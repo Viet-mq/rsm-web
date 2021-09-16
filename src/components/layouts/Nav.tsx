@@ -68,6 +68,14 @@ const Nav = (props: IProps) => {
         </Link>
       </Menu.Item>
 
+      <Menu.Item key="category-manager" style={{display: 'flex', alignItems: 'center'}}>
+        <Link to={`/category-manager`}>
+          <span className="rd-icon rd-icon-home"/>
+          {!props.hiddenLabel ? <span>Quản lý danh mục </span> : null}
+          <i className="ant-menu-submenu-arrow"/>
+        </Link>
+      </Menu.Item>
+
     </Menu>
 
   );

@@ -172,3 +172,39 @@
     width: 18px;
     margin-right: 10px;
 }
+.ant-menu-submenu-expand-icon,
+.ant-menu-submenu-arrow {
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    width: 10px;
+    color: rgba(0, 0, 0, 0.85);
+    transform: translateY(-50%);
+    transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+.ant-menu-submenu-expand-icon,
+.ant-menu-submenu-arrow {
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    width: 10px;
+    color: rgb(130, 130, 130);
+    transform: translateY(-50%);
+    transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+.ant-menu-submenu-arrow::before,
+.ant-menu-submenu-arrow::after {
+    position: absolute;
+    width: 6px;
+    height: 1.5px;
+    background-color: currentColor;
+    border-radius: 2px;
+    transition: background 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), top 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    content: '';
+}
+.ant-menu-submenu-arrow::before {
+    transform: rotate(45deg) translateY(-2.5px);
+}
+.ant-menu-submenu-arrow::after {
+    transform: rotate(-45deg) translateY(2.5px);
+}
