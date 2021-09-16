@@ -54,6 +54,34 @@ const Nav = (props: IProps) => {
         </Link>
       </Menu.Item>
 
+      <SubMenu key="sub1" title={<span><Icon type="user"/><span>Xử lý ngôn ngữ tự nhiên</span></span>}>
+
+        <Menu.Item key="content-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to="/content-manager">
+            {!props.hiddenLabel ? <span>Quản lý nội dung</span> : null}
+          </Link>
+        </Menu.Item>
+
+        <Menu.Item key="intent-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to="/intent-manager">
+            {!props.hiddenLabel ? <span>Quản lý ý định</span> : null}
+          </Link>
+        </Menu.Item>
+
+        <Menu.Item key="entity-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to="/entity-manager">
+            {!props.hiddenLabel ? <span>Quản lý thực thể</span> : null}
+          </Link>
+        </Menu.Item>
+
+        <Menu.Item key="follow-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to="/follow-manager">
+            {!props.hiddenLabel ? <span>Quản lý kịch bản</span> : null}
+          </Link>
+        </Menu.Item>
+
+      </SubMenu>
+
       <Menu.Item key="view-manager" style={{display: 'flex', alignItems: 'center'}}>
         <Link to={`/view-manager`}>
           <span className="rd-icon rd-icon-home"/>
