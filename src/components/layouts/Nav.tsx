@@ -96,13 +96,15 @@ const Nav = (props: IProps) => {
         </Link>
       </Menu.Item>
 
-      <Menu.Item key="category-manager" style={{display: 'flex', alignItems: 'center'}}>
-        <Link to={`/category-manager`}>
-          <span className="rd-icon rd-icon-home"/>
-          {!props.hiddenLabel ? <span>Quản lý danh mục </span> : null}
-          <i className="ant-menu-submenu-arrow"/>
-        </Link>
-      </Menu.Item>
+      <SubMenu key="sub1" title={<span><Icon type="menu"/><span>Quản lý danh mục</span></span>}>
+        <Menu.Item key="job-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to={`/job-manager`}>
+            <span className="rd-icon rd-icon-home"/>
+            {!props.hiddenLabel ? <span>Quản lý job </span> : null}
+            <i className="ant-menu-submenu-arrow"/>
+          </Link>
+        </Menu.Item>
+      </SubMenu>
 
     </Menu>
 

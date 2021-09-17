@@ -13,7 +13,7 @@ import AccountManagerPages from "./modules_cb/AccountManager/pages/AccountManage
 import ViewManagerPage from "./modules_cb/ViewManager/pages/ViewManagerPage";
 import APIManagerPage from "./modules_cb/APIManager/pages/APIManagerPage";
 import ScriptManagerPage from "./modules_cb/ScriptManager/pages/ScriptManagerPage";
-import CategoryManagerPages from "./modules_cb/CategoryManager/pages/CategoryManagerPages";
+import JobManagerPages from "./modules_cb/JobManager/pages/JobManagerPages";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -41,7 +41,7 @@ const Routes = (props: PropsFromRedux) => {
         <Route path="/follow-manager" component={ScriptManagerPage} isLogin={props.isLogin}/>
         <Route path="/view-manager" component={ViewManagerPage} isLogin={props.isLogin}/>
         <Route path="/api-manager" component={APIManagerPage} isLogin={props.isLogin}/>
-        <Route path="/category-manager" component={CategoryManagerPages} isLogin={props.isLogin}/>
+        <Route path="/job-manager" component={JobManagerPages} isLogin={props.isLogin}/>
         <Redirect exact from="/*" to={'/home'}/>
       </Switch>
     </div>

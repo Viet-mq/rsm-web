@@ -11,6 +11,7 @@ import viewManager, {ViewManagerModuleState} from "../modules_cb/ViewManager/red
 import apiManager, {APIManagerModuleState} from "../modules_cb/APIManager/redux/reducers";
 import apiRoleGroupManager, {ApiRoleGroupModuleState} from "../modules_cb/ApiRoleGroupManager/redux/reducers";
 import scriptManager, {ScriptManagerModuleState} from "../modules_cb/ScriptManager/redux/reducers";
+import jobManager,{JobManagerModuleState} from "../modules_cb/JobManager/redux/reducers";
 
 export interface RootState {
   auth: AuthModuleState;
@@ -24,6 +25,7 @@ export interface RootState {
   apiManager: APIManagerModuleState,
   apiRoleGroupManager: ApiRoleGroupModuleState,
   scriptManager: ScriptManagerModuleState,
+  jobManager:JobManagerModuleState,
 }
 
 export default combineReducers<RootState>({
@@ -37,5 +39,6 @@ export default combineReducers<RootState>({
   viewManager,
   apiManager,
   apiRoleGroupManager,
-  scriptManager
+  scriptManager,
+  jobManager
 });

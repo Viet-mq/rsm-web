@@ -1,6 +1,0 @@
-export * from './list'
-export * from './deleteAccount'
-export * from './create'
-export * from './showForm'
-export * from './update'
-export * from './changePassword'
