@@ -45,15 +45,6 @@ function JobManagerPages(props: IProps) {
     props.showFormCreate(true);
   }
 
-  const handleUpdate = (e: any) => {
-    e.preventDefault();
-    if (e?.target) {
-      e.target.disabled = true;
-      e.target.disabled = false;
-    }
-    props.showFormUpdate(true);
-  }
-
   return (
     <div className="contentPage">
 
@@ -67,9 +58,6 @@ function JobManagerPages(props: IProps) {
               <div>
                 <Button onClick={handleCreate}>
                   <Icon type="plus"/> Tạo job
-                </Button>
-                <Button onClick={handleUpdate}>
-                  <Icon type="plus"/> Sửa job
                 </Button>
               </div>
             </div>

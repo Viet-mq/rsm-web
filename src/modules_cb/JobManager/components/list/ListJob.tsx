@@ -47,6 +47,7 @@ function ListJob(props: IProps) {
     let req: DeleteJobRequest = {
       id: entity.id
     }
+    console.log(props.deleteJob(req));
     props.deleteJob(req);
   }
 
@@ -57,7 +58,7 @@ function ListJob(props: IProps) {
 
   const columns: ColumnProps<JobEntity>[] = [
     {
-      title: 'Path',
+      title: 'ID',
       dataIndex: 'id',
       width: 100,
     },

@@ -60,6 +60,7 @@ function ListAccount(props: IProps) {
   function handleEdit(event: any, userAccount: UserAccount) {
     event.stopPropagation();
     props.showFormUpdate(true, userAccount);
+
   }
 
   function handleChangePassword(event: any, userAccount: UserAccount) {

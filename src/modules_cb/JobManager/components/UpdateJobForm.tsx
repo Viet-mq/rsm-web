@@ -1,26 +1,24 @@
-import {RootState} from "../../../redux/reducers";
+import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {FormComponentProps} from "antd/lib/form";
-import {Button, Checkbox, Form, Input, Modal} from "antd";
-import React, {FormEvent, useEffect, useState} from "react";
 import {showFormUpdate, updateJob} from "../redux/actions";
+import {FormComponentProps} from "antd/lib/form";
+import {Button, Form, Input, Modal} from "antd";
+import React, {FormEvent, useState} from "react";
 import {UpdateJobRequest} from "../types";
 
-const mapStateToProps = ({viewManager}: RootState) => ({viewManager});
-const connector = connect(mapStateToProps, {updateJob, showFormUpdate});
+const mapState = ({jobManager: {showForm}}: RootState) => ({showForm})
 
+const connector = connect(mapState, {showFormUpdate, updateJob});
 type ReduxProps = ConnectedProps<typeof connector>;
 
-interface UpdateViewFormProps extends FormComponentProps, ReduxProps {
+interface UpdateJobFormProps extends FormComponentProps, ReduxProps {
 }
 
-function UpdateJobForm(props: UpdateViewFormProps) {
+function UpdateJobForm(props: UpdateJobFormProps) {
 
-  const [show, setShow] = useState<boolean>(true);
   const {getFieldDecorator, resetFields} = props.form;
   const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
-
   const formItemLayout = {
     labelCol: {
       xs: {span: 24},
@@ -32,7 +30,7 @@ function UpdateJobForm(props: UpdateViewFormProps) {
     },
   };
 
-  function onBtnCreateClicked(e: FormEvent) {
+  function onBtnUpdateClicked(e: FormEvent) {
     e.preventDefault();
     (e.target as any).disabled = true;
     (e.target as any).disabled = false;
@@ -42,7 +40,6 @@ function UpdateJobForm(props: UpdateViewFormProps) {
           id: values.id,
           name: values.name,
         }
-        console.log("values: " + JSON.stringify(req));
         props.updateJob(req);
         return;
       }
@@ -55,25 +52,13 @@ function UpdateJobForm(props: UpdateViewFormProps) {
     props.showFormUpdate(false);
   }
 
-  const onCheckBoxChange = (e: any) => {
-    setShow(e.target.checked);
-  }
-
-  useEffect(() => {
-    let checked = props.viewManager.showForm.view?.show;
-    if (checked === undefined || checked === null) {
-      checked = true;
-    }
-    setShow(checked);
-  }, [props.viewManager.showForm.view]);
-
   return (
 
     <Modal
       zIndex={2}
       maskClosable={false}
-      title="Cập nhật menu"
-      visible={props.viewManager.showForm.show_update}
+      title="Cập nhật job hệ thống"
+      visible={props.showForm.show_update}
       centered={true}
       width="550px"
       afterClose={() => {
@@ -89,43 +74,36 @@ function UpdateJobForm(props: UpdateViewFormProps) {
 
       <Form {...formItemLayout}>
 
-        <Form.Item label="Đường dẫn" className="mb-0" style={{...formItemStyle}}>
-          {getFieldDecorator('path', {
-            initialValue: props.viewManager.showForm.view?.id,
+        <Form.Item label="ID" className="mb-0" style={{...formItemStyle}}>
+          {getFieldDecorator('id', {
+            initialValue: props.showForm.data_update?.id,
             rules: [
               {
-                message: 'Vui lòng nhập đường dẫn',
+                message: 'Vui lòng nhập id',
                 required: true,
               },
             ],
-          })(<Input disabled={true} placeholder="Nhập đường dẫn" className="bg-white text-black"/>)}
+          })(
+            <Input disabled placeholder="ID" className="bg-white text-black"/>
+          )}
         </Form.Item>
 
-        <Form.Item label="Tên menu" className="mb-0" style={{...formItemStyle}}>
+        <Form.Item label="Tên Job" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('name', {
-            initialValue: props.viewManager.showForm.view?.name,
+            initialValue: props.showForm.data_update?.name,
             rules: [
               {
-                message: 'Vui lòng nhập tên',
+                message: 'Vui lòng nhập tên job',
                 required: true,
               },
             ],
-          })(<Input placeholder="Nhập tên menu" className="bg-white text-black"/>)}
-        </Form.Item>
-
-        <Form.Item label="Icon" className="mb-0" style={{...formItemStyle}}>
-          {getFieldDecorator('icon', {
-            initialValue: props.viewManager.showForm.view?.icon,
-            rules: [],
-          })(<Input placeholder="Nhập icon menu" className="bg-white text-black"/>)}
-        </Form.Item>
-
-        <Form.Item label="Show" className="mb-0" style={{...formItemStyle}}>
-          <Checkbox checked={show} onChange={onCheckBoxChange}/>
+          })(
+            <Input placeholder="Tên job" className="bg-white text-black"/>
+          )}
         </Form.Item>
 
         <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px'}} colon={false}>
-          <Button className="mr-3 create-btn" htmlType="submit" onClick={onBtnCreateClicked}>
+          <Button className="mr-3 create-btn" htmlType="submit" onClick={onBtnUpdateClicked}>
             Cập nhật
           </Button>
           <Button type="default" className="pl-5 pr-5" onClick={onBtnCancelClicked}>
@@ -137,8 +115,7 @@ function UpdateJobForm(props: UpdateViewFormProps) {
 
     </Modal>
 
-  );
-
+  )
 }
 
-export default connector(Form.create<UpdateViewFormProps>()(UpdateJobForm));
+export default connector(Form.create<UpdateJobFormProps>()(UpdateJobForm));

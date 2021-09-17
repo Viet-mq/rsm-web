@@ -17,7 +17,7 @@ export const createJob = async (params?: any): Promise<ResponseBase2> => {
 };
 
 export const deleteJob = async (params?: any): Promise<ResponseBase2> => {
-  return (await POST('/api-svc/job/delete', params)) as ResponseBase2;
+  return (await POST('api-svc/job/delete', params)) as ResponseBase2;
 };
 
 export const updateJob = async (params?: any): Promise<ResponseBase2> => {

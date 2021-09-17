@@ -6,15 +6,15 @@ import React, {FormEvent, useState} from "react";
 import {createJob, showFormCreate} from "../redux/actions";
 import {CreateJobRequest} from "../types";
 
-const mapStateToProps = ({viewManager}: RootState) => ({viewManager});
+const mapStateToProps = ({jobManager}: RootState) => ({jobManager});
 const connector = connect(mapStateToProps, {createJob, showFormCreate});
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
-interface CreateViewFormProps extends FormComponentProps, ReduxProps {
+interface CreateJobFormProps extends FormComponentProps, ReduxProps {
 }
 
-function CreateJobForm(props: CreateViewFormProps) {
+function CreateJobForm(props: CreateJobFormProps) {
 
   const [show, setShow] = useState<boolean>(true);
   const {getFieldDecorator, resetFields} = props.form;
@@ -63,8 +63,8 @@ function CreateJobForm(props: CreateViewFormProps) {
     <Modal
       zIndex={2}
       maskClosable={false}
-      title="Tạo mới menu"
-      visible={props.viewManager.showForm.show_create}
+      title="Tạo mới job"
+      visible={props.jobManager.showForm.show_create}
       centered={true}
       width="550px"
       afterClose={() => {
@@ -80,39 +80,16 @@ function CreateJobForm(props: CreateViewFormProps) {
 
       <Form {...formItemLayout}>
 
-        <Form.Item label="Đường dẫn" className="mb-0" style={{...formItemStyle}}>
-          {getFieldDecorator('path', {
-            initialValue: '',
-            rules: [
-              {
-                message: 'Vui lòng nhập đường dẫn',
-                required: true,
-              },
-            ],
-          })(<Input placeholder="Nhập đường dẫn" className="bg-white text-black"/>)}
-        </Form.Item>
-
-        <Form.Item label="Tên menu" className="mb-0" style={{...formItemStyle}}>
+        <Form.Item label="Tên job" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('name', {
             initialValue: '',
             rules: [
               {
-                message: 'Vui lòng nhập tên',
+                message: 'Vui lòng nhập tên job',
                 required: true,
               },
             ],
-          })(<Input placeholder="Nhập tên menu" className="bg-white text-black"/>)}
-        </Form.Item>
-
-        <Form.Item label="Icon" className="mb-0" style={{...formItemStyle}}>
-          {getFieldDecorator('icon', {
-            initialValue: '',
-            rules: [],
-          })(<Input placeholder="Nhập icon menu" className="bg-white text-black"/>)}
-        </Form.Item>
-
-        <Form.Item label="Show" className="mb-0" style={{...formItemStyle}}>
-          <Checkbox checked={show} onChange={onCheckBoxChange}/>
+          })(<Input placeholder="Nhập tên job" className="bg-white text-black"/>)}
         </Form.Item>
 
         <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px'}} colon={false}>
@@ -132,4 +109,4 @@ function CreateJobForm(props: CreateViewFormProps) {
 
 }
 
-export default connector(Form.create<CreateViewFormProps>()(CreateJobForm));
+export default connector(Form.create<CreateJobFormProps>()(CreateJobForm));
