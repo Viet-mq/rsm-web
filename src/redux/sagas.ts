@@ -10,7 +10,11 @@ import viewManagerSaga from '../modules_cb/ViewManager/redux/sagas';
 import apiManagerSaga from '../modules_cb/APIManager/redux/sagas';
 import apiGroupManagerSaga from '../modules_cb/ApiRoleGroupManager/redux/sagas';
 import scriptManagerSaga from '../modules_cb/ScriptManager/redux/sagas';
-import jobMagagerSaga from '../modules_cb/JobManager/redux/sagas';
+import jobManagerSaga from '../modules_cb/JobManager/redux/sagas';
+import departmentManagerSaga from '../modules_cb/DepartmentManager/redux/sagas';
+import joblevelManagerSaga from '../modules_cb/JobLevelManager/redux/sagas';
+import sourcecvManagerSaga from '../modules_cb/SourceCVManager/redux/sagas';
+
 import * as commonSaga from './common-saga';
 
 export default function* rootSaga() {
@@ -26,7 +30,10 @@ export default function* rootSaga() {
     apiManagerSaga(),
     apiGroupManagerSaga(),
     scriptManagerSaga(),
-    jobMagagerSaga(),
+    jobManagerSaga(),
+    departmentManagerSaga(),
+    joblevelManagerSaga(),
+    sourcecvManagerSaga(),
     commonSaga.checkErrorAsync(),
   ]);
 }

@@ -12,6 +12,10 @@ import apiManager, {APIManagerModuleState} from "../modules_cb/APIManager/redux/
 import apiRoleGroupManager, {ApiRoleGroupModuleState} from "../modules_cb/ApiRoleGroupManager/redux/reducers";
 import scriptManager, {ScriptManagerModuleState} from "../modules_cb/ScriptManager/redux/reducers";
 import jobManager,{JobManagerModuleState} from "../modules_cb/JobManager/redux/reducers";
+import departmentManager,{DepartmentManagerModuleState} from "../modules_cb/DepartmentManager/redux/reducers";
+import schoolManager,{SchoolManagerModuleState} from "../modules_cb/SchoolManager/redux/reducers";
+import joblevelManager,{JobLevelManagerModuleState} from "../modules_cb/JobLevelManager/redux/reducers";
+import sourcecvManager,{SourceCVManagerModuleState} from "../modules_cb/SourceCVManager/redux/reducers";
 
 export interface RootState {
   auth: AuthModuleState;
@@ -26,6 +30,10 @@ export interface RootState {
   apiRoleGroupManager: ApiRoleGroupModuleState,
   scriptManager: ScriptManagerModuleState,
   jobManager:JobManagerModuleState,
+  departmentManager:DepartmentManagerModuleState,
+  schoolManager:SchoolManagerModuleState,
+  joblevelManager:JobLevelManagerModuleState,
+  sourcecvManager: SourceCVManagerModuleState,
 }
 
 export default combineReducers<RootState>({
@@ -40,5 +48,9 @@ export default combineReducers<RootState>({
   apiManager,
   apiRoleGroupManager,
   scriptManager,
-  jobManager
+  jobManager,
+  joblevelManager,
+  schoolManager,
+  departmentManager,
+  sourcecvManager
 });

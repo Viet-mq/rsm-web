@@ -97,12 +97,49 @@ const Nav = (props: IProps) => {
       </Menu.Item>
 
       <SubMenu key="sub2" title={<span><Icon type="menu"/><span>Quản lý danh mục</span></span>}>
+
         <Menu.Item key="job-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/job-manager`}>
             <span className="rd-icon rd-icon-home"/>
             {!props.hiddenLabel ? <span>Quản lý job </span> : null}
           </Link>
         </Menu.Item>
+
+        <Menu.Item key="department-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to={`/department-manager`}>
+            <span className="rd-icon rd-icon-home"/>
+            {!props.hiddenLabel ? <span>Quản lý phòng ban </span> : null}
+          </Link>
+        </Menu.Item>
+
+        <Menu.Item key="joblevel-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to={`/joblevel-manager`}>
+            <span className="rd-icon rd-icon-home"/>
+            {!props.hiddenLabel ? <span>Quản lý job level </span> : null}
+          </Link>
+        </Menu.Item>
+
+        <Menu.Item key="school-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to={`/school-manager`}>
+            <span className="rd-icon rd-icon-home"/>
+            {!props.hiddenLabel ? <span>Quản lý trường </span> : null}
+          </Link>
+        </Menu.Item>
+
+        <Menu.Item key="sourcecv-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to={`/sourcecv-manager`}>
+            <span className="rd-icon rd-icon-home"/>
+            {!props.hiddenLabel ? <span>Quản lý nguồn CV </span> : null}
+          </Link>
+        </Menu.Item>
+
+        <Menu.Item key="statuscv-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to={`/statuscv-manager`}>
+            <span className="rd-icon rd-icon-home"/>
+            {!props.hiddenLabel ? <span>Quản lý trạng thái CV </span> : null}
+          </Link>
+        </Menu.Item>
+
       </SubMenu>
 
     </Menu>

@@ -8,6 +8,7 @@ import CreateJobForm from "../components/CreateJobForm";
 import Loading from "../../../components/Loading";
 import UpdateJobForm from "../components/UpdateJobForm";
 
+debugger
 const mapStateToProps = ({
                            jobManager: {
                              showForm,
@@ -29,9 +30,7 @@ type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends ReduxProps {
 }
-
 function JobManagerPages(props: IProps) {
-
   useEffect(() => {
     document.title = "Quản lý Job";
   }, []);

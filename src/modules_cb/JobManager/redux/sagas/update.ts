@@ -16,15 +16,15 @@ export function* updateJobAsync(action: UpdateJobAction) {
     const rs = yield apis.updateJob(action.request);
     yield put(updateJobSuccess(rs));
     if (rs.code !== 0) {
-      NotificationError('Cập nhật tài khoản không thành công', "Lỗi: " + rs.message)
+      NotificationError('Cập nhật job không thành công', "Lỗi: " + rs.message)
     } else {
-      NotificationSuccess('Thành công', "Cập nhật tài khoản thành công");
+      NotificationSuccess('Thành công', "Cập nhật job thành công");
       yield put(showFormUpdate(false));
       const params = yield select((state: RootState) => state.jobManager.list.params);
       yield put(getListJob(params))
     }
   } catch (e) {
     yield put(updateJobError(new AppError(e.message)));
-    NotificationError('Cập nhật tài khoản không thành công', "Lỗi: " + e.message);
+    NotificationError('Cập nhật job không thành công', "Lỗi: " + e.message);
   }
 }

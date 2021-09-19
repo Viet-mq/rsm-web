@@ -20,7 +20,7 @@ export function* createJobAsync(action: CreateJobAction) {
     } else {
       NotificationSuccess('Thành công', "Tạo Job thành công");
       yield put(showFormCreate(false));
-      const params = yield select((state: RootState) => state.accountManager.list.params);
+      const params = yield select((state: RootState) => state.jobManager.list.params);
       yield put(getListJob(params))
     }
   } catch (e) {
