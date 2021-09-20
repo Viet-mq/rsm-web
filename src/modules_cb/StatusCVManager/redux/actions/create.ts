@@ -1,28 +1,28 @@
-import {CreateJobRequest} from "../../types";
+import {CreateStatusCVRequest} from "../../types";
 import {AppError, ResponseBase2} from "src/models/common";
 
-export interface CreateJobAction {
+export interface CreateStatusCVAction {
   type: string,
-  request?: CreateJobRequest,
+  request?: CreateStatusCVRequest,
   response?: ResponseBase2,
   error?: AppError
 }
 
-export const CREATE_JOB = "CREATE_JOB";
-export const CREATE_JOB_SUCCESS = "CREATE_JOB_SUCCESS";
-export const CREATE_JOB_ERROR = "CREATE_JOB_ERROR";
+export const CREATE_STATUSCV = "CREATE_STATUSCV";
+export const CREATE_STATUSCV_SUCCESS = "CREATE_STATUSCV_SUCCESS";
+export const CREATE_STATUSCV_ERROR = "CREATE_STATUSCV_ERROR";
 
-export const createJob = (request: CreateJobRequest): CreateJobAction => ({
-  type: CREATE_JOB,
+export const createStatusCV = (request: CreateStatusCVRequest): CreateStatusCVAction => ({
+  type: CREATE_STATUSCV,
   request
 });
 
-export const createJobSuccess = (response: ResponseBase2): CreateJobAction => ({
-  type: CREATE_JOB_SUCCESS,
+export const createStatusCVSuccess = (response: ResponseBase2): CreateStatusCVAction => ({
+  type: CREATE_STATUSCV_SUCCESS,
   response
 });
 
-export const createJobError = (error: AppError): CreateJobAction => ({
-  type: CREATE_JOB_ERROR,
+export const createStatusCVError = (error: AppError): CreateStatusCVAction => ({
+  type: CREATE_STATUSCV_ERROR,
   error
 });

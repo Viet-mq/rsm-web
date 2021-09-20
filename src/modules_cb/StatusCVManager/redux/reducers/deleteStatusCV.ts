@@ -1,34 +1,34 @@
-import {DeleteJobRequest} from "../../types";
+import {DeleteStatusCVRequest} from "../../types";
 import {AppError, ResponseBase2} from "../../../../models/common";
 import * as Actions from "../actions";
-import {DeleteJobAction} from "../actions";
+import {DeleteStatusCVAction} from "../actions";
 
-export interface DeleteJobState {
+export interface DeleteStatusCVState {
   loading: boolean,
-  request?: DeleteJobRequest,
+  request?: DeleteStatusCVRequest,
   response?: ResponseBase2,
   error?: AppError
 }
 
-const initState: DeleteJobState = {
+const initState: DeleteStatusCVState = {
   loading: false,
 }
 
-export default (state = initState, {type, request, response, error}: DeleteJobAction): DeleteJobState => {
+export default (state = initState, {type, request, response, error}: DeleteStatusCVAction): DeleteStatusCVState => {
   switch (type) {
-    case Actions.DELETE_JOB:
+    case Actions.DELETE_STATUSCV:
       return {
         ...state,
         request,
         loading: true
       }
-    case Actions.DELETE_JOB_SUCCESS:
+    case Actions.DELETE_STATUSCV_SUCCESS:
       return {
         ...state,
         response,
         loading: false
       }
-    case Actions.DELETE_JOB_ERROR:
+    case Actions.DELETE_STATUSCV_ERROR:
       return {
         ...state,
         error,

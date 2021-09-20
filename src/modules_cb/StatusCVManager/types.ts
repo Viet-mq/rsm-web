@@ -1,20 +1,20 @@
-export interface JobEntity {
+export interface StatusCVEntity {
   id:string,
   name:string,
   page:number,
   size:number,
 }
 
-export interface CreateJobRequest {
+export interface CreateStatusCVRequest {
   name: string,
 }
 
-export interface UpdateJobRequest {
+export interface UpdateStatusCVRequest {
   id: string,
   name: string,
 }
 
-export interface DeleteJobRequest {
+export interface DeleteStatusCVRequest {
   id: string,
 }
 

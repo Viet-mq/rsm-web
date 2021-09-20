@@ -1,8 +1,8 @@
 import {
-  CreateJobAction,
-  createJobError,
-  createJobSuccess,
-  getListJob,
+  CreateStatusCVAction,
+  createStatusCVError,
+  createStatusCVSuccess,
+  getListStatusCV,
   showFormCreate
 } from "../actions";
 import * as apis from "../services/apis";
@@ -11,20 +11,20 @@ import {NotificationError, NotificationSuccess} from "src/components/Notificatio
 import {AppError} from "src/models/common";
 import {RootState} from "src/redux/reducers";
 
-export function* createJobAsync(action: CreateJobAction) {
+export function* createStatusCVAsync(action: CreateStatusCVAction) {
   try {
-    const rs = yield apis.createJob(action.request);
-    yield put(createJobSuccess(rs));
+    const rs = yield apis.createStatusCV(action.request);
+    yield put(createStatusCVSuccess(rs));
     if (rs.code !== 0) {
-      NotificationError('Tạo Job không thành công', "Lỗi: " + rs.message)
+      NotificationError('Tạo trạng thái CV không thành công', "Lỗi: " + rs.message)
     } else {
-      NotificationSuccess('Thành công', "Tạo Job thành công");
+      NotificationSuccess('Thành công', "Tạo trạng thái CV thành công");
       yield put(showFormCreate(false));
-      const params = yield select((state: RootState) => state.accountManager.list.params);
-      yield put(getListJob(params))
+      const params = yield select((state: RootState) => state.statuscvManager.list.params);
+      yield put(getListStatusCV(params))
     }
   } catch (e) {
-    yield put(createJobError(new AppError(e.message)));
-    NotificationError('Tạo Job không thành công', "Lỗi: " + e.message);
+    yield put(createStatusCVError(new AppError(e.message)));
+    NotificationError('Tạo trạng thái CV không thành công', "Lỗi: " + e.message);
   }
 }

@@ -1,26 +1,26 @@
 import React, {useEffect} from "react";
-import ListJob from "../components/list/ListJob";
+import ListStatusCV from "../components/list/ListStatusCV";
 import {Button, Col, Icon, Row} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {showFormCreate, showFormUpdate} from "../redux/actions";
-import CreateJobForm from "../components/CreateJobForm";
+import CreateStatusCVForm from "../components/CreateStatusCVForm";
 import Loading from "../../../components/Loading";
-import UpdateJobForm from "../components/UpdateJobForm";
+import UpdateStatusCVForm from "../components/UpdateStatusCVForm";
 
 const mapStateToProps = ({
-                           jobManager: {
+                           statuscvManager: {
                              showForm,
                              list,
                              create,
-                             deleteJob,
+                             deleteStatusCV,
                              update,
                            }
                          }: RootState) => ({
   showForm,
   list,
   create,
-  deleteJob,
+  deleteStatusCV,
   update,
 })
 const connector = connect(mapStateToProps, {showFormCreate, showFormUpdate});
@@ -33,7 +33,7 @@ interface IProps extends ReduxProps {
 function StatusCVManagerPages(props: IProps) {
 
   useEffect(() => {
-    document.title = "Quản lý Job";
+    document.title = "Quản lý trạng thái CV";
   }, []);
 
   const handleCreate = (e: any) => {
@@ -51,13 +51,13 @@ function StatusCVManagerPages(props: IProps) {
       <div className="entryHeader">
         <Row>
           <Col md={16}>
-            <div className="tmp-title-page-size20">Quản lý Job</div>
+            <div className="tmp-title-page-size20">Quản lý trạng thái CV</div>
           </Col>
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div>
                 <Button onClick={handleCreate}>
-                  <Icon type="plus"/> Tạo job
+                  <Icon type="plus"/> Tạo trạng thái CV
                 </Button>
               </div>
             </div>
@@ -65,14 +65,14 @@ function StatusCVManagerPages(props: IProps) {
         </Row>
       </div>
 
-      <ListJob/>
+      <ListStatusCV/>
 
-      <CreateJobForm/>
-      <UpdateJobForm/>
+      <CreateStatusCVForm/>
+      <UpdateStatusCVForm/>
 
       {props.create.loading ||
       props.list.loading ||
-      props.deleteJob.loading ||
+      props.deleteStatusCV.loading ||
       props.update.loading ?
         <Loading/> : null}
 

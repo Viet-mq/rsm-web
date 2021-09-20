@@ -1,9 +1,9 @@
 import {ListResponseBase2, ResponseBase2} from "src/models/common";
 import {GET, POST} from "src/services";
-import {JobEntity} from "../../types";
+import {StatusCVEntity} from "../../types";
 
-export const getListJob = async (params: any): Promise<ListResponseBase2<JobEntity>> => {
-  const response = (await GET('api-svc/job/list', params)) as any;
+export const getListStatusCV = async (params: any): Promise<ListResponseBase2<StatusCVEntity>> => {
+  const response = (await GET('api-svc/statuscv/list', params)) as any;
   return {
     total: response.total,
     rows: response.rows || [],
@@ -12,14 +12,14 @@ export const getListJob = async (params: any): Promise<ListResponseBase2<JobEnti
   };
 };
 
-export const createJob = async (params?: any): Promise<ResponseBase2> => {
-  return (await POST('api-svc/job/create', params)) as ResponseBase2;
+export const createStatusCV = async (params?: any): Promise<ResponseBase2> => {
+  return (await POST('api-svc/statuscv/create', params)) as ResponseBase2;
 };
 
-export const deleteJob = async (params?: any): Promise<ResponseBase2> => {
-  return (await POST('api-svc/job/delete', params)) as ResponseBase2;
+export const deleteStatusCV = async (params?: any): Promise<ResponseBase2> => {
+  return (await POST('api-svc/statuscv/delete', params)) as ResponseBase2;
 };
 
-export const updateJob = async (params?: any): Promise<ResponseBase2> => {
-  return (await POST('api-svc/job/update', params)) as ResponseBase2;
+export const updateStatusCV = async (params?: any): Promise<ResponseBase2> => {
+  return (await POST('api-svc/statuscv/update', params)) as ResponseBase2;
 };

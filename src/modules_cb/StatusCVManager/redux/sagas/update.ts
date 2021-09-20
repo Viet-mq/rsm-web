@@ -1,9 +1,9 @@
 import {
-  getListJob,
+  getListStatusCV,
   showFormUpdate,
-  UpdateJobAction,
-  updateJobError,
-  updateJobSuccess
+  UpdateStatusCVAction,
+  updateStatusCVError,
+  updateStatusCVSuccess
 } from "../actions";
 import * as apis from "../services/apis";
 import {put, select} from "redux-saga/effects";
@@ -11,20 +11,20 @@ import {NotificationError, NotificationSuccess} from "src/components/Notificatio
 import {AppError} from "src/models/common";
 import {RootState} from "src/redux/reducers";
 
-export function* updateJobAsync(action: UpdateJobAction) {
+export function* updateStatusCVAsync(action: UpdateStatusCVAction) {
   try {
-    const rs = yield apis.updateJob(action.request);
-    yield put(updateJobSuccess(rs));
+    const rs = yield apis.updateStatusCV(action.request);
+    yield put(updateStatusCVSuccess(rs));
     if (rs.code !== 0) {
-      NotificationError('Cập nhật tài khoản không thành công', "Lỗi: " + rs.message)
+      NotificationError('Cập nhật trạng thái CV không thành công', "Lỗi: " + rs.message)
     } else {
-      NotificationSuccess('Thành công', "Cập nhật tài khoản thành công");
+      NotificationSuccess('Thành công', "Cập nhật trạng thái CV thành công");
       yield put(showFormUpdate(false));
-      const params = yield select((state: RootState) => state.jobManager.list.params);
-      yield put(getListJob(params))
+      const params = yield select((state: RootState) => state.statuscvManager.list.params);
+      yield put(getListStatusCV(params))
     }
   } catch (e) {
-    yield put(updateJobError(new AppError(e.message)));
-    NotificationError('Cập nhật tài khoản không thành công', "Lỗi: " + e.message);
+    yield put(updateStatusCVError(new AppError(e.message)));
+    NotificationError('Cập nhật trạng thái CV không thành công', "Lỗi: " + e.message);
   }
 }

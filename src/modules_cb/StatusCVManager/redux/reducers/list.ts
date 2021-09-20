@@ -1,39 +1,39 @@
-import {JobEntity} from "../../types";
+import {StatusCVEntity} from "../../types";
 import {AppError} from "src/models/common";
 import * as Actions from "../actions";
-import {JobListAction} from "../actions";
+import {StatusCVListAction} from "../actions";
 
-export interface JobListState {
+export interface StatusCVListState {
   loading: boolean,
   params?: any,
-  rows?: JobEntity[],
+  rows?: StatusCVEntity[],
   total?: number,
   error?: AppError
 }
 
-const initState: JobListState = {
+const initState: StatusCVListState = {
   loading: false,
   params: {},
   rows: [],
   total: 0
 }
 
-export default (state = initState, {type, total, rows, params, error}: JobListAction): JobListState => {
+export default (state = initState, {type, total, rows, params, error}: StatusCVListAction): StatusCVListState => {
   switch (type) {
-    case Actions.GET_LIST_JOB:
+    case Actions.GET_LIST_STATUSCV:
       return {
         ...state,
         params,
         loading: true
       }
-    case Actions.GET_LIST_JOB_SUCCESS:
+    case Actions.GET_LIST_STATUSCV_SUCCESS:
       return {
         ...state,
         total,
         rows,
         loading: false
       }
-    case Actions.GET_LIST_JOB_ERROR:
+    case Actions.GET_LIST_STATUSCV_ERROR:
       return {
         ...state,
         error,

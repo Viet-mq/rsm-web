@@ -1,19 +1,20 @@
-import {JobListAction, getListJobError, getListJobSuccess} from "../actions";
+import {StatusCVListAction, getListStatusCVError, getListStatusCVSuccess} from "../actions";
 import * as apis from '../services/apis'
 import {put} from "redux-saga/effects";
 import {AppError} from "src/models/common";
 import {NotificationError} from "src/components/Notification/Notification";
 
-export function* getListJobAsync(action: JobListAction) {
+export function* getListStatusCVAsync(action: StatusCVListAction) {
+  console.log("haah2");
   try {
-    const rs = yield apis.getListJob(action.params);
+    const rs = yield apis.getListStatusCV(action.params);
     console.log("rs: " + JSON.stringify(rs));
     if (rs.code !== 0) {
-      NotificationError('Lấy danh sách Job không thành công', "Lỗi: " + rs.message);
+      NotificationError('Lấy danh sách trạng thái CV không thành công', "Lỗi: " + rs.message);
     }
-    yield put(getListJobSuccess(rs.total, rs.rows))
+    yield put(getListStatusCVSuccess(rs.total, rs.rows))
   } catch (e) {
-    yield put(getListJobError(new AppError(e.message)));
-    NotificationError('Lấy danh sách Job không thành công', "Lỗi: " + e.message);
+    yield put(getListStatusCVError(new AppError(e.message)));
+    NotificationError('Lấy danh sách trạng thái CV không thành công', "Lỗi: " + e.message);
   }
 }

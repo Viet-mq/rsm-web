@@ -1,30 +1,30 @@
-import {JobEntity} from "../../types";
+import {StatusCVEntity} from "../../types";
 import {AppError} from "src/models/common";
 
-export interface JobListAction {
+export interface StatusCVListAction {
   type: string,
   params?: any,
-  rows?: JobEntity[],
+  rows?: StatusCVEntity[],
   total?: number,
   error?: AppError
 }
 
-export const GET_LIST_JOB = "GET_LIST_JOB";
-export const GET_LIST_JOB_SUCCESS = "GET_LIST_JOB_SUCCESS";
-export const GET_LIST_JOB_ERROR = "GET_LIST_JOB_ERROR";
+export const GET_LIST_STATUSCV = "GET_LIST_STATUSCV";
+export const GET_LIST_STATUSCV_SUCCESS = "GET_LIST_STATUSCV_SUCCESS";
+export const GET_LIST_STATUSCV_ERROR = "GET_LIST_STATUSCV_ERROR";
 
-export const getListJob = (params: any): JobListAction => ({
-  type: GET_LIST_JOB,
+export const getListStatusCV = (params: any): StatusCVListAction => ({
+  type: GET_LIST_STATUSCV,
   params
 });
 
-export const getListJobSuccess = (total: number, rows: JobEntity[]): JobListAction => ({
-  type: GET_LIST_JOB_SUCCESS,
+export const getListStatusCVSuccess = (total: number, rows: StatusCVEntity[]): StatusCVListAction => ({
+  type: GET_LIST_STATUSCV_SUCCESS,
   total,
   rows
 });
 
-export const getListJobError = (error: AppError): JobListAction => ({
-  type: GET_LIST_JOB_ERROR,
+export const getListStatusCVError = (error: AppError): StatusCVListAction => ({
+  type: GET_LIST_STATUSCV_ERROR,
   error
 });

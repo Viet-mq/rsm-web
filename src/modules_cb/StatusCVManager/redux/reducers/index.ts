@@ -1,21 +1,21 @@
 import {combineReducers} from "redux";
-import list, {JobListState} from "./list";
-import deleteJob, {DeleteJobState} from "./deleteJob";
-import create, {CreateJobState} from "./create";
-import showForm, {JobFormState} from "./showForm";
-import update, {UpdateJobState} from "./update";
+import list, {StatusCVListState} from "./list";
+import deleteStatusCV, {DeleteStatusCVState} from "./deleteStatusCV";
+import create, {CreateStatusCVState} from "./create";
+import showForm, {StatusCVFormState} from "./showForm";
+import update, {UpdateStatusCVState} from "./update";
 
-export interface JobManagerModuleState {
-  list: JobListState,
-  deleteJob: DeleteJobState,
-  create: CreateJobState,
-  showForm: JobFormState,
-  update: UpdateJobState,
+export interface StatusCVManagerModuleState {
+  list: StatusCVListState,
+  deleteStatusCV: DeleteStatusCVState,
+  create: CreateStatusCVState,
+  showForm: StatusCVFormState,
+  update: UpdateStatusCVState,
 }
 
-export default combineReducers<JobManagerModuleState>({
+export default combineReducers<StatusCVManagerModuleState>({
   list,
-  deleteJob,
+  deleteStatusCV,
   create,
   showForm,
   update,

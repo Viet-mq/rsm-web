@@ -6,21 +6,21 @@ import {ColumnProps} from "antd/lib/table";
 import {Button, Icon, Popconfirm, Table} from "antd";
 import {emptyText} from "src/configs/locales";
 import {
-  deleteJob,
-  getListJob,
+  deleteStatusCV,
+  getListStatusCV,
   showFormCreate,
   showFormUpdate,
-  updateJob
+  updateStatusCV
 } from "../../redux/actions";
-import {JobEntity, CreateJobRequest, UpdateJobRequest, DeleteJobRequest} from "../../types";
+import {StatusCVEntity, CreateStatusCVRequest, UpdateStatusCVRequest, DeleteStatusCVRequest} from "../../types";
 
-const mapStateToProps = ({jobManager: {list}}: RootState) => ({list})
+const mapStateToProps = ({statuscvManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
-  getListJob,
-  deleteJob,
+  getListStatusCV,
+  deleteStatusCV: deleteStatusCV,
   showFormCreate,
   showFormUpdate,
-  updateJob
+  updateStatusCV
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -28,7 +28,7 @@ type ReduxProps = ConnectedProps<typeof connector>;
 interface IProps extends ReduxProps {
 }
 
-function ListJob(props: IProps) {
+function ListStatusCV(props: IProps) {
 
   let screenWidth = document.documentElement.clientWidth;
   const [page, setPage] = useState(1);
@@ -39,24 +39,24 @@ function ListJob(props: IProps) {
   });
 
   useEffect(() => {
-    props.getListJob({page: 1, size: 100});
+    props.getListStatusCV({page: 1, size: 100});
   }, []);
 
-  const handleDelete = (event: any, entity: JobEntity) => {
+  const handleDelete = (event: any, entity: StatusCVEntity) => {
     event.stopPropagation();
-    let req: DeleteJobRequest = {
+    let req: DeleteStatusCVRequest = {
       id: entity.id
     }
-    console.log(props.deleteJob(req));
-    props.deleteJob(req);
+    console.log(props.deleteStatusCV(req));
+    props.deleteStatusCV(req);
   }
 
-  const handleEdit = (event: any, entity: JobEntity) => {
+  const handleEdit = (event: any, entity: StatusCVEntity) => {
     event.stopPropagation();
     props.showFormUpdate(true, entity);
   }
 
-  const columns: ColumnProps<JobEntity>[] = [
+  const columns: ColumnProps<StatusCVEntity>[] = [
     {
       title: 'ID',
       dataIndex: 'id',
@@ -74,11 +74,11 @@ function ListJob(props: IProps) {
       dataIndex: 'action',
       width: 100,
       fixed: 'right',
-      render: (_text: string, record: JobEntity) => {
+      render: (_text: string, record: StatusCVEntity) => {
         return (
           <div style={{whiteSpace: 'nowrap'}}>
             <Popconfirm
-              title="Bạn muốn xóa Job này chứ ?"
+              title="Bạn muốn xóa trạng thái CV này chứ ?"
               okText="Xóa"
               onCancel={event => {
                 event?.stopPropagation();
@@ -139,4 +139,4 @@ function ListJob(props: IProps) {
 
 }
 
-export default connector(ListJob);
+export default connector(ListStatusCV);

@@ -1,28 +1,28 @@
-import {UpdateJobRequest} from "../../types";
+import {UpdateStatusCVRequest} from "../../types";
 import {AppError, ResponseBase2} from "src/models/common";
 
-export interface UpdateJobAction {
+export interface UpdateStatusCVAction {
   type: string,
-  request?: UpdateJobRequest,
+  request?: UpdateStatusCVRequest,
   response?: ResponseBase2,
   error?: AppError
 }
 
-export const UPDATE_JOB = "UPDATE_JOB";
-export const UPDATE_JOB_SUCCESS = "UPDATE_JOB_SUCCESS";
-export const UPDATE_JOB_ERROR = "UPDATE_JOB_ERROR";
+export const UPDATE_STATUSCV = "UPDATE_STATUSCV";
+export const UPDATE_STATUSCV_SUCCESS = "UPDATE_STATUSCV_SUCCESS";
+export const UPDATE_STATUSCV_ERROR = "UPDATE_STATUSCV_ERROR";
 
-export const updateJob = (request: UpdateJobRequest): UpdateJobAction => ({
-  type: UPDATE_JOB,
+export const updateStatusCV = (request: UpdateStatusCVRequest): UpdateStatusCVAction => ({
+  type: UPDATE_STATUSCV,
   request
 });
 
-export const updateJobSuccess = (response: ResponseBase2): UpdateJobAction => ({
-  type: UPDATE_JOB_SUCCESS,
+export const updateStatusCVSuccess = (response: ResponseBase2): UpdateStatusCVAction => ({
+  type: UPDATE_STATUSCV_SUCCESS,
   response
 });
 
-export const updateJobError = (error: AppError): UpdateJobAction => ({
-  type: UPDATE_JOB_ERROR,
+export const updateStatusCVError = (error: AppError): UpdateStatusCVAction => ({
+  type: UPDATE_STATUSCV_ERROR,
   error
 });

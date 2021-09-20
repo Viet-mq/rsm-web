@@ -14,6 +14,7 @@ import jobManagerSaga from '../modules_cb/JobManager/redux/sagas';
 import departmentManagerSaga from '../modules_cb/DepartmentManager/redux/sagas';
 import joblevelManagerSaga from '../modules_cb/JobLevelManager/redux/sagas';
 import sourcecvManagerSaga from '../modules_cb/SourceCVManager/redux/sagas';
+import statuscvManagerSaga from '../modules_cb/StatusCVManager/redux/sagas';
 
 import * as commonSaga from './common-saga';
 
@@ -34,6 +35,7 @@ export default function* rootSaga() {
     departmentManagerSaga(),
     joblevelManagerSaga(),
     sourcecvManagerSaga(),
+    statuscvManagerSaga,
     commonSaga.checkErrorAsync(),
   ]);
 }
