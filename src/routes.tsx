@@ -19,6 +19,7 @@ import JobLevelManagerPages from "./modules_cb/JobLevelManager/pages/JobLevelMan
 import SchoolManagerPages from "./modules_cb/SchoolManager/pages/SchoolManagerPages";
 import SourceCVManagerPages from "./modules_cb/SourceCVManager/pages/SourceCVManagerPages";
 import StatusCVManagerPages from "./modules_cb/StatusCVManager/pages/StatusCVManagerPages";
+import ProfileManagerPages from "./modules_cb/ProfileManager/pages/ProfileManagerPages";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -52,6 +53,7 @@ const Routes = (props: PropsFromRedux) => {
         <Route path="/sourcecv-manager" component={SourceCVManagerPages} isLogin={props.isLogin}/>
         <Route path="/statuscv-manager" component={StatusCVManagerPages} isLogin={props.isLogin}/>
         <Route path="/school-manager" component={SchoolManagerPages} isLogin={props.isLogin}/>
+        <Route path="/profile-manager" component={ProfileManagerPages} isLogin={props.isLogin}/>
         <Redirect exact from="/*" to={'/home'}/>
       </Switch>
     </div>

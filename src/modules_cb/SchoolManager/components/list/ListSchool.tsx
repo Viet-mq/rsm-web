@@ -123,7 +123,6 @@ function ListSchool(props: IProps) {
         className="custom-table"
         dataSource={props.list.rows}
         columns={columns}
-        rowSelection={rowSelection}
         rowKey="id"
         locale={{emptyText: emptyText}}
         pagination={{

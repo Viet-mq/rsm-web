@@ -17,6 +17,7 @@ import schoolManager,{SchoolManagerModuleState} from "../modules_cb/SchoolManage
 import joblevelManager,{JobLevelManagerModuleState} from "../modules_cb/JobLevelManager/redux/reducers";
 import sourcecvManager,{SourceCVManagerModuleState} from "../modules_cb/SourceCVManager/redux/reducers";
 import statuscvManager,{StatusCVManagerModuleState} from "../modules_cb/StatusCVManager/redux/reducers";
+import profileManager,{ProfileManagerModuleState} from "../modules_cb/ProfileManager/redux/reducers";
 
 export interface RootState {
   auth: AuthModuleState;
@@ -36,6 +37,7 @@ export interface RootState {
   joblevelManager:JobLevelManagerModuleState,
   sourcecvManager: SourceCVManagerModuleState,
   statuscvManager: StatusCVManagerModuleState,
+  profileManager: ProfileManagerModuleState,
 }
 
 export default combineReducers<RootState>({
@@ -55,5 +57,6 @@ export default combineReducers<RootState>({
   schoolManager,
   departmentManager,
   sourcecvManager,
-  statuscvManager
+  statuscvManager,
+  profileManager
 });

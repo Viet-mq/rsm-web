@@ -192,7 +192,6 @@ function ListAccount(props: IProps) {
     selectedRowKeys,
     onChange: onSelectedRowKeysChange,
   };
-
   return (
     <>
       <Table

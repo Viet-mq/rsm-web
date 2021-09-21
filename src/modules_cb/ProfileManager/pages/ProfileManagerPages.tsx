@@ -1,26 +1,26 @@
 import React, {useEffect} from "react";
-import ListJob from "../components/list/ListJob";
+import ListProfile from "../components/list/ListProfile";
 import {Button, Col, Icon, Row} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {showFormCreate, showFormUpdate} from "../redux/actions";
-import CreateJobForm from "../components/CreateJobForm";
+import CreateProfileForm from "../components/CreateProfileForm";
 import Loading from "../../../components/Loading";
-import UpdateJobForm from "../components/UpdateJobForm";
+import UpdateProfileForm from "../components/UpdateProfileForm";
 
 const mapStateToProps = ({
-                           jobManager: {
+                           profileManager: {
                              showForm,
                              list,
                              create,
-                             deleteJob,
+                             deleteProfile,
                              update,
                            }
                          }: RootState) => ({
   showForm,
   list,
   create,
-  deleteJob,
+  deleteProfile,
   update,
 })
 const connector = connect(mapStateToProps, {showFormCreate, showFormUpdate});
@@ -29,9 +29,9 @@ type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends ReduxProps {
 }
-function JobManagerPages(props: IProps) {
+function ProfileManagerPages(props: IProps) {
   useEffect(() => {
-    document.title = "Quản lý Job";
+    document.title = "Quản lý Profile";
   }, []);
 
   const handleCreate = (e: any) => {
@@ -49,13 +49,13 @@ function JobManagerPages(props: IProps) {
       <div className="entryHeader">
         <Row>
           <Col md={16}>
-            <div className="tmp-title-page-size20">Quản lý Job</div>
+            <div className="tmp-title-page-size20">Quản lý Profile</div>
           </Col>
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div>
                 <Button onClick={handleCreate}>
-                  <Icon type="plus"/> Tạo job
+                  <Icon type="plus"/> Tạo Profile
                 </Button>
               </div>
             </div>
@@ -63,14 +63,14 @@ function JobManagerPages(props: IProps) {
         </Row>
       </div>
 
-      <ListJob/>
+      <ListProfile/>
 
-      <CreateJobForm/>
-      <UpdateJobForm/>
+      <CreateProfileForm/>
+      <UpdateProfileForm/>
 
       {props.create.loading ||
       props.list.loading ||
-      props.deleteJob.loading ||
+      props.deleteProfile.loading ||
       props.update.loading ?
         <Loading/> : null}
 
@@ -79,4 +79,4 @@ function JobManagerPages(props: IProps) {
 
 }
 
-export default connector(JobManagerPages);
+export default connector(ProfileManagerPages);

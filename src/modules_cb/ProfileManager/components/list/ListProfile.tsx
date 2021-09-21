@@ -6,21 +6,21 @@ import {ColumnProps} from "antd/lib/table";
 import {Button, Icon, Popconfirm, Table} from "antd";
 import {emptyText} from "src/configs/locales";
 import {
-  deleteJobLevel,
-  getListJobLevel,
+  deleteProfile,
+  getListProfile,
   showFormCreate,
   showFormUpdate,
-  updateJobLevel
+  updateProfile
 } from "../../redux/actions";
-import {JobLevelEntity, CreateJobLevelRequest, UpdateJobLevelRequest, DeleteJobLevelRequest} from "../../types";
+import {ProfileEntity, CreateProfileRequest, UpdateProfileRequest, DeleteProfileRequest} from "../../types";
 
-const mapStateToProps = ({joblevelManager: {list}}: RootState) => ({list})
+const mapStateToProps = ({profileManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
-  getListJobLevel,
-  deleteJobLevel: deleteJobLevel,
+  getListProfile,
+  deleteProfile: deleteProfile,
   showFormCreate,
   showFormUpdate,
-  updateJobLevel
+  updateProfile
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -28,7 +28,7 @@ type ReduxProps = ConnectedProps<typeof connector>;
 interface IProps extends ReduxProps {
 }
 
-function ListJobLevel(props: IProps) {
+function ListProfile(props: IProps) {
 
   let screenWidth = document.documentElement.clientWidth;
   const [page, setPage] = useState(1);
@@ -39,34 +39,109 @@ function ListJobLevel(props: IProps) {
   });
 
   useEffect(() => {
-    props.getListJobLevel({page: 1, size: 100});
+    props.getListProfile({page: 1, size: 100});
   }, []);
 
-  const handleDelete = (event: any, entity: JobLevelEntity) => {
+  const handleDelete = (event: any, entity: ProfileEntity) => {
     event.stopPropagation();
-    let req: DeleteJobLevelRequest = {
+    let req: DeleteProfileRequest = {
       id: entity.id
     }
-    console.log(props.deleteJobLevel(req));
-    props.deleteJobLevel(req);
+    console.log(props.deleteProfile(req));
+    props.deleteProfile(req);
   }
 
-  const handleEdit = (event: any, entity: JobLevelEntity) => {
+  const handleEdit = (event: any, entity: ProfileEntity) => {
     event.stopPropagation();
     props.showFormUpdate(true, entity);
   }
 
-  const columns: ColumnProps<JobLevelEntity>[] = [
+  const columns: ColumnProps<ProfileEntity>[] = [
     {
       title: 'ID',
       dataIndex: 'id',
-      width: 100,
+      width: 200,
+      key: '1',
     },
     {
-      title: 'Name',
+      title: 'Họ tên',
+      dataIndex: 'fullName',
+      width: 150,
+      key: '2',
+    },
+    {
+      title: 'Năm sinh',
+      dataIndex: 'dateOfBirth',
+      width: 100,
+      key: '3',
+    },
+    {
+      title: 'Quê quán',
+      dataIndex: 'hometown',
+      width: 200,
+      key: '4',
+    },
+    {
+      title: 'Trường học',
+      dataIndex: 'school',
+      width: 200,
+      key: '5',
+    },
+    {
+      title: 'Số điện thoại',
+      dataIndex: 'phonenumber',
+      width: 100,
+      key: '6',
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      width: 150,
+      key: '7',
+    },
+    {
+      title: 'Công việc',
+      dataIndex: 'job',
+      width: 100,
+      key: '8',
+    },
+    {
+      title: 'Vị trí tuyển dụng',
       dataIndex: 'name',
       width: 100,
+      key: '9',
     },
+    {
+      title: 'CV',
+      dataIndex: 'cv',
+      width: 100,
+      key: '10',
+    },
+    {
+      title: 'Nguồn CV',
+      dataIndex: 'sourceCV',
+      width: 100,
+      key: '11',
+    },
+    {
+      title: 'HR Ref',
+      dataIndex: 'hrRef',
+      width: 100,
+      key: '12',
+    },
+    {
+      title: 'Thời gian nộp',
+      dataIndex: 'dateOfApply',
+      width: 100,
+      key: '13',
+    },
+    {
+      title: 'Loại CV',
+      dataIndex: 'cvType',
+      width: 100,
+      key: '14',
+    },
+
     {
       title: () => {
         return <div style={{whiteSpace: 'nowrap'}}>Thao tác</div>;
@@ -74,11 +149,11 @@ function ListJobLevel(props: IProps) {
       dataIndex: 'action',
       width: 100,
       fixed: 'right',
-      render: (_text: string, record: JobLevelEntity) => {
+      render: (_text: string, record: ProfileEntity) => {
         return (
           <div style={{whiteSpace: 'nowrap'}}>
             <Popconfirm
-              title="Bạn muốn xóa job level này chứ ?"
+              title="Bạn muốn xóa Profile này chứ ?"
               okText="Xóa"
               onCancel={event => {
                 event?.stopPropagation();
@@ -119,7 +194,7 @@ function ListJobLevel(props: IProps) {
   return (
     <>
       <Table
-        scroll={scroll}
+        scroll={{x:1300}}
         className="custom-table"
         dataSource={props.list.rows}
         columns={columns}
@@ -138,4 +213,4 @@ function ListJobLevel(props: IProps) {
 
 }
 
-export default connector(ListJobLevel);
+export default connector(ListProfile);

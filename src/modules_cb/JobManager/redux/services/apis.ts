@@ -10,7 +10,7 @@ export const getListJob = async (params: any): Promise<ListResponseBase2<JobEnti
     rows: response.rows || [],
     code: response.code,
     message: response.message
-  };
+  }
 };
 
 export const createJob = async (params?: any): Promise<ResponseBase2> => {

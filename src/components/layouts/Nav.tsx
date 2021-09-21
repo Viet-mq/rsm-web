@@ -139,6 +139,13 @@ const Nav = (props: IProps) => {
             {!props.hiddenLabel ? <span>Quản lý trạng thái CV </span> : null}
           </Link>
         </Menu.Item>
+`
+        <Menu.Item key="profile-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to={`/profile-manager`}>
+            <span className="rd-icon rd-icon-home"/>
+            {!props.hiddenLabel ? <span>Quản lý thông tin CV </span> : null}
+          </Link>
+        </Menu.Item>
 
       </SubMenu>
 
