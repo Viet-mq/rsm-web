@@ -99,7 +99,10 @@ function ChangePasswordAccountForm(props: ChangePasswordFormProps) {
               },
             ],
           })(
-            <Input placeholder="Mật khẩu mới" className="bg-white text-black"/>
+            <Input.Password
+              placeholder="Mật khẩu mới"
+              className="bg-white text-black"
+            />
           )}
         </Form.Item>
 
