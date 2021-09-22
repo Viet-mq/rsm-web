@@ -17,7 +17,7 @@ import {ProfileEntity, CreateProfileRequest, UpdateProfileRequest, DeleteProfile
 const mapStateToProps = ({profileManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
   getListProfile,
-  deleteProfile: deleteProfile,
+  deleteProfile,
   showFormCreate,
   showFormUpdate,
   updateProfile
@@ -29,7 +29,7 @@ interface IProps extends ReduxProps {
 }
 
 function ListProfile(props: IProps) {
-
+  console.log("list:",props);
   let screenWidth = document.documentElement.clientWidth;
   const [page, setPage] = useState(1);
   const [scroll, setScroll] = useState(screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false});
@@ -107,7 +107,7 @@ function ListProfile(props: IProps) {
     },
     {
       title: 'Vị trí tuyển dụng',
-      dataIndex: 'name',
+      dataIndex: 'levelJob',
       width: 100,
       key: '9',
     },

@@ -2,20 +2,30 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {showFormUpdate, updateProfile} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Form, Input, Modal} from "antd";
-import React, {FormEvent, useState} from "react";
+import {Button, DatePicker, Form, Input, Modal, Select} from "antd";
+import React, {FormEvent, useEffect, useState} from "react";
 import {UpdateProfileRequest} from "../types";
+import moment from "moment";
+import {getListJob} from "../../JobManager/redux/actions";
+import {getListJobLevel} from "../../JobLevelManager/redux/actions";
 
-const mapState = ({profileManager: {showForm}}: RootState) => ({showForm})
+const {Option} = Select;
 
-const connector = connect(mapState, {showFormUpdate, updateProfile});
+// const mapState = ({profileManager: {showForm}}: RootState) => ({showForm})
+
+const mapStateToProps = (state: RootState) => ({
+  showForm: state.profileManager.showForm,
+  listJob: state.jobManager.list,
+  listJobLevel: state.joblevelManager.list,
+})
+
+const connector = connect(mapStateToProps, {showFormUpdate, updateProfile, getListJob, getListJobLevel});
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface UpdateProfileFormProps extends FormComponentProps, ReduxProps {
 }
 
 function UpdateProfileForm(props: UpdateProfileFormProps) {
-
   const {getFieldDecorator, resetFields} = props.form;
   const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
@@ -30,6 +40,11 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     },
   };
 
+  useEffect(() => {
+    props.getListJob({page: '', size: ''});
+    props.getListJobLevel({page: '', size: ''});
+  }, [])
+
   function onBtnUpdateClicked(e: FormEvent) {
     e.preventDefault();
     (e.target as any).disabled = true;
@@ -37,7 +52,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         let req: UpdateProfileRequest = {
-          id:values.id,
+          id: values.id,
           cv: values.cv,
           cvType: values.cvType,
           dateOfApply: values.dateOfApply,
@@ -46,7 +61,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           fullName: values.fullName,
           hometown: values.hometown,
           hrRef: values.hrRef,
-          phonenumberid: values.phonenumberid,
           job: values.job,
           levelJob: values.levelJob,
           phonenumber: values.phonenumber,
@@ -64,6 +78,8 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     setCompensatoryDataSource([]);
     props.showFormUpdate(false);
   }
+
+  const dateFormat = 'DD/MM/YYYY';
 
   return (
 
@@ -101,23 +117,23 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           )}
         </Form.Item>
 
-        <Form.Item label="Tên Profile" className="mb-0" style={{...formItemStyle}}>
-          {getFieldDecorator('name', {
+        <Form.Item label="Họ Tên" className="mb-0" style={{...formItemStyle}}>
+          {getFieldDecorator('fullName', {
             initialValue: props.showForm.data_update?.fullName,
             rules: [
               {
-                message: 'Vui lòng nhập tên Profile',
+                message: 'Vui lòng nhập họ tên',
                 required: true,
               },
             ],
           })(
-            <Input placeholder="Tên Profile" className="bg-white text-black"/>
+            <Input placeholder="Họ tên" className="bg-white text-black"/>
           )}
         </Form.Item>
 
         <Form.Item label="Năm sinh" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('dateOfBirth', {
-            initialValue: props.showForm.data_update?.dateOfBirth,
+            initialValue: moment(props.showForm.data_update?.dateOfBirth),
             rules: [
               {
                 message: 'Vui lòng nhập năm sinh',
@@ -125,7 +141,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
               },
             ],
           })(
-            <Input disabled placeholder="Năm sinh" className="bg-white text-black"/>
+            <DatePicker format={dateFormat}/>
           )}
         </Form.Item>
 
@@ -135,7 +151,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
             rules: [
               {
                 message: 'Vui lòng nhập quê quán',
-                required: true,
+                required: false,
               },
             ],
           })(
@@ -149,11 +165,25 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
             rules: [
               {
                 message: 'Vui lòng nhập trường học',
+                required: false,
+              },
+            ],
+          })(
+            <Input placeholder="Trường học" className="bg-white text-black"/>
+          )}
+        </Form.Item>
+
+        <Form.Item label="SĐT" className="mb-0" style={{...formItemStyle}}>
+          {getFieldDecorator('phonenumber', {
+            initialValue: props.showForm.data_update?.phonenumber,
+            rules: [
+              {
+                message: 'Vui lòng nhập SDT',
                 required: true,
               },
             ],
           })(
-            <Input disabled placeholder="Trường học" className="bg-white text-black"/>
+            <Input placeholder="SDT" className="bg-white text-black"/>
           )}
         </Form.Item>
 
@@ -167,7 +197,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
               },
             ],
           })(
-            <Input disabled placeholder="Email" className="bg-white text-black"/>
+            <Input placeholder="Email" className="bg-white text-black"/>
           )}
         </Form.Item>
 
@@ -176,12 +206,18 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
             initialValue: props.showForm.data_update?.job,
             rules: [
               {
-                message: 'Vui lòng nhập tên Profile',
-                required: false,
+                message: 'Vui lòng nhập tên công việc',
+                required: true,
               },
             ],
           })(
-            <Input placeholder="Công việc" className="bg-white text-black"/>
+            <Select className="bg-white text-black"
+                    defaultValue={props.showForm.data_update?.job}
+            >
+              {props.listJob.rows?.map((item: any, index: any) => (
+                <Option value={item.name}>{item.name}</Option>
+              ))}
+            </Select>
           )}
         </Form.Item>
 
@@ -191,11 +227,31 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
             rules: [
               {
                 message: 'Vui lòng nhập vị trí tuyển dụng',
-                required: false,
+                required: true,
               },
             ],
           })(
-            <Input disabled placeholder="Vị trí tuyển dụng" className="bg-white text-black"/>
+            <Select className="bg-white text-black"
+                    defaultValue={props.showForm.data_update?.levelJob}
+            >
+              {props.listJobLevel.rows?.map((item: any, index: any) => (
+                <Option value={item.name}>{item.name}</Option>
+              ))}
+            </Select>
+          )}
+        </Form.Item>
+
+        <Form.Item label=" CV" className="mb-0" style={{...formItemStyle}}>
+          {getFieldDecorator('cv', {
+            initialValue: props.showForm.data_update?.cv,
+            rules: [
+              {
+                message: 'Vui lòng nhập CV',
+                required: true,
+              },
+            ],
+          })(
+            <Input placeholder="Nguồn CV" className="bg-white text-black"/>
           )}
         </Form.Item>
 
@@ -209,7 +265,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
               },
             ],
           })(
-            <Input disabled placeholder="Nguồn CV" className="bg-white text-black"/>
+            <Input placeholder="Nguồn CV" className="bg-white text-black"/>
           )}
         </Form.Item>
 
@@ -229,15 +285,15 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
 
         <Form.Item label="Thời gian nộp" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('dateOfApply', {
-            initialValue: props.showForm.data_update?.dateOfApply,
+            initialValue: moment(props.showForm.data_update?.dateOfApply),
             rules: [
               {
-                message: 'Vui lòng nhập id',
+                message: 'Vui lòng nhập thời gian',
                 required: false,
               },
             ],
           })(
-            <Input disabled placeholder="Thời gian nộp" className="bg-white text-black"/>
+            <DatePicker format={dateFormat}/>
           )}
         </Form.Item>
 

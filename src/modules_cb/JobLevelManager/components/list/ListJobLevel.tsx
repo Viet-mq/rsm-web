@@ -17,7 +17,7 @@ import {JobLevelEntity, CreateJobLevelRequest, UpdateJobLevelRequest, DeleteJobL
 const mapStateToProps = ({joblevelManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
   getListJobLevel,
-  deleteJobLevel: deleteJobLevel,
+  deleteJobLevel,
   showFormCreate,
   showFormUpdate,
   updateJobLevel
