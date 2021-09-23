@@ -39,7 +39,6 @@ function ListSchool(props: IProps) {
 
   useEffect(() => {
     props.getListSchool({page: 1, size: 100});
-    console.log("hihi:",props.getListSchool({page: 1, size: 100}));
   }, []);
 
   const handleDelete = (event: any, entity: SchoolEntity) => {

@@ -3,16 +3,10 @@ import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import env from "src/configs/env";
 import {ColumnProps} from "antd/lib/table";
-import {Button, Icon, Popconfirm, Table} from "antd";
+import {Button, Icon, Popconfirm, Table, Upload} from "antd";
 import {emptyText} from "src/configs/locales";
-import {
-  deleteProfile,
-  getListProfile,
-  showFormCreate,
-  showFormUpdate,
-  updateProfile
-} from "../../redux/actions";
-import {ProfileEntity, CreateProfileRequest, UpdateProfileRequest, DeleteProfileRequest} from "../../types";
+import {deleteProfile, getListProfile, showFormCreate, showFormUpdate, updateProfile} from "../../redux/actions";
+import {DeleteProfileRequest, ProfileEntity} from "../../types";
 
 const mapStateToProps = ({profileManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
@@ -29,7 +23,6 @@ interface IProps extends ReduxProps {
 }
 
 function ListProfile(props: IProps) {
-  console.log("list:",props);
   let screenWidth = document.documentElement.clientWidth;
   const [page, setPage] = useState(1);
   const [scroll, setScroll] = useState(screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false});
@@ -170,11 +163,19 @@ function ListProfile(props: IProps) {
                 <Icon type="delete" theme="filled"/>
               </Button>
             </Popconfirm>
+
             <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
                     onClick={event => handleEdit(event, record)}
             >
               <Icon type="edit"/>
             </Button>
+
+              <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
+                      // onClick={event => handleEdit(event, record)}
+              >
+                <Icon type="upload"/>
+              </Button>
+
           </div>
         );
       },
@@ -194,7 +195,7 @@ function ListProfile(props: IProps) {
   return (
     <>
       <Table
-        scroll={{x:1300}}
+        scroll={{x: 1300}}
         className="custom-table"
         dataSource={props.list.rows}
         columns={columns}

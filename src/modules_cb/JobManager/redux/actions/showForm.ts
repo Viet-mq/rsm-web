@@ -10,7 +10,7 @@ export interface JobFormAction {
 export const JOB_SHOW_FORM_CREATE = "JOB_SHOW_FORM_CREATE";
 export const JOB_SHOW_FORM_UPDATE = "JOB_SHOW_FORM_UPDATE";
 
-export const showFormCreate = (show: boolean): JobFormAction => ({
+export const  showFormCreate = (show: boolean): JobFormAction => ({
   type: JOB_SHOW_FORM_CREATE,
   show_create: show
 });

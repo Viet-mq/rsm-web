@@ -5,7 +5,6 @@ import {AppError} from "src/models/common";
 import {NotificationError} from "src/components/Notification/Notification";
 
 export function* getListSchoolAsync(action: SchoolListAction) {
-  console.log("haha");
   try {
     const rs = yield apis.getListSchool(action.params);
     console.log("rs: " + JSON.stringify(rs));
