@@ -3,10 +3,11 @@ import ListProfile from "../components/list/ListProfile";
 import {Button, Col, Icon, Row} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {showFormCreate, showFormUpdate} from "../redux/actions";
+import {showFormCreate, showFormUpdate, showFormUploadCV} from "../redux/actions";
 import CreateProfileForm from "../components/CreateProfileForm";
 import Loading from "../../../components/Loading";
 import UpdateProfileForm from "../components/UpdateProfileForm";
+import UploadCVForm from "../components/UploadCVForm";
 
 const mapStateToProps = ({
                            profileManager: {
@@ -15,6 +16,8 @@ const mapStateToProps = ({
                              create,
                              deleteProfile,
                              update,
+                             uploadCV,
+                             showFormUpload,
                            }
                          }: RootState) => ({
   showForm,
@@ -22,8 +25,10 @@ const mapStateToProps = ({
   create,
   deleteProfile,
   update,
+  uploadCV,
+  showFormUpload
 })
-const connector = connect(mapStateToProps, {showFormCreate, showFormUpdate});
+const connector = connect(mapStateToProps, {showFormCreate, showFormUpdate,showFormUploadCV});
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -64,13 +69,14 @@ function ProfileManagerPages(props: IProps) {
       </div>
 
       <ListProfile/>
-
       <CreateProfileForm/>
       <UpdateProfileForm/>
+      <UploadCVForm/>
 
       {props.create.loading ||
       props.list.loading ||
       props.deleteProfile.loading ||
+      props.uploadCV.loading ||
       props.update.loading ?
         <Loading/> : null}
 

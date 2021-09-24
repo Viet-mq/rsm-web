@@ -58,11 +58,6 @@ function ListJob(props: IProps) {
 
   const columns: ColumnProps<JobEntity>[] = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      width: 100,
-    },
-    {
       title: 'Name',
       dataIndex: 'name',
       width: 100,

@@ -3,7 +3,8 @@ import {createProfileAsync} from "./create";
 import {deleteProfileAsync} from "./deleteProfile";
 import {getListProfileAsync} from "./list";
 import {updateProfileAsync} from "./update";
-import { CREATE_PROFILE, DELETE_PROFILE, GET_LIST_PROFILE, UPDATE_PROFILE} from "../actions";
+import {CREATE_PROFILE, DELETE_PROFILE, GET_LIST_PROFILE, UPDATE_PROFILE, UPLOADCV} from "../actions";
+import {uploadCVAsync} from "./uploadCV";
 
 export default function* root() {
   return all([
@@ -11,5 +12,7 @@ export default function* root() {
     yield takeLatest(DELETE_PROFILE, deleteProfileAsync),
     yield takeLatest(GET_LIST_PROFILE, getListProfileAsync),
     yield takeLatest(UPDATE_PROFILE, updateProfileAsync),
+    yield takeLatest(UPLOADCV, uploadCVAsync),
+
   ]);
 }

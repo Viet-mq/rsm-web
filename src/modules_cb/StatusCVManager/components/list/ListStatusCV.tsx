@@ -58,11 +58,6 @@ function ListStatusCV(props: IProps) {
 
   const columns: ColumnProps<StatusCVEntity>[] = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      width: 100,
-    },
-    {
       title: 'Name',
       dataIndex: 'name',
       width: 100,

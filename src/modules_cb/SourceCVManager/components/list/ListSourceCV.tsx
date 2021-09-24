@@ -58,11 +58,6 @@ function ListSourceCV(props: IProps) {
 
   const columns: ColumnProps<SourceCVEntity>[] = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      width: 100,
-    },
-    {
       title: 'Name',
       dataIndex: 'name',
       width: 100,

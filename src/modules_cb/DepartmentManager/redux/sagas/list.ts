@@ -5,7 +5,6 @@ import {AppError} from "src/models/common";
 import {NotificationError} from "src/components/Notification/Notification";
 
 export function* getListDepartmentAsync(action: DepartmentListAction) {
-  console.log("haah2");
   try {
     const rs = yield apis.getListDepartment(action.params);
     console.log("rs: " + JSON.stringify(rs));

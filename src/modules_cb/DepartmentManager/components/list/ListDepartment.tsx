@@ -58,11 +58,6 @@ function ListDepartment(props: IProps) {
 
   const columns: ColumnProps<DepartmentEntity>[] = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      width: 100,
-    },
-    {
       title: 'Name',
       dataIndex: 'name',
       width: 100,

@@ -3,10 +3,18 @@ import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import env from "src/configs/env";
 import {ColumnProps} from "antd/lib/table";
-import {Button, Icon, Popconfirm, Table, Upload} from "antd";
+import {Button, Icon, Popconfirm, Table} from "antd";
 import {emptyText} from "src/configs/locales";
-import {deleteProfile, getListProfile, showFormCreate, showFormUpdate, updateProfile} from "../../redux/actions";
-import {DeleteProfileRequest, ProfileEntity} from "../../types";
+import {
+  deleteProfile,
+  getListProfile,
+  showFormCreate,
+  showFormUpdate,
+  showFormUploadCV,
+  updateProfile
+} from "../../redux/actions";
+import {DeleteProfileRequest, ProfileEntity, UploadCVRequest} from "../../types";
+import moment from "moment";
 
 const mapStateToProps = ({profileManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
@@ -14,7 +22,8 @@ const connector = connect(mapStateToProps, {
   deleteProfile,
   showFormCreate,
   showFormUpdate,
-  updateProfile
+  updateProfile,
+  showFormUploadCV,
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -35,27 +44,35 @@ function ListProfile(props: IProps) {
     props.getListProfile({page: 1, size: 100});
   }, []);
 
+  function unixTimeToDate(unixTime: number): Date {
+    return new Date(unixTime);
+  }
+
   const handleDelete = (event: any, entity: ProfileEntity) => {
     event.stopPropagation();
     let req: DeleteProfileRequest = {
       id: entity.id
     }
-    console.log(props.deleteProfile(req));
     props.deleteProfile(req);
   }
 
   const handleEdit = (event: any, entity: ProfileEntity) => {
-    event.stopPropagation();
+     event.stopPropagation();
     props.showFormUpdate(true, entity);
   }
 
+  const handleUploadCV = (e: any, entity: ProfileEntity) => {
+    e.preventDefault();
+    if (e?.target) {
+      e.target.disabled = true;
+      e.target.disabled = false;
+    }
+    props.showFormUploadCV(true,entity);
+  }
+
+
+
   const columns: ColumnProps<ProfileEntity>[] = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      width: 200,
-      key: '1',
-    },
     {
       title: 'Họ tên',
       dataIndex: 'fullName',
@@ -67,6 +84,9 @@ function ListProfile(props: IProps) {
       dataIndex: 'dateOfBirth',
       width: 100,
       key: '3',
+      render: (value: number) => {
+        return moment(unixTimeToDate(value)).format('DD/MM/YYYY');
+      },
     },
     {
       title: 'Quê quán',
@@ -127,6 +147,9 @@ function ListProfile(props: IProps) {
       dataIndex: 'dateOfApply',
       width: 100,
       key: '13',
+      render: (value: number) => {
+        return moment(unixTimeToDate(value)).format('DD/MM/YYYY');
+      },
     },
     {
       title: 'Loại CV',
@@ -169,9 +192,8 @@ function ListProfile(props: IProps) {
             >
               <Icon type="edit"/>
             </Button>
-
               <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
-                      // onClick={event => handleEdit(event, record)}
+                      onClick={event=>handleUploadCV(event, record)}
               >
                 <Icon type="upload"/>
               </Button>

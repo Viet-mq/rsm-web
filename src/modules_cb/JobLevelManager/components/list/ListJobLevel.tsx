@@ -58,11 +58,6 @@ function ListJobLevel(props: IProps) {
 
   const columns: ColumnProps<JobLevelEntity>[] = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      width: 100,
-    },
-    {
       title: 'Name',
       dataIndex: 'name',
       width: 100,

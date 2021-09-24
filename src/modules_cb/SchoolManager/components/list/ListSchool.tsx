@@ -57,11 +57,6 @@ function ListSchool(props: IProps) {
 
   const columns: ColumnProps<SchoolEntity>[] = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      width: 100,
-    },
-    {
       title: 'Name',
       dataIndex: 'name',
       width: 100,

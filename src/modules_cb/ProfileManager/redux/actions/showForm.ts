@@ -7,6 +7,7 @@ export interface ProfileFormAction {
   data_update?: ProfileEntity
 }
 
+
 export const PROFILE_SHOW_FORM_CREATE = "PROFILE_SHOW_FORM_CREATE";
 export const PROFILE_SHOW_FORM_UPDATE = "PROFILE_SHOW_FORM_UPDATE";
 
@@ -20,4 +21,6 @@ export const showFormUpdate = (show: boolean, dataUpdate?: ProfileEntity): Profi
   show_update: show,
   data_update: dataUpdate
 });
+
+
 

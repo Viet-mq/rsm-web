@@ -13,7 +13,6 @@ export interface ProfileEntity {
   phonenumber: string,
   school: string,
   sourceCV: string,
-
 }
 
 export interface CreateProfileRequest {
@@ -51,4 +50,9 @@ export interface UpdateProfileRequest {
 
 export interface DeleteProfileRequest {
   id:string,
+}
+
+export interface UploadCVRequest {
+  profileId:string,
+  file:any,
 }

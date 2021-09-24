@@ -1,5 +1,5 @@
 import {ListResponseBase2, ResponseBase2} from "src/models/common";
-import {GET, POST} from "src/services";
+import {GET, POST, POSTIMAGE} from "src/services";
 import {ProfileEntity} from "../../types";
 
 export const getListProfile = async (params: any): Promise<ListResponseBase2<ProfileEntity>> => {
@@ -24,3 +24,14 @@ export const deleteProfile = async (params?: any): Promise<ResponseBase2> => {
 export const updateProfile = async (params?: any): Promise<ResponseBase2> => {
   return (await POST('api-svc/profile/update', params)) as ResponseBase2;
 };
+
+export const updateCV = async (file: any, profileId: any) => {
+  let formData = new FormData();
+  formData.append('image', file);
+  formData.append('profile_id', profileId);
+  return POSTIMAGE('upload-svc/upload/upload-cv', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+}

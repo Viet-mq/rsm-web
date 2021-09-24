@@ -45,8 +45,7 @@ const connector = connect(mapStateToProps,
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
-interface CreateProfileFormProps extends FormComponentProps, ReduxProps {
-}
+interface CreateProfileFormProps extends FormComponentProps, ReduxProps {}
 
 function CreateProfileForm(props: CreateProfileFormProps) {
 
@@ -228,7 +227,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                         defaultValue=''
                 >
                   {props.listSchool.rows?.map((item: any, index: any) => (
-                    <Option value={item.name}>{item.name}</Option>
+                    <Option key={index} value={item.name}>{item.name}</Option>
                   ))}
                 </Select>
                 <Button
@@ -287,7 +286,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                         defaultValue=''
                 >
                   {props.listJob.rows?.map((item: any, index: any) => (
-                    <Option value={item.name}>{item.name}</Option>
+                    <Option key={index} value={item.name}>{item.name}</Option>
                   ))}
                 </Select>
 
@@ -320,7 +319,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                         defaultValue=''
                 >
                   {props.listJobLevel.rows?.map((item: any, index: any) => (
-                    <Option value={item.name}>{item.name}</Option>
+                    <Option key={index} value={item.name}>{item.name}</Option>
                   ))}
                 </Select>
 
@@ -333,20 +332,6 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                   <Icon type="plus"/>
                 </Button>
               </div>
-            )}
-          </Form.Item>
-
-          <Form.Item label=" CV" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('cv', {
-              initialValue: '',
-              rules: [
-                {
-                  message: 'Vui lòng nhập CV',
-                  required: true,
-                },
-              ],
-            })(
-              <Input placeholder="Nguồn CV" className="bg-white text-black"/>
             )}
           </Form.Item>
 
@@ -366,7 +351,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                         defaultValue=''
                 >
                   {props.listSourceCV.rows?.map((item: any, index: any) => (
-                    <Option value={item.name}>{item.name}</Option>
+                    <Option key={index} value={item.name}>{item.name}</Option>
                   ))}
                 </Select>
 

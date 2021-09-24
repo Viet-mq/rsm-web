@@ -4,6 +4,8 @@ import deleteProfile, {DeleteProfileState} from "./deleteProfile";
 import create, {CreateProfileState} from "./create";
 import showForm, {ProfileFormState} from "./showForm";
 import update, {UpdateProfileState} from "./update";
+import uploadCV,{UploadCVState} from "./uploadCV";
+import showFormUpload,{ShowUploadFormState} from "./showFormUpload";
 
 export interface ProfileManagerModuleState {
   list: ProfileListState,
@@ -11,6 +13,9 @@ export interface ProfileManagerModuleState {
   create: CreateProfileState,
   showForm: ProfileFormState,
   update: UpdateProfileState,
+  uploadCV:UploadCVState,
+  showFormUpload:ShowUploadFormState,
+
 }
 
 export default combineReducers<ProfileManagerModuleState>({
@@ -19,4 +24,6 @@ export default combineReducers<ProfileManagerModuleState>({
   create,
   showForm,
   update,
+  uploadCV,
+  showFormUpload,
 });

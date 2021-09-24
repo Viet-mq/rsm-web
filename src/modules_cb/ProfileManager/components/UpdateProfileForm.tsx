@@ -63,7 +63,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
       sm: {span: 16},
     },
   };
-
   useEffect(() => {
     props.getListJob({page: '', size: ''});
     props.getListJobLevel({page: '', size: ''});
@@ -166,20 +165,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
 
         <Form {...formItemLayout}>
 
-          <Form.Item label="ID" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('id', {
-              initialValue: props.showForm.data_update?.id,
-              rules: [
-                {
-                  message: 'Vui lòng nhập id',
-                  required: true,
-                },
-              ],
-            })(
-              <Input disabled placeholder="ID" className="bg-white text-black"/>
-            )}
-          </Form.Item>
-
           <Form.Item label="Họ Tên" className="mb-0" style={{...formItemStyle}}>
             {getFieldDecorator('fullName', {
               initialValue: props.showForm.data_update?.fullName,
@@ -237,7 +222,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                         defaultValue={props.showForm.data_update?.school}
                 >
                   {props.listSchool.rows?.map((item: any, index: any) => (
-                    <Option value={item.name}>{item.name}</Option>
+                    <Option key={index} value={item.name}>{item.name}</Option>
                   ))}
                 </Select>
                 <Button
@@ -297,7 +282,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                         defaultValue={props.showForm.data_update?.job}
                 >
                   {props.listJob.rows?.map((item: any, index: any) => (
-                    <Option value={item.name}>{item.name}</Option>
+                    <Option key={index} value={item.name}>{item.name}</Option>
                   ))}
                 </Select>
 
@@ -330,7 +315,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                         defaultValue={props.showForm.data_update?.levelJob}
                 >
                   {props.listJobLevel.rows?.map((item: any, index: any) => (
-                    <Option value={item.name}>{item.name}</Option>
+                    <Option key={index} value={item.name}>{item.name}</Option>
                   ))}
                 </Select>
 
@@ -343,20 +328,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                   <Icon type="plus"/>
                 </Button>
               </div>
-            )}
-          </Form.Item>
-
-          <Form.Item label=" CV" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('cv', {
-              initialValue: props.showForm.data_update?.cv,
-              rules: [
-                {
-                  message: 'Vui lòng nhập CV',
-                  required: true,
-                },
-              ],
-            })(
-              <Input placeholder="Nguồn CV" className="bg-white text-black"/>
             )}
           </Form.Item>
 
@@ -376,7 +347,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                         defaultValue={props.showForm.data_update?.sourceCV}
                 >
                   {props.listSourceCV.rows?.map((item: any, index: any) => (
-                    <Option value={item.name}>{item.name}</Option>
+                    <Option key={index} value={item.name}>{item.name}</Option>
                   ))}
                 </Select>
 
