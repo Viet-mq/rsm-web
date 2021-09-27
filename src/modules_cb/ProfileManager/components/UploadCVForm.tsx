@@ -18,7 +18,6 @@ interface CreateUploadFormProps extends ReduxProps {
 }
 
 function UploadCVForm(props: CreateUploadFormProps) {
-
   const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
   const [file, setFile] = useState(null);

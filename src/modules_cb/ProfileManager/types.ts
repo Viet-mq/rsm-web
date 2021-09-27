@@ -56,3 +56,9 @@ export interface UploadCVRequest {
   profileId:string,
   file:any,
 }
+
+export interface DetailCV{
+  show_detail:boolean,
+  general:number,
+  detail:number,
+}

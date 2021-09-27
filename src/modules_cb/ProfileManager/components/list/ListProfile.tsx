@@ -9,11 +9,12 @@ import {
   deleteProfile,
   getListProfile,
   showFormCreate,
+  showFormDetail,
   showFormUpdate,
   showFormUploadCV,
   updateProfile
 } from "../../redux/actions";
-import {DeleteProfileRequest, ProfileEntity, UploadCVRequest} from "../../types";
+import {DeleteProfileRequest, DetailCV, ProfileEntity, UploadCVRequest} from "../../types";
 import moment from "moment";
 
 const mapStateToProps = ({profileManager: {list}}: RootState) => ({list})
@@ -22,6 +23,7 @@ const connector = connect(mapStateToProps, {
   deleteProfile,
   showFormCreate,
   showFormUpdate,
+  showFormDetail,
   updateProfile,
   showFormUploadCV,
 });
@@ -62,7 +64,7 @@ function ListProfile(props: IProps) {
   }
 
   const handleUploadCV = (e: any, entity: ProfileEntity) => {
-    e.preventDefault();
+    e.stopPropagation();
     if (e?.target) {
       e.target.disabled = true;
       e.target.disabled = false;
@@ -70,7 +72,15 @@ function ListProfile(props: IProps) {
     props.showFormUploadCV(true,entity);
   }
 
-
+  const handleDetail = (e:any,entity:ProfileEntity)=>{
+    e.stopPropagation();
+    let req: DetailCV={
+      show_detail:true,
+      general:12,
+      detail:12,
+    }
+    props.showFormDetail(req,entity);
+  }
 
   const columns: ColumnProps<ProfileEntity>[] = [
     {
@@ -78,6 +88,7 @@ function ListProfile(props: IProps) {
       dataIndex: 'fullName',
       width: 150,
       key: '2',
+      render: (text:string,record:ProfileEntity) => <a onClick={event=>handleDetail(event,record)}>{text}</a>,
     },
     {
       title: 'Năm sinh',
@@ -192,12 +203,14 @@ function ListProfile(props: IProps) {
             >
               <Icon type="edit"/>
             </Button>
-              <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
+            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
                       onClick={event=>handleUploadCV(event, record)}
               >
                 <Icon type="upload"/>
               </Button>
-
+            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
+                    onClick={event=>handleDetail(event,record)}
+            >Chi tiết</Button>
           </div>
         );
       },

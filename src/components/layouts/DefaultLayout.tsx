@@ -1,13 +1,24 @@
 import React, {useEffect, useState} from 'react';
 import Nav from './Nav';
-import {Icon, Layout} from 'antd';
+import {Col, Icon, Layout, Row} from 'antd';
 import Header from './Header';
 import commonStyled from './styled/commonStyled';
 import env from 'src/configs/env';
+import DetailProfileForm from "../../modules_cb/ProfileManager/components/DetailProfileForm";
+import {RootState} from "../../redux/reducers";
+import {connect, ConnectedProps} from "react-redux";
 
 const {Sider} = Layout;
 
-interface LayoutProps {
+const mapStateToProps = ( state :RootState) =>({
+  showFormDetail:state.profileManager.showForm
+})
+
+const connector = connect(mapStateToProps);
+
+type ReduxProps = ConnectedProps<typeof connector>;
+
+interface LayoutProps extends ReduxProps{
   children: React.ReactNode;
 }
 
@@ -15,7 +26,7 @@ const DefaultLayout = (props: LayoutProps) => {
 
   const screenWidth = document.documentElement.clientWidth;
   const [collapsed, setCollapsed] = useState(screenWidth <= env.tabletWidth ? true : false)
-
+  const [colDetail,setColDetail]=useState({general:12,detail:12})
   function toggle() {
     setCollapsed(!collapsed)
   }
@@ -29,7 +40,7 @@ const DefaultLayout = (props: LayoutProps) => {
 
     window.addEventListener('resize', updateSize);
     updateSize();
-      return () => window.removeEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
 
   }, []);
 
@@ -53,7 +64,17 @@ const DefaultLayout = (props: LayoutProps) => {
                 onClick={toggle}
               />
             </Header>
-            {props.children}
+
+            <Row>
+              <Col span={props.showFormDetail?.show_detail?.general}>
+                {props.children}
+              </Col>
+
+              <Col span={props.showFormDetail?.show_detail?.detail}>
+                <DetailProfileForm/>
+              </Col>
+            </Row>
+
           </Layout>
         </Layout>
       </Layout>
@@ -62,4 +83,4 @@ const DefaultLayout = (props: LayoutProps) => {
 
 };
 
-export default DefaultLayout;
+export default connector(DefaultLayout);
