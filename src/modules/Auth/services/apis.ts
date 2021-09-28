@@ -3,7 +3,6 @@ import {POST} from 'src/services';
 import {ResponseBase2} from "src/models/common";
 
 export const login = (data?: LoginInput): Promise<LoginResponse2> => {
-  debugger
   return POST('acc-svc/users/auth/login', data);
 };
 

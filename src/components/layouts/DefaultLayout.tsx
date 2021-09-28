@@ -10,15 +10,15 @@ import {connect, ConnectedProps} from "react-redux";
 
 const {Sider} = Layout;
 
-const mapStateToProps = ( state :RootState) =>({
-  showFormDetail:state.profileManager.showForm
+const mapStateToProps = (state: RootState) => ({
+  showFormDetail: state.profileManager.showForm
 })
 
 const connector = connect(mapStateToProps);
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
-interface LayoutProps extends ReduxProps{
+interface LayoutProps extends ReduxProps {
   children: React.ReactNode;
 }
 
@@ -26,7 +26,8 @@ const DefaultLayout = (props: LayoutProps) => {
 
   const screenWidth = document.documentElement.clientWidth;
   const [collapsed, setCollapsed] = useState(screenWidth <= env.tabletWidth ? true : false)
-  const [colDetail,setColDetail]=useState({general:12,detail:12})
+  const [colDetail, setColDetail] = useState({general: 12, detail: 12})
+
   function toggle() {
     setCollapsed(!collapsed)
   }
@@ -65,16 +66,17 @@ const DefaultLayout = (props: LayoutProps) => {
               />
             </Header>
 
-            <Row>
-              <Col span={props.showFormDetail?.show_detail?.general}>
-                {props.children}
-              </Col>
+            <div>
+              <Row>
+                  <Col span={props.showFormDetail?.show_detail?.general}>
+                    {props.children}
+                  </Col>
 
-              <Col span={props.showFormDetail?.show_detail?.detail}>
-                <DetailProfileForm/>
-              </Col>
-            </Row>
-
+                  <Col span={props.showFormDetail?.show_detail?.detail}>
+                    <DetailProfileForm/>
+                  </Col>
+              </Row>
+            </div>
           </Layout>
         </Layout>
       </Layout>
