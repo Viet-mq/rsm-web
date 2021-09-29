@@ -1,12 +1,13 @@
 import * as Actions from "../actions";
 import {ProfileFormAction} from "../actions";
-import {DetailCV, ProfileEntity} from "../../types";
+import {DetailCV, DetailProfileRequest, ProfileEntity} from "../../types";
 
 export interface ProfileFormState {
   show_create?: boolean,
   show_update?: boolean,
   show_detail?: DetailCV,
-  data_update?: ProfileEntity
+  data_update?: ProfileEntity,
+  data_detail?:DetailProfileRequest
 }
 
 const initState: ProfileFormState = {
@@ -24,7 +25,8 @@ export default (state = initState, {
   show_create,
   show_update,
   show_detail,
-  data_update
+  data_update,
+  data_detail
 }: ProfileFormAction): ProfileFormState => {
   switch (type) {
     case Actions.PROFILE_SHOW_FORM_CREATE:
@@ -54,7 +56,7 @@ export default (state = initState, {
       return {
         ...state,
         show_detail,
-        data_update,
+        data_detail ,
         show_create: false,
         show_update: false,
       }

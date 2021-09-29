@@ -35,3 +35,7 @@ export const updateCV = async (file: any, profileId: any) => {
     },
   })
 }
+
+export const getDetailProfile = async (params?: any): Promise<ResponseBase2> => {
+  return (await GET('api-svc/profile/detail', params)) as ResponseBase2;
+};

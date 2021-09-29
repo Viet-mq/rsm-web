@@ -9,6 +9,7 @@ const {Option} = Select;
 
 const mapStateToProps = (state: RootState) => ({
   showForm: state.profileManager.showForm,
+  detail: state.profileManager.detail
 })
 
 const connector = connect(mapStateToProps,
@@ -36,7 +37,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     }
     props.showFormDetail(req);
   }
-
+  console.log("duyhaha1:",props);
   function unixTimeToDate(unixTime: number): Date {
     return new Date(unixTime);
   }
@@ -45,7 +46,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     <div className="detail-container">
       <div className="detail-title">
         <div className="detail-title__left">
-          <h1>Hồ Đức Duy</h1>
+          <h1>{props.detail.result?.fullName}</h1>
           <span>Java Candidate Profile</span>
         </div>
 
@@ -67,7 +68,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       <div className="detail-paragraph-1">
         <Avatar src={require('src/assets/images/profile.png')} size={100}/>
         <div className="detail-paragraph-1__name">
-          <h2>Hồ Đức Duy</h2>
+          <h2>{props.detail.result?.fullName}</h2>
           <Icon type="star" className="ml-1 mr-1"/>
           <Icon type="star" className="ml-1 mr-1"/>
           <Icon type="star" className="ml-1 mr-1"/>
@@ -78,8 +79,8 @@ function DetailProfileForm(props: DetailProfileFormProps) {
           <p>evaluations </p>
           <br/>
           <p>No title</p>
-          <p>0123456789</p>
-          <p>email@email.com</p>
+          <p>{props.detail.result?.phoneNumber}</p>
+          <p>{props.detail.result?.email}</p>
         </div>
       </div>
 
@@ -90,11 +91,11 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
         <div className="detail-paragraph-2__content">
           <Icon type="mail" className='mr-1'/>
-          <span>email@email.com</span><br/>
+          <span>{props.detail.result?.email}</span><br/>
           <Icon type="phone" className='mr-1'/>
-          <span>0213456789</span><br/>
+          <span>{props.detail.result?.phoneNumber}</span><br/>
           <Icon type="contacts" className='mr-1'/>
-          <span>Không có địa chỉ</span><br/>
+          <span>{props.detail.result?.hometown||"Không có địa chỉ"}</span><br/>
           <h1>Social profiles</h1>
         </div>
 
@@ -116,21 +117,10 @@ function DetailProfileForm(props: DetailProfileFormProps) {
         </div>
       </div>
 
-      {/*<div>*/}
-      {/*  <div>{props.showForm.data_update?.fullName}</div>*/}
-      {/*  <div>{props.showForm.data_update?.dateOfApply}</div>*/}
-      {/*  <div>{props.showForm.data_update?.hometown}</div>*/}
-      {/*  <div>{props.showForm.data_update?.school}</div>*/}
-      {/*  <div>{props.showForm.data_update?.phonenumber}</div>*/}
-      {/*  <div>{props.showForm.data_update?.email}</div>*/}
-      {/*  <div>{props.showForm.data_update?.job}</div>*/}
-      {/*  <div>{props.showForm.data_update?.levelJob}</div>*/}
-      {/*  <div>{props.showForm.data_update?.cv}</div>*/}
-      {/*  <div>{props.showForm.data_update?.sourceCV}</div>*/}
-      {/*  <div>{props.showForm.data_update?.hrRef}</div>*/}
-      {/*  <div>{props.showForm.data_update?.dateOfApply}</div>*/}
-      {/*  <div>{props.showForm.data_update?.cvType}</div>*/}
-      {/*</div>*/}
+      <div className="detail-paragraph-5">
+        <h1>Activity logs</h1>
+      </div>
+
     </div>
   )
 }

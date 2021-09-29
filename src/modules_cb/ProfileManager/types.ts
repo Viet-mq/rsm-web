@@ -1,5 +1,5 @@
 export interface ProfileEntity {
-  id:string,
+  id: string,
   cv: string,
   cvType: string,
   dateOfApply: string,
@@ -32,7 +32,7 @@ export interface CreateProfileRequest {
 }
 
 export interface UpdateProfileRequest {
-  id:string,
+  id: string,
   cv: string,
   cvType: string,
   dateOfApply: string,
@@ -49,16 +49,42 @@ export interface UpdateProfileRequest {
 }
 
 export interface DeleteProfileRequest {
-  id:string,
+  id: string,
 }
 
 export interface UploadCVRequest {
-  profileId:string,
-  file:any,
+  profileId: string,
+  file: any,
 }
 
-export interface DetailCV{
-  show_detail:boolean,
-  general:number,
-  detail:number,
+export interface DetailCV {
+  show_detail: boolean,
+  general: number,
+  detail: number,
+}
+
+export interface DetailProfileRequest {
+  id: string,
+  fullName: string,
+  gender: string,
+  phoneNumber: string,
+  email: string,
+  dateOfBirth: string,
+  hometown: string,
+  school: string,
+  job: string,
+  levelJob: string,
+  cv: string,
+  sourceCV: string,
+  hrRef: string,
+  dateOfApply: string,
+  cvType: string,
+  lastApply: string,
+  tags: string,
+  dateOfCreate: string,
+  dateOfUpdate: string,
+  note: string,
+  evaluation: string,
+  statusCV: string
+
 }

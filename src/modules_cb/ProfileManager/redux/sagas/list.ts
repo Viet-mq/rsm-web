@@ -1,4 +1,4 @@
-import {ProfileListAction, getListProfileError, getListProfileSuccess} from "../actions";
+import {getListProfileError, getListProfileSuccess, ProfileListAction} from "../actions";
 import * as apis from '../services/apis'
 import {put} from "redux-saga/effects";
 import {AppError} from "src/models/common";

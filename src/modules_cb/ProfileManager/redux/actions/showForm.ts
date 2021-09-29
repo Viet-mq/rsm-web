@@ -1,12 +1,12 @@
-import {DetailCV, ProfileEntity} from "../../types";
+import {DetailCV, DetailProfileRequest, ProfileEntity} from "../../types";
 
 export interface ProfileFormAction {
   type: string,
   show_create?: boolean,
   show_update?: boolean,
   show_detail?:DetailCV,
-
   data_update?: ProfileEntity
+  data_detail?:DetailProfileRequest
 }
 
 export const PROFILE_SHOW_FORM_CREATE = "PROFILE_SHOW_FORM_CREATE";
@@ -24,10 +24,10 @@ export const showFormUpdate = (show: boolean, dataUpdate?: ProfileEntity): Profi
   data_update: dataUpdate
 });
 
-export const showFormDetail =(show?:DetailCV,dataDetail?:ProfileEntity):ProfileFormAction=>({
+export const showFormDetail =(show?:DetailCV,dataDetail?:DetailProfileRequest):ProfileFormAction=>({
   type:PROFILE_SHOW_FORM_DETAIL,
   show_detail:show,
-  data_update:dataDetail
+  data_detail:dataDetail
 })
 
 
