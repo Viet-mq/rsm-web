@@ -3,7 +3,7 @@ import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import env from "src/configs/env";
 import {ColumnProps} from "antd/lib/table";
-import {Button, Icon, Popconfirm, Table} from "antd";
+import {Button, DatePicker, Icon, Input, Popconfirm, Select, Table} from "antd";
 import {emptyText} from "src/configs/locales";
 import {
   deleteProfile,
@@ -16,10 +16,16 @@ import {
 } from "../../redux/actions";
 import {DeleteProfileRequest, DetailCV, ProfileEntity} from "../../types";
 import moment from "moment";
+import Search from "antd/lib/input/Search";
+import {getListSourceCV} from "../../../SourceCVManager/redux/actions";
+
+const InputGroup = Input.Group;
+const {Option} = Select;
 
 const mapStateToProps = (state: RootState) => ({
   list: state.profileManager.list,
   detail: state.profileManager.detail,
+  listSource: state.sourcecvManager.list
 })
 const connector = connect(mapStateToProps, {
   getListProfile,
@@ -28,7 +34,8 @@ const connector = connect(mapStateToProps, {
   showFormUpdate,
   showFormDetail,
   showFormUploadCV,
-  getDetailProfile
+  getDetailProfile,
+  getListSourceCV
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -45,9 +52,12 @@ function ListProfile(props: IProps) {
     selectedRowKeys: [],
   });
   const [id, setId] = useState('');
+  const [sourceCV, setSourceCV] = useState('');
+  const [date, setDate] = useState('');
 
   useEffect(() => {
     props.getListProfile({page: 1, size: 100});
+    props.getListSourceCV({page: '', size: ''});
   }, []);
 
   useEffect(() => {
@@ -93,6 +103,19 @@ function ListProfile(props: IProps) {
 
   }
 
+  const handleSearch = (value: any) => {
+    props.getListProfile({key: value, page: 1, size: 100,dateOfApply:date,sourceCV:sourceCV});
+    console.log("duyhaha2", props);
+  }
+
+  const handleSelectSource = (value: any) => {
+    setSourceCV(value);
+  }
+
+  const handleSelectDate = (value: any) => {
+    let applyDate: string = moment(unixTimeToDate(value)).format('DD/MM/YYYY');
+    setSourceCV(applyDate);
+  }
   const columns: ColumnProps<ProfileEntity>[] = [
     {
       title: 'Họ tên',
@@ -238,8 +261,39 @@ function ListProfile(props: IProps) {
     onChange: onSelectedRowKeysChange,
   };
 
+  const dateFormat = 'DD/MM/YYYY';
+
   return (
     <>
+      <InputGroup compact>
+        <Select
+          placeholder="Nguồn CV"
+          size="large"
+          style={{width: '25%'}}
+          onChange={handleSelectSource}
+        >
+          {props.listSource.rows?.map((item: any, index: any) => (
+            <Option key={index} value={item.name}>{item.name}</Option>
+          ))}
+        </Select>
+        <DatePicker size="large"
+                    style={{width: '25%'}}
+                    format={dateFormat}
+                    placeholder="Chọn thời gian nộp"
+                    onChange={handleSelectDate}
+        />
+        <Search
+          placeholder="Nhập tìm kiếm"
+          enterButton="Tìm kiếm"
+          size="large"
+          style={{width: '50%'}}
+          onSearch={handleSearch}
+        />
+      </InputGroup>
+
+
+      <br/>
+      <br/>
       <Table
         scroll={{x: 1300}}
         className="custom-table"

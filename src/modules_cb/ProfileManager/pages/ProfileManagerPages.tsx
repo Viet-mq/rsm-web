@@ -8,6 +8,7 @@ import CreateProfileForm from "../components/CreateProfileForm";
 import Loading from "../../../components/Loading";
 import UpdateProfileForm from "../components/UpdateProfileForm";
 import UploadCVForm from "../components/UploadCVForm";
+import Search from "antd/lib/input/Search";
 
 const mapStateToProps = ({
                            profileManager: {

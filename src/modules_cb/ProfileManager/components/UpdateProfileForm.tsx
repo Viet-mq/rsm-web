@@ -189,7 +189,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                 },
               ],
             })(
-              <DatePicker format={dateFormat}/>
+              <DatePicker format={dateFormat} />
             )}
           </Form.Item>
 
