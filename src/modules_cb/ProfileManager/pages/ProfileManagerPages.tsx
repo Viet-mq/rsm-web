@@ -3,12 +3,12 @@ import ListProfile from "../components/list/ListProfile";
 import {Button, Col, Icon, Row} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {showFormCreate, showFormUpdate, showFormUploadCV} from "../redux/actions";
+import {showFormBooking, showFormCreate, showFormUpdate, showFormUploadCV} from "../redux/actions";
 import CreateProfileForm from "../components/CreateProfileForm";
 import Loading from "../../../components/Loading";
 import UpdateProfileForm from "../components/UpdateProfileForm";
 import UploadCVForm from "../components/UploadCVForm";
-import Search from "antd/lib/input/Search";
+import BookingForm from "../components/BookingForm";
 
 const mapStateToProps = ({
                            profileManager: {
@@ -19,6 +19,9 @@ const mapStateToProps = ({
                              update,
                              uploadCV,
                              showFormUpload,
+                             getBooking,
+                             createBooking,
+                             updateBooking
                            }
                          }: RootState) => ({
   showForm,
@@ -27,14 +30,18 @@ const mapStateToProps = ({
   deleteProfile,
   update,
   uploadCV,
-  showFormUpload
+  showFormUpload,
+  getBooking,
+  createBooking,
+  updateBooking
 })
-const connector = connect(mapStateToProps, {showFormCreate, showFormUpdate,showFormUploadCV});
+const connector = connect(mapStateToProps, {showFormCreate, showFormUpdate, showFormUploadCV, showFormBooking});
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends ReduxProps {
 }
+
 function ProfileManagerPages(props: IProps) {
   useEffect(() => {
     document.title = "Quản lý Profile";
@@ -73,12 +80,16 @@ function ProfileManagerPages(props: IProps) {
       <CreateProfileForm/>
       <UpdateProfileForm/>
       <UploadCVForm/>
+      <BookingForm/>
 
       {props.create.loading ||
       props.list.loading ||
       props.deleteProfile.loading ||
       props.uploadCV.loading ||
-      props.update.loading ?
+      props.update.loading ||
+      props.getBooking.loading ||
+      props.createBooking.loading ||
+      props.updateBooking.loading ?
         <Loading/> : null}
 
     </div>

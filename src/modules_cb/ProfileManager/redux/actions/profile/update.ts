@@ -1,4 +1,4 @@
-import {UpdateProfileRequest} from "../../types";
+import {UpdateProfileRequest} from "../../../types";
 import {AppError, ResponseBase2} from "src/models/common";
 
 export interface UpdateProfileAction {

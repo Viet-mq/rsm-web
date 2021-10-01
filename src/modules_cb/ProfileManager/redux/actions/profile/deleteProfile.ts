@@ -1,4 +1,4 @@
-import {DeleteProfileRequest} from "../../types";
+import {DeleteProfileRequest} from "../../../types";
 import {AppError, ResponseBase2} from "src/models/common";
 
 export interface DeleteProfileAction {

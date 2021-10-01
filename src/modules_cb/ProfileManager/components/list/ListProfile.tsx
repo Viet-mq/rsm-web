@@ -13,6 +13,7 @@ import {
   showFormDetail,
   showFormUpdate,
   showFormUploadCV,
+  showFormBooking, getBooking
 } from "../../redux/actions";
 import {DeleteProfileRequest, DetailCV, ProfileEntity} from "../../types";
 import moment from "moment";
@@ -35,7 +36,9 @@ const connector = connect(mapStateToProps, {
   showFormDetail,
   showFormUploadCV,
   getDetailProfile,
-  getListSourceCV
+  getListSourceCV,
+  showFormBooking,
+  getBooking
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -81,6 +84,11 @@ function ListProfile(props: IProps) {
     props.showFormUpdate(true, entity);
   }
 
+  const handleBooking = (event: any, entity: ProfileEntity) => {
+    event.stopPropagation();
+    props.showFormBooking(true,entity.id);
+  }
+
   const handleUploadCV = (e: any, entity: ProfileEntity) => {
     e.stopPropagation();
     if (e?.target) {
@@ -100,12 +108,10 @@ function ListProfile(props: IProps) {
       detail: 12,
     }
     props.showFormDetail(req, props.detail?.result);
-
   }
 
   const handleSearch = (value: any) => {
     props.getListProfile({key: value, page: 1, size: 100,dateOfApply:date,sourceCV:sourceCV});
-    console.log("duyhaha2", props);
   }
 
   const handleSelectSource = (value: any) => {
@@ -241,6 +247,11 @@ function ListProfile(props: IProps) {
                     onClick={event => handleUploadCV(event, record)}
             >
               <Icon type="upload"/>
+            </Button>
+            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
+                    onClick={event => handleBooking(event, record)}
+            >
+              <Icon type="calendar"/>
             </Button>
             <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
                     onClick={event => handleDetail(event, record)}

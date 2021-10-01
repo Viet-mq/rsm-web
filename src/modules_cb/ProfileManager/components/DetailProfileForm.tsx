@@ -37,7 +37,8 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     }
     props.showFormDetail(req);
   }
-  console.log("duyhaha1:",props);
+  console.log("duyhaha1:", props);
+
   function unixTimeToDate(unixTime: number): Date {
     return new Date(unixTime);
   }
@@ -95,7 +96,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
           <Icon type="phone" className='mr-1'/>
           <span>{props.detail.result?.phoneNumber}</span><br/>
           <Icon type="contacts" className='mr-1'/>
-          <span>{props.detail.result?.hometown||"Không có địa chỉ"}</span><br/>
+          <span>{props.detail.result?.hometown || "Không có địa chỉ"}</span><br/>
           <h1>Social profiles</h1>
         </div>
 
@@ -107,7 +108,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
       <div className="detail-paragraph-3">
         <div className="detail-paragraph-3__title">
-          <h1>Thông tin hồ sơ</h1>
+          <h1>Thông tin ứng tuyển</h1>
         </div>
       </div>
 
@@ -115,6 +116,17 @@ function DetailProfileForm(props: DetailProfileFormProps) {
         <div className="detail-paragraph-4__title">
           <h1>Resumes & CVS</h1>
         </div>
+
+        <div className="detail-paragraph-4__content">
+          <iframe
+            src="https://www.afirm-group.com/viet/ChemicalGuidanceVN.pdf"
+            title="CV"
+            width="100%"
+            height="700px"
+          >
+          </iframe>
+        </div>
+
       </div>
 
       <div className="detail-paragraph-5">

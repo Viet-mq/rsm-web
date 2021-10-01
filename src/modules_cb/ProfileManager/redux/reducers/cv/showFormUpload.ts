@@ -1,6 +1,6 @@
-import {ProfileEntity, UploadCVRequest} from "../../types";
-import * as Actions from "../actions";
-import {UploadCVFormAction} from "../actions";
+import {ProfileEntity, UploadCVRequest} from "../../../types";
+import * as Actions from "../../actions";
+import {UploadCVFormAction} from "../../actions";
 
 export interface ShowUploadFormState {
   show_upload?: boolean,

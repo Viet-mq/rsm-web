@@ -39,3 +39,15 @@ export const updateCV = async (file: any, profileId: any) => {
 export const getDetailProfile = async (params?: any): Promise<ResponseBase2> => {
   return (await GET('api-svc/profile/detail', params)) as ResponseBase2;
 };
+
+export const createBooking = async (params?: any): Promise<ResponseBase2> => {
+  return (await POST('api-svc/calendar/create', params)) as ResponseBase2;
+};
+
+export const updateBooking = async (params?: any): Promise<ResponseBase2> => {
+  return (await POST('api-svc/calendar/update', params)) as ResponseBase2;
+};
+
+export const getBooking = async (params?: any): Promise<ResponseBase2> => {
+  return (await GET('api-svc/calendar/list', params)) as ResponseBase2;
+};

@@ -1,11 +1,21 @@
 import {all, takeLatest} from 'redux-saga/effects';
-import {createProfileAsync} from "./create";
-import {deleteProfileAsync} from "./deleteProfile";
-import {getListProfileAsync} from "./list";
-import {updateProfileAsync} from "./update";
-import {getDetailProfileAsync} from "./detail";
-import {CREATE_PROFILE, DELETE_PROFILE, GET_LIST_PROFILE, UPDATE_PROFILE, UPLOADCV, GET_DETAIL_PROFILE} from "../actions";
-import {uploadCVAsync} from "./uploadCV";
+import {createProfileAsync} from "./profile/create";
+import {deleteProfileAsync} from "./profile/deleteProfile";
+import {getListProfileAsync} from "./profile/list";
+import {updateProfileAsync} from "./profile/update";
+import {getDetailProfileAsync} from "./detail/detail";
+import {
+  CREATE_PROFILE,
+  DELETE_PROFILE,
+  GET_LIST_PROFILE,
+  UPDATE_PROFILE,
+  UPLOADCV,
+  GET_DETAIL_PROFILE,
+  GET_BOOKING, CREATE_BOOKING, UPDATE_BOOKING
+} from "../actions";
+import {uploadCVAsync} from "./cv/uploadCV";
+import {getBookingAsync} from "./booking/getBooking";
+import {updateBookingAsync} from "./booking/updateBooking";
 
 export default function* root() {
   return all([
@@ -15,6 +25,9 @@ export default function* root() {
     yield takeLatest(UPDATE_PROFILE, updateProfileAsync),
     yield takeLatest(GET_DETAIL_PROFILE, getDetailProfileAsync),
     yield takeLatest(UPLOADCV, uploadCVAsync),
+    yield takeLatest(GET_BOOKING,getBookingAsync),
+    yield takeLatest(CREATE_BOOKING,createProfileAsync),
+    yield takeLatest(UPDATE_BOOKING,updateBookingAsync)
 
   ]);
 }

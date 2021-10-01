@@ -86,8 +86,15 @@
 .detail-paragraph-4 h1 {
   text-transform: uppercase;
   font-size: 18px;
+}
+.detail-paragraph-4__title {
+  padding: 15px 15px 0;
+  border-bottom: 2px solid #e8e8e8;
+}
+.detail-paragraph-4__content {
   padding: 15px;
 }
+
 .detail-paragraph-5 {
   border-top: 20px solid #e8e8e8;
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.5);

@@ -1,7 +1,7 @@
-import {DeleteProfileRequest} from "../../types";
-import {AppError, ResponseBase2} from "../../../../models/common";
-import * as Actions from "../actions";
-import {DeleteProfileAction} from "../actions";
+import {DeleteProfileRequest} from "../../../types";
+import {AppError, ResponseBase2} from "../../../../../models/common";
+import * as Actions from "../../actions";
+import {DeleteProfileAction} from "../../actions";
 
 export interface DeleteProfileState {
   loading: boolean,

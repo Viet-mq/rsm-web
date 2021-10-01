@@ -1,10 +1,10 @@
-import {DetailProfileAction, getDetailProfileError, getDetailProfileSuccess, showFormDetail} from "../actions";
-import * as apis from "../services/apis";
+import {DetailProfileAction, getDetailProfileError, getDetailProfileSuccess, showFormDetail} from "../../actions";
+import * as apis from "../../services/apis";
 import {put} from "redux-saga/effects";
 import {NotificationError} from "src/components/Notification/Notification";
 import {AppError} from "src/models/common";
-import {DetailCV} from "../../types";
-import {getDetailProfile} from "../services/apis";
+import {DetailCV} from "../../../types";
+import {getDetailProfile} from "../../services/apis";
 
 export function* getDetailProfileAsync(action: DetailProfileAction) {
   try {

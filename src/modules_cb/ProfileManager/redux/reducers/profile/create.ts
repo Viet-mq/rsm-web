@@ -1,7 +1,7 @@
-import {CreateProfileRequest} from "../../types";
-import {AppError, ResponseBase2} from "../../../../models/common";
-import * as Actions from "../actions";
-import {CreateProfileAction} from "../actions";
+import {CreateProfileRequest} from "../../../types";
+import {AppError, ResponseBase2} from "../../../../../models/common";
+import * as Actions from "../../actions";
+import {CreateProfileAction} from "../../actions";
 
 export interface CreateProfileState {
   loading: boolean,

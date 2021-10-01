@@ -1,4 +1,4 @@
-import {UploadCVRequest} from "../../types";
+import {UploadCVRequest} from "../../../types";
 import {AppError, ResponseBase2} from "src/models/common";
 
 export interface UploadCVAction {

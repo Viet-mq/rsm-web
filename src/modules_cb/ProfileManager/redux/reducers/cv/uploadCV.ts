@@ -1,7 +1,7 @@
-import {UploadCVRequest} from "../../types";
-import {AppError, ResponseBase2} from "../../../../models/common";
-import * as Actions from "../actions";
-import {UploadCVAction} from "../actions";
+import {UploadCVRequest} from "../../../types";
+import {AppError, ResponseBase2} from "../../../../../models/common";
+import * as Actions from "../../actions";
+import {UploadCVAction} from "../../actions";
 
 export interface UploadCVState {
   loading: boolean,

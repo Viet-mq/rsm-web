@@ -1,7 +1,7 @@
-import {UpdateProfileRequest} from "../../types";
-import {AppError, ResponseBase2} from "../../../../models/common";
-import * as Actions from "../actions";
-import {UpdateProfileAction} from "../actions";
+import {UpdateProfileRequest} from "../../../types";
+import {AppError, ResponseBase2} from "../../../../../models/common";
+import * as Actions from "../../actions";
+import {UpdateProfileAction} from "../../actions";
 
 export interface UpdateProfileState {
   loading: boolean,

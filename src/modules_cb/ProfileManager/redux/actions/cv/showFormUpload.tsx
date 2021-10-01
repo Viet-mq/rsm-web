@@ -1,4 +1,4 @@
-import {ProfileEntity, UploadCVRequest} from "../../types";
+import {ProfileEntity} from "../../../types";
 
 
 export interface UploadCVFormAction {

@@ -7,7 +7,7 @@ export interface ProfileFormState {
   show_update?: boolean,
   show_detail?: DetailCV,
   data_update?: ProfileEntity,
-  data_detail?:DetailProfileRequest
+  data_detail?: DetailProfileRequest,
 }
 
 const initState: ProfileFormState = {
@@ -56,9 +56,8 @@ export default (state = initState, {
       return {
         ...state,
         show_detail,
-        data_detail ,
-        show_create: false,
-        show_update: false,
+        data_detail,
+        show_create: false, show_update: false,
       }
     default:
       return state;

@@ -1,7 +1,7 @@
-import {ProfileEntity} from "../../types";
+import {ProfileEntity} from "../../../types";
 import {AppError} from "src/models/common";
-import * as Actions from "../actions";
-import {ProfileListAction} from "../actions";
+import * as Actions from "../../actions";
+import {ProfileListAction} from "../../actions";
 
 export interface ProfileListState {
   loading: boolean,

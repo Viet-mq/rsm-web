@@ -1,4 +1,4 @@
-import {CreateProfileRequest} from "../../types";
+import {CreateProfileRequest} from "../../../types";
 import {AppError, ResponseBase2} from "src/models/common";
 
 export interface CreateProfileAction {

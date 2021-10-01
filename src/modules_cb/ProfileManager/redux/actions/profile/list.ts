@@ -1,4 +1,4 @@
-import {ProfileEntity} from "../../types";
+import {ProfileEntity} from "../../../types";
 import {AppError} from "src/models/common";
 
 export interface ProfileListAction {

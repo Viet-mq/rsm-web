@@ -1,5 +1,5 @@
-import {DeleteProfileAction, deleteProfileError, deleteProfileSuccess, getListProfile} from "../actions";
-import * as apis from "../services/apis";
+import {DeleteProfileAction, deleteProfileError, deleteProfileSuccess, getListProfile} from "../../actions";
+import * as apis from "../../services/apis";
 import {put, select} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
 import {RootState} from "src/redux/reducers";

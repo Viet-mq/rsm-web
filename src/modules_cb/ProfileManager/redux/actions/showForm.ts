@@ -28,7 +28,8 @@ export const showFormDetail =(show?:DetailCV,dataDetail?:DetailProfileRequest):P
   type:PROFILE_SHOW_FORM_DETAIL,
   show_detail:show,
   data_detail:dataDetail
-})
+});
+
 
 
 

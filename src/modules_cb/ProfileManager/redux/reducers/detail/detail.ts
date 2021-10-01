@@ -1,7 +1,7 @@
-import {DetailProfileRequest} from "../../types";
-import {AppError} from "../../../../models/common";
-import * as Actions from "../actions";
-import {DetailProfileAction} from "../actions";
+import {DetailProfileRequest} from "../../../types";
+import {AppError} from "../../../../../models/common";
+import * as Actions from "../../actions";
+import {DetailProfileAction} from "../../actions";
 
 export interface DetailProfileState {
   loading: boolean,

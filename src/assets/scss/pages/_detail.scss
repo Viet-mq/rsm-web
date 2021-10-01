@@ -106,11 +106,15 @@
   h1 {
     text-transform: uppercase;
     font-size: 18px;
-    padding: 15px;
+    //padding: 15px;
   }
 
-  &__title {
-    //border-bottom: 2px solid ;
+  &__title{
+    padding: 15px 15px 0;
+    border-bottom: 2px solid $color-light-grey;
+  }
+  &__content{
+    padding: 15px;
   }
 }
 
@@ -124,6 +128,7 @@
     font-size: 18px;
     padding: 15px;
   }
+
 }
 
 

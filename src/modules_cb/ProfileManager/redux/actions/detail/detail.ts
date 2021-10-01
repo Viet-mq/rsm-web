@@ -1,5 +1,5 @@
-import {DetailProfileRequest} from "../../types";
-import {AppError} from "../../../../models/common";
+import {DetailProfileRequest} from "../../../types";
+import {AppError} from "../../../../../models/common";
 
 export interface DetailProfileAction {
   type: string,

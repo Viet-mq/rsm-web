@@ -63,6 +63,24 @@ export interface DetailCV {
   detail: number,
 }
 
+export interface BookingEntity {
+  id:string,
+  idProfile :  string ,
+  time : string ,
+  address :  string ,
+  form :  string ,
+  interviewer : string[],
+  interviewee :  string ,
+  content :  string ,
+  question : string[],
+  comment : string[],
+  evaluation :  string ,
+  status :  string ,
+  reason :  string,
+  timeStart :  string,
+  timeFinish :  string
+}
+
 export interface DetailProfileRequest {
   id: string,
   fullName: string,
@@ -86,5 +104,39 @@ export interface DetailProfileRequest {
   note: string,
   evaluation: string,
   statusCV: string
+}
 
+export interface CreateBookingRequest {
+   idProfile :  string ,
+   time : string ,
+   address :  string ,
+   form :  string ,
+   interviewer : string[],
+   interviewee :  string ,
+   content :  string ,
+   question : string[],
+   comment : string[],
+   evaluation :  string ,
+   status :  string ,
+   reason :  string,
+   timeStart :  string,
+   timeFinish :  string
+}
+
+export interface UpdateBookingRequest {
+  id:string,
+   idProfile :  string ,
+   time : string ,
+   address :  string ,
+   form :  string ,
+   interviewer : string[],
+   interviewee :  string ,
+   content :  string ,
+   question : string[],
+   comment : string[],
+   evaluation :  string ,
+   status :  string ,
+   reason :  string,
+   timeStart :  string,
+   timeFinish :  string
 }

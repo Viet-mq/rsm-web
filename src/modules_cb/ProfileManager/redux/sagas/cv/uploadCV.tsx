@@ -3,8 +3,8 @@ import {
   UploadCVAction,
   uploadCVError,
   uploadCVSuccess
-} from "../actions";
-import * as apis from "../services/apis";
+} from "../../actions";
+import * as apis from "../../services/apis";
 import {put} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
 import {AppError} from "src/models/common";
