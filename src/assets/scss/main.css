@@ -112,6 +112,10 @@
   padding: 10px 15px 0;
   border-bottom: 2px solid #e8e8e8;
 }
+.detail-paragraph-5__content p {
+  padding-left: 15px;
+  box-sizing: border-box;
+}
 .detail-paragraph-5__content h1 {
   padding-left: 0;
 }

@@ -134,6 +134,10 @@
   }
 
   &__content {
+    p{
+      padding-left: 15px;
+      box-sizing: border-box;
+    }
     padding: 10px 15px 0;
     border-bottom: 2px solid $color-light-grey;
 

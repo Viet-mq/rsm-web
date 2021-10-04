@@ -222,7 +222,7 @@ function BookingForm(props: BookingFormProps) {
 
               <Form.Item label="Hình thức" className="mb-0" style={{...formItemStyle}}>
                 {getFieldDecorator('form', {
-                  initialValue: '',
+                  initialValue: 'Online',
                   rules: [
                     {
                       message: 'Vui lòng nhập Hình thức phỏng vấn',
@@ -230,14 +230,11 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <div style={{display: 'flex'}}>
                     <Select className="bg-white text-black"
-                            defaultValue='online'
                     >
                       <Option value="online">Online</Option>
                       <Option value="offline">Offline</Option>
                     </Select>
-                  </div>
                 )}
               </Form.Item>
 
@@ -251,7 +248,6 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <div style={{display: 'flex'}}>
                     <Select className="bg-white text-black"
                             mode="multiple"
                             placeholder="Please select"
@@ -260,7 +256,6 @@ function BookingForm(props: BookingFormProps) {
                         <Option key={index} value={item.fullName}>{item.fullName}</Option>
                       ))}
                     </Select>
-                  </div>
                 )}
               </Form.Item>
 
@@ -330,7 +325,6 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <div style={{display: 'flex'}}>
                     <Select className="bg-white text-black"
                             placeholder="Please select"
                     >
@@ -338,7 +332,6 @@ function BookingForm(props: BookingFormProps) {
                         <Option key={index} value={item.name}>{item.name}</Option>
                       ))}
                     </Select>
-                  </div>
                 )}
               </Form.Item>
 
@@ -480,7 +473,7 @@ function BookingForm(props: BookingFormProps) {
 
               <Form.Item label="Hình thức" className="mb-0" style={{...formItemStyle}}>
                 {getFieldDecorator('form', {
-                  initialValue: '',
+                  initialValue: 'Online',
                   rules: [
                     {
                       message: 'Vui lòng nhập hình thức',
@@ -488,14 +481,11 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <div style={{display: 'flex'}}>
                     <Select className="bg-white text-black"
-                            defaultValue='on'
                     >
                       <Option value="on">Online</Option>
                       <Option value="off">Offline</Option>
                     </Select>
-                  </div>
                 )}
               </Form.Item>
 
@@ -509,7 +499,6 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <div style={{display: 'flex'}}>
                     <Select className="bg-white text-black"
                             mode="multiple"
                             placeholder="Please select"
@@ -518,7 +507,6 @@ function BookingForm(props: BookingFormProps) {
                         <Option key={index} value={item.fullName}>{item.fullName}</Option>
                       ))}
                     </Select>
-                  </div>
                 )}
               </Form.Item>
 
@@ -588,7 +576,6 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <div style={{display: 'flex'}}>
                     <Select className="bg-white text-black"
                             placeholder="Please select"
                     >
@@ -596,7 +583,6 @@ function BookingForm(props: BookingFormProps) {
                         <Option key={index} value={item.name}>{item.name}</Option>
                       ))}
                     </Select>
-                  </div>
                 )}
               </Form.Item>
 

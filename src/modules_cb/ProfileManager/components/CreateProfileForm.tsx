@@ -45,7 +45,8 @@ const connector = connect(mapStateToProps,
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
-interface CreateProfileFormProps extends FormComponentProps, ReduxProps {}
+interface CreateProfileFormProps extends FormComponentProps, ReduxProps {
+}
 
 function CreateProfileForm(props: CreateProfileFormProps) {
 
@@ -113,7 +114,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
 
   const dateFormat = 'DD/MM/YYYY';
 
-  const handleCreateSchool = (e:any)=>{
+  const handleCreateSchool = (e: any) => {
     e.preventDefault();
     if (e?.target) {
       e.target.disabled = true;
@@ -122,7 +123,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
     props.showSchoolFormCreate(true);
   }
 
-  const handleCreateJob = (e:any)=>{
+  const handleCreateJob = (e: any) => {
     e.preventDefault();
     if (e?.target) {
       e.target.disabled = true;
@@ -131,7 +132,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
     props.showJobFormCreate(true);
   }
 
-  const handleCreateJobLevel = (e:any)=>{
+  const handleCreateJobLevel = (e: any) => {
     e.preventDefault();
     if (e?.target) {
       e.target.disabled = true;
@@ -139,7 +140,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
     }
     props.showJobLevelFormCreate(true);
   }
-  const handleCreateSourceCV = (e:any)=>{
+  const handleCreateSourceCV = (e: any) => {
     e.preventDefault();
     if (e?.target) {
       e.target.disabled = true;
@@ -213,33 +214,33 @@ function CreateProfileForm(props: CreateProfileFormProps) {
           </Form.Item>
 
           <Form.Item label="Trường học" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('school', {
-              initialValue: '',
-              rules: [
-                {
-                  message: 'Vui lòng nhập trường học',
-                  required: false,
-                },
-              ],
-            })(
-              <div style={{display: 'flex'}}>
+            <div style={{display: 'flex'}}>
+              {getFieldDecorator('school', {
+                initialValue: '',
+                rules: [
+                  {
+                    message: 'Vui lòng nhập trường học',
+                    required: false,
+                  },
+                ],
+              })(
                 <Select className="bg-white text-black"
-                        defaultValue=''
                 >
                   {props.listSchool.rows?.map((item: any, index: any) => (
                     <Option key={index} value={item.name}>{item.name}</Option>
                   ))}
                 </Select>
-                <Button
-                  size="small"
-                  className="ant-btn ml-1 mr-1 ant-btn-sm"
-                  style={{height: '32px'}}
-                  onClick={handleCreateSchool}
-                >
-                  <Icon type="plus"/>
-                </Button>
-              </div>
-            )}
+              )}
+              <Button
+                size="small"
+                className="ant-btn ml-1 mr-1 ant-btn-sm"
+                style={{height: '32px'}}
+                onClick={handleCreateSchool}
+              >
+                <Icon type="plus"/>
+              </Button>
+            </div>
+
           </Form.Item>
 
           <Form.Item label="SĐT" className="mb-0" style={{...formItemStyle}}>
@@ -271,100 +272,91 @@ function CreateProfileForm(props: CreateProfileFormProps) {
           </Form.Item>
 
           <Form.Item label="Công việc" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('job', {
-              initialValue: '',
-              rules: [
-                {
-                  message: 'Vui lòng nhập tên công việc',
-                  required: true,
-                },
-              ],
-            })(
-              <div style={{display: 'flex'}}>
-
+            <div style={{display: 'flex'}}>
+              {getFieldDecorator('job', {
+                initialValue: '',
+                rules: [
+                  {
+                    message: 'Vui lòng nhập tên công việc',
+                    required: true,
+                  },
+                ],
+              })(
                 <Select className="bg-white text-black"
-                        defaultValue=''
                 >
                   {props.listJob.rows?.map((item: any, index: any) => (
                     <Option key={index} value={item.name}>{item.name}</Option>
                   ))}
                 </Select>
+              )}
+              <Button
+                size="small"
+                className="ant-btn ml-1 mr-1 ant-btn-sm"
+                style={{height: '32px'}}
+                onClick={handleCreateJob}
+              >
+                <Icon type="plus"/>
+              </Button>
 
-                <Button
-                  size="small"
-                  className="ant-btn ml-1 mr-1 ant-btn-sm"
-                  style={{height: '32px'}}
-                  onClick={handleCreateJob}
-                >
-                  <Icon type="plus"/>
-                </Button>
-
-              </div>
-            )}
+            </div>
           </Form.Item>
 
           <Form.Item label="Vị trí tuyển dụng" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('levelJob', {
-              initialValue: '',
-              rules: [
-                {
-                  message: 'Vui lòng nhập vị trí tuyển dụng',
-                  required: true,
-                },
-              ],
-            })(
-              <div style={{display: 'flex'}}>
-
+            <div style={{display: 'flex'}}>
+              {getFieldDecorator('levelJob', {
+                initialValue: '',
+                rules: [
+                  {
+                    message: 'Vui lòng nhập vị trí tuyển dụng',
+                    required: true,
+                  },
+                ],
+              })(
                 <Select className="bg-white text-black"
-                        defaultValue=''
                 >
                   {props.listJobLevel.rows?.map((item: any, index: any) => (
                     <Option key={index} value={item.name}>{item.name}</Option>
                   ))}
                 </Select>
-
-                <Button
-                  size="small"
-                  className="ant-btn ml-1 mr-1 ant-btn-sm"
-                  style={{height: '32px'}}
-                  onClick={handleCreateJobLevel}
-                >
-                  <Icon type="plus"/>
-                </Button>
-              </div>
-            )}
+              )}
+              <Button
+                size="small"
+                className="ant-btn ml-1 mr-1 ant-btn-sm"
+                style={{height: '32px'}}
+                onClick={handleCreateJobLevel}
+              >
+                <Icon type="plus"/>
+              </Button>
+            </div>
           </Form.Item>
 
           <Form.Item label="Nguồn CV" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('sourceCV', {
-              initialValue: '',
-              rules: [
-                {
-                  message: 'Vui lòng nhập Nguồn CV',
-                  required: false,
-                },
-              ],
-            })(
-              <div style={{display: 'flex'}}>
-
+            <div style={{display: 'flex'}}>
+              {getFieldDecorator('sourceCV', {
+                initialValue: '',
+                rules: [
+                  {
+                    message: 'Vui lòng nhập Nguồn CV',
+                    required: false,
+                  },
+                ],
+              })(
                 <Select className="bg-white text-black"
-                        defaultValue=''
                 >
                   {props.listSourceCV.rows?.map((item: any, index: any) => (
                     <Option key={index} value={item.name}>{item.name}</Option>
                   ))}
                 </Select>
-
-                <Button
-                  size="small"
-                  className="ant-btn ml-1 mr-1 ant-btn-sm"
-                  style={{height: '32px'}}
-                  onClick={handleCreateSourceCV}
-                >
-                  <Icon type="plus"/>
-                </Button>
-              </div>
-            )}
+              )}
+              <Button
+                size="small"
+                className="ant-btn ml-1 mr-1 ant-btn-sm"
+                style={{height: '32px'}}
+                onClick={handleCreateSourceCV}
+              >
+                <Icon type="plus"/>
+              </Button>
+            </div>
           </Form.Item>
 
           <Form.Item label="HR Reference" className="mb-0" style={{...formItemStyle}}>

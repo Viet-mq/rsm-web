@@ -134,15 +134,15 @@ function DetailProfileForm(props: DetailProfileFormProps) {
         </div>
 
         <div className='detail-paragraph-5__content'>
-          <Timeline>
-            <Timeline.Item dot={<Icon type="eye" theme="twoTone" twoToneColor='#70BF74'/>}>Create a services site
-              2015-09-01</Timeline.Item>
-            <Timeline.Item dot={<Icon type="heart" theme="twoTone" twoToneColor="#eb2f96"/>}>Solve initial network
-              problems 2015-09-01</Timeline.Item>
-            <Timeline.Item dot={<Icon type="mail" theme="twoTone"/>}>Solve initial network problems
-              2015-09-01</Timeline.Item>
-            <Timeline.Item dot={<Icon type="carry-out" theme="twoTone" />}>Solve initial network problems
-              2015-09-01</Timeline.Item>
+          <Timeline style={{padding:'15px'}}>
+            <Timeline.Item dot={<Icon type="eye" theme="twoTone" twoToneColor='#70BF74' style={{borderRadius: '50%',backgroundColor:'#70BF74',width:'40px',height:'40px',paddingTop:'5px',fontSize:'30px'}}/>}><p>Create a services site
+            </p><p>2015-09-01</p></Timeline.Item>
+            <Timeline.Item dot={<Icon type="heart" theme="twoTone" twoToneColor="#E2BB39" style={{borderRadius: '50%',backgroundColor:'#E2BB39',width:'25px',height:'25px'}}/>}><p>Solve initial network
+              problems 2015-09-01</p></Timeline.Item>
+            <Timeline.Item dot={<Icon type="mail" theme="twoTone" style={{borderRadius: '50%',backgroundColor:'#5296E5',width:'25px',height:'25px'}}/>}><p>Solve initial network problems
+              2015-09-01</p></Timeline.Item>
+            <Timeline.Item dot={<Icon type="carry-out" theme="twoTone" twoToneColor='#965BB4' style={{borderRadius: '50%',backgroundColor:'#965BB4',width:'25px',height:'25px'}}/>}><p>Solve initial network problems
+              2015-09-01</p></Timeline.Item>
           </Timeline>
         </div>
       </div>

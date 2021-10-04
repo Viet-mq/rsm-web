@@ -126,7 +126,7 @@ function ListProfile(props: IProps) {
     {
       title: 'Họ tên',
       dataIndex: 'fullName',
-      width: 150,
+      width: 130,
       key: '2',
       render: (text: string, record: ProfileEntity) => <a onClick={event => handleDetail(event, record)}>{text}</a>,
     },
@@ -154,13 +154,13 @@ function ListProfile(props: IProps) {
     {
       title: 'Số điện thoại',
       dataIndex: 'phoneNumber',
-      width: 100,
+      width: 110,
       key: '6',
     },
     {
       title: 'Email',
       dataIndex: 'email',
-      width: 150,
+      width: 200,
       key: '7',
     },
     {
