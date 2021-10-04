@@ -47,7 +47,6 @@ function ListSourceCV(props: IProps) {
     let req: DeleteSourceCVRequest = {
       id: entity.id
     }
-    console.log(props.deleteSourceCV(req));
     props.deleteSourceCV(req);
   }
 

@@ -47,7 +47,6 @@ function ListJobLevel(props: IProps) {
     let req: DeleteJobLevelRequest = {
       id: entity.id
     }
-    console.log(props.deleteJobLevel(req));
     props.deleteJobLevel(req);
   }
 

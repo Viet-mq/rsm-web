@@ -11,6 +11,7 @@ import showBooking, {BookingState} from "./booking/showBooking";
 import getBooking, {GetBookingState} from "./booking/getBooking";
 import createBooking, {CreateBookingState} from "./booking/createBooking";
 import updateBooking, {UpdateBookingState} from "./booking/updateBooking";
+import getActivity,{ActivityLogsState} from "./detail/getActivityLogs";
 
 export interface ProfileManagerModuleState {
   list: ProfileListState,
@@ -24,7 +25,8 @@ export interface ProfileManagerModuleState {
   showBooking: BookingState,
   getBooking: GetBookingState,
   createBooking: CreateBookingState,
-  updateBooking: UpdateBookingState
+  updateBooking: UpdateBookingState,
+  getActivity:ActivityLogsState,
 }
 
 export default combineReducers<ProfileManagerModuleState>({
@@ -40,4 +42,5 @@ export default combineReducers<ProfileManagerModuleState>({
   updateBooking,
   getBooking,
   createBooking,
+  getActivity,
 });

@@ -75,14 +75,13 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     (e.target as any).disabled = true;
     (e.target as any).disabled = false;
     props.form.validateFieldsAndScroll((err, values) => {
-      console.log("Duy1:", values);
       if (!err) {
         let req: UpdateProfileRequest = {
           id: values.id,
           cv: values.cv,
           cvType: values.cvType,
-          dateOfApply: values.dateOfApply,
-          dateOfBirth: values.dateOfBirth,
+          dateOfApply: values.dateOfApply*1,
+          dateOfBirth: values.dateOfBirth*1,
           email: values.email,
           fullName: values.fullName,
           hometown: values.hometown,

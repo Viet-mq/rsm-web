@@ -1,5 +1,5 @@
-import React from 'react';
-import {Redirect, Route, Switch} from 'react-router-dom';
+import React,{useEffect} from 'react';
+import {Redirect, Route, Switch,useLocation} from 'react-router-dom';
 import {connect, ConnectedProps} from 'react-redux';
 import Dashboard from './modules/Dashboard/index';
 
@@ -20,6 +20,8 @@ import SchoolManagerPages from "./modules_cb/SchoolManager/pages/SchoolManagerPa
 import SourceCVManagerPages from "./modules_cb/SourceCVManager/pages/SourceCVManagerPages";
 import StatusCVManagerPages from "./modules_cb/StatusCVManager/pages/StatusCVManagerPages";
 import ProfileManagerPages from "./modules_cb/ProfileManager/pages/ProfileManagerPages";
+import {showFormDetail} from "./modules_cb/ProfileManager/redux/actions";
+import {DetailCV} from "./modules_cb/ProfileManager/types";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -28,10 +30,22 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-const connector = connect(mapStateToProps, {});
+const connector = connect(mapStateToProps, {
+  showFormDetail
+});
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 const Routes = (props: PropsFromRedux) => {
+  const location = useLocation();
+  useEffect(() => {
+    let req: DetailCV = {
+      show_detail: false,
+      general: 24,
+      detail: 0,
+    }
+    props.showFormDetail(req);
+  }, [location]);
+
   return (
     <div>
       <Switch>

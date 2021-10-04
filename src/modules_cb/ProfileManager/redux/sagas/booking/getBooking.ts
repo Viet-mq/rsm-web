@@ -7,7 +7,6 @@ import {AppError} from "../../../../../models/common";
 export function* getBookingAsync(action: GetBookingAction) {
   try {
     const rs = yield apis.getBooking(action.params);
-    console.log("rsBooking: ", rs.calendars[0]);
     if (rs.code !== 0) {
       NotificationError('Lập lịch phỏng vấn không thành công', "Lỗi: " + rs.message);
     }

@@ -13,9 +13,7 @@ import {RootState} from "src/redux/reducers";
 
 export function* updateProfileAsync(action: UpdateProfileAction) {
   try {
-    console.log("rsUpdateProfile1:",action);
     const rs = yield apis.updateProfile(action.request);
-    console.log("rsUpdateProfile:",rs);
     yield put(updateProfileSuccess(rs));
     if (rs.code !== 0) {
       NotificationError('Cập nhật Profile không thành công', "Lỗi: " + rs.message)

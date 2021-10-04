@@ -10,4 +10,5 @@ export * from './booking/createBooking'
 export * from './booking/updateBooking'
 export * from './booking/getBooking'
 export * from './booking/showBooking'
+export * from './detail/getActivityLogs'
 

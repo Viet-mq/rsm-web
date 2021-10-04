@@ -2,8 +2,8 @@ export interface ProfileEntity {
   id: string,
   cv: string,
   cvType: string,
-  dateOfApply: string,
-  dateOfBirth: string,
+  dateOfApply: number,
+  dateOfBirth: number,
   email: string,
   fullName: string,
   hometown: string,
@@ -18,8 +18,8 @@ export interface ProfileEntity {
 export interface CreateProfileRequest {
   cv: string,
   cvType: string,
-  dateOfApply: string,
-  dateOfBirth: string,
+  dateOfApply: number,
+  dateOfBirth: number,
   email: string,
   fullName: string,
   hometown: string,
@@ -35,8 +35,8 @@ export interface UpdateProfileRequest {
   id: string,
   cv: string,
   cvType: string,
-  dateOfApply: string,
-  dateOfBirth: string,
+  dateOfApply: number,
+  dateOfBirth: number,
   email: string,
   fullName: string,
   hometown: string,
@@ -66,7 +66,7 @@ export interface DetailCV {
 export interface BookingEntity {
   id: string,
   idProfile: string,
-  time: string,
+  time: number,
   address: string,
   form: string,
   interviewer: string[],
@@ -77,8 +77,8 @@ export interface BookingEntity {
   evaluation: string,
   status: string,
   reason: string,
-  timeStart: string,
-  timeFinish: string
+  timeStart: number,
+  timeFinish: number
 }
 
 export interface DetailProfileRequest {
@@ -87,7 +87,7 @@ export interface DetailProfileRequest {
   gender: string,
   phoneNumber: string,
   email: string,
-  dateOfBirth: string,
+  dateOfBirth: number,
   hometown: string,
   school: string,
   job: string,
@@ -95,12 +95,12 @@ export interface DetailProfileRequest {
   cv: string,
   sourceCV: string,
   hrRef: string,
-  dateOfApply: string,
+  dateOfApply: number,
   cvType: string,
-  lastApply: string,
+  lastApply: number,
   tags: string,
-  dateOfCreate: string,
-  dateOfUpdate: string,
+  dateOfCreate: number,
+  dateOfUpdate: number,
   note: string,
   evaluation: string,
   statusCV: string
@@ -108,7 +108,7 @@ export interface DetailProfileRequest {
 
 export interface CreateBookingRequest {
   idProfile: string,
-  time: string,
+  time: number,
   address: string,
   form: string,
   interviewer: string[],
@@ -119,14 +119,14 @@ export interface CreateBookingRequest {
   evaluation: string,
   status: string,
   reason: string,
-  timeStart: string,
-  timeFinish: string
+  timeStart: number,
+  timeFinish: number
 }
 
 export interface UpdateBookingRequest {
   id: string,
   idProfile: string,
-  time: string,
+  time: number,
   address: string,
   form: string,
   interviewer: string[],
@@ -137,6 +137,14 @@ export interface UpdateBookingRequest {
   evaluation: string,
   status: string,
   reason: string,
-  timeStart: string,
-  timeFinish: string
+  timeStart: number,
+  timeFinish: number
+}
+
+export interface ActivityLogsEntity {
+  id: string,
+  idProfile: string,
+  time: number,
+  action: string,
+  by: string,
 }

@@ -11,11 +11,12 @@ import {
   UPDATE_PROFILE,
   UPLOADCV,
   GET_DETAIL_PROFILE,
-  GET_BOOKING, CREATE_BOOKING, UPDATE_BOOKING
+  GET_BOOKING, CREATE_BOOKING, UPDATE_BOOKING, GET_ACTIVITY
 } from "../actions";
 import {uploadCVAsync} from "./cv/uploadCV";
 import {getBookingAsync} from "./booking/getBooking";
 import {updateBookingAsync} from "./booking/updateBooking";
+import {getActivityLogsAsync} from "./detail/getActivityLogs";
 
 export default function* root() {
   return all([
@@ -27,7 +28,8 @@ export default function* root() {
     yield takeLatest(UPLOADCV, uploadCVAsync),
     yield takeLatest(GET_BOOKING,getBookingAsync),
     yield takeLatest(CREATE_BOOKING,createProfileAsync),
-    yield takeLatest(UPDATE_BOOKING,updateBookingAsync)
+    yield takeLatest(UPDATE_BOOKING,updateBookingAsync),
+    yield takeLatest(GET_ACTIVITY,getActivityLogsAsync),
 
   ]);
 }

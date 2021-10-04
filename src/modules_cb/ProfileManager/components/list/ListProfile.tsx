@@ -13,7 +13,7 @@ import {
   showFormDetail,
   showFormUpdate,
   showFormUploadCV,
-  showFormBooking, getBooking
+  showFormBooking, getBooking, getActivityLogs
 } from "../../redux/actions";
 import {DeleteProfileRequest, DetailCV, ProfileEntity} from "../../types";
 import moment from "moment";
@@ -26,7 +26,7 @@ const {Option} = Select;
 const mapStateToProps = (state: RootState) => ({
   list: state.profileManager.list,
   detail: state.profileManager.detail,
-  listSource: state.sourcecvManager.list
+  listSource: state.sourcecvManager.list,
 })
 const connector = connect(mapStateToProps, {
   getListProfile,
@@ -38,7 +38,8 @@ const connector = connect(mapStateToProps, {
   getDetailProfile,
   getListSourceCV,
   showFormBooking,
-  getBooking
+  getBooking,
+  getActivityLogs
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -65,6 +66,7 @@ function ListProfile(props: IProps) {
 
   useEffect(() => {
     props.getDetailProfile({idProfile: id});
+    props.getActivityLogs({idProfile: id});
   }, [id])
 
   function unixTimeToDate(unixTime: number): Date {

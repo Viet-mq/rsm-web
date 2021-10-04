@@ -4,12 +4,14 @@ import {showFormDetail} from "../redux/actions";
 import {Avatar, Button, Icon, Select, Timeline} from "antd";
 import React, {useState} from "react";
 import {DetailCV} from "../types";
+import moment from "moment";
 
 const {Option} = Select;
 
 const mapStateToProps = (state: RootState) => ({
   showForm: state.profileManager.showForm,
-  detail: state.profileManager.detail
+  detail: state.profileManager.detail,
+  activityLogs: state.profileManager.getActivity
 })
 
 const connector = connect(mapStateToProps,
@@ -41,6 +43,8 @@ function DetailProfileForm(props: DetailProfileFormProps) {
   function unixTimeToDate(unixTime: number): Date {
     return new Date(unixTime);
   }
+
+  const dateFormat = 'DD/MM/YYYY';
 
   return (
     <div className="detail-container">
@@ -134,15 +138,49 @@ function DetailProfileForm(props: DetailProfileFormProps) {
         </div>
 
         <div className='detail-paragraph-5__content'>
-          <Timeline style={{padding:'15px'}}>
-            <Timeline.Item dot={<Icon type="eye" theme="twoTone" twoToneColor='#70BF74' style={{borderRadius: '50%',backgroundColor:'#70BF74',width:'40px',height:'40px',paddingTop:'5px',fontSize:'30px'}}/>}><p>Create a services site
-            </p><p>2015-09-01</p></Timeline.Item>
-            <Timeline.Item dot={<Icon type="heart" theme="twoTone" twoToneColor="#E2BB39" style={{borderRadius: '50%',backgroundColor:'#E2BB39',width:'25px',height:'25px'}}/>}><p>Solve initial network
-              problems 2015-09-01</p></Timeline.Item>
-            <Timeline.Item dot={<Icon type="mail" theme="twoTone" style={{borderRadius: '50%',backgroundColor:'#5296E5',width:'25px',height:'25px'}}/>}><p>Solve initial network problems
-              2015-09-01</p></Timeline.Item>
-            <Timeline.Item dot={<Icon type="carry-out" theme="twoTone" twoToneColor='#965BB4' style={{borderRadius: '50%',backgroundColor:'#965BB4',width:'25px',height:'25px'}}/>}><p>Solve initial network problems
-              2015-09-01</p></Timeline.Item>
+          <Timeline style={{padding: '15px'}}>
+            {props.activityLogs.rows?.map((item: any, index: any) => {
+              return <Timeline.Item key={index} dot={<Icon type="eye" theme="twoTone" twoToneColor='#70BF74' style={{
+                borderRadius: '50%',
+                backgroundColor: '#70BF74',
+                width: '40px',
+                height: '40px',
+                paddingTop: '10px',
+                fontSize: '20px'
+              }}/>}>
+                <span style={{textTransform:'uppercase'}}>{moment(unixTimeToDate(item.time)).format('MMM DD, YYYY')}</span><br/>
+                <span>{item.by} {item.action} at {moment(unixTimeToDate(item.time)).format('HH:mm DD/MM/YYYY')}</span></Timeline.Item>
+            })}
+            {/*<Timeline.Item dot={<Icon type="eye" theme="twoTone" twoToneColor='#70BF74' style={{*/}
+            {/*  borderRadius: '50%',*/}
+            {/*  backgroundColor: '#70BF74',*/}
+            {/*  width: '40px',*/}
+            {/*  height: '40px',*/}
+            {/*  paddingTop: '5px',*/}
+            {/*  fontSize: '30px'*/}
+            {/*}}/>}><p>Create a services site*/}
+            {/*</p><p>2015-09-01</p></Timeline.Item>*/}
+            {/*<Timeline.Item dot={<Icon type="heart" theme="twoTone" twoToneColor="#E2BB39" style={{*/}
+            {/*  borderRadius: '50%',*/}
+            {/*  backgroundColor: '#E2BB39',*/}
+            {/*  width: '25px',*/}
+            {/*  height: '25px'*/}
+            {/*}}/>}><p>Solve initial network*/}
+            {/*  problems 2015-09-01</p></Timeline.Item>*/}
+            {/*<Timeline.Item dot={<Icon type="mail" theme="twoTone" style={{*/}
+            {/*  borderRadius: '50%',*/}
+            {/*  backgroundColor: '#5296E5',*/}
+            {/*  width: '25px',*/}
+            {/*  height: '25px'*/}
+            {/*}}/>}><p>Solve initial network problems*/}
+            {/*  2015-09-01</p></Timeline.Item>*/}
+            {/*<Timeline.Item dot={<Icon type="carry-out" theme="twoTone" twoToneColor='#965BB4' style={{*/}
+            {/*  borderRadius: '50%',*/}
+            {/*  backgroundColor: '#965BB4',*/}
+            {/*  width: '25px',*/}
+            {/*  height: '25px'*/}
+            {/*}}/>}><p>Solve initial network problems*/}
+            {/*  2015-09-01</p></Timeline.Item>*/}
           </Timeline>
         </div>
       </div>

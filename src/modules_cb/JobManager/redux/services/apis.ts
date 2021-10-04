@@ -4,7 +4,6 @@ import {JobEntity} from "../../types";
 
 export const getListJob = async (params: any): Promise<ListResponseBase2<JobEntity>> => {
   const response = (await GET('api-svc/job/list', params)) as any;
-  console.log("api")
   return {
     total: response.total,
     rows: response.rows || [],

@@ -83,8 +83,8 @@ function CreateProfileForm(props: CreateProfileFormProps) {
         let req: CreateProfileRequest = {
           cv: values.cv,
           cvType: values.cvType,
-          dateOfApply: values.dateOfApply,
-          dateOfBirth: values.dateOfBirth,
+          dateOfApply: values.dateOfApply*1,
+          dateOfBirth: values.dateOfBirth*1,
           email: values.email,
           fullName: values.fullName,
           hometown: values.hometown,

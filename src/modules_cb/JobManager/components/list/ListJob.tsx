@@ -47,7 +47,6 @@ function ListJob(props: IProps) {
     let req: DeleteJobRequest = {
       id: entity.id
     }
-    console.log(props.deleteJob(req));
     props.deleteJob(req);
   }
 

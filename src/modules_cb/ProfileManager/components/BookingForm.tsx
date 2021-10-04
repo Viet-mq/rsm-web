@@ -58,8 +58,6 @@ function BookingForm(props: BookingFormProps) {
   }, [props.showBooking.data_booking?.id])
 
   const dateFormat = 'DD/MM/YYYY HH:mm';
-  console.log("Bookingstate:", props.getBookingState)
-  console.log("showBooking:", props.showBooking)
 
   function onBtnCancelClicked() {
     resetFields();

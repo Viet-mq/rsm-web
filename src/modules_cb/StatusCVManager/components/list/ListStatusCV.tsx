@@ -47,7 +47,6 @@ function ListStatusCV(props: IProps) {
     let req: DeleteStatusCVRequest = {
       id: entity.id
     }
-    console.log(props.deleteStatusCV(req));
     props.deleteStatusCV(req);
   }
 

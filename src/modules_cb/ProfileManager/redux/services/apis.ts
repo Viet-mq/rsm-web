@@ -4,7 +4,6 @@ import {ProfileEntity} from "../../types";
 
 export const getListProfile = async (params: any): Promise<ListResponseBase2<ProfileEntity>> => {
   const response = (await GET('api-svc/profile/list', params)) as any;
-  console.log("api")
   return {
     total: response.total,
     rows: response.rows || [],
@@ -50,4 +49,8 @@ export const updateBooking = async (params?: any): Promise<ResponseBase2> => {
 
 export const getBooking = async (params?: any): Promise<ResponseBase2> => {
   return (await GET('api-svc/calendar/list', params)) as ResponseBase2;
+};
+
+export const getActivityLogs = async (params?: any): Promise<ResponseBase2> => {
+  return (await GET('api-svc/history/list', params)) as ResponseBase2;
 };
