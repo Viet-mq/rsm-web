@@ -7,7 +7,6 @@ import {NotificationError} from "src/components/Notification/Notification";
 export function* getListSourceCVAsync(action: SourceCVListAction) {
   try {
     const rs = yield apis.getListSourceCV(action.params);
-    console.log("rs: " + JSON.stringify(rs));
     if (rs.code !== 0) {
       NotificationError('Lấy danh sách nguồn CV không thành công', "Lỗi: " + rs.message);
     }

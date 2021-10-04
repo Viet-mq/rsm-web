@@ -7,7 +7,6 @@ import {NotificationError} from "src/components/Notification/Notification";
 export function* getListDepartmentAsync(action: DepartmentListAction) {
   try {
     const rs = yield apis.getListDepartment(action.params);
-    console.log("rs: " + JSON.stringify(rs));
     if (rs.code !== 0) {
       NotificationError('Lấy danh sách phòng ban không thành công', "Lỗi: " + rs.message);
     }

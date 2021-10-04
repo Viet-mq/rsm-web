@@ -1,7 +1,7 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {showFormDetail} from "../redux/actions";
-import {Avatar, Button, Icon, Select} from "antd";
+import {Avatar, Button, Icon, Select, Timeline} from "antd";
 import React, {useState} from "react";
 import {DetailCV} from "../types";
 
@@ -37,7 +37,6 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     }
     props.showFormDetail(req);
   }
-  console.log("duyhaha1:", props);
 
   function unixTimeToDate(unixTime: number): Date {
     return new Date(unixTime);
@@ -130,7 +129,22 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       </div>
 
       <div className="detail-paragraph-5">
-        <h1>Activity logs</h1>
+        <div className="detail-paragraph-5__title">
+          <h1>Activity logs</h1>
+        </div>
+
+        <div className='detail-paragraph-5__content'>
+          <Timeline>
+            <Timeline.Item dot={<Icon type="eye" theme="twoTone" twoToneColor='#70BF74'/>}>Create a services site
+              2015-09-01</Timeline.Item>
+            <Timeline.Item dot={<Icon type="heart" theme="twoTone" twoToneColor="#eb2f96"/>}>Solve initial network
+              problems 2015-09-01</Timeline.Item>
+            <Timeline.Item dot={<Icon type="mail" theme="twoTone"/>}>Solve initial network problems
+              2015-09-01</Timeline.Item>
+            <Timeline.Item dot={<Icon type="carry-out" theme="twoTone" />}>Solve initial network problems
+              2015-09-01</Timeline.Item>
+          </Timeline>
+        </div>
       </div>
 
     </div>

@@ -86,7 +86,7 @@ function ListProfile(props: IProps) {
 
   const handleBooking = (event: any, entity: ProfileEntity) => {
     event.stopPropagation();
-    props.showFormBooking(true,entity.id);
+    props.showFormBooking(true,entity);
   }
 
   const handleUploadCV = (e: any, entity: ProfileEntity) => {
@@ -153,7 +153,7 @@ function ListProfile(props: IProps) {
     },
     {
       title: 'Số điện thoại',
-      dataIndex: 'phonenumber',
+      dataIndex: 'phoneNumber',
       width: 100,
       key: '6',
     },

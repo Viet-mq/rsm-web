@@ -7,7 +7,6 @@ import {NotificationError} from "../../../../components/Notification/Notificatio
 export function* getListIntentAsync(action: GetListIntentAction) {
   try {
     const rs = yield apis.getListIntent(action.params);
-    console.log("rs: " + JSON.stringify(rs));
     if (rs.code !== 0) {
       NotificationError('Lấy danh sách ý định không thành công', "Lỗi: " + rs.message);
     }

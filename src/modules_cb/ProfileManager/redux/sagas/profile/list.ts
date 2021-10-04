@@ -7,7 +7,6 @@ import {NotificationError} from "src/components/Notification/Notification";
 export function* getListProfileAsync(action: ProfileListAction) {
   try {
     const rs = yield apis.getListProfile(action.params);
-    console.log("rs: " + JSON.stringify(rs));
     if (rs.code !== 0) {
       NotificationError('Lấy danh sách Profile không thành công', "Lỗi: " + rs.message);
     }

@@ -90,7 +90,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
           hrRef: values.hrRef,
           job: values.job,
           levelJob: values.levelJob,
-          phonenumber: values.phonenumber,
+          phoneNumber: values.phoneNumber,
           school: values.school,
           sourceCV: values.sourceCV,
         }
@@ -243,7 +243,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
           </Form.Item>
 
           <Form.Item label="SĐT" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('phonenumber', {
+            {getFieldDecorator('phoneNumber', {
               initialValue: '',
               rules: [
                 {

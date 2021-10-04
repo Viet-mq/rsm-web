@@ -74,7 +74,7 @@ function UpdateJobLevelForm(props: UpdateJobLevelFormProps) {
 
       <Form {...formItemLayout}>
 
-        <Form.Item label="ID" className="mb-0" style={{...formItemStyle}}>
+        <Form.Item label="ID" className="mb-0" style={{...formItemStyle,display: 'none'}}>
           {getFieldDecorator('id', {
             initialValue: props.showForm.data_update?.id,
             rules: [

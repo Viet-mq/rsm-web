@@ -75,6 +75,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     (e.target as any).disabled = true;
     (e.target as any).disabled = false;
     props.form.validateFieldsAndScroll((err, values) => {
+      console.log("Duy1:",values);
       if (!err) {
         let req: UpdateProfileRequest = {
           id: values.id,
@@ -88,7 +89,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           hrRef: values.hrRef,
           job: values.job,
           levelJob: values.levelJob,
-          phonenumber: values.phonenumber,
+          phoneNumber: values.phoneNumber,
           school: values.school,
           sourceCV: values.sourceCV,
         }
@@ -107,7 +108,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
 
   const dateFormat = 'DD/MM/YYYY';
 
-  const handleCreateSchool = (e:any)=>{
+  const handleCreateSchool = (e: any) => {
     e.preventDefault();
     if (e?.target) {
       e.target.disabled = true;
@@ -116,7 +117,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     props.showSchoolFormCreate(true);
   }
 
-  const handleCreateJob = (e:any)=>{
+  const handleCreateJob = (e: any) => {
     e.preventDefault();
     if (e?.target) {
       e.target.disabled = true;
@@ -125,7 +126,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     props.showJobFormCreate(true);
   }
 
-  const handleCreateJobLevel = (e:any)=>{
+  const handleCreateJobLevel = (e: any) => {
     e.preventDefault();
     if (e?.target) {
       e.target.disabled = true;
@@ -133,7 +134,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     }
     props.showJobLevelFormCreate(true);
   }
-  const handleCreateSourceCV = (e:any)=>{
+  const handleCreateSourceCV = (e: any) => {
     e.preventDefault();
     if (e?.target) {
       e.target.disabled = true;
@@ -163,7 +164,21 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
         }}
         footer={""}>
 
-        <Form {...formItemLayout}>
+        <Form {...formItemLayout} >
+
+          <Form.Item label="ID" className="mb-0" style={{...formItemStyle, display: 'none'}} >
+            {getFieldDecorator('id', {
+              initialValue: props.showForm.data_update?.id,
+              rules: [
+                {
+                  message: 'Vui lòng nhập id',
+                  required: true,
+                },
+              ],
+            })(
+              <Input disabled placeholder="id" className="bg-white text-black"/>
+            )}
+          </Form.Item>
 
           <Form.Item label="Họ Tên" className="mb-0" style={{...formItemStyle}}>
             {getFieldDecorator('fullName', {
@@ -189,7 +204,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                 },
               ],
             })(
-              <DatePicker format={dateFormat} />
+              <DatePicker format={dateFormat}/>
             )}
           </Form.Item>
 
@@ -207,19 +222,18 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
             )}
           </Form.Item>
 
-          <Form.Item label="Trường học" className="mb-0" style={{...formItemStyle}}>
+          <Form.Item label="Trường học" className="mb-0" style={{...formItemStyle}} >
             {getFieldDecorator('school', {
-              initialValue: props.showForm.data_update?.school,
               rules: [
                 {
-                  message: 'Vui lòng nhập trường học',
+                  message: 'Vui lòng nhập Trường học',
                   required: false,
                 },
               ],
             })(
               <div style={{display: 'flex'}}>
                 <Select className="bg-white text-black"
-                        defaultValue={props.showForm.data_update?.school}
+                        // defaultValue={props.showForm.data_update?.school}
                 >
                   {props.listSchool.rows?.map((item: any, index: any) => (
                     <Option key={index} value={item.name}>{item.name}</Option>
@@ -239,8 +253,8 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           </Form.Item>
 
           <Form.Item label="SĐT" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('phonenumber', {
-              initialValue: props.showForm.data_update?.phonenumber,
+            {getFieldDecorator('phoneNumber', {
+              initialValue: props.showForm.data_update?.phoneNumber,
               rules: [
                 {
                   message: 'Vui lòng nhập SDT',
@@ -360,6 +374,20 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                   <Icon type="plus"/>
                 </Button>
               </div>
+            )}
+          </Form.Item>
+
+          <Form.Item label="CV" className="mb-0" style={{...formItemStyle}}>
+            {getFieldDecorator('cv', {
+              initialValue: props.showForm.data_update?.cv,
+              rules: [
+                {
+                  message: 'Vui lòng nhập cv',
+                  required: false,
+                },
+              ],
+            })(
+              <Input placeholder="CV" className="bg-white text-black"/>
             )}
           </Form.Item>
 

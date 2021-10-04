@@ -7,7 +7,6 @@ import {NotificationError} from "src/components/Notification/Notification";
 export function* getListJobAsync(action: JobListAction) {
   try {
     const rs = yield apis.getListJob(action.params);
-    console.log("rs: " + JSON.stringify(rs));
     if (rs.code !== 0) {
       NotificationError('Lấy danh sách Job không thành công', "Lỗi: " + rs.message);
     }

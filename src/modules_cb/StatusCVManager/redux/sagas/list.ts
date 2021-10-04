@@ -7,7 +7,6 @@ import {NotificationError} from "src/components/Notification/Notification";
 export function* getListStatusCVAsync(action: StatusCVListAction) {
   try {
     const rs = yield apis.getListStatusCV(action.params);
-    console.log("rs: " + JSON.stringify(rs));
     if (rs.code !== 0) {
       NotificationError('Lấy danh sách trạng thái CV không thành công', "Lỗi: " + rs.message);
     }

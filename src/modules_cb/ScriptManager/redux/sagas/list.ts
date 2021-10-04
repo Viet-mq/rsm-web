@@ -6,7 +6,6 @@ import {AppError} from "src/models/common";
 export function* getScriptAsync(action: GetListScriptAction) {
   try {
     const rs = yield apis.getListScript(action.params);
-    console.log("rs: " + JSON.stringify(rs));
     yield put(getListScriptSuccess( rs.rows,rs.total));
   } catch (e) {
     yield put(getListScriptError(new AppError(e.message)));

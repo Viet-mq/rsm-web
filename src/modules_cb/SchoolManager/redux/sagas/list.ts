@@ -7,7 +7,6 @@ import {NotificationError} from "src/components/Notification/Notification";
 export function* getListSchoolAsync(action: SchoolListAction) {
   try {
     const rs = yield apis.getListSchool(action.params);
-    console.log("rs: " + JSON.stringify(rs));
     if (rs.code !== 0) {
       NotificationError('Lấy danh sách trường không thành công', "Lỗi: " + rs.message);
     }

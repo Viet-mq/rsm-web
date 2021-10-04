@@ -7,7 +7,6 @@ import {NotificationError} from "src/components/Notification/Notification";
 export function* getListJobLevelAsync(action: JobLevelListAction) {
   try {
     const rs = yield apis.getListJobLevel(action.params);
-    console.log("rs: " + JSON.stringify(rs));
     if (rs.code !== 0) {
       NotificationError('Lấy danh sách job level không thành công', "Lỗi: " + rs.message);
     }
