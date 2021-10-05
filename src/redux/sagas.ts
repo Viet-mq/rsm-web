@@ -17,7 +17,7 @@ import sourcecvManagerSaga from '../modules_cb/SourceCVManager/redux/sagas';
 import statuscvManagerSaga from '../modules_cb/StatusCVManager/redux/sagas';
 import schoolManagerSaga from '../modules_cb/SchoolManager/redux/sagas';
 import profileManagerSaga from '../modules_cb/ProfileManager/redux/sagas';
-
+import viewGroupManagerSaga from '../modules_cb/ViewGroupManager/redux/sagas'
 import * as commonSaga from './common-saga';
 
 export default function* rootSaga() {
@@ -40,6 +40,7 @@ export default function* rootSaga() {
     schoolManagerSaga(),
     statuscvManagerSaga(),
     profileManagerSaga(),
+    viewGroupManagerSaga(),
     commonSaga.checkErrorAsync(),
   ]);
 }

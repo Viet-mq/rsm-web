@@ -89,6 +89,13 @@ const Nav = (props: IProps) => {
         </Link>
       </Menu.Item>
 
+      <Menu.Item key="view-group-manager" style={{display: 'flex', alignItems: 'center'}}>
+        <Link to={`/view-group-manager`}>
+          <span className="rd-icon rd-icon-home"/>
+          {!props.hiddenLabel ? <span>Quản lý view group  </span> : null}
+        </Link>
+      </Menu.Item>
+
       <Menu.Item key="api-manager" style={{display: 'flex', alignItems: 'center'}}>
         <Link to={`/api-manager`}>
           <span className="rd-icon rd-icon-home"/>
