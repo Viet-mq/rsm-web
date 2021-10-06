@@ -195,7 +195,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                 },
               ],
             })(
-              <DatePicker format={dateFormat}/>
+              <DatePicker format={dateFormat} style={{width:"100%"}}/>
             )}
           </Form.Item>
 
@@ -205,7 +205,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
               rules: [
                 {
                   message: 'Vui lòng nhập quê quán',
-                  required: false,
+                  required: true,
                 },
               ],
             })(
@@ -220,7 +220,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                 rules: [
                   {
                     message: 'Vui lòng nhập trường học',
-                    required: false,
+                    required: true,
                   },
                 ],
               })(
@@ -337,7 +337,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                 rules: [
                   {
                     message: 'Vui lòng nhập Nguồn CV',
-                    required: false,
+                    required: true,
                   },
                 ],
               })(
@@ -365,7 +365,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
               rules: [
                 {
                   message: 'Vui lòng nhập tên HR Reference',
-                  required: false,
+                  required: true,
                 },
               ],
             })(
@@ -379,11 +379,25 @@ function CreateProfileForm(props: CreateProfileFormProps) {
               rules: [
                 {
                   message: 'Vui lòng nhập thời gian',
-                  required: false,
+                  required: true,
                 },
               ],
             })(
-              <DatePicker format={dateFormat}/>
+              <DatePicker format={dateFormat} style={{width:"100%"}}/>
+            )}
+          </Form.Item>
+
+          <Form.Item label="CV" className="mb-0" style={{...formItemStyle}}>
+            {getFieldDecorator('cv', {
+              initialValue: '',
+              rules: [
+                {
+                  message: 'Vui lòng nhập CV',
+                  required: true,
+                },
+              ],
+            })(
+              <Input placeholder="CV" className="bg-white text-black"/>
             )}
           </Form.Item>
 
@@ -393,7 +407,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
               rules: [
                 {
                   message: 'Vui lòng nhập loại CV',
-                  required: false,
+                  required: true,
                 },
               ],
             })(

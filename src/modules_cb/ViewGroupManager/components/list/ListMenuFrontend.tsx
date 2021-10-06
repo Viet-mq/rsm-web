@@ -7,6 +7,7 @@ import {Button, Icon, Popconfirm, Table} from "antd";
 import {emptyText} from "src/configs/locales";
 import {deleteMenuFrontend, getListMenuFrontend, showFormMenuFrontEndUpdate} from "../../redux/actions";
 import {MenuFrontendEntity} from "../../types";
+import {FrontendViewEntity} from "../../../ViewManager/types";
 
 const mapStateToProps = ({viewGroupManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
@@ -53,6 +54,36 @@ function ListMenuFrontend(props: IProps) {
       dataIndex: 'desc',
       width: 200,
     },
+    // {
+    //   title: 'Actions',
+    //   dataIndex: 'actions',
+    //   width: 150,
+    //   render: (_text: string, record: MenuFrontendEntity) => {
+    //     let actions = record.actions || [];
+    //     return (
+    //       <ul>
+    //         {actions.map((object, i) => <li key={object.actionId}> {object.actionId} : {object.actionName} <Popconfirm
+    //           title={`Bạn muốn xóa action [` + object.actionName + "] này chứ ?"}
+    //           okText="Xóa"
+    //           onCancel={event => {
+    //             event?.stopPropagation();
+    //           }}
+    //           onConfirm={event => removeAction(event, record, object)}
+    //         >
+    //           <Button
+    //             size="small"
+    //             className="ant-btn ml-1 mr-1 ant-btn-sm"
+    //             onClick={event => {
+    //               event.stopPropagation();
+    //             }}
+    //           >
+    //             <Icon type="minus"/>
+    //           </Button>
+    //         </Popconfirm></li>)}
+    //       </ul>
+    //     );
+    //   },
+    // },
     {
       title: () => {
         return <div style={{whiteSpace: 'nowrap'}}>Thao tác</div>;

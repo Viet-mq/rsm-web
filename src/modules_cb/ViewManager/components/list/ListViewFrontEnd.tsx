@@ -87,7 +87,8 @@ function ListViewFrontEnd(props: IProps) {
       render: (value: boolean) => {
         return value ? 'Show' : 'Hidden';
       },
-    }, {
+    },
+    {
       title: 'Actions',
       dataIndex: 'actions',
       width: 150,

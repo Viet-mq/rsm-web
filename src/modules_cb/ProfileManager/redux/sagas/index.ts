@@ -17,6 +17,7 @@ import {uploadCVAsync} from "./cv/uploadCV";
 import {getBookingAsync} from "./booking/getBooking";
 import {updateBookingAsync} from "./booking/updateBooking";
 import {getActivityLogsAsync} from "./detail/getActivityLogs";
+import {createBookingAsync} from "./booking/createBooking";
 
 export default function* root() {
   return all([
@@ -27,7 +28,7 @@ export default function* root() {
     yield takeLatest(GET_DETAIL_PROFILE, getDetailProfileAsync),
     yield takeLatest(UPLOADCV, uploadCVAsync),
     yield takeLatest(GET_BOOKING,getBookingAsync),
-    yield takeLatest(CREATE_BOOKING,createProfileAsync),
+    yield takeLatest(CREATE_BOOKING,createBookingAsync),
     yield takeLatest(UPDATE_BOOKING,updateBookingAsync),
     yield takeLatest(GET_ACTIVITY,getActivityLogsAsync),
 

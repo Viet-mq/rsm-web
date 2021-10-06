@@ -203,7 +203,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                 },
               ],
             })(
-              <DatePicker format={dateFormat}/>
+              <DatePicker format={dateFormat} style={{width:"100%"}}/>
             )}
           </Form.Item>
 
@@ -405,7 +405,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                 },
               ],
             })(
-              <DatePicker format={dateFormat}/>
+              <DatePicker format={dateFormat} style={{width:"100%"}}/>
             )}
           </Form.Item>
 

@@ -74,19 +74,19 @@ function BookingForm(props: BookingFormProps) {
         let req: UpdateBookingRequest = {
           id: values.id,
           idProfile: values.idProfile,
-          time: values.time,
+          time: values.time*1,
           address: values.address,
           form: values.form,
           interviewer: values.interviewer,
           interviewee: values.interviewee,
           content: values.content,
           question: values.question,
-          comment: values.comment,
+          comments: values.comments,
           evaluation: values.evaluation,
           status: values.status,
           reason: values.reason,
-          timeStart: values.timeStart,
-          timeFinish: values.timeFinish,
+          timeStart: values.timeStart*1,
+          timeFinish: values.timeFinish*1,
         }
         props.updateBooking(req);
         return;
@@ -102,19 +102,19 @@ function BookingForm(props: BookingFormProps) {
       if (!err) {
         let req: CreateBookingRequest = {
           idProfile: values.idProfile,
-          time: values.time,
+          time: values.time*1,
           address: values.address,
           form: values.form,
           interviewer: values.interviewer,
           interviewee: values.interviewee,
           content: values.content,
           question: values.question,
-          comment: values.comment,
+          comments: values.comments,
           evaluation: values.evaluation,
           status: values.status,
           reason: values.reason,
-          timeStart: values.timeStart,
-          timeFinish: values.timeFinish,
+          timeStart: values.timeStart*1,
+          timeFinish: values.timeFinish*1,
         }
         props.createBooking(req);
         return;
@@ -131,7 +131,7 @@ function BookingForm(props: BookingFormProps) {
           <Modal
             zIndex={2}
             maskClosable={false}
-            title="Tạo mới profile"
+            title="Sửa lịch phỏng vấn"
             visible={props.showBooking.show_booking}
             centered={true}
             width="550px"
@@ -272,22 +272,22 @@ function BookingForm(props: BookingFormProps) {
               </Form.Item>
 
               <Form.Item label="Câu hỏi" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('evaluation', {
-                  initialValue: props.getBookingState.result?.question || '',
+                {getFieldDecorator('question', {
+                  initialValue: props.getBookingState.result?.question || [],
                   rules: [
                     {
-                      message: 'Vui lòng nhập caau hoir',
+                      message: 'Vui lòng nhập câu hỏi',
                       required: true,
                     },
                   ],
                 })(
-                  <Input disabled placeholder="Đánh giá" className="bg-white text-black"/>
+                  <Input placeholder="Đánh giá" className="bg-white text-black"/>
                 )}
               </Form.Item>
 
               <Form.Item label="Nhận xét" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('comment', {
-                  initialValue: props.getBookingState.result?.comment || '',
+                {getFieldDecorator('comments', {
+                  initialValue: props.getBookingState.result?.comments || [],
                   rules: [
                     {
                       message: 'Vui lòng nhập nhận xét',
@@ -343,7 +343,7 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <DatePicker format={dateFormat}/>
+                  <DatePicker format={dateFormat} style={{width:"100%"}}/>
                 )}
               </Form.Item>
 
@@ -357,7 +357,7 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <DatePicker format={dateFormat}>
+                  <DatePicker format={dateFormat} style={{width:"100%"}}>
 
                   </DatePicker>
                 )}
@@ -373,7 +373,7 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <DatePicker format={dateFormat}/>
+                  <DatePicker format={dateFormat} style={{width:"100%"}}/>
                 )}
               </Form.Item>
 
@@ -396,7 +396,7 @@ function BookingForm(props: BookingFormProps) {
           <Modal
             zIndex={2}
             maskClosable={false}
-            title="Tạo mới profile"
+            title="Lập lịch phỏng vấn"
             visible={props.showBooking.show_booking}
             centered={true}
             width="550px"
@@ -481,15 +481,15 @@ function BookingForm(props: BookingFormProps) {
                 })(
                     <Select className="bg-white text-black"
                     >
-                      <Option value="on">Online</Option>
-                      <Option value="off">Offline</Option>
+                      <Option value="Online">Online</Option>
+                      <Option value="Offline">Offline</Option>
                     </Select>
                 )}
               </Form.Item>
 
               <Form.Item label="Người phỏng vấn" className="mb-0" style={{...formItemStyle}}>
                 {getFieldDecorator('interviewer', {
-                  initialValue: '',
+                  initialValue: undefined,
                   rules: [
                     {
                       message: 'Vui lòng chọn người phỏng vấn',
@@ -537,8 +537,8 @@ function BookingForm(props: BookingFormProps) {
               </Form.Item>
 
               <Form.Item label="Nhận xét" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('comment', {
-                  initialValue: '',
+                {getFieldDecorator('comments', {
+                  initialValue: [''],
                   rules: [
                     {
                       message: 'Vui lòng nhập nhận xét',
@@ -586,7 +586,7 @@ function BookingForm(props: BookingFormProps) {
 
               <Form.Item label="Thời gian phỏng vấn dự kiến" className="mb-0" style={{...formItemStyle}}>
                 {getFieldDecorator('time', {
-                  initialValue: '',
+                  initialValue: undefined,
                   rules: [
                     {
                       message: 'Vui lòng nhập Thời gian phỏng vấn dự kiến',
@@ -594,13 +594,13 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <DatePicker format={dateFormat}/>
+                  <DatePicker format={dateFormat} style={{width:"100%"}}/>
                 )}
               </Form.Item>
 
               <Form.Item label="Thời gian bắt đầu" className="mb-0" style={{...formItemStyle}}>
                 {getFieldDecorator('timeStart', {
-                  initialValue: '',
+                  initialValue: undefined,
                   rules: [
                     {
                       message: 'Vui lòng nhập Thời gian bắt đầu',
@@ -608,7 +608,7 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <DatePicker format={dateFormat}>
+                  <DatePicker format={dateFormat} style={{width:"100%"}}>
 
                   </DatePicker>
                 )}
@@ -616,7 +616,7 @@ function BookingForm(props: BookingFormProps) {
 
               <Form.Item label="Thời gian kết thúc" className="mb-0" style={{...formItemStyle}}>
                 {getFieldDecorator('timeFinish', {
-                  initialValue: '',
+                  initialValue: undefined,
                   rules: [
                     {
                       message: 'Vui lòng nhập Thời gian phỏng vấn dự kiến',
@@ -624,7 +624,7 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <DatePicker format={dateFormat}/>
+                  <DatePicker format={dateFormat} style={{width:"100%"}}/>
                 )}
               </Form.Item>
 
