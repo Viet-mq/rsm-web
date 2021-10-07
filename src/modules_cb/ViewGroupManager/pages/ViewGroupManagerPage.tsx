@@ -4,19 +4,21 @@ import ListViewFrontEnd from "../components/list/ListMenuFrontend";
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import Loading from "../../../components/Loading";
-import {showFormMenuFrontEndCreate, showFormMenuFrontEndUpdate} from "../redux/actions";
+import {showFormMenuFrontEndCreate, showFormMenuFrontEndDetail, showFormMenuFrontEndUpdate} from "../redux/actions";
 import CreateMenuFrontendForm from "../components/CreateMenuFrontendForm";
 import UpdateMenuFrontendForm from "../components/UpdateMenuFrontendForm";
+import ViewGroupDetail from "../components/ViewGroupDetail";
 
 
 const mapStateToProps = ({viewGroupManager: {list, create,update}}: RootState) => ({
   list,
   create,
-  update
+  update,
 })
 const connector = connect(mapStateToProps, {
   showFormMenuFrontEndCreate,
-  showFormMenuFrontEndUpdate
+  showFormMenuFrontEndUpdate,
+  showFormMenuFrontEndDetail
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -61,6 +63,7 @@ function ViewGroupManagerPage(props: IProps) {
       <ListViewFrontEnd/>
       <CreateMenuFrontendForm/>
   <UpdateMenuFrontendForm/>
+      <ViewGroupDetail/>
       {props.list.loading ||
       props.create.loading ||
       props.update.loading

@@ -5,15 +5,20 @@ import env from "src/configs/env";
 import {ColumnProps} from "antd/lib/table";
 import {Button, Icon, Popconfirm, Table} from "antd";
 import {emptyText} from "src/configs/locales";
-import {deleteMenuFrontend, getListMenuFrontend, showFormMenuFrontEndUpdate} from "../../redux/actions";
+import {
+  deleteMenuFrontend,
+  getListMenuFrontend,
+  showFormMenuFrontEndDetail,
+  showFormMenuFrontEndUpdate
+} from "../../redux/actions";
 import {MenuFrontendEntity} from "../../types";
-import {FrontendViewEntity} from "../../../ViewManager/types";
 
 const mapStateToProps = ({viewGroupManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
   getListMenuFrontend,
   deleteMenuFrontend,
-  showFormMenuFrontEndUpdate
+  showFormMenuFrontEndUpdate,
+  showFormMenuFrontEndDetail
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -43,47 +48,39 @@ function ListMenuFrontend(props: IProps) {
     props.showFormMenuFrontEndUpdate(true, entity);
   }
 
+  const handleDetail = (e: any, entity: MenuFrontendEntity) => {
+    e.stopPropagation();
+    props.showFormMenuFrontEndDetail(true, entity);
+  }
+
   const columns: ColumnProps<MenuFrontendEntity>[] = [
     {
       title: 'Name',
       dataIndex: 'name',
       width: 100,
+      render:(text:string,record:MenuFrontendEntity)=><a onClick={event=>handleDetail(event,record)}>{text}</a>
     },
     {
       title: 'Mô tả',
       dataIndex: 'desc',
       width: 200,
     },
-    // {
-    //   title: 'Actions',
-    //   dataIndex: 'actions',
-    //   width: 150,
-    //   render: (_text: string, record: MenuFrontendEntity) => {
-    //     let actions = record.actions || [];
-    //     return (
-    //       <ul>
-    //         {actions.map((object, i) => <li key={object.actionId}> {object.actionId} : {object.actionName} <Popconfirm
-    //           title={`Bạn muốn xóa action [` + object.actionName + "] này chứ ?"}
-    //           okText="Xóa"
-    //           onCancel={event => {
-    //             event?.stopPropagation();
-    //           }}
-    //           onConfirm={event => removeAction(event, record, object)}
-    //         >
-    //           <Button
-    //             size="small"
-    //             className="ant-btn ml-1 mr-1 ant-btn-sm"
-    //             onClick={event => {
-    //               event.stopPropagation();
-    //             }}
-    //           >
-    //             <Icon type="minus"/>
-    //           </Button>
-    //         </Popconfirm></li>)}
-    //       </ul>
-    //     );
-    //   },
-    // },
+    {
+      title: 'Views',
+      dataIndex: 'views',
+      width: 150,
+      render: (_text: string, record: MenuFrontendEntity) => {
+        let actions = record.views || [];
+        return (
+          <ul style={{paddingLeft:'0px'}}>
+            {actions.map((object, i) => <li style={{listStyleType:'none'}} key={object.id}>
+              <input type="checkbox"/>
+              <span>&nbsp;{object.id} : {object.name}</span>
+            </li>)}
+          </ul>
+        );
+      },
+    },
     {
       title: () => {
         return <div style={{whiteSpace: 'nowrap'}}>Thao tác</div>;
@@ -140,7 +137,6 @@ function ListMenuFrontend(props: IProps) {
         className="custom-table"
         dataSource={props.list.rows}
         columns={columns}
-        rowSelection={rowSelection}
         rowKey="id"
         locale={{emptyText: emptyText}}
         pagination={{

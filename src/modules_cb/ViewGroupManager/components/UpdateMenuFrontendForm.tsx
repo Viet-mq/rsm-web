@@ -124,7 +124,7 @@ function UpdateMenuFrontendForm(props: UpdateMenuFrontendFormProps) {
           <Button type="default" className="pl-5 pr-5" onClick={onBtnCancelClicked}>
             Hủy
           </Button>
-          104874008636
+
         </Form.Item>
 
       </Form>

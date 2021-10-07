@@ -10,7 +10,7 @@ export interface ViewGroupManagerModuleState {
   create: CreateMenuFrontendState,
   showForm: ShowFormMenuFrontendState,
   deleteMenu: DeleteMenuFrontendState,
-  update: UpdateMenuFrontendState
+  update: UpdateMenuFrontendState,
 }
 
 export default combineReducers<ViewGroupManagerModuleState>({
