@@ -230,8 +230,8 @@ function BookingForm(props: BookingFormProps) {
                 })(
                     <Select className="bg-white text-black"
                     >
-                      <Option value="online">Online</Option>
-                      <Option value="offline">Offline</Option>
+                      <Option value="on">Online</Option>
+                      <Option value="off">Offline</Option>
                     </Select>
                 )}
               </Form.Item>
@@ -251,7 +251,7 @@ function BookingForm(props: BookingFormProps) {
                             placeholder="Please select"
                     >
                       {props.listAccount.rows?.map((item: any, index: any) => (
-                        <Option key={index} value={item.fullName}>{item.fullName}</Option>
+                        <Option key={index} value={item.id}>{item.fullName}</Option>
                       ))}
                     </Select>
                 )}
@@ -327,7 +327,7 @@ function BookingForm(props: BookingFormProps) {
                             placeholder="Please select"
                     >
                       {props.listStatus?.rows?.map((item: any, index: any) => (
-                        <Option key={index} value={item.name}>{item.name}</Option>
+                        <Option key={index} value={item.id}>{item.name}</Option>
                       ))}
                     </Select>
                 )}
@@ -502,7 +502,7 @@ function BookingForm(props: BookingFormProps) {
                             placeholder="Please select"
                     >
                       {props.listAccount.rows?.map((item: any, index: any) => (
-                        <Option key={index} value={item.fullName}>{item.fullName}</Option>
+                        <Option key={index} value={item.id}>{item.fullName}</Option>
                       ))}
                     </Select>
                 )}
@@ -578,7 +578,7 @@ function BookingForm(props: BookingFormProps) {
                             placeholder="Please select"
                     >
                       {props.listStatus.rows?.map((item: any, index: any) => (
-                        <Option key={index} value={item.name}>{item.name}</Option>
+                        <Option key={index} value={item.id}>{item.name}</Option>
                       ))}
                     </Select>
                 )}

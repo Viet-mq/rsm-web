@@ -63,11 +63,11 @@ function ListProfile(props: IProps) {
     props.getListProfile({page: 1, size: 100});
     props.getListSourceCV({page: '', size: ''});
   }, []);
-
-  useEffect(() => {
-    props.getDetailProfile({idProfile: id});
-    props.getActivityLogs({idProfile: id});
-  }, [id])
+  //
+  // useEffect(() => {
+  //   props.getDetailProfile({idProfile: id});
+  //   props.getActivityLogs({idProfile: id});
+  // }, [id])
 
   function unixTimeToDate(unixTime: number): Date {
     return new Date(unixTime);
@@ -102,14 +102,18 @@ function ListProfile(props: IProps) {
 
   const handleDetail = (e: any, entity: ProfileEntity) => {
     e.stopPropagation();
-    setId(entity.id);
+    // setId(entity.id);
 
     let req: DetailCV = {
       show_detail: true,
       general: 12,
       detail: 12,
     }
+
+    props.getDetailProfile({idProfile: entity.id});
+    props.getActivityLogs({idProfile: entity.id});
     props.showFormDetail(req, props.detail?.result);
+    console.log("props:",props);
   }
 
   const handleSearch = (value: any) => {

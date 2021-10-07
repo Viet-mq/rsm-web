@@ -1,4 +1,4 @@
-import { CreateMenuFrontendRequest} from "../../types";
+import { CreateMenuFrontendRequest} from "../../../types";
 import {AppError, ResponseBase2} from "src/models/common";
 
 export interface CreateMenuFrontendAction {

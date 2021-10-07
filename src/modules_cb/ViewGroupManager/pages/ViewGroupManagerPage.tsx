@@ -4,21 +4,30 @@ import ListViewFrontEnd from "../components/list/ListMenuFrontend";
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import Loading from "../../../components/Loading";
-import {showFormMenuFrontEndCreate, showFormMenuFrontEndDetail, showFormMenuFrontEndUpdate} from "../redux/actions";
+import {
+  showFormActionView,
+  showFormMenuFrontEndCreate,
+  showFormMenuFrontEndDetail,
+  showFormMenuFrontEndUpdate
+} from "../redux/actions";
 import CreateMenuFrontendForm from "../components/CreateMenuFrontendForm";
 import UpdateMenuFrontendForm from "../components/UpdateMenuFrontendForm";
 import ViewGroupDetail from "../components/ViewGroupDetail";
+import AddActionViewForm from "../components/AddActionViewForm";
 
 
-const mapStateToProps = ({viewGroupManager: {list, create,update}}: RootState) => ({
+const mapStateToProps = ({viewGroupManager: {list, create, update, addActionView, removeActionView}}: RootState) => ({
   list,
   create,
   update,
+  addActionView,
+  removeActionView,
 })
 const connector = connect(mapStateToProps, {
   showFormMenuFrontEndCreate,
   showFormMenuFrontEndUpdate,
-  showFormMenuFrontEndDetail
+  showFormMenuFrontEndDetail,
+  showFormActionView
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -32,7 +41,7 @@ function ViewGroupManagerPage(props: IProps) {
     document.title = "Quản lý Menu View";
   }, []);
 
-  const handleCreate = (e:any) => {
+  const handleCreate = (e: any) => {
     e.preventDefault();
     if (e?.target) {
       e.target.disabled = true;
@@ -62,10 +71,13 @@ function ViewGroupManagerPage(props: IProps) {
 
       <ListViewFrontEnd/>
       <CreateMenuFrontendForm/>
-  <UpdateMenuFrontendForm/>
+      <UpdateMenuFrontendForm/>
       <ViewGroupDetail/>
+      <AddActionViewForm/>
       {props.list.loading ||
       props.create.loading ||
+      props.addActionView.loading ||
+      props.removeActionView.loading ||
       props.update.loading
         ?
         <Loading/> : null}

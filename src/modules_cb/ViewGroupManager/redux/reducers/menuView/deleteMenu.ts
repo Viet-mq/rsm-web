@@ -1,6 +1,6 @@
-import {AppError, ResponseBase2} from "../../../../models/common";
-import * as Actions from "../actions";
-import {DeleteMenuFrontendAction} from "../actions";
+import {AppError, ResponseBase2} from "../../../../../models/common";
+import * as Actions from "../../actions";
+import {DeleteMenuFrontendAction} from "../../actions";
 
 export interface DeleteMenuFrontendState {
   loading: boolean,

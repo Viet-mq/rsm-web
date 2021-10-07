@@ -1,8 +1,8 @@
 import {
   getListMenuFrontend,
   GetListMenuFrontendAction, getListMenuFrontendError, getListMenuFrontendSuccess
-} from "../actions";
-import * as apis from '../services/apis'
+} from "../../actions";
+import * as apis from '../../services/apis'
 import {put} from "redux-saga/effects";
 import {AppError} from "src/models/common";
 import {NotificationError} from "src/components/Notification/Notification";

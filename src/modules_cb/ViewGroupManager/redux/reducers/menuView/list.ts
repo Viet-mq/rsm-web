@@ -1,7 +1,7 @@
-import {MenuFrontendEntity} from "../../types";
+import {MenuFrontendEntity} from "../../../types";
 import {AppError} from "src/models/common";
-import * as Actions from "../actions";
-import {GetListMenuFrontendAction} from "../actions";
+import * as Actions from "../../actions";
+import {GetListMenuFrontendAction} from "../../actions";
 
 export interface GetListMenuFrontendState {
   loading: boolean,

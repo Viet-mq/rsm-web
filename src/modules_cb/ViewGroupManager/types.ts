@@ -39,3 +39,9 @@ export interface DeleteMenuFrontendRequest{
   ]
 }
 
+export interface ActionViewRequest{
+  menuId: string,
+    viewIds: [
+    string
+  ]
+}

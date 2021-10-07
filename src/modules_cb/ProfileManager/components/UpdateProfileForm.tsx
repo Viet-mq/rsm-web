@@ -141,7 +141,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     }
     props.showSourceCVFormCreate(true);
   }
-
   return (
     <div>
 
@@ -236,7 +235,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                 <Select className="bg-white text-black"
                 >
                   {props.listSchool.rows?.map((item: any, index: any) => (
-                    <Option key={index} value={item.name}>{item.name}</Option>
+                    <Option key={index} value={item.id}>{item.name}</Option>
                   ))}
                 </Select>
               )}
@@ -294,7 +293,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                 <Select className="bg-white text-black"
                 >
                   {props.listJob.rows?.map((item: any, index: any) => (
-                    <Option key={index} value={item.name}>{item.name}</Option>
+                    <Option key={index} value={item.id}>{item.name}</Option>
                   ))}
                 </Select>
               )}
@@ -323,7 +322,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                 <Select className="bg-white text-black"
                 >
                   {props.listJobLevel.rows?.map((item: any, index: any) => (
-                    <Option key={index} value={item.name}>{item.name}</Option>
+                    <Option key={index} value={item.id}>{item.name}</Option>
                   ))}
                 </Select>
               )}
@@ -352,7 +351,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                 <Select className="bg-white text-black"
                 >
                   {props.listSourceCV.rows?.map((item: any, index: any) => (
-                    <Option key={index} value={item.name}>{item.name}</Option>
+                    <Option key={index} value={item.id}>{item.name}</Option>
                   ))}
                 </Select>
               )}

@@ -1,4 +1,4 @@
-import {MenuFrontendEntity} from "../../types";
+import {MenuFrontendEntity} from "../../../types";
 import {AppError} from "src/models/common";
 
 export interface GetListMenuFrontendAction {

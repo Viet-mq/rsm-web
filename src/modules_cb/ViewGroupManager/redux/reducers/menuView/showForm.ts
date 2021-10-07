@@ -1,6 +1,6 @@
-import * as Actions from "../actions";
-import {ShowFormMenuFrontendAction} from "../actions/showForm";
-import {MenuFrontendEntity} from "../../types";
+import * as Actions from "../../actions";
+import {ShowFormMenuFrontendAction} from "../../actions/menuView/showForm";
+import {MenuFrontendEntity} from "../../../types";
 
 export interface ShowFormMenuFrontendState {
   show_create?: boolean,

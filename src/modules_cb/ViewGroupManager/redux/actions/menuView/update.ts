@@ -1,5 +1,5 @@
 import {AppError, ResponseBase2} from "src/models/common";
-import {UpdateMenuFrontendRequest} from "../../types";
+import {UpdateMenuFrontendRequest} from "../../../types";
 
 export interface UpdateMenuFrontendAction {
   type: string,

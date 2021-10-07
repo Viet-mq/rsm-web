@@ -1,4 +1,4 @@
-import * as apis from "../services/apis";
+import * as apis from "../../services/apis";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
 import {put, select} from "redux-saga/effects";
 import {AppError} from "src/models/common";
@@ -8,7 +8,7 @@ import {
   deleteMenuFrontendError,
   deleteMenuFrontendSuccess,
   getListMenuFrontend
-} from "../actions";
+} from "../../actions";
 
 export function* deleteMenuFrontendAsync(action: DeleteMenuFrontendAction) {
   try {

@@ -24,3 +24,11 @@ export const deleteMenuFrontend = async (params?: any): Promise<ResponseBase2> =
 export const createMenuFrontend = async (params?: any): Promise<ResponseBase2> => {
   return (await POST('acc-svc/menu-web/create', params)) as ResponseBase2;
 };
+
+export const addActionView = async (params?: any): Promise<ResponseBase2> => {
+  return (await POST('acc-svc/menu-web/add-view-action', params)) as ResponseBase2;
+};
+
+export const removeActionView = async (params?: any): Promise<ResponseBase2> => {
+  return (await POST('acc-svc/menu-web/remove-view-action', params)) as ResponseBase2;
+};

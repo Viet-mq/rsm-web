@@ -1,7 +1,7 @@
 import {AppError, ResponseBase2} from "src/models/common";
-import * as Actions from "../actions";
-import {UpdateMenuFrontendRequest} from "../../types";
-import {UpdateMenuFrontendAction} from "../actions";
+import * as Actions from "../../actions";
+import {UpdateMenuFrontendRequest} from "../../../types";
+import {UpdateMenuFrontendAction} from "../../actions";
 
 export interface UpdateMenuFrontendState {
   loading: boolean,
