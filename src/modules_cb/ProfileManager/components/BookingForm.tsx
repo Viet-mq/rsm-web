@@ -54,11 +54,14 @@ function BookingForm(props: BookingFormProps) {
   }, [])
 
   useEffect(() => {
-    props.getBooking({idProfile: props.showBooking.data_booking?.id});
+    if (props.showBooking.data_booking?.id) {
+      props.getBooking({idProfile: props.showBooking.data_booking?.id});
+    }
+
   }, [props.showBooking.data_booking?.id])
 
   const dateFormat = 'DD/MM/YYYY HH:mm';
-
+  console.log("props.listAccount.rows:",props.listAccount.rows);
   function onBtnCancelClicked() {
     resetFields();
     setCompensatoryDataSource([]);
@@ -74,7 +77,7 @@ function BookingForm(props: BookingFormProps) {
         let req: UpdateBookingRequest = {
           id: values.id,
           idProfile: values.idProfile,
-          time: values.time*1,
+          time: values.time * 1,
           address: values.address,
           form: values.form,
           interviewer: values.interviewer,
@@ -85,9 +88,10 @@ function BookingForm(props: BookingFormProps) {
           evaluation: values.evaluation,
           status: values.status,
           reason: values.reason,
-          timeStart: values.timeStart*1,
-          timeFinish: values.timeFinish*1,
+          timeStart: values.timeStart * 1,
+          timeFinish: values.timeFinish * 1,
         }
+        console.log("Req:",req);
         props.updateBooking(req);
         return;
       }
@@ -102,7 +106,7 @@ function BookingForm(props: BookingFormProps) {
       if (!err) {
         let req: CreateBookingRequest = {
           idProfile: values.idProfile,
-          time: values.time*1,
+          time: values.time * 1,
           address: values.address,
           form: values.form,
           interviewer: values.interviewer,
@@ -113,8 +117,8 @@ function BookingForm(props: BookingFormProps) {
           evaluation: values.evaluation,
           status: values.status,
           reason: values.reason,
-          timeStart: values.timeStart*1,
-          timeFinish: values.timeFinish*1,
+          timeStart: values.timeStart * 1,
+          timeFinish: values.timeFinish * 1,
         }
         props.createBooking(req);
         return;
@@ -228,17 +232,17 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                    <Select className="bg-white text-black"
-                    >
-                      <Option value="on">Online</Option>
-                      <Option value="off">Offline</Option>
-                    </Select>
+                  <Select className="bg-white text-black"
+                  >
+                    <Option value="on">Online</Option>
+                    <Option value="off">Offline</Option>
+                  </Select>
                 )}
               </Form.Item>
 
               <Form.Item label="Người phỏng vấn" className="mb-0" style={{...formItemStyle}}>
                 {getFieldDecorator('interviewer', {
-                  initialValue: props.getBookingState.result?.interviewer || '',
+                  initialValue: props.getBookingState.result?.interviewer||'',
                   rules: [
                     {
                       message: 'Vui lòng chọn người phỏng vấn',
@@ -246,14 +250,14 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                    <Select className="bg-white text-black"
-                            mode="multiple"
-                            placeholder="Please select"
-                    >
-                      {props.listAccount.rows?.map((item: any, index: any) => (
-                        <Option key={index} value={item.id}>{item.fullName}</Option>
-                      ))}
-                    </Select>
+                  <Select className="bg-white text-black"
+                          mode="multiple"
+                          placeholder="Please select"
+                  >
+                    {props.listAccount.rows?.map((item: any) => (
+                      <Option key={item.username} value={item.username}>{item.fullName}</Option>
+                    ))}
+                  </Select>
                 )}
               </Form.Item>
 
@@ -323,13 +327,13 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                    <Select className="bg-white text-black"
-                            placeholder="Please select"
-                    >
-                      {props.listStatus?.rows?.map((item: any, index: any) => (
-                        <Option key={index} value={item.id}>{item.name}</Option>
-                      ))}
-                    </Select>
+                  <Select className="bg-white text-black"
+                          placeholder="Please select"
+                  >
+                    {props.listStatus?.rows?.map((item: any) => (
+                      <Option key={item.id} value={item.id}>{item.name}</Option>
+                    ))}
+                  </Select>
                 )}
               </Form.Item>
 
@@ -343,7 +347,7 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <DatePicker format={dateFormat} style={{width:"100%"}}/>
+                  <DatePicker format={dateFormat} style={{width: "100%"}}/>
                 )}
               </Form.Item>
 
@@ -357,7 +361,7 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <DatePicker format={dateFormat} style={{width:"100%"}}>
+                  <DatePicker format={dateFormat} style={{width: "100%"}}>
 
                   </DatePicker>
                 )}
@@ -373,7 +377,7 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <DatePicker format={dateFormat} style={{width:"100%"}}/>
+                  <DatePicker format={dateFormat} style={{width: "100%"}}/>
                 )}
               </Form.Item>
 
@@ -415,7 +419,7 @@ function BookingForm(props: BookingFormProps) {
 
               <Form.Item label="ID Profile" className="mb-0" style={{...formItemStyle, display: "none"}}>
                 {getFieldDecorator('idProfile', {
-                  initialValue: props.showBooking.data_booking?.id,
+                  initialValue: props.showBooking.data_booking?.id||'',
                   rules: [
                     {
                       message: 'Vui lòng nhập ID Profile',
@@ -429,7 +433,7 @@ function BookingForm(props: BookingFormProps) {
 
               <Form.Item label="Họ Tên" className="mb-0" style={{...formItemStyle}}>
                 {getFieldDecorator('interviewee', {
-                  initialValue: props.showBooking.data_booking?.fullName,
+                  initialValue: props.showBooking.data_booking?.fullName||'',
                   rules: [
                     {
                       message: 'Vui lòng nhập họ tên',
@@ -479,11 +483,11 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                    <Select className="bg-white text-black"
-                    >
-                      <Option value="Online">Online</Option>
-                      <Option value="Offline">Offline</Option>
-                    </Select>
+                  <Select className="bg-white text-black"
+                  >
+                    <Option key='1' value="Online">Online</Option>
+                    <Option key='2' value="Offline">Offline</Option>
+                  </Select>
                 )}
               </Form.Item>
 
@@ -497,14 +501,14 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                    <Select className="bg-white text-black"
-                            mode="multiple"
-                            placeholder="Please select"
-                    >
-                      {props.listAccount.rows?.map((item: any, index: any) => (
-                        <Option key={index} value={item.id}>{item.fullName}</Option>
-                      ))}
-                    </Select>
+                  <Select className="bg-white text-black"
+                          mode="multiple"
+                          placeholder="Please select"
+                  >
+                    {props.listAccount.rows?.map((item: any,index:any) => (
+                      <Option key={index} value={item.username}>{item.fullName}</Option>
+                    ))}
+                  </Select>
                 )}
               </Form.Item>
 
@@ -574,13 +578,13 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                    <Select className="bg-white text-black"
-                            placeholder="Please select"
-                    >
-                      {props.listStatus.rows?.map((item: any, index: any) => (
-                        <Option key={index} value={item.id}>{item.name}</Option>
-                      ))}
-                    </Select>
+                  <Select className="bg-white text-black"
+                          placeholder="Please select"
+                  >
+                    {props.listStatus.rows?.map((item: any) => (
+                      <Option key={item.id} value={item.id}>{item.name}</Option>
+                    ))}
+                  </Select>
                 )}
               </Form.Item>
 
@@ -594,7 +598,7 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <DatePicker format={dateFormat} style={{width:"100%"}}/>
+                  <DatePicker format={dateFormat} style={{width: "100%"}}/>
                 )}
               </Form.Item>
 
@@ -608,7 +612,7 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <DatePicker format={dateFormat} style={{width:"100%"}}>
+                  <DatePicker format={dateFormat} style={{width: "100%"}}>
 
                   </DatePicker>
                 )}
@@ -624,7 +628,7 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <DatePicker format={dateFormat} style={{width:"100%"}}/>
+                  <DatePicker format={dateFormat} style={{width: "100%"}}/>
                 )}
               </Form.Item>
 

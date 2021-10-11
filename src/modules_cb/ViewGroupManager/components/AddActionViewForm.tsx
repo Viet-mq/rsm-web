@@ -1,22 +1,48 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Form, Input, Modal} from "antd";
-import React, {FormEvent, useState} from "react";
+import {Button, Card, Checkbox, Form, Input, Modal, Select} from "antd";
+import React, {FormEvent, useEffect, useState} from "react";
 import {addActionView, showFormActionView} from "../redux/actions";
 import {ActionViewRequest} from "../types";
+import {getListFrontendView} from "../../ViewManager/redux/actions";
+import {FrontendViewEntity} from "../../ViewManager/types";
 
-const mapStateToProps = ({viewManager}: RootState) => ({viewManager});
-const connector = connect(mapStateToProps, {showFormActionView, addActionView});
+const CheckboxGroup = Checkbox.Group;
+const {Option} = Select;
+
+const mapStateToProps = (state: RootState) => ({
+  viewGroupManager: state.viewGroupManager,
+  listView: state.viewManager.list
+
+})
+const connector = connect(mapStateToProps, {
+  showFormActionView,
+  addActionView,
+  getListFrontendView
+});
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
-interface AddActionFormProps extends FormComponentProps, ReduxProps {
+interface AddActionViewFormProps extends FormComponentProps, ReduxProps {
 }
 
-function AddActionForm(props: AddActionFormProps) {
+function AddActionViewForm(props: AddActionViewFormProps) {
 
-  const [show, setShow] = useState<boolean>(true);
+  const [state, setState] = useState({
+    action: [
+      {
+        actionId: "",
+        actionName: "",
+        desc: "",
+        show: null
+      }
+    ],
+    checkedList: [],
+    indeterminate: false,
+    checkAll: false,
+  })
+  const [action, setAction] = useState<FrontendViewEntity | any>(null);
   const {getFieldDecorator, resetFields} = props.form;
   const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '40px'};
@@ -32,22 +58,53 @@ function AddActionForm(props: AddActionFormProps) {
     },
   };
 
+  useEffect(() => {
+    props.getListFrontendView({page: 1, size: 100});
+  }, [])
+
+  const onChange = (value: any) => {
+    const findName = action.actions?.filter((item: any) => value.includes(item.actionName))
+    setState({
+      action: findName,
+      checkedList: value,
+      indeterminate: !!value.length && value.length < action?.actions?.length,
+      checkAll: value.length === action?.actions.length,
+    });
+  };
+
+  const onCheckAllChange = (e: any) => {
+    if(action){
+      setState({
+        action: e.target.checked ? (action.actions?.map((item: any) => item)) : [],
+        checkedList: e.target.checked ? (action.actions?.map((item: any) => item.actionName)) : [],
+        indeterminate: false,
+        checkAll: e.target.checked,
+      });
+    }
+
+  };
+
   function onBtnCreateClicked(e: FormEvent) {
     e.preventDefault();
     (e.target as any).disabled = true;
     (e.target as any).disabled = false;
+    console.log("Action", action);
+    console.log("State:", state);
+    let viewActionIds:any = [];
+    viewActionIds=state.action.map((item:any)=>{return action.id+" "+item.actionId})
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         let req: ActionViewRequest = {
-          menuId: values.menuId,
-          viewIds: values.viewIds,
+          menuId: props.viewGroupManager.showForm.data_detail?.id,
+          viewActionIds: viewActionIds,
         }
-        console.log("values: " + JSON.stringify(req));
+        console.log("req:", req);
         props.addActionView(req);
         return;
       }
     });
   }
+
 
   function onBtnCancelClicked() {
     resetFields();
@@ -55,13 +112,20 @@ function AddActionForm(props: AddActionFormProps) {
     props.showFormActionView(false);
   }
 
+  const onChangeSelectView = (value: any) => {
+    if (props.listView.rows) {
+      const selectedRow = props.listView.rows?.find(row => row.id === value);
+      setAction(selectedRow as FrontendViewEntity);
+    }
+  }
+
   return (
 
     <Modal
       zIndex={2}
       maskClosable={false}
-      title="Thêm mới action"
-      visible={props.viewManager.showForm.show_add_action}
+      title="Thêm mới View Action"
+      visible={props.viewGroupManager.showForm.show_action_view}
       centered={true}
       width="550px"
       afterClose={() => {
@@ -78,8 +142,8 @@ function AddActionForm(props: AddActionFormProps) {
       <Form {...formItemLayout}>
 
         <Form.Item label="Menu" className="mb-0" style={{...formItemStyle}}>
-          {getFieldDecorator('path', {
-            initialValue: props.viewManager.showForm.view?.name,
+          {getFieldDecorator('menu', {
+            initialValue: props.viewGroupManager.showForm.data_detail?.name,
             rules: [
               {
                 message: 'Vui lòng nhập đường dẫn',
@@ -89,19 +153,25 @@ function AddActionForm(props: AddActionFormProps) {
           })(<Input disabled={true} placeholder="Nhập đường dẫn" className="bg-white text-black"/>)}
         </Form.Item>
 
-        <Form.Item label="Action" className="mb-0" style={{...formItemStyle}}>
-          {getFieldDecorator('action', {
+        <Form.Item label="View" className="mb-0" style={{...formItemStyle}}>
+          {getFieldDecorator('viewActionIds', {
             initialValue: '',
             rules: [
               {
-                message: 'Vui lòng nhập action',
+                message: 'Vui lòng nhập tên View',
                 required: true,
               },
             ],
-          })(<Input placeholder="Nhập action" className="bg-white text-black"/>)}
+          })(<Select className="bg-white text-black"
+                     onChange={onChangeSelectView}
+          >
+            {props.listView.rows?.map((item: any, index: any) => (
+              <Option key={index} value={item.id}>{item.name}</Option>
+            ))}
+          </Select>)}
         </Form.Item>
 
-        <Form.Item label="Nhập tên" className="mb-0" style={{...formItemStyle}}>
+        <Form.Item label="Nhập tên" className="mb-0" style={{...formItemStyle, marginTop: "4px"}}>
           {getFieldDecorator('name', {
             initialValue: '',
             rules: [
@@ -110,7 +180,21 @@ function AddActionForm(props: AddActionFormProps) {
                 required: true,
               },
             ],
-          })(<Input placeholder="Nhập icon menu" className="bg-white text-black"/>)}
+          })(<Card>
+            <Checkbox
+              indeterminate={state.indeterminate}
+              onChange={onCheckAllChange}
+              checked={state.checkAll}
+            >
+              Check all
+            </Checkbox>
+            <CheckboxGroup
+              style={{display: "grid"}}
+              options={action?.actions.map((item: any) => item.actionName)}
+              value={state.checkedList}
+              onChange={event => onChange(event)}
+            />
+          </Card>)}
         </Form.Item>
 
         <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px'}} colon={false}>
@@ -130,4 +214,4 @@ function AddActionForm(props: AddActionFormProps) {
 
 }
 
-export default connector(Form.create<AddActionFormProps>()(AddActionForm));
+export default connector(Form.create<AddActionViewFormProps>()(AddActionViewForm));

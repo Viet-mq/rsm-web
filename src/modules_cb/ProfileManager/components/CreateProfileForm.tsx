@@ -9,10 +9,13 @@ import {getListJob, showFormCreate as showJobFormCreate} from "../../JobManager/
 import {getListJobLevel, showFormCreate as showJobLevelFormCreate} from "../../JobLevelManager/redux/actions";
 import {getListSchool, showFormCreate as showSchoolFormCreate} from "../../SchoolManager/redux/actions";
 import {getListSourceCV, showFormCreate as showSourceCVFormCreate} from "../../SourceCVManager/redux/actions";
+// import {getListStatusCV,showFormCreate as showStatusCVFormCreate } from "../../StatusCVManager/redux/actions";
 import CreateJobForm from "../../JobManager/components/CreateJobForm";
 import CreateJobLevelForm from "../../JobLevelManager/components/CreateJobLevelForm";
 import CreateSourceCVForm from "../../SourceCVManager/components/CreateSourceCVForm";
 import CreateSchoolForm from "../../SchoolManager/components/CreateSchoolForm";
+import CreateStatusCVForm from "../../StatusCVManager/components/CreateStatusCVForm";
+
 import Loading from "../../../components/Loading";
 
 const {Option} = Select;
@@ -23,10 +26,13 @@ const mapStateToProps = (state: RootState) => ({
   listJobLevel: state.joblevelManager.list,
   listSchool: state.schoolManager.list,
   listSourceCV: state.sourcecvManager.list,
+  // listStatusCV:state.statuscvManager.list,
   createJob: state.jobManager.create,
   createJobLevel: state.joblevelManager.create,
   createSchool: state.schoolManager.create,
   createSourceCV: state.sourcecvManager.create,
+  // createStatusCV:state.statuscvManager.create
+
 })
 
 const connector = connect(mapStateToProps,
@@ -37,10 +43,12 @@ const connector = connect(mapStateToProps,
     getListJobLevel,
     getListSchool,
     getListSourceCV,
+    // getListStatusCV,
     showJobFormCreate,
     showJobLevelFormCreate,
     showSchoolFormCreate,
     showSourceCVFormCreate,
+    // showStatusCVFormCreate,
   });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -50,7 +58,6 @@ interface CreateProfileFormProps extends FormComponentProps, ReduxProps {
 
 function CreateProfileForm(props: CreateProfileFormProps) {
 
-  const [show, setShow] = useState<boolean>(true);
   const {getFieldDecorator, resetFields} = props.form;
   const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
@@ -71,7 +78,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
     props.getListJobLevel({page: '', size: ''});
     props.getListSchool({page: '', size: ''});
     props.getListSourceCV({page: '', size: ''});
-
+    // props.getListStatusCV({page: '', size: ''});
   }, [])
 
   function onBtnCreateClicked(e: FormEvent) {
@@ -94,8 +101,9 @@ function CreateProfileForm(props: CreateProfileFormProps) {
           phoneNumber: values.phoneNumber,
           school: values.school,
           sourceCV: values.sourceCV,
+          // statusCV: values.statusCV,
         }
-        console.log("values: " + JSON.stringify(req));
+        console.log("values: ", req);
         props.createProfile(req);
         return;
       }
@@ -108,9 +116,6 @@ function CreateProfileForm(props: CreateProfileFormProps) {
     props.showFormCreate(false);
   }
 
-  const onCheckBoxChange = (e: any) => {
-    setShow(e.target.checked);
-  }
 
   const dateFormat = 'DD/MM/YYYY';
 
@@ -148,6 +153,17 @@ function CreateProfileForm(props: CreateProfileFormProps) {
     }
     props.showSourceCVFormCreate(true);
   }
+
+  // const handleCreateStatusCV = (e: any) => {
+  //   console.log("Click")
+  //   e.preventDefault();
+  //   if (e?.target) {
+  //     e.target.disabled = true;
+  //     e.target.disabled = false;
+  //   }
+  //   props.showStatusCVFormCreate(true);
+  //   console.log(props.showStatusCVFormCreate(true))
+  // }
 
   return (
     <div>
@@ -187,7 +203,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
 
           <Form.Item label="Năm sinh" className="mb-0" style={{...formItemStyle}}>
             {getFieldDecorator('dateOfBirth', {
-              initialValue: '',
+              // initialValue: '',
               rules: [
                 {
                   message: 'Vui lòng nhập năm sinh',
@@ -359,6 +375,35 @@ function CreateProfileForm(props: CreateProfileFormProps) {
             </div>
           </Form.Item>
 
+          {/*<Form.Item label="Trạng thái CV" className="mb-0" style={{...formItemStyle}}>*/}
+          {/*  <div style={{display: 'flex'}}>*/}
+          {/*    {getFieldDecorator('statusCV', {*/}
+          {/*      initialValue: '',*/}
+          {/*      rules: [*/}
+          {/*        {*/}
+          {/*          message: 'Vui lòng nhập trạng thái CV',*/}
+          {/*          required: false,*/}
+          {/*        },*/}
+          {/*      ],*/}
+          {/*    })(*/}
+          {/*      <Select className="bg-white text-black"*/}
+          {/*      >*/}
+          {/*        {props.listStatusCV.rows?.map((item: any, index: any) => (*/}
+          {/*          <Option key={index} value={item.id}>{item.name}</Option>*/}
+          {/*        ))}*/}
+          {/*      </Select>*/}
+          {/*    )}*/}
+          {/*    <Button*/}
+          {/*      size="small"*/}
+          {/*      className="ant-btn ml-1 mr-1 ant-btn-sm"*/}
+          {/*      style={{height: '32px'}}*/}
+          {/*      onClick={handleCreateStatusCV}*/}
+          {/*    >*/}
+          {/*      <Icon type="plus"/>*/}
+          {/*    </Button>*/}
+          {/*  </div>*/}
+          {/*</Form.Item>*/}
+
           <Form.Item label="HR Reference" className="mb-0" style={{...formItemStyle}}>
             {getFieldDecorator('hrRef', {
               initialValue: '',
@@ -375,7 +420,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
 
           <Form.Item label="Thời gian nộp" className="mb-0" style={{...formItemStyle}}>
             {getFieldDecorator('dateOfApply', {
-              initialValue: '',
+              // initialValue: '',
               rules: [
                 {
                   message: 'Vui lòng nhập thời gian',
@@ -432,6 +477,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
       <CreateJobLevelForm/>
       <CreateSourceCVForm/>
       <CreateSchoolForm/>
+      <CreateStatusCVForm/>
 
       {props.createJob.loading ||
       props.createJobLevel.loading ||

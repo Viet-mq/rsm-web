@@ -100,11 +100,11 @@ function ListChatBot(props: IProps) {
       sorter: true,
       width: 100,
       render: (value: number) => {
-        if (value == 0) {
+        if (value === 0) {
           return 'Pending';
-        } else if (value == 1) {
+        } else if (value === 1) {
           return 'Training';
-        } else if (value == 2) {
+        } else if (value === 2) {
           return 'Trained';
         }
         return 'Unknown';

@@ -16,7 +16,6 @@ interface CreateJobFormProps extends FormComponentProps, ReduxProps {
 
 function CreateJobForm(props: CreateJobFormProps) {
 
-  const [show, setShow] = useState<boolean>(true);
   const {getFieldDecorator, resetFields} = props.form;
   const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
@@ -52,10 +51,6 @@ function CreateJobForm(props: CreateJobFormProps) {
     resetFields();
     setCompensatoryDataSource([]);
     props.showFormCreate(false);
-  }
-
-  const onCheckBoxChange = (e: any) => {
-    setShow(e.target.checked);
   }
 
   return (

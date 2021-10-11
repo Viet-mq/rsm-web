@@ -57,7 +57,7 @@ function ListMenuFrontend(props: IProps) {
     {
       title: 'Name',
       dataIndex: 'name',
-      width: 100,
+      width: 200,
       render:(text:string,record:MenuFrontendEntity)=><a onClick={event=>handleDetail(event,record)}>{text}</a>
     },
     {
@@ -74,7 +74,6 @@ function ListMenuFrontend(props: IProps) {
         return (
           <ul style={{paddingLeft:'0px'}}>
             {actions.map((object, i) => <li style={{listStyleType:'none'}} key={object.id}>
-              <input type="checkbox"/>
               <span>&nbsp;{object.id} : {object.name}</span>
             </li>)}
           </ul>
@@ -120,15 +119,15 @@ function ListMenuFrontend(props: IProps) {
     },
   ];
 
-  function onSelectedRowKeysChange(selectedRowKeys: any) {
-    setState({selectedRowKeys});
-  }
-
-  const {selectedRowKeys} = state;
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectedRowKeysChange,
-  };
+  // function onSelectedRowKeysChange(selectedRowKeys: any) {
+  //   setState({selectedRowKeys});
+  // }
+  //
+  // const {selectedRowKeys} = state;
+  // const rowSelection = {
+  //   selectedRowKeys,
+  //   onChange: onSelectedRowKeysChange,
+  // };
 
   return (
     <>

@@ -12,7 +12,7 @@ import {
   showFormUpdate,
   updateStatusCV
 } from "../../redux/actions";
-import {StatusCVEntity, CreateStatusCVRequest, UpdateStatusCVRequest, DeleteStatusCVRequest} from "../../types";
+import {StatusCVEntity, DeleteStatusCVRequest} from "../../types";
 
 const mapStateToProps = ({statuscvManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
@@ -100,15 +100,15 @@ function ListStatusCV(props: IProps) {
     },
   ];
 
-  function onSelectedRowKeysChange(selectedRowKeys: any) {
-    setState({selectedRowKeys});
-  }
-
-  const {selectedRowKeys} = state;
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectedRowKeysChange,
-  };
+  // function onSelectedRowKeysChange(selectedRowKeys: any) {
+  //   setState({selectedRowKeys});
+  // }
+  //
+  // const {selectedRowKeys} = state;
+  // const rowSelection = {
+  //   selectedRowKeys,
+  //   onChange: onSelectedRowKeysChange,
+  // };
 
   return (
     <>

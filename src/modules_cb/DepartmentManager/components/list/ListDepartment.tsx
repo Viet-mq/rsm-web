@@ -12,7 +12,7 @@ import {
   showFormUpdate,
   updateDepartment
 } from "../../redux/actions";
-import {DepartmentEntity, CreateDepartmentRequest, UpdateDepartmentRequest, DeleteDepartmentRequest} from "../../types";
+import {DepartmentEntity, DeleteDepartmentRequest} from "../../types";
 
 const mapStateToProps = ({departmentManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
@@ -101,15 +101,15 @@ function ListDepartment(props: IProps) {
     },
   ];
 
-  function onSelectedRowKeysChange(selectedRowKeys: any) {
-    setState({selectedRowKeys});
-  }
-
-  const {selectedRowKeys} = state;
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectedRowKeysChange,
-  };
+  // function onSelectedRowKeysChange(selectedRowKeys: any) {
+  //   setState({selectedRowKeys});
+  // }
+  //
+  // const {selectedRowKeys} = state;
+  // const rowSelection = {
+  //   selectedRowKeys,
+  //   onChange: onSelectedRowKeysChange,
+  // };
 
   return (
     <>

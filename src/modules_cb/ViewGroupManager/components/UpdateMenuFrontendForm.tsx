@@ -16,7 +16,6 @@ interface UpdateMenuFrontendFormProps extends FormComponentProps, ReduxProps {
 
 function UpdateMenuFrontendForm(props: UpdateMenuFrontendFormProps) {
 
-  const [show, setShow] = useState<boolean>(true);
   const {getFieldDecorator, resetFields} = props.form;
   const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};

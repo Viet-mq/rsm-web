@@ -16,7 +16,6 @@ interface CreateScriptFormProps extends FormComponentProps, ReduxProps {
 
 function CreateScriptForm(props: CreateScriptFormProps) {
 
-  const [show, setShow] = useState<boolean>(true);
   const {getFieldDecorator, resetFields} = props.form;
   const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '40px'};

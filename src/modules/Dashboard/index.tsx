@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {connect, ConnectedProps} from 'react-redux';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 import {RootState} from 'src/redux/reducers';
-import {Row} from 'antd';
+// import {Row} from 'antd';
 import env from "../../configs/env";
 
 const mapStateToProps = (rootState: RootState) => ({
@@ -17,9 +17,9 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 const Dashboard = ({}: PropsFromRedux) => {
 
-  const currentTime = Date.now();
-  const [selectedTime, setSelectedTime] = React.useState(currentTime); // time to get report;
-  const [departmentId, setDepartmentId] = useState('');
+  // const currentTime = Date.now();
+  // const [selectedTime, setSelectedTime] = React.useState(currentTime); // time to get report;
+  // const [departmentId, setDepartmentId] = useState('');
 
   useEffect(() => {
     document.title = env.pageTitle + 'Dashboard';
@@ -31,15 +31,15 @@ const Dashboard = ({}: PropsFromRedux) => {
 
   );
 };
-
-const Wrapper = styled.div.attrs({
-  className: 'contentPage',
-})`
-  padding-top: 0 !important;
-`;
-
-const StyledRow = styled(Row)`
-  margin-bottom: 20px;
-`;
+//
+// const Wrapper = styled.div.attrs({
+//   className: 'contentPage',
+// })`
+//   padding-top: 0 !important;
+// `;
+//
+// const StyledRow = styled(Row)`
+//   margin-bottom: 20px;
+// `;
 
 export default connector(Dashboard);

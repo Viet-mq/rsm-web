@@ -153,7 +153,7 @@ function ListProfile(props: IProps) {
     },
     {
       title: 'Trường học',
-      dataIndex: 'school',
+      dataIndex: 'schoolName',
       width: 200,
       key: '5',
     },
@@ -171,13 +171,13 @@ function ListProfile(props: IProps) {
     },
     {
       title: 'Công việc',
-      dataIndex: 'job',
-      width: 100,
+      dataIndex: 'jobName',
+      width: 150,
       key: '8',
     },
     {
       title: 'Vị trí tuyển dụng',
-      dataIndex: 'levelJob',
+      dataIndex: 'levelJobName',
       width: 100,
       key: '9',
     },
@@ -189,7 +189,7 @@ function ListProfile(props: IProps) {
     },
     {
       title: 'Nguồn CV',
-      dataIndex: 'sourceCV',
+      dataIndex: 'sourceCVName',
       width: 100,
       key: '11',
     },
@@ -268,15 +268,15 @@ function ListProfile(props: IProps) {
     },
   ];
 
-  function onSelectedRowKeysChange(selectedRowKeys: any) {
-    setState({selectedRowKeys});
-  }
-
-  const {selectedRowKeys} = state;
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectedRowKeysChange,
-  };
+  // function onSelectedRowKeysChange(selectedRowKeys: any) {
+  //   setState({selectedRowKeys});
+  // }
+  //
+  // const {selectedRowKeys} = state;
+  // const rowSelection = {
+  //   selectedRowKeys,
+  //   onChange: onSelectedRowKeysChange,
+  // };
 
   const dateFormat = 'DD/MM/YYYY';
 

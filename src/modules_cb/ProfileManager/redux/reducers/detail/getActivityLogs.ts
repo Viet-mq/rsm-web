@@ -1,4 +1,4 @@
-import {ActivityLogsEntity, ProfileEntity} from "../../../types";
+import {ActivityLogsEntity} from "../../../types";
 import {AppError} from "src/models/common";
 import * as Actions from "../../actions";
 import { ActivityLogsAction } from "../../actions";

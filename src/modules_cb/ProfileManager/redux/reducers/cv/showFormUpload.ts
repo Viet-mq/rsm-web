@@ -1,4 +1,4 @@
-import {ProfileEntity, UploadCVRequest} from "../../../types";
+import {ProfileEntity} from "../../../types";
 import * as Actions from "../../actions";
 import {UploadCVFormAction} from "../../actions";
 

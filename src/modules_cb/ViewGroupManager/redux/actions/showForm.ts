@@ -1,6 +1,4 @@
-import {showFrontEndViewUpdateForm, VIEW_FRONT_END_SHOW_UPDATE_FORM} from "../../../../ViewManager/redux/actions";
-import {FrontendViewEntity} from "../../../../ViewManager/types";
-import {MenuFrontendEntity} from "../../../types";
+import {MenuFrontendEntity} from "../../types";
 
 export interface ShowFormMenuFrontendAction {
   type: string,
@@ -8,13 +6,15 @@ export interface ShowFormMenuFrontendAction {
   show_update?: boolean,
   show_detail?: boolean,
   show_action_view?: boolean,
-  view?: MenuFrontendEntity
+  view?: MenuFrontendEntity,
+  data_detail?:MenuFrontendEntity
 
 }
 
 export const SHOW_FORM_MENU_FRONTEND_CREATE = "SHOW_FORM_MENU_FRONTEND_CREATE";
 export const SHOW_FORM_MENU_FRONTEND_UPDATE = "SHOW_FORM_MENU_FRONTEND_UPDATE";
 export const SHOW_FORM_MENU_FRONTEND_DETAIL = "SHOW_FORM_MENU_FRONTEND_DETAIL";
+export const SHOW_FORM_ADD_ACTION_VIEW = "SHOW_FORM_ADD_ACTION_VIEW";
 
 export const showFormMenuFrontEndCreate = (show_create: boolean): ShowFormMenuFrontendAction => ({
   type: SHOW_FORM_MENU_FRONTEND_CREATE,
@@ -33,9 +33,9 @@ export const showFormMenuFrontEndDetail = (show_detail: boolean,view?:MenuFronte
   view
 });
 
-export const showFormActionView = (show_action_view: boolean,view?:MenuFrontendEntity): ShowFormMenuFrontendAction => ({
-  type: SHOW_FORM_MENU_FRONTEND_DETAIL,
+export const showFormActionView = (show_action_view: boolean,data_detail?:MenuFrontendEntity): ShowFormMenuFrontendAction => ({
+  type: SHOW_FORM_ADD_ACTION_VIEW,
   show_action_view,
-  view
+  data_detail
 });
 

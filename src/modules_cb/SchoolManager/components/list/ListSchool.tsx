@@ -12,7 +12,7 @@ import {
   showFormUpdate,
   updateSchool
 } from "../../redux/actions";
-import {SchoolEntity, CreateSchoolRequest, UpdateSchoolRequest, DeleteSchoolRequest} from "../../types";
+import {SchoolEntity, DeleteSchoolRequest} from "../../types";
 
 const mapStateToProps = ({schoolManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
@@ -100,15 +100,15 @@ function ListSchool(props: IProps) {
     },
   ];
 
-  function onSelectedRowKeysChange(selectedRowKeys: any) {
-    setState({selectedRowKeys});
-  }
-
-  const {selectedRowKeys} = state;
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectedRowKeysChange,
-  };
+  // function onSelectedRowKeysChange(selectedRowKeys: any) {
+  //   setState({selectedRowKeys});
+  // }
+  //
+  // const {selectedRowKeys} = state;
+  // const rowSelection = {
+  //   selectedRowKeys,
+  //   onChange: onSelectedRowKeysChange,
+  // };
 
   return (
     <>

@@ -13,7 +13,7 @@ export function* removeActionViewAsync(action: RemoveActionViewAction) {
       NotificationError('Xóa action view không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa action view thành công");
-      const params = yield select((state: RootState) => state.viewManager.list.params);
+      const params = yield select((state: RootState) => state.viewGroupManager.list.params);
       yield put(getListMenuFrontend(params));
     }
   } catch (e) {

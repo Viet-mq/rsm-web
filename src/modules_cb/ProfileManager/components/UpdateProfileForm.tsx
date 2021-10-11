@@ -15,6 +15,7 @@ import CreateJobLevelForm from "../../JobLevelManager/components/CreateJobLevelF
 import CreateSourceCVForm from "../../SourceCVManager/components/CreateSourceCVForm";
 import CreateSchoolForm from "../../SchoolManager/components/CreateSchoolForm";
 import Loading from "../../../components/Loading";
+// import {getListStatusCV, showFormCreate as showStatusCVFormCreate} from "../../StatusCVManager/redux/actions";
 
 const {Option} = Select;
 
@@ -23,10 +24,12 @@ const mapStateToProps = (state: RootState) => ({
   listJob: state.jobManager.list,
   listJobLevel: state.joblevelManager.list,
   listSchool: state.schoolManager.list,
+  // listStatusCV:state.statuscvManager.list,
   listSourceCV: state.sourcecvManager.list,
   createJob: state.jobManager.create,
   createJobLevel: state.joblevelManager.create,
   createSchool: state.schoolManager.create,
+  // createStatusCV:state.statuscvManager.create,
   createSourceCV: state.sourcecvManager.create,
 })
 
@@ -38,10 +41,12 @@ const connector = connect(mapStateToProps,
     getListJobLevel,
     getListSchool,
     getListSourceCV,
+    // getListStatusCV,
     showJobFormCreate,
     showJobLevelFormCreate,
     showSchoolFormCreate,
     showSourceCVFormCreate,
+    // showStatusCVFormCreate
 
   });
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -68,13 +73,14 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     props.getListJobLevel({page: '', size: ''});
     props.getListSchool({page: '', size: ''});
     props.getListSourceCV({page: '', size: ''});
+    // props.getListStatusCV({page: '', size: ''});
   }, [])
-
   function onBtnUpdateClicked(e: FormEvent) {
     e.preventDefault();
     (e.target as any).disabled = true;
     (e.target as any).disabled = false;
-    props.form.validateFieldsAndScroll((err, values) => {
+
+      props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         let req: UpdateProfileRequest = {
           id: values.id,
@@ -86,11 +92,12 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           fullName: values.fullName,
           hometown: values.hometown,
           hrRef: values.hrRef,
-          job: values.job,
-          levelJob: values.levelJob,
+          job: props.showForm.data_update?.jobName.includes(values.job)? props.showForm.data_update?.jobId:values.job,
+          levelJob: props.showForm.data_update?.levelJobName.includes(values.levelJob)? props.showForm.data_update?.levelJobId:values.levelJob,
           phoneNumber: values.phoneNumber,
-          school: values.school,
-          sourceCV: values.sourceCV,
+          school: props.showForm.data_update?.schoolName.includes(values.school)? props.showForm.data_update?.schoolId:values.school,
+          sourceCV: props.showForm.data_update?.sourceCVName.includes(values.sourceCV)? props.showForm.data_update?.sourceCVId:values.sourceCV,
+          // statusCV: values.statusCV,
         }
         props.updateProfile(req);
         return;
@@ -141,6 +148,15 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     }
     props.showSourceCVFormCreate(true);
   }
+
+  // const handleCreateStatusCV = (e: any) => {
+  //   e.preventDefault();
+  //   if (e?.target) {
+  //     e.target.disabled = true;
+  //     e.target.disabled = false;
+  //   }
+  //   props.showStatusCVFormCreate(true);
+  // }
   return (
     <div>
 
@@ -224,7 +240,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
             <div style={{display: 'flex'}}>
               {getFieldDecorator('school',
                 {
-                  initialValue: props.showForm.data_update?.school,
+                  initialValue: props.showForm.data_update?.schoolName,
                   rules: [
                     {
                       message: 'Vui lòng nhập Trường học',
@@ -282,7 +298,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           <Form.Item label="Công việc" className="mb-0" style={{...formItemStyle}}>
             <div style={{display: 'flex'}}>
               {getFieldDecorator('job', {
-                initialValue: props.showForm.data_update?.job,
+                initialValue: props.showForm.data_update?.jobName,
                 rules: [
                   {
                     message: 'Vui lòng nhập tên công việc',
@@ -311,7 +327,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           <Form.Item label="Vị trí tuyển dụng" className="mb-0" style={{...formItemStyle}}>
             <div style={{display: 'flex'}}>
               {getFieldDecorator('levelJob', {
-                initialValue: props.showForm.data_update?.levelJob,
+                initialValue: props.showForm.data_update?.levelJobName,
                 rules: [
                   {
                     message: 'Vui lòng nhập vị trí tuyển dụng',
@@ -340,7 +356,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           <Form.Item label="Nguồn CV" className="mb-0" style={{...formItemStyle}}>
             <div style={{display: 'flex'}}>
               {getFieldDecorator('sourceCV', {
-                initialValue: props.showForm.data_update?.sourceCV,
+                initialValue: props.showForm.data_update?.sourceCVName,
                 rules: [
                   {
                     message: 'Vui lòng nhập Nguồn CV',
@@ -365,6 +381,35 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
               </Button>
             </div>
           </Form.Item>
+
+          {/*<Form.Item label="Trạng thái CV" className="mb-0" style={{...formItemStyle}}>*/}
+          {/*  <div style={{display: 'flex'}}>*/}
+          {/*    {getFieldDecorator('statusCV', {*/}
+          {/*      initialValue: props.showForm.data_update?.statusCVName,*/}
+          {/*      rules: [*/}
+          {/*        {*/}
+          {/*          message: 'Vui lòng nhập trạng thái CV',*/}
+          {/*          required: false,*/}
+          {/*        },*/}
+          {/*      ],*/}
+          {/*    })(*/}
+          {/*      <Select className="bg-white text-black"*/}
+          {/*      >*/}
+          {/*        {props.listStatusCV.rows?.map((item: any, index: any) => (*/}
+          {/*          <Option key={index} value={item.id}>{item.name}</Option>*/}
+          {/*        ))}*/}
+          {/*      </Select>*/}
+          {/*    )}*/}
+          {/*    <Button*/}
+          {/*      size="small"*/}
+          {/*      className="ant-btn ml-1 mr-1 ant-btn-sm"*/}
+          {/*      style={{height: '32px'}}*/}
+          {/*      onClick={handleCreateStatusCV}*/}
+          {/*    >*/}
+          {/*      <Icon type="plus"/>*/}
+          {/*    </Button>*/}
+          {/*  </div>*/}
+          {/*</Form.Item>*/}
 
           <Form.Item label="CV" className="mb-0" style={{...formItemStyle}}>
             {getFieldDecorator('cv', {

@@ -1,11 +1,11 @@
 import {combineReducers} from "redux";
 import list, {GetListMenuFrontendState} from "./menuView/list";
 import create, {CreateMenuFrontendState} from "./menuView/create";
-import showForm, {ShowFormMenuFrontendState} from "./menuView/showForm";
+import showForm, {ShowFormMenuFrontendState} from "./showForm";
 import deleteMenu, {DeleteMenuFrontendState} from "./menuView/deleteMenu";
 import update, {UpdateMenuFrontendState} from "./menuView/update";
-import addActionView,{AddActionViewState} from "./view/add_view";
-import removeActionView,{RemoveActionViewState} from "./view/remove_view";
+import addActionView,{AddActionViewState} from "./view/add_action_view";
+import removeActionView,{RemoveActionViewState} from "./view/remove_action_view";
 
 export interface ViewGroupManagerModuleState {
   list: GetListMenuFrontendState,

@@ -1,4 +1,4 @@
-import {RemoveStepScriptRequest, UpdateStepScriptRequest} from "../../types";
+import {RemoveStepScriptRequest} from "../../types";
 import {AppError, ResponseBase2} from "src/models/common";
 
 export interface RemoveStepScriptAction {

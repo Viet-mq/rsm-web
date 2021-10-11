@@ -13,6 +13,7 @@ import {
 
 export function* addActionViewAsync(action: AddActionViewAction) {
   try {
+    console.log("action.request:",action.request)
     const rs = yield apis.addActionView(action.request);
     yield put(addActionViewSuccess(rs));
     if (rs.code !== 0) {
@@ -20,7 +21,7 @@ export function* addActionViewAsync(action: AddActionViewAction) {
     } else {
       NotificationSuccess('Thành công', "Thêm action view thành công");
       yield put(showFormActionView(false));
-      const params = yield select((state: RootState) => state.viewManager.list.params);
+      const params = yield select((state: RootState) => state.viewGroupManager.list.params);
       yield put(getListMenuFrontend(params));
     }
   } catch (e) {

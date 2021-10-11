@@ -16,7 +16,6 @@ interface AddActionFormProps extends FormComponentProps, ReduxProps {
 
 function AddActionForm(props: AddActionFormProps) {
 
-  const [show, setShow] = useState<boolean>(true);
   const {getFieldDecorator, resetFields} = props.form;
   const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '40px'};
@@ -91,19 +90,19 @@ function AddActionForm(props: AddActionFormProps) {
           })(<Input disabled={true} placeholder="Nhập đường dẫn" className="bg-white text-black"/>)}
         </Form.Item>
 
-        <Form.Item label="Action" className="mb-0" style={{...formItemStyle}}>
+        <Form.Item label="ID Action" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('action', {
             initialValue: '',
             rules: [
               {
-                message: 'Vui lòng nhập action',
+                message: 'Vui lòng nhập ID action',
                 required: true,
               },
             ],
           })(<Input placeholder="Nhập action" className="bg-white text-black"/>)}
         </Form.Item>
 
-        <Form.Item label="Nhập tên" className="mb-0" style={{...formItemStyle}}>
+        <Form.Item label="Tên Action" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('name', {
             initialValue: '',
             rules: [
@@ -112,7 +111,7 @@ function AddActionForm(props: AddActionFormProps) {
                 required: true,
               },
             ],
-          })(<Input placeholder="Nhập icon menu" className="bg-white text-black"/>)}
+          })(<Input placeholder="Nhập tên action" className="bg-white text-black"/>)}
         </Form.Item>
 
         <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px'}} colon={false}>

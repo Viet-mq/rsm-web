@@ -112,9 +112,9 @@ function ListScript(props: IProps) {
     console.log("value: " + e.target.value);
   }
 
-  const onClickCard = (e: any) => {
-    console.log("on card clicked get template to display");
-  }
+  // const onClickCard = (e: any) => {
+  //   console.log("on card clicked get template to display");
+  // }
 
   const onClickNew = (event: any, scriptId: string) => {
     console.log("on card clicked !" + scriptId);

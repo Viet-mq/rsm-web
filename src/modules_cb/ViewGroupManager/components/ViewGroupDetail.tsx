@@ -1,12 +1,18 @@
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {Modal, Tree} from "antd";
+import {Button, Icon, Modal, Tree} from "antd";
 import React, {useEffect, useState} from "react";
-import {showFormMenuFrontEndDetail} from "../redux/actions";
+import {showFormActionView, showFormMenuFrontEndDetail} from "../redux/actions";
 
-const mapStateToProps = ({viewGroupManager: {showForm}}: RootState) => ({showForm})
+
+const mapStateToProps = (state: RootState) => ({
+  showForm: state.viewGroupManager.showForm,
+
+})
+
 const connector = connect(mapStateToProps, {
-  showFormMenuFrontEndDetail
+  showFormMenuFrontEndDetail,
+  showFormActionView,
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -14,12 +20,10 @@ type ReduxProps = ConnectedProps<typeof connector>;
 interface IProps extends ReduxProps {
 }
 
-
 function MenuFrontendDetailForm(props: IProps) {
   const [show, setShow] = useState<boolean>(true);
   const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
-
   const formItemLayout = {
     labelCol: {
       xs: {span: 24},
@@ -38,12 +42,15 @@ function MenuFrontendDetailForm(props: IProps) {
         actions.push({
           title: childens[i]?.actionName,
           key: childens[i]?.actionId,
-          children: getChildrenRecursive(childens[i].actions)
+          children: getChildrenRecursive(childens[i].actions),
+          disableCheckbox: false,
         })
       } else {
         actions.push({
           title: childens[i]?.actionName,
-          key: childens[i]?.actionId
+          key: childens[i]?.actionId,
+          disableCheckbox: false,
+
         })
       }
     }
@@ -66,7 +73,6 @@ function MenuFrontendDetailForm(props: IProps) {
 
   const [treeData, setTreeData] = useState([]);
 
-  console.log(props.showForm);
   useEffect(() => {
     const formatTree = convertArrayToTree(props?.showForm?.view?.views);
     setTreeData(formatTree);
@@ -79,12 +85,22 @@ function MenuFrontendDetailForm(props: IProps) {
     props.showFormMenuFrontEndDetail(false);
   }
 
+  const onCheck = (checkedKeys: any) => {
+    console.log('onCheck', checkedKeys);
+  };
+
+  const HandleCreateView = () => {
+    props.showFormActionView(true, props.showForm.view);
+  }
+
+  console.log("showFormActionView:", props.showForm.view);
+
   return (
 
     <Modal
       zIndex={2}
       maskClosable={false}
-      title="Cập nhật menu"
+      title={"Cập nhật menu view: " + props.showForm.view?.name}
       visible={props.showForm.show_detail}
       centered={true}
       width="550px"
@@ -101,12 +117,32 @@ function MenuFrontendDetailForm(props: IProps) {
           paddingTop: 0
         }}
       >
+        <div className="tmp-btn" style={{textAlign: "end", padding: "0 25px 10px"}}>
+          <Button onClick={HandleCreateView}>
+            <Icon type="plus"/> Tạo View
+          </Button>
+        </div>
 
         <Tree
-          showLine={true}
+          checkable
+          onCheck={onCheck}
+          style={{padding: "0 30px 30px"}}
           defaultExpandedKeys={["0-0"]}
           treeData={treeData}
         />
+
+        <div style={{textAlign: "center"}}>
+          <Button className="mr-3 create-btn" htmlType="submit">
+            Cập nhật
+          </Button>
+          <Button  type="danger" className="pl-5 pr-5 mr-3" >
+            Xóa
+          </Button>
+          <Button type="default" className="pl-5 pr-5" onClick={onBtnCancelClicked}>
+            Hủy
+          </Button>
+        </div>
+
       </div>
     </Modal>
 

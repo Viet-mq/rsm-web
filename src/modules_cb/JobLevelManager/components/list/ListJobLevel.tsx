@@ -12,7 +12,7 @@ import {
   showFormUpdate,
   updateJobLevel
 } from "../../redux/actions";
-import {JobLevelEntity, CreateJobLevelRequest, UpdateJobLevelRequest, DeleteJobLevelRequest} from "../../types";
+import {JobLevelEntity, DeleteJobLevelRequest} from "../../types";
 
 const mapStateToProps = ({joblevelManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
@@ -100,15 +100,15 @@ function ListJobLevel(props: IProps) {
     },
   ];
 
-  function onSelectedRowKeysChange(selectedRowKeys: any) {
-    setState({selectedRowKeys});
-  }
-
-  const {selectedRowKeys} = state;
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectedRowKeysChange,
-  };
+  // function onSelectedRowKeysChange(selectedRowKeys: any) {
+  //   setState({selectedRowKeys});
+  // }
+  //
+  // const {selectedRowKeys} = state;
+  // const rowSelection = {
+  //   selectedRowKeys,
+  //   onChange: onSelectedRowKeysChange,
+  // };
 
   return (
     <>

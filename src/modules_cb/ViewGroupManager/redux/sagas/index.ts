@@ -9,8 +9,8 @@ import {
 import {createMenuFrontendAsync} from "./menuView/create";
 import {deleteMenuFrontendAsync} from "./menuView/deleteMenu";
 import {updateMenuFrontendAsync} from "./menuView/update";
-import {addActionViewAsync} from "./view/add_view";
-import {removeActionViewAsync} from "./view/remove_view";
+import {addActionViewAsync} from "./view/add_action_view";
+import {removeActionViewAsync} from "./view/remove_action_view";
 
 export default function* root() {
   return all([
