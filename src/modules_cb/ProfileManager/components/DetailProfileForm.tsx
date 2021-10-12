@@ -13,7 +13,8 @@ const mapStateToProps = (state: RootState) => ({
   showForm: state.profileManager.showForm,
   detail: state.profileManager.detail,
   activityLogs: state.profileManager.getActivity,
-  booking: state.profileManager.getBooking
+  booking: state.profileManager.getBooking,
+  account: state.accountManager.list,
 })
 
 const connector = connect(mapStateToProps,
@@ -28,13 +29,14 @@ interface DetailProfileFormProps extends ReduxProps {
 }
 
 function DetailProfileForm(props: DetailProfileFormProps) {
+  console.log("props:", props)
   const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   let screenWidth = document.documentElement.clientWidth;
   const [page, setPage] = useState(1);
   const [scroll, setScroll] = useState(screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false});
   const size = 10;
   const [activeLogs, setActiveLogs] = useState({
-    params:'',
+    params: '',
     data: [],
     totalPage: 0,
     current: 1,
@@ -45,7 +47,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     {
       type: "select",
       iconType: 'eye',
-      twoToneColor: '#fff200'
+      twoToneColor: '#ffee00'
     },
     {
       type: "create",
@@ -65,17 +67,15 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
     },
   ])
-  console.log("prop:",props)
-  console.log("Propactive:", activeLogs.params,"rows:",activeLogs.data)
   useEffect(() => {
-      setActiveLogs({
-        params:props.activityLogs.params,
-        data: props.activityLogs.rows,
-        totalPage: props.activityLogs.total,
-        current: page,
-        minIndex: 0,
-        maxIndex: size
-      })
+    setActiveLogs({
+      params: props.activityLogs.params,
+      data: props.activityLogs.rows,
+      totalPage: props.activityLogs.total,
+      current: page,
+      minIndex: 0,
+      maxIndex: size
+    })
   }, [props.activityLogs.total])
   const handeClose = (e: any) => {
     e.preventDefault();
@@ -92,7 +92,6 @@ function DetailProfileForm(props: DetailProfileFormProps) {
   }
 
 
-
   function unixTimeToDate(unixTime: number): Date {
     return new Date(unixTime);
   }
@@ -104,7 +103,6 @@ function DetailProfileForm(props: DetailProfileFormProps) {
   }
 
   function handleChangeActivityLogs(page: any) {
-    console.log("page:", page)
     setActiveLogs({
       ...activeLogs,
       current: page,
@@ -137,7 +135,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       </div>
 
       <div className="detail-paragraph-1">
-        <Avatar src={require('src/assets/images/profile.png')} size={100} style={{width:"115px"}}/>
+        <Avatar src={require('src/assets/images/profile.png')} size={100} style={{width: "115px"}}/>
         <div className="detail-paragraph-1__name">
           <h2>{props.detail.result?.fullName}</h2>
           <Icon type="star" className="ml-1 mr-1"/>
@@ -190,9 +188,10 @@ function DetailProfileForm(props: DetailProfileFormProps) {
             <Icon type="team" className="mr-2"/>
             <span>Hội đồng tuyển dụng:</span>
             <ul>
-              {props.booking.result?.interviewer.map((item: any, index: any) => {
+              {props.account.rows?.filter((item: any) => props.booking.result?.interviewer.includes(item.username))
+                .map((item: any, index: any) => {
                 return <li key={index}>
-                  {item}
+                  {item.fullName}
                 </li>
               })}
             </ul>
@@ -258,19 +257,19 @@ function DetailProfileForm(props: DetailProfileFormProps) {
         <div className='detail-paragraph-5__content'>
           <Timeline style={{padding: '15px'}}>
             {activeLogs.data?.reverse().map((item: any, index: any) => {
-              let iconType = icon.find((icon: any) => icon.type===item.type);
+              let iconType = icon.find((icon: any) => icon.type === item.type);
               return index >= activeLogs.minIndex &&
                 index < activeLogs.maxIndex &&
                 <Timeline.Item key={index} dot={
-                    <Icon type={iconType?.iconType} theme="twoTone" twoToneColor={iconType?.twoToneColor} style={{
-                      borderRadius: '50%',
-                      backgroundColor: iconType?.twoToneColor,
-                      width: '40px',
-                      height: '40px',
-                      paddingTop: '10px',
-                      fontSize: '20px',
-                      // marginTop:'10px'
-                    }}/>
+                  <Icon type={iconType?.iconType} theme="twoTone" twoToneColor={iconType?.twoToneColor} style={{
+                    borderRadius: '50%',
+                    backgroundColor: iconType?.twoToneColor,
+                    width: '40px',
+                    height: '40px',
+                    paddingTop: '10px',
+                    fontSize: '20px',
+                    // marginTop:'10px'
+                  }}/>
 
                 }>
                 <span

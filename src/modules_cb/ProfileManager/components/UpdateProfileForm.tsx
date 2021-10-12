@@ -93,11 +93,11 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           fullName: values.fullName,
           hometown: values.hometown,
           hrRef: values.hrRef,
-          job: props.showForm.data_update?.jobName.includes(values.job)? props.showForm.data_update?.jobId:values.job,
-          levelJob: props.showForm.data_update?.levelJobName.includes(values.levelJob)? props.showForm.data_update?.levelJobId:values.levelJob,
+          job:values.job,
+          levelJob: values.levelJob,
           phoneNumber: values.phoneNumber,
-          school: props.showForm.data_update?.schoolName.includes(values.school)? props.showForm.data_update?.schoolId:values.school,
-          sourceCV: props.showForm.data_update?.sourceCVName.includes(values.sourceCV)? props.showForm.data_update?.sourceCVId:values.sourceCV,
+          school:values.school,
+          sourceCV:values.sourceCV,
           // statusCV: values.statusCV,
         }
         props.updateProfile(req);
@@ -241,7 +241,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
             <div style={{display: 'flex'}}>
               {getFieldDecorator('school',
                 {
-                  initialValue: props.showForm.data_update?.schoolName,
+                  initialValue: props.showForm.data_update?.schoolId,
                   rules: [
                     {
                       message: 'Vui lòng nhập Trường học',
@@ -299,7 +299,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           <Form.Item label="Công việc" className="mb-0" style={{...formItemStyle}}>
             <div style={{display: 'flex'}}>
               {getFieldDecorator('job', {
-                initialValue: props.showForm.data_update?.jobName,
+                initialValue: props.showForm.data_update?.jobId,
                 rules: [
                   {
                     message: 'Vui lòng nhập tên công việc',
@@ -328,7 +328,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           <Form.Item label="Vị trí tuyển dụng" className="mb-0" style={{...formItemStyle}}>
             <div style={{display: 'flex'}}>
               {getFieldDecorator('levelJob', {
-                initialValue: props.showForm.data_update?.levelJobName,
+                initialValue: props.showForm.data_update?.levelJobId,
                 rules: [
                   {
                     message: 'Vui lòng nhập vị trí tuyển dụng',
@@ -357,7 +357,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           <Form.Item label="Nguồn CV" className="mb-0" style={{...formItemStyle}}>
             <div style={{display: 'flex'}}>
               {getFieldDecorator('sourceCV', {
-                initialValue: props.showForm.data_update?.sourceCVName,
+                initialValue: props.showForm.data_update?.sourceCVId,
                 rules: [
                   {
                     message: 'Vui lòng nhập Nguồn CV',

@@ -60,7 +60,7 @@ function BookingForm(props: BookingFormProps) {
     }
 
   }, [props.showBooking.data_booking?.id])
-
+  console.log("getbooking:",props.getBookingState)
   const dateFormat = 'DD/MM/YYYY HH:mm';
   function onBtnCancelClicked() {
     resetFields();
@@ -319,7 +319,7 @@ function BookingForm(props: BookingFormProps) {
 
               <Form.Item label="Trạng thái phỏng vấn" className="mb-0" style={{...formItemStyle}}>
                 {getFieldDecorator('status', {
-                  initialValue: props.getBookingState.result?.statusName || '',
+                  initialValue: props.getBookingState.result?.statusId || '',
                   rules: [
                     {
                       message: 'Vui lòng chọn Trạng thái phỏng vấn',
