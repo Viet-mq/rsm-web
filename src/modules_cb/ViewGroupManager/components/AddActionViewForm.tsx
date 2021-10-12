@@ -108,6 +108,20 @@ function AddActionViewForm(props: AddActionViewFormProps) {
 
   function onBtnCancelClicked() {
     resetFields();
+    setAction(null);
+    setState({
+      action: [
+        {
+          actionId: "",
+          actionName: "",
+          desc: "",
+          show: null
+        }
+      ],
+      checkedList: [],
+      indeterminate: false,
+      checkAll: false,
+    });
     setCompensatoryDataSource([]);
     props.showFormActionView(false);
   }

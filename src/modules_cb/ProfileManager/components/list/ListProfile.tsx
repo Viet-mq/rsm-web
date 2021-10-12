@@ -48,26 +48,21 @@ interface IProps extends ReduxProps {
 }
 
 function ListProfile(props: IProps) {
-  let screenWidth = document.documentElement.clientWidth;
+  // let screenWidth = document.documentElement.clientWidth;
   const [page, setPage] = useState(1);
-  const [scroll, setScroll] = useState(screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false});
+  // const [scroll, setScroll] = useState(screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false});
   const size = 10;
-  const [state, setState] = useState<any>({
-    selectedRowKeys: [],
-  });
-  const [id, setId] = useState('');
+  // const [state, setState] = useState<any>({
+  //   selectedRowKeys: [],
+  // });
+  // const [id, setId] = useState('');
   const [sourceCV, setSourceCV] = useState('');
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState<any>();
 
   useEffect(() => {
     props.getListProfile({page: 1, size: 100});
-    props.getListSourceCV({page: '', size: ''});
+    props.getListSourceCV({page: 1, size: 100});
   }, []);
-  //
-  // useEffect(() => {
-  //   props.getDetailProfile({idProfile: id});
-  //   props.getActivityLogs({idProfile: id});
-  // }, [id])
 
   function unixTimeToDate(unixTime: number): Date {
     return new Date(unixTime);
@@ -112,8 +107,8 @@ function ListProfile(props: IProps) {
 
     props.getDetailProfile({idProfile: entity.id});
     props.getActivityLogs({idProfile: entity.id});
+    props.getBooking({idProfile: entity.id});
     props.showFormDetail(req, props.detail?.result);
-    console.log("props:",props);
   }
 
   const handleSearch = (value: any) => {
@@ -125,8 +120,8 @@ function ListProfile(props: IProps) {
   }
 
   const handleSelectDate = (value: any) => {
-    let applyDate: string = moment(unixTimeToDate(value)).format('DD/MM/YYYY');
-    setSourceCV(applyDate);
+    // let applyDate: number = moment(unixTimeToDate(value)).format('DD/MM/YYYY');
+    setDate(value*1);
   }
   const columns: ColumnProps<ProfileEntity>[] = [
     {

@@ -2,7 +2,7 @@ import {RootState} from "../../../redux/reducers";
 
 import React, {useState} from "react";
 import {Button, Input, Modal} from "antd";
-import {showFormUploadCV, uploadCV} from "../redux/actions";
+import {getActivityLogs, showFormUploadCV, uploadCV} from "../redux/actions";
 import {connect, ConnectedProps} from "react-redux";
 import {UploadCVRequest} from "../types";
 
@@ -10,7 +10,11 @@ const mapStateToProps = (state: RootState) => ({
   showFormUpload: state.profileManager.showFormUpload,
 })
 
-const connector = connect(mapStateToProps, {showFormUploadCV, uploadCV});
+const connector = connect(mapStateToProps, {
+  showFormUploadCV,
+  uploadCV,
+  getActivityLogs
+});
 
 type ReduxProps = ConnectedProps<typeof connector>;
 

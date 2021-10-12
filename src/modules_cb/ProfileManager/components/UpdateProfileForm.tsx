@@ -1,6 +1,6 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {showFormUpdate, updateProfile} from "../redux/actions";
+import {getActivityLogs, showFormUpdate, updateProfile} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, DatePicker, Form, Icon, Input, Modal, Select} from "antd";
 import React, {FormEvent, useEffect, useState} from "react";
@@ -46,6 +46,7 @@ const connector = connect(mapStateToProps,
     showJobLevelFormCreate,
     showSchoolFormCreate,
     showSourceCVFormCreate,
+    getActivityLogs
     // showStatusCVFormCreate
 
   });
@@ -69,11 +70,11 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     },
   };
   useEffect(() => {
-    props.getListJob({page: '', size: ''});
-    props.getListJobLevel({page: '', size: ''});
-    props.getListSchool({page: '', size: ''});
-    props.getListSourceCV({page: '', size: ''});
-    // props.getListStatusCV({page: '', size: ''});
+    props.getListJob({page: 1, size: 100});
+    props.getListJobLevel({page: 1, size: 100});
+    props.getListSchool({page: 1, size: 100});
+    props.getListSourceCV({page: 1, size: 100});
+    // props.getListStatusCV({page: 1, size: 100});
   }, [])
   function onBtnUpdateClicked(e: FormEvent) {
     e.preventDefault();

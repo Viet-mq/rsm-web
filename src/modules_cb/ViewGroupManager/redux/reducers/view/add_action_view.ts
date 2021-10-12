@@ -1,7 +1,7 @@
 import {AppError, ResponseBase2} from "src/models/common";
 import * as Actions from "../../actions";
 import {ActionViewRequest} from "../../../types";
-import {ADD_ACTION_VIEW, ADD_ACTION_VIEW_ERROR, ADD_ACTION_VIEW_SUCCESS, AddActionViewAction} from "../../actions";
+import {AddActionViewAction} from "../../actions";
 
 export interface AddActionViewState {
   loading: boolean,

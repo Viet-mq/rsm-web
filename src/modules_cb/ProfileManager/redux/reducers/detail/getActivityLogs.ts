@@ -6,8 +6,8 @@ import { ActivityLogsAction } from "../../actions";
 export interface ActivityLogsState {
   loading: boolean,
   params?: any,
-  rows?: ActivityLogsEntity[],
-  total?: number,
+  rows?: ActivityLogsEntity[]|any,
+  total?: number|any,
   error?: AppError
 }
 

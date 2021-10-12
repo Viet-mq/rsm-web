@@ -3,7 +3,7 @@ import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, DatePicker, Form, Icon, Input, Modal, Select} from "antd";
 import React, {FormEvent, useEffect, useState} from "react";
-import {createProfile, showFormCreate} from "../redux/actions";
+import {createProfile, getActivityLogs, showFormCreate} from "../redux/actions";
 import {CreateProfileRequest} from "../types";
 import {getListJob, showFormCreate as showJobFormCreate} from "../../JobManager/redux/actions";
 import {getListJobLevel, showFormCreate as showJobLevelFormCreate} from "../../JobLevelManager/redux/actions";
@@ -48,6 +48,7 @@ const connector = connect(mapStateToProps,
     showJobLevelFormCreate,
     showSchoolFormCreate,
     showSourceCVFormCreate,
+    getActivityLogs
     // showStatusCVFormCreate,
   });
 
@@ -74,11 +75,11 @@ function CreateProfileForm(props: CreateProfileFormProps) {
   };
 
   useEffect(() => {
-    props.getListJob({page: '', size: ''});
-    props.getListJobLevel({page: '', size: ''});
-    props.getListSchool({page: '', size: ''});
-    props.getListSourceCV({page: '', size: ''});
-    // props.getListStatusCV({page: '', size: ''});
+    props.getListJob({page: 1, size: 100});
+    props.getListJobLevel({page: 1, size: 100});
+    props.getListSchool({page: 1, size: 100});
+    props.getListSourceCV({page: 1, size: 100});
+    // props.getListStatusCV({page: 1, size: 100});
   }, [])
 
   function onBtnCreateClicked(e: FormEvent) {

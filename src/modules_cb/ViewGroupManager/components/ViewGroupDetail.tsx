@@ -21,19 +21,19 @@ interface IProps extends ReduxProps {
 }
 
 function MenuFrontendDetailForm(props: IProps) {
-  const [show, setShow] = useState<boolean>(true);
+  // const [show, setShow] = useState<boolean>(true);
   const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
-  const formItemStyle = {height: '60px'};
-  const formItemLayout = {
-    labelCol: {
-      xs: {span: 24},
-      sm: {span: 8},
-    },
-    wrapperCol: {
-      xs: {span: 24},
-      sm: {span: 16},
-    },
-  };
+  // const formItemStyle = {height: '60px'};
+  // const formItemLayout = {
+  //   labelCol: {
+  //     xs: {span: 24},
+  //     sm: {span: 8},
+  //   },
+  //   wrapperCol: {
+  //     xs: {span: 24},
+  //     sm: {span: 16},
+  //   },
+  // };
 
   const getChildrenRecursive = (childens: any) => {
     let actions: any = [];
@@ -76,7 +76,6 @@ function MenuFrontendDetailForm(props: IProps) {
   useEffect(() => {
     const formatTree = convertArrayToTree(props?.showForm?.view?.views);
     setTreeData(formatTree);
-    console.log("formatTree", formatTree)
   }, [props?.showForm])
 
 
@@ -88,12 +87,14 @@ function MenuFrontendDetailForm(props: IProps) {
   const onCheck = (checkedKeys: any) => {
     console.log('onCheck', checkedKeys);
   };
-
+  console.log("props:",props);
   const HandleCreateView = () => {
     props.showFormActionView(true, props.showForm.view);
   }
 
-  console.log("showFormActionView:", props.showForm.view);
+  const onBtnRemoveActionView=(e:any)=> {
+
+  }
 
   return (
 
@@ -129,13 +130,14 @@ function MenuFrontendDetailForm(props: IProps) {
           style={{padding: "0 30px 30px"}}
           defaultExpandedKeys={["0-0"]}
           treeData={treeData}
+
         />
 
         <div style={{textAlign: "center"}}>
           <Button className="mr-3 create-btn" htmlType="submit">
             Cập nhật
           </Button>
-          <Button  type="danger" className="pl-5 pr-5 mr-3" >
+          <Button  type="danger" className="pl-5 pr-5 mr-3" onClick={event=>onBtnRemoveActionView(event)} >
             Xóa
           </Button>
           <Button type="default" className="pl-5 pr-5" onClick={onBtnCancelClicked}>

@@ -1,8 +1,8 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {showFormDetail} from "../redux/actions";
-import {Avatar, Button, Icon, Select, Timeline} from "antd";
-import React, {useState} from "react";
+import {getActivityLogs, showFormDetail} from "../redux/actions";
+import {Avatar, Button, Icon, Pagination, Select, Timeline} from "antd";
+import React, {useEffect, useState} from "react";
 import {DetailCV} from "../types";
 import moment from "moment";
 
@@ -11,12 +11,14 @@ const {Option} = Select;
 const mapStateToProps = (state: RootState) => ({
   showForm: state.profileManager.showForm,
   detail: state.profileManager.detail,
-  activityLogs: state.profileManager.getActivity
+  activityLogs: state.profileManager.getActivity,
+  booking: state.profileManager.getBooking
 })
 
 const connector = connect(mapStateToProps,
   {
     showFormDetail,
+    getActivityLogs
   });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -26,6 +28,52 @@ interface DetailProfileFormProps extends ReduxProps {
 
 function DetailProfileForm(props: DetailProfileFormProps) {
   const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
+  const [page, setPage] = useState(1);
+  const size = 10;
+  const [activeLogs, setActiveLogs] = useState({
+    params:'',
+    data: [],
+    totalPage: 0,
+    current: 1,
+    minIndex: 0,
+    maxIndex: 0
+  })
+  const [icon, setIcon] = useState([
+    {
+      type: "select",
+      iconType: 'eye',
+      twoToneColor: '#fff200'
+    },
+    {
+      type: "create",
+      iconType: 'plus-circle',
+      twoToneColor: '#41ff0b'
+    },
+    {
+      type: "update",
+      iconType: 'edit',
+      twoToneColor: '#0d89fc'
+
+    },
+    {
+      type: "delete",
+      iconType: 'delete',
+      twoToneColor: '#ff3b3b'
+
+    },
+  ])
+  console.log("prop:",props)
+  console.log("Propactive:", activeLogs.params,"rows:",activeLogs.data)
+  useEffect(() => {
+      setActiveLogs({
+        params:props.activityLogs.params,
+        data: props.activityLogs.rows,
+        totalPage: props.activityLogs.total,
+        current: page,
+        minIndex: 0,
+        maxIndex: size
+      })
+  }, [props.activityLogs.total])
   const handeClose = (e: any) => {
     e.preventDefault();
     if (e?.target) {
@@ -40,11 +88,27 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     props.showFormDetail(req);
   }
 
+
+
   function unixTimeToDate(unixTime: number): Date {
     return new Date(unixTime);
   }
 
   const dateFormat = 'DD/MM/YYYY';
+
+  function onChange() {
+
+  }
+
+  function handleChangeActivityLogs(page: any) {
+    console.log("page:", page)
+    setActiveLogs({
+      ...activeLogs,
+      current: page,
+      minIndex: (page - 1) * size,
+      maxIndex: page * size,
+    });
+  }
 
   return (
     <div className="detail-container">
@@ -111,7 +175,58 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
       <div className="detail-paragraph-3">
         <div className="detail-paragraph-3__title">
-          <h1>Thông tin ứng tuyển</h1>
+          <h1>Lịch phỏng vấn</h1>
+        </div>
+        <div className="detail-paragraph-3__content">
+          <div>
+            <Icon type="environment" className="mr-2"/>
+            <span>Địa chỉ phỏng vấn: {props.booking.result?.address}</span>
+          </div>
+
+          <div>
+            <Icon type="team" className="mr-2"/>
+            <span>Hội đồng tuyển dụng:</span>
+            <ul>
+              {props.booking.result?.interviewer.map((item: any, index: any) => {
+                return <li key={index}>
+                  {item}
+                </li>
+              })}
+            </ul>
+          </div>
+
+          <div>
+            <Icon type="calendar" className="mr-2"/>
+            <span>Thời gian phỏng vấn: {props.booking.result ? moment(unixTimeToDate(props.booking.result?.time)).format('DD/MM/YYYY HH:mm') : ''} </span>
+          </div>
+
+          <h1>Trạng thái phỏng vấn</h1>
+          <div>
+            <Icon type="audit" className="mr-2"/>
+            <span>Nội dung phỏng vấn: {props.booking.result?.content}</span>
+          </div>
+
+          <div>
+            <Icon type="question-circle" className="mr-2"/>
+            <span>Câu hỏi: {props.booking.result?.question}</span>
+          </div>
+
+          <div>
+            <Icon type="edit" className="mr-2"/>
+            <span>Nhận xét: {props.booking.result?.comments}</span>
+          </div>
+
+          <div>
+            <Icon type="like" className="mr-2"/>
+            <span>Đánh giá: {props.booking.result?.evaluation}</span>
+          </div>
+
+          <div>
+            <Icon type="check-circle" className="mr-2"/>
+            <span>Lý do: {props.booking.result?.reason}</span>
+          </div>
+
+
         </div>
       </div>
 
@@ -139,18 +254,30 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
         <div className='detail-paragraph-5__content'>
           <Timeline style={{padding: '15px'}}>
-            {props.activityLogs.rows?.map((item: any, index: any) => {
-              return <Timeline.Item key={index} dot={<Icon type="eye" theme="twoTone" twoToneColor='#70BF74' style={{
-                borderRadius: '50%',
-                backgroundColor: '#70BF74',
-                width: '40px',
-                height: '40px',
-                paddingTop: '10px',
-                fontSize: '20px'
-              }}/>}>
-                <span style={{textTransform:'uppercase'}}>{moment(unixTimeToDate(item.time)).format('MMM DD, YYYY')}</span><br/>
-                <span>{item.by} {item.action} at {moment(unixTimeToDate(item.time)).format('HH:mm DD/MM/YYYY')}</span></Timeline.Item>
+            {activeLogs.data?.reverse().map((item: any, index: any) => {
+              let iconType = icon.find((icon: any) => icon.type===item.type);
+              return index >= activeLogs.minIndex &&
+                index < activeLogs.maxIndex &&
+                <Timeline.Item key={index} dot={
+                  <Icon type={iconType?.iconType} theme="twoTone" twoToneColor={iconType?.twoToneColor} style={{
+                    borderRadius: '50%',
+                    backgroundColor: iconType?.twoToneColor,
+                    width: '40px',
+                    height: '40px',
+                    paddingTop: '10px',
+                    fontSize: '20px'
+                  }}/>
+                }>
+                <span
+                  style={{textTransform: 'uppercase'}}>{moment(unixTimeToDate(item.time)).format('MMM DD, YYYY')}
+                </span>
+                  <br/>
+                  <span>
+                    {item.fullName} {item.action} at {moment(unixTimeToDate(item.time)).format('HH:mm DD/MM/YYYY')}
+                  </span>
+                </Timeline.Item>
             })}
+
             {/*<Timeline.Item dot={<Icon type="eye" theme="twoTone" twoToneColor='#70BF74' style={{*/}
             {/*  borderRadius: '50%',*/}
             {/*  backgroundColor: '#70BF74',*/}
@@ -182,6 +309,13 @@ function DetailProfileForm(props: DetailProfileFormProps) {
             {/*}}/>}><p>Solve initial network problems*/}
             {/*  2015-09-01</p></Timeline.Item>*/}
           </Timeline>
+
+          <Pagination showQuickJumper
+                      current={activeLogs.current}
+                      total={activeLogs.totalPage}
+                      pageSize={size}
+                      showTotal={(total, range) => `${range[0]}- ${range[1]} of ${total} items`}
+                      onChange={handleChangeActivityLogs}></Pagination>
         </div>
       </div>
 

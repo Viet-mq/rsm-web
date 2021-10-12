@@ -159,5 +159,7 @@ export interface ActivityLogsEntity {
   idProfile: string,
   time: number,
   action: string,
-  by: string,
+  type: string,
+  username: string,
+  fullName: string
 }

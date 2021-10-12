@@ -61,7 +61,7 @@ export default (state = initState, {
         data_detail,
         show_create: false,
         show_update: false,
-        show_detail:true
+        show_detail:false
       }
     default:
       return state;

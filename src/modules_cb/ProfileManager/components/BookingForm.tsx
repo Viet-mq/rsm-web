@@ -1,6 +1,6 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {createBooking, getBooking, showFormBooking, updateBooking} from "../redux/actions";
+import {createBooking, getActivityLogs, getBooking, showFormBooking, updateBooking} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, DatePicker, Form, Input, Modal, Select} from "antd";
 import React, {FormEvent, useEffect, useState} from "react";
@@ -27,7 +27,8 @@ const connector = connect(mapStateToProps,
     getListStatusCV,
     updateBooking,
     createBooking,
-    showFormBooking
+    showFormBooking,
+    getActivityLogs
   });
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -49,8 +50,8 @@ function BookingForm(props: BookingFormProps) {
     },
   };
   useEffect(() => {
-    props.getListAccount({page: '', size: ''});
-    props.getListStatusCV({page: '', size: ''});
+    props.getListAccount({page: 1, size: 100});
+    props.getListStatusCV({page: 1, size: 100});
   }, [])
 
   useEffect(() => {
@@ -61,7 +62,6 @@ function BookingForm(props: BookingFormProps) {
   }, [props.showBooking.data_booking?.id])
 
   const dateFormat = 'DD/MM/YYYY HH:mm';
-  console.log("props.listAccount.rows:",props.listAccount.rows);
   function onBtnCancelClicked() {
     resetFields();
     setCompensatoryDataSource([]);
@@ -91,7 +91,6 @@ function BookingForm(props: BookingFormProps) {
           timeStart: values.timeStart * 1,
           timeFinish: values.timeFinish * 1,
         }
-        console.log("Req:",req);
         props.updateBooking(req);
         return;
       }
@@ -121,6 +120,7 @@ function BookingForm(props: BookingFormProps) {
           timeFinish: values.timeFinish * 1,
         }
         props.createBooking(req);
+        props.getActivityLogs({idProfile: values.idProfile});
         return;
       }
     });

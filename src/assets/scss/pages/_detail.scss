@@ -90,11 +90,20 @@
   h1 {
     text-transform: uppercase;
     font-size: 18px;
-    padding: 15px;
+    padding: 15px 15px 0;
   }
 
   &__title {
-    //border-bottom: 2px solid;
+    border-bottom: 2px solid $color-light-grey;
+  }
+
+  &__content {
+    padding: 10px 15px 15px;
+    border-bottom: 2px solid $color-light-grey;
+
+    h1 {
+      padding-left: 0;
+    }
   }
 }
 
