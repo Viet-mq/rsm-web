@@ -3,6 +3,8 @@
   border-left: 1px solid $color-dark-grey;
   width: 100%;
   margin-top: 2px;
+  overflow: auto;
+  height: 100vh;
 }
 
 .detail-title {
@@ -147,7 +149,7 @@
       padding-left: 15px;
       box-sizing: border-box;
     }
-    padding: 10px 15px 0;
+    padding: 10px 15px 0 30px;
     border-bottom: 2px solid $color-light-grey;
 
     h1 {
@@ -162,6 +164,15 @@
       padding-right: 10px;
     }
   }
+}
+
+.pagination{
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+::-webkit-scrollbar {
+  height: 7px
 }
 
 

@@ -319,7 +319,7 @@ function BookingForm(props: BookingFormProps) {
 
               <Form.Item label="Trạng thái phỏng vấn" className="mb-0" style={{...formItemStyle}}>
                 {getFieldDecorator('status', {
-                  initialValue: props.getBookingState.result?.status || '',
+                  initialValue: props.getBookingState.result?.statusName || '',
                   rules: [
                     {
                       message: 'Vui lòng chọn Trạng thái phỏng vấn',

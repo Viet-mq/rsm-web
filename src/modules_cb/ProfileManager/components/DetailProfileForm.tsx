@@ -5,6 +5,7 @@ import {Avatar, Button, Icon, Pagination, Select, Timeline} from "antd";
 import React, {useEffect, useState} from "react";
 import {DetailCV} from "../types";
 import moment from "moment";
+import env from "../../../configs/env";
 
 const {Option} = Select;
 
@@ -28,7 +29,9 @@ interface DetailProfileFormProps extends ReduxProps {
 
 function DetailProfileForm(props: DetailProfileFormProps) {
   const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
+  let screenWidth = document.documentElement.clientWidth;
   const [page, setPage] = useState(1);
+  const [scroll, setScroll] = useState(screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false});
   const size = 10;
   const [activeLogs, setActiveLogs] = useState({
     params:'',
@@ -47,7 +50,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     {
       type: "create",
       iconType: 'plus-circle',
-      twoToneColor: '#41ff0b'
+      twoToneColor: '#00d62b'
     },
     {
       type: "update",
@@ -134,7 +137,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       </div>
 
       <div className="detail-paragraph-1">
-        <Avatar src={require('src/assets/images/profile.png')} size={100}/>
+        <Avatar src={require('src/assets/images/profile.png')} size={100} style={{width:"115px"}}/>
         <div className="detail-paragraph-1__name">
           <h2>{props.detail.result?.fullName}</h2>
           <Icon type="star" className="ml-1 mr-1"/>
@@ -197,7 +200,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
           <div>
             <Icon type="calendar" className="mr-2"/>
-            <span>Thời gian phỏng vấn: {props.booking.result ? moment(unixTimeToDate(props.booking.result?.time)).format('DD/MM/YYYY HH:mm') : ''} </span>
+            <span>Thời gian phỏng vấn: {props.booking.result ? moment(unixTimeToDate(props.booking.result?.time)).format('HH:mm DD/MM/YYYY') : ''} </span>
           </div>
 
           <h1>Trạng thái phỏng vấn</h1>
@@ -259,14 +262,16 @@ function DetailProfileForm(props: DetailProfileFormProps) {
               return index >= activeLogs.minIndex &&
                 index < activeLogs.maxIndex &&
                 <Timeline.Item key={index} dot={
-                  <Icon type={iconType?.iconType} theme="twoTone" twoToneColor={iconType?.twoToneColor} style={{
-                    borderRadius: '50%',
-                    backgroundColor: iconType?.twoToneColor,
-                    width: '40px',
-                    height: '40px',
-                    paddingTop: '10px',
-                    fontSize: '20px'
-                  }}/>
+                    <Icon type={iconType?.iconType} theme="twoTone" twoToneColor={iconType?.twoToneColor} style={{
+                      borderRadius: '50%',
+                      backgroundColor: iconType?.twoToneColor,
+                      width: '40px',
+                      height: '40px',
+                      paddingTop: '10px',
+                      fontSize: '20px',
+                      // marginTop:'10px'
+                    }}/>
+
                 }>
                 <span
                   style={{textTransform: 'uppercase'}}>{moment(unixTimeToDate(item.time)).format('MMM DD, YYYY')}
@@ -278,44 +283,16 @@ function DetailProfileForm(props: DetailProfileFormProps) {
                 </Timeline.Item>
             })}
 
-            {/*<Timeline.Item dot={<Icon type="eye" theme="twoTone" twoToneColor='#70BF74' style={{*/}
-            {/*  borderRadius: '50%',*/}
-            {/*  backgroundColor: '#70BF74',*/}
-            {/*  width: '40px',*/}
-            {/*  height: '40px',*/}
-            {/*  paddingTop: '5px',*/}
-            {/*  fontSize: '30px'*/}
-            {/*}}/>}><p>Create a services site*/}
-            {/*</p><p>2015-09-01</p></Timeline.Item>*/}
-            {/*<Timeline.Item dot={<Icon type="heart" theme="twoTone" twoToneColor="#E2BB39" style={{*/}
-            {/*  borderRadius: '50%',*/}
-            {/*  backgroundColor: '#E2BB39',*/}
-            {/*  width: '25px',*/}
-            {/*  height: '25px'*/}
-            {/*}}/>}><p>Solve initial network*/}
-            {/*  problems 2015-09-01</p></Timeline.Item>*/}
-            {/*<Timeline.Item dot={<Icon type="mail" theme="twoTone" style={{*/}
-            {/*  borderRadius: '50%',*/}
-            {/*  backgroundColor: '#5296E5',*/}
-            {/*  width: '25px',*/}
-            {/*  height: '25px'*/}
-            {/*}}/>}><p>Solve initial network problems*/}
-            {/*  2015-09-01</p></Timeline.Item>*/}
-            {/*<Timeline.Item dot={<Icon type="carry-out" theme="twoTone" twoToneColor='#965BB4' style={{*/}
-            {/*  borderRadius: '50%',*/}
-            {/*  backgroundColor: '#965BB4',*/}
-            {/*  width: '25px',*/}
-            {/*  height: '25px'*/}
-            {/*}}/>}><p>Solve initial network problems*/}
-            {/*  2015-09-01</p></Timeline.Item>*/}
           </Timeline>
 
           <Pagination showQuickJumper
                       current={activeLogs.current}
                       total={activeLogs.totalPage}
                       pageSize={size}
-                      showTotal={(total, range) => `${range[0]}- ${range[1]} of ${total} items`}
-                      onChange={handleChangeActivityLogs}></Pagination>
+                      showTotal={(total, range) => `Đang xem ${range[0]}- ${range[1]} trong tổng số ${total} mục`}
+                      onChange={handleChangeActivityLogs}
+                      className="pagination"
+          ></Pagination>
         </div>
       </div>
 

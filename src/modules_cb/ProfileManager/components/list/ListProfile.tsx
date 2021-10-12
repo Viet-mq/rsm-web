@@ -13,7 +13,7 @@ import {
   showFormDetail,
   showFormUpdate,
   showFormUploadCV,
-  showFormBooking, getBooking, getActivityLogs
+  showFormBooking, getBooking, getActivityLogs, getElasticSearch
 } from "../../redux/actions";
 import {DeleteProfileRequest, DetailCV, ProfileEntity} from "../../types";
 import moment from "moment";
@@ -39,7 +39,8 @@ const connector = connect(mapStateToProps, {
   getListSourceCV,
   showFormBooking,
   getBooking,
-  getActivityLogs
+  getActivityLogs,
+  getElasticSearch
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -48,14 +49,9 @@ interface IProps extends ReduxProps {
 }
 
 function ListProfile(props: IProps) {
-  // let screenWidth = document.documentElement.clientWidth;
   const [page, setPage] = useState(1);
-  // const [scroll, setScroll] = useState(screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false});
   const size = 10;
-  // const [state, setState] = useState<any>({
-  //   selectedRowKeys: [],
-  // });
-  // const [id, setId] = useState('');
+
   const [sourceCV, setSourceCV] = useState('');
   const [date, setDate] = useState<any>();
 
@@ -112,7 +108,7 @@ function ListProfile(props: IProps) {
   }
 
   const handleSearch = (value: any) => {
-    props.getListProfile({key: value, page: 1, size: 100,dateOfApply:date,sourceCV:sourceCV});
+    props.getElasticSearch({key: value});
   }
 
   const handleSelectSource = (value: any) => {
@@ -307,7 +303,7 @@ function ListProfile(props: IProps) {
       <br/>
       <Table
         scroll={{x: 1300}}
-        className="custom-table"
+        className="custom-table -webkit-scrollbar"
         dataSource={props.list.rows}
         columns={columns}
         rowKey="id"

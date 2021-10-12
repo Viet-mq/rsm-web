@@ -1,6 +1,7 @@
 export * from './profile/list'
 export * from './profile/deleteProfile'
 export * from './profile/create'
+export * from './profile/search'
 export * from './showForm'
 export * from './profile/update'
 export * from './cv/uploadCV'
@@ -11,4 +12,5 @@ export * from './booking/updateBooking'
 export * from './booking/getBooking'
 export * from './booking/showBooking'
 export * from './detail/getActivityLogs'
+
 

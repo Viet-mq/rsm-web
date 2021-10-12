@@ -54,3 +54,7 @@ export const getBooking = async (params?: any): Promise<ResponseBase2> => {
 export const getActivityLogs = async (params?: any): Promise<ResponseBase2> => {
   return (await GET('api-svc/history/list', params)) as ResponseBase2;
 };
+
+export const getElasticSearch = async (params?: any): Promise<ResponseBase2> => {
+  return (await GET('upload-svc/upload/view', params)) as ResponseBase2;
+};

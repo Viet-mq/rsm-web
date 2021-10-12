@@ -83,7 +83,8 @@ export interface BookingEntity {
   question: string[],
   comments: string[],
   evaluation: string,
-  status: string,
+  statusId: string,
+  statusName: string,
   reason: string,
   timeStart: number,
   timeFinish: number
