@@ -84,7 +84,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
       props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         let req: UpdateProfileRequest = {
-          id: values.id,
+          id: props.showForm.data_update?.id,
           cv: values.cv,
           cvType: values.cvType,
           dateOfApply: values.dateOfApply*1,
@@ -180,20 +180,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
         footer={""}>
 
         <Form {...formItemLayout} >
-
-          <Form.Item label="ID" className="mb-0" style={{...formItemStyle, display: 'none'}}>
-            {getFieldDecorator('id', {
-              initialValue: props.showForm.data_update?.id,
-              rules: [
-                {
-                  message: 'Vui lòng nhập id',
-                  required: true,
-                },
-              ],
-            })(
-              <Input disabled placeholder="id" className="bg-white text-black"/>
-            )}
-          </Form.Item>
 
           <Form.Item label="Họ Tên" className="mb-0" style={{...formItemStyle}}>
             {getFieldDecorator('fullName', {

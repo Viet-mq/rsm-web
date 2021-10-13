@@ -154,6 +154,13 @@ const Nav = (props: IProps) => {
           </Link>
         </Menu.Item>
 
+        <Menu.Item key="blacklist-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to={`/blacklist-manager`}>
+            <span className="rd-icon rd-icon-home"/>
+            {!props.hiddenLabel ? <span>Quản lý Blacklist </span> : null}
+          </Link>
+        </Menu.Item>
+
       </SubMenu>
 
     </Menu>

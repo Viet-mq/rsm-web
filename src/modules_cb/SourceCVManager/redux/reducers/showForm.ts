@@ -5,7 +5,7 @@ import {SourceCVEntity} from "../../types";
 export interface SourceCVFormState {
   show_create?: boolean,
   show_update?: boolean,
-  data_update?: SourceCVEntity
+  data_update?: SourceCVEntity|any
 }
 
 const initState: SourceCVFormState = {

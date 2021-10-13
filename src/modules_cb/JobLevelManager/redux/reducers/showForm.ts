@@ -5,7 +5,7 @@ import {JobLevelEntity} from "../../types";
 export interface JobLevelFormState {
   show_create?: boolean,
   show_update?: boolean,
-  data_update?: JobLevelEntity
+  data_update?: JobLevelEntity|any
 }
 
 const initState: JobLevelFormState = {

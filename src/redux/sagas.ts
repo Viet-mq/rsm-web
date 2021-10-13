@@ -15,6 +15,7 @@ import departmentManagerSaga from '../modules_cb/DepartmentManager/redux/sagas';
 import joblevelManagerSaga from '../modules_cb/JobLevelManager/redux/sagas';
 import sourcecvManagerSaga from '../modules_cb/SourceCVManager/redux/sagas';
 import statuscvManagerSaga from '../modules_cb/StatusCVManager/redux/sagas';
+import blacklistManagerSaga from '../modules_cb/BlacklistManager/redux/sagas';
 import schoolManagerSaga from '../modules_cb/SchoolManager/redux/sagas';
 import profileManagerSaga from '../modules_cb/ProfileManager/redux/sagas';
 import viewGroupManagerSaga from '../modules_cb/ViewGroupManager/redux/sagas'
@@ -39,6 +40,7 @@ export default function* rootSaga() {
     sourcecvManagerSaga(),
     schoolManagerSaga(),
     statuscvManagerSaga(),
+    blacklistManagerSaga(),
     profileManagerSaga(),
     viewGroupManagerSaga(),
     commonSaga.checkErrorAsync(),

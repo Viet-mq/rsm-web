@@ -37,7 +37,7 @@ function UpdateDepartmentForm(props: UpdateDepartmentFormProps) {
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         let req: UpdateDepartmentRequest = {
-          id: values.id,
+          id: props.showForm.data_update?.id,
           name: values.name,
         }
         props.updateDepartment(req);
@@ -73,20 +73,6 @@ function UpdateDepartmentForm(props: UpdateDepartmentFormProps) {
       footer={""}>
 
       <Form {...formItemLayout}>
-
-        <Form.Item label="ID" className="mb-0" style={{...formItemStyle,display: 'none'}}>
-          {getFieldDecorator('id', {
-            initialValue: props.showForm.data_update?.id,
-            rules: [
-              {
-                message: 'Vui lòng nhập id',
-                required: true,
-              },
-            ],
-          })(
-            <Input disabled placeholder="ID" className="bg-white text-black"/>
-          )}
-        </Form.Item>
 
         <Form.Item label="Tên phòng ban" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('name', {

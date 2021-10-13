@@ -6,7 +6,7 @@ export interface ProfileFormState {
   show_create?: boolean,
   show_update?: boolean,
   show_detail?: DetailCV,
-  data_update?: ProfileEntity,
+  data_update?: ProfileEntity|any,
   data_detail?: DetailProfileRequest,
 }
 

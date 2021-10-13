@@ -19,6 +19,7 @@ import JobLevelManagerPages from "./modules_cb/JobLevelManager/pages/JobLevelMan
 import SchoolManagerPages from "./modules_cb/SchoolManager/pages/SchoolManagerPages";
 import SourceCVManagerPages from "./modules_cb/SourceCVManager/pages/SourceCVManagerPages";
 import StatusCVManagerPages from "./modules_cb/StatusCVManager/pages/StatusCVManagerPages";
+import BlacklistManagerPages from "./modules_cb/BlacklistManager/pages/BlacklistManagerPages";
 import ProfileManagerPages from "./modules_cb/ProfileManager/pages/ProfileManagerPages";
 import {showFormDetail} from "./modules_cb/ProfileManager/redux/actions";
 import {DetailCV} from "./modules_cb/ProfileManager/types";
@@ -67,6 +68,7 @@ const Routes = (props: PropsFromRedux) => {
         <Route path="/joblevel-manager" component={JobLevelManagerPages} isLogin={props.isLogin}/>
         <Route path="/sourcecv-manager" component={SourceCVManagerPages} isLogin={props.isLogin}/>
         <Route path="/statuscv-manager" component={StatusCVManagerPages} isLogin={props.isLogin}/>
+        <Route path="/blacklist-manager" component={BlacklistManagerPages} isLogin={props.isLogin}/>
         <Route path="/school-manager" component={SchoolManagerPages} isLogin={props.isLogin}/>
         <Route path="/profile-manager" component={ProfileManagerPages} isLogin={props.isLogin}/>
         <Route path="/view-group-manager" component={ViewGroupManagerPage} isLogin={props.isLogin}/>

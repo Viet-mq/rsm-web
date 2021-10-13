@@ -37,7 +37,7 @@ function UpdateSchoolForm(props: UpdateSchoolFormProps) {
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         let req: UpdateSchoolRequest = {
-          id: values.id,
+          id: props.showForm.data_update?.id,
           name: values.name,
         }
         props.updateSchool(req);
@@ -73,20 +73,6 @@ function UpdateSchoolForm(props: UpdateSchoolFormProps) {
       footer={""}>
 
       <Form {...formItemLayout}>
-
-        <Form.Item label="ID" className="mb-0" style={{...formItemStyle,display: 'none'}}>
-          {getFieldDecorator('id', {
-            initialValue: props.showForm.data_update?.id,
-            rules: [
-              {
-                message: 'Vui lòng nhập id',
-                required: true,
-              },
-            ],
-          })(
-            <Input disabled placeholder="ID" className="bg-white text-black"/>
-          )}
-        </Form.Item>
 
         <Form.Item label="Tên trường" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('name', {

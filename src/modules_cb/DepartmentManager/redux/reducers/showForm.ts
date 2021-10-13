@@ -5,7 +5,7 @@ import {DepartmentEntity} from "../../types";
 export interface DepartmentFormState {
   show_create?: boolean,
   show_update?: boolean,
-  data_update?: DepartmentEntity
+  data_update?: DepartmentEntity|any
 }
 
 const initState: DepartmentFormState = {

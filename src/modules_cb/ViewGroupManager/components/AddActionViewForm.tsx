@@ -28,7 +28,7 @@ interface AddActionViewFormProps extends FormComponentProps, ReduxProps {
 }
 
 function AddActionViewForm(props: AddActionViewFormProps) {
-
+  console.log("ADDACTION:",props.listView.rows,props.viewGroupManager.list.rows);
   const [state, setState] = useState({
     action: [
       {

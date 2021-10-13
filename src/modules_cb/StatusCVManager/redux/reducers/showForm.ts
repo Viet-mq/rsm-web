@@ -5,7 +5,7 @@ import {StatusCVEntity} from "../../types";
 export interface StatusCVFormState {
   show_create?: boolean,
   show_update?: boolean,
-  data_update?: StatusCVEntity
+  data_update?: StatusCVEntity|any
 }
 
 const initState: StatusCVFormState = {

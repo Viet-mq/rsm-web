@@ -1,9 +1,8 @@
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {Button, Icon, Modal, Tree} from "antd";
+import {Button, Icon, Modal, Popconfirm, Tree} from "antd";
 import React, {useEffect, useState} from "react";
 import {showFormActionView, showFormMenuFrontEndDetail} from "../redux/actions";
-
 
 const mapStateToProps = (state: RootState) => ({
   showForm: state.viewGroupManager.showForm,
@@ -34,7 +33,7 @@ function MenuFrontendDetailForm(props: IProps) {
   //     sm: {span: 16},
   //   },
   // };
-
+  const [defaultCheckedKeys, setDefaultCheckedKeys] = useState<any>([])
   const getChildrenRecursive = (childens: any) => {
     let actions: any = [];
     for (let i = 0; i < childens.length; i++) {
@@ -43,15 +42,20 @@ function MenuFrontendDetailForm(props: IProps) {
           title: childens[i]?.actionName,
           key: childens[i]?.actionId,
           children: getChildrenRecursive(childens[i].actions),
-          disableCheckbox: false,
+          // defaultCheckedKeys: childens[i]?.show?(childens[i]?.actionId):null,
         })
+        if (childens[i]?.show===true){
+          defaultCheckedKeys.push(childens[i]?.actionId)
+        }
       } else {
         actions.push({
           title: childens[i]?.actionName,
           key: childens[i]?.actionId,
-          disableCheckbox: false,
-
+          // defaultCheckedKeys: childens[i]?.show?(childens[i]?.actionId):null,
         })
+        if (childens[i]?.show===true){
+          defaultCheckedKeys.push(childens[i]?.actionId)
+        }
       }
     }
     return actions;
@@ -81,20 +85,21 @@ function MenuFrontendDetailForm(props: IProps) {
 
   function onBtnCancelClicked() {
     setCompensatoryDataSource([]);
+    setDefaultCheckedKeys([])
     props.showFormMenuFrontEndDetail(false);
   }
 
   const onCheck = (checkedKeys: any) => {
-    console.log('onCheck', checkedKeys);
+    setDefaultCheckedKeys(checkedKeys)
   };
-  console.log("props:",props);
   const HandleCreateView = () => {
     props.showFormActionView(true, props.showForm.view);
   }
 
-  const onBtnRemoveActionView=(e:any)=> {
-
+  const onBtnRemoveActionView = (e: any) => {
+    // props.showFormActionView(true, props.showForm.view);
   }
+
 
   return (
 
@@ -105,6 +110,7 @@ function MenuFrontendDetailForm(props: IProps) {
       visible={props.showForm.show_detail}
       centered={true}
       width="550px"
+      destroyOnClose={true}
       afterClose={() => {
         setCompensatoryDataSource([]);
       }}
@@ -127,8 +133,9 @@ function MenuFrontendDetailForm(props: IProps) {
         <Tree
           checkable
           onCheck={onCheck}
+          defaultExpandAll={false}
+          checkedKeys={defaultCheckedKeys}
           style={{padding: "0 30px 30px"}}
-          defaultExpandedKeys={["0-0"]}
           treeData={treeData}
 
         />
@@ -137,9 +144,24 @@ function MenuFrontendDetailForm(props: IProps) {
           <Button className="mr-3 create-btn" htmlType="submit">
             Cập nhật
           </Button>
-          <Button  type="danger" className="pl-5 pr-5 mr-3" onClick={event=>onBtnRemoveActionView(event)} >
-            Xóa
-          </Button>
+          <Popconfirm
+            title="Bạn muốn xóa view này chứ ?"
+            okText="Xóa"
+            onCancel={event => {
+              event?.stopPropagation();
+            }}
+            onConfirm={event => onBtnRemoveActionView(event)}
+          >
+            <Button
+              type="danger" className="pl-5 pr-5 mr-3"
+              onClick={event => {
+                event.stopPropagation();
+              }}
+            >
+              Xóa
+            </Button>
+          </Popconfirm>
+
           <Button type="default" className="pl-5 pr-5" onClick={onBtnCancelClicked}>
             Hủy
           </Button>

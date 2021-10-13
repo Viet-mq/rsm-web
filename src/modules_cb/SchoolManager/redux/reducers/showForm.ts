@@ -5,7 +5,7 @@ import {SchoolEntity} from "../../types";
 export interface SchoolFormState {
   show_create?: boolean,
   show_update?: boolean,
-  data_update?: SchoolEntity
+  data_update?: SchoolEntity|any
 }
 
 const initState: SchoolFormState = {
