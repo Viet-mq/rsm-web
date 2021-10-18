@@ -10,6 +10,7 @@ import {put, select} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
 import {AppError} from "src/models/common";
 import {RootState} from "src/redux/reducers";
+import {DetailCV} from "../../../types";
 
 export function* updateProfileAsync(action: UpdateProfileAction) {
   try {
@@ -21,6 +22,7 @@ export function* updateProfileAsync(action: UpdateProfileAction) {
       NotificationSuccess('Thành công', "Cập nhật Profile thành công");
       yield put(showFormUpdate(false));
       const params = yield select((state: RootState) => state.profileManager.list.params);
+
       yield put(getListProfile(params));
     }
   } catch (e) {

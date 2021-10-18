@@ -286,7 +286,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
         <div className="detail-paragraph-4__content">
           <iframe
-            src="https://www.afirm-group.com/viet/ChemicalGuidanceVN.pdf"
+            src={`http://file-rs.edsolabs.com/${props.detail.result?.cv}`}
             title="CV"
             width="100%"
             height="700px"

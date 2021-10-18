@@ -78,6 +78,9 @@ function ProfileManagerPages(props: IProps) {
                 <Button onClick={handleCreate}>
                   <Icon type="plus"/> Tạo Profile
                 </Button>
+                <Button >
+                  <Icon type="upload"/> Upload CV
+                </Button>
               </div>
             </div>
           </Col>
