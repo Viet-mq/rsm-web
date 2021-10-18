@@ -31,7 +31,6 @@ function ChatBotSelector(props: IProps) {
 
   const getBotsAsync = async (params: any) => {
     const data = await apis.getListChatBots(params);
-    // console.log("data = " + JSON.stringify(data));
     setBots(data.rows);
   }
 
@@ -40,7 +39,6 @@ function ChatBotSelector(props: IProps) {
   }, []);
 
   const onSearchBot = (value: string) => {
-    // console.log("search Value: " + value);
     setKeySearch(value);
     let params = {
       "chatbot_name": value,

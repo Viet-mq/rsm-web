@@ -1,24 +1,26 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
-import env from "src/configs/env";
 import {ColumnProps} from "antd/lib/table";
-import {Button, DatePicker, Icon, Input, Popconfirm, Select, Table} from "antd";
+import {Button, DatePicker, Form, Icon, Input, Popconfirm, Select, Table} from "antd";
 import {emptyText} from "src/configs/locales";
 import {
   deleteProfile,
+  getActivityLogs,
+  getBooking,
   getDetailProfile,
+  getElasticSearch,
   getListProfile,
+  showFormBooking,
   showFormCreate,
   showFormDetail,
   showFormUpdate,
-  showFormUploadCV,
-  showFormBooking, getBooking, getActivityLogs, getElasticSearch
+  showFormUploadCV
 } from "../../redux/actions";
 import {DeleteProfileRequest, DetailCV, ProfileEntity} from "../../types";
 import moment from "moment";
-import Search from "antd/lib/input/Search";
-import {getListSourceCV} from "../../../SourceCVManager/redux/actions";
+import {FormComponentProps} from "antd/lib/form";
+// import {getListSourceCV} from "../../../SourceCVManager/redux/actions";
 
 const InputGroup = Input.Group;
 const {Option} = Select;
@@ -27,6 +29,7 @@ const mapStateToProps = (state: RootState) => ({
   list: state.profileManager.list,
   detail: state.profileManager.detail,
   listSource: state.sourcecvManager.list,
+  elasticSearch: state.profileManager.search
 })
 const connector = connect(mapStateToProps, {
   getListProfile,
@@ -36,7 +39,7 @@ const connector = connect(mapStateToProps, {
   showFormDetail,
   showFormUploadCV,
   getDetailProfile,
-  getListSourceCV,
+  // getListSourceCV,
   showFormBooking,
   getBooking,
   getActivityLogs,
@@ -45,80 +48,19 @@ const connector = connect(mapStateToProps, {
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
-interface IProps extends ReduxProps {
+interface ListProfileProps extends FormComponentProps, ReduxProps {
 }
 
-function ListProfile(props: IProps) {
+function ListProfile(props: ListProfileProps) {
   const [page, setPage] = useState(1);
   const size = 10;
+  const formItemStyle = {height: '32px'};
+  const {getFieldDecorator, resetFields} = props.form;
 
   const [sourceCV, setSourceCV] = useState('');
   const [date, setDate] = useState<any>();
-
-  useEffect(() => {
-    props.getListProfile({page: 1, size: 100});
-    props.getListSourceCV({page: 1, size: 100});
-  }, []);
-
-  function unixTimeToDate(unixTime: number): Date {
-    return new Date(unixTime);
-  }
-
-  const handleDelete = (event: any, entity: ProfileEntity) => {
-    event.stopPropagation();
-    let req: DeleteProfileRequest = {
-      id: entity.id
-    }
-    props.deleteProfile(req);
-  }
-
-  const handleEdit = (event: any, entity: ProfileEntity) => {
-    event.stopPropagation();
-    props.showFormUpdate(true, entity);
-  }
-
-  const handleBooking = (event: any, entity: ProfileEntity) => {
-    event.stopPropagation();
-    props.showFormBooking(true,entity);
-  }
-
-  const handleUploadCV = (e: any, entity: ProfileEntity) => {
-    e.stopPropagation();
-    if (e?.target) {
-      e.target.disabled = true;
-      e.target.disabled = false;
-    }
-    props.showFormUploadCV(true, entity);
-  }
-
-  const handleDetail = (e: any, entity: ProfileEntity) => {
-    e.stopPropagation();
-    // setId(entity.id);
-
-    let req: DetailCV = {
-      show_detail: true,
-      general: 12,
-      detail: 12,
-    }
-
-    props.getDetailProfile({idProfile: entity.id});
-    props.getActivityLogs({idProfile: entity.id});
-    props.getBooking({idProfile: entity.id});
-    props.showFormDetail(req, props.detail?.result);
-  }
-
-  const handleSearch = (value: any) => {
-    props.getElasticSearch({key: value});
-  }
-
-  const handleSelectSource = (value: any) => {
-    setSourceCV(value);
-  }
-
-  const handleSelectDate = (value: any) => {
-    // let applyDate: number = moment(unixTimeToDate(value)).format('DD/MM/YYYY');
-    setDate(value*1);
-  }
+  const [inputValue, setInputValue] = useState<any>("")
+  const [dataSource, setDataSource] = useState<ProfileEntity | any>([])
   const columns: ColumnProps<ProfileEntity>[] = [
     {
       title: 'Họ tên',
@@ -126,39 +68,6 @@ function ListProfile(props: IProps) {
       width: 130,
       key: '2',
       render: (text: string, record: ProfileEntity) => <a onClick={event => handleDetail(event, record)}>{text}</a>,
-    },
-    {
-      title: 'Năm sinh',
-      dataIndex: 'dateOfBirth',
-      width: 100,
-      key: '3',
-      render: (value: number) => {
-        return moment(unixTimeToDate(value)).format('DD/MM/YYYY');
-      },
-    },
-    {
-      title: 'Quê quán',
-      dataIndex: 'hometown',
-      width: 200,
-      key: '4',
-    },
-    {
-      title: 'Trường học',
-      dataIndex: 'schoolName',
-      width: 200,
-      key: '5',
-    },
-    {
-      title: 'Số điện thoại',
-      dataIndex: 'phoneNumber',
-      width: 110,
-      key: '6',
-    },
-    {
-      title: 'Email',
-      dataIndex: 'email',
-      width: 200,
-      key: '7',
     },
     {
       title: 'Công việc',
@@ -205,6 +114,41 @@ function ListProfile(props: IProps) {
       width: 100,
       key: '14',
     },
+    {
+      title: 'Năm sinh',
+      dataIndex: 'dateOfBirth',
+      width: 100,
+      key: '3',
+      render: (value: number) => {
+        return moment(unixTimeToDate(value)).format('DD/MM/YYYY');
+      },
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      width: 200,
+      key: '7',
+    },
+    {
+      title: 'Quê quán',
+      dataIndex: 'hometown',
+      width: 200,
+      key: '4',
+    },
+    {
+      title: 'Trường học',
+      dataIndex: 'schoolName',
+      width: 200,
+      key: '5',
+    },
+    {
+      title: 'Số điện thoại',
+      dataIndex: 'phoneNumber',
+      width: 110,
+      key: '6',
+    },
+
+
 
     {
       title: () => {
@@ -259,52 +203,148 @@ function ListProfile(props: IProps) {
     },
   ];
 
-  // function onSelectedRowKeysChange(selectedRowKeys: any) {
-  //   setState({selectedRowKeys});
-  // }
-  //
-  // const {selectedRowKeys} = state;
-  // const rowSelection = {
-  //   selectedRowKeys,
-  //   onChange: onSelectedRowKeysChange,
-  // };
+  useEffect(() => {
+    props.getListProfile({page: 1, size: 100});
+    // props.getListSourceCV({page: 1, size: 100});
+  }, [])
+
+
+  function unixTimeToDate(unixTime: number): Date {
+    return new Date(unixTime);
+  }
+
+  const handleDelete = (event: any, entity: ProfileEntity) => {
+    event.stopPropagation();
+    let req: DeleteProfileRequest = {
+      id: entity.id
+    }
+    props.deleteProfile(req);
+  }
+
+  const handleEdit = (event: any, entity: ProfileEntity) => {
+    event.stopPropagation();
+    props.showFormUpdate(true, entity);
+  }
+
+  const handleBooking = (event: any, entity: ProfileEntity) => {
+    event.stopPropagation();
+    props.showFormBooking(true, entity);
+  }
+
+  const handleUploadCV = (e: any, entity: ProfileEntity) => {
+    e.stopPropagation();
+    if (e?.target) {
+      e.target.disabled = true;
+      e.target.disabled = false;
+    }
+    props.showFormUploadCV(true, entity);
+  }
+
+  const handleDetail = (e: any, entity: ProfileEntity) => {
+    e.stopPropagation();
+    // setId(entity.id);
+
+    let req: DetailCV = {
+      show_detail: true,
+      general: 12,
+      detail: 12,
+    }
+
+    props.getDetailProfile({idProfile: entity.id});
+    props.getActivityLogs({idProfile: entity.id});
+    props.getBooking({idProfile: entity.id});
+    props.showFormDetail(req, props.detail?.result);
+  }
+
+  const handleSelectSource = (value: any) => {
+    setSourceCV(value);
+  }
+
+  const handleSelectDate = (value: any) => {
+    // let applyDate: number = moment(unixTimeToDate(value)).format('DD/MM/YYYY');
+    setDate(value * 1);
+  }
+
+  function onBtnResetClicked() {
+    resetFields();
+    props.getElasticSearch();
+    // setDataSource(props.list.rows);
+  }
+
+  const onBtnSearchClicked = () => {
+    inputValue ? props.getElasticSearch({key: inputValue}) : props.getElasticSearch();
+    props.elasticSearch?.rows?.length !== 0 ? setDataSource(props.elasticSearch?.rows) : setDataSource(props.list.rows)
+  }
 
   const dateFormat = 'DD/MM/YYYY';
 
+  function inputChange(event: any) {
+    setInputValue(event.target.value)
+  }
+
+  console.log("setDataSource:", dataSource)
+  console.log("props.list:", props.list.rows)
+  console.log("props.search:", props.elasticSearch.rows)
   return (
     <>
-      <InputGroup compact>
+      <Form style={{display: "flex"}}>
         <Select
           placeholder="Nguồn CV"
-          size="large"
-          style={{width: '25%'}}
+          style={{width: "20%", padding: "0 5px 0 0"}}
           onChange={handleSelectSource}
         >
           {props.listSource.rows?.map((item: any, index: any) => (
             <Option key={index} value={item.name}>{item.name}</Option>
           ))}
         </Select>
-        <DatePicker size="large"
-                    style={{width: '25%'}}
-                    format={dateFormat}
-                    placeholder="Chọn thời gian nộp"
-                    onChange={handleSelectDate}
+        <DatePicker
+          className="col"
+          style={{width: "20%", padding: "0 5px"}}
+          format={dateFormat}
+          placeholder="Chọn thời gian nộp"
+          onChange={handleSelectDate}
         />
-        <Search
-          placeholder="Nhập tìm kiếm"
-          enterButton="Tìm kiếm"
-          size="large"
-          style={{width: '50%'}}
-          onSearch={handleSearch}
-        />
-      </InputGroup>
 
-      <br/>
+        <Form.Item style={{margin: "-5px 5px 0", width: "40%"}}>
+          {getFieldDecorator('valueInput')(
+            <Input
+              placeholder={"Họ tên, Năm sinh, Quê quán, Trường học, Số điện thoại, Email, Công việc"}
+              className="bg-white text-black"
+              onChange={event => inputChange(event)}
+              prefix={<Icon type="search"/>}
+
+            />
+          )}
+        </Form.Item>
+        <Button type="primary"
+                style={{
+                  width: "10%",
+                  margin: "0 5px",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+                onClick={onBtnSearchClicked}>
+          Tìm kiếm
+        </Button>
+        <Button style={{
+          width: "10%",
+          margin: "0 5px",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis"
+        }}
+                onClick={onBtnResetClicked}>
+          Reset
+        </Button>
+      </Form>
+
       <br/>
       <Table
         scroll={{x: 1300}}
         className="custom-table -webkit-scrollbar"
-        dataSource={props.list.rows}
+        dataSource={props.elasticSearch?.rows?.length !== 0 ? (props.elasticSearch?.rows) : (props.list.rows)}
+        // dataSource={dataSource}
         columns={columns}
         rowKey="id"
         locale={{emptyText: emptyText}}
@@ -321,4 +361,4 @@ function ListProfile(props: IProps) {
 
 }
 
-export default connector(ListProfile);
+export default connector(Form.create<ListProfileProps>()(ListProfile));

@@ -19,6 +19,7 @@ import blacklistManagerSaga from '../modules_cb/BlacklistManager/redux/sagas';
 import schoolManagerSaga from '../modules_cb/SchoolManager/redux/sagas';
 import profileManagerSaga from '../modules_cb/ProfileManager/redux/sagas';
 import viewGroupManagerSaga from '../modules_cb/ViewGroupManager/redux/sagas'
+import groupAPIManagerSaga from '../modules_cb/GroupAPIManager/redux/sagas'
 import * as commonSaga from './common-saga';
 
 export default function* rootSaga() {
@@ -43,6 +44,7 @@ export default function* rootSaga() {
     blacklistManagerSaga(),
     profileManagerSaga(),
     viewGroupManagerSaga(),
+    groupAPIManagerSaga(),
     commonSaga.checkErrorAsync(),
   ]);
 }

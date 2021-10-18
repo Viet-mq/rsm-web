@@ -47,7 +47,6 @@ function ListDepartment(props: IProps) {
     let req: DeleteDepartmentRequest = {
       id: entity.id
     }
-    console.log(props.deleteDepartment(req));
     props.deleteDepartment(req);
   }
 

@@ -40,7 +40,6 @@ function CreateStatusCVForm(props: CreateStatusCVFormProps) {
         let req: CreateStatusCVRequest = {
           name: values.name,
         }
-        console.log("values: " + JSON.stringify(req));
         props.createStatusCV(req);
         return;
       }

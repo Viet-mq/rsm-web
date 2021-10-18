@@ -43,7 +43,6 @@ function CreateEntityForm(props: CreateEntityFormProps) {
           entity_name: values.name,
           keyword: values.description
         }
-        console.log("values: " + JSON.stringify(req));
         props.createChatBotEntity(req);
         return;
       }

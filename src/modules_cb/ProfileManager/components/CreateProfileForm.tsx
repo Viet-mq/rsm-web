@@ -70,7 +70,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
     },
     wrapperCol: {
       xs: {span: 24},
-      sm: {span: 16},
+      sm: {span: 12},
     },
   };
 
@@ -104,7 +104,6 @@ function CreateProfileForm(props: CreateProfileFormProps) {
           sourceCV: values.sourceCV,
           // statusCV: values.statusCV,
         }
-        console.log("values: ", req);
         props.createProfile(req);
         return;
       }
@@ -156,14 +155,12 @@ function CreateProfileForm(props: CreateProfileFormProps) {
   }
 
   // const handleCreateStatusCV = (e: any) => {
-  //   console.log("Click")
   //   e.preventDefault();
   //   if (e?.target) {
   //     e.target.disabled = true;
   //     e.target.disabled = false;
   //   }
   //   props.showStatusCVFormCreate(true);
-  //   console.log(props.showStatusCVFormCreate(true))
   // }
 
   return (

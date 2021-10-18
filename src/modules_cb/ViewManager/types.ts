@@ -23,6 +23,6 @@ export interface CreateFrontendViewRequest {
 export interface AddActionToViewRequest {
   viewId: string,
   actionId: string,
-  actionName: string,
-  desc: string,
+  actionName?: string,
+  desc?: string,
 }

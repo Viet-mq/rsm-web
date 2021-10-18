@@ -6,7 +6,6 @@ import {NotificationError} from "src/components/Notification/Notification";
 
 export function* getListChatBotEntityAsync(action: EntityListAction) {
   try {
-    console.log("getListChatBotEntityAsync: params: " + JSON.stringify(action.params));
     const rs = yield apis.getListChatBotEntity(action.params || {});
     if (rs.code !== 0) {
       NotificationError('Lấy danh sách ý định không thành công', "Lỗi: " + rs.message)

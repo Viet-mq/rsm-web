@@ -109,7 +109,6 @@ interface IProps extends ReduxProps {
 function ListScript(props: IProps) {
 
   const onSearchChange = (e: any) => {
-    console.log("value: " + e.target.value);
   }
 
   // const onClickCard = (e: any) => {
@@ -117,7 +116,6 @@ function ListScript(props: IProps) {
   // }
 
   const onClickNew = (event: any, scriptId: string) => {
-    console.log("on card clicked !" + scriptId);
     props.showFormUpdateAddStep(true);
   }
 
@@ -129,7 +127,6 @@ function ListScript(props: IProps) {
   }
 
   const onDeleteStepClicked = (event: any, step: Step) => {
-    console.log("onDeleteStepClicked: " + JSON.stringify(step));
   }
 
   return (

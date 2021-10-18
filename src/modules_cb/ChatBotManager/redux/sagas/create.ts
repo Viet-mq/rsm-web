@@ -14,7 +14,6 @@ export function* createChatBotAsync(action: CreateChatBotAction) {
   try {
     const rs = yield apis.createChatBot(action.params);
     yield put(createChatBotSuccess(rs));
-    console.log("create rs: " + JSON.stringify(rs));
     if (rs.code !== 0) {
       NotificationError('Tạo chat bot không thành công', "Lỗi: " + rs.message)
     } else {

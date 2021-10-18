@@ -39,6 +39,10 @@ export const getDetailProfile = async (params?: any): Promise<ResponseBase2> => 
   return (await GET('api-svc/profile/detail', params)) as ResponseBase2;
 };
 
+export const updateDetail = async (params?: any): Promise<ResponseBase2> => {
+  return (await POST('api-svc/profile/update-detail', params)) as ResponseBase2;
+};
+
 export const createBooking = async (params?: any): Promise<ResponseBase2> => {
   return (await POST('api-svc/calendar/create', params)) as ResponseBase2;
 };

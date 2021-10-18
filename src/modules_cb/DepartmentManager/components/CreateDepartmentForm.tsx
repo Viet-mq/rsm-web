@@ -40,7 +40,6 @@ function CreateDepartmentForm(props: CreateDepartmentFormProps) {
         let req: CreateDepartmentRequest = {
           name: values.name,
         }
-        console.log("values: " + JSON.stringify(req));
         props.createDepartment(req);
         return;
       }

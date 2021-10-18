@@ -6,7 +6,6 @@ import {AppError} from "src/models/common";
 export function* getListChatBots(action: ListChatBotAction) {
   try {
     const rs = yield apis.getListChatBots(action.params);
-    console.log("rs: " + JSON.stringify(rs));
     yield put(getListChatBotsSuccess(rs));
   } catch (e) {
     yield put(getListChatBotsError(new AppError(e.message)));

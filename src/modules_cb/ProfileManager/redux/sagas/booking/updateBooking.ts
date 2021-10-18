@@ -13,7 +13,6 @@ import {RootState} from "src/redux/reducers";
 
 export function* updateBookingAsync(action: UpdateBookingAction) {
   try {
-    console.log("Action.request:", action.request)
     const rs = yield apis.updateBooking(action.request);
     yield put(updateBookingSuccess(rs));
     if (rs.code !== 0) {

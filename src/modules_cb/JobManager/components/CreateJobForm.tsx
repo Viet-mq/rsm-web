@@ -40,7 +40,6 @@ function CreateJobForm(props: CreateJobFormProps) {
         let req: CreateJobRequest = {
           name: values.name,
         }
-        console.log("values: " + JSON.stringify(req));
         props.createJob(req);
         return;
       }

@@ -24,6 +24,7 @@ import ProfileManagerPages from "./modules_cb/ProfileManager/pages/ProfileManage
 import {showFormDetail} from "./modules_cb/ProfileManager/redux/actions";
 import {DetailCV} from "./modules_cb/ProfileManager/types";
 import ViewGroupManagerPage from './modules_cb/ViewGroupManager/pages/ViewGroupManagerPage';
+import GroupAPIManagerPage from "./modules_cb/GroupAPIManager/pages/GroupAPIManagerPage";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -72,6 +73,7 @@ const Routes = (props: PropsFromRedux) => {
         <Route path="/school-manager" component={SchoolManagerPages} isLogin={props.isLogin}/>
         <Route path="/profile-manager" component={ProfileManagerPages} isLogin={props.isLogin}/>
         <Route path="/view-group-manager" component={ViewGroupManagerPage} isLogin={props.isLogin}/>
+        <Route path="/group-api-manager" component={GroupAPIManagerPage} isLogin={props.isLogin}/>
         <Redirect exact from="/*" to={'/home'}/>
       </Switch>
     </div>

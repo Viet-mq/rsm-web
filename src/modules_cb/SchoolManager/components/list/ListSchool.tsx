@@ -46,7 +46,6 @@ function ListSchool(props: IProps) {
     let req: DeleteSchoolRequest = {
       id: entity.id
     }
-    console.log(props.deleteSchool(req));
     props.deleteSchool(req);
   }
 

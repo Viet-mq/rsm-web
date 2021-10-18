@@ -3,12 +3,18 @@ import ListProfile from "../components/list/ListProfile";
 import {Button, Col, Icon, Row} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {showFormBooking, showFormCreate, showFormUpdate, showFormUploadCV} from "../redux/actions";
+import {
+  showFormBooking,
+  showFormCreate,
+  showFormUpdate,
+  showFormUploadCV
+} from "../redux/actions";
 import CreateProfileForm from "../components/CreateProfileForm";
 import Loading from "../../../components/Loading";
 import UpdateProfileForm from "../components/UpdateProfileForm";
 import UploadCVForm from "../components/UploadCVForm";
 import BookingForm from "../components/BookingForm";
+import UpdateDetailProfileForm from "../components/UpdateDetailProfileForm";
 
 const mapStateToProps = ({
                            profileManager: {
@@ -21,7 +27,8 @@ const mapStateToProps = ({
                              showFormUpload,
                              getBooking,
                              createBooking,
-                             updateBooking
+                             updateBooking,
+                             updateDetail
                            }
                          }: RootState) => ({
   showForm,
@@ -33,7 +40,8 @@ const mapStateToProps = ({
   showFormUpload,
   getBooking,
   createBooking,
-  updateBooking
+  updateBooking,
+  updateDetail
 })
 const connector = connect(mapStateToProps, {showFormCreate, showFormUpdate, showFormUploadCV, showFormBooking});
 
@@ -81,12 +89,14 @@ function ProfileManagerPages(props: IProps) {
       <UpdateProfileForm/>
       <UploadCVForm/>
       <BookingForm/>
+      <UpdateDetailProfileForm/>
 
       {props.create.loading ||
       props.list.loading ||
       props.deleteProfile.loading ||
       props.uploadCV.loading ||
       props.update.loading ||
+      props.updateDetail.loading ||
       props.getBooking.loading ||
       props.createBooking.loading ||
       props.updateBooking.loading ?

@@ -40,11 +40,9 @@ function ChatBotManagerPage(props: IProps) {
   }, []);
 
   function callback(key: any) {
-    console.log(key);
   }
 
   function onCreateResponse(result: number) {
-    console.log("result = " + result);
   }
 
   function handleCreate(e: any) {

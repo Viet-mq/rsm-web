@@ -27,7 +27,6 @@ export default (state = initState, {
         showUpdate: false
       }
     case Actions.INTENT_SHOW_FORM_UPDATE:
-      console.log("update1111: " + showUpdate);
       return {
         ...state,
         showUpdate,

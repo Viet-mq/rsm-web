@@ -40,7 +40,6 @@ function CreateJobLevelForm(props: CreateJobLevelFormProps) {
         let req: CreateJobLevelRequest = {
           name: values.name,
         }
-        console.log("values: " + JSON.stringify(req));
         props.createJobLevel(req);
         return;
       }

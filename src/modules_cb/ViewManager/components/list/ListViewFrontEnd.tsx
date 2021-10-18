@@ -56,10 +56,8 @@ function ListViewFrontEnd(props: IProps) {
 
   const removeAction = (event: any, entity: FrontendViewEntity, action: ActionView) => {
     let req: AddActionToViewRequest = {
-      viewId: action.viewId,
+      viewId: entity.id,
       actionId: action.actionId,
-      actionName: action.actionName,
-      desc: action.desc
     }
     props.removeAction(req);
   }

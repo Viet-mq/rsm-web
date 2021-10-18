@@ -1,19 +1,24 @@
 import {AppError, ResponseBase2} from "../../../../../models/common";
 import * as Actions from "../../actions";
 import { GetElasticSearchAction } from "../../actions";
+import {ProfileEntity} from "../../../types";
 
 export interface GetElasticSearchState {
   loading: boolean,
   request?: any,
-  response?: ResponseBase2,
+  rows?: ProfileEntity[],
+  total?: number,
   error?: AppError
 }
 
 const initState: GetElasticSearchState = {
-  loading: false
+  loading: false,
+  request: {},
+  rows: [],
+  total: 0
 }
 
-export default (state = initState, {type, request, response, error}: GetElasticSearchAction): GetElasticSearchState => {
+export default (state = initState, {type, request,  rows, total, error}: GetElasticSearchAction): GetElasticSearchState => {
   switch (type) {
     case Actions.GET_ELASTIC_SEARCH:
       return {
@@ -24,7 +29,8 @@ export default (state = initState, {type, request, response, error}: GetElasticS
     case Actions.GET_ELASTIC_SEARCH_SUCCESS:
       return {
         ...state,
-        response,
+        total,
+        rows,
         loading: false
       }
     case Actions.GET_ELASTIC_SEARCH_ERROR:

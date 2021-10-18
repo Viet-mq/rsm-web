@@ -1,10 +1,10 @@
-import {DetailProfileRequest} from "../../../types";
+import {DetailProfileEntity} from "../../../types";
 import {AppError} from "../../../../../models/common";
 
 export interface DetailProfileAction {
   type: string,
   params?: any,
-  result?: DetailProfileRequest,
+  result?: DetailProfileEntity,
   error?: AppError
 }
 
@@ -17,7 +17,7 @@ export const getDetailProfile = (params: any): DetailProfileAction => ({
   params
 });
 
-export const getDetailProfileSuccess = (result: DetailProfileRequest): DetailProfileAction => ({
+export const getDetailProfileSuccess = (result: DetailProfileEntity): DetailProfileAction => ({
   type: GET_DETAIL_PROFILE_SUCCESS,
   result,
 });

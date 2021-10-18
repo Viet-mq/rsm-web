@@ -39,7 +39,6 @@ function CreateMenuFrontendForm(props: CreateMenuFrontendFormProps) {
         let req: CreateMenuFrontendRequest = {
           name: values.name,
         }
-        console.log("values: " + JSON.stringify(req));
         props.createMenuFrontEnd(req);
         return;
       }

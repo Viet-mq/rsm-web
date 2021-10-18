@@ -4,7 +4,7 @@
   width: 100%;
   margin-top: 2px;
   overflow: auto;
-  height: 100vh;
+  height: calc(100vh - 62px);
 }
 
 .detail-title {
@@ -20,9 +20,10 @@
   }
 
   &__right {
-    position: absolute;
-    right: 0;
+    position: relative;
+    text-align: right;
     padding: 10px;
+    width: calc(100% - 139.7px);
   }
 }
 
@@ -64,6 +65,13 @@
 
   &__title {
     border-bottom: 2px solid $color-light-grey;
+    display: flex;
+    &--button{
+      position: relative;
+      width: calc(100% - 181.42px);
+      text-align: right;
+      padding: 15px 15px;
+    }
   }
 
   &__content {
@@ -97,6 +105,7 @@
 
   &__title {
     border-bottom: 2px solid $color-light-grey;
+    display: flex;
   }
 
   &__content {
@@ -122,7 +131,14 @@
 
   &__title{
     padding: 15px 15px 0;
+    display: flex;
     border-bottom: 2px solid $color-light-grey;
+    &--button{
+      position: relative;
+      width: calc(100% - 135.55px);
+      text-align: right;
+      //padding: 15px 15px;
+    }
   }
   &__content{
     padding: 15px;

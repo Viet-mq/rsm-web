@@ -15,7 +15,6 @@ import UpdateMenuFrontendForm from "../components/UpdateMenuFrontendForm";
 import ViewGroupDetail from "../components/ViewGroupDetail";
 import AddActionViewForm from "../components/AddActionViewForm";
 
-
 const mapStateToProps = ({viewGroupManager: {list, create, update, addActionView, removeActionView}}: RootState) => ({
   list,
   create,

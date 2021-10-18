@@ -45,14 +45,12 @@ function ListChatBot(props: IProps) {
   }
 
   function handleDelete(event: any, chatBot: ChatBot) {
-    console.log('chatBotDelete id => ', chatBot)
     event.stopPropagation();
     props.deleteChatBot(chatBot.chatbot_id);
   }
 
   function handleEdit(event: any, chatBot: ChatBot) {
     event.stopPropagation();
-    console.log("handleEdit: " + JSON.stringify(chatBot));
     props.showUpdateChatBotForm(chatBot);
   }
 

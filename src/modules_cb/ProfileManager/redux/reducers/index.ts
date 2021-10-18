@@ -4,6 +4,7 @@ import deleteProfile, {DeleteProfileState} from "./profile/deleteProfile";
 import create, {CreateProfileState} from "./profile/create";
 import showForm, {ProfileFormState} from "./showForm";
 import update, {UpdateProfileState} from "./profile/update";
+import updateDetail, {UpdateDetailState} from "./detail/updateDetail";
 import detail, {DetailProfileState} from "./detail/detail";
 import uploadCV, {UploadCVState} from "./cv/uploadCV";
 import showFormUpload, {ShowUploadFormState} from "./cv/showFormUpload";
@@ -20,6 +21,7 @@ export interface ProfileManagerModuleState {
   create: CreateProfileState,
   showForm: ProfileFormState,
   update: UpdateProfileState,
+  updateDetail: UpdateDetailState,
   detail: DetailProfileState,
   uploadCV: UploadCVState,
   showFormUpload: ShowUploadFormState,
@@ -37,6 +39,7 @@ export default combineReducers<ProfileManagerModuleState>({
   create,
   showForm,
   update,
+  updateDetail,
   detail,
   uploadCV,
   showFormUpload,

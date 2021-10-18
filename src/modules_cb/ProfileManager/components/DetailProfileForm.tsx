@@ -1,9 +1,9 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {getActivityLogs, showFormDetail} from "../redux/actions";
+import {getActivityLogs, showFormDetail, showFormUpdate, showFormUpdateDetail} from "../redux/actions";
 import {Avatar, Button, Icon, Pagination, Select, Timeline} from "antd";
 import React, {useEffect, useState} from "react";
-import {DetailCV} from "../types";
+import {DetailCV, ProfileEntity} from "../types";
 import moment from "moment";
 import env from "../../../configs/env";
 
@@ -20,7 +20,9 @@ const mapStateToProps = (state: RootState) => ({
 const connector = connect(mapStateToProps,
   {
     showFormDetail,
-    getActivityLogs
+    getActivityLogs,
+    showFormUpdate,
+    showFormUpdateDetail
   });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -29,7 +31,6 @@ interface DetailProfileFormProps extends ReduxProps {
 }
 
 function DetailProfileForm(props: DetailProfileFormProps) {
-  console.log("props:", props)
   const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   let screenWidth = document.documentElement.clientWidth;
   const [page, setPage] = useState(1);
@@ -111,6 +112,11 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     });
   }
 
+  const onBtnUpdateDetail = (event: any) => {
+    event.stopPropagation();
+    props.showFormUpdateDetail(true,props.detail.result);
+  }
+
   return (
     <div className="detail-container">
       <div className="detail-title">
@@ -123,7 +129,8 @@ function DetailProfileForm(props: DetailProfileFormProps) {
           <Button size="small" className="ant-btn ant-btn-sm">
             Tạo ứng tuyển
           </Button>
-          <Button size="small" className="ant-btn mr-1 ant-btn-sm">
+          <Button size="small" className="ant-btn mr-1 ant-btn-sm"
+          onClick={event=>onBtnUpdateDetail(event)}>
             <Icon type="edit"/>
           </Button>
           <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
@@ -235,6 +242,12 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       <div className="detail-paragraph-4">
         <div className="detail-paragraph-4__title">
           <h1>Resumes & CVS</h1>
+          <div className="detail-paragraph-4__title--button">
+
+            <Button size="small" className="ant-btn mr-1 ant-btn-sm">
+              <Icon type="upload"/>
+            </Button>
+          </div>
         </div>
 
         <div className="detail-paragraph-4__content">

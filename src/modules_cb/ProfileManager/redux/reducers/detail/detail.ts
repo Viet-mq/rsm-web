@@ -1,4 +1,4 @@
-import {DetailProfileRequest} from "../../../types";
+import {DetailProfileEntity} from "../../../types";
 import {AppError} from "../../../../../models/common";
 import * as Actions from "../../actions";
 import {DetailProfileAction} from "../../actions";
@@ -6,7 +6,7 @@ import {DetailProfileAction} from "../../actions";
 export interface DetailProfileState {
   loading: boolean,
   params?: any,
-  result?: DetailProfileRequest,
+  result?: DetailProfileEntity,
   error?: AppError
 }
 

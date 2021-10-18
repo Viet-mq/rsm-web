@@ -20,6 +20,7 @@ import statuscvManager,{StatusCVManagerModuleState} from "../modules_cb/StatusCV
 import blacklistManager,{BlacklistManagerModuleState} from "../modules_cb/BlacklistManager/redux/reducers";
 import profileManager,{ProfileManagerModuleState} from "../modules_cb/ProfileManager/redux/reducers";
 import viewGroupManager, {ViewGroupManagerModuleState} from "../modules_cb/ViewGroupManager/redux/reducers";
+import groupAPIManager,{GroupAPIModuleState} from "../modules_cb/GroupAPIManager/redux/reducers";
 
 export interface RootState {
   auth: AuthModuleState;
@@ -42,6 +43,7 @@ export interface RootState {
   blacklistManager: BlacklistManagerModuleState,
   profileManager: ProfileManagerModuleState,
   viewGroupManager:ViewGroupManagerModuleState,
+  groupAPIManager:GroupAPIModuleState
 }
 
 export default combineReducers<RootState>({
@@ -65,4 +67,5 @@ export default combineReducers<RootState>({
   blacklistManager,
   profileManager,
   viewGroupManager,
+  groupAPIManager
 });

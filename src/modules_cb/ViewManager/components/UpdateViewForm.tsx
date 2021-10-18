@@ -44,7 +44,6 @@ function UpdateViewForm(props: UpdateViewFormProps) {
           icon: values.icon,
           show: show
         }
-        console.log("values: " + JSON.stringify(req));
         props.updateViewFrontEnd(req);
         return;
       }

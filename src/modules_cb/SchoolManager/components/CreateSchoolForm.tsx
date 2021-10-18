@@ -40,7 +40,6 @@ function CreateSchoolForm(props: CreateSchoolFormProps) {
         let req: CreateSchoolRequest = {
           name: values.name,
         }
-        console.log("values: " + JSON.stringify(req));
         props.createSchool(req);
         return;
       }

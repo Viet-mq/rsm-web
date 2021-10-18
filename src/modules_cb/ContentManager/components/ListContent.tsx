@@ -54,13 +54,11 @@ function ListContent(props: IProps) {
   }
 
   function handleDelete(event: any, chatBot: ChatBotContent) {
-    console.log('chatBotDelete id => ', chatBot)
     event.stopPropagation();
   }
 
   function handleEdit(event: any, chatBot: ChatBotContent) {
     event.stopPropagation();
-    console.log("handleEdit: " + JSON.stringify(chatBot));
     props.showFormUpdateContent(true, chatBot);
   }
 

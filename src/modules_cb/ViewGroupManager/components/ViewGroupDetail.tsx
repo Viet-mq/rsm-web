@@ -20,20 +20,9 @@ interface IProps extends ReduxProps {
 }
 
 function MenuFrontendDetailForm(props: IProps) {
-  // const [show, setShow] = useState<boolean>(true);
-  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
-  // const formItemStyle = {height: '60px'};
-  // const formItemLayout = {
-  //   labelCol: {
-  //     xs: {span: 24},
-  //     sm: {span: 8},
-  //   },
-  //   wrapperCol: {
-  //     xs: {span: 24},
-  //     sm: {span: 16},
-  //   },
-  // };
-  const [defaultCheckedKeys, setDefaultCheckedKeys] = useState<any>([])
+
+  const [checkedKeys, setCheckedKeys] = useState<any>([])
+  console.log("checkedKeys",checkedKeys)
   const getChildrenRecursive = (childens: any) => {
     let actions: any = [];
     for (let i = 0; i < childens.length; i++) {
@@ -42,19 +31,18 @@ function MenuFrontendDetailForm(props: IProps) {
           title: childens[i]?.actionName,
           key: childens[i]?.actionId,
           children: getChildrenRecursive(childens[i].actions),
-          // defaultCheckedKeys: childens[i]?.show?(childens[i]?.actionId):null,
+          // checkedKeys: childens[i]?.show?(childens[i]?.actionId):null,
         })
         if (childens[i]?.show===true){
-          defaultCheckedKeys.push(childens[i]?.actionId)
+          setCheckedKeys(childens[i]?.actionId)
         }
       } else {
         actions.push({
           title: childens[i]?.actionName,
           key: childens[i]?.actionId,
-          // defaultCheckedKeys: childens[i]?.show?(childens[i]?.actionId):null,
         })
         if (childens[i]?.show===true){
-          defaultCheckedKeys.push(childens[i]?.actionId)
+          checkedKeys.push(childens[i]?.actionId)
         }
       }
     }
@@ -84,13 +72,12 @@ function MenuFrontendDetailForm(props: IProps) {
 
 
   function onBtnCancelClicked() {
-    setCompensatoryDataSource([]);
-    setDefaultCheckedKeys([])
+    setCheckedKeys([])
     props.showFormMenuFrontEndDetail(false);
   }
 
   const onCheck = (checkedKeys: any) => {
-    setDefaultCheckedKeys(checkedKeys)
+    setCheckedKeys(checkedKeys)
   };
   const HandleCreateView = () => {
     props.showFormActionView(true, props.showForm.view);
@@ -111,13 +98,8 @@ function MenuFrontendDetailForm(props: IProps) {
       centered={true}
       width="550px"
       destroyOnClose={true}
-      afterClose={() => {
-        setCompensatoryDataSource([]);
-      }}
-      onCancel={() => {
-        setCompensatoryDataSource([]);
-        props.showFormMenuFrontEndDetail(false);
-      }}
+      afterClose={onBtnCancelClicked}
+      onCancel={onBtnCancelClicked}
       footer={""}>
       <div
         style={{
@@ -134,7 +116,7 @@ function MenuFrontendDetailForm(props: IProps) {
           checkable
           onCheck={onCheck}
           defaultExpandAll={false}
-          checkedKeys={defaultCheckedKeys}
+          checkedKeys={checkedKeys}
           style={{padding: "0 30px 30px"}}
           treeData={treeData}
 
@@ -152,14 +134,14 @@ function MenuFrontendDetailForm(props: IProps) {
             }}
             onConfirm={event => onBtnRemoveActionView(event)}
           >
-            <Button
-              type="danger" className="pl-5 pr-5 mr-3"
-              onClick={event => {
-                event.stopPropagation();
-              }}
-            >
-              Xóa
-            </Button>
+            {/*<Button*/}
+            {/*  type="danger" className="pl-5 pr-5 mr-3"*/}
+            {/*  onClick={event => {*/}
+            {/*    event.stopPropagation();*/}
+            {/*  }}*/}
+            {/*>*/}
+            {/*  Xóa*/}
+            {/*</Button>*/}
           </Popconfirm>
 
           <Button type="default" className="pl-5 pr-5" onClick={onBtnCancelClicked}>

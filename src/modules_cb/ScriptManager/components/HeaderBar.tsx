@@ -28,7 +28,6 @@ function HeaderBar() {
   }
 
   function onChatBotChange(e: any) {
-    console.log("e: " + e);
     setChatBotId(e);
   }
 

@@ -90,7 +90,29 @@ export interface BookingEntity {
   timeFinish: number
 }
 
-export interface DetailProfileRequest {
+export interface UpdateDetailRequest {
+  id: string,
+  cv: string,
+  cvType: string,
+  dateOfApply: number,
+  dateOfBirth: number,
+  email: string,
+  evaluation: string,
+  fullName: string,
+  gender: string,
+  hometown: string,
+  hrRef: string,
+  job: string,
+  lastApply: number,
+  levelJob: string,
+  note: string,
+  phoneNumber: string,
+  school: string,
+  sourceCV: string,
+  tags: string
+}
+
+export interface DetailProfileEntity   {
   id: string,
   fullName: string,
   gender: string,

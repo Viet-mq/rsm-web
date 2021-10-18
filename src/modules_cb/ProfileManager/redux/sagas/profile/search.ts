@@ -4,18 +4,18 @@ import {put, select} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
 import {AppError} from "src/models/common";
 import {RootState} from "src/redux/reducers";
-import {GetElasticSearchAction, getElasticSearchError, getElasticSearchSuccess} from "../../actions";
+import {getElasticSearch, GetElasticSearchAction, getElasticSearchError, getElasticSearchSuccess} from "../../actions";
 
 export function* searchAsync(action: GetElasticSearchAction) {
   try {
     const rs = yield apis.getElasticSearch(action.request);
-    yield put(getElasticSearchSuccess(rs));
+    yield put(getElasticSearchSuccess(rs.total,rs.rows));
     if (rs.code !== 0) {
       NotificationError('Tìm kiếm thông tin không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tìm kiếm thông tin thành công");
-      // const params = yield select((state: RootState) => state.profileManager.list.params);
-      // yield put(getListProfile(params))
+      // const params = yield select((state: RootState) => state.profileManager.search.request);
+      // yield put(getElasticSearch(params))
     }
   } catch (e) {
     yield put(getElasticSearchError(new AppError(e.message)));

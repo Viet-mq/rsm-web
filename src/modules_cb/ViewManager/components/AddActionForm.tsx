@@ -43,7 +43,6 @@ function AddActionForm(props: AddActionFormProps) {
           actionName: values.name,
           desc: values.description
         }
-        console.log("values: " + JSON.stringify(req));
         props.addAction(req);
         return;
       }

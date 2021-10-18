@@ -13,7 +13,6 @@ import {
 
 export function* addActionViewAsync(action: AddActionViewAction) {
   try {
-    console.log("action.request:",action.request)
     const rs = yield apis.addActionView(action.request);
     yield put(addActionViewSuccess(rs));
     if (rs.code !== 0) {

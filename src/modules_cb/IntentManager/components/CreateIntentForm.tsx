@@ -43,7 +43,6 @@ function CreateIntentForm(props: CreateIntentFormProps) {
           intent_name: values.intent_name,
           sample_content: values.sample_content
         }
-        console.log("values: " + JSON.stringify(req));
         props.createChatBotIntent(req);
         return;
       }

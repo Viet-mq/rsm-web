@@ -49,7 +49,6 @@ function ListAccount(props: IProps) {
   }
 
   function handleDelete(event: any, userAccount: UserAccount) {
-    console.log('chatBotUserAccount => ', userAccount)
     event.stopPropagation();
     let req: DeleteAccountRequest = {
       username: userAccount.username

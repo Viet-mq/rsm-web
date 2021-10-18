@@ -40,7 +40,6 @@ function CreateSourceCVForm(props: CreateSourceCVFormProps) {
         let req: CreateSourceCVRequest = {
           name: values.name,
         }
-        console.log("values: " + JSON.stringify(req));
         props.createSourceCV(req);
         return;
       }

@@ -45,7 +45,6 @@ function UpdateMenuFrontendForm(props: UpdateMenuFrontendFormProps) {
             values.view_action,
           ]
         }
-        console.log("values: " + JSON.stringify(req));
         props.updateMenuFrontEnd(req);
         return;
       }

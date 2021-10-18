@@ -44,7 +44,6 @@ function CreateViewForm(props: CreateViewFormProps) {
           icon: values.icon,
           show: show
         }
-        console.log("values: " + JSON.stringify(req));
         props.createViewFrontEnd(req);
         return;
       }

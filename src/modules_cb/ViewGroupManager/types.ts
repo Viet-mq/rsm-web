@@ -34,14 +34,10 @@ export interface UpdateMenuFrontendRequest{
 export interface DeleteMenuFrontendRequest{
   id: string,
   name: string,
-  viewIds: [
-    string
-  ]
+  viewIds: string[]
 }
 
 export interface ActionViewRequest{
   menuId: string,
-  viewActionIds: [
-    string
-  ]
+  viewActionIds:string[]
 }

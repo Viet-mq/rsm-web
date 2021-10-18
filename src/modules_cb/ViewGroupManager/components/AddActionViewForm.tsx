@@ -28,7 +28,6 @@ interface AddActionViewFormProps extends FormComponentProps, ReduxProps {
 }
 
 function AddActionViewForm(props: AddActionViewFormProps) {
-  console.log("ADDACTION:",props.listView.rows,props.viewGroupManager.list.rows);
   const [state, setState] = useState({
     action: [
       {
@@ -73,7 +72,7 @@ function AddActionViewForm(props: AddActionViewFormProps) {
   };
 
   const onCheckAllChange = (e: any) => {
-    if(action){
+    if (action) {
       setState({
         action: e.target.checked ? (action.actions?.map((item: any) => item)) : [],
         checkedList: e.target.checked ? (action.actions?.map((item: any) => item.actionName)) : [],
@@ -88,17 +87,16 @@ function AddActionViewForm(props: AddActionViewFormProps) {
     e.preventDefault();
     (e.target as any).disabled = true;
     (e.target as any).disabled = false;
-    console.log("Action", action);
-    console.log("State:", state);
-    let viewActionIds:any = [];
-    viewActionIds=state.action.map((item:any)=>{return action.id+" "+item.actionId})
+    let viewActionIds: any = [];
+    viewActionIds = state.action.map((item: any) => {
+      return action.id + " " + item.actionId
+    })
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         let req: ActionViewRequest = {
           menuId: props.viewGroupManager.showForm.data_detail?.id,
           viewActionIds: viewActionIds,
         }
-        console.log("req:", req);
         props.addActionView(req);
         return;
       }
@@ -106,7 +104,7 @@ function AddActionViewForm(props: AddActionViewFormProps) {
   }
 
 
-  function onBtnCancelClicked() {
+  const onBtnCancelClicked=()=> {
     resetFields();
     setAction(null);
     setState({
@@ -132,7 +130,9 @@ function AddActionViewForm(props: AddActionViewFormProps) {
       setAction(selectedRow as FrontendViewEntity);
     }
   }
-
+  console.log("props.listView.rows:", props.listView.rows);
+  console.log("Action:", action)
+  console.log("viewGroupManager:", props.viewGroupManager.showForm?.view?.views)
   return (
 
     <Modal
@@ -142,15 +142,8 @@ function AddActionViewForm(props: AddActionViewFormProps) {
       visible={props.viewGroupManager.showForm.show_action_view}
       centered={true}
       width="550px"
-      afterClose={() => {
-        resetFields();
-        setCompensatoryDataSource([]);
-      }}
-      onCancel={() => {
-        resetFields();
-        setCompensatoryDataSource([]);
-        props.showFormActionView(false);
-      }}
+      afterClose={onBtnCancelClicked}
+      onCancel={onBtnCancelClicked}
       footer={""}>
 
       <Form {...formItemLayout}>
@@ -179,9 +172,11 @@ function AddActionViewForm(props: AddActionViewFormProps) {
           })(<Select className="bg-white text-black"
                      onChange={onChangeSelectView}
           >
-            {props.listView.rows?.map((item: any, index: any) => (
-              <Option key={index} value={item.id}>{item.name}</Option>
-            ))}
+            {props.listView.rows?.filter((item: any) => !props.viewGroupManager.showForm?.view?.views
+              .find((item1: any) => item1.id === item.id))
+              .map((item: any, index: any) => (
+                <Option key={index} value={item.id}>{item.name}</Option>
+              ))}
           </Select>)}
         </Form.Item>
 

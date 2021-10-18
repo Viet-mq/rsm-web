@@ -103,6 +103,13 @@ const Nav = (props: IProps) => {
         </Link>
       </Menu.Item>
 
+      <Menu.Item key="group-api-manager" style={{display: 'flex', alignItems: 'center'}}>
+        <Link to={`/group-api-manager`}>
+          <span className="rd-icon rd-icon-home"/>
+          {!props.hiddenLabel ? <span>Quản lý Group API </span> : null}
+        </Link>
+      </Menu.Item>
+
       <SubMenu key="sub2" title={<span><Icon type="menu"/><span>Quản lý danh mục</span></span>}>
 
         <Menu.Item key="job-manager" style={{display: 'flex', alignItems: 'center'}}>

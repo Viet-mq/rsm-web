@@ -44,7 +44,6 @@ function CreateBlacklistForm(props: CreateBlacklistFormProps) {
           reason: values.reason,
           ssn: values.ssn
         }
-        console.log("values: " + JSON.stringify(req));
         props.createBlacklist(req);
         return;
       }
