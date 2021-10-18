@@ -2,7 +2,7 @@ import {RootState} from "../../../redux/reducers";
 
 import React, {useState} from "react";
 import {Button, Input, Modal} from "antd";
-import {getActivityLogs, showFormUploadCV, uploadCV} from "../redux/actions";
+import {showFormUploadCV, uploadCV} from "../redux/actions";
 import {connect, ConnectedProps} from "react-redux";
 import {UploadCVRequest} from "../types";
 
@@ -13,7 +13,7 @@ const mapStateToProps = (state: RootState) => ({
 const connector = connect(mapStateToProps, {
   showFormUploadCV,
   uploadCV,
-  getActivityLogs
+
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -46,7 +46,7 @@ function UploadCVForm(props: CreateUploadFormProps) {
     (e.target as any).disabled = true;
     (e.target as any).disabled = false;
     let req: UploadCVRequest = ({
-      profileId: props.showFormUpload.data_upload?.id || '',
+      profileId: props.showFormUpload.id_upload || '',
       file: file,
     });
     props.uploadCV(req);

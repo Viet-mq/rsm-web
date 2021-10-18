@@ -92,6 +92,12 @@
   border-bottom: 2px solid #e8e8e8;
   display: flex;
 }
+.detail-paragraph-3__title--button {
+  position: relative;
+  width: calc(100% - 177px);
+  text-align: right;
+  padding: 15px 15px;
+}
 .detail-paragraph-3__content {
   padding: 10px 15px 15px;
   border-bottom: 2px solid #e8e8e8;

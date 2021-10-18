@@ -74,8 +74,8 @@ function BookingForm(props: BookingFormProps) {
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         let req: UpdateBookingRequest = {
-          id: values.id,
-          idProfile: values.idProfile,
+          id:props.getBookingState.result?.id,
+          idProfile: props.getBookingState.result?.idProfile,
           time: values.time * 1,
           address: values.address,
           form: values.form,
@@ -103,7 +103,7 @@ function BookingForm(props: BookingFormProps) {
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         let req: CreateBookingRequest = {
-          idProfile: values.idProfile,
+          idProfile: props.showBooking.data_booking?.id,
           time: values.time * 1,
           address: values.address,
           form: values.form,
@@ -119,7 +119,7 @@ function BookingForm(props: BookingFormProps) {
           timeFinish: values.timeFinish * 1,
         }
         props.createBooking(req);
-        props.getActivityLogs({idProfile: values.idProfile});
+        props.getActivityLogs({idProfile: props.showBooking.data_booking?.id});
         return;
       }
     });
@@ -151,34 +151,6 @@ function BookingForm(props: BookingFormProps) {
 
             <Form {...formItemLayout}>
 
-              <Form.Item label="ID" className="mb-0" style={{...formItemStyle, display: "none"}}>
-                {getFieldDecorator('id', {
-                  initialValue: props.getBookingState.result?.id || '',
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập id',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <Input placeholder="ID" className="bg-white text-black"/>
-                )}
-              </Form.Item>
-
-              <Form.Item label="ID Profile" className="mb-0" style={{...formItemStyle, display: "none"}}>
-                {getFieldDecorator('idProfile', {
-                  initialValue: props.getBookingState.result?.idProfile || '',
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập ID Profile',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <Input placeholder="ID Profile" className="bg-white text-black"/>
-                )}
-              </Form.Item>
-
               <Form.Item label="Họ Tên" className="mb-0" style={{...formItemStyle}}>
                 {getFieldDecorator('interviewee', {
                   initialValue: props.getBookingState.result?.interviewee || '',
@@ -189,7 +161,7 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <Input placeholder="Họ tên" className="bg-white text-black"/>
+                  <Input disabled placeholder="Họ tên" className="bg-white text-black"/>
                 )}
               </Form.Item>
 
@@ -415,20 +387,6 @@ function BookingForm(props: BookingFormProps) {
             footer={""}>
 
             <Form {...formItemLayout}>
-
-              <Form.Item label="ID Profile" className="mb-0" style={{...formItemStyle, display: "none"}}>
-                {getFieldDecorator('idProfile', {
-                  initialValue: props.showBooking.data_booking?.id||'',
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập ID Profile',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <Input placeholder="ID Profile" className="bg-white text-black"/>
-                )}
-              </Form.Item>
 
               <Form.Item label="Họ Tên" className="mb-0" style={{...formItemStyle}}>
                 {getFieldDecorator('interviewee', {

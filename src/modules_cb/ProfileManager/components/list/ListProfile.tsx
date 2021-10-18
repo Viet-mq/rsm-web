@@ -17,7 +17,7 @@ import {
   showFormUpdate,
   showFormUploadCV
 } from "../../redux/actions";
-import {DeleteProfileRequest, DetailCV, ProfileEntity} from "../../types";
+import {DataShowBooking, DeleteProfileRequest, DetailCV, ProfileEntity} from "../../types";
 import moment from "moment";
 import {FormComponentProps} from "antd/lib/form";
 // import {getListSourceCV} from "../../../SourceCVManager/redux/actions";
@@ -228,7 +228,11 @@ function ListProfile(props: ListProfileProps) {
 
   const handleBooking = (event: any, entity: ProfileEntity) => {
     event.stopPropagation();
-    props.showFormBooking(true, entity);
+    let req:DataShowBooking={
+      id:entity.id,
+      fullName:entity.fullName
+    }
+    props.showFormBooking(true, req);
   }
 
   const handleUploadCV = (e: any, entity: ProfileEntity) => {
@@ -237,7 +241,7 @@ function ListProfile(props: ListProfileProps) {
       e.target.disabled = true;
       e.target.disabled = false;
     }
-    props.showFormUploadCV(true, entity);
+    props.showFormUploadCV(true, entity.id);
   }
 
   const handleDetail = (e: any, entity: ProfileEntity) => {
@@ -299,7 +303,7 @@ function ListProfile(props: ListProfileProps) {
         </Select>
         <DatePicker
           className="col"
-          style={{width: "20%", padding: "0 5px"}}
+          style={{width: "auto", padding: "0 5px"}}
           format={dateFormat}
           placeholder="Chọn thời gian nộp"
           onChange={handleSelectDate}

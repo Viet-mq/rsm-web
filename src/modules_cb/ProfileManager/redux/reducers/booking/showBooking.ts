@@ -1,10 +1,10 @@
 import * as Actions from "../../actions";
 import {ShowBookingAction} from "../../actions";
-import {ProfileEntity} from "../../../types";
+import {DataShowBooking} from "../../../types";
 
 export interface BookingState {
   show_booking?: boolean
-  data_booking?:ProfileEntity
+  data_booking?:DataShowBooking
 }
 
 const initState: BookingState = {

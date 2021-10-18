@@ -61,7 +61,7 @@ export interface DeleteProfileRequest {
 }
 
 export interface UploadCVRequest {
-  profileId: string,
+  profileId: string|any,
   file: any,
 }
 
@@ -72,8 +72,8 @@ export interface DetailCV {
 }
 
 export interface BookingEntity {
-  id: string,
-  idProfile: string,
+  id: string|any,
+  idProfile: string|any,
   time: number,
   address: string,
   form: string,
@@ -113,8 +113,8 @@ export interface UpdateDetailRequest {
 }
 
 export interface DetailProfileEntity   {
-  id: string,
-  fullName: string,
+  id: string|any,
+  fullName: string|any,
   gender: string,
   phoneNumber: string,
   email: string,
@@ -143,7 +143,7 @@ export interface DetailProfileEntity   {
 }
 
 export interface CreateBookingRequest {
-  idProfile: string,
+  idProfile: string|any,
   time: number,
   address: string,
   form: string,
@@ -177,6 +177,10 @@ export interface UpdateBookingRequest {
   timeFinish: number
 }
 
+export interface DataShowBooking{
+  id:string,
+  fullName:string
+}
 export interface ActivityLogsEntity {
   id: string,
   idProfile: string,

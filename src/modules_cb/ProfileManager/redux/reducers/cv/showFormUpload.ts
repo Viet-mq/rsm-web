@@ -4,7 +4,7 @@ import {UploadCVFormAction} from "../../actions";
 
 export interface ShowUploadFormState {
   show_upload?: boolean,
-  data_upload?: ProfileEntity
+  id_upload?: string
 }
 
 const initUploadState: ShowUploadFormState = {
@@ -14,14 +14,14 @@ const initUploadState: ShowUploadFormState = {
 export default (state = initUploadState, {
   type,
   show_upload,
-  data_upload,
+  id_upload,
 }: UploadCVFormAction): ShowUploadFormState => {
   switch (type) {
     case Actions.PROFILE_SHOW_FORM_UPLOADCV:
       return {
         ...state,
         show_upload,
-        data_upload,
+        id_upload,
       }
     default:
       return state;

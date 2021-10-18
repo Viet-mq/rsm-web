@@ -1,9 +1,15 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {getActivityLogs, showFormDetail, showFormUpdate, showFormUpdateDetail} from "../redux/actions";
+import {
+  getActivityLogs, showFormBooking,
+  showFormDetail,
+  showFormUpdate,
+  showFormUpdateDetail,
+  showFormUploadCV
+} from "../redux/actions";
 import {Avatar, Button, Icon, Pagination, Select, Timeline} from "antd";
 import React, {useEffect, useState} from "react";
-import {DetailCV, ProfileEntity} from "../types";
+import {DataShowBooking, DetailCV, ProfileEntity} from "../types";
 import moment from "moment";
 import env from "../../../configs/env";
 
@@ -22,7 +28,9 @@ const connector = connect(mapStateToProps,
     showFormDetail,
     getActivityLogs,
     showFormUpdate,
-    showFormUpdateDetail
+    showFormUpdateDetail,
+    showFormUploadCV,
+    showFormBooking
   });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -117,6 +125,23 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     props.showFormUpdateDetail(true,props.detail.result);
   }
 
+  const onBtnUploadCV = (e: any) => {
+    e.stopPropagation();
+    if (e?.target) {
+      e.target.disabled = true;
+      e.target.disabled = false;
+    }
+    props.showFormUploadCV(true,props.detail.result?.id);
+  }
+
+  const onBtnUpdateBooking = (event: any) => {
+    event.stopPropagation();
+    let req: DataShowBooking={
+      id:props.detail.result?.id,
+      fullName:props.detail.result?.fullName
+    }
+    props.showFormBooking(true, req);
+  }
   return (
     <div className="detail-container">
       <div className="detail-title">
@@ -184,6 +209,13 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       <div className="detail-paragraph-3">
         <div className="detail-paragraph-3__title">
           <h1>Lịch phỏng vấn</h1>
+          <div className="detail-paragraph-3__title--button">
+            <Button size="small" className="ant-btn mr-1 ant-btn-sm"
+                    onClick={event=>onBtnUpdateBooking(event)}
+            >
+              <Icon type="edit"/>
+            </Button>
+          </div>
         </div>
         <div className="detail-paragraph-3__content">
           <div>
@@ -244,7 +276,9 @@ function DetailProfileForm(props: DetailProfileFormProps) {
           <h1>Resumes & CVS</h1>
           <div className="detail-paragraph-4__title--button">
 
-            <Button size="small" className="ant-btn mr-1 ant-btn-sm">
+            <Button size="small" className="ant-btn mr-1 ant-btn-sm"
+            onClick={event=>onBtnUploadCV(event)}
+            >
               <Icon type="upload"/>
             </Button>
           </div>
