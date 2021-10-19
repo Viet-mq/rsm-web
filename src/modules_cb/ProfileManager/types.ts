@@ -65,6 +65,10 @@ export interface UploadCVRequest {
   file: any,
 }
 
+export interface UploadListCVRequest {
+  file: any,
+}
+
 export interface DetailCV {
   show_detail: boolean,
   general: number,

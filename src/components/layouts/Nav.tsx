@@ -168,6 +168,13 @@ const Nav = (props: IProps) => {
           </Link>
         </Menu.Item>
 
+        <Menu.Item key="talent-pool-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to={`/talent-pool-manager`}>
+            <span className="rd-icon rd-icon-home"/>
+            {!props.hiddenLabel ? <span>Quản lý Talent Pool </span> : null}
+          </Link>
+        </Menu.Item>
+
       </SubMenu>
 
     </Menu>

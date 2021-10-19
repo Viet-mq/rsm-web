@@ -14,6 +14,7 @@ import createBooking, {CreateBookingState} from "./booking/createBooking";
 import updateBooking, {UpdateBookingState} from "./booking/updateBooking";
 import getActivity,{ActivityLogsState} from "./detail/getActivityLogs";
 import search,{GetElasticSearchState} from "./profile/search";
+import uploadListCV,{UploadListCVState} from "./cv/uploadListCV";
 
 export interface ProfileManagerModuleState {
   list: ProfileListState,
@@ -24,6 +25,7 @@ export interface ProfileManagerModuleState {
   updateDetail: UpdateDetailState,
   detail: DetailProfileState,
   uploadCV: UploadCVState,
+  uploadListCV:UploadListCVState,
   showFormUpload: ShowUploadFormState,
   showBooking: BookingState,
   getBooking: GetBookingState,
@@ -42,6 +44,7 @@ export default combineReducers<ProfileManagerModuleState>({
   updateDetail,
   detail,
   uploadCV,
+  uploadListCV,
   showFormUpload,
   showBooking,
   updateBooking,

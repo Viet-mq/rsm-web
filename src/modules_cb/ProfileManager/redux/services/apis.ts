@@ -35,6 +35,17 @@ export const updateCV = async (file: any, profileId: any) => {
   })
 }
 
+export const uploadListCV = async (file: any) => {
+  let formData = new FormData();
+  formData.append('file', file);
+  return POSTIMAGE('api-svc/profiles/upload', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+}
+
+
 export const getDetailProfile = async (params?: any): Promise<ResponseBase2> => {
   return (await GET('api-svc/profile/detail', params)) as ResponseBase2;
 };

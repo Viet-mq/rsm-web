@@ -7,7 +7,8 @@ import {
   showFormBooking,
   showFormCreate,
   showFormUpdate,
-  showFormUploadCV
+  showFormUploadCV,
+  showFormUploadListCV,
 } from "../redux/actions";
 import CreateProfileForm from "../components/CreateProfileForm";
 import Loading from "../../../components/Loading";
@@ -28,7 +29,8 @@ const mapStateToProps = ({
                              getBooking,
                              createBooking,
                              updateBooking,
-                             updateDetail
+                             updateDetail,
+                             uploadListCV
                            }
                          }: RootState) => ({
   showForm,
@@ -41,9 +43,16 @@ const mapStateToProps = ({
   getBooking,
   createBooking,
   updateBooking,
-  updateDetail
+  updateDetail,
+  uploadListCV
 })
-const connector = connect(mapStateToProps, {showFormCreate, showFormUpdate, showFormUploadCV, showFormBooking});
+const connector = connect(mapStateToProps, {
+  showFormCreate,
+  showFormUpdate,
+  showFormUploadCV,
+  showFormBooking,
+  showFormUploadListCV
+});
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -64,6 +73,15 @@ function ProfileManagerPages(props: IProps) {
     props.showFormCreate(true);
   }
 
+  const handleUploadListCV = (e: any) => {
+    e.stopPropagation();
+    if (e?.target) {
+      e.target.disabled = true;
+      e.target.disabled = false;
+    }
+    props.showFormUploadListCV(true);
+  }
+
   return (
     <div className="contentPage">
 
@@ -78,8 +96,8 @@ function ProfileManagerPages(props: IProps) {
                 <Button onClick={handleCreate}>
                   <Icon type="plus"/> Tạo Profile
                 </Button>
-                <Button >
-                  <Icon type="upload"/> Upload CV
+                <Button onClick={event => handleUploadListCV(event)}>
+                  <Icon type="upload"/> Upload List CV
                 </Button>
               </div>
             </div>

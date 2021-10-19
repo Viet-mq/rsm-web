@@ -11,7 +11,7 @@ import {
   UPDATE_PROFILE,
   UPLOADCV,
   GET_DETAIL_PROFILE,
-  GET_BOOKING, CREATE_BOOKING, UPDATE_BOOKING, GET_ACTIVITY, GET_ELASTIC_SEARCH, UPDATE_DETAIL
+  GET_BOOKING, CREATE_BOOKING, UPDATE_BOOKING, GET_ACTIVITY, GET_ELASTIC_SEARCH, UPDATE_DETAIL, UPLOAD_LIST_CV
 } from "../actions";
 import {uploadCVAsync} from "./cv/uploadCV";
 import {getBookingAsync} from "./booking/getBooking";
@@ -20,6 +20,7 @@ import {getActivityLogsAsync} from "./detail/getActivityLogs";
 import {createBookingAsync} from "./booking/createBooking";
 import {searchAsync} from "./profile/search";
 import {updateDetailAsync} from "./detail/updateDetail";
+import {uploadListCVAsync} from "./cv/uploadListCV";
 
 export default function* root() {
   return all([
@@ -30,6 +31,7 @@ export default function* root() {
     yield takeLatest(UPDATE_DETAIL, updateDetailAsync),
     yield takeLatest(GET_DETAIL_PROFILE, getDetailProfileAsync),
     yield takeLatest(UPLOADCV, uploadCVAsync),
+    yield takeLatest(UPLOAD_LIST_CV, uploadListCVAsync),
     yield takeLatest(GET_BOOKING,getBookingAsync),
     yield takeLatest(CREATE_BOOKING,createBookingAsync),
     yield takeLatest(UPDATE_BOOKING,updateBookingAsync),

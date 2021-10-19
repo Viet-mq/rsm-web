@@ -9,7 +9,7 @@ export interface ProfileFormState {
   data_update_detail?: DetailProfileEntity|any,
   show_detail?: DetailCV,
   data_update?: ProfileEntity | any,
-  data_detail?: DetailProfileEntity,
+  data_detail?: DetailProfileEntity[],
 }
 
 const initState: ProfileFormState = {

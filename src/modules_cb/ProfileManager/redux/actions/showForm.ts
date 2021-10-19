@@ -8,7 +8,7 @@ export interface ProfileFormAction {
   show_detail?:DetailCV,
   data_update?: ProfileEntity
   data_update_detail?: DetailProfileEntity
-  data_detail?:DetailProfileEntity
+  data_detail?:DetailProfileEntity[]
 }
 
 export const PROFILE_SHOW_FORM_CREATE = "PROFILE_SHOW_FORM_CREATE";
@@ -33,7 +33,7 @@ export const showFormUpdateDetail = (show: boolean, dataUpdateDetail?: DetailPro
   data_update_detail: dataUpdateDetail
 });
 
-export const showFormDetail =(show?:DetailCV,dataDetail?:DetailProfileEntity):ProfileFormAction=>({
+export const showFormDetail =(show?:DetailCV,dataDetail?:DetailProfileEntity[]):ProfileFormAction=>({
   type:PROFILE_SHOW_FORM_DETAIL,
   show_detail:show,
   data_detail:dataDetail

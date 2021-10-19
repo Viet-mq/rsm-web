@@ -1,10 +1,10 @@
 import {RootState} from "../../../redux/reducers";
 
-import React, {useState} from "react";
-import {Button, Input, Modal} from "antd";
-import {showFormUploadCV, uploadCV} from "../redux/actions";
+import React, {useRef, useState} from "react";
+import {Button, Modal} from "antd";
+import {showFormUploadCV, uploadCV, uploadListCV} from "../redux/actions";
 import {connect, ConnectedProps} from "react-redux";
-import {UploadCVRequest} from "../types";
+import {UploadCVRequest, UploadListCVRequest} from "../types";
 
 const mapStateToProps = (state: RootState) => ({
   showFormUpload: state.profileManager.showFormUpload,
@@ -13,6 +13,7 @@ const mapStateToProps = (state: RootState) => ({
 const connector = connect(mapStateToProps, {
   showFormUploadCV,
   uploadCV,
+  uploadListCV
 
 });
 
@@ -25,7 +26,7 @@ function UploadCVForm(props: CreateUploadFormProps) {
   const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
   const [file, setFile] = useState(null);
-
+  // const fieldUpload = useRef<any>(null);
   const formItemLayout = {
     labelCol: {
       xs: {span: 24},
@@ -45,24 +46,33 @@ function UploadCVForm(props: CreateUploadFormProps) {
     e.preventDefault();
     (e.target as any).disabled = true;
     (e.target as any).disabled = false;
+
     let req: UploadCVRequest = ({
-      profileId: props.showFormUpload.id_upload || '',
+      profileId: props.showFormUpload.id_upload,
       file: file,
     });
-    props.uploadCV(req);
+
+    let reqList: UploadListCVRequest = ({
+      file: file,
+    });
+    props.showFormUpload.show_upload ? (props.uploadCV(req)) : (props.uploadListCV(reqList));
   }
 
   function onBtnCancelClicked() {
     setCompensatoryDataSource([]);
+    if(document.querySelector("#upload")) {
+    (  document.querySelector("#upload") as any).value=''
+    }
     props.showFormUploadCV(false);
   }
 
+  console.log("propFdaf:", props)
   return (
 
     <Modal
       zIndex={2}
-      title="Thêm CV"
-      visible={props.showFormUpload.show_upload}
+      title={props.showFormUpload.show_upload ? "Thêm CV" : "Thêm Danh sách CV"}
+      visible={props.showFormUpload.show_upload || props.showFormUpload.show_upload_list}
       centered={true}
       width="550px"
       footer={""}
@@ -74,15 +84,20 @@ function UploadCVForm(props: CreateUploadFormProps) {
         props.showFormUploadCV(false);
       }}
     >
+      <form id="form-upload">
+        <input id="upload"  type="file" style={{width: "100%", border: "1px solid"}}
+               onChange={onFileChange}
+               accept=".doc,.docx,.pdf,.xlsx"/>
+      </form>
 
-      <Input type="file" onChange={onFileChange} accept=".doc,.docx,.pdf"/>
-
-      <Button className="mr-3 create-btn" htmlType="submit" onClick={onBtnCreateClicked}>
-        Thêm
-      </Button>
-      <Button type="default" className="pl-5 pr-5" onClick={onBtnCancelClicked}>
-        Hủy
-      </Button>
+      <div style={{textAlign: "center", marginTop: "20px"}}>
+        <Button className="mr-3 create-btn" htmlType="submit" onClick={onBtnCreateClicked}>
+          Thêm
+        </Button>
+        <Button type="default" className="pl-5 pr-5" onClick={onBtnCancelClicked}>
+          Hủy
+        </Button>
+      </div>
 
     </Modal>
   );

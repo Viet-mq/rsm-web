@@ -318,7 +318,7 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <DatePicker format={dateFormat} style={{width: "100%"}}/>
+                  <DatePicker showTime format={dateFormat} style={{width: "100%"}}/>
                 )}
               </Form.Item>
 
@@ -332,7 +332,7 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <DatePicker format={dateFormat} style={{width: "100%"}}>
+                  <DatePicker showTime format={dateFormat} style={{width: "100%"}}>
 
                   </DatePicker>
                 )}
@@ -348,7 +348,7 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <DatePicker format={dateFormat} style={{width: "100%"}}/>
+                  <DatePicker showTime format={dateFormat} style={{width: "100%"}}/>
                 )}
               </Form.Item>
 
@@ -555,7 +555,7 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <DatePicker format={dateFormat} style={{width: "100%"}}/>
+                  <DatePicker showTime format={dateFormat} style={{width: "100%"}}/>
                 )}
               </Form.Item>
 
@@ -569,7 +569,7 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <DatePicker format={dateFormat} style={{width: "100%"}}>
+                  <DatePicker showTime format={dateFormat} style={{width: "100%"}}>
 
                   </DatePicker>
                 )}
@@ -585,7 +585,7 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <DatePicker format={dateFormat} style={{width: "100%"}}/>
+                  <DatePicker showTime format={dateFormat} style={{width: "100%"}}/>
                 )}
               </Form.Item>
 

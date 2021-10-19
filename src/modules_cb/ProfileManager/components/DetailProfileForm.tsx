@@ -76,6 +76,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
     },
   ])
+
   useEffect(() => {
     setActiveLogs({
       params: props.activityLogs.params,
@@ -142,11 +143,16 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     }
     props.showFormBooking(true, req);
   }
+  var dataDetailMatch:ProfileEntity|any;
+  if(props.detail.result&&props.showForm.data_detail){
+    dataDetailMatch=props.showForm.data_detail.find((item:any)=>props.detail.result?.id===item.id)
+  }
+
   return (
     <div className="detail-container">
       <div className="detail-title">
         <div className="detail-title__left">
-          <h1>{props.detail.result?.fullName}</h1>
+          <h1>{dataDetailMatch?.fullName}</h1>
           <span>Java Candidate Profile</span>
         </div>
 
@@ -169,7 +175,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       <div className="detail-paragraph-1">
         <Avatar src={require('src/assets/images/profile.png')} size={100} style={{width: "115px"}}/>
         <div className="detail-paragraph-1__name">
-          <h2>{props.detail.result?.fullName}</h2>
+          <h2>{dataDetailMatch?.fullName}</h2>
           <Icon type="star" className="ml-1 mr-1"/>
           <Icon type="star" className="ml-1 mr-1"/>
           <Icon type="star" className="ml-1 mr-1"/>
@@ -180,8 +186,8 @@ function DetailProfileForm(props: DetailProfileFormProps) {
           <p>evaluations </p>
           <br/>
           <p>No title</p>
-          <p>{props.detail.result?.phoneNumber}</p>
-          <p>{props.detail.result?.email}</p>
+          <p>{dataDetailMatch?.phoneNumber}</p>
+          <p>{dataDetailMatch?.email}</p>
         </div>
       </div>
 
@@ -192,11 +198,11 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
         <div className="detail-paragraph-2__content">
           <Icon type="mail" className='mr-1'/>
-          <span>{props.detail.result?.email}</span><br/>
+          <span>{dataDetailMatch?.email}</span><br/>
           <Icon type="phone" className='mr-1'/>
-          <span>{props.detail.result?.phoneNumber}</span><br/>
+          <span>{dataDetailMatch?.phoneNumber}</span><br/>
           <Icon type="contacts" className='mr-1'/>
-          <span>{props.detail.result?.hometown || "Không có địa chỉ"}</span><br/>
+          <span>{dataDetailMatch?.hometown || "Không có địa chỉ"}</span><br/>
           <h1>Social profiles</h1>
         </div>
 
@@ -286,7 +292,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
         <div className="detail-paragraph-4__content">
           <iframe
-            src={`http://file-rs.edsolabs.com/${props.detail.result?.cv}`}
+            src={`http://file-rs.edsolabs.com/${dataDetailMatch?.cv}`}
             title="CV"
             width="100%"
             height="700px"

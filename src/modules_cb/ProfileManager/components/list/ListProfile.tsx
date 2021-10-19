@@ -84,7 +84,7 @@ function ListProfile(props: ListProfileProps) {
     {
       title: 'CV',
       dataIndex: 'cv',
-      width: 100,
+      width: 200,
       key: '10',
     },
     {
@@ -256,7 +256,13 @@ function ListProfile(props: ListProfileProps) {
     props.getDetailProfile({idProfile: entity.id});
     props.getActivityLogs({idProfile: entity.id});
     props.getBooking({idProfile: entity.id});
-    props.showFormDetail(req, props.detail?.result);
+
+    if(dataSource!==undefined){
+      console.log("?dataSource:",dataSource)
+    }else {
+      console.log("props.list.rows:",props.list.rows)
+    }
+    props.showFormDetail(req, dataSource!==undefined?dataSource:props.list.rows);
   }
 
   const handleSelectSource = (value: any) => {
@@ -291,14 +297,6 @@ function ListProfile(props: ListProfileProps) {
       setDataSource(props.elasticSearch.rows)
     }
   },[props.elasticSearch.rows])
-
-  if(dataSource!==undefined){
-    console.log("showDatasource:",dataSource)
-  }else {
-    console.log("showListProfile:", props.list.rows)
-
-  }
-  // console.log("elasticSearch:",props.elasticSearch)
 
 
   return (
@@ -367,7 +365,7 @@ function ListProfile(props: ListProfileProps) {
         pagination={{
           current: page,
           pageSize: size,
-          total: props.list.total,
+          total: dataSource!==undefined?dataSource.length:props.list.total,
           onChange: value => setPage(value),
           showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,
         }}
