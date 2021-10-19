@@ -60,7 +60,7 @@ function ListProfile(props: ListProfileProps) {
   const [sourceCV, setSourceCV] = useState('');
   const [date, setDate] = useState<any>();
   const [inputValue, setInputValue] = useState<any>("")
-  const [dataSource, setDataSource] = useState<ProfileEntity | any>([])
+  const [dataSource, setDataSource] = useState<ProfileEntity | any>(undefined)
   const columns: ColumnProps<ProfileEntity>[] = [
     {
       title: 'Họ tên',
@@ -149,7 +149,6 @@ function ListProfile(props: ListProfileProps) {
     },
 
 
-
     {
       title: () => {
         return <div style={{whiteSpace: 'nowrap'}}>Thao tác</div>;
@@ -228,9 +227,9 @@ function ListProfile(props: ListProfileProps) {
 
   const handleBooking = (event: any, entity: ProfileEntity) => {
     event.stopPropagation();
-    let req:DataShowBooking={
-      id:entity.id,
-      fullName:entity.fullName
+    let req: DataShowBooking = {
+      id: entity.id,
+      fullName: entity.fullName
     }
     props.showFormBooking(true, req);
   }
@@ -271,13 +270,14 @@ function ListProfile(props: ListProfileProps) {
 
   function onBtnResetClicked() {
     resetFields();
-    props.getElasticSearch();
+    setDataSource(undefined)
+    props.getListProfile({page:1,size:100});
     // setDataSource(props.list.rows);
   }
 
   const onBtnSearchClicked = () => {
     inputValue ? props.getElasticSearch({key: inputValue}) : props.getElasticSearch();
-    props.elasticSearch?.rows?.length !== 0 ? setDataSource(props.elasticSearch?.rows) : setDataSource(props.list.rows)
+    // props.elasticSearch?.request === {} ? setDataSource(props.list.rows) : setDataSource(props.elasticSearch?.rows);
   }
 
   const dateFormat = 'DD/MM/YYYY';
@@ -286,9 +286,21 @@ function ListProfile(props: ListProfileProps) {
     setInputValue(event.target.value)
   }
 
-  console.log("setDataSource:", dataSource)
-  console.log("props.list:", props.list.rows)
-  console.log("props.search:", props.elasticSearch.rows)
+  useEffect(()=>{
+    if(props.elasticSearch.request!==null){
+      setDataSource(props.elasticSearch.rows)
+    }
+  },[props.elasticSearch.rows])
+
+  if(dataSource!==undefined){
+    console.log("showDatasource:",dataSource)
+  }else {
+    console.log("showListProfile:", props.list.rows)
+
+  }
+  // console.log("elasticSearch:",props.elasticSearch)
+
+
   return (
     <>
       <Form style={{display: "flex"}}>
@@ -347,8 +359,8 @@ function ListProfile(props: ListProfileProps) {
       <Table
         scroll={{x: 1300}}
         className="custom-table -webkit-scrollbar"
-        dataSource={props.elasticSearch?.rows?.length !== 0 ? (props.elasticSearch?.rows) : (props.list.rows)}
-        // dataSource={dataSource}
+        // dataSource={props.elasticSearch?.rows?.length !== 0 ? (props.elasticSearch?.rows) : (props.list.rows)}
+        dataSource={dataSource!==undefined?dataSource:props.list.rows}
         columns={columns}
         rowKey="id"
         locale={{emptyText: emptyText}}

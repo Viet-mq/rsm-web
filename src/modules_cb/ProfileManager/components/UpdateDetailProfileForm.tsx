@@ -111,7 +111,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     });
   }
 
-  console.log("props.showForm.data_update_detail:",props.showForm.data_update_detail)
   function onBtnCancelClicked() {
     resetFields();
     setCompensatoryDataSource([]);

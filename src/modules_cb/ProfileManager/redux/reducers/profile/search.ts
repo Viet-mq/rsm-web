@@ -13,7 +13,7 @@ export interface GetElasticSearchState {
 
 const initState: GetElasticSearchState = {
   loading: false,
-  request: {},
+  request: null,
   rows: [],
   total: 0
 }
