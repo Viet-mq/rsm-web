@@ -1,30 +1,30 @@
-import {JobEntity} from "../../types";
+import {TalentPoolEntity} from "../../types";
 import {AppError} from "src/models/common";
 
-export interface JobListAction {
+export interface TalentPoolListAction {
   type: string,
   params?: any,
-  rows?: JobEntity[],
+  rows?: TalentPoolEntity[],
   total?: number,
   error?: AppError
 }
 
-export const GET_LIST_JOB = "GET_LIST_JOB";
-export const GET_LIST_JOB_SUCCESS = "GET_LIST_JOB_SUCCESS";
-export const GET_LIST_JOB_ERROR = "GET_LIST_JOB_ERROR";
+export const GET_LIST_TALENT_POOL = "GET_LIST_TALENT_POOL";
+export const GET_LIST_TALENT_POOL_SUCCESS = "GET_LIST_TALENT_POOL_SUCCESS";
+export const GET_LIST_TALENT_POOL_ERROR = "GET_LIST_TALENT_POOL_ERROR";
 
-export const getListJob = (params: any): JobListAction => ({
-  type: GET_LIST_JOB,
+export const getListTalentPool = (params: any): TalentPoolListAction => ({
+  type: GET_LIST_TALENT_POOL,
   params
 });
 
-export const getListJobSuccess = (total: number, rows: JobEntity[]): JobListAction => ({
-  type: GET_LIST_JOB_SUCCESS,
+export const getListTalentPoolSuccess = (total: number, rows: TalentPoolEntity[]): TalentPoolListAction => ({
+  type: GET_LIST_TALENT_POOL_SUCCESS,
   total,
   rows
 });
 
-export const getListJobError = (error: AppError): JobListAction => ({
-  type: GET_LIST_JOB_ERROR,
+export const getListTalentPoolError = (error: AppError): TalentPoolListAction => ({
+  type: GET_LIST_TALENT_POOL_ERROR,
   error
 });

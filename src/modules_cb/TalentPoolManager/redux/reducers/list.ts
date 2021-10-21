@@ -1,39 +1,39 @@
-import {JobEntity} from "../../types";
+import {TalentPoolEntity} from "../../types";
 import {AppError} from "src/models/common";
 import * as Actions from "../actions";
-import {JobListAction} from "../actions";
+import {TalentPoolListAction} from "../actions";
 
-export interface JobListState {
+export interface TalentPoolListState {
   loading: boolean,
   params?: any,
-  rows?: JobEntity[],
+  rows?: TalentPoolEntity[]|any,
   total?: number,
   error?: AppError
 }
 
-const initState: JobListState = {
+const initState: TalentPoolListState = {
   loading: false,
   params: {},
   rows: [],
   total: 0
 }
 
-export default (state = initState, {type, total, rows, params, error}: JobListAction): JobListState => {
+export default (state = initState, {type, total, rows, params, error}: TalentPoolListAction): TalentPoolListState => {
   switch (type) {
-    case Actions.GET_LIST_JOB:
+    case Actions.GET_LIST_TALENT_POOL:
       return {
         ...state,
         params,
         loading: true
       }
-    case Actions.GET_LIST_JOB_SUCCESS:
+    case Actions.GET_LIST_TALENT_POOL_SUCCESS:
       return {
         ...state,
         total,
         rows,
         loading: false
       }
-    case Actions.GET_LIST_JOB_ERROR:
+    case Actions.GET_LIST_TALENT_POOL_ERROR:
       return {
         ...state,
         error,

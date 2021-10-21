@@ -64,6 +64,12 @@ function ListViewFrontEnd(props: IProps) {
 
   const columns: ColumnProps<FrontendViewEntity>[] = [
     {
+      title: 'STT',
+      key: 'index',
+      width: 40,
+      render: (text, record, index) =>  {return (page - 1) * 10 + index + 1}
+    },
+    {
       title: 'Path',
       dataIndex: 'id',
       width: 100,

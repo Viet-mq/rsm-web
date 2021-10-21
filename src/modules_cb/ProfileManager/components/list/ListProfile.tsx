@@ -63,6 +63,12 @@ function ListProfile(props: ListProfileProps) {
   const [dataSource, setDataSource] = useState<ProfileEntity | any>(undefined)
   const columns: ColumnProps<ProfileEntity>[] = [
     {
+      title: 'STT',
+      key: 'index',
+      width: 40,
+      render: (text, record, index) =>  {return (page - 1) * 10 + index + 1}
+    },
+    {
       title: 'Họ tên',
       dataIndex: 'fullName',
       width: 130,

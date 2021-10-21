@@ -59,6 +59,12 @@ function ListGroupAPI(props: IProps) {
 
   const columns: ColumnProps<GroupAPIEntity>[] = [
     {
+      title: 'STT',
+      key: 'index',
+      width: 40,
+      render: (text, record, index) =>  {return (page - 1) * 10 + index + 1}
+    },
+    {
       title: 'Tên',
       dataIndex: 'name',
       width: 100,

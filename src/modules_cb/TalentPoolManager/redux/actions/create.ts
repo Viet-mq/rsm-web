@@ -1,28 +1,28 @@
-import {CreateJobRequest} from "../../types";
+import {CreateTalentPoolRequest} from "../../types";
 import {AppError, ResponseBase2} from "src/models/common";
 
-export interface CreateJobAction {
+export interface CreateTalentPoolAction {
   type: string,
-  request?: CreateJobRequest,
+  request?: CreateTalentPoolRequest,
   response?: ResponseBase2,
   error?: AppError
 }
 
-export const CREATE_JOB = "CREATE_JOB";
-export const CREATE_JOB_SUCCESS = "CREATE_JOB_SUCCESS";
-export const CREATE_JOB_ERROR = "CREATE_JOB_ERROR";
+export const CREATE_TALENT_POOL = "CREATE_TALENT_POOL";
+export const CREATE_TALENT_POOL_SUCCESS = "CREATE_TALENT_POOL_SUCCESS";
+export const CREATE_TALENT_POOL_ERROR = "CREATE_TALENT_POOL_ERROR";
 
-export const createJob = (request: CreateJobRequest): CreateJobAction => ({
-  type: CREATE_JOB,
+export const createTalentPool = (request: CreateTalentPoolRequest): CreateTalentPoolAction => ({
+  type: CREATE_TALENT_POOL,
   request
 });
 
-export const createJobSuccess = (response: ResponseBase2): CreateJobAction => ({
-  type: CREATE_JOB_SUCCESS,
+export const createTalentPoolSuccess = (response: ResponseBase2): CreateTalentPoolAction => ({
+  type: CREATE_TALENT_POOL_SUCCESS,
   response
 });
 
-export const createJobError = (error: AppError): CreateJobAction => ({
-  type: CREATE_JOB_ERROR,
+export const createTalentPoolError = (error: AppError): CreateTalentPoolAction => ({
+  type: CREATE_TALENT_POOL_ERROR,
   error
 });

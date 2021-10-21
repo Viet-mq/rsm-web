@@ -1,23 +1,23 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import React from "react";
+import React, {useEffect} from "react";
 
 import {
-  deleteJob,
-  getListJob,
+  deleteTalentPool,
+  getListTalentPool,
   showFormCreate,
   showFormUpdate,
-  updateJob
+  updateTalentPool
 } from "../../redux/actions";
-import {JobEntity, DeleteJobRequest} from "../../types";
+import TalentPoolItem from "../TalentPoolItem";
 
-const mapStateToProps = ({jobManager: {list}}: RootState) => ({list})
+const mapStateToProps = ({talentPoolManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
-  getListJob,
-  deleteJob,
+  getListTalentPool,
+  deleteTalentPool,
   showFormCreate,
   showFormUpdate,
-  updateJob
+  updateTalentPool
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -26,13 +26,17 @@ interface IProps extends ReduxProps {
 }
 
 function ListTalentPool(props: IProps) {
-
-
+  useEffect(() => {
+    props.getListTalentPool({page: 1, size: 100});
+  }, [])
+  console.log("list:",props.list)
   return (
     <>
-      <div >
-        hello
+      <div className="card-container">
+        {props.list.rows.map((item: any, index: any) => {
+          return <TalentPoolItem key={index} talentPool={item}/>
 
+        })}
       </div>
     </>
   );

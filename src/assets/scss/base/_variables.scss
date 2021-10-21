@@ -2,10 +2,17 @@
 $color-bg:#fff;
 //color list
 $color-dark-grey:rgb(178,178,178);
+$color-dark-grey-hover:rgba(178,178,178,0.3);
 $color-light-grey:#e8e8e8;
 $color-blue:#02a7f0;
 $color-shadow:rgba(0, 0, 0, 0.5);
 $color-green:rgb(112,191,116);
+$color-black:rgb(0,0,0);
+$color-user-1:#FF7878;
+$color-user-2:#7EB5A6;
+$color-user-3:#F5E8C7;
+$color-user-4:#9E7777;
+
 
 //width
 $container-sm: 750px;
@@ -20,23 +27,29 @@ $container-xl-number: 1348;
 //grid size
 $screen-sm: 768px;
 $screen-sm-min: $screen-sm;
-$screen-md: 992px;
+$screen-md: 1024px;
 $screen-md-min: $screen-md;
 $screen-lg: 1200px;
 $screen-lg-min: $screen-lg;
-$screen-xl: 1400px;
+$screen-xl: 1440px;
 $screen-xl-min: $screen-xl;
+$screen-xxl: 1920px;
+$screen-xxl-min: $screen-xxl;
+$screen-xxxl: 2560px;
+$screen-xxxl-min: $screen-xxxl;
 $screen-xs-max: ($screen-sm-min - 1);
 $screen-sm-max: ($screen-md-min - 1);
 $screen-md-max: ($screen-lg-min - 1);
 $screen-lg-max: ($screen-xl-min - 1);
+$screen-xl-max: ($screen-xxl-min - 1);
+$screen-xxl-max: ($screen-xxxl-min - 1);
 $screen-xs-small: 481px;
 //more grid size
 $screen-xs-small-min: $screen-xs-small;
 $screen-xxs-max: ($screen-xs-small-min - 1);
 
 //font size
-$font-size-xs: 14px;
+$font-size-xs: 12px;
+$font-size-sm: 12px;
 $line-height-xs: 20px;
-$font-size-sm: 14px;
 $line-height-sm: 20px;

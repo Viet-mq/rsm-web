@@ -1,14 +1,14 @@
 import * as Actions from "../actions";
-import {JobFormAction} from "../actions";
-import {JobEntity} from "../../types";
+import {TalentPoolFormAction} from "../actions";
+import {TalentPoolEntity} from "../../types";
 
-export interface JobFormState {
+export interface TalentPoolFormState {
   show_create?: boolean,
   show_update?: boolean,
-  data_update?: JobEntity|any
+  data_update?: TalentPoolEntity|any
 }
 
-const initState: JobFormState = {
+const initState: TalentPoolFormState = {
   show_create: false,
   show_update: false,
 }
@@ -18,15 +18,15 @@ export default (state = initState, {
   show_create,
   show_update,
   data_update
-}: JobFormAction): JobFormState => {
+}: TalentPoolFormAction): TalentPoolFormState => {
   switch (type) {
-    case Actions.JOB_SHOW_FORM_CREATE:
+    case Actions.TALENT_POOL_SHOW_FORM_CREATE:
       return {
         ...state,
         show_create,
         show_update: false,
       }
-    case Actions.JOB_SHOW_FORM_UPDATE:
+    case Actions.TALENT_POOL_SHOW_FORM_UPDATE:
       return {
         ...state,
         show_update,

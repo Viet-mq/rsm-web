@@ -4,6 +4,21 @@ import {Link} from 'react-router-dom';
 import {RootState} from 'src/redux/reducers';
 import {connect, ConnectedProps} from 'react-redux';
 import SubMenu from "antd/es/menu/SubMenu";
+import {
+  AiOutlineCheckCircle,
+  AiOutlineFolderView,
+  AiOutlineLinkedin,
+  FaRegUser,
+  FaSchool,
+  FaUserLock,
+  FaUsersCog,
+  HiOutlineUserGroup,
+  ImProfile,
+  IoEyeSharp,
+  IoIosListBox,
+  MdOutlineSource,
+  MdOutlineWorkOutline
+} from "react-icons/all";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -40,137 +55,107 @@ const Nav = (props: IProps) => {
         </Link>
       </Menu.Item>
 
-      <Menu.Item key="statistic" style={{display: 'flex', alignItems: 'center'}}>
-        <Link to={`/statistic`}>
-          <span className="rd-icon rd-icon-home"/>
-          {!props.hiddenLabel ? <span>Thống kê </span> : null}
-        </Link>
-      </Menu.Item>
-
       <Menu.Item key="account-manager" style={{display: 'flex', alignItems: 'center'}}>
         <Link to={`/account-manager`}>
-          <span className="rd-icon rd-icon-home"/>
+          <Icon type="user"/>
           {!props.hiddenLabel ? <span>Quản lý tài khoản </span> : null}
         </Link>
       </Menu.Item>
 
-      <SubMenu key="sub1" title={<span><Icon type="user"/><span>Xử lý ngôn ngữ tự nhiên</span></span>}>
+      <SubMenu key="sub1" title={<span><Icon type="setting"/><span>Cài Đặt</span></span>}>
 
-        <Menu.Item key="content-manager" style={{display: 'flex', alignItems: 'center'}}>
-          <Link to="/content-manager">
-            {!props.hiddenLabel ? <span>Quản lý nội dung</span> : null}
+        <Menu.Item key="view-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to={`/view-manager`}>
+            <IoEyeSharp className="mr-2"/>
+            {!props.hiddenLabel ? <span>Quản lý view </span> : null}
           </Link>
         </Menu.Item>
 
-        <Menu.Item key="intent-manager" style={{display: 'flex', alignItems: 'center'}}>
-          <Link to="/intent-manager">
-            {!props.hiddenLabel ? <span>Quản lý ý định</span> : null}
+        <Menu.Item key="view-group-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to={`/view-group-manager`}>
+            <AiOutlineFolderView className="mr-2"/>
+            {!props.hiddenLabel ? <span>Quản lý view group  </span> : null}
           </Link>
         </Menu.Item>
 
-        <Menu.Item key="entity-manager" style={{display: 'flex', alignItems: 'center'}}>
-          <Link to="/entity-manager">
-            {!props.hiddenLabel ? <span>Quản lý thực thể</span> : null}
+        <Menu.Item key="api-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to={`/api-manager`}>
+            <FaUserLock className="mr-2"/>
+            {!props.hiddenLabel ? <span>Quản lý API </span> : null}
           </Link>
         </Menu.Item>
 
-        <Menu.Item key="follow-manager" style={{display: 'flex', alignItems: 'center'}}>
-          <Link to="/follow-manager">
-            {!props.hiddenLabel ? <span>Quản lý kịch bản</span> : null}
+        <Menu.Item key="group-api-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to={`/group-api-manager`}>
+            <FaUsersCog className="mr-2"/>
+            {!props.hiddenLabel ? <span>Quản lý Group API </span> : null}
           </Link>
         </Menu.Item>
 
       </SubMenu>
 
-      <Menu.Item key="view-manager" style={{display: 'flex', alignItems: 'center'}}>
-        <Link to={`/view-manager`}>
-          <span className="rd-icon rd-icon-home"/>
-          {!props.hiddenLabel ? <span>Quản lý view </span> : null}
-        </Link>
-      </Menu.Item>
-
-      <Menu.Item key="view-group-manager" style={{display: 'flex', alignItems: 'center'}}>
-        <Link to={`/view-group-manager`}>
-          <span className="rd-icon rd-icon-home"/>
-          {!props.hiddenLabel ? <span>Quản lý view group  </span> : null}
-        </Link>
-      </Menu.Item>
-
-      <Menu.Item key="api-manager" style={{display: 'flex', alignItems: 'center'}}>
-        <Link to={`/api-manager`}>
-          <span className="rd-icon rd-icon-home"/>
-          {!props.hiddenLabel ? <span>Quản lý API </span> : null}
-        </Link>
-      </Menu.Item>
-
-      <Menu.Item key="group-api-manager" style={{display: 'flex', alignItems: 'center'}}>
-        <Link to={`/group-api-manager`}>
-          <span className="rd-icon rd-icon-home"/>
-          {!props.hiddenLabel ? <span>Quản lý Group API </span> : null}
-        </Link>
-      </Menu.Item>
 
       <SubMenu key="sub2" title={<span><Icon type="menu"/><span>Quản lý danh mục</span></span>}>
 
         <Menu.Item key="job-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/job-manager`}>
-            <span className="rd-icon rd-icon-home"/>
+            <MdOutlineWorkOutline className="mr-2"/>
             {!props.hiddenLabel ? <span>Quản lý job </span> : null}
           </Link>
         </Menu.Item>
 
         <Menu.Item key="department-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/department-manager`}>
-            <span className="rd-icon rd-icon-home"/>
+            <HiOutlineUserGroup className="mr-2"/>
             {!props.hiddenLabel ? <span>Quản lý phòng ban </span> : null}
           </Link>
         </Menu.Item>
 
         <Menu.Item key="joblevel-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/joblevel-manager`}>
-            <span className="rd-icon rd-icon-home"/>
+            <FaRegUser className="mr-2"/>
             {!props.hiddenLabel ? <span>Quản lý job level </span> : null}
           </Link>
         </Menu.Item>
 
         <Menu.Item key="school-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/school-manager`}>
-            <span className="rd-icon rd-icon-home"/>
+            <FaSchool className="mr-2"/>
             {!props.hiddenLabel ? <span>Quản lý trường </span> : null}
           </Link>
         </Menu.Item>
 
         <Menu.Item key="sourcecv-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/sourcecv-manager`}>
-            <span className="rd-icon rd-icon-home"/>
+            <AiOutlineLinkedin className="mr-2"/>
             {!props.hiddenLabel ? <span>Quản lý nguồn CV </span> : null}
           </Link>
         </Menu.Item>
 
         <Menu.Item key="statuscv-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/statuscv-manager`}>
-            <span className="rd-icon rd-icon-home"/>
+            <AiOutlineCheckCircle className="mr-2"/>
             {!props.hiddenLabel ? <span>Quản lý trạng thái CV </span> : null}
           </Link>
         </Menu.Item>
-`
+        `
         <Menu.Item key="profile-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/profile-manager`}>
-            <span className="rd-icon rd-icon-home"/>
+            <ImProfile className="mr-2"/>
             {!props.hiddenLabel ? <span>Quản lý thông tin CV </span> : null}
           </Link>
         </Menu.Item>
 
         <Menu.Item key="blacklist-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/blacklist-manager`}>
-            <span className="rd-icon rd-icon-home"/>
+            <IoIosListBox className="mr-2"/>
             {!props.hiddenLabel ? <span>Quản lý Blacklist </span> : null}
           </Link>
         </Menu.Item>
 
         <Menu.Item key="talent-pool-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/talent-pool-manager`}>
-            <span className="rd-icon rd-icon-home"/>
+            <MdOutlineSource className="mr-2"/>
             {!props.hiddenLabel ? <span>Quản lý Talent Pool </span> : null}
           </Link>
         </Menu.Item>

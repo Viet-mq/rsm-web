@@ -69,6 +69,12 @@ function ListAccount(props: IProps) {
 
   const columns: ColumnProps<UserAccount>[] = [
     {
+      title: 'STT',
+      key: 'index',
+      width: 40,
+      render: (text, record, index) =>  {return (page - 1) * 10 + index + 1}
+    },
+    {
       title: 'Tên đăng nhập',
       dataIndex: 'username',
       sorter: true,

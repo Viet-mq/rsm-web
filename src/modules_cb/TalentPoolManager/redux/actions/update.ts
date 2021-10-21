@@ -1,28 +1,28 @@
-import {UpdateJobRequest} from "../../types";
+import {UpdateTalentPoolRequest} from "../../types";
 import {AppError, ResponseBase2} from "src/models/common";
 
-export interface UpdateJobAction {
+export interface UpdateTalentPoolAction {
   type: string,
-  request?: UpdateJobRequest,
+  request?: UpdateTalentPoolRequest,
   response?: ResponseBase2,
   error?: AppError
 }
 
-export const UPDATE_JOB = "UPDATE_JOB";
-export const UPDATE_JOB_SUCCESS = "UPDATE_JOB_SUCCESS";
-export const UPDATE_JOB_ERROR = "UPDATE_JOB_ERROR";
+export const UPDATE_TALENT_POOL = "UPDATE_TALENT_POOL";
+export const UPDATE_TALENT_POOL_SUCCESS = "UPDATE_TALENT_POOL_SUCCESS";
+export const UPDATE_TALENT_POOL_ERROR = "UPDATE_TALENT_POOL_ERROR";
 
-export const updateJob = (request: UpdateJobRequest): UpdateJobAction => ({
-  type: UPDATE_JOB,
+export const updateTalentPool = (request: UpdateTalentPoolRequest): UpdateTalentPoolAction => ({
+  type: UPDATE_TALENT_POOL,
   request
 });
 
-export const updateJobSuccess = (response: ResponseBase2): UpdateJobAction => ({
-  type: UPDATE_JOB_SUCCESS,
+export const updateTalentPoolSuccess = (response: ResponseBase2): UpdateTalentPoolAction => ({
+  type: UPDATE_TALENT_POOL_SUCCESS,
   response
 });
 
-export const updateJobError = (error: AppError): UpdateJobAction => ({
-  type: UPDATE_JOB_ERROR,
+export const updateTalentPoolError = (error: AppError): UpdateTalentPoolAction => ({
+  type: UPDATE_TALENT_POOL_ERROR,
   error
 });

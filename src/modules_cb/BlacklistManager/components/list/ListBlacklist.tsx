@@ -51,6 +51,12 @@ function ListBlacklist(props: IProps) {
 
   const columns: ColumnProps<BlacklistEntity>[] = [
     {
+      title: 'STT',
+      key: 'index',
+      width: 40,
+      render: (text, record, index) =>  {return (page - 1) * 10 + index + 1}
+    },
+    {
       title: 'Tên',
       dataIndex: 'name',
       width: 100,
@@ -130,7 +136,8 @@ function ListBlacklist(props: IProps) {
           onChange: value => setPage(value),
           showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,
         }}
-      />
+      >
+      </Table>
     </>
   );
 

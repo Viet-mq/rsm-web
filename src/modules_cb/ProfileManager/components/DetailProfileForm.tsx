@@ -1,7 +1,8 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {
-  getActivityLogs, showFormBooking,
+  getActivityLogs,
+  showFormBooking,
   showFormDetail,
   showFormUpdate,
   showFormUpdateDetail,
@@ -12,8 +13,6 @@ import React, {useEffect, useState} from "react";
 import {DataShowBooking, DetailCV, ProfileEntity} from "../types";
 import moment from "moment";
 import env from "../../../configs/env";
-
-const {Option} = Select;
 
 const mapStateToProps = (state: RootState) => ({
   showForm: state.profileManager.showForm,
@@ -39,10 +38,7 @@ interface DetailProfileFormProps extends ReduxProps {
 }
 
 function DetailProfileForm(props: DetailProfileFormProps) {
-  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
-  let screenWidth = document.documentElement.clientWidth;
   const [page, setPage] = useState(1);
-  const [scroll, setScroll] = useState(screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false});
   const size = 10;
   const [activeLogs, setActiveLogs] = useState({
     params: '',
@@ -123,7 +119,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
   const onBtnUpdateDetail = (event: any) => {
     event.stopPropagation();
-    props.showFormUpdateDetail(true,props.detail.result);
+    props.showFormUpdateDetail(true, props.detail.result);
   }
 
   const onBtnUploadCV = (e: any) => {
@@ -132,20 +128,20 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       e.target.disabled = true;
       e.target.disabled = false;
     }
-    props.showFormUploadCV(true,props.detail.result?.id);
+    props.showFormUploadCV(true, props.detail.result?.id);
   }
 
   const onBtnUpdateBooking = (event: any) => {
     event.stopPropagation();
-    let req: DataShowBooking={
-      id:props.detail.result?.id,
-      fullName:props.detail.result?.fullName
+    let req: DataShowBooking = {
+      id: props.detail.result?.id,
+      fullName: props.detail.result?.fullName
     }
     props.showFormBooking(true, req);
   }
-  var dataDetailMatch:ProfileEntity|any;
-  if(props.detail.result&&props.showForm.data_detail){
-    dataDetailMatch=props.showForm.data_detail.find((item:any)=>props.detail.result?.id===item.id)
+  var dataDetailMatch: ProfileEntity | any;
+  if (props.detail.result && props.showForm.data_detail) {
+    dataDetailMatch = props.showForm.data_detail.find((item: any) => props.detail.result?.id === item.id)
   }
 
   return (
@@ -161,7 +157,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
             Tạo ứng tuyển
           </Button>
           <Button size="small" className="ant-btn mr-1 ant-btn-sm"
-          onClick={event=>onBtnUpdateDetail(event)}>
+                  onClick={event => onBtnUpdateDetail(event)}>
             <Icon type="edit"/>
           </Button>
           <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
@@ -217,7 +213,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
           <h1>Lịch phỏng vấn</h1>
           <div className="detail-paragraph-3__title--button">
             <Button size="small" className="ant-btn mr-1 ant-btn-sm"
-                    onClick={event=>onBtnUpdateBooking(event)}
+                    onClick={event => onBtnUpdateBooking(event)}
             >
               <Icon type="edit"/>
             </Button>
@@ -235,10 +231,10 @@ function DetailProfileForm(props: DetailProfileFormProps) {
             <ul>
               {props.account.rows?.filter((item: any) => props.booking.result?.interviewer.includes(item.username))
                 .map((item: any, index: any) => {
-                return <li key={index}>
-                  {item.fullName}
-                </li>
-              })}
+                  return <li key={index}>
+                    {item.fullName}
+                  </li>
+                })}
             </ul>
           </div>
 
@@ -283,7 +279,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
           <div className="detail-paragraph-4__title--button">
 
             <Button size="small" className="ant-btn mr-1 ant-btn-sm"
-            onClick={event=>onBtnUploadCV(event)}
+                    onClick={event => onBtnUploadCV(event)}
             >
               <Icon type="upload"/>
             </Button>

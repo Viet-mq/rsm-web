@@ -55,6 +55,12 @@ function ListMenuFrontend(props: IProps) {
 
   const columns: ColumnProps<MenuFrontendEntity>[] = [
     {
+      title: 'STT',
+      key: 'index',
+      width: 40,
+      render: (text, record, index) =>  {return (page - 1) * 10 + index + 1}
+    },
+    {
       title: 'Name',
       dataIndex: 'name',
       width: 200,

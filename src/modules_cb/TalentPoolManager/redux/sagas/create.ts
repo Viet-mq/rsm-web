@@ -1,8 +1,8 @@
 import {
-  CreateJobAction,
-  createJobError,
-  createJobSuccess,
-  getListJob,
+  CreateTalentPoolAction,
+  createTalentPoolError,
+  createTalentPoolSuccess,
+  getListTalentPool,
   showFormCreate
 } from "../actions";
 import * as apis from "../services/apis";
@@ -11,20 +11,20 @@ import {NotificationError, NotificationSuccess} from "src/components/Notificatio
 import {AppError} from "src/models/common";
 import {RootState} from "src/redux/reducers";
 
-export function* createJobAsync(action: CreateJobAction) {
+export function* createTalentPoolAsync(action: CreateTalentPoolAction) {
   try {
-    const rs = yield apis.createJob(action.request);
-    yield put(createJobSuccess(rs));
+    const rs = yield apis.createTalentPool(action.request);
+    yield put(createTalentPoolSuccess(rs));
     if (rs.code !== 0) {
-      NotificationError('Tạo Job không thành công', "Lỗi: " + rs.message)
+      NotificationError('Tạo Talent Pool không thành công', "Lỗi: " + rs.message)
     } else {
-      NotificationSuccess('Thành công', "Tạo Job thành công");
+      NotificationSuccess('Thành công', "Tạo Talent Pool thành công");
       yield put(showFormCreate(false));
-      const params = yield select((state: RootState) => state.jobManager.list.params);
-      yield put(getListJob(params))
+      const params = yield select((state: RootState) => state.talentPoolManager.list.params);
+      yield put(getListTalentPool(params))
     }
   } catch (e) {
-    yield put(createJobError(new AppError(e.message)));
-    NotificationError('Tạo Job không thành công', "Lỗi: " + e.message);
+    yield put(createTalentPoolError(new AppError(e.message)));
+    NotificationError('Tạo Talent Pool không thành công', "Lỗi: " + e.message);
   }
 }
