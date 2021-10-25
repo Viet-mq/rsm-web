@@ -43,7 +43,6 @@ function AddActionViewForm(props: AddActionViewFormProps) {
   })
   const [action, setAction] = useState<FrontendViewEntity | any>(null);
   const {getFieldDecorator, resetFields} = props.form;
-  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '40px'};
 
   const formItemLayout = {
@@ -120,7 +119,6 @@ function AddActionViewForm(props: AddActionViewFormProps) {
       indeterminate: false,
       checkAll: false,
     });
-    setCompensatoryDataSource([]);
     props.showFormActionView(false);
   }
 

@@ -9,7 +9,7 @@ import {
   getActivityLogs,
   getBooking,
   getDetailProfile,
-  getElasticSearch,
+  getElasticSearch, getListNote,
   getListProfile,
   showFormBooking,
   showFormCreate,
@@ -20,9 +20,7 @@ import {
 import {DataShowBooking, DeleteProfileRequest, DetailCV, ProfileEntity} from "../../types";
 import moment from "moment";
 import {FormComponentProps} from "antd/lib/form";
-// import {getListSourceCV} from "../../../SourceCVManager/redux/actions";
 
-const InputGroup = Input.Group;
 const {Option} = Select;
 
 const mapStateToProps = (state: RootState) => ({
@@ -39,11 +37,11 @@ const connector = connect(mapStateToProps, {
   showFormDetail,
   showFormUploadCV,
   getDetailProfile,
-  // getListSourceCV,
   showFormBooking,
   getBooking,
   getActivityLogs,
-  getElasticSearch
+  getElasticSearch,
+  getListNote
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -54,7 +52,6 @@ interface ListProfileProps extends FormComponentProps, ReduxProps {
 function ListProfile(props: ListProfileProps) {
   const [page, setPage] = useState(1);
   const size = 10;
-  const formItemStyle = {height: '32px'};
   const {getFieldDecorator, resetFields} = props.form;
 
   const [sourceCV, setSourceCV] = useState('');
@@ -65,8 +62,10 @@ function ListProfile(props: ListProfileProps) {
     {
       title: 'STT',
       key: 'index',
-      width: 40,
-      render: (text, record, index) =>  {return (page - 1) * 10 + index + 1}
+      width: 50,
+      render: (text, record, index) => {
+        return (page - 1) * 10 + index + 1
+      }
     },
     {
       title: 'Họ tên',
@@ -262,13 +261,8 @@ function ListProfile(props: ListProfileProps) {
     props.getDetailProfile({idProfile: entity.id});
     props.getActivityLogs({idProfile: entity.id});
     props.getBooking({idProfile: entity.id});
-
-    if(dataSource!==undefined){
-      console.log("?dataSource:",dataSource)
-    }else {
-      console.log("props.list.rows:",props.list.rows)
-    }
-    props.showFormDetail(req, dataSource!==undefined?dataSource:props.list.rows);
+    props.getListNote({idProfile: entity.id})
+    props.showFormDetail(req, dataSource !== undefined ? dataSource : props.list.rows);
   }
 
   const handleSelectSource = (value: any) => {
@@ -283,7 +277,7 @@ function ListProfile(props: ListProfileProps) {
   function onBtnResetClicked() {
     resetFields();
     setDataSource(undefined)
-    props.getListProfile({page:1,size:100});
+    props.getListProfile({page: 1, size: 100});
     // setDataSource(props.list.rows);
   }
 
@@ -298,19 +292,19 @@ function ListProfile(props: ListProfileProps) {
     setInputValue(event.target.value)
   }
 
-  useEffect(()=>{
-    if(props.elasticSearch.request!==null){
+  useEffect(() => {
+    if (props.elasticSearch.request !== null) {
       setDataSource(props.elasticSearch.rows)
     }
-  },[props.elasticSearch.rows])
+  }, [props.elasticSearch.rows])
 
 
   return (
     <>
-      <Form style={{display: "flex"}}>
+      <Form style={{display: "flex", flexWrap: "wrap"}}>
         <Select
           placeholder="Nguồn CV"
-          style={{width: "20%", padding: "0 5px 0 0"}}
+          style={{width: "16%", padding: "0 5px 0 0"}}
           onChange={handleSelectSource}
         >
           {props.listSource.rows?.map((item: any, index: any) => (
@@ -325,7 +319,7 @@ function ListProfile(props: ListProfileProps) {
           onChange={handleSelectDate}
         />
 
-        <Form.Item style={{margin: "-5px 5px 0", width: "40%"}}>
+        <Form.Item style={{margin: "-5px 10px 0 5px", width: "40%"}}>
           {getFieldDecorator('valueInput')(
             <Input
               placeholder={"Họ tên, Năm sinh, Quê quán, Trường học, Số điện thoại, Email, Công việc"}
@@ -338,40 +332,35 @@ function ListProfile(props: ListProfileProps) {
         </Form.Item>
         <Button type="primary"
                 style={{
-                  width: "10%",
-                  margin: "0 5px",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
+                  width: "115px",
+                  margin: "0 10px 0 0 ",
                 }}
                 onClick={onBtnSearchClicked}>
           Tìm kiếm
         </Button>
-        <Button style={{
-          width: "10%",
-          margin: "0 5px",
-          whiteSpace: "nowrap",
-          overflow: "hidden",
-          textOverflow: "ellipsis"
-        }}
-                onClick={onBtnResetClicked}>
+        <Button
+          style={{
+            width: "115px",
+            // margin: "0 5px",
+          }}
+          onClick={onBtnResetClicked}>
           Reset
         </Button>
       </Form>
 
       <br/>
       <Table
-        scroll={{x: 1300}}
+        scroll={{x: 1500}}
         className="custom-table -webkit-scrollbar"
         // dataSource={props.elasticSearch?.rows?.length !== 0 ? (props.elasticSearch?.rows) : (props.list.rows)}
-        dataSource={dataSource!==undefined?dataSource:props.list.rows}
+        dataSource={dataSource !== undefined ? dataSource : props.list.rows}
         columns={columns}
         rowKey="id"
         locale={{emptyText: emptyText}}
         pagination={{
           current: page,
           pageSize: size,
-          total: dataSource!==undefined?dataSource.length:props.list.total,
+          total: dataSource !== undefined ? dataSource.length : props.list.total,
           onChange: value => setPage(value),
           showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,
         }}

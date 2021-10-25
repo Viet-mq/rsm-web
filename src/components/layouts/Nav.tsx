@@ -67,96 +67,96 @@ const Nav = (props: IProps) => {
         <Menu.Item key="view-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/view-manager`}>
             <IoEyeSharp className="mr-2"/>
-            {!props.hiddenLabel ? <span>Quản lý view </span> : null}
+            <span>Quản lý view </span>
           </Link>
         </Menu.Item>
 
         <Menu.Item key="view-group-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/view-group-manager`}>
             <AiOutlineFolderView className="mr-2"/>
-            {!props.hiddenLabel ? <span>Quản lý view group  </span> : null}
+            <span>Quản lý view group  </span>
           </Link>
         </Menu.Item>
 
         <Menu.Item key="api-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/api-manager`}>
             <FaUserLock className="mr-2"/>
-            {!props.hiddenLabel ? <span>Quản lý API </span> : null}
+            <span>Quản lý API </span>
           </Link>
         </Menu.Item>
 
         <Menu.Item key="group-api-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/group-api-manager`}>
             <FaUsersCog className="mr-2"/>
-            {!props.hiddenLabel ? <span>Quản lý Group API </span> : null}
+            <span>Quản lý Group API </span>
           </Link>
         </Menu.Item>
 
       </SubMenu>
 
 
+      <Menu.Item key="profile-manager" style={{display: 'flex', alignItems: 'center'}}>
+        <Link to={`/profile-manager`}>
+          <ImProfile className="mr-2"/>
+          {!props.hiddenLabel ? <span>Quản lý thông tin CV </span> : null}
+        </Link>
+      </Menu.Item>
+
       <SubMenu key="sub2" title={<span><Icon type="menu"/><span>Quản lý danh mục</span></span>}>
 
         <Menu.Item key="job-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/job-manager`}>
             <MdOutlineWorkOutline className="mr-2"/>
-            {!props.hiddenLabel ? <span>Quản lý job </span> : null}
+            <span>Quản lý job </span>
           </Link>
         </Menu.Item>
 
         <Menu.Item key="department-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/department-manager`}>
             <HiOutlineUserGroup className="mr-2"/>
-            {!props.hiddenLabel ? <span>Quản lý phòng ban </span> : null}
+            <span>Quản lý phòng ban </span>
           </Link>
         </Menu.Item>
 
         <Menu.Item key="joblevel-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/joblevel-manager`}>
             <FaRegUser className="mr-2"/>
-            {!props.hiddenLabel ? <span>Quản lý job level </span> : null}
+            <span>Quản lý job level </span>
           </Link>
         </Menu.Item>
 
         <Menu.Item key="school-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/school-manager`}>
             <FaSchool className="mr-2"/>
-            {!props.hiddenLabel ? <span>Quản lý trường </span> : null}
+            <span>Quản lý trường </span>
           </Link>
         </Menu.Item>
 
         <Menu.Item key="sourcecv-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/sourcecv-manager`}>
             <AiOutlineLinkedin className="mr-2"/>
-            {!props.hiddenLabel ? <span>Quản lý nguồn CV </span> : null}
+            <span>Quản lý nguồn CV </span>
           </Link>
         </Menu.Item>
 
         <Menu.Item key="statuscv-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/statuscv-manager`}>
             <AiOutlineCheckCircle className="mr-2"/>
-            {!props.hiddenLabel ? <span>Quản lý trạng thái CV </span> : null}
-          </Link>
-        </Menu.Item>
-        `
-        <Menu.Item key="profile-manager" style={{display: 'flex', alignItems: 'center'}}>
-          <Link to={`/profile-manager`}>
-            <ImProfile className="mr-2"/>
-            {!props.hiddenLabel ? <span>Quản lý thông tin CV </span> : null}
+            <span>Quản lý trạng thái CV </span>
           </Link>
         </Menu.Item>
 
         <Menu.Item key="blacklist-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/blacklist-manager`}>
             <IoIosListBox className="mr-2"/>
-            {!props.hiddenLabel ? <span>Quản lý Blacklist </span> : null}
+            <span>Quản lý Blacklist </span>
           </Link>
         </Menu.Item>
 
         <Menu.Item key="talent-pool-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/talent-pool-manager`}>
             <MdOutlineSource className="mr-2"/>
-            {!props.hiddenLabel ? <span>Quản lý Talent Pool </span> : null}
+            <span>Quản lý Talent Pool </span>
           </Link>
         </Menu.Item>
 

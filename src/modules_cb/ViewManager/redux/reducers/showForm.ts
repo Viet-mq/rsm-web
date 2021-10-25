@@ -1,6 +1,6 @@
 import {FrontendViewEntity} from "../../types";
 import * as Actions from "../actions";
-import {VIEW_FRONT_END_SHOW_ADD_ACTION_FORM, ViewShowFormAction} from "../actions";
+import {ViewShowFormAction} from "../actions";
 
 export interface ViewShowFormState {
   show_create?: boolean,
@@ -15,7 +15,13 @@ const initState: ViewShowFormState = {
   show_add_action: false
 }
 
-export default (state = initState, {type, show_create, show_update, show_add_action, view}: ViewShowFormAction): ViewShowFormState => {
+export default (state = initState, {
+  type,
+  show_create,
+  show_update,
+  show_add_action,
+  view
+}: ViewShowFormAction): ViewShowFormState => {
   switch (type) {
     case Actions.VIEW_FRONT_END_SHOW_CREATE_FORM:
       return {

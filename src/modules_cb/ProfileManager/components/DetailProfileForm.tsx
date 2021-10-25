@@ -1,18 +1,29 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {
+  createNote,
+  deleteNote,
   getActivityLogs,
   showFormBooking,
   showFormDetail,
   showFormUpdate,
   showFormUpdateDetail,
-  showFormUploadCV
+  showFormUploadCV,
+  updateNote
 } from "../redux/actions";
-import {Avatar, Button, Icon, Pagination, Select, Timeline} from "antd";
+import {showFormCreateNote, showFormUpdateNote} from "../../ProfileManager/redux/actions/note/showNote";
+
+import {Avatar, Button, Icon, Pagination, Popconfirm, Table, Timeline} from "antd";
 import React, {useEffect, useState} from "react";
-import {DataShowBooking, DetailCV, ProfileEntity} from "../types";
+import {DataShowBooking, DeleteNoteRequest, DetailCV, NoteEntity, ProfileEntity} from "../types";
 import moment from "moment";
-import env from "../../../configs/env";
+import {ColumnProps} from "antd/lib/table";
+import {emptyText} from "../../../configs/locales";
+import Loading from "../../../components/Loading";
+import CreateNoteForm from "./CreateNoteForm";
+import UpdateNoteForm from "./UpdateNoteForm";
+import {RiFullscreenExitLine, RiFullscreenLine} from "react-icons/all";
+import {downloadCVNote} from "../redux/services/apis";
 
 const mapStateToProps = (state: RootState) => ({
   showForm: state.profileManager.showForm,
@@ -20,6 +31,9 @@ const mapStateToProps = (state: RootState) => ({
   activityLogs: state.profileManager.getActivity,
   booking: state.profileManager.getBooking,
   account: state.accountManager.list,
+  note: state.profileManager.getListNote,
+  createNote: state.profileManager.createNote,
+  updateNote: state.profileManager.updateNote
 })
 
 const connector = connect(mapStateToProps,
@@ -29,7 +43,12 @@ const connector = connect(mapStateToProps,
     showFormUpdate,
     showFormUpdateDetail,
     showFormUploadCV,
-    showFormBooking
+    showFormBooking,
+    deleteNote,
+    updateNote,
+    createNote,
+    showFormCreateNote,
+    showFormUpdateNote
   });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -40,6 +59,8 @@ interface DetailProfileFormProps extends ReduxProps {
 function DetailProfileForm(props: DetailProfileFormProps) {
   const [page, setPage] = useState(1);
   const size = 10;
+  const [isFull, setIsFull] = useState<boolean>(false);
+  const [dataDetailMatch,setDataDetailMatch]=useState<ProfileEntity|any>({});
   const [activeLogs, setActiveLogs] = useState({
     params: '',
     data: [],
@@ -48,7 +69,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     minIndex: 0,
     maxIndex: 0
   })
-  const [icon, setIcon] = useState([
+  const icon = [
     {
       type: "select",
       iconType: 'eye',
@@ -71,7 +92,108 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       twoToneColor: '#ff3b3b'
 
     },
-  ])
+  ]
+
+  const handleDeleteNote = (event: any, entity: NoteEntity) => {
+    event.stopPropagation();
+    let req: DeleteNoteRequest = {
+      id: entity.id
+    }
+    props.deleteNote(req);
+
+  }
+
+  const handleEditNote = (event: any, entity: NoteEntity) => {
+    event.stopPropagation();
+    // console.log("handleEditNote:",entity)
+    props.showFormUpdateNote(true, entity);
+  }
+
+  function handleCreateNote(event: any) {
+    event.stopPropagation();
+    props.showFormCreateNote(true, dataDetailMatch.id);
+  }
+
+  const columns: ColumnProps<NoteEntity>[] = [
+    {
+      title: "Người phỏng vấn",
+      dataIndex: "fullName",
+      width: 100,
+      key: '1'
+    },
+    {
+      title: "Nhận xét",
+      dataIndex: "comment",
+      width: 200,
+      key: 2,
+    },
+    {
+      title: "Đánh giá",
+      dataIndex: "evaluation",
+      width: 100,
+      key: 3,
+    },
+    {
+      title: "Đính kèm",
+      dataIndex: "fileName",
+      width: 100,
+      key: 4,
+      render: (text: string, record: NoteEntity) => <a onClick={()=>downloadCVNote(record.fileName)}>{text}</a>,
+
+    },
+    {
+      title: "Thời gian sửa",
+      dataIndex: "createAt",
+      width: 100,
+      key: 5,
+    },
+    {
+      title: "Người sửa",
+      dataIndex: "createBy",
+      width: 100,
+      key: 6,
+    },
+    {
+      title: () => {
+        return <div style={{whiteSpace: 'nowrap'}}>Thao tác</div>;
+      },
+      dataIndex: 'action',
+      width: 100,
+      fixed: 'right',
+      render: (_text: string, record: NoteEntity) => {
+        return (
+          <div style={{whiteSpace: 'nowrap'}}>
+            <Popconfirm
+              title="Bạn muốn xóa Profile này chứ ?"
+              okText="Xóa"
+              onCancel={event => {
+                event?.stopPropagation();
+              }}
+              onConfirm={event => handleDeleteNote(event, record)}
+            >
+              <Button
+                size="small"
+                className="ant-btn ml-1 mr-1 ant-btn-sm"
+                onClick={event => {
+                  event.stopPropagation();
+                }}
+              >
+                <Icon type="delete" theme="filled"/>
+              </Button>
+            </Popconfirm>
+
+            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
+                    onClick={event => handleEditNote(event, record)}
+            >
+              <Icon type="edit"/>
+            </Button>
+
+          </div>
+        );
+      },
+    },
+
+  ]
 
   useEffect(() => {
     setActiveLogs({
@@ -96,16 +218,30 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     }
     props.showFormDetail(req);
   }
+  const handleFullScreen = (e: any) => {
+    e.preventDefault();
+    setIsFull(!isFull);
+    if (e?.target) {
+      e.target.disabled = true;
+      e.target.disabled = false;
+    }
+    let req: DetailCV = isFull ?
+      {
+        show_detail: false,
+        general: 12,
+        detail: 12
+
+      } : {
+        show_detail: false,
+        general: 0,
+        detail: 24
+      }
+    props.showFormDetail(req);
+  }
 
 
   function unixTimeToDate(unixTime: number): Date {
     return new Date(unixTime);
-  }
-
-  const dateFormat = 'DD/MM/YYYY';
-
-  function onChange() {
-
   }
 
   function handleChangeActivityLogs(page: any) {
@@ -139,212 +275,241 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     }
     props.showFormBooking(true, req);
   }
-  var dataDetailMatch: ProfileEntity | any;
-  if (props.detail.result && props.showForm.data_detail) {
-    dataDetailMatch = props.showForm.data_detail.find((item: any) => props.detail.result?.id === item.id)
-  }
+
+  useEffect(()=>{
+    if (props.detail.result && props.showForm.data_detail) {
+      setDataDetailMatch(props.showForm.data_detail.find((item: any) => props.detail.result?.id === item.id));
+    }
+  },[props.detail.result && props.showForm.data_detail])
 
   return (
-    <div className="detail-container">
-      <div className="detail-title">
-        <div className="detail-title__left">
-          <h1>{dataDetailMatch?.fullName}</h1>
-          <span>Java Candidate Profile</span>
-        </div>
+    <>
+      <div className="detail-container">
+        <div className="detail-title">
+          <div className="detail-title__left">
+            <h1>{dataDetailMatch?.fullName}</h1>
+            <span>Java Candidate Profile</span>
+          </div>
 
-        <div className="detail-title__right">
-          <Button size="small" className="ant-btn ant-btn-sm">
-            Tạo ứng tuyển
-          </Button>
-          <Button size="small" className="ant-btn mr-1 ant-btn-sm"
-                  onClick={event => onBtnUpdateDetail(event)}>
-            <Icon type="edit"/>
-          </Button>
-          <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
-                  onClick={handeClose}
-          >
-            <Icon type="close"/>
-          </Button>
-        </div>
-      </div>
+          <div className="detail-title__right">
 
-      <div className="detail-paragraph-1">
-        <Avatar src={require('src/assets/images/profile.png')} size={100} style={{width: "115px"}}/>
-        <div className="detail-paragraph-1__name">
-          <h2>{dataDetailMatch?.fullName}</h2>
-          <Icon type="star" className="ml-1 mr-1"/>
-          <Icon type="star" className="ml-1 mr-1"/>
-          <Icon type="star" className="ml-1 mr-1"/>
-          <Icon type="star" className="ml-1 mr-1"/>
-          <Icon type="star" className="ml-1 mr-1"/>
-          <span>0.0/5</span>
-          <span>0</span>
-          <p>evaluations </p>
-          <br/>
-          <p>No title</p>
-          <p>{dataDetailMatch?.phoneNumber}</p>
-          <p>{dataDetailMatch?.email}</p>
-        </div>
-      </div>
-
-      <div className="detail-paragraph-2">
-        <div className="detail-paragraph-2__title">
-          <h1>Thông tin hồ sơ</h1>
-        </div>
-
-        <div className="detail-paragraph-2__content">
-          <Icon type="mail" className='mr-1'/>
-          <span>{dataDetailMatch?.email}</span><br/>
-          <Icon type="phone" className='mr-1'/>
-          <span>{dataDetailMatch?.phoneNumber}</span><br/>
-          <Icon type="contacts" className='mr-1'/>
-          <span>{dataDetailMatch?.hometown || "Không có địa chỉ"}</span><br/>
-          <h1>Social profiles</h1>
-        </div>
-
-        <div className="detail-paragraph-2__footer">
-          <a>Tìm ứng viên trên facebook</a>
-          <a>Tìm theo email</a>
-        </div>
-      </div>
-
-      <div className="detail-paragraph-3">
-        <div className="detail-paragraph-3__title">
-          <h1>Lịch phỏng vấn</h1>
-          <div className="detail-paragraph-3__title--button">
             <Button size="small" className="ant-btn mr-1 ant-btn-sm"
-                    onClick={event => onBtnUpdateBooking(event)}
-            >
+                    onClick={event => handleFullScreen(event)}>
+              {isFull ? <RiFullscreenExitLine className="mt-1"/> : <RiFullscreenLine className="mt-1"/>}
+            </Button>
+            <Button size="small" className="ant-btn mr-1 ant-btn-sm"
+                    onClick={event => onBtnUpdateDetail(event)}>
               <Icon type="edit"/>
             </Button>
-          </div>
-        </div>
-        <div className="detail-paragraph-3__content">
-          <div>
-            <Icon type="environment" className="mr-2"/>
-            <span>Địa chỉ phỏng vấn: {props.booking.result?.address}</span>
-          </div>
-
-          <div>
-            <Icon type="team" className="mr-2"/>
-            <span>Hội đồng tuyển dụng:</span>
-            <ul>
-              {props.account.rows?.filter((item: any) => props.booking.result?.interviewer.includes(item.username))
-                .map((item: any, index: any) => {
-                  return <li key={index}>
-                    {item.fullName}
-                  </li>
-                })}
-            </ul>
-          </div>
-
-          <div>
-            <Icon type="calendar" className="mr-2"/>
-            <span>Thời gian phỏng vấn: {props.booking.result ? moment(unixTimeToDate(props.booking.result?.time)).format('HH:mm DD/MM/YYYY') : ''} </span>
-          </div>
-
-          <h1>Trạng thái phỏng vấn</h1>
-          <div>
-            <Icon type="audit" className="mr-2"/>
-            <span>Nội dung phỏng vấn: {props.booking.result?.content}</span>
-          </div>
-
-          <div>
-            <Icon type="question-circle" className="mr-2"/>
-            <span>Câu hỏi: {props.booking.result?.question}</span>
-          </div>
-
-          <div>
-            <Icon type="edit" className="mr-2"/>
-            <span>Nhận xét: {props.booking.result?.comments}</span>
-          </div>
-
-          <div>
-            <Icon type="like" className="mr-2"/>
-            <span>Đánh giá: {props.booking.result?.evaluation}</span>
-          </div>
-
-          <div>
-            <Icon type="check-circle" className="mr-2"/>
-            <span>Lý do: {props.booking.result?.reason}</span>
-          </div>
-
-
-        </div>
-      </div>
-
-      <div className="detail-paragraph-4">
-        <div className="detail-paragraph-4__title">
-          <h1>Resumes & CVS</h1>
-          <div className="detail-paragraph-4__title--button">
-
-            <Button size="small" className="ant-btn mr-1 ant-btn-sm"
-                    onClick={event => onBtnUploadCV(event)}
+            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
+                    onClick={handeClose}
             >
-              <Icon type="upload"/>
+              <Icon type="close"/>
             </Button>
+
           </div>
         </div>
 
-        <div className="detail-paragraph-4__content">
-          <iframe
-            src={`http://file-rs.edsolabs.com/${dataDetailMatch?.cv}`}
-            title="CV"
-            width="100%"
-            height="700px"
-          >
-          </iframe>
+        <div className="detail-paragraph-1">
+          <Avatar src={require('src/assets/images/profile.png')} size={100} style={{width: "115px"}}/>
+          <div className="detail-paragraph-1__name">
+            <h2>{dataDetailMatch?.fullName}</h2>
+            <Icon type="star" className="ml-1 mr-1"/>
+            <Icon type="star" className="ml-1 mr-1"/>
+            <Icon type="star" className="ml-1 mr-1"/>
+            <Icon type="star" className="ml-1 mr-1"/>
+            <Icon type="star" className="ml-1 mr-1"/>
+            <span>0.0/5</span>
+            <span>0</span>
+            <p>evaluations </p>
+            <br/>
+            <p>No title</p>
+            <p>{dataDetailMatch?.phoneNumber}</p>
+            <p>{dataDetailMatch?.email}</p>
+          </div>
         </div>
 
-      </div>
+        <div className="detail-paragraph-2">
+          <div className="detail-paragraph-2__title">
+            <h1>Thông tin hồ sơ</h1>
+          </div>
 
-      <div className="detail-paragraph-5">
-        <div className="detail-paragraph-5__title">
-          <h1>Activity logs</h1>
+          <div className="detail-paragraph-2__content">
+            <Icon type="mail" className='mr-1'/>
+            <span>{dataDetailMatch?.email}</span><br/>
+            <Icon type="phone" className='mr-1'/>
+            <span>{dataDetailMatch?.phoneNumber}</span><br/>
+            <Icon type="contacts" className='mr-1'/>
+            <span>{dataDetailMatch?.hometown || "Không có địa chỉ"}</span><br/>
+            <h1>Social profiles</h1>
+          </div>
+
+          <div className="detail-paragraph-2__footer">
+            <a>Tìm ứng viên trên facebook</a>
+            <a>Tìm theo email</a>
+          </div>
         </div>
 
-        <div className='detail-paragraph-5__content'>
-          <Timeline style={{padding: '15px'}}>
-            {activeLogs.data?.reverse().map((item: any, index: any) => {
-              let iconType = icon.find((icon: any) => icon.type === item.type);
-              return index >= activeLogs.minIndex &&
-                index < activeLogs.maxIndex &&
-                <Timeline.Item key={index} dot={
-                  <Icon type={iconType?.iconType} theme="twoTone" twoToneColor={iconType?.twoToneColor} style={{
-                    borderRadius: '50%',
-                    backgroundColor: iconType?.twoToneColor,
-                    width: '40px',
-                    height: '40px',
-                    paddingTop: '10px',
-                    fontSize: '20px',
-                    // marginTop:'10px'
-                  }}/>
+        <div className="detail-paragraph-3">
+          <div className="detail-paragraph-3__title">
+            <h1>Lịch phỏng vấn</h1>
+            <div className="detail-paragraph-3__title--button">
+              <Button size="small" className="ant-btn mr-1 ant-btn-sm"
+                      onClick={event => onBtnUpdateBooking(event)}
+              >
+                <Icon type="edit"/>
+              </Button>
+            </div>
+          </div>
+          <div className="detail-paragraph-3__content">
+            <div>
+              <Icon type="environment" className="mr-2"/>
+              <span>Địa chỉ phỏng vấn: {props.booking.result?.address}</span>
+            </div>
 
-                }>
+            <div>
+              <Icon type="team" className="mr-2"/>
+              <span>Hội đồng tuyển dụng:</span>
+              <ul>
+                {props.account.rows?.filter((item: any) => props.booking.result?.interviewer.includes(item.username))
+                  .map((item: any, index: any) => {
+                    return <li key={index}>
+                      {item.fullName}
+                    </li>
+                  })}
+              </ul>
+            </div>
+
+            <div>
+              <Icon type="calendar" className="mr-2"/>
+              <span>Thời gian phỏng vấn: {props.booking.result ? moment(unixTimeToDate(props.booking.result?.time)).format('HH:mm DD/MM/YYYY') : ''} </span>
+            </div>
+            <div style={{display: "flex", justifyContent: "space-between"}}>
+              <h1>Trạng thái phỏng vấn</h1>
+              <Button size="small" className="ant-btn mr-1 ant-btn-sm"
+                      style={{margin: "auto"}}
+                      onClick={event => handleCreateNote(event)}>
+                <Icon type="plus"/> Tạo đánh giá
+              </Button>
+            </div>
+
+            <div>
+              <Icon type="audit" className="mr-2"/>
+              <span>Nội dung phỏng vấn: {props.booking.result?.content}</span>
+            </div>
+
+            <div>
+              <Icon type="question-circle" className="mr-2"/>
+              <span>Câu hỏi: {props.booking.result?.question}</span>
+            </div>
+
+            <Table
+              scroll={{x: 1000}}
+              className="custom-table -webkit-scrollbar"
+              dataSource={props.note.result?.rows}
+              columns={columns}
+              rowKey="id"
+              locale={{emptyText: emptyText}}
+              pagination={{
+                current: page,
+                pageSize: size,
+                total: props.note.result?.total,
+                onChange: value => setPage(value),
+                showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,
+              }}
+
+            />
+
+            <div>
+              <Icon type="check-circle" className="mr-2"/>
+              <span>Lý do: {props.booking.result?.reason}</span>
+            </div>
+
+
+          </div>
+        </div>
+
+        <div className="detail-paragraph-4">
+          <div className="detail-paragraph-4__title">
+            <h1>Resumes & CVS</h1>
+            <div className="detail-paragraph-4__title--button">
+
+              <Button size="small" className="ant-btn mr-1 ant-btn-sm"
+                      onClick={event => onBtnUploadCV(event)}
+              >
+                <Icon type="upload"/>
+              </Button>
+            </div>
+          </div>
+
+          <div className="detail-paragraph-4__content">
+            <iframe
+              src={`http://file-rs.edsolabs.com/${dataDetailMatch?.cv}`}
+              title="CV"
+              width="100%"
+              height="700px"
+            >
+            </iframe>
+          </div>
+
+        </div>
+
+        <div className="detail-paragraph-5">
+          <div className="detail-paragraph-5__title">
+            <h1>Activity logs</h1>
+          </div>
+
+          <div className='detail-paragraph-5__content'>
+            <Timeline style={{padding: '15px'}}>
+              {activeLogs.data?.reverse().map((item: any, index: any) => {
+                let iconType = icon.find((icon: any) => icon.type === item.type);
+                return index >= activeLogs.minIndex &&
+                  index < activeLogs.maxIndex &&
+                  <Timeline.Item key={index} dot={
+                    <Icon type={iconType?.iconType} theme="twoTone" twoToneColor={iconType?.twoToneColor} style={{
+                      borderRadius: '50%',
+                      backgroundColor: iconType?.twoToneColor,
+                      width: '40px',
+                      height: '40px',
+                      paddingTop: '10px',
+                      fontSize: '20px',
+                      // marginTop:'10px'
+                    }}/>
+
+                  }>
                 <span
                   style={{textTransform: 'uppercase'}}>{moment(unixTimeToDate(item.time)).format('MMM DD, YYYY')}
                 </span>
-                  <br/>
-                  <span>
+                    <br/>
+                    <span>
                     {item.fullName} {item.action} at {moment(unixTimeToDate(item.time)).format('HH:mm DD/MM/YYYY')}
                   </span>
-                </Timeline.Item>
-            })}
+                  </Timeline.Item>
+              })}
 
-          </Timeline>
+            </Timeline>
 
-          <Pagination showQuickJumper
-                      current={activeLogs.current}
-                      total={activeLogs.totalPage}
-                      pageSize={size}
-                      showTotal={(total, range) => `Đang xem ${range[0]}- ${range[1]} trong tổng số ${total} mục`}
-                      onChange={handleChangeActivityLogs}
-                      className="pagination"
-          ></Pagination>
+            <Pagination showQuickJumper
+                        current={activeLogs.current}
+                        total={activeLogs.totalPage}
+                        pageSize={size}
+                        showTotal={(total, range) => `Đang xem ${range[0]}- ${range[1]} trong tổng số ${total} mục`}
+                        onChange={handleChangeActivityLogs}
+                        className="pagination"
+            ></Pagination>
+          </div>
         </div>
+
       </div>
 
-    </div>
+      <CreateNoteForm/>
+      <UpdateNoteForm/>
+
+      {props.createNote.loading ||
+      props.updateNote.loading
+        ? <Loading/> : null}
+
+    </>
   )
 }
 

@@ -35,7 +35,7 @@ export interface RootState {
   blacklistManager: BlacklistManagerModuleState,
   profileManager: ProfileManagerModuleState,
   viewGroupManager:ViewGroupManagerModuleState,
-  groupAPIManager:GroupAPIModuleState
+  groupAPIManager:GroupAPIModuleState,
 }
 
 export default combineReducers<RootState>({

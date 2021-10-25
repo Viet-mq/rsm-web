@@ -8,7 +8,7 @@ import {
 } from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, DatePicker, Form, Icon, Input, Modal, Select} from "antd";
-import React, {FormEvent, useEffect, useState} from "react";
+import React, {FormEvent, useEffect} from "react";
 import {DetailCV, UpdateDetailRequest} from "../types";
 import {getListJob, showFormCreate as showJobFormCreate} from "../../JobManager/redux/actions";
 import {getListJobLevel, showFormCreate as showJobLevelFormCreate} from "../../JobLevelManager/redux/actions";
@@ -58,7 +58,6 @@ interface UpdateProfileFormProps extends FormComponentProps, ReduxProps {
 
 function UpdateProfileForm(props: UpdateProfileFormProps) {
   const {getFieldDecorator, resetFields} = props.form;
-  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
   const formItemLayout = {
     labelCol: {
@@ -104,7 +103,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           note: values.note,
           tags: values.tags
         }
-        // console.log("UpdateProfile:",req)
         props.updateDetail(req);
         return;
       }
@@ -113,7 +111,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
 
   function onBtnCancelClicked() {
     resetFields();
-    setCompensatoryDataSource([]);
     props.showFormUpdateDetail(false);
     let req: DetailCV = {
       show_detail: true,
@@ -173,11 +170,9 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
         width="550px"
         afterClose={() => {
           resetFields();
-          setCompensatoryDataSource([]);
         }}
         onCancel={() => {
           resetFields();
-          setCompensatoryDataSource([]);
           props.showFormUpdateDetail(false);
           let req: DetailCV = {
             show_detail: true,

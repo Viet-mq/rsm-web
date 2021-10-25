@@ -1,12 +1,7 @@
 import {AppError, ResponseBase2} from "src/models/common";
 import * as Actions from "../../actions";
+import {RemoveActionViewAction} from "../../actions";
 import {ActionViewRequest} from "../../../types";
-import {
-  REMOVE_ACTION_VIEW,
-  REMOVE_ACTION_VIEW_ERROR,
-  REMOVE_ACTION_VIEW_SUCCESS,
-  RemoveActionViewAction
-} from "../../actions";
 
 export interface RemoveActionViewState {
   loading: boolean,

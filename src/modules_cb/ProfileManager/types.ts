@@ -61,7 +61,7 @@ export interface DeleteProfileRequest {
 }
 
 export interface UploadCVRequest {
-  profileId: string|any,
+  profileId: string | any,
   file: any,
 }
 
@@ -76,8 +76,8 @@ export interface DetailCV {
 }
 
 export interface BookingEntity {
-  id: string|any,
-  idProfile: string|any,
+  id: string | any,
+  idProfile: string | any,
   time: number,
   address: string,
   form: string,
@@ -116,9 +116,9 @@ export interface UpdateDetailRequest {
   tags: string
 }
 
-export interface DetailProfileEntity   {
-  id: string|any,
-  fullName: string|any,
+export interface DetailProfileEntity {
+  id: string | any,
+  fullName: string | any,
   gender: string,
   phoneNumber: string,
   email: string,
@@ -147,7 +147,7 @@ export interface DetailProfileEntity   {
 }
 
 export interface CreateBookingRequest {
-  idProfile: string|any,
+  idProfile: string | any,
   time: number,
   address: string,
   form: string,
@@ -181,10 +181,11 @@ export interface UpdateBookingRequest {
   timeFinish: number
 }
 
-export interface DataShowBooking{
-  id:string,
-  fullName:string
+export interface DataShowBooking {
+  id: string,
+  fullName: string
 }
+
 export interface ActivityLogsEntity {
   id: string,
   idProfile: string,
@@ -193,4 +194,35 @@ export interface ActivityLogsEntity {
   type: string,
   username: string,
   fullName: string
+}
+
+export interface NoteEntity {
+  id: string | any,
+  idProfile: string,
+  username: string,
+  fullName: string,
+  comment: string,
+  evaluation: string,
+  fileName?: any,
+  path: string
+}
+
+export interface UpdateNoteRequest {
+  id: string,
+  username: string,
+  comment: string,
+  evaluation: string,
+  file?: any,
+}
+
+export interface CreateNoteRequest {
+  idProfile: string,
+  username: string,
+  comment: string,
+  evaluation: string,
+  file?: any,
+}
+
+export interface DeleteNoteRequest {
+  id: string,
 }

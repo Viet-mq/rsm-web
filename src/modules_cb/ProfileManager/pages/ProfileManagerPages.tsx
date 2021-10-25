@@ -16,6 +16,7 @@ import UpdateProfileForm from "../components/UpdateProfileForm";
 import UploadCVForm from "../components/UploadCVForm";
 import BookingForm from "../components/BookingForm";
 import UpdateDetailProfileForm from "../components/UpdateDetailProfileForm";
+import env from 'src/configs/env';
 
 const mapStateToProps = ({
                            profileManager: {
@@ -92,12 +93,16 @@ function ProfileManagerPages(props: IProps) {
           </Col>
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
-              <div>
+              <div style={{display:"flex",flexWrap:"nowrap"}}>
                 <Button onClick={handleCreate}>
                   <Icon type="plus"/> Tạo Profile
                 </Button>
                 <Button onClick={event => handleUploadListCV(event)}>
                   <Icon type="upload"/> Upload List CV
+                </Button>
+                <Button >
+                  {/*<a href="http://18.139.222.137:35000/api-svc/excel/export"><Icon type="upload"/> Xuất Excel</a>*/}
+                  <a href={`${env.apiUri}/api-svc/excel/export`}><Icon type="upload"/> Xuất Excel</a>
                 </Button>
               </div>
             </div>

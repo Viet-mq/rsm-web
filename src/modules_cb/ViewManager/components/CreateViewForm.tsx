@@ -18,7 +18,6 @@ function CreateViewForm(props: CreateViewFormProps) {
 
   const [show, setShow] = useState<boolean>(true);
   const {getFieldDecorator, resetFields} = props.form;
-  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
 
   const formItemLayout = {
@@ -52,7 +51,6 @@ function CreateViewForm(props: CreateViewFormProps) {
 
   function onBtnCancelClicked() {
     resetFields();
-    setCompensatoryDataSource([]);
     props.showFrontEndViewCreateForm(false);
   }
 
@@ -71,11 +69,9 @@ function CreateViewForm(props: CreateViewFormProps) {
       width="550px"
       afterClose={() => {
         resetFields();
-        setCompensatoryDataSource([]);
       }}
       onCancel={() => {
         resetFields();
-        setCompensatoryDataSource([]);
         props.showFrontEndViewCreateForm(false);
       }}
       footer={""}>

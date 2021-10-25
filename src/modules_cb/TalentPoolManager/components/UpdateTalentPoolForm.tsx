@@ -3,7 +3,7 @@ import {connect, ConnectedProps} from "react-redux";
 import {showFormUpdate, updateTalentPool} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Input, InputNumber, Modal, Select} from "antd";
-import React, {FormEvent, useEffect, useState} from "react";
+import React, {FormEvent, useEffect} from "react";
 import {UpdateTalentPoolRequest} from "../types";
 import {getListAccount} from "../../AccountManager/redux/actions";
 
@@ -28,7 +28,6 @@ interface UpdateTalentPoolFormProps extends FormComponentProps, ReduxProps {
 function UpdateTalentPoolForm(props: UpdateTalentPoolFormProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
-  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
   const formItemLayout = {
     labelCol: {
@@ -66,7 +65,6 @@ function UpdateTalentPoolForm(props: UpdateTalentPoolFormProps) {
 
   function onBtnCancelClicked() {
     resetFields();
-    setCompensatoryDataSource([]);
     props.showFormUpdate(false);
   }
 
@@ -81,11 +79,9 @@ function UpdateTalentPoolForm(props: UpdateTalentPoolFormProps) {
       width="550px"
       afterClose={() => {
         resetFields();
-        setCompensatoryDataSource([]);
       }}
       onCancel={() => {
         resetFields();
-        setCompensatoryDataSource([]);
         props.showFormUpdate(false);
       }}
       footer={""}>
@@ -120,7 +116,7 @@ function UpdateTalentPoolForm(props: UpdateTalentPoolFormProps) {
                     mode="multiple"
                     placeholder="Vui lòng chọn người quản lý"
             >
-              {props.listAccountState.rows?.map((item: any,index:any) => (
+              {props.listAccountState.rows?.map((item: any, index: any) => (
                 <Option key={index} value={item.username}>{item.fullName}</Option>
               ))}
             </Select>

@@ -10,7 +10,6 @@ import {put, select} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
 import {AppError} from "src/models/common";
 import {RootState} from "src/redux/reducers";
-import {DetailCV} from "../../../types";
 
 export function* updateProfileAsync(action: UpdateProfileAction) {
   try {

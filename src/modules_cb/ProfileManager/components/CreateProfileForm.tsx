@@ -2,14 +2,13 @@ import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, DatePicker, Form, Icon, Input, Modal, Select} from "antd";
-import React, {FormEvent, useEffect, useState} from "react";
+import React, {FormEvent, useEffect} from "react";
 import {createProfile, getActivityLogs, showFormCreate} from "../redux/actions";
 import {CreateProfileRequest} from "../types";
 import {getListJob, showFormCreate as showJobFormCreate} from "../../JobManager/redux/actions";
 import {getListJobLevel, showFormCreate as showJobLevelFormCreate} from "../../JobLevelManager/redux/actions";
 import {getListSchool, showFormCreate as showSchoolFormCreate} from "../../SchoolManager/redux/actions";
 import {getListSourceCV, showFormCreate as showSourceCVFormCreate} from "../../SourceCVManager/redux/actions";
-// import {getListStatusCV,showFormCreate as showStatusCVFormCreate } from "../../StatusCVManager/redux/actions";
 import CreateJobForm from "../../JobManager/components/CreateJobForm";
 import CreateJobLevelForm from "../../JobLevelManager/components/CreateJobLevelForm";
 import CreateSourceCVForm from "../../SourceCVManager/components/CreateSourceCVForm";
@@ -26,12 +25,10 @@ const mapStateToProps = (state: RootState) => ({
   listJobLevel: state.joblevelManager.list,
   listSchool: state.schoolManager.list,
   listSourceCV: state.sourcecvManager.list,
-  // listStatusCV:state.statuscvManager.list,
   createJob: state.jobManager.create,
   createJobLevel: state.joblevelManager.create,
   createSchool: state.schoolManager.create,
   createSourceCV: state.sourcecvManager.create,
-  // createStatusCV:state.statuscvManager.create
 
 })
 
@@ -43,13 +40,11 @@ const connector = connect(mapStateToProps,
     getListJobLevel,
     getListSchool,
     getListSourceCV,
-    // getListStatusCV,
     showJobFormCreate,
     showJobLevelFormCreate,
     showSchoolFormCreate,
     showSourceCVFormCreate,
     getActivityLogs
-    // showStatusCVFormCreate,
   });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -60,7 +55,6 @@ interface CreateProfileFormProps extends FormComponentProps, ReduxProps {
 function CreateProfileForm(props: CreateProfileFormProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
-  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
 
   const formItemLayout = {
@@ -79,7 +73,6 @@ function CreateProfileForm(props: CreateProfileFormProps) {
     props.getListJobLevel({page: 1, size: 100});
     props.getListSchool({page: 1, size: 100});
     props.getListSourceCV({page: 1, size: 100});
-    // props.getListStatusCV({page: 1, size: 100});
   }, [])
 
   function onBtnCreateClicked(e: FormEvent) {
@@ -91,8 +84,8 @@ function CreateProfileForm(props: CreateProfileFormProps) {
         let req: CreateProfileRequest = {
           cv: values.cv,
           cvType: values.cvType,
-          dateOfApply: values.dateOfApply*1,
-          dateOfBirth: values.dateOfBirth*1,
+          dateOfApply: values.dateOfApply * 1,
+          dateOfBirth: values.dateOfBirth * 1,
           email: values.email,
           fullName: values.fullName,
           hometown: values.hometown,
@@ -112,7 +105,6 @@ function CreateProfileForm(props: CreateProfileFormProps) {
 
   function onBtnCancelClicked() {
     resetFields();
-    setCompensatoryDataSource([]);
     props.showFormCreate(false);
   }
 
@@ -174,11 +166,9 @@ function CreateProfileForm(props: CreateProfileFormProps) {
         width="550px"
         afterClose={() => {
           resetFields();
-          setCompensatoryDataSource([]);
         }}
         onCancel={() => {
           resetFields();
-          setCompensatoryDataSource([]);
           props.showFormCreate(false);
         }}
         footer={""}>
@@ -209,7 +199,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                 },
               ],
             })(
-              <DatePicker format={dateFormat} style={{width:"100%"}}/>
+              <DatePicker format={dateFormat} style={{width: "100%"}}/>
             )}
           </Form.Item>
 
@@ -426,7 +416,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                 },
               ],
             })(
-              <DatePicker format={dateFormat} style={{width:"100%"}}/>
+              <DatePicker format={dateFormat} style={{width: "100%"}}/>
             )}
           </Form.Item>
 

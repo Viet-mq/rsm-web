@@ -1,8 +1,6 @@
 import React, {useEffect} from 'react';
 import {connect, ConnectedProps} from 'react-redux';
-// import styled from 'styled-components';
 import {RootState} from 'src/redux/reducers';
-// import {Row} from 'antd';
 import env from "../../configs/env";
 
 const mapStateToProps = (rootState: RootState) => ({

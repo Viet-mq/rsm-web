@@ -45,6 +45,8 @@
 }
 .detail-title__right {
   position: relative;
+  display: flex;
+  justify-content: right;
   text-align: right;
   padding: 10px;
   width: calc(100% - 139.7px);

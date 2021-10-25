@@ -1,8 +1,8 @@
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Checkbox, Form, Input, Modal} from "antd";
-import React, {FormEvent, useState} from "react";
+import {Button, Form, Input, Modal} from "antd";
+import React, {FormEvent} from "react";
 import {createStatusCV, showFormCreate} from "../redux/actions";
 import {CreateStatusCVRequest} from "../types";
 
@@ -17,7 +17,6 @@ interface CreateStatusCVFormProps extends FormComponentProps, ReduxProps {
 function CreateStatusCVForm(props: CreateStatusCVFormProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
-  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
 
   const formItemLayout = {
@@ -48,7 +47,6 @@ function CreateStatusCVForm(props: CreateStatusCVFormProps) {
 
   function onBtnCancelClicked() {
     resetFields();
-    setCompensatoryDataSource([]);
     props.showFormCreate(false);
   }
 
@@ -64,11 +62,9 @@ function CreateStatusCVForm(props: CreateStatusCVFormProps) {
       width="550px"
       afterClose={() => {
         resetFields();
-        setCompensatoryDataSource([]);
       }}
       onCancel={() => {
         resetFields();
-        setCompensatoryDataSource([]);
         props.showFormCreate(false);
       }}
       footer={""}>

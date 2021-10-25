@@ -15,12 +15,13 @@ import {
 import {getListApiRole} from "../../APIManager/redux/actions";
 import {CreateGroupAPIRequest} from "../types";
 
-const CheckboxGroup=Checkbox.Group;
+const CheckboxGroup = Checkbox.Group;
 const mapStateToProps = (state: RootState) => ({
-  groupAPIManager:state.groupAPIManager,
-  listApiState:state.apiManager.list
+  groupAPIManager: state.groupAPIManager,
+  listApiState: state.apiManager.list
 });
-const connector = connect(mapStateToProps, { showCreateGroupAPIForm,
+const connector = connect(mapStateToProps, {
+  showCreateGroupAPIForm,
   showUpdateGroupAPIForm,
   showAssignUserForm,
   showAddAPIForm,
@@ -37,21 +38,19 @@ interface CreateViewFormProps extends FormComponentProps, ReduxProps {
 
 function CreateGroupAPIForm(props: CreateViewFormProps) {
 
-  const [show, setShow] = useState<boolean>(true);
   const {getFieldDecorator, resetFields} = props.form;
-  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
 
-  const [listApi,setListApi]= useState<any>({
-    api:[
+  const [listApi, setListApi] = useState<any>({
+    api: [
       {
         id: '',
         path: '',
-        method:'',
-        name:''
+        method: '',
+        name: ''
       }
     ],
-    checkedList:[],
+    checkedList: [],
     indeterminate: false,
     checkAll: false,
   })
@@ -67,25 +66,25 @@ function CreateGroupAPIForm(props: CreateViewFormProps) {
     },
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     props.getListApiRole();
-  },[])
+  }, [])
 
-  const onChange=(value:any)=>{
-    const findApi =props.listApiState.rows?.filter((item:any)=>value.includes(item.name));
+  const onChange = (value: any) => {
+    const findApi = props.listApiState.rows?.filter((item: any) => value.includes(item.name));
 
     setListApi({
-      api:findApi,
-      checkedList:value,
+      api: findApi,
+      checkedList: value,
       indeterminate: !!value.length && value.length < props.listApiState?.total,
       checkAll: value.length === props.listApiState?.total,
     })
 
   }
-  const onCheckAllChange =(e: any)=>{
+  const onCheckAllChange = (e: any) => {
     if (props.listApiState) {
       setListApi({
-        api:props.listApiState.rows,
+        api: props.listApiState.rows,
         checkedList: e.target.checked ? (props.listApiState.rows?.map((item: any) => item.name)) : [],
         indeterminate: false,
         checkAll: e.target.checked,
@@ -94,7 +93,7 @@ function CreateGroupAPIForm(props: CreateViewFormProps) {
 
   }
 
-  const onBtnCreateClicked=(e: FormEvent) =>{
+  const onBtnCreateClicked = (e: FormEvent) => {
 
     e.preventDefault();
     (e.target as any).disabled = true;
@@ -104,32 +103,31 @@ function CreateGroupAPIForm(props: CreateViewFormProps) {
       if (!err) {
         let req: CreateGroupAPIRequest = {
           name: values.name,
-          roleIds: listApi.api?.map((item:any)=>item.id),
+          roleIds: listApi.api?.map((item: any) => item.id),
         }
 
-        console.log("props.createGroupAPI(req):",req)
+        console.log("props.createGroupAPI(req):", req)
         // props.createGroupAPI(req);
         return;
       }
     });
   }
-  const onBtnCancelClicked=()=> {
+  const onBtnCancelClicked = () => {
     resetFields();
     setListApi({
-      api:[
+      api: [
         {
           id: '',
           path: '',
-          method:'',
-          name:''
+          method: '',
+          name: ''
         }
       ],
-      checkedList:[],
+      checkedList: [],
       indeterminate: false,
       checkAll: false,
     })
 
-    setCompensatoryDataSource([]);
     props.showCreateGroupAPIForm(false);
   }
 
@@ -144,11 +142,9 @@ function CreateGroupAPIForm(props: CreateViewFormProps) {
       width="550px"
       afterClose={() => {
         resetFields();
-        setCompensatoryDataSource([]);
       }}
       onCancel={() => {
         resetFields();
-        setCompensatoryDataSource([]);
         props.showCreateGroupAPIForm(false);
       }}
       footer={""}>
@@ -195,7 +191,7 @@ function CreateGroupAPIForm(props: CreateViewFormProps) {
 
         <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px'}} colon={false}>
           <Button className="mr-3 create-btn" htmlType="submit"
-          onClick={onBtnCreateClicked}
+                  onClick={onBtnCreateClicked}
           >
             Tạo mới
           </Button>

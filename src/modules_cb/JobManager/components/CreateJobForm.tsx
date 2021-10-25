@@ -1,8 +1,8 @@
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Checkbox, Form, Input, Modal} from "antd";
-import React, {FormEvent, useState} from "react";
+import {Button, Form, Input, Modal} from "antd";
+import React, {FormEvent} from "react";
 import {createJob, showFormCreate} from "../redux/actions";
 import {CreateJobRequest} from "../types";
 
@@ -17,7 +17,6 @@ interface CreateJobFormProps extends FormComponentProps, ReduxProps {
 function CreateJobForm(props: CreateJobFormProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
-  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
 
   const formItemLayout = {
@@ -48,7 +47,6 @@ function CreateJobForm(props: CreateJobFormProps) {
 
   function onBtnCancelClicked() {
     resetFields();
-    setCompensatoryDataSource([]);
     props.showFormCreate(false);
   }
 
@@ -63,11 +61,9 @@ function CreateJobForm(props: CreateJobFormProps) {
       width="550px"
       afterClose={() => {
         resetFields();
-        setCompensatoryDataSource([]);
       }}
       onCancel={() => {
         resetFields();
-        setCompensatoryDataSource([]);
         props.showFormCreate(false);
       }}
       footer={""}>

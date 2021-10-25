@@ -4,12 +4,12 @@ import {FormComponentProps} from "antd/lib/form";
 import {Button, Card, Checkbox, Form, Input, Modal} from "antd";
 import React, {FormEvent, useState} from "react";
 import {showUpdateGroupAPIForm, updateGroupAPI} from "../redux/actions";
-import {CreateGroupAPIRequest, UpdateGroupAPIRequest} from "../types";
+import {UpdateGroupAPIRequest} from "../types";
 
-const CheckboxGroup=Checkbox.Group;
+const CheckboxGroup = Checkbox.Group;
 const mapStateToProps = (state: RootState) => ({
-  groupAPIManager:state.groupAPIManager,
-  listApiState:state.apiManager.list
+  groupAPIManager: state.groupAPIManager,
+  listApiState: state.apiManager.list
 });
 const connector = connect(mapStateToProps, {
   showUpdateGroupAPIForm,
@@ -22,21 +22,20 @@ interface UpdateGroupAPIFormProps extends FormComponentProps, ReduxProps {
 }
 
 function UpdateGroupAPIForm(props: UpdateGroupAPIFormProps) {
-  console.log("props:",props.groupAPIManager.showForm?.view)
+  console.log("props:", props.groupAPIManager.showForm?.view)
   const {getFieldDecorator, resetFields} = props.form;
-  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
 
-  const [listApi,setListApi]= useState<any>({
-    api:[
+  const [listApi, setListApi] = useState<any>({
+    api: [
       {
         id: '',
         path: '',
-        method:'',
-        name:''
+        method: '',
+        name: ''
       }
     ],
-    checkedList:[],
+    checkedList: [],
     indeterminate: false,
     checkAll: false,
   })
@@ -52,22 +51,22 @@ function UpdateGroupAPIForm(props: UpdateGroupAPIFormProps) {
     },
   };
 
-  const onChange=(value:any)=>{
-    console.log("onChangeonChange",value)
-    const findApi =props.listApiState.rows?.filter((item:any)=>value.includes(item.name));
+  const onChange = (value: any) => {
+    console.log("onChangeonChange", value)
+    const findApi = props.listApiState.rows?.filter((item: any) => value.includes(item.name));
 
     setListApi({
-      api:findApi,
-      checkedList:value,
+      api: findApi,
+      checkedList: value,
       indeterminate: !!value.length && value.length < props.listApiState?.total,
       checkAll: value.length === props.listApiState?.total,
     })
 
   }
-  const onCheckAllChange =(e: any)=>{
+  const onCheckAllChange = (e: any) => {
     if (props.listApiState) {
       setListApi({
-        api:props.listApiState.rows,
+        api: props.listApiState.rows,
         checkedList: e.target.checked ? (props.listApiState.rows?.map((item: any) => item.name)) : [],
         indeterminate: false,
         checkAll: e.target.checked,
@@ -76,7 +75,7 @@ function UpdateGroupAPIForm(props: UpdateGroupAPIFormProps) {
 
   }
 
-  const onBtnUpdateClicked=(e: FormEvent) =>{
+  const onBtnUpdateClicked = (e: FormEvent) => {
 
     e.preventDefault();
     (e.target as any).disabled = true;
@@ -87,34 +86,33 @@ function UpdateGroupAPIForm(props: UpdateGroupAPIFormProps) {
         let req: UpdateGroupAPIRequest = {
           id: props.groupAPIManager.showForm?.view.id,
           name: values.name,
-          roles: listApi.api?.map((item:any)=>item.id),
+          roles: listApi.api?.map((item: any) => item.id),
         }
 
-        console.log("props.createGroupAPI(req):",req)
+        console.log("props.createGroupAPI(req):", req)
         // props.updateGroupAPI(req);
         return;
       }
     });
   }
-  console.log("value:",listApi.checkedList)
-  console.log("list:",props.listApiState?.rows?.map((item: any) => item.name))
-  const onBtnCancelClicked=()=> {
+  console.log("value:", listApi.checkedList)
+  console.log("list:", props.listApiState?.rows?.map((item: any) => item.name))
+  const onBtnCancelClicked = () => {
     resetFields();
     setListApi({
-      api:[
+      api: [
         {
           id: '',
           path: '',
-          method:'',
-          name:''
+          method: '',
+          name: ''
         }
       ],
-      checkedList:[],
+      checkedList: [],
       indeterminate: false,
       checkAll: false,
     })
 
-    setCompensatoryDataSource([]);
     props.showUpdateGroupAPIForm(false);
   }
 
@@ -129,11 +127,9 @@ function UpdateGroupAPIForm(props: UpdateGroupAPIFormProps) {
       width="550px"
       afterClose={() => {
         resetFields();
-        setCompensatoryDataSource([]);
       }}
       onCancel={() => {
         resetFields();
-        setCompensatoryDataSource([]);
         props.showUpdateGroupAPIForm(false);
       }}
       footer={""}>
@@ -172,7 +168,7 @@ function UpdateGroupAPIForm(props: UpdateGroupAPIFormProps) {
             <CheckboxGroup
               style={{display: "grid"}}
               // options={props.listApiState?.rows?.map((item: any) => item.name)}
-              options={['1','2']}
+              options={['1', '2']}
               value={listApi.checkedList}
               // defaultValue={props.groupAPIManager.showForm?.view?.roles.map((item:any)=>item.name)}
               defaultValue={['1']}
@@ -183,7 +179,7 @@ function UpdateGroupAPIForm(props: UpdateGroupAPIFormProps) {
 
         <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px'}} colon={false}>
           <Button className="mr-3 create-btn" htmlType="submit"
-          onClick={onBtnUpdateClicked}
+                  onClick={onBtnUpdateClicked}
           >
             Cập nhật
           </Button>

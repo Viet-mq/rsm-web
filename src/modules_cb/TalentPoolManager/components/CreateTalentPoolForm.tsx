@@ -1,8 +1,8 @@
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Checkbox, Form, Input, Modal, Select} from "antd";
-import React, {FormEvent, useEffect, useState} from "react";
+import {Button, Form, Input, Modal, Select} from "antd";
+import React, {FormEvent, useEffect} from "react";
 import {createTalentPool, showFormCreate} from "../redux/actions";
 import {CreateTalentPoolRequest} from "../types";
 import {getListAccount} from "../../AccountManager/redux/actions";
@@ -28,7 +28,6 @@ interface CreateTalentPoolFormProps extends FormComponentProps, ReduxProps {
 function CreateTalentPoolForm(props: CreateTalentPoolFormProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
-  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
 
   const formItemLayout = {
@@ -53,7 +52,7 @@ function CreateTalentPoolForm(props: CreateTalentPoolFormProps) {
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         let req: CreateTalentPoolRequest = {
-          description:values.description,
+          description: values.description,
           managers: values.managers,
           name: values.name
         }
@@ -65,7 +64,6 @@ function CreateTalentPoolForm(props: CreateTalentPoolFormProps) {
 
   function onBtnCancelClicked() {
     resetFields();
-    setCompensatoryDataSource([]);
     props.showFormCreate(false);
   }
 
@@ -80,11 +78,9 @@ function CreateTalentPoolForm(props: CreateTalentPoolFormProps) {
       width="550px"
       afterClose={() => {
         resetFields();
-        setCompensatoryDataSource([]);
       }}
       onCancel={() => {
         resetFields();
-        setCompensatoryDataSource([]);
         props.showFormCreate(false);
       }}
       footer={""}>
@@ -117,7 +113,7 @@ function CreateTalentPoolForm(props: CreateTalentPoolFormProps) {
                     mode="multiple"
                     placeholder="Vui lòng chọn người quản lý"
             >
-              {props.listAccountState.rows?.map((item: any,index:any) => (
+              {props.listAccountState.rows?.map((item: any, index: any) => (
                 <Option key={index} value={item.username}>{item.fullName}</Option>
               ))}
             </Select>

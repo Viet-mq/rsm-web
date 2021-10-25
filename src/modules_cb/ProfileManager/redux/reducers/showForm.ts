@@ -1,12 +1,12 @@
 import * as Actions from "../actions";
-import {PROFILE_SHOW_FORM_UPDATE_DETAIL, ProfileFormAction} from "../actions";
+import {ProfileFormAction} from "../actions";
 import {DetailCV, DetailProfileEntity, ProfileEntity} from "../../types";
 
 export interface ProfileFormState {
   show_create?: boolean,
   show_update?: boolean,
   show_update_detail?: boolean,
-  data_update_detail?: DetailProfileEntity|any,
+  data_update_detail?: DetailProfileEntity | any,
   show_detail?: DetailCV,
   data_update?: ProfileEntity | any,
   data_detail?: DetailProfileEntity[],

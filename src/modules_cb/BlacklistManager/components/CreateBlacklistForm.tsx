@@ -2,7 +2,7 @@ import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Input, Modal} from "antd";
-import React, {FormEvent, useState} from "react";
+import React, {FormEvent} from "react";
 import {createBlacklist, showFormCreate} from "../redux/actions";
 import {CreateBlacklistRequest} from "../types";
 
@@ -17,7 +17,6 @@ interface CreateBlacklistFormProps extends FormComponentProps, ReduxProps {
 function CreateBlacklistForm(props: CreateBlacklistFormProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
-  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
 
   const formItemLayout = {
@@ -52,7 +51,6 @@ function CreateBlacklistForm(props: CreateBlacklistFormProps) {
 
   function onBtnCancelClicked() {
     resetFields();
-    setCompensatoryDataSource([]);
     props.showFormCreate(false);
   }
 
@@ -68,11 +66,9 @@ function CreateBlacklistForm(props: CreateBlacklistFormProps) {
       width="550px"
       afterClose={() => {
         resetFields();
-        setCompensatoryDataSource([]);
       }}
       onCancel={() => {
         resetFields();
-        setCompensatoryDataSource([]);
         props.showFormCreate(false);
       }}
       footer={""}>
@@ -90,7 +86,7 @@ function CreateBlacklistForm(props: CreateBlacklistFormProps) {
             ],
           })(<Input placeholder="Nhập tên" className="bg-white text-black"/>)}
         </Form.Item>
-        
+
         <Form.Item label="Email" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('email', {
             initialValue: '',
@@ -102,7 +98,7 @@ function CreateBlacklistForm(props: CreateBlacklistFormProps) {
             ],
           })(<Input placeholder="Nhập Email" className="bg-white text-black"/>)}
         </Form.Item>
-        
+
         <Form.Item label="SĐT" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('phoneNumber', {
             initialValue: '',
@@ -114,7 +110,7 @@ function CreateBlacklistForm(props: CreateBlacklistFormProps) {
             ],
           })(<Input placeholder="Nhập SĐT" className="bg-white text-black"/>)}
         </Form.Item>
-        
+
         <Form.Item label="Lý do" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('reason', {
             initialValue: '',
@@ -126,7 +122,7 @@ function CreateBlacklistForm(props: CreateBlacklistFormProps) {
             ],
           })(<Input placeholder="Nhập Lý do" className="bg-white text-black"/>)}
         </Form.Item>
-        
+
         <Form.Item label="SSN" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('ssn', {
             initialValue: '',

@@ -2,7 +2,7 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Input, Modal} from "antd";
-import React, {FormEvent, useState} from "react";
+import React, {FormEvent} from "react";
 import {addAction, showFrontEndViewCreateForm} from "../redux/actions";
 import {AddActionToViewRequest} from "../types";
 
@@ -17,7 +17,6 @@ interface AddActionFormProps extends FormComponentProps, ReduxProps {
 function AddActionForm(props: AddActionFormProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
-  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '40px'};
 
   const formItemLayout = {
@@ -51,7 +50,6 @@ function AddActionForm(props: AddActionFormProps) {
 
   function onBtnCancelClicked() {
     resetFields();
-    setCompensatoryDataSource([]);
     props.showFrontEndViewCreateForm(false);
   }
 
@@ -66,11 +64,9 @@ function AddActionForm(props: AddActionFormProps) {
       width="550px"
       afterClose={() => {
         resetFields();
-        setCompensatoryDataSource([]);
       }}
       onCancel={() => {
         resetFields();
-        setCompensatoryDataSource([]);
         props.showFrontEndViewCreateForm(false);
       }}
       footer={""}>

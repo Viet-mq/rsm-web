@@ -14,5 +14,9 @@ export * from './booking/updateBooking'
 export * from './booking/getBooking'
 export * from './booking/showBooking'
 export * from './detail/getActivityLogs'
-
+export * from './note/createNote'
+export * from './note/updateNote'
+export * from './note/getListNote'
+export * from './note/showNote'
+export * from './note/deleteNote'
 

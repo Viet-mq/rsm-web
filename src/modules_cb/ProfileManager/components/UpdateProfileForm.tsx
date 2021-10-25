@@ -3,7 +3,7 @@ import {connect, ConnectedProps} from "react-redux";
 import {getActivityLogs, showFormUpdate, updateProfile} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, DatePicker, Form, Icon, Input, Modal, Select} from "antd";
-import React, {FormEvent, useEffect, useState} from "react";
+import React, {FormEvent, useEffect} from "react";
 import {UpdateProfileRequest} from "../types";
 import {getListJob, showFormCreate as showJobFormCreate} from "../../JobManager/redux/actions";
 import {getListJobLevel, showFormCreate as showJobLevelFormCreate} from "../../JobLevelManager/redux/actions";
@@ -15,7 +15,6 @@ import CreateJobLevelForm from "../../JobLevelManager/components/CreateJobLevelF
 import CreateSourceCVForm from "../../SourceCVManager/components/CreateSourceCVForm";
 import CreateSchoolForm from "../../SchoolManager/components/CreateSchoolForm";
 import Loading from "../../../components/Loading";
-// import {getListStatusCV, showFormCreate as showStatusCVFormCreate} from "../../StatusCVManager/redux/actions";
 
 const {Option} = Select;
 
@@ -24,12 +23,10 @@ const mapStateToProps = (state: RootState) => ({
   listJob: state.jobManager.list,
   listJobLevel: state.joblevelManager.list,
   listSchool: state.schoolManager.list,
-  // listStatusCV:state.statuscvManager.list,
   listSourceCV: state.sourcecvManager.list,
   createJob: state.jobManager.create,
   createJobLevel: state.joblevelManager.create,
   createSchool: state.schoolManager.create,
-  // createStatusCV:state.statuscvManager.create,
   createSourceCV: state.sourcecvManager.create,
 })
 
@@ -41,13 +38,11 @@ const connector = connect(mapStateToProps,
     getListJobLevel,
     getListSchool,
     getListSourceCV,
-    // getListStatusCV,
     showJobFormCreate,
     showJobLevelFormCreate,
     showSchoolFormCreate,
     showSourceCVFormCreate,
     getActivityLogs
-    // showStatusCVFormCreate
 
   });
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -57,7 +52,6 @@ interface UpdateProfileFormProps extends FormComponentProps, ReduxProps {
 
 function UpdateProfileForm(props: UpdateProfileFormProps) {
   const {getFieldDecorator, resetFields} = props.form;
-  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
   const formItemLayout = {
     labelCol: {
@@ -76,28 +70,29 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     props.getListSourceCV({page: 1, size: 100});
     // props.getListStatusCV({page: 1, size: 100});
   }, [])
+
   function onBtnUpdateClicked(e: FormEvent) {
     e.preventDefault();
     (e.target as any).disabled = true;
     (e.target as any).disabled = false;
 
-      props.form.validateFieldsAndScroll((err, values) => {
+    props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         let req: UpdateProfileRequest = {
           id: props.showForm.data_update?.id,
           cv: values.cv,
           cvType: values.cvType,
-          dateOfApply: values.dateOfApply*1,
-          dateOfBirth: values.dateOfBirth*1,
+          dateOfApply: values.dateOfApply * 1,
+          dateOfBirth: values.dateOfBirth * 1,
           email: values.email,
           fullName: values.fullName,
           hometown: values.hometown,
           hrRef: values.hrRef,
-          job:values.job,
+          job: values.job,
           levelJob: values.levelJob,
           phoneNumber: values.phoneNumber,
-          school:values.school,
-          sourceCV:values.sourceCV,
+          school: values.school,
+          sourceCV: values.sourceCV,
           // statusCV: values.statusCV,
         }
         props.updateProfile(req);
@@ -108,7 +103,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
 
   function onBtnCancelClicked() {
     resetFields();
-    setCompensatoryDataSource([]);
     props.showFormUpdate(false);
   }
 
@@ -170,11 +164,9 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
         width="550px"
         afterClose={() => {
           resetFields();
-          setCompensatoryDataSource([]);
         }}
         onCancel={() => {
           resetFields();
-          setCompensatoryDataSource([]);
           props.showFormUpdate(false);
         }}
         footer={""}>
@@ -205,7 +197,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                 },
               ],
             })(
-              <DatePicker format={dateFormat} style={{width:"100%"}}/>
+              <DatePicker format={dateFormat} style={{width: "100%"}}/>
             )}
           </Form.Item>
 
@@ -436,7 +428,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                 },
               ],
             })(
-              <DatePicker format={dateFormat} style={{width:"100%"}}/>
+              <DatePicker format={dateFormat} style={{width: "100%"}}/>
             )}
           </Form.Item>
 

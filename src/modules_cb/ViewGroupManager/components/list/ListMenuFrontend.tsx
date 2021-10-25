@@ -30,11 +30,8 @@ function ListMenuFrontend(props: IProps) {
 
   let screenWidth = document.documentElement.clientWidth;
   const [page, setPage] = useState(1);
-  const [scroll, setScroll] = useState(screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false});
+  const scroll = screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false};
   const size = 10;
-  const [state, setState] = useState<any>({
-    selectedRowKeys: [],
-  });
 
   useEffect(() => {
     props.getListMenuFrontend({page: 1, size: 100});
@@ -58,13 +55,15 @@ function ListMenuFrontend(props: IProps) {
       title: 'STT',
       key: 'index',
       width: 40,
-      render: (text, record, index) =>  {return (page - 1) * 10 + index + 1}
+      render: (text, record, index) => {
+        return (page - 1) * 10 + index + 1
+      }
     },
     {
       title: 'Name',
       dataIndex: 'name',
       width: 200,
-      render:(text:string,record:MenuFrontendEntity)=><a onClick={event=>handleDetail(event,record)}>{text}</a>
+      render: (text: string, record: MenuFrontendEntity) => <a onClick={event => handleDetail(event, record)}>{text}</a>
     },
     {
       title: 'Mô tả',
@@ -78,8 +77,8 @@ function ListMenuFrontend(props: IProps) {
       render: (_text: string, record: MenuFrontendEntity) => {
         let actions = record.views || [];
         return (
-          <ul style={{paddingLeft:'0px'}}>
-            {actions.map((object, i) => <li style={{listStyleType:'none'}} key={object.id}>
+          <ul style={{paddingLeft: '0px'}}>
+            {actions.map((object, i) => <li style={{listStyleType: 'none'}} key={object.id}>
               <span>&nbsp;{object.id} : {object.name}</span>
             </li>)}
           </ul>

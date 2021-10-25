@@ -24,7 +24,7 @@ function ListApiRole(props: IProps) {
 
   let screenWidth = document.documentElement.clientWidth;
   const [page, setPage] = useState(1);
-  const [scroll, setScroll] = useState(screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false});
+  const scroll = screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false};
   const size = 10;
   const [state, setState] = useState<any>({
     selectedRowKeys: [],

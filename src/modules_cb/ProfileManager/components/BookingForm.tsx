@@ -3,7 +3,7 @@ import {connect, ConnectedProps} from "react-redux";
 import {createBooking, getActivityLogs, getBooking, showFormBooking, updateBooking} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, DatePicker, Form, Input, Modal, Select} from "antd";
-import React, {FormEvent, useEffect, useState} from "react";
+import React, {FormEvent, useEffect} from "react";
 import {getListAccount} from "../../AccountManager/redux/actions";
 import {getListStatusCV} from "../../StatusCVManager/redux/actions";
 import moment from "moment";
@@ -37,7 +37,6 @@ interface BookingFormProps extends FormComponentProps, ReduxProps {
 
 function BookingForm(props: BookingFormProps) {
   const {getFieldDecorator, resetFields} = props.form;
-  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
   const formItemLayout = {
     labelCol: {
@@ -61,9 +60,9 @@ function BookingForm(props: BookingFormProps) {
 
   }, [props.showBooking.data_booking?.id])
   const dateFormat = 'DD/MM/YYYY HH:mm';
+
   function onBtnCancelClicked() {
     resetFields();
-    setCompensatoryDataSource([]);
     props.showFormBooking(false);
   }
 
@@ -74,7 +73,7 @@ function BookingForm(props: BookingFormProps) {
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         let req: UpdateBookingRequest = {
-          id:props.getBookingState.result?.id,
+          id: props.getBookingState.result?.id,
           idProfile: props.getBookingState.result?.idProfile,
           time: values.time * 1,
           address: values.address,
@@ -140,11 +139,9 @@ function BookingForm(props: BookingFormProps) {
             width="550px"
             afterClose={() => {
               resetFields();
-              setCompensatoryDataSource([]);
             }}
             onCancel={() => {
               resetFields();
-              setCompensatoryDataSource([]);
               props.showFormBooking(false);
             }}
             footer={""}>
@@ -213,7 +210,7 @@ function BookingForm(props: BookingFormProps) {
 
               <Form.Item label="Người phỏng vấn" className="mb-0" style={{...formItemStyle}}>
                 {getFieldDecorator('interviewer', {
-                  initialValue: props.getBookingState.result?.interviewer||'',
+                  initialValue: props.getBookingState.result?.interviewer || '',
                   rules: [
                     {
                       message: 'Vui lòng chọn người phỏng vấn',
@@ -377,11 +374,9 @@ function BookingForm(props: BookingFormProps) {
             width="550px"
             afterClose={() => {
               resetFields();
-              setCompensatoryDataSource([]);
             }}
             onCancel={() => {
               resetFields();
-              setCompensatoryDataSource([]);
               props.showFormBooking(false);
             }}
             footer={""}>
@@ -390,7 +385,7 @@ function BookingForm(props: BookingFormProps) {
 
               <Form.Item label="Họ Tên" className="mb-0" style={{...formItemStyle}}>
                 {getFieldDecorator('interviewee', {
-                  initialValue: props.showBooking.data_booking?.fullName||'',
+                  initialValue: props.showBooking.data_booking?.fullName || '',
                   rules: [
                     {
                       message: 'Vui lòng nhập họ tên',
@@ -462,7 +457,7 @@ function BookingForm(props: BookingFormProps) {
                           mode="multiple"
                           placeholder="Please select"
                   >
-                    {props.listAccount.rows?.map((item: any,index:any) => (
+                    {props.listAccount.rows?.map((item: any, index: any) => (
                       <Option key={index} value={item.username}>{item.fullName}</Option>
                     ))}
                   </Select>

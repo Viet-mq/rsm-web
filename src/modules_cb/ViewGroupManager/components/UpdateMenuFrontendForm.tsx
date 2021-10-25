@@ -2,9 +2,9 @@ import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Input, Modal} from "antd";
-import React, {FormEvent, useState} from "react";
+import React, {FormEvent} from "react";
 import {showFormMenuFrontEndUpdate, updateMenuFrontEnd} from "../redux/actions";
-import { UpdateMenuFrontendRequest} from "../types";
+import {UpdateMenuFrontendRequest} from "../types";
 
 const mapStateToProps = ({viewGroupManager}: RootState) => ({viewGroupManager});
 const connector = connect(mapStateToProps, {showFormMenuFrontEndUpdate, updateMenuFrontEnd});
@@ -17,7 +17,6 @@ interface UpdateMenuFrontendFormProps extends FormComponentProps, ReduxProps {
 function UpdateMenuFrontendForm(props: UpdateMenuFrontendFormProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
-  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
 
   const formItemLayout = {
@@ -53,7 +52,6 @@ function UpdateMenuFrontendForm(props: UpdateMenuFrontendFormProps) {
 
   function onBtnCancelClicked() {
     resetFields();
-    setCompensatoryDataSource([]);
     props.showFormMenuFrontEndUpdate(false);
   }
 
@@ -68,18 +66,16 @@ function UpdateMenuFrontendForm(props: UpdateMenuFrontendFormProps) {
       width="550px"
       afterClose={() => {
         resetFields();
-        setCompensatoryDataSource([]);
       }}
       onCancel={() => {
         resetFields();
-        setCompensatoryDataSource([]);
         props.showFormMenuFrontEndUpdate(false);
       }}
       footer={""}>
 
       <Form {...formItemLayout}>
 
-        <Form.Item label="ID" className="mb-0" style={{...formItemStyle,display:"none"}}>
+        <Form.Item label="ID" className="mb-0" style={{...formItemStyle, display: "none"}}>
           {getFieldDecorator('id', {
             initialValue: props.viewGroupManager.showForm.view?.id,
             rules: [

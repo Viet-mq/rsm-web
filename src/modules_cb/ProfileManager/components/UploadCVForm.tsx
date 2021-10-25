@@ -1,6 +1,6 @@
 import {RootState} from "../../../redux/reducers";
 
-import React, {useRef, useState} from "react";
+import React, {useState} from "react";
 import {Button, Modal} from "antd";
 import {showFormUploadCV, uploadCV, uploadListCV} from "../redux/actions";
 import {connect, ConnectedProps} from "react-redux";
@@ -23,20 +23,8 @@ interface CreateUploadFormProps extends ReduxProps {
 }
 
 function UploadCVForm(props: CreateUploadFormProps) {
-  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
-  const formItemStyle = {height: '60px'};
   const [file, setFile] = useState(null);
-  // const fieldUpload = useRef<any>(null);
-  const formItemLayout = {
-    labelCol: {
-      xs: {span: 24},
-      sm: {span: 8},
-    },
-    wrapperCol: {
-      xs: {span: 24},
-      sm: {span: 16},
-    },
-  };
+
   const onFileChange = (e: any) => {
     setFile(e.target.files[0]);
     console.log("file:", e.target.files[0]);
@@ -59,14 +47,12 @@ function UploadCVForm(props: CreateUploadFormProps) {
   }
 
   function onBtnCancelClicked() {
-    setCompensatoryDataSource([]);
-    if(document.querySelector("#upload")) {
-    (  document.querySelector("#upload") as any).value=''
+    if (document.querySelector("#upload")) {
+      (document.querySelector("#upload") as any).value = ''
     }
     props.showFormUploadCV(false);
   }
 
-  console.log("propFdaf:", props)
   return (
 
     <Modal
@@ -77,15 +63,13 @@ function UploadCVForm(props: CreateUploadFormProps) {
       width="550px"
       footer={""}
       afterClose={() => {
-        setCompensatoryDataSource([]);
       }}
       onCancel={() => {
-        setCompensatoryDataSource([]);
         props.showFormUploadCV(false);
       }}
     >
       <form id="form-upload">
-        <input id="upload"  type="file" style={{width: "100%", border: "1px solid"}}
+        <input id="upload" type="file" style={{width: "100%", border: "1px solid"}}
                onChange={onFileChange}
                accept=".doc,.docx,.pdf,.xlsx"/>
       </form>

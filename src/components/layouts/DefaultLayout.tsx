@@ -26,7 +26,6 @@ const DefaultLayout = (props: LayoutProps) => {
 
   const screenWidth = document.documentElement.clientWidth;
   const [collapsed, setCollapsed] = useState(screenWidth <= env.tabletWidth ? true : false)
-  const [colDetail, setColDetail] = useState({general: 12, detail: 12})
 
   function toggle() {
     setCollapsed(!collapsed)
@@ -68,13 +67,14 @@ const DefaultLayout = (props: LayoutProps) => {
 
             <div>
               <Row>
-                  <Col span={props.showFormDetail?.show_detail?.general} style={{height:"calc(100vh - 60px)",overflow:"auto"}}>
-                    {props.children}
-                  </Col>
+                <Col span={props.showFormDetail?.show_detail?.general}
+                     style={{height: "calc(100vh - 60px)", overflow: "auto"}}>
+                  {props.children}
+                </Col>
 
-                  <Col span={props.showFormDetail?.show_detail?.detail}>
-                    <DetailProfileForm/>
-                  </Col>
+                <Col span={props.showFormDetail?.show_detail?.detail}>
+                  <DetailProfileForm/>
+                </Col>
               </Row>
             </div>
           </Layout>

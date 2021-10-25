@@ -15,6 +15,11 @@ import updateBooking, {UpdateBookingState} from "./booking/updateBooking";
 import getActivity,{ActivityLogsState} from "./detail/getActivityLogs";
 import search,{GetElasticSearchState} from "./profile/search";
 import uploadListCV,{UploadListCVState} from "./cv/uploadListCV";
+import createNote,{CreateNoteState} from "./note/createNote";
+import deleteNote,{DeleteNoteState} from "./note/deleteNote";
+import getListNote,{GetListNoteState} from "./note/getListNote";
+import showNote,{ ShowNoteState} from "./note/showNote";
+import updateNote,{UpdateNoteState} from "./note/updateNote";
 
 export interface ProfileManagerModuleState {
   list: ProfileListState,
@@ -33,6 +38,11 @@ export interface ProfileManagerModuleState {
   updateBooking: UpdateBookingState,
   getActivity:ActivityLogsState,
   search:GetElasticSearchState,
+  createNote:CreateNoteState,
+  deleteNote:DeleteNoteState,
+  getListNote:GetListNoteState,
+  showNote:ShowNoteState,
+  updateNote:UpdateNoteState,
 }
 
 export default combineReducers<ProfileManagerModuleState>({
@@ -51,5 +61,10 @@ export default combineReducers<ProfileManagerModuleState>({
   getBooking,
   createBooking,
   getActivity,
-  search
+  search,
+  createNote,
+  deleteNote,
+  getListNote,
+  showNote,
+  updateNote,
 });

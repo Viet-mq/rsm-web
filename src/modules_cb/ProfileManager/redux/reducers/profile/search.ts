@@ -1,6 +1,6 @@
-import {AppError, ResponseBase2} from "../../../../../models/common";
+import {AppError} from "../../../../../models/common";
 import * as Actions from "../../actions";
-import { GetElasticSearchAction } from "../../actions";
+import {GetElasticSearchAction} from "../../actions";
 import {ProfileEntity} from "../../../types";
 
 export interface GetElasticSearchState {
@@ -18,7 +18,13 @@ const initState: GetElasticSearchState = {
   total: 0
 }
 
-export default (state = initState, {type, request,  rows, total, error}: GetElasticSearchAction): GetElasticSearchState => {
+export default (state = initState, {
+  type,
+  request,
+  rows,
+  total,
+  error
+}: GetElasticSearchAction): GetElasticSearchState => {
   switch (type) {
     case Actions.GET_ELASTIC_SEARCH:
       return {

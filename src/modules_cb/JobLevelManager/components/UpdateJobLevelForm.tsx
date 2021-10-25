@@ -3,7 +3,7 @@ import {connect, ConnectedProps} from "react-redux";
 import {showFormUpdate, updateJobLevel} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Input, Modal} from "antd";
-import React, {FormEvent, useState} from "react";
+import React, {FormEvent} from "react";
 import {UpdateJobLevelRequest} from "../types";
 
 const mapState = ({joblevelManager: {showForm}}: RootState) => ({showForm})
@@ -17,7 +17,6 @@ interface UpdateJobLevelFormProps extends FormComponentProps, ReduxProps {
 function UpdateJobLevelForm(props: UpdateJobLevelFormProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
-  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
   const formItemLayout = {
     labelCol: {
@@ -48,7 +47,6 @@ function UpdateJobLevelForm(props: UpdateJobLevelFormProps) {
 
   function onBtnCancelClicked() {
     resetFields();
-    setCompensatoryDataSource([]);
     props.showFormUpdate(false);
   }
 
@@ -63,11 +61,9 @@ function UpdateJobLevelForm(props: UpdateJobLevelFormProps) {
       width="550px"
       afterClose={() => {
         resetFields();
-        setCompensatoryDataSource([]);
       }}
       onCancel={() => {
         resetFields();
-        setCompensatoryDataSource([]);
         props.showFormUpdate(false);
       }}
       footer={""}>

@@ -1,15 +1,13 @@
-
 import * as apis from "../../services/apis";
-import {put, select} from "redux-saga/effects";
+import {put} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
 import {AppError} from "src/models/common";
-import {RootState} from "src/redux/reducers";
-import {getElasticSearch, GetElasticSearchAction, getElasticSearchError, getElasticSearchSuccess} from "../../actions";
+import {GetElasticSearchAction, getElasticSearchError, getElasticSearchSuccess} from "../../actions";
 
 export function* searchAsync(action: GetElasticSearchAction) {
   try {
     const rs = yield apis.getElasticSearch(action.request);
-    yield put(getElasticSearchSuccess(rs.total,rs.rows));
+    yield put(getElasticSearchSuccess(rs.total, rs.rows));
     if (rs.code !== 0) {
       NotificationError('Tìm kiếm thông tin không thành công', "Lỗi: " + rs.message)
     } else {

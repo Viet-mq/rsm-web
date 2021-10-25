@@ -2,7 +2,7 @@ import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Input, Modal} from "antd";
-import React, {FormEvent, useState} from "react";
+import React, {FormEvent} from "react";
 import {createMenuFrontEnd, showFormMenuFrontEndCreate} from "../redux/actions";
 import {CreateMenuFrontendRequest} from "../types";
 
@@ -16,7 +16,6 @@ interface CreateMenuFrontendFormProps extends FormComponentProps, ReduxProps {
 
 function CreateMenuFrontendForm(props: CreateMenuFrontendFormProps) {
   const {getFieldDecorator, resetFields} = props.form;
-  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
 
   const formItemLayout = {
@@ -47,7 +46,6 @@ function CreateMenuFrontendForm(props: CreateMenuFrontendFormProps) {
 
   function onBtnCancelClicked() {
     resetFields();
-    setCompensatoryDataSource([]);
     props.showFormMenuFrontEndCreate(false);
   }
 
@@ -63,11 +61,9 @@ function CreateMenuFrontendForm(props: CreateMenuFrontendFormProps) {
       width="550px"
       afterClose={() => {
         resetFields();
-        setCompensatoryDataSource([]);
       }}
       onCancel={() => {
         resetFields();
-        setCompensatoryDataSource([]);
         props.showFormMenuFrontEndCreate(false);
       }}
       footer={""}>

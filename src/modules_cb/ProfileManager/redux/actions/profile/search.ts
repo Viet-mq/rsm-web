@@ -1,10 +1,10 @@
-import {AppError, ResponseBase2} from "src/models/common";
+import {AppError} from "src/models/common";
 import {ProfileEntity} from "../../../types";
 
 export interface GetElasticSearchAction {
   type: string,
   request?: any,
-  rows?:ProfileEntity[],
+  rows?: ProfileEntity[],
   total?: number,
   error?: AppError
 

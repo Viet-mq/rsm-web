@@ -3,7 +3,7 @@ import {connect, ConnectedProps} from "react-redux";
 import {showFormUpdate, updateSourceCV} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Input, Modal} from "antd";
-import React, {FormEvent, useState} from "react";
+import React, {FormEvent} from "react";
 import {UpdateSourceCVRequest} from "../types";
 
 const mapState = ({sourcecvManager: {showForm}}: RootState) => ({showForm})
@@ -17,7 +17,6 @@ interface UpdateSourceCVFormProps extends FormComponentProps, ReduxProps {
 function UpdateSourceCVForm(props: UpdateSourceCVFormProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
-  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
   const formItemLayout = {
     labelCol: {
@@ -48,7 +47,6 @@ function UpdateSourceCVForm(props: UpdateSourceCVFormProps) {
 
   function onBtnCancelClicked() {
     resetFields();
-    setCompensatoryDataSource([]);
     props.showFormUpdate(false);
   }
 
@@ -63,11 +61,9 @@ function UpdateSourceCVForm(props: UpdateSourceCVFormProps) {
       width="550px"
       afterClose={() => {
         resetFields();
-        setCompensatoryDataSource([]);
       }}
       onCancel={() => {
         resetFields();
-        setCompensatoryDataSource([]);
         props.showFormUpdate(false);
       }}
       footer={""}>

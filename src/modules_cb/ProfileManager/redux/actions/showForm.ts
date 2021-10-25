@@ -1,14 +1,14 @@
-import {DetailCV, DetailProfileEntity, ProfileEntity, UpdateDetailRequest} from "../../types";
+import {DetailCV, DetailProfileEntity, ProfileEntity} from "../../types";
 
 export interface ProfileFormAction {
   type: string,
   show_create?: boolean,
   show_update?: boolean,
   show_update_detail?: boolean,
-  show_detail?:DetailCV,
+  show_detail?: DetailCV,
   data_update?: ProfileEntity
   data_update_detail?: DetailProfileEntity
-  data_detail?:DetailProfileEntity[]
+  data_detail?: DetailProfileEntity[]
 }
 
 export const PROFILE_SHOW_FORM_CREATE = "PROFILE_SHOW_FORM_CREATE";
@@ -33,10 +33,10 @@ export const showFormUpdateDetail = (show: boolean, dataUpdateDetail?: DetailPro
   data_update_detail: dataUpdateDetail
 });
 
-export const showFormDetail =(show?:DetailCV,dataDetail?:DetailProfileEntity[]):ProfileFormAction=>({
-  type:PROFILE_SHOW_FORM_DETAIL,
-  show_detail:show,
-  data_detail:dataDetail
+export const showFormDetail = (show?: DetailCV, dataDetail?: DetailProfileEntity[]): ProfileFormAction => ({
+  type: PROFILE_SHOW_FORM_DETAIL,
+  show_detail: show,
+  data_detail: dataDetail
 });
 
 
