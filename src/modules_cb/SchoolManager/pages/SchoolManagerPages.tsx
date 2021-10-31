@@ -33,7 +33,7 @@ interface IProps extends ReduxProps {
 function SchoolManagerPages(props: IProps) {
 
   useEffect(() => {
-    document.title = "Quản lý trường";
+    document.title = "Quản lý trường học";
   }, []);
 
   const handleCreate = (e: any) => {
@@ -51,7 +51,7 @@ function SchoolManagerPages(props: IProps) {
       <div className="entryHeader">
         <Row>
           <Col md={16}>
-            <div className="tmp-title-page-size20">Quản lý trường</div>
+            <div className="tmp-title-page-size20">Quản lý trường học</div>
           </Col>
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">

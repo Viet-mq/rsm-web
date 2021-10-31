@@ -6,7 +6,7 @@ import {ProfileEntity} from "../../../types";
 export interface GetElasticSearchState {
   loading: boolean,
   request?: any,
-  rows?: ProfileEntity[],
+  rows?: ProfileEntity[]|any,
   total?: number,
   error?: AppError
 }

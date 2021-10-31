@@ -20,6 +20,7 @@ import {
 import {DataShowBooking, DeleteProfileRequest, DetailCV, ProfileEntity} from "../../types";
 import moment from "moment";
 import {FormComponentProps} from "antd/lib/form";
+import { RouteComponentProps } from 'react-router-dom';
 
 const {Option} = Select;
 
@@ -47,13 +48,14 @@ const connector = connect(mapStateToProps, {
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface ListProfileProps extends FormComponentProps, ReduxProps {
+
 }
 
 function ListProfile(props: ListProfileProps) {
+
   const [page, setPage] = useState(1);
   const size = 10;
   const {getFieldDecorator, resetFields} = props.form;
-
   const [sourceCV, setSourceCV] = useState('');
   const [date, setDate] = useState<any>();
   const [inputValue, setInputValue] = useState<any>("")
@@ -63,6 +65,7 @@ function ListProfile(props: ListProfileProps) {
       title: 'STT',
       key: 'index',
       width: 50,
+      align:"center",
       render: (text, record, index) => {
         return (page - 1) * 10 + index + 1
       }
@@ -352,8 +355,8 @@ function ListProfile(props: ListProfileProps) {
       <Table
         scroll={{x: 1500}}
         className="custom-table -webkit-scrollbar"
-        // dataSource={props.elasticSearch?.rows?.length !== 0 ? (props.elasticSearch?.rows) : (props.list.rows)}
-        dataSource={dataSource !== undefined ? dataSource : props.list.rows}
+        // dataSource={dataSource !== undefined ? dataSource : props.list.rows}
+        dataSource={ props.list.rows}
         columns={columns}
         rowKey="id"
         locale={{emptyText: emptyText}}

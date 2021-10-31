@@ -49,9 +49,15 @@ function BookingForm(props: BookingFormProps) {
     },
   };
   useEffect(() => {
-    props.getListAccount({page: 1, size: 100});
-    props.getListStatusCV({page: 1, size: 100});
-  }, [])
+    if (props.listAccount.loading === true) {
+      props.getListAccount({page: 1, size: 100});
+    }
+    if (props.listStatus.loading === true) {
+      props.getListStatusCV({page: 1, size: 100});
+    }
+  }, [props.listAccount.loading === true ||
+  props.listStatus.loading === true
+  ])
 
   useEffect(() => {
     if (props.showBooking.data_booking?.id) {

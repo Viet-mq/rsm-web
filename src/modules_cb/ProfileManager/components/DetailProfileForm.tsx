@@ -24,6 +24,7 @@ import CreateNoteForm from "./CreateNoteForm";
 import UpdateNoteForm from "./UpdateNoteForm";
 import {RiFullscreenExitLine, RiFullscreenLine} from "react-icons/all";
 import {downloadCVNote} from "../redux/services/apis";
+import StarRatings from 'react-star-ratings';
 
 const mapStateToProps = (state: RootState) => ({
   showForm: state.profileManager.showForm,
@@ -59,6 +60,7 @@ interface DetailProfileFormProps extends ReduxProps {
 function DetailProfileForm(props: DetailProfileFormProps) {
   const [page, setPage] = useState(1);
   const size = 10;
+  const [rate, setRate] = useState(2.4);
   const [isFull, setIsFull] = useState<boolean>(false);
   const [dataDetailMatch,setDataDetailMatch]=useState<ProfileEntity|any>({});
   const [activeLogs, setActiveLogs] = useState({
@@ -311,14 +313,18 @@ function DetailProfileForm(props: DetailProfileFormProps) {
         </div>
 
         <div className="detail-paragraph-1">
-          <Avatar src={require('src/assets/images/profile.png')} size={100} style={{width: "115px"}}/>
+          <img src={require('src/assets/images/profile.png')}  style={{width: "100px",height:"100px"}}/>
           <div className="detail-paragraph-1__name">
             <h2>{dataDetailMatch?.fullName}</h2>
-            <Icon type="star" className="ml-1 mr-1"/>
-            <Icon type="star" className="ml-1 mr-1"/>
-            <Icon type="star" className="ml-1 mr-1"/>
-            <Icon type="star" className="ml-1 mr-1"/>
-            <Icon type="star" className="ml-1 mr-1"/>
+            <StarRatings
+              rating={rate}
+              starRatedColor="#FEDE00"
+              // changeRating={changeRating}
+              numberOfStars={5}
+              name='rating'
+              starDimension="20px"
+              starSpacing="0"
+            />
             <span>0.0/5</span>
             <span>0</span>
             <p>evaluations </p>

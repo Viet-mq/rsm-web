@@ -17,7 +17,9 @@ import UploadCVForm from "../components/UploadCVForm";
 import BookingForm from "../components/BookingForm";
 import UpdateDetailProfileForm from "../components/UpdateDetailProfileForm";
 import env from 'src/configs/env';
-
+import { RouteComponentProps } from 'react-router-dom';
+import {ProfileEntity} from "../types";
+import { useLocation } from "react-router-dom";
 const mapStateToProps = ({
                            profileManager: {
                              showForm,
@@ -57,13 +59,24 @@ const connector = connect(mapStateToProps, {
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
-interface IProps extends ReduxProps {
-}
+interface IProps extends ReduxProps,RouteComponentProps {
 
+}
+interface LocationState {
+  from: {
+    pathname: string;
+    state:ProfileEntity
+  };
+}
 function ProfileManagerPages(props: IProps) {
   useEffect(() => {
     document.title = "Quản lý Profile";
   }, []);
+  const location = useLocation<LocationState>();
+
+  const { from } = location.state || { from: { pathname: "/profile-manager" } };
+
+  console.log(from)
 
   const handleCreate = (e: any) => {
     e.preventDefault();
@@ -101,7 +114,6 @@ function ProfileManagerPages(props: IProps) {
                   <Icon type="upload"/> Upload List CV
                 </Button>
                 <Button >
-                  {/*<a href="http://18.139.222.137:35000/api-svc/excel/export"><Icon type="upload"/> Xuất Excel</a>*/}
                   <a href={`${env.apiUri}/api-svc/excel/export`}><Icon type="upload"/> Xuất Excel</a>
                 </Button>
               </div>

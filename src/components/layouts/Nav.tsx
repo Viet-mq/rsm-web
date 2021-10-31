@@ -17,7 +17,7 @@ import {
   IoEyeSharp,
   IoIosListBox,
   MdOutlineSource,
-  MdOutlineWorkOutline
+  MdOutlineWorkOutline, RiMailSettingsLine
 } from "react-icons/all";
 
 const mapStateToProps = (state: RootState) => {
@@ -39,8 +39,8 @@ interface IProps extends ParentProps, PropsFromRedux {
 
 const Nav = (props: IProps) => {
 
+  console.log(props.auth)
   const paths = window.location.pathname.split('/');
-
   return (
     <Menu
       className="menu-left"
@@ -50,19 +50,26 @@ const Nav = (props: IProps) => {
     >
       <Menu.Item key="home" style={{display: 'flex', alignItems: 'center'}}>
         <Link to={`/home`}>
-          <span className="rd-icon rd-icon-home"/>
-          {!props.hiddenLabel ? <span>Dashboard </span> : null}
+          <Icon type="dashboard" />
+           <span>Dashboard </span>
         </Link>
       </Menu.Item>
 
       <Menu.Item key="account-manager" style={{display: 'flex', alignItems: 'center'}}>
         <Link to={`/account-manager`}>
           <Icon type="user"/>
-          {!props.hiddenLabel ? <span>Quản lý tài khoản </span> : null}
+          <span>Quản lý tài khoản </span>
         </Link>
       </Menu.Item>
 
-      <SubMenu key="sub1" title={<span><Icon type="setting"/><span>Cài Đặt</span></span>}>
+      <Menu.Item key="profile-manager" style={{display: 'flex', alignItems: 'center'}}>
+        <Link to={`/profile-manager`}>
+          <ImProfile className="mr-2"/>
+          {!props.hiddenLabel ? <span>Quản lý thông tin CV </span> : null}
+        </Link>
+      </Menu.Item>
+
+      <SubMenu key="sub1" title={<span>CÀI ĐẶT</span>}>
 
         <Menu.Item key="view-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/view-manager`}>
@@ -94,20 +101,12 @@ const Nav = (props: IProps) => {
 
       </SubMenu>
 
-
-      <Menu.Item key="profile-manager" style={{display: 'flex', alignItems: 'center'}}>
-        <Link to={`/profile-manager`}>
-          <ImProfile className="mr-2"/>
-          {!props.hiddenLabel ? <span>Quản lý thông tin CV </span> : null}
-        </Link>
-      </Menu.Item>
-
-      <SubMenu key="sub2" title={<span><Icon type="menu"/><span>Quản lý danh mục</span></span>}>
+      <SubMenu key="sub2" title={<span>QUẢN LÝ DANH MỤC</span>}>
 
         <Menu.Item key="job-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/job-manager`}>
             <MdOutlineWorkOutline className="mr-2"/>
-            <span>Quản lý job </span>
+            <span>Quản lý công việc </span>
           </Link>
         </Menu.Item>
 
@@ -121,14 +120,14 @@ const Nav = (props: IProps) => {
         <Menu.Item key="joblevel-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/joblevel-manager`}>
             <FaRegUser className="mr-2"/>
-            <span>Quản lý job level </span>
+            <span>Quản lý chức vụ </span>
           </Link>
         </Menu.Item>
 
         <Menu.Item key="school-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/school-manager`}>
             <FaSchool className="mr-2"/>
-            <span>Quản lý trường </span>
+            <span>Quản lý trường học</span>
           </Link>
         </Menu.Item>
 
@@ -156,10 +155,33 @@ const Nav = (props: IProps) => {
         <Menu.Item key="talent-pool-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/talent-pool-manager`}>
             <MdOutlineSource className="mr-2"/>
-            <span>Quản lý Talent Pool </span>
+            <span>Quản lý Talent Pools </span>
           </Link>
         </Menu.Item>
 
+      </SubMenu>
+
+      <SubMenu key="sub3" title={<span>TALENT POOLS</span>}>
+        {props.auth?.pools.map((item:any)=>{
+          return <Menu.Item key={item.id} style={{display: 'flex', alignItems: 'center'}}>
+            <Link to={`/talent-pool-manager/${item.id}`}>
+              <Icon type="contacts" />
+              <span>{item.name} </span>
+              <span>{item.count}</span>
+            </Link>
+          </Menu.Item>
+
+        })}
+
+      </SubMenu>
+
+      <SubMenu key="sub4" title={<span>TÙY CHỈNH</span>}>
+           <Menu.Item key="/email-manager" style={{display: 'flex', alignItems: 'center'}}>
+            <Link to={`/email-manager`}>
+              <RiMailSettingsLine className="mr-2"/>
+              <span>Mẫu Email</span>
+            </Link>
+          </Menu.Item>
       </SubMenu>
 
     </Menu>

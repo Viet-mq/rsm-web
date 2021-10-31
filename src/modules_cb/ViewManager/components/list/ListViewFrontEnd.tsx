@@ -67,6 +67,7 @@ function ListViewFrontEnd(props: IProps) {
       title: 'STT',
       key: 'index',
       width: 40,
+      align:"center",
       render: (text, record, index) =>  {return (page - 1) * 10 + index + 1}
     },
     {

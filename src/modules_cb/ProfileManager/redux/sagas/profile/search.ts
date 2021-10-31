@@ -9,14 +9,12 @@ export function* searchAsync(action: GetElasticSearchAction) {
     const rs = yield apis.getElasticSearch(action.request);
     yield put(getElasticSearchSuccess(rs.total, rs.rows));
     if (rs.code !== 0) {
-      NotificationError('Tìm kiếm thông tin không thành công', "Lỗi: " + rs.message)
+      // NotificationError('Tìm kiếm thông tin không thành công', "Lỗi: " + rs.message)
     } else {
-      NotificationSuccess('Thành công', "Tìm kiếm thông tin thành công");
-      // const params = yield select((state: RootState) => state.profileManager.search.request);
-      // yield put(getElasticSearch(params))
+      // NotificationSuccess('Thành công', "Tìm kiếm thông tin thành công");
     }
   } catch (e) {
     yield put(getElasticSearchError(new AppError(e.message)));
-    NotificationError('Tìm kiếm thông tin không thành công', "Lỗi: " + e.message);
+    // NotificationError('Tìm kiếm thông tin không thành công', "Lỗi: " + e.message);
   }
 }

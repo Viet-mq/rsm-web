@@ -1,24 +1,33 @@
 import React, {useEffect, useState} from 'react';
 import Nav from './Nav';
-import {Col, Icon, Layout, Row} from 'antd';
+import {AutoComplete, Button, Col, Form, Icon, Layout, Row} from 'antd';
 import Header from './Header';
 import commonStyled from './styled/commonStyled';
 import env from 'src/configs/env';
 import DetailProfileForm from "../../modules_cb/ProfileManager/components/DetailProfileForm";
 import {RootState} from "../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
+import {FormComponentProps} from "antd/lib/form";
+import {getElasticSearch} from "../../modules_cb/ProfileManager/redux/actions";
+import ListProfile from "../../modules_cb/ProfileManager/components/list/ListProfile";
+import {useHistory} from "react-router-dom";
+
 
 const {Sider} = Layout;
 
 const mapStateToProps = (state: RootState) => ({
-  showFormDetail: state.profileManager.showForm
+  showFormDetail: state.profileManager.showForm,
+  elasticSearch: state.profileManager.search
+
 })
 
-const connector = connect(mapStateToProps);
+const connector = connect(mapStateToProps, {
+  getElasticSearch,
+});
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
-interface LayoutProps extends ReduxProps {
+interface LayoutProps extends FormComponentProps, ReduxProps {
   children: React.ReactNode;
 }
 
@@ -26,6 +35,22 @@ const DefaultLayout = (props: LayoutProps) => {
 
   const screenWidth = document.documentElement.clientWidth;
   const [collapsed, setCollapsed] = useState(screenWidth <= env.tabletWidth ? true : false)
+  const [inputValue, setInputValue] = useState<any>("")
+  const {getFieldDecorator, resetFields} = props.form;
+  const history = useHistory();
+  const [state, setState] = useState({
+    value: '',
+    dataSource: [],
+  });
+
+  function onSelect(value: any) {
+    let result:any;
+    if (state.value) {
+      result= props.getElasticSearch({key: state.value})
+    }
+    console.log('onSelect', result);
+
+  }
 
   function toggle() {
     setCollapsed(!collapsed)
@@ -44,6 +69,27 @@ const DefaultLayout = (props: LayoutProps) => {
 
   }, []);
 
+
+
+  const handleSearch = () => {
+    let result:any;
+    if (state.value) {
+      result= props.getElasticSearch({key: state.value})
+    }
+    history.push({
+      pathname:"/profile-manager",
+      state:result,
+    });
+  }
+
+  function onChange(value: any) {
+    setState({
+      ...state,
+      value
+    })
+    props.getElasticSearch({key: value})
+  }
+
   return (
     <commonStyled.Container>
       <Layout>
@@ -51,8 +97,8 @@ const DefaultLayout = (props: LayoutProps) => {
           <Sider className="menu" trigger={null} collapsible collapsed={collapsed} width={250}>
             {}
             <div className="logo">
-              {}
-              {collapsed ? (<h1 className="collapsed-logo"/>) : null}
+              {collapsed ? null : <img src={require('src/assets/images/logo-edsolabs.png')}/>
+              }
             </div>
             <Nav hiddenLabel={collapsed}/>
           </Sider>
@@ -63,6 +109,38 @@ const DefaultLayout = (props: LayoutProps) => {
                 type={collapsed ? 'menu-unfold' : 'menu-fold'}
                 onClick={toggle}
               />
+              <span className="ml-5" style={{fontWeight: 500, marginRight: '-21px'}}>Tìm kiếm</span>
+              <Form style={{
+                display: "flex", flexWrap: "wrap", marginLeft: "25px", flex: "1"
+              }}>
+
+                <Form.Item style={{margin: "-5px 10px 0 5px", width: "40%"}}>
+                  {getFieldDecorator('valueInput')(
+                    <>
+                      <div style={{display: "flex"}}>
+                        <AutoComplete
+                          dataSource={ props.elasticSearch.rows.map((item:any)=>item.fullName)}
+                          style={{width: 400}}
+                          onSelect={onSelect}
+                          onChange={onChange}
+                          placeholder={"Họ tên, Năm sinh, Quê quán, Trường học, Số điện thoại, Email, Công việc"}
+                        >
+                        </AutoComplete>
+                        <Button
+                          className="search-btn"
+                          style={{marginRight: -12}}
+                          size="default"
+                          type="primary"
+                          onClick={handleSearch}
+                        >
+                          <Icon type="search"/>
+                        </Button>
+                      </div>
+
+                    </>
+                  )}
+                </Form.Item>
+              </Form>
             </Header>
 
             <div>
@@ -85,4 +163,4 @@ const DefaultLayout = (props: LayoutProps) => {
 
 };
 
-export default connector(DefaultLayout);
+export default connector(Form.create<LayoutProps>()(DefaultLayout));

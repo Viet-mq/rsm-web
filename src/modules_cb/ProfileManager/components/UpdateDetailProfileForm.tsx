@@ -1,11 +1,6 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {
-  getActivityLogs,
-  showFormDetail,
-  showFormUpdateDetail,
-  updateDetail,
-} from "../redux/actions";
+import {getActivityLogs, showFormDetail, showFormUpdateDetail, updateDetail,} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, DatePicker, Form, Icon, Input, Modal, Select} from "antd";
 import React, {FormEvent, useEffect} from "react";
@@ -69,37 +64,51 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
       sm: {span: 16},
     },
   };
+
   useEffect(() => {
-    props.getListJob({page: 1, size: 100});
-    props.getListJobLevel({page: 1, size: 100});
-    props.getListSchool({page: 1, size: 100});
-    props.getListSourceCV({page: 1, size: 100});
-  }, [])
+    if (props.createJob.loading === true) {
+      props.getListJob({page: 1, size: 100});
+    }
+    if (props.createJobLevel.loading === true) {
+      props.getListJobLevel({page: 1, size: 100});
+    }
+    if (props.createSchool.loading === true) {
+      props.getListSchool({page: 1, size: 100});
+    }
+    if (props.createSourceCV.loading === true) {
+      props.getListSourceCV({page: 1, size: 100});
+    }
+  }, [props.createJob.loading === true ||
+  props.createJobLevel.loading === true ||
+  props.createSchool.loading === true ||
+  props.createSourceCV.loading === true
+  ])
+
   function onBtnUpdateClicked(e: FormEvent) {
     e.preventDefault();
     (e.target as any).disabled = true;
     (e.target as any).disabled = false;
 
-      props.form.validateFieldsAndScroll((err, values) => {
+    props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         let req: UpdateDetailRequest = {
           id: props.showForm.data_update_detail?.id,
           cv: values.cv,
           cvType: values.cvType,
-          dateOfApply: values.dateOfApply*1,
-          dateOfBirth: values.dateOfBirth*1,
+          dateOfApply: values.dateOfApply * 1,
+          dateOfBirth: values.dateOfBirth * 1,
           email: values.email,
           evaluation: values.evaluation,
           gender: values.gender,
           fullName: values.fullName,
           hometown: values.hometown,
           hrRef: values.hrRef,
-          job:values.job,
+          job: values.job,
           levelJob: values.levelJob,
           phoneNumber: values.phoneNumber,
-          school:values.school,
-          sourceCV:values.sourceCV,
-          lastApply: values.lastApply*1,
+          school: values.school,
+          sourceCV: values.sourceCV,
+          lastApply: values.lastApply * 1,
           note: values.note,
           tags: values.tags
         }
@@ -201,7 +210,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
 
           <Form.Item label="Giới tính" className="mb-0" style={{...formItemStyle}}>
             {getFieldDecorator('gender', {
-              initialValue: props.showForm.data_update_detail?.gender==="Nam"?"Nam":"Nữ",
+              initialValue: props.showForm.data_update_detail?.gender === "Nam" ? "Nam" : "Nữ",
               rules: [
                 {
                   message: 'Vui lòng nhập Giới tính',
@@ -227,7 +236,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                 },
               ],
             })(
-              <DatePicker format={dateFormat} style={{width:"100%"}}/>
+              <DatePicker format={dateFormat} style={{width: "100%"}}/>
             )}
           </Form.Item>
 
@@ -472,10 +481,10 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                 },
               ],
             })(
-              <DatePicker format={dateFormat} style={{width:"100%"}}/>
+              <DatePicker format={dateFormat} style={{width: "100%"}}/>
             )}
           </Form.Item>
-         
+
           <Form.Item label="Chỉnh sửa lần cuối" className="mb-0" style={{...formItemStyle}}>
             {getFieldDecorator('lastApply', {
               initialValue: moment(props.showForm.data_update_detail?.lastApply),
@@ -486,7 +495,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                 },
               ],
             })(
-              <DatePicker format={dateFormat} style={{width:"100%"}}/>
+              <DatePicker format={dateFormat} style={{width: "100%"}}/>
             )}
           </Form.Item>
 
