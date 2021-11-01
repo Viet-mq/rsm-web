@@ -2,7 +2,7 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import {ColumnProps} from "antd/lib/table";
-import {Avatar, Badge, Button, DatePicker, Form, Icon, Input, Popconfirm, Select, Table, Tooltip} from "antd";
+import {Avatar, Badge, Button, Form, Icon, Popconfirm, Table, Tooltip} from "antd";
 import {emptyText} from "src/configs/locales";
 import {
   deleteProfile,
@@ -22,15 +22,14 @@ import {DataShowBooking, DeleteProfileRequest, DetailCV, ProfileEntity} from "..
 import moment from "moment";
 import {FormComponentProps} from "antd/lib/form";
 import {GiFemale, GiMale, ImPhoneHangUp} from "react-icons/all";
+import {getListJobLevel} from "../../../JobLevelManager/redux/actions";
 
-const {Option} = Select;
 
 const mapStateToProps = (state: RootState) => ({
   list: state.profileManager.list,
   showDetail: state.profileManager.showForm.show_detail?.show_detail,
   detail: state.profileManager.detail,
   listSource: state.sourcecvManager.list,
-  elasticSearch: state.profileManager.search,
   listJobLevel: state.joblevelManager.list,
 })
 const connector = connect(mapStateToProps, {
@@ -45,31 +44,34 @@ const connector = connect(mapStateToProps, {
   getBooking,
   getActivityLogs,
   getElasticSearch,
-  getListNote
+  getListNote,
+  getListJobLevel
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface ListProfileProps extends FormComponentProps, ReduxProps {
-
+  locationState: any,
+  history: any
 }
 
 function ListProfile(props: ListProfileProps) {
-
+  console.log("locationState:", props.locationState)
+  console.log("history:", props.history)
   const [page, setPage] = useState(1);
   const size = 10;
   const {getFieldDecorator, resetFields} = props.form;
   const [inputValue, setInputValue] = useState<any>("")
   const [dataSource, setDataSource] = useState<ProfileEntity | any>(undefined)
-  const [state,setState] =useState<any>(
+  const [state, setState] = useState<any>(
     {
-      filteredInfo:null,
+      filteredInfo: null,
       sortedInfo: {
         order: null,
         columnKey: null,
       },
     }
-  ) ;
+  );
   const columns: ColumnProps<ProfileEntity>[] = [
     {
       title: 'STT',
@@ -91,14 +93,16 @@ function ListProfile(props: ListProfileProps) {
         return <div>
                   <span style={{marginRight: 24}}>
                     <Badge count={1}>
-                      <Avatar icon="user" style={{backgroundColor: "pink"}}/>
+                      <Avatar icon={record.image ? null : "user"} src={record.image ? record.image : "#"}/>
                     </Badge>
                   </span>
-          <a className="c-list-profile" style={{marginRight: "1px"}} onClick={event => handleDetail(event, record)}><span>{text}</span></a>
+          <a className="c-list-profile" style={{marginRight: "1px"}}
+             onClick={event => handleDetail(event, record)}><span>{text}</span></a>
           {record.gender === "Nam" ? <GiMale/> : <GiFemale/>}
         </div>
       }
     },
+
     {
       title: 'Thông tin liên hệ',
       // dataIndex: 'contact',
@@ -128,14 +132,14 @@ function ListProfile(props: ListProfileProps) {
     {
       title: 'Vị trí tuyển dụng',
       dataIndex: 'levelJobName',
-      width: 150,
+      width: 170,
       key: 'levelJobName',
       filters: props.listJobLevel?.rows.map((item: any) => ({
-        text:item.name,
-          value:item.name
+        text: item.name,
+        value: item.name
       }))
       ,
-      // filteredValue: state.filteredInfo.levelJobName || null,
+      filteredValue: state.filteredInfo?.levelJobName || null,
       onFilter: (value, record) => record.levelJobName.includes(value),
       sorter: (a, b) => a.levelJobName.length - b.levelJobName.length,
       sortOrder: state.sortedInfo.columnKey === 'levelJobName' && state.sortedInfo.order,
@@ -271,21 +275,22 @@ function ListProfile(props: ListProfileProps) {
 
   useEffect(() => {
     props.getListProfile({page: 1, size: 100});
-
+    props.getListJobLevel({page: 1, size: 100})
   }, [])
 
+  useEffect(() => {
+    setDataSource(props.locationState?.rows);
+  }, [props.locationState])
 
-
-  const handleChange = (pagination:any, filters:any, sorter:any) => {
+  const handleChange = (pagination: any, filters: any, sorter: any) => {
     console.log('Various parameters', pagination, filters, sorter);
     setState({
       filteredInfo: filters,
       sortedInfo: sorter,
     });
   };
-
   const clearFilters = () => {
-    setState({ ...state,filteredInfo: null });
+    setState({...state, filteredInfo: null});
   };
 
   const clearAll = () => {
@@ -349,19 +354,17 @@ function ListProfile(props: ListProfileProps) {
     props.getListNote({idProfile: entity.id})
     props.showFormDetail(req, dataSource !== undefined ? dataSource : props.list.rows);
   }
-  //
-  // const handleSelectSource = (value: any) => {
-  //   setSourceCV(value);
-  // }
-  //
-  // const handleSelectDate = (value: any) => {
-  //   // let applyDate: number = moment(unixTimeToDate(value)).format('DD/MM/YYYY');
-  //   setDate(value * 1);
-  // }
 
   function onBtnResetClicked() {
     resetFields();
-    setDataSource(undefined)
+    setDataSource(undefined);
+    setState({
+      filteredInfo: null,
+      sortedInfo: {
+        order: null,
+        columnKey: null,
+      },
+    });
     props.getListProfile({page: 1, size: 100});
     // setDataSource(props.list.rows);
   }
@@ -377,72 +380,36 @@ function ListProfile(props: ListProfileProps) {
     setInputValue(event.target.value)
   }
 
-  useEffect(() => {
-    if (props.elasticSearch.request !== null) {
-      setDataSource(props.elasticSearch.rows)
-    }
-  }, [props.elasticSearch.rows])
-
-
   return (
     <>
       <Form style={{display: "flex", flexWrap: "wrap"}}>
-        {/*<Select*/}
-        {/*  placeholder="Nguồn CV"*/}
-        {/*  style={{width: "16%", padding: "0 5px 0 0"}}*/}
-        {/*  onChange={handleSelectSource}*/}
-        {/*>*/}
-        {/*  {props.listSource.rows?.map((item: any, index: any) => (*/}
-        {/*    <Option key={index} value={item.name}>{item.name}</Option>*/}
-        {/*  ))}*/}
-        {/*</Select>*/}
-        {/*<DatePicker*/}
-        {/*  className="col"*/}
-        {/*  style={{width: "auto", padding: "0 5px"}}*/}
-        {/*  format={dateFormat}*/}
-        {/*  placeholder="Chọn thời gian nộp"*/}
-        {/*  onChange={handleSelectDate}*/}
-        {/*/>*/}
 
-        <Form.Item style={{margin: "-5px 10px 0 5px", width: "40%"}}>
-          {getFieldDecorator('valueInput')(
-            <Input
-              placeholder={"Họ tên, Năm sinh, Quê quán, Trường học, Số điện thoại, Email, Công việc"}
-              className="bg-white text-black"
-              onChange={event => inputChange(event)}
-              prefix={<Icon type="search"/>}
+        <Button style={{
 
-            />
-          )}
-        </Form.Item>
-        <Button type="primary"
-                style={{
-                  width: "115px",
-                  margin: "0 10px 0 0 ",
-                }}
-                onClick={onBtnSearchClicked}>
-          Tìm kiếm
-        </Button>
+          margin: "0 10px 0 0 ",
+        }} onClick={clearFilters}>Clear filters</Button>
+
+        <Button style={{
+
+          margin: "0 10px 0 0 ",
+        }} onClick={clearAll}>Clear filters and sorters</Button>
+
         <Button
           style={{
             width: "115px",
-            // margin: "0 5px",
           }}
+          type="danger"
           onClick={onBtnResetClicked}>
-          Reset
+          Reset All
         </Button>
       </Form>
 
       <br/>
-      <div className="table-operations">
-        <Button onClick={clearFilters}>Clear filters</Button>
-        <Button onClick={clearAll}>Clear filters and sorters</Button>
-      </div>
+
       <Table
         scroll={{x: 1500}}
         className="custom-table -webkit-scrollbar"
-        // dataSource={dataSource !== undefined ? dataSource : props.list.rows}
-        dataSource={props.list.rows}
+        dataSource={dataSource !== undefined ? dataSource : props.list.rows}
         columns={columns}
         rowKey="id"
         onChange={handleChange}

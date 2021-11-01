@@ -55,6 +55,15 @@ function ListDepartment(props: IProps) {
 
   const columns: ColumnProps<DepartmentEntity>[] = [
     {
+      title: 'STT',
+      key: 'index',
+      width: 50,
+      align: "center",
+      render: (text, record, index) => {
+        return (page - 1) * 10 + index + 1
+      }
+    },
+    {
       title: 'Name',
       dataIndex: 'name',
       width: 100,

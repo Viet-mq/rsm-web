@@ -13,18 +13,19 @@ import {
 } from "../redux/actions";
 import {showFormCreateNote, showFormUpdateNote} from "../../ProfileManager/redux/actions/note/showNote";
 
-import {Avatar, Button, Icon, Pagination, Popconfirm, Table, Timeline, Tooltip} from "antd";
+import {Avatar, Button, Icon, Pagination, Popconfirm, Popover, Table, Timeline, Tooltip} from "antd";
 import React, {useEffect, useState} from "react";
-import {DataShowBooking, DeleteNoteRequest, DetailCV, NoteEntity, ProfileEntity} from "../types";
+import {DataShowBooking, DeleteNoteRequest, DetailCV, DetailProfileEntity, NoteEntity, ProfileEntity} from "../types";
 import moment from "moment";
 import {ColumnProps} from "antd/lib/table";
 import {emptyText} from "../../../configs/locales";
 import Loading from "../../../components/Loading";
 import CreateNoteForm from "./CreateNoteForm";
 import UpdateNoteForm from "./UpdateNoteForm";
-import {RiFullscreenExitLine, RiFullscreenLine} from "react-icons/all";
+import {BsThreeDots, RiFullscreenExitLine, RiFullscreenLine} from "react-icons/all";
 import {downloadCVNote} from "../redux/services/apis";
 import StarRatings from 'react-star-ratings';
+import {DeleteTalentPoolRequest} from "../../TalentPoolManager/types";
 
 const mapStateToProps = (state: RootState) => ({
   showForm: state.profileManager.showForm,
@@ -62,7 +63,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
   const size = 10;
   const [rate, setRate] = useState(2.4);
   const [isFull, setIsFull] = useState<boolean>(false);
-  const [dataDetailMatch,setDataDetailMatch]=useState<ProfileEntity|any>({});
+  const [dataDetailMatch,setDataDetailMatch]=useState<DetailProfileEntity|any>({});
   const [activeLogs, setActiveLogs] = useState({
     params: '',
     data: [],
@@ -96,12 +97,53 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     },
   ]
 
+
+  const [visiblePopover, setVisiblePopover] = useState<boolean>(false);
+
+  const handleUpdateAvatar = (e: any) => {
+    e.preventDefault();
+    setVisiblePopover(false)
+    if (e?.target) {
+      e.target.disabled = true;
+      e.target.disabled = false;
+    }
+    // props.showFormUpdate(true, talentPool);
+  }
+
+  const handleDeleteAvatar = (event: any) => {
+    event.stopPropagation();
+    setVisiblePopover(false)
+    // let req: DeleteTalentPoolRequest = {
+    //   id: talentPool.id
+    // }
+    // props.deleteTalentPool(req);
+  }
+
+  const content = (
+    <ul style={{width: 165}} className="popup-popover">
+      <li>
+        <a onClick={handleUpdateAvatar}>Cập nhật ảnh đại diện</a>
+      </li>
+
+      <li>
+        <a onClick={handleDeleteAvatar} style={{color:"red"}}>Xóa ảnh đại diện</a>
+      </li>
+
+    </ul>
+  );
+
+  const handleVisibleChange = (visible: any) => {
+    console.log(visible)
+    setVisiblePopover(visible);
+  };
+
+
   const handleDeleteNote = (event: any, entity: NoteEntity) => {
     event.stopPropagation();
     let req: DeleteNoteRequest = {
       id: entity.id
     }
-    props.deleteNote(req);
+    props.deleteNote({id:req.id});
 
   }
 
@@ -323,7 +365,16 @@ function DetailProfileForm(props: DetailProfileFormProps) {
         </div>
 
         <div className="detail-paragraph-1">
-          <img src={require('src/assets/images/profile.png')}  style={{width: "100px",height:"100px",borderRadius:"50%"}}/>
+          <Popover
+            onVisibleChange={handleVisibleChange}
+            visible={visiblePopover}
+            className="header-user-info"
+            placement="bottom"
+            content={content}
+            trigger="click">
+
+            <img src={dataDetailMatch.image?dataDetailMatch.image:require('src/assets/images/profile.png')}  style={{width: "100px",height:"100px",borderRadius:"50%"}}/>
+          </Popover>
           <div className="detail-paragraph-1__name">
             <h2>{dataDetailMatch?.fullName}</h2>
             <StarRatings

@@ -91,7 +91,6 @@ export const createNote = async (params?: any) => {
   formData.append('username', params.username);
   formData.append('comment', params.comment);
   formData.append('evaluation', params.evaluation);
-  console.log("formdata Cre:",formData.getAll('file'),formData.getAll('idProfile'),formData.getAll('username'),formData.getAll('comment'),formData.getAll('evaluation'))
   return POSTIMAGE('api-svc/note/create', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
@@ -110,7 +109,6 @@ export const updateNote = async (params?: any) => {
   formData.append('username', params.username);
   formData.append('comment', params.comment);
   formData.append('evaluation', params.evaluation);
-  console.log("Formdata UP:",formData)
   return POSTIMAGE('api-svc/note/update', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',

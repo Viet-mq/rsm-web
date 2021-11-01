@@ -69,27 +69,14 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
   };
 
   useEffect(()=>{
-    if(props.createJob.loading||props.showForm.show_update){
+    if(props.showForm.show_update){
       props.getListJob({page: 1, size: 100});
-    }
-    if(props.createJobLevel.loading||props.showForm.show_update){
       props.getListJobLevel({page: 1, size: 100});
-    }
-    if(props.createSchool.loading||props.showForm.show_update){
       props.getListSchool({page: 1, size: 100});
-    }
-    if(props.createSourceCV.loading||props.showForm.show_update){
       props.getListSourceCV({page: 1, size: 100});
-    }
-    if( props.showForm.show_update){
       props.getListTalentPool({page: 1, size: 100});
     }
-  },[props.createJob.loading||
-  props.createJobLevel.loading||
-  props.createSchool.loading||
-  props.createSourceCV.loading||
-  props.showForm.show_update
-  ])
+  },[props.showForm.show_update])
 
   function onBtnUpdateClicked(e: FormEvent) {
     e.preventDefault();
@@ -274,14 +261,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                   ))}
                 </Select>
               )}
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                style={{height: '32px'}}
-                onClick={handleCreateJobLevel}
-              >
-                <Icon type="plus"/>
-              </Button>
             </div>
           </Form.Item>
 

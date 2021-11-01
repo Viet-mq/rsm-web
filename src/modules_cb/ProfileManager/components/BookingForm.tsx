@@ -49,16 +49,13 @@ function BookingForm(props: BookingFormProps) {
       sm: {span: 16},
     },
   };
+
   useEffect(() => {
-    if (props.listAccount.loading ||props.showBooking.show_booking) {
+    if (props.showBooking.show_booking) {
       props.getListAccount({page: 1, size: 100});
-    }
-    if (props.listStatus.loading ||props.showBooking.show_booking) {
       props.getListStatusCV({page: 1, size: 100});
     }
-  }, [props.listAccount.loading ||
-  props.listStatus.loading ||props.showBooking.show_booking
-  ])
+  }, [props.showBooking.show_booking])
 
   useEffect(() => {
     if (props.showBooking.data_booking?.id) {

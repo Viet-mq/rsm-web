@@ -72,27 +72,15 @@ function CreateProfileForm(props: CreateProfileFormProps) {
   };
 
   useEffect(()=>{
-    if(props.createJob.loading||props.profileManager.showForm.show_create){
-      props.getListJob({page: 1, size: 100});
-    }
-    if(props.createJobLevel.loading||props.profileManager.showForm.show_create){
-      props.getListJobLevel({page: 1, size: 100});
-    }
-    if(props.createSchool.loading||props.profileManager.showForm.show_create){
-      props.getListSchool({page: 1, size: 100});
-    }
-    if(props.createSourceCV.loading||props.profileManager.showForm.show_create){
-      props.getListSourceCV({page: 1, size: 100});
-    }
     if(props.profileManager.showForm.show_create){
+      props.getListJob({page: 1, size: 100});
+      props.getListJobLevel({page: 1, size: 100});
+      props.getListSchool({page: 1, size: 100});
+      props.getListSourceCV({page: 1, size: 100});
       props.getListTalentPool({page: 1, size: 100});
+
     }
-  },[props.createJob.loading||
-  props.createJobLevel.loading||
-  props.createSchool.loading||
-  props.createSourceCV.loading||
-  props.profileManager.showForm.show_create
-  ])
+  },[props.profileManager.showForm.show_create])
 
   function onBtnCreateClicked(e: FormEvent) {
     e.preventDefault();
@@ -276,14 +264,6 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                   ))}
                 </Select>
               )}
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                style={{height: '32px'}}
-                onClick={handleCreateJobLevel}
-              >
-                <Icon type="plus"/>
-              </Button>
             </div>
           </Form.Item>
 

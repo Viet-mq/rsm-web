@@ -43,14 +43,7 @@ const DefaultLayout = (props: LayoutProps) => {
     dataSource: [],
   });
 
-  function onSelect(value: any) {
-    let result:any;
-    if (state.value) {
-      result= props.getElasticSearch({key: state.value})
-    }
-    console.log('onSelect', result);
 
-  }
 
   function toggle() {
     setCollapsed(!collapsed)
@@ -69,17 +62,24 @@ const DefaultLayout = (props: LayoutProps) => {
 
   }, []);
 
+  useEffect(()=>{
+    props.getElasticSearch({key: state.value})
+  },[state.value])
+  console.log("Default:",props.elasticSearch)
 
-
-  const handleSearch = () => {
-    let result:any;
-    if (state.value) {
-      result= props.getElasticSearch({key: state.value})
-    }
+  const btnSearchClicked = () => {
+    console.log("cliked")
     history.push({
       pathname:"/profile-manager",
-      state:result,
+      state:props.elasticSearch,
     });
+  }
+
+  function onSelect(value: any) {
+    // history.push({
+    //   pathname:"/profile-manager",
+    //   state:props.elasticSearch,
+    // });
   }
 
   function onChange(value: any) {
@@ -87,7 +87,6 @@ const DefaultLayout = (props: LayoutProps) => {
       ...state,
       value
     })
-    props.getElasticSearch({key: value})
   }
 
   return (
@@ -131,7 +130,7 @@ const DefaultLayout = (props: LayoutProps) => {
                           style={{marginRight: -12}}
                           size="default"
                           type="primary"
-                          onClick={handleSearch}
+                          onClick={btnSearchClicked}
                         >
                           <Icon type="search"/>
                         </Button>

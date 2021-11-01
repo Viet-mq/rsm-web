@@ -1,3 +1,4 @@
+//profile
 export interface ProfileEntity {
   id: string,
   dateOfApply: number,
@@ -61,6 +62,7 @@ export interface DeleteProfileRequest {
   id: string,
 }
 
+//cv
 export interface UploadCVRequest {
   profileId: string | any,
   file: any,
@@ -76,6 +78,7 @@ export interface DetailCV {
   detail: number,
 }
 
+//booking
 export interface BookingEntity {
   id: string | any,
   idProfile: string | any,
@@ -93,58 +96,6 @@ export interface BookingEntity {
   reason: string,
   timeStart: number,
   timeFinish: number
-}
-
-export interface UpdateDetailRequest {
-  id: string,
-  cv: string,
-  cvType: string,
-  dateOfApply: number,
-  dateOfBirth: number,
-  email: string,
-  evaluation: string,
-  fullName: string,
-  gender: string,
-  hometown: string,
-  hrRef: string,
-  job: string,
-  lastApply: number,
-  levelJob: string,
-  note: string,
-  phoneNumber: string,
-  school: string,
-  sourceCV: string,
-  tags: string
-}
-
-export interface DetailProfileEntity {
-  id: string | any,
-  fullName: string | any,
-  gender: string,
-  phoneNumber: string,
-  email: string,
-  dateOfBirth: number,
-  hometown: string,
-  schoolId: string,
-  schoolName: string,
-  jobId: string,
-  jobName: string,
-  levelJobId: string,
-  levelJobName: string,
-  cv: string,
-  sourceCVId: string,
-  sourceCVName: string,
-  hrRef: string,
-  dateOfApply: number,
-  cvType: string,
-  lastApply: number,
-  tags: string,
-  dateOfCreate: number,
-  dateOfUpdate: number,
-  note: string,
-  evaluation: string,
-  statusCVId: string,
-  statusCVName: string,
 }
 
 export interface CreateBookingRequest {
@@ -187,6 +138,62 @@ export interface DataShowBooking {
   fullName: string
 }
 
+//detail
+export interface UpdateDetailRequest {
+  id: string,
+  dateOfApply: number,
+  dateOfBirth: number,
+  email: string,
+  evaluation: string,
+  fullName: string,
+  gender: string,
+  hometown: string,
+  hrRef: string,
+  job: string,
+  lastApply: number,
+  levelJob: string,
+  note: string,
+  phoneNumber: string,
+  school: string,
+  sourceCV: string,
+  tags: string,
+  talentPool: string
+
+}
+
+export interface DetailProfileEntity {
+  id: string | any,
+  fullName: string | any,
+  gender: string,
+  phoneNumber: string,
+  email: string,
+  dateOfBirth: number,
+  hometown: string,
+  schoolId: string,
+  schoolName: string,
+  jobId: string,
+  jobName: string,
+  levelJobId: string,
+  levelJobName: string,
+  cv: string,
+  sourceCVId: string,
+  sourceCVName: string,
+  hrRef: string,
+  dateOfApply: number,
+  lastApply: number,
+  tags: string,
+  dateOfCreate: number,
+  dateOfUpdate: number,
+  note: string,
+  evaluation: string,
+  statusCVId: string,
+  statusCVName: string,
+  image: string,
+  talentPoolId: string
+  talentPoolName: string
+
+}
+
 export interface ActivityLogsEntity {
   id: string,
   idProfile: string,
@@ -197,6 +204,7 @@ export interface ActivityLogsEntity {
   fullName: string
 }
 
+//note
 export interface NoteEntity {
   id: string | any,
   idProfile: string,

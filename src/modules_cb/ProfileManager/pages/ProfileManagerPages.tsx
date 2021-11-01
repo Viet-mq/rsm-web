@@ -17,9 +17,8 @@ import UploadCVForm from "../components/UploadCVForm";
 import BookingForm from "../components/BookingForm";
 import UpdateDetailProfileForm from "../components/UpdateDetailProfileForm";
 import env from 'src/configs/env';
-import { RouteComponentProps } from 'react-router-dom';
-import {ProfileEntity} from "../types";
-import { useLocation } from "react-router-dom";
+import {RouteComponentProps} from 'react-router-dom';
+
 const mapStateToProps = ({
                            profileManager: {
                              showForm,
@@ -59,24 +58,16 @@ const connector = connect(mapStateToProps, {
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
-interface IProps extends ReduxProps,RouteComponentProps {
+interface IProps extends ReduxProps, RouteComponentProps {
 
 }
-interface LocationState {
-  from: {
-    pathname: string;
-    state:ProfileEntity
-  };
-}
+
 function ProfileManagerPages(props: IProps) {
+  const locationState:any=props.location.state
+  const history:any =props.history.location.state
   useEffect(() => {
     document.title = "Quản lý Profile";
   }, []);
-  const location = useLocation<LocationState>();
-
-  const { from } = location.state || { from: { pathname: "/profile-manager" } };
-
-  console.log(from)
 
   const handleCreate = (e: any) => {
     e.preventDefault();
@@ -96,6 +87,7 @@ function ProfileManagerPages(props: IProps) {
     props.showFormUploadListCV(true);
   }
 
+  // @ts-ignore
   return (
     <div className="contentPage">
 
@@ -106,14 +98,14 @@ function ProfileManagerPages(props: IProps) {
           </Col>
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
-              <div style={{display:"flex",flexWrap:"nowrap"}}>
+              <div style={{display: "flex", flexWrap: "nowrap"}}>
                 <Button onClick={handleCreate}>
                   <Icon type="plus"/> Tạo Profile
                 </Button>
                 <Button onClick={event => handleUploadListCV(event)}>
                   <Icon type="upload"/> Upload List CV
                 </Button>
-                <Button >
+                <Button>
                   <a href={`${env.apiUri}/api-svc/excel/export`}><Icon type="upload"/> Xuất Excel</a>
                 </Button>
               </div>
@@ -122,7 +114,7 @@ function ProfileManagerPages(props: IProps) {
         </Row>
       </div>
 
-      <ListProfile/>
+      <ListProfile locationState={locationState} history={history}/>
       <CreateProfileForm/>
       <UpdateProfileForm/>
       <UploadCVForm/>

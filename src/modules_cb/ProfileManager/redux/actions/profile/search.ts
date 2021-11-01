@@ -7,7 +7,6 @@ export interface GetElasticSearchAction {
   rows?: ProfileEntity[],
   total?: number,
   error?: AppError
-
 }
 
 export const GET_ELASTIC_SEARCH = "GET_ELASTIC_SEARCH";

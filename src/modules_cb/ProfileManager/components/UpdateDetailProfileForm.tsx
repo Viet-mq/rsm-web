@@ -66,23 +66,14 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
   };
 
   useEffect(() => {
-    if (props.createJob.loading === true) {
+    if ( props.showForm.show_update_detail) {
       props.getListJob({page: 1, size: 100});
-    }
-    if (props.createJobLevel.loading === true) {
       props.getListJobLevel({page: 1, size: 100});
-    }
-    if (props.createSchool.loading === true) {
       props.getListSchool({page: 1, size: 100});
-    }
-    if (props.createSourceCV.loading === true) {
       props.getListSourceCV({page: 1, size: 100});
     }
-  }, [props.createJob.loading === true ||
-  props.createJobLevel.loading === true ||
-  props.createSchool.loading === true ||
-  props.createSourceCV.loading === true
-  ])
+
+  }, [props.showForm.show_update_detail])
 
   function onBtnUpdateClicked(e: FormEvent) {
     e.preventDefault();
@@ -93,8 +84,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
       if (!err) {
         let req: UpdateDetailRequest = {
           id: props.showForm.data_update_detail?.id,
-          cv: values.cv,
-          cvType: values.cvType,
           dateOfApply: values.dateOfApply * 1,
           dateOfBirth: values.dateOfBirth * 1,
           email: values.email,
@@ -110,7 +99,8 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           sourceCV: values.sourceCV,
           lastApply: values.lastApply * 1,
           note: values.note,
-          tags: values.tags
+          tags: values.tags,
+          talentPool:values.talentPool
         }
         props.updateDetail(req);
         return;
