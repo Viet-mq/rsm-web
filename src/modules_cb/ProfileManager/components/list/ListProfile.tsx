@@ -2,14 +2,15 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import {ColumnProps} from "antd/lib/table";
-import {Button, DatePicker, Form, Icon, Input, Popconfirm, Select, Table} from "antd";
+import {Avatar, Badge, Button, DatePicker, Form, Icon, Input, Popconfirm, Select, Table, Tooltip} from "antd";
 import {emptyText} from "src/configs/locales";
 import {
   deleteProfile,
   getActivityLogs,
   getBooking,
   getDetailProfile,
-  getElasticSearch, getListNote,
+  getElasticSearch,
+  getListNote,
   getListProfile,
   showFormBooking,
   showFormCreate,
@@ -20,15 +21,17 @@ import {
 import {DataShowBooking, DeleteProfileRequest, DetailCV, ProfileEntity} from "../../types";
 import moment from "moment";
 import {FormComponentProps} from "antd/lib/form";
-import { RouteComponentProps } from 'react-router-dom';
+import {GiFemale, GiMale, ImPhoneHangUp} from "react-icons/all";
 
 const {Option} = Select;
 
 const mapStateToProps = (state: RootState) => ({
   list: state.profileManager.list,
+  showDetail: state.profileManager.showForm.show_detail?.show_detail,
   detail: state.profileManager.detail,
   listSource: state.sourcecvManager.list,
-  elasticSearch: state.profileManager.search
+  elasticSearch: state.profileManager.search,
+  listJobLevel: state.joblevelManager.list,
 })
 const connector = connect(mapStateToProps, {
   getListProfile,
@@ -56,16 +59,24 @@ function ListProfile(props: ListProfileProps) {
   const [page, setPage] = useState(1);
   const size = 10;
   const {getFieldDecorator, resetFields} = props.form;
-  const [sourceCV, setSourceCV] = useState('');
-  const [date, setDate] = useState<any>();
   const [inputValue, setInputValue] = useState<any>("")
   const [dataSource, setDataSource] = useState<ProfileEntity | any>(undefined)
+  const [state,setState] =useState<any>(
+    {
+      filteredInfo:null,
+      sortedInfo: {
+        order: null,
+        columnKey: null,
+      },
+    }
+  ) ;
   const columns: ColumnProps<ProfileEntity>[] = [
     {
       title: 'STT',
       key: 'index',
       width: 50,
-      align:"center",
+      align: "center",
+      fixed: "left",
       render: (text, record, index) => {
         return (page - 1) * 10 + index + 1
       }
@@ -73,45 +84,93 @@ function ListProfile(props: ListProfileProps) {
     {
       title: 'Họ tên',
       dataIndex: 'fullName',
-      width: 130,
-      key: '2',
-      render: (text: string, record: ProfileEntity) => <a onClick={event => handleDetail(event, record)}>{text}</a>,
+      width: 200,
+      key: 'fullName',
+      fixed: "left",
+      render: (text: string, record: ProfileEntity) => {
+        return <div>
+                  <span style={{marginRight: 24}}>
+                    <Badge count={1}>
+                      <Avatar icon="user" style={{backgroundColor: "pink"}}/>
+                    </Badge>
+                  </span>
+          <a className="c-list-profile" style={{marginRight: "1px"}} onClick={event => handleDetail(event, record)}><span>{text}</span></a>
+          {record.gender === "Nam" ? <GiMale/> : <GiFemale/>}
+        </div>
+      }
+    },
+    {
+      title: 'Thông tin liên hệ',
+      // dataIndex: 'contact',
+      width: 200,
+      fixed: props.showDetail ? undefined : "left",
+      key: 'contact',
+      render: (text: string, record: ProfileEntity) => {
+        return <div>
+          <p>
+            <Icon type="mail" className="mr-1"/>
+            <span>{record.email}</span>
+          </p>
+          <p>
+            <ImPhoneHangUp className="mr-1"/>
+            <span>{record.phoneNumber}</span>
+          </p>
+        </div>
+      }
     },
     {
       title: 'Công việc',
       dataIndex: 'jobName',
-      width: 150,
-      key: '8',
+      width: 120,
+      key: 'jobName',
+      render: (text, record) => <span style={{fontWeight: 500}}>{record.jobName}</span>
     },
     {
       title: 'Vị trí tuyển dụng',
       dataIndex: 'levelJobName',
-      width: 100,
-      key: '9',
+      width: 150,
+      key: 'levelJobName',
+      filters: props.listJobLevel?.rows.map((item: any) => ({
+        text:item.name,
+          value:item.name
+      }))
+      ,
+      // filteredValue: state.filteredInfo.levelJobName || null,
+      onFilter: (value, record) => record.levelJobName.includes(value),
+      sorter: (a, b) => a.levelJobName.length - b.levelJobName.length,
+      sortOrder: state.sortedInfo.columnKey === 'levelJobName' && state.sortedInfo.order,
+      ellipsis: true,
     },
     {
       title: 'CV',
       dataIndex: 'cv',
       width: 200,
-      key: '10',
+      key: 'cv',
+      render: (text, record) => <a className="cv-overflow">{text}</a>
     },
     {
       title: 'Nguồn CV',
       dataIndex: 'sourceCVName',
       width: 100,
-      key: '11',
+      key: 'sourceCVName',
+    },
+    {
+      title: 'Talent Pools',
+      dataIndex: 'talentPoolName',
+      width: 100,
+      key: 'talentPoolName',
     },
     {
       title: 'HR Ref',
       dataIndex: 'hrRef',
       width: 100,
-      key: '12',
+      key: 'hrRef',
     },
     {
       title: 'Thời gian nộp',
       dataIndex: 'dateOfApply',
-      width: 100,
-      key: '13',
+      width: 110,
+      key: 'dateOfApply',
       render: (value: number) => {
         return moment(unixTimeToDate(value)).format('DD/MM/YYYY');
       },
@@ -131,12 +190,7 @@ function ListProfile(props: ListProfileProps) {
         return moment(unixTimeToDate(value)).format('DD/MM/YYYY');
       },
     },
-    {
-      title: 'Email',
-      dataIndex: 'email',
-      width: 200,
-      key: '7',
-    },
+
     {
       title: 'Quê quán',
       dataIndex: 'hometown',
@@ -148,12 +202,6 @@ function ListProfile(props: ListProfileProps) {
       dataIndex: 'schoolName',
       width: 200,
       key: '5',
-    },
-    {
-      title: 'Số điện thoại',
-      dataIndex: 'phoneNumber',
-      width: 110,
-      key: '6',
     },
 
 
@@ -175,35 +223,46 @@ function ListProfile(props: ListProfileProps) {
               }}
               onConfirm={event => handleDelete(event, record)}
             >
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                onClick={event => {
-                  event.stopPropagation();
-                }}
-              >
-                <Icon type="delete" theme="filled"/>
-              </Button>
+              <Tooltip placement="top" title="Xóa">
+                <Button
+                  size="small"
+                  className="ant-btn ml-1 mr-1 ant-btn-sm"
+                  onClick={event => {
+                    event.stopPropagation();
+                  }}
+                >
+                  <Icon type="delete" theme="filled"/>
+                </Button>
+              </Tooltip>
+
             </Popconfirm>
 
-            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
-                    onClick={event => handleEdit(event, record)}
-            >
-              <Icon type="edit"/>
-            </Button>
-            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
-                    onClick={event => handleUploadCV(event, record)}
-            >
-              <Icon type="upload"/>
-            </Button>
-            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
-                    onClick={event => handleBooking(event, record)}
-            >
-              <Icon type="calendar"/>
-            </Button>
-            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
-                    onClick={event => handleDetail(event, record)}
-            >Chi tiết</Button>
+            <Tooltip placement="top" title="Sửa">
+              <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
+                      onClick={event => handleEdit(event, record)}
+              >
+                <Icon type="edit"/>
+              </Button>
+            </Tooltip>
+
+            <Tooltip placement="top" title="Upload CV">
+              <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
+                      onClick={event => handleUploadCV(event, record)}
+              >
+                <Icon type="upload"/>
+              </Button>
+            </Tooltip>
+
+
+            <Tooltip placement="top" title="Lịch phỏng vấn">
+              <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
+                      onClick={event => handleBooking(event, record)}
+              >
+                <Icon type="calendar"/>
+              </Button>
+            </Tooltip>
+
+
           </div>
         );
       },
@@ -212,9 +271,32 @@ function ListProfile(props: ListProfileProps) {
 
   useEffect(() => {
     props.getListProfile({page: 1, size: 100});
-    // props.getListSourceCV({page: 1, size: 100});
+
   }, [])
 
+
+
+  const handleChange = (pagination:any, filters:any, sorter:any) => {
+    console.log('Various parameters', pagination, filters, sorter);
+    setState({
+      filteredInfo: filters,
+      sortedInfo: sorter,
+    });
+  };
+
+  const clearFilters = () => {
+    setState({ ...state,filteredInfo: null });
+  };
+
+  const clearAll = () => {
+    setState({
+      filteredInfo: null,
+      sortedInfo: {
+        order: null,
+        columnKey: null,
+      },
+    });
+  };
 
   function unixTimeToDate(unixTime: number): Date {
     return new Date(unixTime);
@@ -267,15 +349,15 @@ function ListProfile(props: ListProfileProps) {
     props.getListNote({idProfile: entity.id})
     props.showFormDetail(req, dataSource !== undefined ? dataSource : props.list.rows);
   }
-
-  const handleSelectSource = (value: any) => {
-    setSourceCV(value);
-  }
-
-  const handleSelectDate = (value: any) => {
-    // let applyDate: number = moment(unixTimeToDate(value)).format('DD/MM/YYYY');
-    setDate(value * 1);
-  }
+  //
+  // const handleSelectSource = (value: any) => {
+  //   setSourceCV(value);
+  // }
+  //
+  // const handleSelectDate = (value: any) => {
+  //   // let applyDate: number = moment(unixTimeToDate(value)).format('DD/MM/YYYY');
+  //   setDate(value * 1);
+  // }
 
   function onBtnResetClicked() {
     resetFields();
@@ -305,22 +387,22 @@ function ListProfile(props: ListProfileProps) {
   return (
     <>
       <Form style={{display: "flex", flexWrap: "wrap"}}>
-        <Select
-          placeholder="Nguồn CV"
-          style={{width: "16%", padding: "0 5px 0 0"}}
-          onChange={handleSelectSource}
-        >
-          {props.listSource.rows?.map((item: any, index: any) => (
-            <Option key={index} value={item.name}>{item.name}</Option>
-          ))}
-        </Select>
-        <DatePicker
-          className="col"
-          style={{width: "auto", padding: "0 5px"}}
-          format={dateFormat}
-          placeholder="Chọn thời gian nộp"
-          onChange={handleSelectDate}
-        />
+        {/*<Select*/}
+        {/*  placeholder="Nguồn CV"*/}
+        {/*  style={{width: "16%", padding: "0 5px 0 0"}}*/}
+        {/*  onChange={handleSelectSource}*/}
+        {/*>*/}
+        {/*  {props.listSource.rows?.map((item: any, index: any) => (*/}
+        {/*    <Option key={index} value={item.name}>{item.name}</Option>*/}
+        {/*  ))}*/}
+        {/*</Select>*/}
+        {/*<DatePicker*/}
+        {/*  className="col"*/}
+        {/*  style={{width: "auto", padding: "0 5px"}}*/}
+        {/*  format={dateFormat}*/}
+        {/*  placeholder="Chọn thời gian nộp"*/}
+        {/*  onChange={handleSelectDate}*/}
+        {/*/>*/}
 
         <Form.Item style={{margin: "-5px 10px 0 5px", width: "40%"}}>
           {getFieldDecorator('valueInput')(
@@ -352,13 +434,18 @@ function ListProfile(props: ListProfileProps) {
       </Form>
 
       <br/>
+      <div className="table-operations">
+        <Button onClick={clearFilters}>Clear filters</Button>
+        <Button onClick={clearAll}>Clear filters and sorters</Button>
+      </div>
       <Table
         scroll={{x: 1500}}
         className="custom-table -webkit-scrollbar"
         // dataSource={dataSource !== undefined ? dataSource : props.list.rows}
-        dataSource={ props.list.rows}
+        dataSource={props.list.rows}
         columns={columns}
         rowKey="id"
+        onChange={handleChange}
         locale={{emptyText: emptyText}}
         pagination={{
           current: page,

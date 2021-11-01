@@ -10,6 +10,7 @@ import moment from "moment";
 import {CreateBookingRequest, UpdateBookingRequest} from "../types";
 
 const {Option} = Select;
+const { TextArea } = Input;
 
 const mapStateToProps = (state: RootState) => ({
   listAccount: state.accountManager.list,
@@ -49,14 +50,14 @@ function BookingForm(props: BookingFormProps) {
     },
   };
   useEffect(() => {
-    if (props.listAccount.loading === true) {
+    if (props.listAccount.loading ||props.showBooking.show_booking) {
       props.getListAccount({page: 1, size: 100});
     }
-    if (props.listStatus.loading === true) {
+    if (props.listStatus.loading ||props.showBooking.show_booking) {
       props.getListStatusCV({page: 1, size: 100});
     }
-  }, [props.listAccount.loading === true ||
-  props.listStatus.loading === true
+  }, [props.listAccount.loading ||
+  props.listStatus.loading ||props.showBooking.show_booking
   ])
 
   useEffect(() => {
@@ -273,7 +274,7 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <Input placeholder="Nhận xét" className="bg-white text-black"/>
+                  <TextArea placeholder="Nhận xét" style={{height:"100px"}} className="bg-white text-black"/>
                 )}
               </Form.Item>
 
@@ -311,7 +312,7 @@ function BookingForm(props: BookingFormProps) {
                 )}
               </Form.Item>
 
-              <Form.Item label="Thời gian phỏng vấn dự kiến" className="mb-0" style={{...formItemStyle}}>
+              <Form.Item label="Thời gian dự kiến" className="mb-0" style={{...formItemStyle}}>
                 {getFieldDecorator('time', {
                   initialValue: moment(props.getBookingState.result?.time) || null,
                   rules: [
@@ -346,7 +347,7 @@ function BookingForm(props: BookingFormProps) {
                   initialValue: moment(props.getBookingState.result?.timeFinish) || null,
                   rules: [
                     {
-                      message: 'Vui lòng nhập Thời gian phỏng vấn dự kiến',
+                      message: 'Vui lòng nhập Thời gian kết thúc',
                       required: true,
                     },
                   ],
@@ -480,7 +481,7 @@ function BookingForm(props: BookingFormProps) {
                     },
                   ],
                 })(
-                  <Input placeholder="Nhận xét" className="bg-white text-black"/>
+                  <TextArea placeholder="Nhận xét" style={{height:"100px"}} className="bg-white text-black"/>
                 )}
               </Form.Item>
 
@@ -546,7 +547,7 @@ function BookingForm(props: BookingFormProps) {
                 )}
               </Form.Item>
 
-              <Form.Item label="Thời gian phỏng vấn dự kiến" className="mb-0" style={{...formItemStyle}}>
+              <Form.Item label="Thời gian dự kiến" className="mb-0" style={{...formItemStyle}}>
                 {getFieldDecorator('time', {
                   initialValue: undefined,
                   rules: [
@@ -581,7 +582,7 @@ function BookingForm(props: BookingFormProps) {
                   initialValue: undefined,
                   rules: [
                     {
-                      message: 'Vui lòng nhập Thời gian phỏng vấn dự kiến',
+                      message: 'Vui lòng nhập Thời gian kết thúc',
                       required: true,
                     },
                   ],

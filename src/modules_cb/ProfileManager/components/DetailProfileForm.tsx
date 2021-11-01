@@ -13,7 +13,7 @@ import {
 } from "../redux/actions";
 import {showFormCreateNote, showFormUpdateNote} from "../../ProfileManager/redux/actions/note/showNote";
 
-import {Avatar, Button, Icon, Pagination, Popconfirm, Table, Timeline} from "antd";
+import {Avatar, Button, Icon, Pagination, Popconfirm, Table, Timeline, Tooltip} from "antd";
 import React, {useEffect, useState} from "react";
 import {DataShowBooking, DeleteNoteRequest, DetailCV, NoteEntity, ProfileEntity} from "../types";
 import moment from "moment";
@@ -173,6 +173,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
               }}
               onConfirm={event => handleDeleteNote(event, record)}
             >
+              <Tooltip placement="top" title="Xóa">
               <Button
                 size="small"
                 className="ant-btn ml-1 mr-1 ant-btn-sm"
@@ -182,13 +183,18 @@ function DetailProfileForm(props: DetailProfileFormProps) {
               >
                 <Icon type="delete" theme="filled"/>
               </Button>
+              </Tooltip>
+
             </Popconfirm>
+
+            <Tooltip placement="top" title="Sửa">
 
             <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
                     onClick={event => handleEditNote(event, record)}
             >
               <Icon type="edit"/>
             </Button>
+            </Tooltip>
 
           </div>
         );
@@ -295,6 +301,8 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
           <div className="detail-title__right">
 
+            <div style={{display:"flex",marginRight:"34px"}}>
+
             <Button size="small" className="ant-btn mr-1 ant-btn-sm"
                     onClick={event => handleFullScreen(event)}>
               {isFull ? <RiFullscreenExitLine className="mt-1"/> : <RiFullscreenLine className="mt-1"/>}
@@ -303,7 +311,9 @@ function DetailProfileForm(props: DetailProfileFormProps) {
                     onClick={event => onBtnUpdateDetail(event)}>
               <Icon type="edit"/>
             </Button>
-            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
+            </div>
+
+            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm btn-delete"
                     onClick={handeClose}
             >
               <Icon type="close"/>
@@ -313,7 +323,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
         </div>
 
         <div className="detail-paragraph-1">
-          <img src={require('src/assets/images/profile.png')}  style={{width: "100px",height:"100px"}}/>
+          <img src={require('src/assets/images/profile.png')}  style={{width: "100px",height:"100px",borderRadius:"50%"}}/>
           <div className="detail-paragraph-1__name">
             <h2>{dataDetailMatch?.fullName}</h2>
             <StarRatings

@@ -1,4 +1,5 @@
 import {
+  getDetailProfile,
   getListProfile,
   showFormUpdateDetail,
   UpdateDetailAction,
@@ -22,6 +23,7 @@ export function* updateDetailAsync(action: UpdateDetailAction) {
       yield put(showFormUpdateDetail(false));
       const params = yield select((state: RootState) => state.profileManager.list.params);
       yield put(getListProfile(params));
+      yield put(getDetailProfile(action.request?.id))
     }
   } catch (e) {
     yield put(updateDetailError(new AppError(e.message)));

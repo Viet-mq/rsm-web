@@ -1,0 +1,16 @@
+.c-list-profile{
+  a{
+    &:hover{
+      text-decoration: underline;
+    }
+  }
+}
+
+.cv-overflow {
+  white-space: nowrap;
+  width: 170px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+
+}

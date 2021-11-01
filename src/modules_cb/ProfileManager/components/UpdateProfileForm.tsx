@@ -15,6 +15,7 @@ import CreateJobLevelForm from "../../JobLevelManager/components/CreateJobLevelF
 import CreateSourceCVForm from "../../SourceCVManager/components/CreateSourceCVForm";
 import CreateSchoolForm from "../../SchoolManager/components/CreateSchoolForm";
 import Loading from "../../../components/Loading";
+import {getListTalentPool} from "../../TalentPoolManager/redux/actions";
 
 const {Option} = Select;
 
@@ -28,6 +29,8 @@ const mapStateToProps = (state: RootState) => ({
   createJobLevel: state.joblevelManager.create,
   createSchool: state.schoolManager.create,
   createSourceCV: state.sourcecvManager.create,
+  listTalentPool:state.talentPoolManager.list,
+
 })
 
 const connector = connect(mapStateToProps,
@@ -42,7 +45,8 @@ const connector = connect(mapStateToProps,
     showJobLevelFormCreate,
     showSchoolFormCreate,
     showSourceCVFormCreate,
-    getActivityLogs
+    getActivityLogs,
+    getListTalentPool
 
   });
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -65,22 +69,26 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
   };
 
   useEffect(()=>{
-    if(props.createJob.loading===true){
+    if(props.createJob.loading||props.showForm.show_update){
       props.getListJob({page: 1, size: 100});
     }
-    if(props.createJobLevel.loading===true){
+    if(props.createJobLevel.loading||props.showForm.show_update){
       props.getListJobLevel({page: 1, size: 100});
     }
-    if(props.createSchool.loading===true){
+    if(props.createSchool.loading||props.showForm.show_update){
       props.getListSchool({page: 1, size: 100});
     }
-    if(props.createSourceCV.loading===true){
+    if(props.createSourceCV.loading||props.showForm.show_update){
       props.getListSourceCV({page: 1, size: 100});
     }
-  },[props.createJob.loading===true||
-  props.createJobLevel.loading===true||
-  props.createSchool.loading===true||
-  props.createSourceCV.loading===true
+    if( props.showForm.show_update){
+      props.getListTalentPool({page: 1, size: 100});
+    }
+  },[props.createJob.loading||
+  props.createJobLevel.loading||
+  props.createSchool.loading||
+  props.createSourceCV.loading||
+  props.showForm.show_update
   ])
 
   function onBtnUpdateClicked(e: FormEvent) {
@@ -247,6 +255,36 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
               </Button>
             </div>
           </Form.Item>
+
+          <Form.Item label="Talent pools" className="mb-0" style={{...formItemStyle}}>
+            <div style={{display: 'flex'}}>
+              {getFieldDecorator('talentPool', {
+                initialValue: props.showForm.data_update?.talentPool,
+                rules: [
+                  {
+                    message: 'Vui lòng chọn talent pools',
+                    required: true,
+                  },
+                ],
+              })(
+                <Select className="bg-white text-black"
+                >
+                  {props.listTalentPool.rows?.map((item: any, index: any) => (
+                    <Option key={index} value={item.id}>{item.name}</Option>
+                  ))}
+                </Select>
+              )}
+              <Button
+                size="small"
+                className="ant-btn ml-1 mr-1 ant-btn-sm"
+                style={{height: '32px'}}
+                onClick={handleCreateJobLevel}
+              >
+                <Icon type="plus"/>
+              </Button>
+            </div>
+          </Form.Item>
+
 
           <Form.Item label="Nguồn CV" className="mb-0" style={{...formItemStyle}}>
             <div style={{display: 'flex'}}>

@@ -5,6 +5,7 @@ import {RootState} from 'src/redux/reducers';
 import {connect, ConnectedProps} from 'react-redux';
 import SubMenu from "antd/es/menu/SubMenu";
 import {
+  AiOutlineAppstoreAdd,
   AiOutlineCheckCircle,
   AiOutlineFolderView,
   AiOutlineLinkedin,
@@ -17,7 +18,9 @@ import {
   IoEyeSharp,
   IoIosListBox,
   MdOutlineSource,
-  MdOutlineWorkOutline, RiMailSettingsLine
+  MdOutlineWorkOutline,
+  RiFolderUserLine,
+  RiMailSettingsLine
 } from "react-icons/all";
 
 const mapStateToProps = (state: RootState) => {
@@ -50,8 +53,8 @@ const Nav = (props: IProps) => {
     >
       <Menu.Item key="home" style={{display: 'flex', alignItems: 'center'}}>
         <Link to={`/home`}>
-          <Icon type="dashboard" />
-           <span>Dashboard </span>
+          <Icon type="dashboard"/>
+          <span>Dashboard </span>
         </Link>
       </Menu.Item>
 
@@ -69,7 +72,7 @@ const Nav = (props: IProps) => {
         </Link>
       </Menu.Item>
 
-      <SubMenu key="sub1" title={<span>CÀI ĐẶT</span>}>
+      <SubMenu key="sub1" title={!props.hiddenLabel ? <span>CÀI ĐẶT</span> : <Icon type="setting"/>}>
 
         <Menu.Item key="view-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/view-manager`}>
@@ -101,7 +104,7 @@ const Nav = (props: IProps) => {
 
       </SubMenu>
 
-      <SubMenu key="sub2" title={<span>QUẢN LÝ DANH MỤC</span>}>
+      <SubMenu key="sub2" title={!props.hiddenLabel ? <span>QUẢN LÝ DANH MỤC</span> : <Icon type="menu"/>}>
 
         <Menu.Item key="job-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/job-manager`}>
@@ -161,11 +164,11 @@ const Nav = (props: IProps) => {
 
       </SubMenu>
 
-      <SubMenu key="sub3" title={<span>TALENT POOLS</span>}>
-        {props.auth?.pools.map((item:any)=>{
+      <SubMenu key="sub3" title={!props.hiddenLabel ? <span>TALENT POOLS</span> : <RiFolderUserLine/>}>
+        {props.auth?.pools.map((item: any) => {
           return <Menu.Item key={item.id} style={{display: 'flex', alignItems: 'center'}}>
             <Link to={`/talent-pool-manager/${item.id}`}>
-              <Icon type="contacts" />
+              <Icon type="contacts"/>
               <span>{item.name} </span>
               <span>{item.count}</span>
             </Link>
@@ -175,13 +178,13 @@ const Nav = (props: IProps) => {
 
       </SubMenu>
 
-      <SubMenu key="sub4" title={<span>TÙY CHỈNH</span>}>
-           <Menu.Item key="/email-manager" style={{display: 'flex', alignItems: 'center'}}>
-            <Link to={`/email-manager`}>
-              <RiMailSettingsLine className="mr-2"/>
-              <span>Mẫu Email</span>
-            </Link>
-          </Menu.Item>
+      <SubMenu key="sub4" title={!props.hiddenLabel ? <span>TÙY CHỈNH</span> : <AiOutlineAppstoreAdd/>}>
+        <Menu.Item key="/email-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to={`/email-manager`}>
+            <RiMailSettingsLine className="mr-2"/>
+            <span>Mẫu Email</span>
+          </Link>
+        </Menu.Item>
       </SubMenu>
 
     </Menu>

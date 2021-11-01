@@ -16,6 +16,7 @@ import CreateSchoolForm from "../../SchoolManager/components/CreateSchoolForm";
 import CreateStatusCVForm from "../../StatusCVManager/components/CreateStatusCVForm";
 
 import Loading from "../../../components/Loading";
+import {getListTalentPool} from "../../TalentPoolManager/redux/actions";
 
 const {Option} = Select;
 
@@ -25,6 +26,7 @@ const mapStateToProps = (state: RootState) => ({
   listJobLevel: state.joblevelManager.list,
   listSchool: state.schoolManager.list,
   listSourceCV: state.sourcecvManager.list,
+  listTalentPool:state.talentPoolManager.list,
   createJob: state.jobManager.create,
   createJobLevel: state.joblevelManager.create,
   createSchool: state.schoolManager.create,
@@ -44,7 +46,8 @@ const connector = connect(mapStateToProps,
     showJobLevelFormCreate,
     showSchoolFormCreate,
     showSourceCVFormCreate,
-    getActivityLogs
+    getActivityLogs,
+    getListTalentPool
   });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -69,22 +72,26 @@ function CreateProfileForm(props: CreateProfileFormProps) {
   };
 
   useEffect(()=>{
-    if(props.createJob.loading===true){
+    if(props.createJob.loading||props.profileManager.showForm.show_create){
       props.getListJob({page: 1, size: 100});
     }
-    if(props.createJobLevel.loading===true){
+    if(props.createJobLevel.loading||props.profileManager.showForm.show_create){
       props.getListJobLevel({page: 1, size: 100});
     }
-    if(props.createSchool.loading===true){
+    if(props.createSchool.loading||props.profileManager.showForm.show_create){
       props.getListSchool({page: 1, size: 100});
     }
-    if(props.createSourceCV.loading===true){
+    if(props.createSourceCV.loading||props.profileManager.showForm.show_create){
       props.getListSourceCV({page: 1, size: 100});
     }
-  },[props.createJob.loading===true||
-  props.createJobLevel.loading===true||
-  props.createSchool.loading===true||
-  props.createSourceCV.loading===true
+    if(props.profileManager.showForm.show_create){
+      props.getListTalentPool({page: 1, size: 100});
+    }
+  },[props.createJob.loading||
+  props.createJobLevel.loading||
+  props.createSchool.loading||
+  props.createSourceCV.loading||
+  props.profileManager.showForm.show_create
   ])
 
   function onBtnCreateClicked(e: FormEvent) {
@@ -157,15 +164,6 @@ function CreateProfileForm(props: CreateProfileFormProps) {
     }
     props.showSourceCVFormCreate(true);
   }
-
-  // const handleCreateStatusCV = (e: any) => {
-  //   e.preventDefault();
-  //   if (e?.target) {
-  //     e.target.disabled = true;
-  //     e.target.disabled = false;
-  //   }
-  //   props.showStatusCVFormCreate(true);
-  // }
 
   return (
     <div>
@@ -245,6 +243,35 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                 <Select className="bg-white text-black"
                 >
                   {props.listJobLevel.rows?.map((item: any, index: any) => (
+                    <Option key={index} value={item.id}>{item.name}</Option>
+                  ))}
+                </Select>
+              )}
+              <Button
+                size="small"
+                className="ant-btn ml-1 mr-1 ant-btn-sm"
+                style={{height: '32px'}}
+                onClick={handleCreateJobLevel}
+              >
+                <Icon type="plus"/>
+              </Button>
+            </div>
+          </Form.Item>
+
+          <Form.Item label="Talent pools" className="mb-0" style={{...formItemStyle}}>
+            <div style={{display: 'flex'}}>
+              {getFieldDecorator('talentPool', {
+                initialValue: '',
+                rules: [
+                  {
+                    message: 'Vui lòng chọn talent pools',
+                    required: true,
+                  },
+                ],
+              })(
+                <Select className="bg-white text-black"
+                >
+                  {props.listTalentPool.rows?.map((item: any, index: any) => (
                     <Option key={index} value={item.id}>{item.name}</Option>
                   ))}
                 </Select>

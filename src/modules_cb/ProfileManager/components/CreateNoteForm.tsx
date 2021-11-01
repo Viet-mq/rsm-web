@@ -6,18 +6,22 @@ import React, {FormEvent, useEffect, useState} from "react";
 import {createNote} from "../redux/actions";
 import {CreateNoteRequest} from "../types";
 import {showFormCreateNote} from "../../ProfileManager/redux/actions/note/showNote";
+import {getListAccount} from "../../AccountManager/redux/actions";
 
 const {Option} = Select;
+const { TextArea } = Input;
 
 const mapStateToProps = (state: RootState) => ({
-  profileManager: state.profileManager,
+  showNote: state.profileManager.showNote,
   listAccount: state.accountManager.list,
 })
 
 const connector = connect(mapStateToProps,
   {
     showFormCreateNote,
-    createNote
+    createNote,
+    getListAccount,
+
   });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -41,14 +45,12 @@ function CreateProfileForm(props: CreateProfileFormProps) {
       sm: {span: 12},
     },
   };
-
   useEffect(() => {
-    // props.getListJob({page: 1, size: 100});
-    // props.getListJobLevel({page: 1, size: 100});
-    // props.getListSchool({page: 1, size: 100});
-    // props.getListSourceCV({page: 1, size: 100});
-    // props.getListStatusCV({page: 1, size: 100});
-  }, [])
+    if (props.showNote.show_note_create) {
+      props.getListAccount({page: 1, size: 100});
+    }
+
+  }, [props.showNote.show_note_create])
 
   function onBtnCreateClicked(e: FormEvent) {
     e.preventDefault();
@@ -57,7 +59,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         let req: CreateNoteRequest = {
-          idProfile: props.profileManager.showNote.idProfile,
+          idProfile: props.showNote.idProfile,
           username: values.username,
           comment: values.comment,
           evaluation: values.evaluation,
@@ -86,7 +88,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
         zIndex={2}
         maskClosable={false}
         title="Tạo mới Đánh giá"
-        visible={props.profileManager.showNote.show_note_create}
+        visible={props.showNote.show_note_create}
         centered={true}
         width="550px"
         afterClose={() => {
@@ -128,7 +130,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                 },
               ],
             })(
-              <Input placeholder="Nhận xét" className="bg-white text-black"/>
+              <TextArea placeholder="Nhận xét" style={{height:"100px"}} className="bg-white text-black"/>
             )}
           </Form.Item>
 

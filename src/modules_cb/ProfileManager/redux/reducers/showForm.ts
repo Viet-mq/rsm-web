@@ -69,8 +69,8 @@ export default (state = initState, {
         show_update: false,
         show_detail: {
           show_detail: false,
-          general: 24,
-          detail: 0,
+          general: 12,
+          detail: 12,
         },
       }
     case Actions.PROFILE_SHOW_FORM_DETAIL:

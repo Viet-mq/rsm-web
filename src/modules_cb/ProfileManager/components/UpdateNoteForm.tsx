@@ -6,8 +6,10 @@ import React, {FormEvent, useEffect, useState} from "react";
 import {updateNote} from "../redux/actions";
 import {UpdateNoteRequest} from "../types";
 import {showFormUpdateNote} from "../../ProfileManager/redux/actions/note/showNote";
+import {getListAccount} from "../../AccountManager/redux/actions";
 
 const {Option} = Select;
+const { TextArea } = Input;
 
 const mapStateToProps = (state: RootState) => ({
   showNote: state.profileManager.showNote,
@@ -17,7 +19,9 @@ const mapStateToProps = (state: RootState) => ({
 const connector = connect(mapStateToProps,
   {
     showFormUpdateNote,
-    updateNote
+    updateNote,
+    getListAccount,
+
   });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -41,6 +45,13 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
       sm: {span: 12},
     },
   };
+
+  useEffect(() => {
+    if (props.showNote.show_note_update) {
+      props.getListAccount({page: 1, size: 100});
+    }
+
+  }, [props.showNote.show_note_update])
 
   function onBtnUpdateClicked(e: FormEvent) {
     e.preventDefault();
@@ -118,7 +129,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                 },
               ],
             })(
-              <Input placeholder="Nhận xét" className="bg-white text-black"/>
+              <TextArea placeholder="Nhận xét" style={{height:"100px"}} className="bg-white text-black"/>
             )}
           </Form.Item>
 
