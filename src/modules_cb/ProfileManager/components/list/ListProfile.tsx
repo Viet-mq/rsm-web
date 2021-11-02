@@ -39,12 +39,8 @@ const connector = connect(mapStateToProps, {
   showFormUpdate,
   showFormDetail,
   showFormUploadCV,
-  getDetailProfile,
   showFormBooking,
-  getBooking,
-  getActivityLogs,
   getElasticSearch,
-  getListNote,
   getListJobLevel
 });
 
@@ -52,14 +48,12 @@ type ReduxProps = ConnectedProps<typeof connector>;
 
 interface ListProfileProps extends FormComponentProps, ReduxProps {
   locationState: any,
-  history: any
 }
 
 function ListProfile(props: ListProfileProps) {
   console.log("locationState:", props.locationState)
-  console.log("history:", props.history)
   const [page, setPage] = useState(1);
-  const size = 10;
+  const size = 30;
   const {getFieldDecorator, resetFields} = props.form;
   const [inputValue, setInputValue] = useState<any>("")
   const [dataSource, setDataSource] = useState<ProfileEntity | any>(undefined)
@@ -80,7 +74,7 @@ function ListProfile(props: ListProfileProps) {
       align: "center",
       fixed: "left",
       render: (text, record, index) => {
-        return (page - 1) * 10 + index + 1
+        return (page - 1) * 30 + index + 1
       }
     },
     {
@@ -150,7 +144,7 @@ function ListProfile(props: ListProfileProps) {
       dataIndex: 'cv',
       width: 200,
       key: 'cv',
-      render: (text, record) => <a className="cv-overflow">{text}</a>
+      render: (text, record) => <a className="cv-overflow" href={record.urlCV} target="_blank">{record.cv}</a>
     },
     {
       title: 'Nguồn CV',
@@ -347,12 +341,7 @@ function ListProfile(props: ListProfileProps) {
       general: 12,
       detail: 12,
     }
-
-    props.getDetailProfile({idProfile: entity.id});
-    props.getActivityLogs({idProfile: entity.id});
-    props.getBooking({idProfile: entity.id});
-    props.getListNote({idProfile: entity.id})
-    props.showFormDetail(req, dataSource !== undefined ? dataSource : props.list.rows);
+    props.showFormDetail(req, entity.id);
   }
 
   function onBtnResetClicked() {
@@ -379,6 +368,8 @@ function ListProfile(props: ListProfileProps) {
   function inputChange(event: any) {
     setInputValue(event.target.value)
   }
+
+
 
   return (
     <>

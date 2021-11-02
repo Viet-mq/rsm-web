@@ -20,6 +20,7 @@ import deleteNote,{DeleteNoteState} from "./note/deleteNote";
 import getListNote,{GetListNoteState} from "./note/getListNote";
 import showNote,{ ShowNoteState} from "./note/showNote";
 import updateNote,{UpdateNoteState} from "./note/updateNote";
+import uploadAvatar, {UploadAvatarState} from "./profile/uploadAvatar";
 
 export interface ProfileManagerModuleState {
   list: ProfileListState,
@@ -43,6 +44,7 @@ export interface ProfileManagerModuleState {
   getListNote:GetListNoteState,
   showNote:ShowNoteState,
   updateNote:UpdateNoteState,
+  uploadAvatar:UploadAvatarState,
 }
 
 export default combineReducers<ProfileManagerModuleState>({
@@ -67,4 +69,5 @@ export default combineReducers<ProfileManagerModuleState>({
   getListNote,
   showNote,
   updateNote,
+  uploadAvatar
 });

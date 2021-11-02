@@ -1,4 +1,4 @@
-import {DetailCV, DetailProfileEntity, ProfileEntity} from "../../types";
+import {DetailCV, DetailProfileEntity, ProfileEntity, UploadAvatarRequest} from "../../types";
 
 export interface ProfileFormAction {
   type: string,
@@ -8,13 +8,17 @@ export interface ProfileFormAction {
   show_detail?: DetailCV,
   data_update?: ProfileEntity
   data_update_detail?: DetailProfileEntity
-  data_detail?: DetailProfileEntity[]
+  id_detail?: string,
+  show_upload_avatar?: boolean,
+  id_upload_avatar?:string
+
 }
 
 export const PROFILE_SHOW_FORM_CREATE = "PROFILE_SHOW_FORM_CREATE";
 export const PROFILE_SHOW_FORM_UPDATE = "PROFILE_SHOW_FORM_UPDATE";
 export const PROFILE_SHOW_FORM_UPDATE_DETAIL = "PROFILE_SHOW_FORM_UPDATE_DETAIL";
 export const PROFILE_SHOW_FORM_DETAIL = "PROFILE_SHOW_FORM_DETAIL";
+export const PROFILE_SHOW_FORM_UPLOAD_AVATAR = "PROFILE_SHOW_FORM_UPLOAD_AVATAR";
 
 export const showFormCreate = (show: boolean): ProfileFormAction => ({
   type: PROFILE_SHOW_FORM_CREATE,
@@ -33,12 +37,17 @@ export const showFormUpdateDetail = (show: boolean, dataUpdateDetail?: DetailPro
   data_update_detail: dataUpdateDetail
 });
 
-export const showFormDetail = (show?: DetailCV, dataDetail?: DetailProfileEntity[]): ProfileFormAction => ({
+export const showFormDetail = (show?: DetailCV, id_detail?: string): ProfileFormAction => ({
   type: PROFILE_SHOW_FORM_DETAIL,
   show_detail: show,
-  data_detail: dataDetail
+  id_detail: id_detail
 });
 
+export const showFormUploadAvatar = (show_upload_avatar: boolean,id_upload_avatar?:string): ProfileFormAction => ({
+  type: PROFILE_SHOW_FORM_UPLOAD_AVATAR,
+  show_upload_avatar: show_upload_avatar,
+  id_upload_avatar:id_upload_avatar
+});
 
 
 

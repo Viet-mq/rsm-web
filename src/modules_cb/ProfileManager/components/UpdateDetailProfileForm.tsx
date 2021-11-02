@@ -15,6 +15,7 @@ import CreateJobLevelForm from "../../JobLevelManager/components/CreateJobLevelF
 import CreateSourceCVForm from "../../SourceCVManager/components/CreateSourceCVForm";
 import CreateSchoolForm from "../../SchoolManager/components/CreateSchoolForm";
 import Loading from "../../../components/Loading";
+import {getListTalentPool} from "../../TalentPoolManager/redux/actions";
 
 const {Option} = Select;
 
@@ -28,6 +29,8 @@ const mapStateToProps = (state: RootState) => ({
   createJobLevel: state.joblevelManager.create,
   createSchool: state.schoolManager.create,
   createSourceCV: state.sourcecvManager.create,
+  listTalentPool:state.talentPoolManager.list,
+
 })
 
 const connector = connect(mapStateToProps,
@@ -43,7 +46,8 @@ const connector = connect(mapStateToProps,
     showSourceCVFormCreate,
     getActivityLogs,
     showFormUpdateDetail,
-    showFormDetail
+    showFormDetail,
+    getListTalentPool
 
   });
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -71,6 +75,8 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
       props.getListJobLevel({page: 1, size: 100});
       props.getListSchool({page: 1, size: 100});
       props.getListSourceCV({page: 1, size: 100});
+      props.getListTalentPool({page: 1, size: 100});
+
     }
 
   }, [props.showForm.show_update_detail])
@@ -98,11 +104,11 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           school: values.school,
           sourceCV: values.sourceCV,
           lastApply: values.lastApply * 1,
-          note: values.note,
-          tags: values.tags,
-          talentPool:values.talentPool
+          talentPool:values.talentPoolId
         }
+        console.log("req:",req)
         props.updateDetail(req);
+
         return;
       }
     });
@@ -163,7 +169,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
       <Modal
         zIndex={2}
         maskClosable={false}
-        title="Cập nhật Profile hệ thống"
+        title="Cập nhật chi tiết Profile"
         visible={props.showForm.show_update_detail}
         centered={true}
         width="550px"
@@ -196,83 +202,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
             })(
               <Input placeholder="Họ tên" className="bg-white text-black"/>
             )}
-          </Form.Item>
-
-          <Form.Item label="Giới tính" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('gender', {
-              initialValue: props.showForm.data_update_detail?.gender === "Nam" ? "Nam" : "Nữ",
-              rules: [
-                {
-                  message: 'Vui lòng nhập Giới tính',
-                  required: true,
-                },
-              ],
-            })(
-              <Select className="bg-white text-black"
-              >
-                <Option value="Nam">Nam</Option>
-                <Option value="Nữ">Nữ</Option>
-              </Select>
-            )}
-          </Form.Item>
-
-          <Form.Item label="Năm sinh" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('dateOfBirth', {
-              initialValue: moment(props.showForm.data_update_detail?.dateOfBirth),
-              rules: [
-                {
-                  message: 'Vui lòng nhập năm sinh',
-                  required: true,
-                },
-              ],
-            })(
-              <DatePicker format={dateFormat} style={{width: "100%"}}/>
-            )}
-          </Form.Item>
-
-          <Form.Item label="Quê quán" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('hometown', {
-              initialValue: props.showForm.data_update_detail?.hometown,
-              rules: [
-                {
-                  message: 'Vui lòng nhập quê quán',
-                  required: false,
-                },
-              ],
-            })(
-              <Input placeholder="Quê quán" className="bg-white text-black"/>
-            )}
-          </Form.Item>
-
-          <Form.Item label="Trường học" className="mb-0" style={{...formItemStyle}}>
-            <div style={{display: 'flex'}}>
-              {getFieldDecorator('school',
-                {
-                  initialValue: props.showForm.data_update_detail?.schoolId,
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập Trường học',
-                      required: false,
-                    },
-                  ],
-                })(
-                <Select className="bg-white text-black"
-                >
-                  {props.listSchool.rows?.map((item: any, index: any) => (
-                    <Option key={index} value={item.id}>{item.name}</Option>
-                  ))}
-                </Select>
-              )}
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                style={{height: '32px'}}
-                onClick={handleCreateSchool}
-              >
-                <Icon type="plus"/>
-              </Button>
-            </div>
-
           </Form.Item>
 
           <Form.Item label="SĐT" className="mb-0" style={{...formItemStyle}}>
@@ -361,19 +290,102 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
             </div>
           </Form.Item>
 
+          <Form.Item label="Talent pools" className="mb-0" style={{...formItemStyle}}>
+            <div style={{display: 'flex'}}>
+              {getFieldDecorator('talentPoolId', {
+                initialValue: props.showForm.data_update_detail?.talentPoolId,
+                rules: [
+                  {
+                    message: 'Vui lòng chọn talent pools',
+                    required: true,
+                  },
+                ],
+              })(
+                <Select className="bg-white text-black"
+                >
+                  {props.listTalentPool.rows?.map((item: any, index: any) => (
+                    <Option key={index} value={item.id}>{item.name}</Option>
+                  ))}
+                </Select>
+              )}
+            </div>
+          </Form.Item>
 
-          <Form.Item label="Note" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('note', {
-              initialValue: props.showForm.data_update_detail?.note,
+          <Form.Item label="Giới tính" className="mb-0" style={{...formItemStyle}}>
+            {getFieldDecorator('gender', {
+              initialValue: props.showForm.data_update_detail?.gender === "Nam" ? "Nam" : "Nữ",
               rules: [
                 {
-                  message: 'Vui lòng nhập ghi chú',
-                  required: true,
+                  message: 'Vui lòng nhập Giới tính',
+                  required: false,
                 },
               ],
             })(
-              <Input placeholder="Note" className="bg-white text-black"/>
+              <Select className="bg-white text-black"
+              >
+                <Option value="Nam">Nam</Option>
+                <Option value="Nữ">Nữ</Option>
+              </Select>
             )}
+          </Form.Item>
+
+          <Form.Item label="Năm sinh" className="mb-0" style={{...formItemStyle}}>
+            {getFieldDecorator('dateOfBirth', {
+              initialValue: moment(props.showForm.data_update_detail?.dateOfBirth),
+              rules: [
+                {
+                  message: 'Vui lòng nhập năm sinh',
+                  required: false,
+                },
+              ],
+            })(
+              <DatePicker format={dateFormat} style={{width: "100%"}}/>
+            )}
+          </Form.Item>
+
+          <Form.Item label="Quê quán" className="mb-0" style={{...formItemStyle}}>
+            {getFieldDecorator('hometown', {
+              initialValue: props.showForm.data_update_detail?.hometown,
+              rules: [
+                {
+                  message: 'Vui lòng nhập quê quán',
+                  required: false,
+                },
+              ],
+            })(
+              <Input placeholder="Quê quán" className="bg-white text-black"/>
+            )}
+          </Form.Item>
+
+          <Form.Item label="Trường học" className="mb-0" style={{...formItemStyle}}>
+            <div style={{display: 'flex'}}>
+              {getFieldDecorator('school',
+                {
+                  initialValue: props.showForm.data_update_detail?.schoolId,
+                  rules: [
+                    {
+                      message: 'Vui lòng nhập Trường học',
+                      required: false,
+                    },
+                  ],
+                })(
+                <Select className="bg-white text-black"
+                >
+                  {props.listSchool.rows?.map((item: any, index: any) => (
+                    <Option key={index} value={item.id}>{item.name}</Option>
+                  ))}
+                </Select>
+              )}
+              <Button
+                size="small"
+                className="ant-btn ml-1 mr-1 ant-btn-sm"
+                style={{height: '32px'}}
+                onClick={handleCreateSchool}
+              >
+                <Icon type="plus"/>
+              </Button>
+            </div>
+
           </Form.Item>
 
           <Form.Item label="Đánh giá" className="mb-0" style={{...formItemStyle}}>
@@ -390,20 +402,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
             )}
           </Form.Item>
 
-          <Form.Item label="Tags" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('tags', {
-              initialValue: props.showForm.data_update_detail?.tags,
-              rules: [
-                {
-                  message: 'Vui lòng nhập tags',
-                  required: true,
-                },
-              ],
-            })(
-              <Input placeholder="Tags" className="bg-white text-black"/>
-            )}
-          </Form.Item>
-
           <Form.Item label="Nguồn CV" className="mb-0" style={{...formItemStyle}}>
             <div style={{display: 'flex'}}>
               {getFieldDecorator('sourceCV', {
@@ -411,7 +409,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                 rules: [
                   {
                     message: 'Vui lòng nhập Nguồn CV',
-                    required: false,
+                    required: true,
                   },
                 ],
               })(
@@ -431,20 +429,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                 <Icon type="plus"/>
               </Button>
             </div>
-          </Form.Item>
-
-          <Form.Item label="CV" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('cv', {
-              initialValue: props.showForm.data_update_detail?.cv,
-              rules: [
-                {
-                  message: 'Vui lòng nhập cv',
-                  required: false,
-                },
-              ],
-            })(
-              <Input placeholder="CV" className="bg-white text-black"/>
-            )}
           </Form.Item>
 
           <Form.Item label="HR Ref" className="mb-0" style={{...formItemStyle}}>
@@ -467,7 +451,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
               rules: [
                 {
                   message: 'Vui lòng nhập thời gian',
-                  required: false,
+                  required: true,
                 },
               ],
             })(
@@ -475,7 +459,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
             )}
           </Form.Item>
 
-          <Form.Item label="Chỉnh sửa lần cuối" className="mb-0" style={{...formItemStyle}}>
+          <Form.Item label="Lần cuối ứng tuyển" className="mb-0" style={{...formItemStyle}}>
             {getFieldDecorator('lastApply', {
               initialValue: moment(props.showForm.data_update_detail?.lastApply),
               rules: [
@@ -486,20 +470,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
               ],
             })(
               <DatePicker format={dateFormat} style={{width: "100%"}}/>
-            )}
-          </Form.Item>
-
-          <Form.Item label="Loại CV" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('cvType', {
-              initialValue: props.showForm.data_update_detail?.cvType,
-              rules: [
-                {
-                  message: 'Vui lòng nhập loại CV',
-                  required: false,
-                },
-              ],
-            })(
-              <Input placeholder="Loại CV" className="bg-white text-black"/>
             )}
           </Form.Item>
 

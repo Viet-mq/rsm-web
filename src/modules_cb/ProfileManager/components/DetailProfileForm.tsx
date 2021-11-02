@@ -4,31 +4,34 @@ import {
   createNote,
   deleteNote,
   getActivityLogs,
+  getBooking,
+  getDetailProfile,
+  getListNote,
   showFormBooking,
   showFormDetail,
   showFormUpdate,
   showFormUpdateDetail,
+  showFormUploadAvatar,
   showFormUploadCV,
   updateNote
 } from "../redux/actions";
 import {showFormCreateNote, showFormUpdateNote} from "../../ProfileManager/redux/actions/note/showNote";
 
-import {Avatar, Button, Icon, Pagination, Popconfirm, Popover, Table, Timeline, Tooltip} from "antd";
+import {Button, Icon, Pagination, Popconfirm, Popover, Table, Timeline, Tooltip} from "antd";
 import React, {useEffect, useState} from "react";
-import {DataShowBooking, DeleteNoteRequest, DetailCV, DetailProfileEntity, NoteEntity, ProfileEntity} from "../types";
+import {DataShowBooking, DeleteNoteRequest, DetailCV, NoteEntity} from "../types";
 import moment from "moment";
 import {ColumnProps} from "antd/lib/table";
 import {emptyText} from "../../../configs/locales";
 import Loading from "../../../components/Loading";
 import CreateNoteForm from "./CreateNoteForm";
 import UpdateNoteForm from "./UpdateNoteForm";
-import {BsThreeDots, RiFullscreenExitLine, RiFullscreenLine} from "react-icons/all";
-import {downloadCVNote} from "../redux/services/apis";
+import {RiFullscreenExitLine, RiFullscreenLine} from "react-icons/all";
 import StarRatings from 'react-star-ratings';
-import {DeleteTalentPoolRequest} from "../../TalentPoolManager/types";
+import UploadAvatarForm from "./UploadAvatarForm";
 
 const mapStateToProps = (state: RootState) => ({
-  showForm: state.profileManager.showForm,
+  showDetail: state.profileManager.showForm,
   detail: state.profileManager.detail,
   activityLogs: state.profileManager.getActivity,
   booking: state.profileManager.getBooking,
@@ -50,7 +53,11 @@ const connector = connect(mapStateToProps,
     updateNote,
     createNote,
     showFormCreateNote,
-    showFormUpdateNote
+    showFormUpdateNote,
+    getDetailProfile,
+    getBooking,
+    getListNote,
+    showFormUploadAvatar
   });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -63,7 +70,6 @@ function DetailProfileForm(props: DetailProfileFormProps) {
   const size = 10;
   const [rate, setRate] = useState(2.4);
   const [isFull, setIsFull] = useState<boolean>(false);
-  const [dataDetailMatch,setDataDetailMatch]=useState<DetailProfileEntity|any>({});
   const [activeLogs, setActiveLogs] = useState({
     params: '',
     data: [],
@@ -97,17 +103,16 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     },
   ]
 
-
   const [visiblePopover, setVisiblePopover] = useState<boolean>(false);
 
-  const handleUpdateAvatar = (e: any) => {
+  const handleUploadAvatar = (e: any) => {
     e.preventDefault();
     setVisiblePopover(false)
     if (e?.target) {
       e.target.disabled = true;
       e.target.disabled = false;
     }
-    // props.showFormUpdate(true, talentPool);
+    props.showFormUploadAvatar(true, props.detail.result?.id);
   }
 
   const handleDeleteAvatar = (event: any) => {
@@ -122,11 +127,11 @@ function DetailProfileForm(props: DetailProfileFormProps) {
   const content = (
     <ul style={{width: 165}} className="popup-popover">
       <li>
-        <a onClick={handleUpdateAvatar}>Cập nhật ảnh đại diện</a>
+        <a onClick={handleUploadAvatar}>Cập nhật ảnh đại diện</a>
       </li>
 
       <li>
-        <a onClick={handleDeleteAvatar} style={{color:"red"}}>Xóa ảnh đại diện</a>
+        <a onClick={handleDeleteAvatar} style={{color: "red"}}>Xóa ảnh đại diện</a>
       </li>
 
     </ul>
@@ -143,7 +148,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     let req: DeleteNoteRequest = {
       id: entity.id
     }
-    props.deleteNote({id:req.id});
+    props.deleteNote({id: req.id});
 
   }
 
@@ -155,7 +160,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
   function handleCreateNote(event: any) {
     event.stopPropagation();
-    props.showFormCreateNote(true, dataDetailMatch.id);
+    props.showFormCreateNote(true, props.detail.result?.id);
   }
 
   const columns: ColumnProps<NoteEntity>[] = [
@@ -182,7 +187,8 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       dataIndex: "fileName",
       width: 100,
       key: 4,
-      render: (text: string, record: NoteEntity) => <a onClick={()=>downloadCVNote(record.fileName)}>{text}</a>,
+      render: (text: string, record: NoteEntity) => <a className="cv-overflow" href={record.url}
+                                                       target="_blank">{record.fileName}</a>,
 
     },
     {
@@ -216,26 +222,26 @@ function DetailProfileForm(props: DetailProfileFormProps) {
               onConfirm={event => handleDeleteNote(event, record)}
             >
               <Tooltip placement="top" title="Xóa">
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                onClick={event => {
-                  event.stopPropagation();
-                }}
-              >
-                <Icon type="delete" theme="filled"/>
-              </Button>
+                <Button
+                  size="small"
+                  className="ant-btn ml-1 mr-1 ant-btn-sm"
+                  onClick={event => {
+                    event.stopPropagation();
+                  }}
+                >
+                  <Icon type="delete" theme="filled"/>
+                </Button>
               </Tooltip>
 
             </Popconfirm>
 
             <Tooltip placement="top" title="Sửa">
 
-            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
-                    onClick={event => handleEditNote(event, record)}
-            >
-              <Icon type="edit"/>
-            </Button>
+              <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
+                      onClick={event => handleEditNote(event, record)}
+              >
+                <Icon type="edit"/>
+              </Button>
             </Tooltip>
 
           </div>
@@ -326,33 +332,37 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     props.showFormBooking(true, req);
   }
 
-  useEffect(()=>{
-    if (props.detail.result && props.showForm.data_detail) {
-      setDataDetailMatch(props.showForm.data_detail.find((item: any) => props.detail.result?.id === item.id));
+  useEffect(() => {
+    if (props.showDetail.id_detail) {
+      props.getDetailProfile({idProfile: props.showDetail.id_detail});
+      props.getActivityLogs({idProfile: props.showDetail.id_detail});
+      props.getBooking({idProfile: props.showDetail.id_detail});
+      props.getListNote({idProfile: props.showDetail.id_detail})
     }
-  },[props.detail.result && props.showForm.data_detail])
+  }, [props.showDetail.id_detail])
 
+  console.log(props.detail)
   return (
     <>
       <div className="detail-container">
         <div className="detail-title">
           <div className="detail-title__left">
-            <h1>{dataDetailMatch?.fullName}</h1>
+            <h1>{props.detail.result?.fullName}</h1>
             <span>Java Candidate Profile</span>
           </div>
 
           <div className="detail-title__right">
 
-            <div style={{display:"flex",marginRight:"34px"}}>
+            <div style={{display: "flex", marginRight: "34px"}}>
 
-            <Button size="small" className="ant-btn mr-1 ant-btn-sm"
-                    onClick={event => handleFullScreen(event)}>
-              {isFull ? <RiFullscreenExitLine className="mt-1"/> : <RiFullscreenLine className="mt-1"/>}
-            </Button>
-            <Button size="small" className="ant-btn mr-1 ant-btn-sm"
-                    onClick={event => onBtnUpdateDetail(event)}>
-              <Icon type="edit"/>
-            </Button>
+              <Button size="small" className="ant-btn mr-1 ant-btn-sm"
+                      onClick={event => handleFullScreen(event)}>
+                {isFull ? <RiFullscreenExitLine className="mt-1"/> : <RiFullscreenLine className="mt-1"/>}
+              </Button>
+              <Button size="small" className="ant-btn mr-1 ant-btn-sm"
+                      onClick={event => onBtnUpdateDetail(event)}>
+                <Icon type="edit"/>
+              </Button>
             </div>
 
             <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm btn-delete"
@@ -373,10 +383,12 @@ function DetailProfileForm(props: DetailProfileFormProps) {
             content={content}
             trigger="click">
 
-            <img src={dataDetailMatch.image?dataDetailMatch.image:require('src/assets/images/profile.png')}  style={{width: "100px",height:"100px",borderRadius:"50%"}}/>
+            <img
+              src={props.detail.result?.image ? props.detail.result?.image : require('src/assets/images/profile.png')}
+              style={{width: "100px", height: "100px", borderRadius: "50%"}}/>
           </Popover>
           <div className="detail-paragraph-1__name">
-            <h2>{dataDetailMatch?.fullName}</h2>
+            <h2>{props.detail.result?.fullName}</h2>
             <StarRatings
               rating={rate}
               starRatedColor="#FEDE00"
@@ -386,13 +398,13 @@ function DetailProfileForm(props: DetailProfileFormProps) {
               starDimension="20px"
               starSpacing="0"
             />
-            <span>0.0/5</span>
+            <span>{rate}/5</span>
             <span>0</span>
             <p>evaluations </p>
             <br/>
             <p>No title</p>
-            <p>{dataDetailMatch?.phoneNumber}</p>
-            <p>{dataDetailMatch?.email}</p>
+            <p>{props.detail.result?.phoneNumber}</p>
+            <p>{props.detail.result?.email}</p>
           </div>
         </div>
 
@@ -403,11 +415,11 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
           <div className="detail-paragraph-2__content">
             <Icon type="mail" className='mr-1'/>
-            <span>{dataDetailMatch?.email}</span><br/>
+            <span>{props.detail.result?.email}</span><br/>
             <Icon type="phone" className='mr-1'/>
-            <span>{dataDetailMatch?.phoneNumber}</span><br/>
+            <span>{props.detail.result?.phoneNumber}</span><br/>
             <Icon type="contacts" className='mr-1'/>
-            <span>{dataDetailMatch?.hometown || "Không có địa chỉ"}</span><br/>
+            <span>{props.detail.result?.hometown || "Không có địa chỉ"}</span><br/>
             <h1>Social profiles</h1>
           </div>
 
@@ -511,7 +523,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
           <div className="detail-paragraph-4__content">
             <iframe
-              src={`http://file-rs.edsolabs.com/${dataDetailMatch?.cv}`}
+              src={props.detail.result?.urlCV}
               title="CV"
               width="100%"
               height="700px"
@@ -528,7 +540,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
           <div className='detail-paragraph-5__content'>
             <Timeline style={{padding: '15px'}}>
-              {activeLogs.data?.reverse().map((item: any, index: any) => {
+              {activeLogs.data?.map((item: any, index: any) => {
                 let iconType = icon.find((icon: any) => icon.type === item.type);
                 return index >= activeLogs.minIndex &&
                   index < activeLogs.maxIndex &&
@@ -571,9 +583,11 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
       <CreateNoteForm/>
       <UpdateNoteForm/>
+      <UploadAvatarForm/>
 
       {props.createNote.loading ||
-      props.updateNote.loading
+      props.updateNote.loading ||
+      props.detail.loading
         ? <Loading/> : null}
 
     </>

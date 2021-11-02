@@ -68,7 +68,6 @@ const DefaultLayout = (props: LayoutProps) => {
   console.log("Default:",props.elasticSearch)
 
   const btnSearchClicked = () => {
-    console.log("cliked")
     history.push({
       pathname:"/profile-manager",
       state:props.elasticSearch,

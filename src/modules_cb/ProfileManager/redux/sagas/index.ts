@@ -15,7 +15,7 @@ import {
   GET_LIST_PROFILE,
   UPDATE_BOOKING,
   UPDATE_DETAIL, UPDATE_NOTE,
-  UPDATE_PROFILE,
+  UPDATE_PROFILE, UPLOAD_AVATAR,
   UPLOAD_LIST_CV,
   UPLOADCV
 } from "../actions";
@@ -31,6 +31,7 @@ import {getListNoteAsync} from "./note/getNote";
 import {createNoteAsync} from "./note/createNote";
 import {updateNoteAsync} from "./note/updateNote";
 import {deleteNoteAsync} from "./note/deleteNote";
+import {uploadAvatarAsync} from "./profile/uploadAvatar";
 
 export default function* root() {
   return all([
@@ -51,6 +52,7 @@ export default function* root() {
     yield takeLatest(CREATE_NOTE, createNoteAsync),
     yield takeLatest(UPDATE_NOTE, updateNoteAsync),
     yield takeLatest(DELETE_NOTE, deleteNoteAsync),
+    yield takeLatest(UPLOAD_AVATAR, uploadAvatarAsync),
 
   ]);
 }

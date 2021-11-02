@@ -22,6 +22,8 @@ export interface ProfileEntity {
   statusCVName: string,
   talentPoolId: string,
   talentPoolName: string,
+  cv: string,
+  urlCV: string
 }
 
 export interface CreateProfileRequest {
@@ -60,6 +62,11 @@ export interface UpdateProfileRequest {
 
 export interface DeleteProfileRequest {
   id: string,
+}
+
+export interface UploadAvatarRequest {
+  profileId: string | any,
+  image: any,
 }
 
 //cv
@@ -152,11 +159,9 @@ export interface UpdateDetailRequest {
   job: string,
   lastApply: number,
   levelJob: string,
-  note: string,
   phoneNumber: string,
   school: string,
   sourceCV: string,
-  tags: string,
   talentPool: string
 
 }
@@ -175,23 +180,20 @@ export interface DetailProfileEntity {
   jobName: string,
   levelJobId: string,
   levelJobName: string,
-  cv: string,
+  urlCV: string,
   sourceCVId: string,
   sourceCVName: string,
   hrRef: string,
   dateOfApply: number,
   lastApply: number,
-  tags: string,
   dateOfCreate: number,
   dateOfUpdate: number,
-  note: string,
   evaluation: string,
   statusCVId: string,
   statusCVName: string,
   image: string,
   talentPoolId: string
   talentPoolName: string
-
 }
 
 export interface ActivityLogsEntity {
@@ -213,7 +215,7 @@ export interface NoteEntity {
   comment: string,
   evaluation: string,
   fileName?: any,
-  path: string
+  url: string
 }
 
 export interface UpdateNoteRequest {

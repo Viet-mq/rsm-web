@@ -8,11 +8,11 @@ export function* getListJobLevelAsync(action: JobLevelListAction) {
   try {
     const rs = yield apis.getListJobLevel(action.params);
     if (rs.code !== 0) {
-      NotificationError('Lấy danh sách job level không thành công', "Lỗi: " + rs.message);
+      NotificationError('Lấy danh sách vị trí tuyển dụng không thành công', "Lỗi: " + rs.message);
     }
     yield put(getListJobLevelSuccess(rs.total, rs.rows))
   } catch (e) {
     yield put(getListJobLevelError(new AppError(e.message)));
-    NotificationError('Lấy danh sách job level không thành công', "Lỗi: " + e.message);
+    NotificationError('Lấy danh sách vị trí tuyển dụng không thành công', "Lỗi: " + e.message);
   }
 }

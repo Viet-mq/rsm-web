@@ -55,7 +55,7 @@ function UpdateJobLevelForm(props: UpdateJobLevelFormProps) {
     <Modal
       zIndex={2}
       maskClosable={false}
-      title="Cập nhật job level hệ thống"
+      title="Cập nhật vị trí tuyển dụng"
       visible={props.showForm.show_update}
       centered={true}
       width="550px"
@@ -70,17 +70,17 @@ function UpdateJobLevelForm(props: UpdateJobLevelFormProps) {
 
       <Form {...formItemLayout}>
 
-        <Form.Item label="Tên job level" className="mb-0" style={{...formItemStyle}}>
+        <Form.Item label="vị trí tuyển dụng" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('name', {
             initialValue: props.showForm.data_update?.name,
             rules: [
               {
-                message: 'Vui lòng nhập tên job level',
+                message: 'Vui lòng nhập vị trí tuyển dụng',
                 required: true,
               },
             ],
           })(
-            <Input placeholder="Tên job level" className="bg-white text-black"/>
+            <Input placeholder="vị trí tuyển dụng" className="bg-white text-black"/>
           )}
         </Form.Item>
 

@@ -18,6 +18,7 @@ import BookingForm from "../components/BookingForm";
 import UpdateDetailProfileForm from "../components/UpdateDetailProfileForm";
 import env from 'src/configs/env';
 import {RouteComponentProps} from 'react-router-dom';
+import {exportExcelFile} from "../redux/services/apis";
 
 const mapStateToProps = ({
                            profileManager: {
@@ -32,7 +33,8 @@ const mapStateToProps = ({
                              createBooking,
                              updateBooking,
                              updateDetail,
-                             uploadListCV
+                             uploadListCV,
+
                            }
                          }: RootState) => ({
   showForm,
@@ -87,7 +89,18 @@ function ProfileManagerPages(props: IProps) {
     props.showFormUploadListCV(true);
   }
 
-  // @ts-ignore
+  function BtnExportExcel() {
+   exportExcelFile(undefined).then((value:any) => {
+     var data = new Blob([value], {type: 'application/json'});
+     var xlsxURL = window.URL.createObjectURL(data);
+     console.log("value",xlsxURL)
+     const tempLink = document.createElement('a');
+     tempLink.href = xlsxURL;
+     tempLink.setAttribute('download', 'file.xlsx');
+     tempLink.click();
+   });
+  }
+
   return (
     <div className="contentPage">
 
@@ -106,7 +119,7 @@ function ProfileManagerPages(props: IProps) {
                   <Icon type="upload"/> Upload List CV
                 </Button>
                 <Button>
-                  <a href={`${env.apiUri}/api-svc/excel/export`}><Icon type="upload"/> Xuất Excel</a>
+                  <a onClick={BtnExportExcel}><Icon type="upload"/> Xuất Excel</a>
                 </Button>
               </div>
             </div>
@@ -114,7 +127,7 @@ function ProfileManagerPages(props: IProps) {
         </Row>
       </div>
 
-      <ListProfile locationState={locationState} history={history}/>
+      <ListProfile locationState={locationState}/>
       <CreateProfileForm/>
       <UpdateProfileForm/>
       <UploadCVForm/>
@@ -125,6 +138,7 @@ function ProfileManagerPages(props: IProps) {
       props.list.loading ||
       props.deleteProfile.loading ||
       props.uploadCV.loading ||
+      props.uploadListCV.loading ||
       props.update.loading ||
       props.updateDetail.loading ||
       props.getBooking.loading ||

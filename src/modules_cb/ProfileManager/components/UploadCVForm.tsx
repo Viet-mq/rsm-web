@@ -43,6 +43,9 @@ function UploadCVForm(props: CreateUploadFormProps) {
     let reqList: UploadListCVRequest = ({
       file: file,
     });
+    if (document.querySelector("#upload")) {
+      (document.querySelector("#upload") as any).value = ''
+    }
     props.showFormUpload.show_upload ? (props.uploadCV(req)) : (props.uploadListCV(reqList));
   }
 

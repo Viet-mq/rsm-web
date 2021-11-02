@@ -77,7 +77,7 @@ function ListJobLevel(props: IProps) {
         return (
           <div style={{whiteSpace: 'nowrap'}}>
             <Popconfirm
-              title="Bạn muốn xóa job level này chứ ?"
+              title="Bạn muốn xóa vị trí tuyển dụng này chứ ?"
               okText="Xóa"
               onCancel={event => {
                 event?.stopPropagation();

@@ -1,6 +1,6 @@
 import {ListResponseBase2, ResponseBase2} from "src/models/common";
-import {GET, POST, POSTIMAGE} from "src/services";
-import {NoteEntity, ProfileEntity} from "../../types";
+import {EXPORT, GET, POST, POSTIMAGE} from "src/services";
+import {NoteEntity, ProfileEntity, UploadAvatarRequest} from "../../types";
 
 export const getListProfile = async (params: any): Promise<ListResponseBase2<ProfileEntity>> => {
   const response = (await GET('api-svc/profile/list', params)) as any;
@@ -121,6 +121,16 @@ export const downloadCVNote = async (params?: any): Promise<ResponseBase2> => {
   return (await GET(`api-svc/note/export/file/${params}`)) as ResponseBase2;
 };
 export const exportExcelFile = async (params?: any): Promise<ResponseBase2> => {
-  return (await GET('api-svc/excel/export', params)) as ResponseBase2;
+  return (await EXPORT('api-svc/excel/export', params)) as ResponseBase2;
 };
 
+export const uploadAvatar = async (params?:UploadAvatarRequest) => {
+  let formData = new FormData();
+  formData.append('image', params?.image);
+  formData.append('idProfile', params?.profileId);
+  return POSTIMAGE('api-svc/image/update', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+}

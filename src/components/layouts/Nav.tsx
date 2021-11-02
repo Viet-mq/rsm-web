@@ -121,7 +121,7 @@ const Nav = (props: IProps) => {
         <Menu.Item key="joblevel-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/joblevel-manager`}>
             <FaRegUser className="mr-2"/>
-            <span>Quản lý chức vụ </span>
+            <span>Quản lý vị trí tuyển dụng </span>
           </Link>
         </Menu.Item>
 

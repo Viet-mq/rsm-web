@@ -10,14 +10,14 @@ export function* deleteJobLevelAsync(action: DeleteJobLevelAction) {
     const rs = yield apis.deleteJobLevel(action.request);
     yield put(deleteJobLevelSuccess(rs));
     if (rs.code !== 0) {
-      NotificationError('Xóa job level không thành công', "Lỗi: " + rs.message)
+      NotificationError('Xóa vị trí tuyển dụng không thành công', "Lỗi: " + rs.message)
     } else {
-      NotificationSuccess('Thành công', "Xóa job level thành công");
+      NotificationSuccess('Thành công', "Xóa vị trí tuyển dụng thành công");
       const params = yield select((state: RootState) => state.joblevelManager.list.params);
       yield put(getListJobLevel(params))
     }
   } catch (e) {
     yield put(deleteJobLevelError(new AppError(e.message)));
-    NotificationError('Xóa job level không thành công', "Lỗi: " + e.message);
+    NotificationError('Xóa vị trí tuyển dụng không thành công', "Lỗi: " + e.message);
   }
 }

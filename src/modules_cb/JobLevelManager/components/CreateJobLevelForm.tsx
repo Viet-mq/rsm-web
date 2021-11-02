@@ -56,7 +56,7 @@ function CreateJobLevelForm(props: CreateJobLevelFormProps) {
     <Modal
       zIndex={2}
       maskClosable={false}
-      title="Tạo mới job level"
+      title="Tạo mới vị trí tuyển dụng"
       visible={props.joblevelManager.showForm.show_create}
       centered={true}
       width="550px"
@@ -71,16 +71,16 @@ function CreateJobLevelForm(props: CreateJobLevelFormProps) {
 
       <Form {...formItemLayout}>
 
-        <Form.Item label="Tên job level" className="mb-0" style={{...formItemStyle}}>
+        <Form.Item label="Tên vị trí tuyển dụng" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('name', {
             initialValue: '',
             rules: [
               {
-                message: 'Vui lòng nhập tên job level',
+                message: 'Vui lòng nhập tên vị trí tuyển dụng',
                 required: true,
               },
             ],
-          })(<Input placeholder="Nhập tên job level" className="bg-white text-black"/>)}
+          })(<Input placeholder="Nhập tên vị trí tuyển dụng" className="bg-white text-black"/>)}
         </Form.Item>
 
         <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px'}} colon={false}>

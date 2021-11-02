@@ -1,6 +1,6 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {getActivityLogs, showFormUpdate, updateProfile} from "../redux/actions";
+import { showFormUpdate, updateProfile} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, DatePicker, Form, Icon, Input, Modal, Select} from "antd";
 import React, {FormEvent, useEffect} from "react";
@@ -45,7 +45,6 @@ const connector = connect(mapStateToProps,
     showJobLevelFormCreate,
     showSchoolFormCreate,
     showSourceCVFormCreate,
-    getActivityLogs,
     getListTalentPool
 
   });
@@ -263,7 +262,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
               )}
             </div>
           </Form.Item>
-
 
           <Form.Item label="Nguồn CV" className="mb-0" style={{...formItemStyle}}>
             <div style={{display: 'flex'}}>
