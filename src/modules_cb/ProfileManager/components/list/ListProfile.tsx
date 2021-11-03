@@ -31,9 +31,9 @@ const mapStateToProps = (state: RootState) => ({
   detail: state.profileManager.detail,
   listSourceCV: state.sourcecvManager.list,
   listJobLevel: state.joblevelManager.list,
-  listDepartment:state.departmentManager.list,
-  listTalentPool:state.talentPoolManager.list,
-  listJob:state.jobManager.list,
+  listDepartment: state.departmentManager.list,
+  listTalentPool: state.talentPoolManager.list,
+  listJob: state.jobManager.list,
 
 })
 const connector = connect(mapStateToProps, {
@@ -86,7 +86,7 @@ function ListProfile(props: ListProfileProps) {
     {
       title: 'Họ tên',
       dataIndex: 'fullName',
-      width: 200,
+      width: 210,
       key: 'fullName',
       fixed: "left",
       render: (text: string, record: ProfileEntity) => {
@@ -124,7 +124,7 @@ function ListProfile(props: ListProfileProps) {
     {
       title: 'Công việc',
       dataIndex: 'jobName',
-      width: 120,
+      width: 150,
       key: 'jobName',
       render: (text, record) => <span style={{fontWeight: 500}}>{record.jobName}</span>,
       filters: props.listJob?.rows.map((item: any) => ({
@@ -173,14 +173,14 @@ function ListProfile(props: ListProfileProps) {
     {
       title: 'CV',
       dataIndex: 'cv',
-      width: 200,
+      width: 150,
       key: 'cv',
       render: (text, record) => <a className="cv-overflow" href={record.urlCV} target="_blank">{record.cv}</a>
     },
     {
       title: 'Nguồn CV',
       dataIndex: 'sourceCVName',
-      width: 120,
+      width: 130,
       key: 'sourceCVName',
       filters: props.listSourceCV?.rows.map((item: any) => ({
         text: item.name,
@@ -218,11 +218,14 @@ function ListProfile(props: ListProfileProps) {
     {
       title: 'Thời gian nộp',
       dataIndex: 'dateOfApply',
-      width: 110,
+      width: 120,
       key: 'dateOfApply',
       render: (value: number) => {
         return moment(unixTimeToDate(value)).format('DD/MM/YYYY');
       },
+      sorter: (a, b) => a.talentPoolName.length - b.talentPoolName.length,
+      sortOrder: state.sortedInfo.columnKey === 'talentPoolName' && state.sortedInfo.order,
+      ellipsis: true,
     },
     {
       title: 'Loại CV',
@@ -318,7 +321,6 @@ function ListProfile(props: ListProfileProps) {
   ];
 
   useEffect(() => {
-    props.getListProfile({page: 1, size: 100});
     props.getListJob({page: 1, size: 100});
     props.getListJobLevel({page: 1, size: 100});
     props.getListSourceCV({page: 1, size: 100});
@@ -330,6 +332,9 @@ function ListProfile(props: ListProfileProps) {
     setDataSource(props.locationState?.rows);
   }, [props.locationState])
 
+  useEffect(() => {
+    onBtnResetClicked()
+  }, [])
   const handleChange = (pagination: any, filters: any, sorter: any) => {
     console.log('Various parameters', pagination, filters, sorter);
     setState({
@@ -361,6 +366,8 @@ function ListProfile(props: ListProfileProps) {
       id: entity.id
     }
     props.deleteProfile(req);
+    setDataSource(undefined);
+
   }
 
   const handleEdit = (event: any, entity: ProfileEntity) => {
@@ -410,18 +417,15 @@ function ListProfile(props: ListProfileProps) {
     props.getListProfile({page: 1, size: 100});
   }
 
-
   return (
     <>
       <Form style={{display: "flex", flexWrap: "wrap"}}>
 
         <Button style={{
-
           margin: "0 10px 0 0 ",
         }} onClick={clearFilters}>Clear filters</Button>
 
         <Button style={{
-
           margin: "0 10px 0 0 ",
         }} onClick={clearAll}>Clear filters and sorters</Button>
 

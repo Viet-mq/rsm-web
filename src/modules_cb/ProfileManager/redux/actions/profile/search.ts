@@ -1,9 +1,9 @@
 import {AppError} from "src/models/common";
-import {ProfileEntity} from "../../../types";
+import {ProfileEntity, SearchRequest} from "../../../types";
 
 export interface GetElasticSearchAction {
   type: string,
-  request?: any,
+  request?: SearchRequest,
   rows?: ProfileEntity[],
   total?: number,
   error?: AppError
@@ -13,7 +13,7 @@ export const GET_ELASTIC_SEARCH = "GET_ELASTIC_SEARCH";
 export const GET_ELASTIC_SEARCH_SUCCESS = "GET_ELASTIC_SEARCH_SUCCESS";
 export const GET_ELASTIC_SEARCH_ERROR = "GET_ELASTIC_SEARCH_ERROR";
 
-export const getElasticSearch = (request?: any): GetElasticSearchAction => ({
+export const getElasticSearch = (request?: SearchRequest): GetElasticSearchAction => ({
   type: GET_ELASTIC_SEARCH,
   request
 });

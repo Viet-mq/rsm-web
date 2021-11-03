@@ -1,5 +1,5 @@
 import * as Actions from "../actions";
-import {PROFILE_SHOW_FORM_UPLOAD_AVATAR, ProfileFormAction} from "../actions";
+import {ProfileFormAction} from "../actions";
 import {DetailCV, DetailProfileEntity, ProfileEntity} from "../../types";
 
 export interface ProfileFormState {
@@ -10,15 +10,15 @@ export interface ProfileFormState {
   show_detail?: DetailCV,
   data_update?: ProfileEntity | any,
   id_detail?: string,
-  show_upload_avatar?:boolean,
-  id_upload_avatar?:string
+  show_upload_avatar?: boolean,
+  id_upload_avatar?: string
 }
 
 const initState: ProfileFormState = {
   show_create: false,
   show_update: false,
   show_update_detail: false,
-  show_upload_avatar:false,
+  show_upload_avatar: false,
   show_detail: {
     show_detail: false,
     general: 24,
@@ -50,7 +50,7 @@ export default (state = initState, {
         //   general: 24,
         //   detail: 0,
         // },
-        show_upload_avatar:false
+        show_upload_avatar: false
       }
     case Actions.PROFILE_SHOW_FORM_UPDATE:
       return {
@@ -64,7 +64,7 @@ export default (state = initState, {
         //   general: 24,
         //   detail: 0,
         // },
-        show_upload_avatar:false
+        show_upload_avatar: false
       }
 
     case Actions.PROFILE_SHOW_FORM_UPDATE_DETAIL:
@@ -79,7 +79,7 @@ export default (state = initState, {
         //   general: 12,
         //   detail: 12,
         // },
-        show_upload_avatar:false
+        show_upload_avatar: false
 
       }
     case Actions.PROFILE_SHOW_FORM_DETAIL:
@@ -90,7 +90,7 @@ export default (state = initState, {
         show_create: false,
         show_update: false,
         show_update_detail: false,
-        show_upload_avatar:false
+        show_upload_avatar: false
       }
     case Actions.PROFILE_SHOW_FORM_UPLOAD_AVATAR:
       return {
@@ -98,7 +98,7 @@ export default (state = initState, {
         show_upload_avatar,
         id_upload_avatar,
         show_update: false,
-        show_create:false,
+        show_create: false,
         show_update_detail: false,
         // show_detail: {
         //   show_detail: false,

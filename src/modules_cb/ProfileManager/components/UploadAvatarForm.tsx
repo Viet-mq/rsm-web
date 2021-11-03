@@ -43,17 +43,23 @@ function UploadAvatarForm(props: CreateUploadFormProps) {
       profileId: props.showUploadAvatar.id_upload_avatar,
       image: file,
     });
+
     props.uploadAvatar(req);
-    if (document.querySelector("#upload")) {
-      (document.querySelector("#upload") as any).value = ''
+    if(!props.showUploadAvatar.show_upload_avatar){
+      console.log(!props.showUploadAvatar.show_upload_avatar)
+      setImageUpload(null);
+      if (document.querySelector("#upload")) {
+        (document.querySelector("#upload") as any).value = ''
+      }
     }
   }
 
   function onBtnCancelClicked() {
+    props.showFormUploadAvatar(false);
     if (document.querySelector("#upload")) {
       (document.querySelector("#upload") as any).value = ''
     }
-    props.showFormUploadAvatar(false);
+    setImageUpload(null);
   }
 
   return (

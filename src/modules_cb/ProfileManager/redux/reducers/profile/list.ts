@@ -8,14 +8,16 @@ export interface ProfileListState {
   params?: any,
   rows?: ProfileEntity[],
   total?: number,
-  error?: AppError
+  error?: AppError,
+
 }
 
 const initState: ProfileListState = {
   loading: false,
   params: {},
   rows: [],
-  total: 0
+  total: 0,
+
 }
 
 export default (state = initState, {type, total, rows, params, error}: ProfileListAction): ProfileListState => {
@@ -31,7 +33,7 @@ export default (state = initState, {type, total, rows, params, error}: ProfileLi
         ...state,
         total,
         rows,
-        loading: false
+        loading: false,
       }
     case Actions.GET_LIST_PROFILE_ERROR:
       return {

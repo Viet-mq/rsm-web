@@ -74,6 +74,13 @@ export interface UploadAvatarRequest {
   image: any,
 }
 
+export interface SearchRequest {
+  key: string ,
+  size: number,
+}
+
+
+
 //cv
 export interface UploadCVRequest {
   profileId: string | any,

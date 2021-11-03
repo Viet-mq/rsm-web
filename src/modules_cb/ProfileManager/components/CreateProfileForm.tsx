@@ -75,18 +75,6 @@ function CreateProfileForm(props: CreateProfileFormProps) {
     },
   };
 
-  useEffect(()=>{
-    if(props.profileManager.showForm.show_create){
-      props.getListJob({page: 1, size: 100});
-      props.getListJobLevel({page: 1, size: 100});
-      props.getListSchool({page: 1, size: 100});
-      props.getListSourceCV({page: 1, size: 100});
-      props.getListTalentPool({page: 1, size: 100});
-      props.getListDepartment({page: 1, size: 100});
-
-    }
-  },[props.profileManager.showForm.show_create])
-
   function onBtnCreateClicked(e: FormEvent) {
     e.preventDefault();
     (e.target as any).disabled = true;

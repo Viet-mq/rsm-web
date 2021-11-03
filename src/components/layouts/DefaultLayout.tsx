@@ -9,9 +9,7 @@ import {RootState} from "../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {getElasticSearch} from "../../modules_cb/ProfileManager/redux/actions";
-import ListProfile from "../../modules_cb/ProfileManager/components/list/ListProfile";
 import {useHistory} from "react-router-dom";
-
 
 const {Sider} = Layout;
 
@@ -35,7 +33,6 @@ const DefaultLayout = (props: LayoutProps) => {
 
   const screenWidth = document.documentElement.clientWidth;
   const [collapsed, setCollapsed] = useState(screenWidth <= env.tabletWidth ? true : false)
-  const [inputValue, setInputValue] = useState<any>("")
   const {getFieldDecorator, resetFields} = props.form;
   const history = useHistory();
   const [state, setState] = useState({
@@ -43,14 +40,11 @@ const DefaultLayout = (props: LayoutProps) => {
     dataSource: [],
   });
 
-
-
   function toggle() {
     setCollapsed(!collapsed)
   }
 
   useEffect(() => {
-
     function updateSize() {
       if (document.documentElement.clientWidth < env.desktopWidth) setCollapsed(true)
       else setCollapsed(false)
@@ -62,23 +56,21 @@ const DefaultLayout = (props: LayoutProps) => {
 
   }, []);
 
-  useEffect(()=>{
-    props.getElasticSearch({key: state.value})
-  },[state.value])
-  console.log("Default:",props.elasticSearch)
+  useEffect(() => {
+    if (state.value) {
+      props.getElasticSearch({key: state.value,size:10})
+    }
+  }, [state.value])
+  console.log("Default:", props.elasticSearch)
+
 
   const btnSearchClicked = () => {
-    history.push({
-      pathname:"/profile-manager",
-      state:props.elasticSearch,
-    });
-  }
+    props.getElasticSearch({key: state.value,size:100})
+      history.push({
+        pathname: "/profile-manager",
+        state: props.elasticSearch,
+      });
 
-  function onSelect(value: any) {
-    // history.push({
-    //   pathname:"/profile-manager",
-    //   state:props.elasticSearch,
-    // });
   }
 
   function onChange(value: any) {
@@ -117,9 +109,8 @@ const DefaultLayout = (props: LayoutProps) => {
                     <>
                       <div style={{display: "flex"}}>
                         <AutoComplete
-                          dataSource={ props.elasticSearch.rows.map((item:any)=>item.fullName)}
+                          dataSource={Array.from(new Set(props.elasticSearch.rows.map((item: any) => item.fullName)))}
                           style={{width: 400}}
-                          onSelect={onSelect}
                           onChange={onChange}
                           placeholder={"Họ tên, Năm sinh, Quê quán, Trường học, Số điện thoại, Email, Công việc"}
                         >

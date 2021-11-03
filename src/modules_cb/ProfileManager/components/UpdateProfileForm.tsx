@@ -72,17 +72,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     },
   };
 
-  useEffect(()=>{
-    if(props.showForm.show_update){
-      props.getListJob({page: 1, size: 100});
-      props.getListJobLevel({page: 1, size: 100});
-      props.getListSchool({page: 1, size: 100});
-      props.getListSourceCV({page: 1, size: 100});
-      props.getListTalentPool({page: 1, size: 100});
-      props.getListDepartment({page: 1, size: 100});
-    }
-  },[props.showForm.show_update])
-
   function onBtnUpdateClicked(e: FormEvent) {
     e.preventDefault();
     (e.target as any).disabled = true;
