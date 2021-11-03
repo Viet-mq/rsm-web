@@ -341,7 +341,6 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     }
   }, [props.showDetail.id_detail])
 
-  console.log(props.detail)
   return (
     <>
       <div className="detail-container">
@@ -384,6 +383,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
             trigger="click">
 
             <img
+              alt={"Ảnh đại diện"}
               src={props.detail.result?.image ? props.detail.result?.image : require('src/assets/images/profile.png')}
               style={{width: "100px", height: "100px", borderRadius: "50%"}}/>
           </Popover>

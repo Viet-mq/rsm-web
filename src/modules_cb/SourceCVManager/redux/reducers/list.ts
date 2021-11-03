@@ -6,7 +6,7 @@ import {SourceCVListAction} from "../actions";
 export interface SourceCVListState {
   loading: boolean,
   params?: any,
-  rows?: SourceCVEntity[],
+  rows?: SourceCVEntity[]|any,
   total?: number,
   error?: AppError
 }

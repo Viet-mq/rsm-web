@@ -54,7 +54,7 @@ function CreateDepartmentForm(props: CreateDepartmentFormProps) {
   return (
 
     <Modal
-      zIndex={2}
+      zIndex={4}
       maskClosable={false}
       title="Tạo mới phòng ban"
       visible={props.departmentManager.showForm.show_create}

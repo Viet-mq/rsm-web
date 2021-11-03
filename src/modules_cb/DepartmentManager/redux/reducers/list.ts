@@ -6,7 +6,7 @@ import {DepartmentListAction} from "../actions";
 export interface DepartmentListState {
   loading: boolean,
   params?: any,
-  rows?: DepartmentEntity[],
+  rows?: DepartmentEntity[]|any,
   total?: number,
   error?: AppError
 }

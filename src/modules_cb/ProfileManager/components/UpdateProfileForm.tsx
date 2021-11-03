@@ -14,8 +14,11 @@ import CreateJobForm from "../../JobManager/components/CreateJobForm";
 import CreateJobLevelForm from "../../JobLevelManager/components/CreateJobLevelForm";
 import CreateSourceCVForm from "../../SourceCVManager/components/CreateSourceCVForm";
 import CreateSchoolForm from "../../SchoolManager/components/CreateSchoolForm";
+
 import Loading from "../../../components/Loading";
 import {getListTalentPool} from "../../TalentPoolManager/redux/actions";
+import {getListDepartment, showFormCreate as showDepartmentFormCreate} from "../../DepartmentManager/redux/actions";
+import CreateDepartmentForm from "../../DepartmentManager/components/CreateDepartmentForm";
 
 const {Option} = Select;
 
@@ -25,6 +28,7 @@ const mapStateToProps = (state: RootState) => ({
   listJobLevel: state.joblevelManager.list,
   listSchool: state.schoolManager.list,
   listSourceCV: state.sourcecvManager.list,
+  listDepartment:state.departmentManager.list,
   createJob: state.jobManager.create,
   createJobLevel: state.joblevelManager.create,
   createSchool: state.schoolManager.create,
@@ -45,8 +49,9 @@ const connector = connect(mapStateToProps,
     showJobLevelFormCreate,
     showSchoolFormCreate,
     showSourceCVFormCreate,
-    getListTalentPool
-
+    getListTalentPool,
+    getListDepartment,
+    showDepartmentFormCreate
   });
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -74,6 +79,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
       props.getListSchool({page: 1, size: 100});
       props.getListSourceCV({page: 1, size: 100});
       props.getListTalentPool({page: 1, size: 100});
+      props.getListDepartment({page: 1, size: 100});
     }
   },[props.showForm.show_update])
 
@@ -98,7 +104,8 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           school: values.school,
           sourceCV: values.sourceCV,
           gender: values.gender,
-          talentPool: values.talentPool
+          talentPool: values.talentPool,
+          department:values.department,
         }
         props.updateProfile(req);
         return;
@@ -148,6 +155,16 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     }
     props.showSourceCVFormCreate(true);
   }
+
+  const handleCreateDepartment = (e: any) => {
+    e.preventDefault();
+    if (e?.target) {
+      e.target.disabled = true;
+      e.target.disabled = false;
+    }
+    props.showDepartmentFormCreate(true);
+  }
+
 
   return (
     <div>
@@ -236,6 +253,35 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                 className="ant-btn ml-1 mr-1 ant-btn-sm"
                 style={{height: '32px'}}
                 onClick={handleCreateJobLevel}
+              >
+                <Icon type="plus"/>
+              </Button>
+            </div>
+          </Form.Item>
+
+          <Form.Item label="Phòng ban" className="mb-0" style={{...formItemStyle}}>
+            <div style={{display: 'flex'}}>
+              {getFieldDecorator('department', {
+                initialValue: props.showForm.data_update?.department,
+                rules: [
+                  {
+                    message: 'Vui lòng nhập Phòng ban',
+                    required: true,
+                  },
+                ],
+              })(
+                <Select className="bg-white text-black"
+                >
+                  {props.listDepartment.rows?.map((item: any, index: any) => (
+                    <Option key={index} value={item.id}>{item.name}</Option>
+                  ))}
+                </Select>
+              )}
+              <Button
+                size="small"
+                className="ant-btn ml-1 mr-1 ant-btn-sm"
+                style={{height: '32px'}}
+                onClick={handleCreateDepartment}
               >
                 <Icon type="plus"/>
               </Button>
@@ -442,6 +488,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
       <CreateJobLevelForm/>
       <CreateSourceCVForm/>
       <CreateSchoolForm/>
+      <CreateDepartmentForm/>
 
       {props.createJob.loading ||
       props.createJobLevel.loading ||

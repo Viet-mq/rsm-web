@@ -6,11 +6,7 @@ import {Avatar, Badge, Button, Form, Icon, Popconfirm, Table, Tooltip} from "ant
 import {emptyText} from "src/configs/locales";
 import {
   deleteProfile,
-  getActivityLogs,
-  getBooking,
-  getDetailProfile,
   getElasticSearch,
-  getListNote,
   getListProfile,
   showFormBooking,
   showFormCreate,
@@ -23,14 +19,22 @@ import moment from "moment";
 import {FormComponentProps} from "antd/lib/form";
 import {GiFemale, GiMale, ImPhoneHangUp} from "react-icons/all";
 import {getListJobLevel} from "../../../JobLevelManager/redux/actions";
+import {getListJob} from "../../../JobManager/redux/actions";
+import {getListSourceCV} from "../../../SourceCVManager/redux/actions";
+import {getListDepartment} from "../../../DepartmentManager/redux/actions";
+import {getListTalentPool} from "../../../TalentPoolManager/redux/actions";
 
 
 const mapStateToProps = (state: RootState) => ({
   list: state.profileManager.list,
   showDetail: state.profileManager.showForm.show_detail?.show_detail,
   detail: state.profileManager.detail,
-  listSource: state.sourcecvManager.list,
+  listSourceCV: state.sourcecvManager.list,
   listJobLevel: state.joblevelManager.list,
+  listDepartment:state.departmentManager.list,
+  listTalentPool:state.talentPoolManager.list,
+  listJob:state.jobManager.list,
+
 })
 const connector = connect(mapStateToProps, {
   getListProfile,
@@ -41,7 +45,11 @@ const connector = connect(mapStateToProps, {
   showFormUploadCV,
   showFormBooking,
   getElasticSearch,
-  getListJobLevel
+  getListJobLevel,
+  getListJob,
+  getListSourceCV,
+  getListDepartment,
+  getListTalentPool
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -54,8 +62,6 @@ function ListProfile(props: ListProfileProps) {
   console.log("locationState:", props.locationState)
   const [page, setPage] = useState(1);
   const size = 30;
-  const {getFieldDecorator, resetFields} = props.form;
-  const [inputValue, setInputValue] = useState<any>("")
   const [dataSource, setDataSource] = useState<ProfileEntity | any>(undefined)
   const [state, setState] = useState<any>(
     {
@@ -99,7 +105,6 @@ function ListProfile(props: ListProfileProps) {
 
     {
       title: 'Thông tin liên hệ',
-      // dataIndex: 'contact',
       width: 200,
       fixed: props.showDetail ? undefined : "left",
       key: 'contact',
@@ -121,7 +126,17 @@ function ListProfile(props: ListProfileProps) {
       dataIndex: 'jobName',
       width: 120,
       key: 'jobName',
-      render: (text, record) => <span style={{fontWeight: 500}}>{record.jobName}</span>
+      render: (text, record) => <span style={{fontWeight: 500}}>{record.jobName}</span>,
+      filters: props.listJob?.rows.map((item: any) => ({
+        text: item.name,
+        value: item.name
+      }))
+      ,
+      filteredValue: state.filteredInfo?.jobName || null,
+      onFilter: (value, record) => record.jobName.includes(value),
+      sorter: (a, b) => a.jobName.length - b.jobName.length,
+      sortOrder: state.sortedInfo.columnKey === 'jobName' && state.sortedInfo.order,
+      ellipsis: true,
     },
     {
       title: 'Vị trí tuyển dụng',
@@ -140,6 +155,22 @@ function ListProfile(props: ListProfileProps) {
       ellipsis: true,
     },
     {
+      title: 'Phòng ban',
+      dataIndex: 'departmentName',
+      width: 150,
+      key: 'departmentName',
+      filters: props.listDepartment?.rows.map((item: any) => ({
+        text: item.name,
+        value: item.name
+      }))
+      ,
+      filteredValue: state.filteredInfo?.departmentName || null,
+      onFilter: (value, record) => record.departmentName.includes(value),
+      sorter: (a, b) => a.departmentName.length - b.departmentName.length,
+      sortOrder: state.sortedInfo.columnKey === 'departmentName' && state.sortedInfo.order,
+      ellipsis: true,
+    },
+    {
       title: 'CV',
       dataIndex: 'cv',
       width: 200,
@@ -149,14 +180,34 @@ function ListProfile(props: ListProfileProps) {
     {
       title: 'Nguồn CV',
       dataIndex: 'sourceCVName',
-      width: 100,
+      width: 120,
       key: 'sourceCVName',
+      filters: props.listSourceCV?.rows.map((item: any) => ({
+        text: item.name,
+        value: item.name
+      }))
+      ,
+      filteredValue: state.filteredInfo?.sourceCVName || null,
+      onFilter: (value, record) => record.sourceCVName.includes(value),
+      sorter: (a, b) => a.sourceCVName.length - b.sourceCVName.length,
+      sortOrder: state.sortedInfo.columnKey === 'sourceCVName' && state.sortedInfo.order,
+      ellipsis: true,
     },
     {
       title: 'Talent Pools',
       dataIndex: 'talentPoolName',
-      width: 100,
+      width: 140,
       key: 'talentPoolName',
+      filters: props.listTalentPool?.rows.map((item: any) => ({
+        text: item.name,
+        value: item.name
+      }))
+      ,
+      filteredValue: state.filteredInfo?.talentPoolName || null,
+      onFilter: (value, record) => record.talentPoolName.includes(value),
+      sorter: (a, b) => a.talentPoolName.length - b.talentPoolName.length,
+      sortOrder: state.sortedInfo.columnKey === 'talentPoolName' && state.sortedInfo.order,
+      ellipsis: true,
     },
     {
       title: 'HR Ref',
@@ -201,7 +252,6 @@ function ListProfile(props: ListProfileProps) {
       width: 200,
       key: '5',
     },
-
 
     {
       title: () => {
@@ -269,7 +319,11 @@ function ListProfile(props: ListProfileProps) {
 
   useEffect(() => {
     props.getListProfile({page: 1, size: 100});
-    props.getListJobLevel({page: 1, size: 100})
+    props.getListJob({page: 1, size: 100});
+    props.getListJobLevel({page: 1, size: 100});
+    props.getListSourceCV({page: 1, size: 100});
+    props.getListTalentPool({page: 1, size: 100});
+    props.getListDepartment({page: 1, size: 100});
   }, [])
 
   useEffect(() => {
@@ -345,7 +399,6 @@ function ListProfile(props: ListProfileProps) {
   }
 
   function onBtnResetClicked() {
-    resetFields();
     setDataSource(undefined);
     setState({
       filteredInfo: null,
@@ -355,20 +408,7 @@ function ListProfile(props: ListProfileProps) {
       },
     });
     props.getListProfile({page: 1, size: 100});
-    // setDataSource(props.list.rows);
   }
-
-  const onBtnSearchClicked = () => {
-    inputValue ? props.getElasticSearch({key: inputValue}) : props.getElasticSearch();
-    // props.elasticSearch?.request === {} ? setDataSource(props.list.rows) : setDataSource(props.elasticSearch?.rows);
-  }
-
-  const dateFormat = 'DD/MM/YYYY';
-
-  function inputChange(event: any) {
-    setInputValue(event.target.value)
-  }
-
 
 
   return (

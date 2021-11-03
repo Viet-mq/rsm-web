@@ -119,7 +119,7 @@ function ProfileManagerPages(props: IProps) {
                   <Icon type="upload"/> Upload List CV
                 </Button>
                 <Button>
-                  <a onClick={BtnExportExcel}><Icon type="upload"/> Xuất Excel</a>
+                  <a onClick={BtnExportExcel}><Icon type="export" /> Xuất Excel</a>
                 </Button>
               </div>
             </div>

@@ -6,7 +6,7 @@ import {JobListAction} from "../actions";
 export interface JobListState {
   loading: boolean,
   params?: any,
-  rows?: JobEntity[],
+  rows?: JobEntity[]|any,
   total?: number,
   error?: AppError
 }

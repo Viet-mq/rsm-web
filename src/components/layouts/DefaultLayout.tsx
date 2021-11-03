@@ -126,7 +126,7 @@ const DefaultLayout = (props: LayoutProps) => {
                         </AutoComplete>
                         <Button
                           className="search-btn"
-                          style={{marginRight: -12}}
+                          style={{marginLeft: 10}}
                           size="default"
                           type="primary"
                           onClick={btnSearchClicked}

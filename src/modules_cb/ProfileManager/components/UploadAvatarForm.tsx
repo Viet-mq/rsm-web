@@ -8,7 +8,7 @@ import Loading from "../../../components/Loading";
 
 const mapStateToProps = (state: RootState) => ({
   showUploadAvatar: state.profileManager.showForm,
-  uploadAvatar:state.profileManager.uploadAvatar
+  uploadAvatar: state.profileManager.uploadAvatar
 })
 
 const connector = connect(mapStateToProps, {
@@ -24,9 +24,13 @@ interface CreateUploadFormProps extends ReduxProps {
 function UploadAvatarForm(props: CreateUploadFormProps) {
 
   const [file, setFile] = useState(null);
-  console.log("shwoww:",props.showFormUploadAvatar)
+  const [imageUpload, setImageUpload] = useState<any>(null)
   const onFileChange = (e: any) => {
     setFile(e.target.files[0]);
+    const [file1] = e.target.files;
+    if (file1) {
+      setImageUpload(URL.createObjectURL(file1))
+    }
     console.log("file:", e.target.files[0]);
   }
 
@@ -43,7 +47,6 @@ function UploadAvatarForm(props: CreateUploadFormProps) {
     if (document.querySelector("#upload")) {
       (document.querySelector("#upload") as any).value = ''
     }
-    console.log("Avatar:", req)
   }
 
   function onBtnCancelClicked() {
@@ -69,9 +72,10 @@ function UploadAvatarForm(props: CreateUploadFormProps) {
         }}
       >
         <form id="form-upload">
+          <img id="blah" src={imageUpload} alt="your image" width="30%" height="30%" style={{marginBottom: "15px"}}/>
           <input id="upload" type="file" style={{width: "100%", border: "1px solid"}}
                  onChange={onFileChange}
-                 accept=".jpg,.jpeg,.png,.svg"/>
+                 accept="image/*"/>
         </form>
 
         <div style={{textAlign: "center", marginTop: "20px"}}>

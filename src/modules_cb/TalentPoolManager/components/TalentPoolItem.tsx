@@ -90,7 +90,6 @@ function TalentPoolItem(props: IProps) {
   );
 
   const handleVisibleChange = (visible: any) => {
-    console.log(visible)
     setVisiblePopover(visible);
   };
 

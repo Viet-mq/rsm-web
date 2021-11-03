@@ -23,7 +23,9 @@ export interface ProfileEntity {
   talentPoolId: string,
   talentPoolName: string,
   cv: string,
-  urlCV: string
+  urlCV: string,
+  departmentId: string,
+  departmentName: string
 }
 
 export interface CreateProfileRequest {
@@ -39,7 +41,9 @@ export interface CreateProfileRequest {
   phoneNumber: string,
   school: string,
   sourceCV: string,
-  talentPool: string
+  talentPool: string,
+  department: string,
+
 }
 
 export interface UpdateProfileRequest {
@@ -57,6 +61,7 @@ export interface UpdateProfileRequest {
   school: string,
   sourceCV: string,
   talentPool: string
+  department: string,
 
 }
 
