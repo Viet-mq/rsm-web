@@ -8,19 +8,20 @@ import DetailProfileForm from "../../modules_cb/ProfileManager/components/Detail
 import {RootState} from "../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {getElasticSearch} from "../../modules_cb/ProfileManager/redux/actions";
+import {getElasticSearch, triggerSearch} from "../../modules_cb/ProfileManager/redux/actions";
 import {useHistory} from "react-router-dom";
 
 const {Sider} = Layout;
 
 const mapStateToProps = (state: RootState) => ({
   showFormDetail: state.profileManager.showForm,
-  elasticSearch: state.profileManager.search
+  elasticSearch: state.profileManager.search,
 
 })
 
 const connector = connect(mapStateToProps, {
   getElasticSearch,
+  triggerSearch
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -61,16 +62,21 @@ const DefaultLayout = (props: LayoutProps) => {
       props.getElasticSearch({key: state.value,size:10})
     }
   }, [state.value])
-  console.log("Default:", props.elasticSearch)
 
-
-  const btnSearchClicked = () => {
-    props.getElasticSearch({key: state.value,size:100})
+  useEffect(() => {
+    if (state.value) {
       history.push({
         pathname: "/profile-manager",
         state: props.elasticSearch,
       });
+    }
+  }, [props.elasticSearch.trigger_search&&props.elasticSearch.pushbackHis])
+  console.log("Default:", props.elasticSearch)
 
+
+  const btnSearchClicked = () => {
+    props.triggerSearch();
+    props.getElasticSearch({key: state.value, size: 100})
   }
 
   function onChange(value: any) {

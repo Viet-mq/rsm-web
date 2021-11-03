@@ -9,6 +9,7 @@ export interface GetElasticSearchState {
   rows?: ProfileEntity[]|any,
   total?: number,
   error?: AppError,
+  trigger_search?:boolean,
   pushbackHis:boolean
 }
 
@@ -16,8 +17,8 @@ const initState: GetElasticSearchState = {
   loading: false,
   rows: [],
   total: 0,
+  trigger_search:false,
   pushbackHis:false
-
 }
 
 export default (state = initState, {
@@ -35,18 +36,25 @@ export default (state = initState, {
         loading: true
       }
     case Actions.GET_ELASTIC_SEARCH_SUCCESS:
-      let pushbackHis =state.pushbackHis
+      let pushbackHis=!state.pushbackHis
       return {
         ...state,
         total,
         rows,
-        pushbackHis:!pushbackHis,
+        pushbackHis:pushbackHis,
         loading: false
       }
     case Actions.GET_ELASTIC_SEARCH_ERROR:
       return {
         ...state,
         error,
+        loading: false
+      }
+      case Actions.TRIGGER_SEARCH:
+        let trigger=!state.trigger_search
+      return {
+        ...state,
+        trigger_search:trigger,
         loading: false
       }
     default:

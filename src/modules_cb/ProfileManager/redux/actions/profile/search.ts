@@ -6,12 +6,13 @@ export interface GetElasticSearchAction {
   request?: SearchRequest,
   rows?: ProfileEntity[],
   total?: number,
-  error?: AppError
+  error?: AppError,
 }
 
 export const GET_ELASTIC_SEARCH = "GET_ELASTIC_SEARCH";
 export const GET_ELASTIC_SEARCH_SUCCESS = "GET_ELASTIC_SEARCH_SUCCESS";
 export const GET_ELASTIC_SEARCH_ERROR = "GET_ELASTIC_SEARCH_ERROR";
+export const TRIGGER_SEARCH = "TRIGGER_SEARCH";
 
 export const getElasticSearch = (request?: SearchRequest): GetElasticSearchAction => ({
   type: GET_ELASTIC_SEARCH,
@@ -28,3 +29,7 @@ export const getElasticSearchError = (error: AppError): GetElasticSearchAction =
   type: GET_ELASTIC_SEARCH_ERROR,
   error
 });
+
+export const triggerSearch=():GetElasticSearchAction=>({
+  type:TRIGGER_SEARCH,
+})
