@@ -10,6 +10,7 @@ import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {getElasticSearch, triggerSearch} from "../../modules_cb/ProfileManager/redux/actions";
 import {useHistory} from "react-router-dom";
+import {ProfileEntity} from "../../modules_cb/ProfileManager/types";
 
 const {Sider} = Layout;
 
@@ -63,20 +64,24 @@ const DefaultLayout = (props: LayoutProps) => {
     }
   }, [state.value])
 
+  const [searchRs,setSearchRs]=useState<ProfileEntity|any>(undefined)
   useEffect(() => {
     if (state.value) {
-      history.push({
-        pathname: "/profile-manager",
-        state: props.elasticSearch,
-      });
+      props.getElasticSearch({key: state.value, size: 100})
+      setSearchRs(props.elasticSearch)
     }
-  }, [props.elasticSearch.trigger_search&&props.elasticSearch.pushbackHis])
-  console.log("Default:", props.elasticSearch)
+  }, [props.elasticSearch.trigger_search])
+  // console.log("Default:", props.elasticSearch)
 
+  useEffect(()=>{
+    history.push({
+      pathname: "/profile-manager",
+      state:searchRs,
+    });
+  },[searchRs])
 
   const btnSearchClicked = () => {
     props.triggerSearch();
-    props.getElasticSearch({key: state.value, size: 100})
   }
 
   function onChange(value: any) {

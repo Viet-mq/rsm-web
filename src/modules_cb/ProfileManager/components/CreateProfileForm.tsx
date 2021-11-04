@@ -255,7 +255,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                 rules: [
                   {
                     message: 'Vui lòng nhập Phòng ban',
-                    required: true,
+                    required: false,
                   },
                 ],
               })(

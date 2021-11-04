@@ -255,7 +255,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                 rules: [
                   {
                     message: 'Vui lòng nhập Phòng ban',
-                    required: true,
+                    required: false,
                   },
                 ],
               })(

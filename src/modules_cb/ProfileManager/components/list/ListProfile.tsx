@@ -59,7 +59,7 @@ interface ListProfileProps extends FormComponentProps, ReduxProps {
 }
 
 function ListProfile(props: ListProfileProps) {
-  console.log("locationState:", props.locationState)
+  // console.log("locationState:", props.locationState)
   const [page, setPage] = useState(1);
   const size = 30;
   const [dataSource, setDataSource] = useState<ProfileEntity | any>(undefined)
