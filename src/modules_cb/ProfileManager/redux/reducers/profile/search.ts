@@ -6,25 +6,26 @@ import {ProfileEntity, SearchRequest} from "../../../types";
 export interface GetElasticSearchState {
   loading: boolean,
   request?: SearchRequest,
-  rows?: ProfileEntity[]|any,
+  rowsSearch?: ProfileEntity[] | any,
+  rowsRs?: ProfileEntity[] | any,
   total?: number,
   error?: AppError,
-  trigger_search?:boolean,
-  pushbackHis:boolean
+  triggerSearch: boolean
 }
 
 const initState: GetElasticSearchState = {
   loading: false,
-  rows: [],
+  rowsSearch: [],
+  rowsRs: undefined,
   total: 0,
-  trigger_search:false,
-  pushbackHis:false
+  triggerSearch: false
 }
 
 export default (state = initState, {
   type,
   request,
-  rows,
+  rowsSearch,
+  rowsRs,
   total,
   error,
 }: GetElasticSearchAction): GetElasticSearchState => {
@@ -36,12 +37,19 @@ export default (state = initState, {
         loading: true
       }
     case Actions.GET_ELASTIC_SEARCH_SUCCESS:
-      let pushbackHis=!state.pushbackHis
       return {
         ...state,
         total,
-        rows,
-        pushbackHis:pushbackHis,
+        rowsSearch,
+        loading: false
+      }
+    case Actions.GET_ELASTIC_SEARCH_RESULT_SUCCESS:
+      let triggerSearch = !state.triggerSearch
+      return {
+        ...state,
+        total,
+        rowsRs,
+        triggerSearch: triggerSearch,
         loading: false
       }
     case Actions.GET_ELASTIC_SEARCH_ERROR:
@@ -50,13 +58,7 @@ export default (state = initState, {
         error,
         loading: false
       }
-      case Actions.TRIGGER_SEARCH:
-        let trigger=!state.trigger_search
-      return {
-        ...state,
-        trigger_search:trigger,
-        loading: false
-      }
+
     default:
       return state;
   }

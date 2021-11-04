@@ -10,7 +10,7 @@ import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {getElasticSearch, triggerSearch} from "../../modules_cb/ProfileManager/redux/actions";
 import {useHistory} from "react-router-dom";
-import {ProfileEntity} from "../../modules_cb/ProfileManager/types";
+import Loading from "../Loading";
 
 const {Sider} = Layout;
 
@@ -60,28 +60,26 @@ const DefaultLayout = (props: LayoutProps) => {
 
   useEffect(() => {
     if (state.value) {
-      props.getElasticSearch({key: state.value,size:10})
+      props.getElasticSearch({key: state.value, size: 10})
     }
   }, [state.value])
-
-  const [searchRs,setSearchRs]=useState<ProfileEntity|any>(undefined)
+  const [isLoading,setIsLoading]=useState(false)
   useEffect(() => {
-    if (state.value) {
-      props.getElasticSearch({key: state.value, size: 100})
-      setSearchRs(props.elasticSearch)
+    if (props.elasticSearch.rowsRs && state.value) {
+      history.push({
+        pathname: "/profile-manager",
+        state: props.elasticSearch.rowsRs,
+        search:state.value,
+      });
+      setIsLoading(false)
     }
-  }, [props.elasticSearch.trigger_search])
-  // console.log("Default:", props.elasticSearch)
-
-  useEffect(()=>{
-    history.push({
-      pathname: "/profile-manager",
-      state:searchRs,
-    });
-  },[searchRs])
+  }, [props.elasticSearch.triggerSearch])
 
   const btnSearchClicked = () => {
-    props.triggerSearch();
+    props.getElasticSearch({key: state.value, size: 100})
+    if(state.value){
+      setIsLoading(true);
+    }
   }
 
   function onChange(value: any) {
@@ -92,6 +90,8 @@ const DefaultLayout = (props: LayoutProps) => {
   }
 
   return (
+    <div>
+
     <commonStyled.Container>
       <Layout>
         <Layout>
@@ -120,7 +120,7 @@ const DefaultLayout = (props: LayoutProps) => {
                     <>
                       <div style={{display: "flex"}}>
                         <AutoComplete
-                          dataSource={Array.from(new Set(props.elasticSearch.rows.map((item: any) => item.fullName)))}
+                          dataSource={Array.from(new Set(props.elasticSearch.rowsSearch.map((item: any) => item.fullName)))}
                           style={{width: 400}}
                           onChange={onChange}
                           placeholder={"Họ tên, Năm sinh, Quê quán, Trường học, Số điện thoại, Email, Công việc"}
@@ -159,6 +159,9 @@ const DefaultLayout = (props: LayoutProps) => {
         </Layout>
       </Layout>
     </commonStyled.Container>
+
+      {isLoading?<Loading/>:null}
+    </div>
   );
 
 };

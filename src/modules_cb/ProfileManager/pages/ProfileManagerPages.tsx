@@ -65,8 +65,7 @@ interface IProps extends ReduxProps, RouteComponentProps {
 }
 
 function ProfileManagerPages(props: IProps) {
-  const locationState:any=props.location.state
-  const history:any =props.history.location.state
+  const locationState:any=props.location
   useEffect(() => {
     document.title = "Quản lý Profile";
   }, []);

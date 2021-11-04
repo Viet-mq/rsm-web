@@ -4,13 +4,15 @@ import {ProfileEntity, SearchRequest} from "../../../types";
 export interface GetElasticSearchAction {
   type: string,
   request?: SearchRequest,
-  rows?: ProfileEntity[],
+  rowsSearch?: ProfileEntity[],
+  rowsRs?: ProfileEntity[],
   total?: number,
   error?: AppError,
 }
 
 export const GET_ELASTIC_SEARCH = "GET_ELASTIC_SEARCH";
 export const GET_ELASTIC_SEARCH_SUCCESS = "GET_ELASTIC_SEARCH_SUCCESS";
+export const GET_ELASTIC_SEARCH_RESULT_SUCCESS = "GET_ELASTIC_SEARCH_RESULT_SUCCESS";
 export const GET_ELASTIC_SEARCH_ERROR = "GET_ELASTIC_SEARCH_ERROR";
 export const TRIGGER_SEARCH = "TRIGGER_SEARCH";
 
@@ -19,10 +21,16 @@ export const getElasticSearch = (request?: SearchRequest): GetElasticSearchActio
   request
 });
 
-export const getElasticSearchSuccess = (total: number, rows?: ProfileEntity[]): GetElasticSearchAction => ({
+export const getElasticSearchSuccess = (total: number, rowsSearch?: ProfileEntity[]): GetElasticSearchAction => ({
   type: GET_ELASTIC_SEARCH_SUCCESS,
   total,
-  rows
+  rowsSearch:rowsSearch
+});
+
+export const getElasticSearchResultSuccess = (total: number, rowsRs?: ProfileEntity[]): GetElasticSearchAction => ({
+  type: GET_ELASTIC_SEARCH_RESULT_SUCCESS,
+  total,
+  rowsRs:rowsRs
 });
 
 export const getElasticSearchError = (error: AppError): GetElasticSearchAction => ({

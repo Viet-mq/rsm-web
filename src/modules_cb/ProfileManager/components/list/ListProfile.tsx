@@ -2,7 +2,7 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import {ColumnProps} from "antd/lib/table";
-import {Avatar, Badge, Button, Form, Icon, Popconfirm, Table, Tooltip} from "antd";
+import {Avatar, Badge, Button, Icon, Popconfirm, Table, Tooltip} from "antd";
 import {emptyText} from "src/configs/locales";
 import {
   deleteProfile,
@@ -16,13 +16,13 @@ import {
 } from "../../redux/actions";
 import {DataShowBooking, DeleteProfileRequest, DetailCV, ProfileEntity} from "../../types";
 import moment from "moment";
-import {FormComponentProps} from "antd/lib/form";
 import {GiFemale, GiMale, ImPhoneHangUp} from "react-icons/all";
 import {getListJobLevel} from "../../../JobLevelManager/redux/actions";
 import {getListJob} from "../../../JobManager/redux/actions";
 import {getListSourceCV} from "../../../SourceCVManager/redux/actions";
 import {getListDepartment} from "../../../DepartmentManager/redux/actions";
 import {getListTalentPool} from "../../../TalentPoolManager/redux/actions";
+import {useHistory} from "react-router-dom";
 
 
 const mapStateToProps = (state: RootState) => ({
@@ -54,15 +54,14 @@ const connector = connect(mapStateToProps, {
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
-interface ListProfileProps extends FormComponentProps, ReduxProps {
+interface ListProfileProps extends ReduxProps {
   locationState: any,
 }
 
 function ListProfile(props: ListProfileProps) {
-  // console.log("locationState:", props.locationState)
+  const history = useHistory();
   const [page, setPage] = useState(1);
   const size = 30;
-  const [dataSource, setDataSource] = useState<ProfileEntity | any>(undefined)
   const [state, setState] = useState<any>(
     {
       filteredInfo: null,
@@ -329,10 +328,6 @@ function ListProfile(props: ListProfileProps) {
   }, [])
 
   useEffect(() => {
-    setDataSource(props.locationState?.rows);
-  }, [props.locationState])
-
-  useEffect(() => {
     onBtnResetClicked()
   }, [])
   const handleChange = (pagination: any, filters: any, sorter: any) => {
@@ -366,8 +361,9 @@ function ListProfile(props: ListProfileProps) {
       id: entity.id
     }
     props.deleteProfile(req);
-    setDataSource(undefined);
-
+    history.push({
+      state: undefined,
+    });
   }
 
   const handleEdit = (event: any, entity: ProfileEntity) => {
@@ -406,7 +402,9 @@ function ListProfile(props: ListProfileProps) {
   }
 
   function onBtnResetClicked() {
-    setDataSource(undefined);
+    history.push({
+      state: undefined,
+    });
     setState({
       filteredInfo: null,
       sortedInfo: {
@@ -419,32 +417,40 @@ function ListProfile(props: ListProfileProps) {
 
   return (
     <>
-      <Form style={{display: "flex", flexWrap: "wrap"}}>
+      <div>
+        {props.locationState.search ?
+          <div style={{marginLeft: 15}}>
+            <span>Kết quả tìm kiếm cho: </span>
+            <span
+              className="c-search-profile"
+            >
+              {props.locationState.search.slice(1)}
+            </span>
+            <a style={{color:"black",fontStyle:"italic"}} onClick={onBtnResetClicked}>x</a>
+          </div>
+          : null}
 
-        <Button style={{
-          margin: "0 10px 0 0 ",
-        }} onClick={clearFilters}>Clear filters</Button>
+        <br/>
+        <div style={{display: "flex", flexWrap: "wrap"}}>
 
-        <Button style={{
-          margin: "0 10px 0 0 ",
-        }} onClick={clearAll}>Clear filters and sorters</Button>
+          <Button style={{
+            margin: "0 10px 0 0 ",
+          }} onClick={clearFilters}>Clear filters</Button>
 
-        <Button
-          style={{
-            width: "115px",
-          }}
-          type="danger"
-          onClick={onBtnResetClicked}>
-          Reset All
-        </Button>
-      </Form>
+          <Button style={{
+            margin: "0 10px 0 0 ",
+          }} onClick={clearAll}>Clear filters and sorters</Button>
 
+
+        </div>
+
+      </div>
       <br/>
 
       <Table
         scroll={{x: 1500}}
         className="custom-table -webkit-scrollbar"
-        dataSource={dataSource !== undefined ? dataSource : props.list.rows}
+        dataSource={props.locationState.state !== undefined ? props.locationState.state : props.list.rows}
         columns={columns}
         rowKey="id"
         onChange={handleChange}
@@ -452,7 +458,7 @@ function ListProfile(props: ListProfileProps) {
         pagination={{
           current: page,
           pageSize: size,
-          total: dataSource !== undefined ? dataSource.length : props.list.total,
+          total: props.locationState.state !== undefined ? props.locationState.state.length : props.list.total,
           onChange: value => setPage(value),
           showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,
         }}
@@ -462,4 +468,4 @@ function ListProfile(props: ListProfileProps) {
 
 }
 
-export default connector(Form.create<ListProfileProps>()(ListProfile));
+export default connector(ListProfile);
