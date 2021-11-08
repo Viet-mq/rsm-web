@@ -60,12 +60,12 @@ const connector = connect(mapStateToProps, {
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
-interface IProps extends ReduxProps, RouteComponentProps {
+interface IProps extends ReduxProps {
 
 }
 
 function ProfileManagerPages(props: IProps) {
-  const locationState:any=props.location
+
   useEffect(() => {
     document.title = "Quản lý Profile";
   }, []);
@@ -126,7 +126,7 @@ function ProfileManagerPages(props: IProps) {
         </Row>
       </div>
 
-      <ListProfile locationState={locationState}/>
+      <ListProfile />
       <CreateProfileForm/>
       <UpdateProfileForm/>
       <UploadCVForm/>

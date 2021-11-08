@@ -18,7 +18,8 @@ const initState: GetElasticSearchState = {
   rowsSearch: [],
   rowsRs: undefined,
   total: 0,
-  triggerSearch: false
+  triggerSearch: false,
+
 }
 
 export default (state = initState, {

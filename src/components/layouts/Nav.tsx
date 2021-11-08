@@ -65,8 +65,8 @@ const Nav = (props: IProps) => {
 
       <Menu.Item key="profile-manager" style={{display: 'flex', alignItems: 'center'}}>
         <Link to={`/profile-manager`}>
-          <ImProfile className="mr-2"/>
-          {!props.hiddenLabel ? <span>Quản lý thông tin CV </span> : null}
+          <Icon type="solution" />
+          <span>Quản lý thông tin CV </span>
         </Link>
       </Menu.Item>
 

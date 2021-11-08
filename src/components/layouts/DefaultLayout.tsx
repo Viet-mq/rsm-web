@@ -36,11 +36,13 @@ const DefaultLayout = (props: LayoutProps) => {
   const screenWidth = document.documentElement.clientWidth;
   const [collapsed, setCollapsed] = useState(screenWidth <= env.tabletWidth ? true : false)
   const {getFieldDecorator, resetFields} = props.form;
+  const [isLoading,setIsLoading]=useState(false)
   const history = useHistory();
-  const [state, setState] = useState({
+  const [state, setState] = useState<any>({
     value: '',
     dataSource: [],
   });
+const [rowsSearch,setRowsSearch]=useState<string[]|any>([])
 
   function toggle() {
     setCollapsed(!collapsed)
@@ -63,29 +65,44 @@ const DefaultLayout = (props: LayoutProps) => {
       props.getElasticSearch({key: state.value, size: 10})
     }
   }, [state.value])
-  const [isLoading,setIsLoading]=useState(false)
+
   useEffect(() => {
     if (props.elasticSearch.rowsRs && state.value) {
       history.push({
         pathname: "/profile-manager",
-        state: props.elasticSearch.rowsRs,
-        search:state.value,
       });
       setIsLoading(false)
     }
   }, [props.elasticSearch.triggerSearch])
 
-  const btnSearchClicked = () => {
-    props.getElasticSearch({key: state.value, size: 100})
+  function onChange(value: any) {
+    setState({
+      ...state,
+      value
+    })
+  }
+
+  function onSelect(value:any) {
+    console.log('onSelect', value);
+    if(value){
+      props.getElasticSearch({key: value, size: 100})
+    }
     if(state.value){
       setIsLoading(true);
     }
   }
 
-  function onChange(value: any) {
+  useEffect(()=>{
+
+  },[])
+
+  function onSearch(searchText:any) {
+    console.log('onSearch', searchText);
+    const filterSearchRows=Array.from(new Set(props.elasticSearch.rowsSearch?.map((item: any) => item.fullName)))
+    console.log("REsult:",[searchText].concat(filterSearchRows))
     setState({
       ...state,
-      value
+      dataSource: !searchText ? [] : [searchText].concat(filterSearchRows),
     })
   }
 
@@ -111,18 +128,21 @@ const DefaultLayout = (props: LayoutProps) => {
                 onClick={toggle}
               />
               <span className="ml-5" style={{fontWeight: 500, marginRight: '-21px'}}>Tìm kiếm</span>
+
               <Form style={{
                 display: "flex", flexWrap: "wrap", marginLeft: "25px", flex: "1"
               }}>
 
                 <Form.Item style={{margin: "-5px 10px 0 5px", width: "40%"}}>
-                  {getFieldDecorator('valueInput')(
                     <>
                       <div style={{display: "flex"}}>
                         <AutoComplete
-                          dataSource={Array.from(new Set(props.elasticSearch.rowsSearch.map((item: any) => item.fullName)))}
+                          dataSource={state.dataSource}
+                          // dataSource={Array.from(new Set(props.elasticSearch.rowsSearch?.map((item: any) => item.fullName)))}
                           style={{width: 400}}
                           onChange={onChange}
+                          onSelect={onSelect}
+                          onSearch={onSearch}
                           placeholder={"Họ tên, Năm sinh, Quê quán, Trường học, Số điện thoại, Email, Công việc"}
                         >
                         </AutoComplete>
@@ -131,14 +151,13 @@ const DefaultLayout = (props: LayoutProps) => {
                           style={{marginLeft: 10}}
                           size="default"
                           type="primary"
-                          onClick={btnSearchClicked}
+                          onClick={onSelect}
                         >
                           <Icon type="search"/>
                         </Button>
                       </div>
 
                     </>
-                  )}
                 </Form.Item>
               </Form>
             </Header>
@@ -160,7 +179,7 @@ const DefaultLayout = (props: LayoutProps) => {
       </Layout>
     </commonStyled.Container>
 
-      {isLoading?<Loading/>:null}
+      {/*{isLoading?<Loading/>:null}*/}
     </div>
   );
 

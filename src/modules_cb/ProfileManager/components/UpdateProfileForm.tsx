@@ -93,7 +93,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           school: values.school,
           sourceCV: values.sourceCV,
           gender: values.gender,
-          talentPool: values.talentPool,
+          talentPool: values.talentPoolId,
           department:values.department,
         }
         props.updateProfile(req);
@@ -279,8 +279,8 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
 
           <Form.Item label="Talent pools" className="mb-0" style={{...formItemStyle}}>
             <div style={{display: 'flex'}}>
-              {getFieldDecorator('talentPool', {
-                initialValue: props.showForm.data_update?.talentPool,
+              {getFieldDecorator('talentPoolId', {
+                initialValue: props.showForm.data_update?.talentPoolId,
                 rules: [
                   {
                     message: 'Vui lòng chọn talent pools',

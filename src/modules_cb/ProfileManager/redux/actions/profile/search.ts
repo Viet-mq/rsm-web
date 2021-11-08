@@ -16,9 +16,9 @@ export const GET_ELASTIC_SEARCH_RESULT_SUCCESS = "GET_ELASTIC_SEARCH_RESULT_SUCC
 export const GET_ELASTIC_SEARCH_ERROR = "GET_ELASTIC_SEARCH_ERROR";
 export const TRIGGER_SEARCH = "TRIGGER_SEARCH";
 
-export const getElasticSearch = (request?: SearchRequest): GetElasticSearchAction => ({
+export const getElasticSearch = (request?: SearchRequest,keySearch?:string): GetElasticSearchAction => ({
   type: GET_ELASTIC_SEARCH,
-  request
+  request,
 });
 
 export const getElasticSearchSuccess = (total: number, rowsSearch?: ProfileEntity[]): GetElasticSearchAction => ({
@@ -30,7 +30,7 @@ export const getElasticSearchSuccess = (total: number, rowsSearch?: ProfileEntit
 export const getElasticSearchResultSuccess = (total: number, rowsRs?: ProfileEntity[]): GetElasticSearchAction => ({
   type: GET_ELASTIC_SEARCH_RESULT_SUCCESS,
   total,
-  rowsRs:rowsRs
+  rowsRs:rowsRs,
 });
 
 export const getElasticSearchError = (error: AppError): GetElasticSearchAction => ({
@@ -40,4 +40,5 @@ export const getElasticSearchError = (error: AppError): GetElasticSearchAction =
 
 export const triggerSearch=():GetElasticSearchAction=>({
   type:TRIGGER_SEARCH,
+
 })

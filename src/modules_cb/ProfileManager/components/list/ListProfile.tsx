@@ -2,7 +2,7 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import {ColumnProps} from "antd/lib/table";
-import {Avatar, Badge, Button, Icon, Popconfirm, Table, Tooltip} from "antd";
+import {Avatar, Badge, Button, Icon, Input, Popconfirm, Select, Table, Tooltip} from "antd";
 import {emptyText} from "src/configs/locales";
 import {
   deleteProfile,
@@ -23,7 +23,9 @@ import {getListSourceCV} from "../../../SourceCVManager/redux/actions";
 import {getListDepartment} from "../../../DepartmentManager/redux/actions";
 import {getListTalentPool} from "../../../TalentPoolManager/redux/actions";
 import {useHistory} from "react-router-dom";
+import {getListSchool} from "../../../SchoolManager/redux/actions";
 
+const {Option} = Select;
 
 const mapStateToProps = (state: RootState) => ({
   list: state.profileManager.list,
@@ -34,7 +36,7 @@ const mapStateToProps = (state: RootState) => ({
   listDepartment: state.departmentManager.list,
   listTalentPool: state.talentPoolManager.list,
   listJob: state.jobManager.list,
-
+  elasticSearch: state.profileManager.search,
 })
 const connector = connect(mapStateToProps, {
   getListProfile,
@@ -49,13 +51,13 @@ const connector = connect(mapStateToProps, {
   getListJob,
   getListSourceCV,
   getListDepartment,
-  getListTalentPool
+  getListTalentPool,
+  getListSchool
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface ListProfileProps extends ReduxProps {
-  locationState: any,
 }
 
 function ListProfile(props: ListProfileProps) {
@@ -71,6 +73,14 @@ function ListProfile(props: ListProfileProps) {
       },
     }
   );
+  const [selected, setSelected] = useState<any>({
+    name:null,
+    job: null,
+    jobLevel: null,
+    department: null,
+    talentPool: null,
+  })
+  // console.log("selected",selected)
   const columns: ColumnProps<ProfileEntity>[] = [
     {
       title: 'STT',
@@ -320,16 +330,15 @@ function ListProfile(props: ListProfileProps) {
   ];
 
   useEffect(() => {
+    props.getListProfile({page: 1, size: 100});
     props.getListJob({page: 1, size: 100});
     props.getListJobLevel({page: 1, size: 100});
     props.getListSourceCV({page: 1, size: 100});
     props.getListTalentPool({page: 1, size: 100});
     props.getListDepartment({page: 1, size: 100});
+    props.getListSchool({page: 1, size: 100});
   }, [])
 
-  useEffect(() => {
-    onBtnResetClicked()
-  }, [])
   const handleChange = (pagination: any, filters: any, sorter: any) => {
     console.log('Various parameters', pagination, filters, sorter);
     setState({
@@ -349,6 +358,12 @@ function ListProfile(props: ListProfileProps) {
         columnKey: null,
       },
     });
+    setSelected({
+      job: null,
+      jobLevel: null,
+      department: null,
+      talentPool: null,
+    })
   };
 
   function unixTimeToDate(unixTime: number): Date {
@@ -402,9 +417,7 @@ function ListProfile(props: ListProfileProps) {
   }
 
   function onBtnResetClicked() {
-    history.push({
-      state: undefined,
-    });
+    setDataSource(undefined);
     setState({
       filteredInfo: null,
       sortedInfo: {
@@ -415,32 +428,84 @@ function ListProfile(props: ListProfileProps) {
     props.getListProfile({page: 1, size: 100});
   }
 
+  const [dataSource, setDataSource] = useState<ProfileEntity[] | any>(undefined)
+
+  useEffect(() => {
+    setDataSource(props.elasticSearch.rowsRs);
+  }, [props.elasticSearch.triggerSearch])
+
   return (
     <>
       <div>
-        {props.locationState.search ?
+        {props.elasticSearch.triggerSearch ?
           <div style={{marginLeft: 15}}>
             <span>Kết quả tìm kiếm cho: </span>
             <span
               className="c-search-profile"
             >
-              {props.locationState.search.slice(1)}
+              {props.elasticSearch.request?.key}
             </span>
-            <a style={{color:"black",fontStyle:"italic"}} onClick={onBtnResetClicked}>x</a>
+            <a style={{color: "black", fontStyle: "italic"}} onClick={onBtnResetClicked}>x</a>
           </div>
           : null}
 
         <br/>
-        <div style={{display: "flex", flexWrap: "wrap"}}>
+
+        <div className="c-filter-profile">
+
+          <Input style={{display: "inline"}}
+                 onChange={value => setSelected(selected.name=value)}
+                 placeholder="Họ tên" prefix={<Icon type="search"/>}/>
+
+          <Select style={{width: "13%"}}
+                  placeholder="Công việc"
+                  onChange={value => setSelected(selected.job=value)}
+          >
+            {props.listJob.rows?.map((item: any, index: any) => (
+              <Option key={index} value={item.id}>{item.name}</Option>
+            ))}
+          </Select>
+
+          <Select style={{width: "13%"}}
+                  onChange={value => setSelected(selected.jobLevel=value)}
+                  placeholder="Vị trí tuyển dụng"
+          >
+            {props.listJobLevel.rows?.map((item: any, index: any) => (
+              <Option key={index} value={item.id}>{item.name}</Option>
+            ))}
+          </Select>
+
+          <Select
+            style={{
+              width: "13%"
+            }}
+            onChange={value => setSelected(selected.department=value)}
+            placeholder="Phòng ban"
+          >
+            {props.listDepartment.rows?.map((item: any, index: any) => (
+              <Option key={index} value={item.id}>{item.name}</Option>
+            ))}
+          </Select>
+
+          <Select
+            style={{
+              width: "13%"
+            }}
+            onChange={value => setSelected(selected.talentPool=value)}
+            placeholder="Talent Pools"
+          >
+            {props.listTalentPool.rows?.map((item: any, index: any) => (
+              <Option key={index} value={item.id}>{item.name}</Option>
+            ))}
+          </Select>
+
+          <Button type="primary" style={{
+            width: "13%"
+          }}>Tìm kiếm</Button>
 
           <Button style={{
-            margin: "0 10px 0 0 ",
-          }} onClick={clearFilters}>Clear filters</Button>
-
-          <Button style={{
-            margin: "0 10px 0 0 ",
-          }} onClick={clearAll}>Clear filters and sorters</Button>
-
+            width: "13%"
+          }} onClick={clearAll}>Reset</Button>
 
         </div>
 
@@ -450,7 +515,7 @@ function ListProfile(props: ListProfileProps) {
       <Table
         scroll={{x: 1500}}
         className="custom-table -webkit-scrollbar"
-        dataSource={props.locationState.state !== undefined ? props.locationState.state : props.list.rows}
+        dataSource={dataSource ? dataSource : props.list.rows}
         columns={columns}
         rowKey="id"
         onChange={handleChange}
@@ -458,7 +523,7 @@ function ListProfile(props: ListProfileProps) {
         pagination={{
           current: page,
           pageSize: size,
-          total: props.locationState.state !== undefined ? props.locationState.state.length : props.list.total,
+          total: dataSource ? dataSource.length : props.list.total,
           onChange: value => setPage(value),
           showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,
         }}

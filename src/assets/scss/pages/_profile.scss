@@ -21,3 +21,13 @@
     font-style:italic;
     color:$color-blue-link
 }
+
+.c-filter-profile>*{
+  //display: flex;
+  //flex-wrap: wrap;
+  margin:  0 10px 5px 0;
+  input{
+      width: 15%;
+  }
+}
+

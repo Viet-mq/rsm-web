@@ -13,7 +13,7 @@ export function* searchAsync(action: GetElasticSearchAction) {
     const rs = yield apis.getElasticSearch(action.request);
     if (action.request?.size === 10) {
       yield put(getElasticSearchSuccess(rs.total, rs.rows));
-    } else{
+    } else {
       yield put(getElasticSearchResultSuccess(rs.total, rs.rows));
     }
 

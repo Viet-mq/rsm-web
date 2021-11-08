@@ -522,13 +522,15 @@ function DetailProfileForm(props: DetailProfileFormProps) {
           </div>
 
           <div className="detail-paragraph-4__content">
-            <iframe
-              src={props.detail.result?.urlCV}
-              title="CV"
-              width="100%"
-              height="700px"
-            >
-            </iframe>
+            {props.detail.result?.urlCV ? <iframe
+                src={props.detail.result?.urlCV}
+                title="CV"
+                width="100%"
+                height="700px"
+              >
+              </iframe>
+              : null}
+
           </div>
 
         </div>
