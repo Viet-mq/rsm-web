@@ -101,7 +101,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
 
         <Form {...formItemLayout}>
 
-          <Form.Item label="Người phỏng vấn" className="mb-0" style={{...formItemStyle}}>
+          <Form.Item label="Người phỏng vấn" className="mb-0" style={{height:50}}>
             {getFieldDecorator('username', {
               initialValue: props.showNote.data_update?.username,
               rules: [
@@ -119,7 +119,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
               </Select>)}
           </Form.Item>
 
-          <Form.Item label="Nhận xét" className="mb-0" style={{...formItemStyle}}>
+          <Form.Item label="Nhận xét" className="mb-0" style={{height:110}}>
             {getFieldDecorator('comment', {
               initialValue: props.showNote.data_update?.comment,
               rules: [
@@ -133,7 +133,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
             )}
           </Form.Item>
 
-          <Form.Item label="Đánh giá" className="mb-0" style={{...formItemStyle}}>
+          <Form.Item label="Đánh giá" className="mb-0" style={{height:50}}>
             {getFieldDecorator('evaluation', {
               initialValue: props.showNote.data_update?.evaluation,
               rules: [
@@ -147,7 +147,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
             )}
           </Form.Item>
 
-          <Form.Item label="File đính kèm" className="mb-0" style={{...formItemStyle}}>
+          <Form.Item label="File đính kèm" className="mb-0" style={{height:50}}>
             {getFieldDecorator('file', {
               initialValue: "",
               rules: [

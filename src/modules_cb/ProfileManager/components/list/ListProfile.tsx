@@ -2,7 +2,7 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import {ColumnProps} from "antd/lib/table";
-import {Avatar, Badge, Button, Icon, Input, Popconfirm, Select, Table, Tooltip} from "antd";
+import {Avatar, Button, Icon, Input, Popconfirm, Select, Table, Tooltip} from "antd";
 import {emptyText} from "src/configs/locales";
 import {
   deleteProfile,
@@ -74,13 +74,15 @@ function ListProfile(props: ListProfileProps) {
     }
   );
   const [selected, setSelected] = useState<any>({
-    name:null,
+    name: null,
     job: null,
     jobLevel: null,
     department: null,
     talentPool: null,
   })
-  // console.log("selected",selected)
+
+  console.log("selected:",selected)
+
   const columns: ColumnProps<ProfileEntity>[] = [
     {
       title: 'STT',
@@ -95,40 +97,55 @@ function ListProfile(props: ListProfileProps) {
     {
       title: 'Họ tên',
       dataIndex: 'fullName',
-      width: 210,
+      width: 250,
       key: 'fullName',
       fixed: "left",
       render: (text: string, record: ProfileEntity) => {
-        return <div>
+        return <div style={{display: 'flex', alignItems: 'center'}}>
                   <span style={{marginRight: 24}}>
-                    <Badge count={1}>
-                      <Avatar icon={record.image ? null : "user"} src={record.image ? record.image : "#"}/>
-                    </Badge>
+                    {/*<Badge count={1}>*/}
+                    <Avatar icon={record.image ? null : "user"} src={record.image ? record.image : "#"}/>
+                    {/*</Badge>*/}
                   </span>
-          <a className="c-list-profile" style={{marginRight: "1px"}}
-             onClick={event => handleDetail(event, record)}><span>{text}</span></a>
-          {record.gender === "Nam" ? <GiMale/> : <GiFemale/>}
+          <span><a className="c-list-profile" style={{marginRight: "1px"}}
+                   onClick={event => handleDetail(event, record)}><span>{text}</span></a>
+            {record.gender === "Nam" ? <GiMale/> : <GiFemale/>}</span>
+
         </div>
-      }
+      },
+      sorter: (a, b) => a.fullName.length - b.fullName.length,
+      sortOrder: state.sortedInfo.columnKey === 'fullName' && state.sortedInfo.order,
+      ellipsis: true,
     },
 
     {
       title: 'Thông tin liên hệ',
-      width: 200,
+      width: 180,
       fixed: props.showDetail ? undefined : "left",
       key: 'contact',
       render: (text: string, record: ProfileEntity) => {
         return <div>
-          <p>
-            <Icon type="mail" className="mr-1"/>
-            <span>{record.email}</span>
-          </p>
-          <p>
+          <div style={{display: 'flex', alignItems: 'center'}}>
+            <Icon type="mail" className="mr-1" style={{alignSelf: 'flex-start', paddingTop: 3}}/>
+            <span style={{fontWeight:500}}>{record.email}</span>
+          </div>
+          <div>
             <ImPhoneHangUp className="mr-1"/>
-            <span>{record.phoneNumber}</span>
-          </p>
+            <span style={{color:"#B2B2B2"}} >{record.phoneNumber}</span>
+          </div>
         </div>
       }
+
+    },
+    {
+      title: 'Vòng tuyển dụng',
+      dataIndex: 'statusCVName',
+      width: 150,
+      key: 'statusCVName',
+      render: (text, record) => <span>{record.statusCVName}</span>,
+      sorter: (a, b) => a.statusCVName.length - b.statusCVName.length,
+      sortOrder: state.sortedInfo.columnKey === 'statusCVName' && state.sortedInfo.order,
+      ellipsis: true,
     },
     {
       title: 'Công việc',
@@ -136,13 +153,6 @@ function ListProfile(props: ListProfileProps) {
       width: 150,
       key: 'jobName',
       render: (text, record) => <span style={{fontWeight: 500}}>{record.jobName}</span>,
-      filters: props.listJob?.rows.map((item: any) => ({
-        text: item.name,
-        value: item.name
-      }))
-      ,
-      filteredValue: state.filteredInfo?.jobName || null,
-      onFilter: (value, record) => record.jobName.includes(value),
       sorter: (a, b) => a.jobName.length - b.jobName.length,
       sortOrder: state.sortedInfo.columnKey === 'jobName' && state.sortedInfo.order,
       ellipsis: true,
@@ -152,13 +162,6 @@ function ListProfile(props: ListProfileProps) {
       dataIndex: 'levelJobName',
       width: 170,
       key: 'levelJobName',
-      filters: props.listJobLevel?.rows.map((item: any) => ({
-        text: item.name,
-        value: item.name
-      }))
-      ,
-      filteredValue: state.filteredInfo?.levelJobName || null,
-      onFilter: (value, record) => record.levelJobName.includes(value),
       sorter: (a, b) => a.levelJobName.length - b.levelJobName.length,
       sortOrder: state.sortedInfo.columnKey === 'levelJobName' && state.sortedInfo.order,
       ellipsis: true,
@@ -168,13 +171,6 @@ function ListProfile(props: ListProfileProps) {
       dataIndex: 'departmentName',
       width: 150,
       key: 'departmentName',
-      filters: props.listDepartment?.rows.map((item: any) => ({
-        text: item.name,
-        value: item.name
-      }))
-      ,
-      filteredValue: state.filteredInfo?.departmentName || null,
-      onFilter: (value, record) => record.departmentName.includes(value),
       sorter: (a, b) => a.departmentName.length - b.departmentName.length,
       sortOrder: state.sortedInfo.columnKey === 'departmentName' && state.sortedInfo.order,
       ellipsis: true,
@@ -207,13 +203,13 @@ function ListProfile(props: ListProfileProps) {
       dataIndex: 'talentPoolName',
       width: 140,
       key: 'talentPoolName',
-      filters: props.listTalentPool?.rows.map((item: any) => ({
-        text: item.name,
-        value: item.name
-      }))
-      ,
-      filteredValue: state.filteredInfo?.talentPoolName || null,
-      onFilter: (value, record) => record.talentPoolName.includes(value),
+      // filters: props.listTalentPool?.rows.map((item: any) => ({
+      //   text: item.name,
+      //   value: item.name
+      // }))
+      // ,
+      // filteredValue: state.filteredInfo?.talentPoolName || null,
+      // onFilter: (value, record) => record.talentPoolName.includes(value),
       sorter: (a, b) => a.talentPoolName.length - b.talentPoolName.length,
       sortOrder: state.sortedInfo.columnKey === 'talentPoolName' && state.sortedInfo.order,
       ellipsis: true,
@@ -221,7 +217,7 @@ function ListProfile(props: ListProfileProps) {
     {
       title: 'HR Ref',
       dataIndex: 'hrRef',
-      width: 100,
+      width: 160,
       key: 'hrRef',
     },
     {
@@ -270,8 +266,8 @@ function ListProfile(props: ListProfileProps) {
         return <div style={{whiteSpace: 'nowrap'}}>Thao tác</div>;
       },
       dataIndex: 'action',
-      width: 100,
-      fixed: 'right',
+      width: 170,
+      // fixed: 'right',
       render: (_text: string, record: ProfileEntity) => {
         return (
           <div style={{whiteSpace: 'nowrap'}}>
@@ -416,6 +412,8 @@ function ListProfile(props: ListProfileProps) {
     props.showFormDetail(req, entity.id);
   }
 
+  const [keySearch, setKeySearch] = useState<string>('')
+
   function onBtnResetClicked() {
     setDataSource(undefined);
     setState({
@@ -425,6 +423,7 @@ function ListProfile(props: ListProfileProps) {
         columnKey: null,
       },
     });
+    setKeySearch('')
     props.getListProfile({page: 1, size: 100});
   }
 
@@ -432,18 +431,32 @@ function ListProfile(props: ListProfileProps) {
 
   useEffect(() => {
     setDataSource(props.elasticSearch.rowsRs);
+    if (props.elasticSearch.request?.key) {
+      setKeySearch(props.elasticSearch.request?.key)
+    }
   }, [props.elasticSearch.triggerSearch])
+
+  function btnSearchClicked() {
+    props.getListProfile({fullName:selected.name,
+      jobId:selected.job,
+      levelJobId:selected.jobLevel,
+      departmentId:selected.department,
+      talentPoolId:selected.talentPool,
+      page:1,
+      size:30,
+    })
+  }
 
   return (
     <>
       <div>
-        {props.elasticSearch.triggerSearch ?
+        {keySearch ?
           <div style={{marginLeft: 15}}>
             <span>Kết quả tìm kiếm cho: </span>
             <span
               className="c-search-profile"
             >
-              {props.elasticSearch.request?.key}
+              {keySearch}
             </span>
             <a style={{color: "black", fontStyle: "italic"}} onClick={onBtnResetClicked}>x</a>
           </div>
@@ -454,12 +467,13 @@ function ListProfile(props: ListProfileProps) {
         <div className="c-filter-profile">
 
           <Input style={{display: "inline"}}
-                 onChange={value => setSelected(selected.name=value)}
+                 onChange={e => setSelected({...selected,name:e.target.value})}
+
                  placeholder="Họ tên" prefix={<Icon type="search"/>}/>
 
           <Select style={{width: "13%"}}
                   placeholder="Công việc"
-                  onChange={value => setSelected(selected.job=value)}
+                  onChange={value => setSelected({...selected,job:value})}
           >
             {props.listJob.rows?.map((item: any, index: any) => (
               <Option key={index} value={item.id}>{item.name}</Option>
@@ -467,7 +481,7 @@ function ListProfile(props: ListProfileProps) {
           </Select>
 
           <Select style={{width: "13%"}}
-                  onChange={value => setSelected(selected.jobLevel=value)}
+                  onChange={value => setSelected({...selected,jobLevel:value})}
                   placeholder="Vị trí tuyển dụng"
           >
             {props.listJobLevel.rows?.map((item: any, index: any) => (
@@ -479,7 +493,7 @@ function ListProfile(props: ListProfileProps) {
             style={{
               width: "13%"
             }}
-            onChange={value => setSelected(selected.department=value)}
+            onChange={value => setSelected({...selected,department:value})}
             placeholder="Phòng ban"
           >
             {props.listDepartment.rows?.map((item: any, index: any) => (
@@ -491,7 +505,7 @@ function ListProfile(props: ListProfileProps) {
             style={{
               width: "13%"
             }}
-            onChange={value => setSelected(selected.talentPool=value)}
+            onChange={value => setSelected({...selected,talentPool:value})}
             placeholder="Talent Pools"
           >
             {props.listTalentPool.rows?.map((item: any, index: any) => (
@@ -501,7 +515,9 @@ function ListProfile(props: ListProfileProps) {
 
           <Button type="primary" style={{
             width: "13%"
-          }}>Tìm kiếm</Button>
+          }}
+                  onClick={btnSearchClicked}
+          >Tìm kiếm</Button>
 
           <Button style={{
             width: "13%"
@@ -513,11 +529,13 @@ function ListProfile(props: ListProfileProps) {
       <br/>
 
       <Table
-        scroll={{x: 1500}}
+        scroll={{x: "1500px",y:"450px"}}
         className="custom-table -webkit-scrollbar"
         dataSource={dataSource ? dataSource : props.list.rows}
         columns={columns}
         rowKey="id"
+        size="small"
+        bordered
         onChange={handleChange}
         locale={{emptyText: emptyText}}
         pagination={{
@@ -528,6 +546,7 @@ function ListProfile(props: ListProfileProps) {
           showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,
         }}
       />
+
     </>
   );
 

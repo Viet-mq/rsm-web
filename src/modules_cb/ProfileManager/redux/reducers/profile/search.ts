@@ -1,10 +1,11 @@
 import {AppError} from "../../../../../models/common";
 import * as Actions from "../../actions";
-import {GetElasticSearchAction} from "../../actions";
+import {GetElasticSearchAction, TRIGGER_SEARCH} from "../../actions";
 import {ProfileEntity, SearchRequest} from "../../../types";
 
 export interface GetElasticSearchState {
   loading: boolean,
+  loadingRs: boolean,
   request?: SearchRequest,
   rowsSearch?: ProfileEntity[] | any,
   rowsRs?: ProfileEntity[] | any,
@@ -15,6 +16,7 @@ export interface GetElasticSearchState {
 
 const initState: GetElasticSearchState = {
   loading: false,
+  loadingRs: false,
   rowsSearch: [],
   rowsRs: undefined,
   total: 0,
@@ -35,7 +37,7 @@ export default (state = initState, {
       return {
         ...state,
         request,
-        loading: true
+        loading: true,
       }
     case Actions.GET_ELASTIC_SEARCH_SUCCESS:
       return {
@@ -51,13 +53,19 @@ export default (state = initState, {
         total,
         rowsRs,
         triggerSearch: triggerSearch,
-        loading: false
+        loadingRs: false
       }
     case Actions.GET_ELASTIC_SEARCH_ERROR:
       return {
         ...state,
         error,
-        loading: false
+        loading: false,
+        loadingRs: false
+      }
+   case Actions.TRIGGER_SEARCH:
+      return {
+        ...state,
+        loadingRs: true
       }
 
     default:

@@ -1,10 +1,15 @@
 export interface DepartmentEntity {
   id:string,
   name:string,
-  page:number,
-  size:number,
-}
+  idCompany:string,
+  children:ChildrenDepartment[]|any,
 
+}
+export interface ChildrenDepartment{
+  id:string,
+  name:string,
+  children:ChildrenDepartment[]
+}
 export interface CreateDepartmentRequest {
   name: string,
 }

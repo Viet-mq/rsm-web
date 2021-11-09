@@ -76,34 +76,29 @@ const [rowsSearch,setRowsSearch]=useState<string[]|any>([])
   }, [props.elasticSearch.triggerSearch])
 
   function onChange(value: any) {
+    console.log('onChange', value);
     setState({
       ...state,
       value
     })
   }
 
+  useEffect(()=>{
+    setState({
+      ...state,
+      dataSource: !state.value ? [] : Array.from(new Set([state.value ].concat(props.elasticSearch.rowsSearch?.map((item: any) => item.fullName)))) ,
+    })
+  },[props.elasticSearch.rowsSearch])
+
   function onSelect(value:any) {
     console.log('onSelect', value);
     if(value){
       props.getElasticSearch({key: value, size: 100})
+      props.triggerSearch();
     }
     if(state.value){
       setIsLoading(true);
     }
-  }
-
-  useEffect(()=>{
-
-  },[])
-
-  function onSearch(searchText:any) {
-    console.log('onSearch', searchText);
-    const filterSearchRows=Array.from(new Set(props.elasticSearch.rowsSearch?.map((item: any) => item.fullName)))
-    console.log("REsult:",[searchText].concat(filterSearchRows))
-    setState({
-      ...state,
-      dataSource: !searchText ? [] : [searchText].concat(filterSearchRows),
-    })
   }
 
   return (
@@ -138,23 +133,13 @@ const [rowsSearch,setRowsSearch]=useState<string[]|any>([])
                       <div style={{display: "flex"}}>
                         <AutoComplete
                           dataSource={state.dataSource}
-                          // dataSource={Array.from(new Set(props.elasticSearch.rowsSearch?.map((item: any) => item.fullName)))}
                           style={{width: 400}}
                           onChange={onChange}
                           onSelect={onSelect}
-                          onSearch={onSearch}
+                          // onSearch={onSearch}
                           placeholder={"Họ tên, Năm sinh, Quê quán, Trường học, Số điện thoại, Email, Công việc"}
                         >
                         </AutoComplete>
-                        <Button
-                          className="search-btn"
-                          style={{marginLeft: 10}}
-                          size="default"
-                          type="primary"
-                          onClick={onSelect}
-                        >
-                          <Icon type="search"/>
-                        </Button>
                       </div>
 
                     </>
@@ -179,7 +164,7 @@ const [rowsSearch,setRowsSearch]=useState<string[]|any>([])
       </Layout>
     </commonStyled.Container>
 
-      {/*{isLoading?<Loading/>:null}*/}
+      {props.elasticSearch.loadingRs?<Loading/>:null}
     </div>
   );
 

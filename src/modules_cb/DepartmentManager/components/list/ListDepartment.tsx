@@ -13,6 +13,7 @@ import {
   updateDepartment
 } from "../../redux/actions";
 import {DepartmentEntity, DeleteDepartmentRequest} from "../../types";
+import {ProfileEntity} from "../../../ProfileManager/types";
 
 const mapStateToProps = ({departmentManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
@@ -41,11 +42,11 @@ function ListDepartment(props: IProps) {
   }, []);
 
   const handleDelete = (event: any, entity: DepartmentEntity) => {
-    event.stopPropagation();
-    let req: DeleteDepartmentRequest = {
-      id: entity.id
-    }
-    props.deleteDepartment(req);
+    // event.stopPropagation();
+    // let req: DeleteDepartmentRequest = {
+    //   id: entity.id
+    // }
+    // props.deleteDepartment(req);
   }
 
   const handleEdit = (event: any, entity: DepartmentEntity) => {
@@ -54,20 +55,13 @@ function ListDepartment(props: IProps) {
   }
 
   const columns: ColumnProps<DepartmentEntity>[] = [
-    {
-      title: 'STT',
-      key: 'index',
-      width: 50,
-      align: "center",
-      render: (text, record, index) => {
-        return (page - 1) * 10 + index + 1
-      }
-    },
+
     {
       title: 'Name',
       dataIndex: 'name',
       width: 100,
-    },
+    },   
+
     {
       title: () => {
         return <div style={{whiteSpace: 'nowrap'}}>Thao tác</div>;
@@ -106,16 +100,6 @@ function ListDepartment(props: IProps) {
       },
     },
   ];
-
-  // function onSelectedRowKeysChange(selectedRowKeys: any) {
-  //   setState({selectedRowKeys});
-  // }
-  //
-  // const {selectedRowKeys} = state;
-  // const rowSelection = {
-  //   selectedRowKeys,
-  //   onChange: onSelectedRowKeysChange,
-  // };
 
   return (
     <>

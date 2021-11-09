@@ -227,7 +227,9 @@ export interface NoteEntity {
   comment: string,
   evaluation: string,
   fileName?: any,
-  url: string
+  url: string,
+  updateAt:number,
+  updateBy:string
 }
 
 export interface UpdateNoteRequest {

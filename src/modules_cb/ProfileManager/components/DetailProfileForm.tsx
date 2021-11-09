@@ -82,7 +82,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     {
       type: "select",
       iconType: 'eye',
-      twoToneColor: '#ffee00'
+      twoToneColor: '#D7D704'
     },
     {
       type: "create",
@@ -102,6 +102,10 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
     },
   ]
+
+  function unixTimeToDate(unixTime: number): Date {
+    return new Date(unixTime);
+  }
 
   const [visiblePopover, setVisiblePopover] = useState<boolean>(false);
 
@@ -180,35 +184,38 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       title: "Đánh giá",
       dataIndex: "evaluation",
       width: 100,
-      key: 3,
+      key: "evaluation",
     },
     {
       title: "Đính kèm",
       dataIndex: "fileName",
       width: 100,
-      key: 4,
+      key: "fileName",
       render: (text: string, record: NoteEntity) => <a className="cv-overflow" href={record.url}
                                                        target="_blank">{record.fileName}</a>,
 
     },
     {
       title: "Thời gian sửa",
-      dataIndex: "createAt",
+      dataIndex: "updateAt",
       width: 100,
-      key: 5,
+      key: "updateAt",
+      render: (value: string) => {
+        return moment(unixTimeToDate(parseInt(value,10))).format('DD/MM/YYYY HH:mm');
+      },
     },
     {
       title: "Người sửa",
-      dataIndex: "createBy",
-      width: 100,
-      key: 6,
+      dataIndex: "updateBy",
+      width: 90,
+      key: "updateBy",
     },
     {
       title: () => {
         return <div style={{whiteSpace: 'nowrap'}}>Thao tác</div>;
       },
       dataIndex: 'action',
-      width: 100,
+      width: 90,
       fixed: 'right',
       render: (_text: string, record: NoteEntity) => {
         return (
@@ -296,9 +303,6 @@ function DetailProfileForm(props: DetailProfileFormProps) {
   }
 
 
-  function unixTimeToDate(unixTime: number): Date {
-    return new Date(unixTime);
-  }
 
   function handleChangeActivityLogs(page: any) {
     setActiveLogs({

@@ -102,7 +102,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
 
         <Form {...formItemLayout}>
 
-          <Form.Item label="Người phỏng vấn" className="mb-0" style={{...formItemStyle}}>
+          <Form.Item label="Người phỏng vấn" className="mb-0" style={{height:50}}>
             {getFieldDecorator('username', {
               initialValue: '',
               rules: [
@@ -120,7 +120,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
               </Select>)}
           </Form.Item>
 
-          <Form.Item label="Nhận xét" className="mb-0" style={{...formItemStyle}}>
+          <Form.Item label="Nhận xét" className="mb-0" style={{height:110}}>
             {getFieldDecorator('comment', {
               initialValue: '',
               rules: [
@@ -134,7 +134,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
             )}
           </Form.Item>
 
-          <Form.Item label="Đánh giá" className="mb-0" style={{...formItemStyle}}>
+          <Form.Item label="Đánh giá" className="mb-0" style={{height:50}}>
             {getFieldDecorator('evaluation', {
               initialValue: '',
               rules: [
@@ -148,7 +148,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
             )}
           </Form.Item>
 
-          <Form.Item label="File đính kèm" className="mb-0" style={{...formItemStyle}}>
+          <Form.Item label="File đính kèm" className="mb-0" style={{height:50}}>
             {getFieldDecorator('file', {
               initialValue: '',
               rules: [
