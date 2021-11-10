@@ -1,4 +1,4 @@
-import {Icon, Menu} from 'antd';
+import {Icon, Menu, Avatar, Badge} from 'antd';
 import React from 'react';
 import {Link} from 'react-router-dom';
 import {RootState} from 'src/redux/reducers';
@@ -66,7 +66,7 @@ const Nav = (props: IProps) => {
       <Menu.Item key="profile-manager" style={{display: 'flex', alignItems: 'center'}}>
         <Link to={`/profile-manager`}>
           <Icon type="solution" />
-          <span>Quản lý thông tin CV </span>
+          <span>Ứng viên</span>
         </Link>
       </Menu.Item>
 
@@ -164,11 +164,12 @@ const Nav = (props: IProps) => {
 
       <SubMenu key="sub3" title={!props.hiddenLabel ? <span>TALENT POOLS</span> : <RiFolderUserLine/>}>
         {props.auth?.pools.map((item: any) => {
-          return <Menu.Item key={item.id} style={{display: 'flex', alignItems: 'center'}}>
-            <Link to={`/talent-pool-manager/${item.id}`}>
-              <Icon type="contacts"/>
-              <span>{item.name} </span>
-              <span>{item.count}</span>
+          return <Menu.Item key={item.id} style={{display: 'flex'}}>
+            <Link to={`/talent-pool-manager/${item.id}`} className='nav-element'>
+              <Icon  type="contacts"/>
+              <span className="nav-element__content">{item.name} </span>
+              <Badge style={{ backgroundColor: '#818181'}} count={item.count} overflowCount={999}/>
+              {/*<Avatar style={{ backgroundColor: '#818181' }} shape="square" size={25}>{item.count}</Avatar>*/}
             </Link>
           </Menu.Item>
 

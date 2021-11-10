@@ -17,7 +17,7 @@ import {
 } from "../redux/actions";
 import {showFormCreateNote, showFormUpdateNote} from "../../ProfileManager/redux/actions/note/showNote";
 
-import {Button, Icon, Pagination, Popconfirm, Popover, Table, Timeline, Tooltip} from "antd";
+import {Badge, Button, Icon, Pagination, Popconfirm, Popover, Table, Tag, Timeline, Tooltip} from "antd";
 import React, {useEffect, useState} from "react";
 import {DataShowBooking, DeleteNoteRequest, DetailCV, NoteEntity} from "../types";
 import moment from "moment";
@@ -201,7 +201,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       width: 100,
       key: "updateAt",
       render: (value: string) => {
-        return moment(unixTimeToDate(parseInt(value,10))).format('DD/MM/YYYY HH:mm');
+        return moment(unixTimeToDate(parseInt(value, 10))).format('DD/MM/YYYY HH:mm');
       },
     },
     {
@@ -303,7 +303,6 @@ function DetailProfileForm(props: DetailProfileFormProps) {
   }
 
 
-
   function handleChangeActivityLogs(page: any) {
     setActiveLogs({
       ...activeLogs,
@@ -392,7 +391,20 @@ function DetailProfileForm(props: DetailProfileFormProps) {
               style={{width: "100px", height: "100px", borderRadius: "50%"}}/>
           </Popover>
           <div className="detail-paragraph-1__name">
-            <h2>{props.detail.result?.fullName}</h2>
+
+            <div style={{display: "flex", justifyContent: "space-between"}}>
+              <h2>{props.detail.result?.fullName}</h2>
+              {
+               props.detail.result?.statusCVName === "APPLY" ? <Tag color="#cfcfcf" style={{height: 22,fontSize:17}}>{props.detail.result?.statusCVName}</Tag> :
+                 props.detail.result?.statusCVName === "INTERVIEW" ? <Tag color="#339cff" style={{height: 22,fontSize:17}}>{props.detail.result?.statusCVName}</Tag> :
+                   props.detail.result?.statusCVName === "OFFER" ? <Tag color="#fac000" style={{height: 22,fontSize:17}}>{props.detail.result?.statusCVName}</Tag> :
+                     props.detail.result?.statusCVName === "HIRED" ? <Tag color="#87d068" style={{height: 22,fontSize:17}}>{props.detail.result?.statusCVName}</Tag> :
+                       props.detail.result?.statusCVName === "REJECT" ? <Tag color="#fa0000" style={{height: 22,fontSize:17}}>{props.detail.result?.statusCVName}</Tag> :
+                         props.detail.result?.statusCVName === "TEST" ? <Tag color="#8900fa" style={{height: 22,fontSize:17}}>{props.detail.result?.statusCVName}</Tag> : null
+              }
+
+            </div>
+
             <StarRatings
               rating={rate}
               starRatedColor="#FEDE00"

@@ -67,7 +67,7 @@ interface IProps extends ReduxProps {
 function ProfileManagerPages(props: IProps) {
 
   useEffect(() => {
-    document.title = "Quản lý Profile";
+    document.title = "Ứng viên";
   }, []);
 
   const handleCreate = (e: any) => {
@@ -106,13 +106,13 @@ function ProfileManagerPages(props: IProps) {
       <div className="entryHeader">
         <Row>
           <Col md={16}>
-            <div className="tmp-title-page-size20">Quản lý Profile</div>
+            <div className="tmp-title-page-size20">Ứng viên ({props.list.total})</div>
           </Col>
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div style={{display: "flex", flexWrap: "nowrap"}}>
                 <Button onClick={handleCreate}>
-                  <Icon type="plus"/> Tạo Profile
+                  <Icon type="plus"/> Thêm ứng viên
                 </Button>
                 <Button onClick={event => handleUploadListCV(event)}>
                   <Icon type="upload"/> Upload List CV

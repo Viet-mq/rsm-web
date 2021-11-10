@@ -2,8 +2,8 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import { showFormUpdate, updateProfile} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, DatePicker, Form, Icon, Input, Modal, Select} from "antd";
-import React, {FormEvent, useEffect} from "react";
+import {Button, DatePicker, Form, Icon, Input, Modal, Select, TreeSelect} from "antd";
+import React, {FormEvent, useEffect, useState} from "react";
 import {UpdateProfileRequest} from "../types";
 import {getListJob, showFormCreate as showJobFormCreate} from "../../JobManager/redux/actions";
 import {getListJobLevel, showFormCreate as showJobLevelFormCreate} from "../../JobLevelManager/redux/actions";
@@ -154,6 +154,32 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     props.showDepartmentFormCreate(true);
   }
 
+  const convertArrayToTree = (arrays:any)=>{
+    let dataFetch:any=[];
+    for (let i=0;i<arrays.length;i++){
+      if(arrays[i]?.children){
+        dataFetch.push({
+          title:arrays[i].name,
+          key:arrays[i].id,
+          value:arrays[i].id,
+          children:convertArrayToTree(arrays[i].children)
+        })
+      }
+      else{
+        dataFetch.push({
+          title:arrays[i].name,
+          key:arrays[i].id,
+          value:arrays[i].id,
+        })
+      }
+    }
+    return dataFetch;
+  }
+
+  const [treeData,setTreeData]=useState([])
+  useEffect(()=>{
+    setTreeData(convertArrayToTree(props.listDepartment.rows))
+  },[props.listDepartment.rows])
 
   return (
     <div>
@@ -259,12 +285,13 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                   },
                 ],
               })(
-                <Select className="bg-white text-black"
-                >
-                  {props.listDepartment.rows?.map((item: any, index: any) => (
-                    <Option key={index} value={item.id}>{item.name}</Option>
-                  ))}
-                </Select>
+                <TreeSelect
+                  className="bg-white text-black"
+                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                  treeData={treeData}
+                  placeholder="Phòng ban"
+                  treeDefaultExpandAll
+                />
               )}
               <Button
                 size="small"
