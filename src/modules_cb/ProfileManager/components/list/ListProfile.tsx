@@ -120,7 +120,7 @@ function ListProfile(props: ListProfileProps) {
 
     {
       title: 'Thông tin liên hệ',
-      width: 180,
+      width: 230,
       fixed: props.showDetail ? undefined : "left",
       key: 'contact',
       render: (text: string, record: ProfileEntity) => {
