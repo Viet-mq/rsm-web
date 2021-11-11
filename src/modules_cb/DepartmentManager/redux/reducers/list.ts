@@ -17,8 +17,10 @@ const initState: DepartmentListState = {
   rows: [],
   total: 0
 }
+const saveDepartment:any=localStorage.getItem('list-department');
+const dataDepartment:DepartmentListState = JSON.parse(saveDepartment)?JSON.parse(saveDepartment):initState
 
-export default (state = initState, {type, total, rows, params, error}: DepartmentListAction): DepartmentListState => {
+export default (state = dataDepartment, {type, total, rows, params, error}: DepartmentListAction): DepartmentListState => {
   switch (type) {
     case Actions.GET_LIST_DEPARTMENT:
       return {

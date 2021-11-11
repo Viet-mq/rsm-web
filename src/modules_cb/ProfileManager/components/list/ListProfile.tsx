@@ -34,6 +34,12 @@ const mapStateToProps = (state: RootState) => ({
   showDetail: state.profileManager.showForm.show_detail?.show_detail,
   detail: state.profileManager.detail,
   elasticSearch: state.profileManager.search,
+  listSourceCV: state.sourcecvManager.list,
+  listJobLevel: state.joblevelManager.list,
+  listDepartment: state.departmentManager.list,
+  listTalentPool: state.talentPoolManager.list,
+  listJob: state.jobManager.list,
+
 })
 const connector = connect(mapStateToProps, {
   getListProfile,
@@ -52,23 +58,23 @@ const connector = connect(mapStateToProps, {
   getListSchool
 });
 
-const saveJob:any=localStorage.getItem('list-job');
-const saveJobLevel:any=localStorage.getItem('list-job-level');
-const saveSchool:any=localStorage.getItem('list-school');
-const saveDepartment:any=localStorage.getItem('list-department');
-const saveSourceCV:any=localStorage.getItem('list-source-cv');
-const saveStatusCV:any=localStorage.getItem('list-status-cv');
-const saveTalentPool:any=localStorage.getItem('list-talent-pool');
-const saveAccount:any=localStorage.getItem('list-account');
-
-const dataJob:JobListAction = JSON.parse(saveJob)?JSON.parse(saveJob):{}
-const dataJobLevel:JobLevelListAction = JSON.parse(saveJobLevel)?JSON.parse(saveJobLevel):{}
-const dataSchool:SchoolListAction = JSON.parse(saveSchool)?JSON.parse(saveSchool):{}
-const dataDepartment:DepartmentListAction = JSON.parse(saveDepartment)?JSON.parse(saveDepartment):{}
-const dataSourceCV:SourceCVListAction = JSON.parse(saveSourceCV)?JSON.parse(saveSourceCV):{}
-const dataStatusCV:StatusCVListAction = JSON.parse(saveStatusCV)?JSON.parse(saveStatusCV):{}
-const dataTalentPool:TalentPoolListAction = JSON.parse(saveTalentPool)?JSON.parse(saveTalentPool):{}
-const dataAccount:AccountListAction = JSON.parse(saveAccount)?JSON.parse(saveAccount):{}
+// const saveJob:any=localStorage.getItem('list-job');
+// const saveJobLevel:any=localStorage.getItem('list-job-level');
+// const saveSchool:any=localStorage.getItem('list-school');
+// const saveDepartment:any=localStorage.getItem('list-department');
+// const saveSourceCV:any=localStorage.getItem('list-source-cv');
+// const saveStatusCV:any=localStorage.getItem('list-status-cv');
+// const saveTalentPool:any=localStorage.getItem('list-talent-pool');
+// const saveAccount:any=localStorage.getItem('list-account');
+//
+// const dataJob:JobListAction = JSON.parse(saveJob)?JSON.parse(saveJob):{}
+// const dataJobLevel:JobLevelListAction = JSON.parse(saveJobLevel)?JSON.parse(saveJobLevel):{}
+// const dataSchool:SchoolListAction = JSON.parse(saveSchool)?JSON.parse(saveSchool):{}
+// const dataDepartment:DepartmentListAction = JSON.parse(saveDepartment)?JSON.parse(saveDepartment):{}
+// const dataSourceCV:SourceCVListAction = JSON.parse(saveSourceCV)?JSON.parse(saveSourceCV):{}
+// const dataStatusCV:StatusCVListAction = JSON.parse(saveStatusCV)?JSON.parse(saveStatusCV):{}
+// const dataTalentPool:TalentPoolListAction = JSON.parse(saveTalentPool)?JSON.parse(saveTalentPool):{}
+// const dataAccount:AccountListAction = JSON.parse(saveAccount)?JSON.parse(saveAccount):{}
 
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -225,7 +231,7 @@ function ListProfile(props: ListProfileProps) {
       dataIndex: 'sourceCVName',
       width: 130,
       key: 'sourceCVName',
-      filters: dataSourceCV.rows?.map((item: any) => ({
+      filters: props.listSourceCV.rows?.map((item: any) => ({
         text: item.name,
         value: item.name
       }))
@@ -402,8 +408,8 @@ function ListProfile(props: ListProfileProps) {
 
 const [treeData,setTreeData]=useState([])
  useEffect(()=>{
-   setTreeData(convertArrayToTree(dataDepartment.rows))
- },[dataDepartment.rows])
+   setTreeData(convertArrayToTree(props.listDepartment.rows))
+ },[props.listDepartment.rows])
 
   const handleChange = (pagination: any, filters: any, sorter: any) => {
     console.log('Various parameters', pagination, filters, sorter);
@@ -558,7 +564,7 @@ const [treeData,setTreeData]=useState([])
                   value={selected.job ? selected.job : undefined}
                   onChange={(value: any) => setSelected({...selected, job: value})}
           >
-            {dataJob.rows?.map((item: any, index: any) => (
+            {props.listJob.rows?.map((item: any, index: any) => (
               <Option key={index} value={item.id}>{item.name}</Option>
             ))}
           </Select>
@@ -568,7 +574,7 @@ const [treeData,setTreeData]=useState([])
                   onChange={(value: any) => setSelected({...selected, jobLevel: value})}
                   placeholder="Vị trí tuyển dụng"
           >
-            {dataJobLevel.rows?.map((item: any, index: any) => (
+            {props.listJobLevel.rows?.map((item: any, index: any) => (
               <Option key={index} value={item.id}>{item.name}</Option>
             ))}
           </Select>
@@ -591,7 +597,7 @@ const [treeData,setTreeData]=useState([])
             onChange={(value: any) => setSelected({...selected, talentPool: value})}
             placeholder="Talent Pools"
           >
-            {dataTalentPool.rows?.map((item: any, index: any) => (
+            {props.listTalentPool.rows?.map((item: any, index: any) => (
               <Option key={index} value={item.id}>{item.name}</Option>
             ))}
           </Select>

@@ -17,8 +17,10 @@ const initState: SchoolListState = {
   rows: [],
   total: 0
 }
+const saveSchool:any=localStorage.getItem('list-school');
+const dataSchool:SchoolListState = JSON.parse(saveSchool)?JSON.parse(saveSchool):initState
 
-export default (state = initState, {type, total, rows, params, error}: SchoolListAction): SchoolListState => {
+export default (state = dataSchool, {type, total, rows, params, error}: SchoolListAction): SchoolListState => {
   switch (type) {
     case Actions.GET_LIST_SCHOOL:
       return {

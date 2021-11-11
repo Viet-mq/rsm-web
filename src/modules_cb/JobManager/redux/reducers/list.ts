@@ -18,7 +18,10 @@ const initState: JobListState = {
   total: 0
 }
 
-export default (state = initState, {type, total, rows, params, error}: JobListAction): JobListState => {
+const saveJob:any=localStorage.getItem('list-job');
+const dataJob:JobListState = JSON.parse(saveJob)?JSON.parse(saveJob):initState
+
+export default (state = dataJob, {type, total, rows, params, error}: JobListAction): JobListState => {
   switch (type) {
     case Actions.GET_LIST_JOB:
       return {

@@ -18,7 +18,11 @@ const initState: StatusCVListState = {
   total: 0
 }
 
-export default (state = initState, {type, total, rows, params, error}: StatusCVListAction): StatusCVListState => {
+const saveStatusCV:any=localStorage.getItem('list-status-cv');
+const dataStatusCV:StatusCVListState = JSON.parse(saveStatusCV)?JSON.parse(saveStatusCV):initState
+
+
+export default (state = dataStatusCV, {type, total, rows, params, error}: StatusCVListAction): StatusCVListState => {
   switch (type) {
     case Actions.GET_LIST_STATUSCV:
       return {

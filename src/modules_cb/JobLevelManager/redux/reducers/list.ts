@@ -18,7 +18,11 @@ const initState: JobLevelListState = {
   total: 0
 }
 
-export default (state = initState, {type, total, rows, params, error}: JobLevelListAction): JobLevelListState => {
+const saveJobLevel:any=localStorage.getItem('list-job-level');
+const dataJobLevel:JobLevelListState = JSON.parse(saveJobLevel)?JSON.parse(saveJobLevel):initState
+
+
+export default (state = dataJobLevel, {type, total, rows, params, error}: JobLevelListAction): JobLevelListState => {
   switch (type) {
     case Actions.GET_LIST_JOBLEVEL:
       return {

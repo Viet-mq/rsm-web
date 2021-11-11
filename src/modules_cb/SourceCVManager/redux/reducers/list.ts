@@ -17,8 +17,10 @@ const initState: SourceCVListState = {
   rows: [],
   total: 0
 }
+const saveSourceCV:any=localStorage.getItem('list-source-cv');
+const dataSourceCV:SourceCVListState = JSON.parse(saveSourceCV)?JSON.parse(saveSourceCV):initState
 
-export default (state = initState, {type, total, rows, params, error}: SourceCVListAction): SourceCVListState => {
+export default (state = dataSourceCV, {type, total, rows, params, error}: SourceCVListAction): SourceCVListState => {
   switch (type) {
     case Actions.GET_LIST_SOURCECV:
       return {

@@ -18,7 +18,10 @@ const initState: TalentPoolListState = {
   total: 0
 }
 
-export default (state = initState, {type, total, rows, params, error}: TalentPoolListAction): TalentPoolListState => {
+const saveTalentPool:any=localStorage.getItem('list-talent-pool');
+const dataTalentPool:TalentPoolListState = JSON.parse(saveTalentPool)?JSON.parse(saveTalentPool):initState
+
+export default (state = dataTalentPool, {type, total, rows, params, error}: TalentPoolListAction): TalentPoolListState => {
   switch (type) {
     case Actions.GET_LIST_TALENT_POOL:
       return {
