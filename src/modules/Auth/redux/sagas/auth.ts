@@ -7,7 +7,6 @@ import {LoginResponse2} from '../../types';
 import history from 'src/history';
 import {NotificationError, NotificationSuccess} from 'src/components/Notification/Notification';
 import {RootState} from "../../../../redux/reducers";
-import {getListProfile} from "../../../../modules_cb/ProfileManager/redux/actions";
 import {getListJob} from "../../../../modules_cb/JobManager/redux/actions";
 import {getListJobLevel} from "../../../../modules_cb/JobLevelManager/redux/actions";
 import {getListDepartment} from "../../../../modules_cb/DepartmentManager/redux/actions";
@@ -15,6 +14,7 @@ import {getListSourceCV} from "../../../../modules_cb/SourceCVManager/redux/acti
 import {getListTalentPool} from "../../../../modules_cb/TalentPoolManager/redux/actions";
 import {getListStatusCV} from "../../../../modules_cb/StatusCVManager/redux/actions";
 import {getListSchool} from "../../../../modules_cb/SchoolManager/redux/actions";
+import {getListAccount} from "../../../../modules_cb/AccountManager/redux/actions";
 
 const TOKEN_KEY = 'auth-n-token';
 
@@ -25,7 +25,6 @@ export function* loginAsync(action: LoginAction) {
       NotificationSuccess("Thành công", "Đăng nhập thành công");
       localStorage.setItem(TOKEN_KEY, JSON.stringify(loginPayload || {}));
       yield put(loginSuccess(loginPayload));
-      // const paramsProfile = yield select((state: RootState) => state.profileManager.list.params);
       // const paramsJob = yield select((state: RootState) => state.jobManager.list.params);
       // const paramsJobLevel = yield select((state: RootState) => state.joblevelManager.list.params);
       // const paramsDepartment = yield select((state: RootState) => state.departmentManager.list.params);
@@ -33,15 +32,17 @@ export function* loginAsync(action: LoginAction) {
       // const paramsTalentPool = yield select((state: RootState) => state.talentPoolManager.list.params);
       // const paramsStatusCV = yield select((state: RootState) => state.statuscvManager.list.params);
       // const paramsSchool = yield select((state: RootState) => state.schoolManager.list.params);
-      //
-      // yield put(getListProfile(paramsProfile))
-      // yield put(getListJob(paramsJob))
-      // yield put(getListJobLevel(paramsJobLevel))
-      // yield put(getListDepartment(paramsDepartment))
-      // yield put(getListSourceCV(paramsSourceCV))
-      // yield put(getListTalentPool(paramsTalentPool))
-      // yield put(getListStatusCV(paramsStatusCV))
-      // yield put(getListSchool(paramsSchool))
+      // const paramsAccount = yield select((state: RootState) => state.accountManager.list.params);
+
+      yield put(getListJob({page: 1, size: 100}))
+      yield put(getListJobLevel({page: 1, size: 100}))
+      yield put(getListDepartment({page: 1, size: 100}))
+      yield put(getListSourceCV({page: 1, size: 100}))
+      yield put(getListTalentPool({page: 1, size: 100}))
+      yield put(getListStatusCV({page: 1, size: 100}))
+      yield put(getListSchool({page: 1, size: 100}))
+      yield put(getListAccount({page: 1, size: 100}))
+
 
     } else {
       NotificationError("Đăng nhập không thành công", loginPayload.message);
@@ -69,5 +70,15 @@ export function* loginCheckerAsync() {
     }
     yield take(LOGOUT);
     localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem("list-school");
+    localStorage.removeItem("list-job-level");
+    localStorage.removeItem("list-source-cv");
+    localStorage.removeItem("list-department");
+    localStorage.removeItem("list-job");
+    localStorage.removeItem("list-status-cv");
+    localStorage.removeItem("list-talent-pool");
+    localStorage.removeItem("list-talent-pool");
+    localStorage.removeItem("list-account");
+
   }
 }

@@ -42,11 +42,11 @@ function ListDepartment(props: IProps) {
   }, []);
 
   const handleDelete = (event: any, entity: DepartmentEntity) => {
-    // event.stopPropagation();
-    // let req: DeleteDepartmentRequest = {
-    //   id: entity.id
-    // }
-    // props.deleteDepartment(req);
+    event.stopPropagation();
+    let req: DeleteDepartmentRequest = {
+      id: entity.id
+    }
+    props.deleteDepartment(req);
   }
 
   const handleEdit = (event: any, entity: DepartmentEntity) => {

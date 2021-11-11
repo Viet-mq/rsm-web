@@ -17,13 +17,15 @@ import {
 import {DataShowBooking, DeleteProfileRequest, DetailCV, ProfileEntity} from "../../types";
 import moment from "moment";
 import {GiFemale, GiMale, ImPhoneHangUp} from "react-icons/all";
-import {getListJobLevel} from "../../../JobLevelManager/redux/actions";
-import {getListJob} from "../../../JobManager/redux/actions";
-import {getListSourceCV} from "../../../SourceCVManager/redux/actions";
-import {getListDepartment} from "../../../DepartmentManager/redux/actions";
-import {getListTalentPool} from "../../../TalentPoolManager/redux/actions";
+import {getListJobLevel, JobLevelListAction} from "../../../JobLevelManager/redux/actions";
+import {getListJob, JobListAction} from "../../../JobManager/redux/actions";
+import {getListSourceCV, SourceCVListAction} from "../../../SourceCVManager/redux/actions";
+import {DepartmentListAction, getListDepartment} from "../../../DepartmentManager/redux/actions";
+import {getListTalentPool, TalentPoolListAction} from "../../../TalentPoolManager/redux/actions";
 import {useHistory} from "react-router-dom";
-import {getListSchool} from "../../../SchoolManager/redux/actions";
+import {getListSchool, SchoolListAction} from "../../../SchoolManager/redux/actions";
+import {StatusCVListAction} from "../../../StatusCVManager/redux/actions";
+import {AccountListAction} from "../../../AccountManager/redux/actions";
 
 const {Option} = Select;
 
@@ -31,11 +33,6 @@ const mapStateToProps = (state: RootState) => ({
   list: state.profileManager.list,
   showDetail: state.profileManager.showForm.show_detail?.show_detail,
   detail: state.profileManager.detail,
-  listSourceCV: state.sourcecvManager.list,
-  listJobLevel: state.joblevelManager.list,
-  listDepartment: state.departmentManager.list,
-  listTalentPool: state.talentPoolManager.list,
-  listJob: state.jobManager.list,
   elasticSearch: state.profileManager.search,
 })
 const connector = connect(mapStateToProps, {
@@ -54,6 +51,25 @@ const connector = connect(mapStateToProps, {
   getListTalentPool,
   getListSchool
 });
+
+const saveJob:any=localStorage.getItem('list-job');
+const saveJobLevel:any=localStorage.getItem('list-job-level');
+const saveSchool:any=localStorage.getItem('list-school');
+const saveDepartment:any=localStorage.getItem('list-department');
+const saveSourceCV:any=localStorage.getItem('list-source-cv');
+const saveStatusCV:any=localStorage.getItem('list-status-cv');
+const saveTalentPool:any=localStorage.getItem('list-talent-pool');
+const saveAccount:any=localStorage.getItem('list-account');
+
+const dataJob:JobListAction = JSON.parse(saveJob)?JSON.parse(saveJob):{}
+const dataJobLevel:JobLevelListAction = JSON.parse(saveJobLevel)?JSON.parse(saveJobLevel):{}
+const dataSchool:SchoolListAction = JSON.parse(saveSchool)?JSON.parse(saveSchool):{}
+const dataDepartment:DepartmentListAction = JSON.parse(saveDepartment)?JSON.parse(saveDepartment):{}
+const dataSourceCV:SourceCVListAction = JSON.parse(saveSourceCV)?JSON.parse(saveSourceCV):{}
+const dataStatusCV:StatusCVListAction = JSON.parse(saveStatusCV)?JSON.parse(saveStatusCV):{}
+const dataTalentPool:TalentPoolListAction = JSON.parse(saveTalentPool)?JSON.parse(saveTalentPool):{}
+const dataAccount:AccountListAction = JSON.parse(saveAccount)?JSON.parse(saveAccount):{}
+
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -209,7 +225,7 @@ function ListProfile(props: ListProfileProps) {
       dataIndex: 'sourceCVName',
       width: 130,
       key: 'sourceCVName',
-      filters: props.listSourceCV?.rows.map((item: any) => ({
+      filters: dataSourceCV.rows?.map((item: any) => ({
         text: item.name,
         value: item.name
       }))
@@ -348,14 +364,14 @@ function ListProfile(props: ListProfileProps) {
     },
   ];
 
-  useEffect(() => {
-    props.getListJob({page: 1, size: 100});
-    props.getListJobLevel({page: 1, size: 100});
-    props.getListSourceCV({page: 1, size: 100});
-    props.getListTalentPool({page: 1, size: 100});
-    props.getListDepartment({page: 1, size: 100});
-    props.getListSchool({page: 1, size: 100});
-  }, [])
+  // useEffect(() => {
+  //   props.getListJob({page: 1, size: 100});
+  //   props.getListJobLevel({page: 1, size: 100});
+  //   props.getListSourceCV({page: 1, size: 100});
+  //   props.getListTalentPool({page: 1, size: 100});
+  //   props.getListDepartment({page: 1, size: 100});
+  //   props.getListSchool({page: 1, size: 100});
+  // }, [])
 
   useEffect(() => {
     props.getListProfile({page: page, size: 30});
@@ -386,8 +402,8 @@ function ListProfile(props: ListProfileProps) {
 
 const [treeData,setTreeData]=useState([])
  useEffect(()=>{
-   setTreeData(convertArrayToTree(props.listDepartment.rows))
- },[props.listDepartment.rows])
+   setTreeData(convertArrayToTree(dataDepartment.rows))
+ },[dataDepartment.rows])
 
   const handleChange = (pagination: any, filters: any, sorter: any) => {
     console.log('Various parameters', pagination, filters, sorter);
@@ -542,7 +558,7 @@ const [treeData,setTreeData]=useState([])
                   value={selected.job ? selected.job : undefined}
                   onChange={(value: any) => setSelected({...selected, job: value})}
           >
-            {props.listJob.rows?.map((item: any, index: any) => (
+            {dataJob.rows?.map((item: any, index: any) => (
               <Option key={index} value={item.id}>{item.name}</Option>
             ))}
           </Select>
@@ -552,7 +568,7 @@ const [treeData,setTreeData]=useState([])
                   onChange={(value: any) => setSelected({...selected, jobLevel: value})}
                   placeholder="Vị trí tuyển dụng"
           >
-            {props.listJobLevel.rows?.map((item: any, index: any) => (
+            {dataJobLevel.rows?.map((item: any, index: any) => (
               <Option key={index} value={item.id}>{item.name}</Option>
             ))}
           </Select>
@@ -575,7 +591,7 @@ const [treeData,setTreeData]=useState([])
             onChange={(value: any) => setSelected({...selected, talentPool: value})}
             placeholder="Talent Pools"
           >
-            {props.listTalentPool.rows?.map((item: any, index: any) => (
+            {dataTalentPool.rows?.map((item: any, index: any) => (
               <Option key={index} value={item.id}>{item.name}</Option>
             ))}
           </Select>

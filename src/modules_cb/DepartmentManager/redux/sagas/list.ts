@@ -9,8 +9,10 @@ export function* getListDepartmentAsync(action: DepartmentListAction) {
     const rs = yield apis.getListDepartment(action.params);
     if (rs.code !== 0) {
       NotificationError('Lấy danh sách phòng ban không thành công', "Lỗi: " + rs.message);
+    } else {
+      localStorage.setItem("list-department", JSON.stringify(rs || {}));
+      yield put(getListDepartmentSuccess(rs.total, rs.rows))
     }
-    yield put(getListDepartmentSuccess(rs.total, rs.rows))
   } catch (e) {
     yield put(getListDepartmentError(new AppError(e.message)));
     NotificationError('Lấy danh sách phòng ban không thành công', "Lỗi: " + e.message);

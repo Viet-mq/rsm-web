@@ -1,4 +1,4 @@
-import {SchoolListAction, getListSchoolError, getListSchoolSuccess} from "../actions";
+import {getListSchoolError, getListSchoolSuccess, SchoolListAction} from "../actions";
 import * as apis from '../services/apis'
 import {put} from "redux-saga/effects";
 import {AppError} from "src/models/common";
@@ -9,8 +9,10 @@ export function* getListSchoolAsync(action: SchoolListAction) {
     const rs = yield apis.getListSchool(action.params);
     if (rs.code !== 0) {
       NotificationError('Lấy danh sách trường không thành công', "Lỗi: " + rs.message);
+    } else {
+      localStorage.setItem("list-school", JSON.stringify(rs || {}));
+      yield put(getListSchoolSuccess(rs.total, rs.rows))
     }
-    yield put(getListSchoolSuccess(rs.total, rs.rows))
   } catch (e) {
     yield put(getListSchoolError(new AppError(e.message)));
     NotificationError('Lấy danh sách trường không thành công', "Lỗi: " + e.message);
