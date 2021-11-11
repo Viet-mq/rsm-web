@@ -2,7 +2,7 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import {ColumnProps} from "antd/lib/table";
-import {Avatar, Button, Icon, Input, Popconfirm, Select, Table, Tooltip, Badge, TreeSelect} from "antd";
+import {Avatar, Badge, Button, Icon, Input, Popconfirm, Select, Table, Tooltip, TreeSelect} from "antd";
 import {emptyText} from "src/configs/locales";
 import {
   deleteProfile,
@@ -17,15 +17,13 @@ import {
 import {DataShowBooking, DeleteProfileRequest, DetailCV, ProfileEntity} from "../../types";
 import moment from "moment";
 import {GiFemale, GiMale, ImPhoneHangUp} from "react-icons/all";
-import {getListJobLevel, JobLevelListAction} from "../../../JobLevelManager/redux/actions";
-import {getListJob, JobListAction} from "../../../JobManager/redux/actions";
-import {getListSourceCV, SourceCVListAction} from "../../../SourceCVManager/redux/actions";
-import {DepartmentListAction, getListDepartment} from "../../../DepartmentManager/redux/actions";
-import {getListTalentPool, TalentPoolListAction} from "../../../TalentPoolManager/redux/actions";
+import {getListJobLevel} from "../../../JobLevelManager/redux/actions";
+import {getListJob} from "../../../JobManager/redux/actions";
+import {getListSourceCV} from "../../../SourceCVManager/redux/actions";
+import {getListDepartment} from "../../../DepartmentManager/redux/actions";
+import {getListTalentPool} from "../../../TalentPoolManager/redux/actions";
 import {useHistory} from "react-router-dom";
-import {getListSchool, SchoolListAction} from "../../../SchoolManager/redux/actions";
-import {StatusCVListAction} from "../../../StatusCVManager/redux/actions";
-import {AccountListAction} from "../../../AccountManager/redux/actions";
+import {getListSchool} from "../../../SchoolManager/redux/actions";
 
 const {Option} = Select;
 
@@ -173,20 +171,20 @@ function ListProfile(props: ListProfileProps) {
       dataIndex: 'statusCVName',
       width: 150,
       key: 'statusCVName',
-      render: (text, record) =>{
+      render: (text, record) => {
         return <div>
           {
-            record.statusCVName==="APPLY"?<Badge status="default" />:
-              record.statusCVName==="INTERVIEW"?<Badge status="processing" />:
-                record.statusCVName==="OFFER"?<Badge status="warning" />:
-                  record.statusCVName==="HIRED"?<Badge status="success" />:
-                    record.statusCVName==="REJECT"?<Badge status="error" />:
-                      record.statusCVName==="TEST"?<Badge color="purple" />:null
+            record.statusCVName === "APPLY" ? <Badge status="default"/> :
+              record.statusCVName === "INTERVIEW" ? <Badge status="processing"/> :
+                record.statusCVName === "OFFER" ? <Badge status="warning"/> :
+                  record.statusCVName === "HIRED" ? <Badge status="success"/> :
+                    record.statusCVName === "REJECT" ? <Badge status="error"/> :
+                      record.statusCVName === "TEST" ? <Badge color="purple"/> : null
           }
 
           <span>{record.statusCVName}</span>
         </div>
-      } ,
+      },
       sorter: (a, b) => a.statusCVName.length - b.statusCVName.length,
       sortOrder: state.sortedInfo.columnKey === 'statusCVName' && state.sortedInfo.order,
       ellipsis: true,
@@ -384,32 +382,31 @@ function ListProfile(props: ListProfileProps) {
 
   }, [page])
 
-  const convertArrayToTree = (arrays:any)=>{
-    let dataFetch:any=[];
-    for (let i=0;i<arrays.length;i++){
-      if(arrays[i]?.children){
+  const convertArrayToTree = (arrays: any) => {
+    let dataFetch: any = [];
+    for (let i = 0; i < arrays.length; i++) {
+      if (arrays[i]?.children) {
         dataFetch.push({
-          title:arrays[i].name,
-          key:arrays[i].id,
-          value:arrays[i].id,
-          children:convertArrayToTree(arrays[i].children)
+          title: arrays[i].name,
+          key: arrays[i].id,
+          value: arrays[i].id,
+          children: convertArrayToTree(arrays[i].children)
         })
-      }
-      else{
+      } else {
         dataFetch.push({
-          title:arrays[i].name,
-          key:arrays[i].id,
-          value:arrays[i].id,
+          title: arrays[i].name,
+          key: arrays[i].id,
+          value: arrays[i].id,
         })
       }
     }
     return dataFetch;
   }
 
-const [treeData,setTreeData]=useState([])
- useEffect(()=>{
-   setTreeData(convertArrayToTree(props.listDepartment.rows))
- },[props.listDepartment.rows])
+  const [treeData, setTreeData] = useState([])
+  useEffect(() => {
+    setTreeData(convertArrayToTree(props.listDepartment.rows))
+  }, [props.listDepartment.rows])
 
   const handleChange = (pagination: any, filters: any, sorter: any) => {
     console.log('Various parameters', pagination, filters, sorter);
@@ -512,26 +509,15 @@ const [treeData,setTreeData]=useState([])
   }, [props.elasticSearch.triggerSearch])
 
   function btnSearchClicked() {
-    selected.name ?
       props.getListProfile({
         fullName: selected.name,
-        jobId: selected.job,
-        levelJobId: selected.jobLevel,
-        departmentId: selected.department,
-        talentPoolId: selected.talentPool,
+        job: selected.job,
+        levelJob: selected.jobLevel,
+        department: selected.department,
+        talentPool: selected.talentPool,
         page: 1,
         size: 30,
       })
-      :
-      props.getListProfile({
-        jobId: selected.job,
-        levelJobId: selected.jobLevel,
-        departmentId: selected.department,
-        talentPoolId: selected.talentPool,
-        page: 1,
-        size: 30,
-      })
-
   }
 
   return (
@@ -580,9 +566,9 @@ const [treeData,setTreeData]=useState([])
           </Select>
 
           <TreeSelect
-            style={{ width: "13%" }}
+            style={{width: "13%"}}
             value={selected.department ? selected.department : undefined}
-            dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+            dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
             treeData={treeData}
             placeholder="Phòng ban"
             treeDefaultExpandAll

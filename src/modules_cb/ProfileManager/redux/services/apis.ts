@@ -3,7 +3,30 @@ import {EXPORT, GET, POST, POSTIMAGE} from "src/services";
 import {NoteEntity, ProfileEntity, UploadAvatarRequest} from "../../types";
 
 export const getListProfile = async (params: any): Promise<ListResponseBase2<ProfileEntity>> => {
-  const response = (await GET('api-svc/profile/list', params)) as any;
+  let url="api-svc/profile/list?"
+  if(params.fullName!==null&&params.fullName!==undefined){
+    console.log(params.fullName)
+    url+="fullName="+params.fullName+"&"
+  }
+  if(params.job!==null&&params.job!==undefined){
+    url+="job="+params.job+"&"
+  }
+  if(params.levelJob!==null&&params.levelJob!==undefined){
+    url+="levelJob="+params.fullName+"&"
+  }
+  if(params.department!==null&&params.department!==undefined){
+    url+="department="+params.department+"&"
+  }
+  if(params.talentPool!==null&&params.talentPool!==undefined){
+    url+="talentPool="+params.talentPool+"&"
+  }
+  if(params.page!==null&&params.page!==undefined){
+    url+="page="+params.page+"&"
+  }
+  if(params.size!==null&&params.size!==undefined){
+    url+="size="+params.size
+  }
+  const response = (await GET(url, )) as any;
   return {
     total: response.total,
     rows: response.rows || [],
