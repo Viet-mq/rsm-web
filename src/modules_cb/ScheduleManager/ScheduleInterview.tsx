@@ -7,6 +7,9 @@ import {createJob, showFormCreate} from "../JobManager/redux/actions";
 import {CreateJobRequest} from "../JobManager/types";
 import TextArea from "antd/es/input/TextArea";
 import moment from "moment";
+import 'devextreme/dist/css/dx.light.css';
+
+import DateBox from 'devextreme-react/date-box';
 
 const mapStateToProps = ({jobManager}: RootState) => ({jobManager});
 const connector = connect(mapStateToProps, {createJob, showFormCreate});
@@ -104,32 +107,38 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
             <Row>
               <Col span={8} style={{marginRight: 10}}>
                 <Form.Item className="form-label" label="Ngày" labelCol={{span: 24}} wrapperCol={{span: 24}}>
-                  {getFieldDecorator('date', {
-                    initialValue: moment(),
-                    rules: [
-                      {
-                        message: 'Vui lòng chọn ngày bắt đầu',
-                        required: true,
-                      },
-                    ],
-                  })(
-                    <DatePicker defaultValue={moment()} format={dateFormat}
-                    ></DatePicker>)}
+                  {/*{getFieldDecorator('date', {*/}
+                  {/*  initialValue: moment(),*/}
+                  {/*  rules: [*/}
+                  {/*    {*/}
+                  {/*      message: 'Vui lòng chọn ngày bắt đầu',*/}
+                  {/*      required: true,*/}
+                  {/*    },*/}
+                  {/*  ],*/}
+                  {/*})(*/}
+                  {/*  <DateBox defaultValue={moment()} type="date" />*/}
+                  {/*  // <DatePicker defaultValue={moment()} format={dateFormat}*/}
+                  {/*  // ></DatePicker>*/}
+                  {/*)}*/}
+                    <DateBox defaultValue={moment()} displayFormat="dd/MM/yyyy"
+                             type="date" />
                 </Form.Item>
               </Col>
               <Col span={6} style={{marginRight: 10}}>
                 <Form.Item className="form-label" label="Giờ bắt đầu" labelCol={{span: 24}} wrapperCol={{span: 24}}>
-                  {getFieldDecorator('timeStart', {
-                    initialValue: '',
-                    rules: [
-                      {
-                        message: 'Vui lòng chọn giờ',
-                        required: true,
-                      },
-                    ],
-                  })(
-                    <Input placeholder="Giờ bắt đầu" className="bg-white text-black"/>
-                  )}
+                  {/*{getFieldDecorator('timeStart', {*/}
+                  {/*  initialValue: '',*/}
+                  {/*  rules: [*/}
+                  {/*    {*/}
+                  {/*      message: 'Vui lòng chọn giờ',*/}
+                  {/*      required: true,*/}
+                  {/*    },*/}
+                  {/*  ],*/}
+                  {/*})(*/}
+                  {/*  <Input placeholder="Giờ bắt đầu" className="bg-white text-black"/>*/}
+                  {/*)}*/}
+                    <DateBox defaultValue={moment()}
+                             type="time" />
                 </Form.Item>
               </Col>
               <Col span={7}>

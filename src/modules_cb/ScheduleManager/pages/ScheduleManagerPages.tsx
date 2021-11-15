@@ -12,6 +12,7 @@ import {
 import {AiOutlineCalendar, AiTwotoneCalendar, FiChevronDown, GrNext, GrPrevious} from "react-icons/all";
 import moment from 'moment';
 import ScheduleInterview from "../ScheduleInterview";
+import DateBox from "devextreme-react/date-box";
 const {Search} = Input;
 
 const mapStateToProps = ({
@@ -133,8 +134,9 @@ function ScheduleManagerPages(props: IProps) {
             <GrNext/>
           </Button>
           <div style={{marginRight:30}} className="align">
-            <DatePicker defaultValue={moment()} format={dateFormat}
-            ></DatePicker>
+            <DateBox defaultValue={moment()} displayFormat="dd/MM/yyyy"
+                     type="date" />
+
             {/*<AiTwotoneCalendar size={20}/>*/}
           </div>
 
