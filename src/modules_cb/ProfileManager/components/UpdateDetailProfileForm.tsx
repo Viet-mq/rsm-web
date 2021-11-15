@@ -226,7 +226,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                 initialValue: props.showForm.data_update_detail?.jobId,
                 rules: [
                   {
-                    message: 'Vui lòng nhập tên công việc',
+                    message: 'Vui lòng nhập vị trí công việc',
                     required: true,
                   },
                 ],
@@ -249,13 +249,13 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
             </div>
           </Form.Item>
 
-          <Form.Item label="Vị trí tuyển dụng" className="mb-0" style={{...formItemStyle}}>
+          <Form.Item label="cấp bậc công việc" className="mb-0" style={{...formItemStyle}}>
             <div style={{display: 'flex'}}>
               {getFieldDecorator('levelJob', {
                 initialValue: props.showForm.data_update_detail?.levelJobId,
                 rules: [
                   {
-                    message: 'Vui lòng nhập vị trí tuyển dụng',
+                    message: 'Vui lòng nhập cấp bậc công việc',
                     required: true,
                   },
                 ],

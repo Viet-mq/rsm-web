@@ -16,15 +16,15 @@ export function* createJobLevelAsync(action: CreateJobLevelAction) {
     const rs = yield apis.createJobLevel(action.request);
     yield put(createJobLevelSuccess(rs));
     if (rs.code !== 0) {
-      NotificationError('Tạo vị trí tuyển dụng không thành công', "Lỗi: " + rs.message)
+      NotificationError('Tạo cấp bậc công việc không thành công', "Lỗi: " + rs.message)
     } else {
-      NotificationSuccess('Thành công', "Tạo vị trí tuyển dụng thành công");
+      NotificationSuccess('Thành công', "Tạo cấp bậc công việc thành công");
       yield put(showFormCreate(false));
       const params = yield select((state: RootState) => state.joblevelManager.list.params);
       yield put(getListJobLevel(params))
     }
   } catch (e) {
     yield put(createJobLevelError(new AppError(e.message)));
-    NotificationError('Tạo vị trí tuyển dụng không thành công', "Lỗi: " + e.message);
+    NotificationError('Tạo cấp bậc công việc không thành công', "Lỗi: " + e.message);
   }
 }

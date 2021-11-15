@@ -1,0 +1,103 @@
+.c-schedule-container{
+  margin: 15px 25px 0;
+  text-align: center;
+}
+.c-schedule-header{
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  &__align-left{
+    display: flex;
+    align-items: center;
+    button{
+      display: flex;
+      align-items: center;
+      margin-right: 5px;
+    }
+
+  }
+  &__align-right{
+    display: flex;
+    align-items: center;
+  }
+}
+.align{
+  display: flex;
+  align-items: center;
+}
+
+.c-schedule-content-nodata{
+ background-color: white;
+  height: 79vh;
+
+}
+.image-nodata-schedule {
+  //justify-content: center;
+  //display: flex;
+  padding-top: 100px;
+  img{
+    width: 350px;
+    height: 280px;
+    align-items: center;
+
+  }
+}
+.text-1{
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e2633;
+  margin-top: 24px;
+  line-height: 24px;
+}
+.text-2{
+  font-size: 16px;
+  color: #6a727d;
+  line-height: 20px;
+  margin: 8px 0 24px;
+}
+
+.custom{
+  .ant-modal-body{
+    padding: 0;
+  }
+  .ant-form-item-label{
+    padding: 0;
+  }
+
+}
+
+.c-schedule-interview-popup{
+  width: 990px;
+  height: 615px;
+  z-index: 1501;
+  margin: 0px;
+  left: 0px;
+  top: 0px;
+}
+
+.grid-left{
+  padding: 24px;
+}
+
+.grid-right{
+  background-color: $color-schedule-interview;
+  height: 100%;
+  border-left: 1px solid #dddde4;
+  padding: 24px;
+  &__title{
+    font-weight: 500;
+  }
+}
+
+.schedule-popup-footer{
+  width: 100%!important;
+  height: 52px !important;
+  padding: 10px 16px !important;
+  text-align: right;
+  background-color: $color-shedule-interview-footer!important;
+}
+
+.form-label{
+  //font-size: 13px;
+  font-weight: 600;
+}

@@ -33,7 +33,7 @@ interface IProps extends ReduxProps {
 function JobLevelManagerPages(props: IProps) {
 
   useEffect(() => {
-    document.title = "Quản lý vị trí tuyển dụng";
+    document.title = "Quản lý cấp bậc công việc";
   }, []);
 
   const handleCreate = (e: any) => {
@@ -51,13 +51,13 @@ function JobLevelManagerPages(props: IProps) {
       <div className="entryHeader">
         <Row>
           <Col md={16}>
-            <div className="tmp-title-page-size20">Quản lý vị trí tuyển dụng</div>
+            <div className="tmp-title-page-size20">Quản lý cấp bậc công việc</div>
           </Col>
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div>
                 <Button onClick={handleCreate}>
-                  <Icon type="plus"/> Tạo vị trí tuyển dụng
+                  <Icon type="plus"/> Tạo cấp bậc công việc
                 </Button>
               </div>
             </div>

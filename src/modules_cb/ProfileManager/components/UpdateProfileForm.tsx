@@ -222,7 +222,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                 initialValue: props.showForm.data_update?.jobId,
                 rules: [
                   {
-                    message: 'Vui lòng nhập tên công việc',
+                    message: 'Vui lòng nhập vị trí công việc',
                     required: true,
                   },
                 ],

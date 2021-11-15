@@ -82,19 +82,22 @@ function CreateProfileForm(props: CreateProfileFormProps) {
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         let req: CreateProfileRequest = {
-          dateOfApply: values.dateOfApply * 1,
-          dateOfBirth: values.dateOfBirth * 1,
-          email: values.email,
           fullName: values.fullName,
-          hometown: values.hometown,
-          hrRef: values.hrRef,
-          job: values.job,
-          levelJob: values.levelJob,
+          dateOfBirth: values.dateOfBirth * 1,
+          gender: values.gender,
           phoneNumber: values.phoneNumber,
+          email: values.email,
+          hometown: values.hometown,
+          levelSchool:values.levelSchool,
           school: values.school,
           sourceCV: values.sourceCV,
-          gender: values.gender,
+          job: values.job,
+          levelJob: values.levelJob,
+          skill:values.skill,
+          recruitment:values.recruitment,
           talentPool: values.talentPool,
+          hrRef: values.hrRef,
+          mailRef:values.mailRef,
           department:values.department,
         }
         props.createProfile(req);
@@ -217,13 +220,179 @@ function CreateProfileForm(props: CreateProfileFormProps) {
             )}
           </Form.Item>
 
-          <Form.Item label="Công việc" className="mb-0" style={{...formItemStyle}}>
+          <Form.Item label="Năm sinh" className="mb-0" style={{...formItemStyle}}>
+            {getFieldDecorator('dateOfBirth', {
+              // initialValue: '',
+              rules: [
+                {
+                  message: 'Vui lòng nhập năm sinh',
+                  required: false,
+                },
+              ],
+            })(
+              <DatePicker format={dateFormat} style={{width: "100%"}}/>
+            )}
+          </Form.Item>
+
+          <Form.Item label="Giới tính" className="mb-0" style={{...formItemStyle}}>
+            {getFieldDecorator('gender', {
+              initialValue: "Nam",
+              rules: [
+                {
+                  message: 'Vui lòng nhập Giới tính',
+                  required: false,
+                },
+              ],
+            })(
+              <Select className="bg-white text-black"
+              >
+                <Option value="Nam">Nam</Option>
+                <Option value="Nữ">Nữ</Option>
+              </Select>
+            )}
+          </Form.Item>
+
+          <Form.Item label="SĐT" className="mb-0" style={{...formItemStyle}}>
+            {getFieldDecorator('phoneNumber', {
+              initialValue: '',
+              rules: [
+                {
+                  message: 'Vui lòng nhập SDT',
+                  required: false,
+                },
+              ],
+            })(
+              <Input placeholder="SDT" className="bg-white text-black"/>
+            )}
+          </Form.Item>
+
+          <Form.Item label="Email" className="mb-0" style={{...formItemStyle}}>
+            {getFieldDecorator('email', {
+              initialValue: '',
+              rules: [
+                {
+                  message: 'Vui lòng nhập Email',
+                  required: true,
+                },
+              ],
+            })(
+              <Input placeholder="Email" className="bg-white text-black"/>
+            )}
+          </Form.Item>
+
+          <Form.Item label="Địa chỉ" className="mb-0" style={{...formItemStyle}}>
+            {getFieldDecorator('hometown', {
+              initialValue: '',
+              rules: [
+                {
+                  message: 'Vui lòng nhập quê quán',
+                  required: false,
+                },
+              ],
+            })(
+              <Input placeholder="Quê quán" className="bg-white text-black"/>
+            )}
+          </Form.Item>
+
+          <Form.Item label="Trình độ học vấn" className="mb-0" style={{...formItemStyle}}>
+            <div style={{display: 'flex'}}>
+              {getFieldDecorator('levelSchool', {
+                initialValue: '',
+                rules: [
+                  {
+                    message: 'Vui lòng chọn cấp bậc',
+                    required: false,
+                  },
+                ],
+              })(
+                <Select className="bg-white text-black"
+                >
+                  <Option key="1" value="Trung cấp">Trung cấp</Option>
+                  <Option key="2" value="Đại học">Đại học</Option>
+                  <Option key="3" value="Cao đẳng">Cao đẳng</Option>
+                  <Option key="4" value="Thạc sĩ">Thạc sĩ</Option>
+                  <Option key="5" value="Tiến sĩ">Tiến sĩ</Option>
+                  <Option key="6" value="Giáo sư">Giáo sư</Option>
+                </Select>
+              )}
+              <Button
+                size="small"
+                className="ant-btn ml-1 mr-1 ant-btn-sm"
+                style={{height: '32px'}}
+                onClick={handleCreateSchool}
+              >
+                <Icon type="plus"/>
+              </Button>
+            </div>
+
+          </Form.Item>
+
+          <Form.Item label="Nơi đào tạo" className="mb-0" style={{...formItemStyle}}>
+            <div style={{display: 'flex'}}>
+              {getFieldDecorator('school', {
+                initialValue: '',
+                rules: [
+                  {
+                    message: 'Vui lòng nhập trường học',
+                    required: false,
+                  },
+                ],
+              })(
+                <Select className="bg-white text-black"
+                >
+                  {props.listSchool.rows?.map((item: any, index: any) => (
+                    <Option key={index} value={item.id}>{item.name}</Option>
+                  ))}
+                </Select>
+              )}
+              <Button
+                size="small"
+                className="ant-btn ml-1 mr-1 ant-btn-sm"
+                style={{height: '32px'}}
+                onClick={handleCreateSchool}
+              >
+                <Icon type="plus"/>
+              </Button>
+            </div>
+
+          </Form.Item>
+
+          <Form.Item label="Nguồn ứng tuyển" className="mb-0" style={{...formItemStyle}}>
+            <div style={{display: 'flex'}}>
+              {getFieldDecorator('sourceCV', {
+                initialValue: '',
+                rules: [
+                  {
+                    message: 'Vui lòng nhập nguồn ứng tuyển',
+                    required: true,
+                  },
+                ],
+              })(
+                <Select className="bg-white text-black"
+                >
+                  {props.listSourceCV.rows?.map((item: any, index: any) => (
+                    <Option key={index} value={item.id}>{item.name}</Option>
+                  ))}
+                </Select>
+              )}
+              <Button
+                size="small"
+                className="ant-btn ml-1 mr-1 ant-btn-sm"
+                style={{height: '32px'}}
+                onClick={handleCreateSourceCV}
+              >
+                <Icon type="plus"/>
+              </Button>
+            </div>
+          </Form.Item>
+
+          <Form.Item label="Vị trí công việc" className="mb-0" style={{...formItemStyle}}>
             <div style={{display: 'flex'}}>
               {getFieldDecorator('job', {
                 initialValue: '',
                 rules: [
                   {
-                    message: 'Vui lòng nhập tên công việc',
+                    message: 'Vui lòng nhập vị trí công việc',
                     required: true,
                   },
                 ],
@@ -247,14 +416,14 @@ function CreateProfileForm(props: CreateProfileFormProps) {
             </div>
           </Form.Item>
 
-          <Form.Item label="Vị trí tuyển dụng" className="mb-0" style={{...formItemStyle}}>
+          <Form.Item label="Cấp bậc công việc" className="mb-0" style={{...formItemStyle}}>
             <div style={{display: 'flex'}}>
               {getFieldDecorator('levelJob', {
                 initialValue: '',
                 rules: [
                   {
-                    message: 'Vui lòng nhập vị trí tuyển dụng',
-                    required: true,
+                    message: 'Vui lòng nhập cấp bậc công việc',
+                    required: false,
                   },
                 ],
               })(
@@ -274,6 +443,105 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                 <Icon type="plus"/>
               </Button>
             </div>
+          </Form.Item>
+
+          <Form.Item label="Kỹ năng công việc" className="mb-0" style={{...formItemStyle}}>
+            <div style={{display: 'flex'}}>
+              {getFieldDecorator('skill', {
+                initialValue: '',
+                rules: [
+                  {
+                    message: 'Vui lòng nhập kỹ năng công việc',
+                    required: false,
+                  },
+                ],
+              })(
+                <Select className="bg-white text-black"
+                >
+                  {props.listJobLevel.rows?.map((item: any, index: any) => (
+                    <Option key={index} value={item.id}>{item.name}</Option>
+                  ))}
+                </Select>
+              )}
+              <Button
+                size="small"
+                className="ant-btn ml-1 mr-1 ant-btn-sm"
+                style={{height: '32px'}}
+                onClick={handleCreateJobLevel}
+              >
+                <Icon type="plus"/>
+              </Button>
+            </div>
+          </Form.Item>
+
+          <Form.Item label="Tin tuyển dụng" className="mb-0" style={{...formItemStyle}}>
+            <div style={{display: 'flex'}}>
+              {getFieldDecorator('recruitment', {
+                initialValue: '',
+                rules: [
+                  {
+                    message: 'Vui lòng chọn tin tuyển dụng',
+                    required: false,
+                  },
+                ],
+              })(
+                <Select className="bg-white text-black"
+                >
+                  {props.listTalentPool.rows?.map((item: any, index: any) => (
+                    <Option key={index} value={item.id}>{item.name}</Option>
+                  ))}
+                </Select>
+              )}
+            </div>
+          </Form.Item>
+
+          <Form.Item label="Talent pools" className="mb-0" style={{...formItemStyle}}>
+            <div style={{display: 'flex'}}>
+              {getFieldDecorator('talentPool', {
+                initialValue: '',
+                rules: [
+                  {
+                    message: 'Vui lòng chọn talent pools',
+                    required: false,
+                  },
+                ],
+              })(
+                <Select className="bg-white text-black"
+                >
+                  {props.listTalentPool.rows?.map((item: any, index: any) => (
+                    <Option key={index} value={item.id}>{item.name}</Option>
+                  ))}
+                </Select>
+              )}
+            </div>
+          </Form.Item>
+
+          <Form.Item label="Người giới thiệu" className="mb-0" style={{...formItemStyle}}>
+            {getFieldDecorator('hrRef', {
+              initialValue: '',
+              rules: [
+                {
+                  message: 'Vui lòng nhập tên người giới thiệu',
+                  required: false,
+                },
+              ],
+            })(
+              <Input placeholder="Tên HR Reference" className="bg-white text-black"/>
+            )}
+          </Form.Item>
+
+          <Form.Item label="Email người giới thiệu" className="mb-0" style={{...formItemStyle}}>
+            {getFieldDecorator('emailRef', {
+              initialValue: '',
+              rules: [
+                {
+                  message: 'Vui lòng nhập tên người giới thiệu',
+                  required: false,
+                },
+              ],
+            })(
+              <Input placeholder="Tên HR Reference" className="bg-white text-black"/>
+            )}
           </Form.Item>
 
           <Form.Item label="Phòng ban" className="mb-0" style={{...formItemStyle}}>
@@ -305,189 +573,6 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                 <Icon type="plus"/>
               </Button>
             </div>
-          </Form.Item>
-
-
-          <Form.Item label="Talent pools" className="mb-0" style={{...formItemStyle}}>
-            <div style={{display: 'flex'}}>
-              {getFieldDecorator('talentPool', {
-                initialValue: '',
-                rules: [
-                  {
-                    message: 'Vui lòng chọn talent pools',
-                    required: true,
-                  },
-                ],
-              })(
-                <Select className="bg-white text-black"
-                >
-                  {props.listTalentPool.rows?.map((item: any, index: any) => (
-                    <Option key={index} value={item.id}>{item.name}</Option>
-                  ))}
-                </Select>
-              )}
-            </div>
-          </Form.Item>
-
-          <Form.Item label="Nguồn CV" className="mb-0" style={{...formItemStyle}}>
-            <div style={{display: 'flex'}}>
-              {getFieldDecorator('sourceCV', {
-                initialValue: '',
-                rules: [
-                  {
-                    message: 'Vui lòng nhập Nguồn CV',
-                    required: true,
-                  },
-                ],
-              })(
-                <Select className="bg-white text-black"
-                >
-                  {props.listSourceCV.rows?.map((item: any, index: any) => (
-                    <Option key={index} value={item.id}>{item.name}</Option>
-                  ))}
-                </Select>
-              )}
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                style={{height: '32px'}}
-                onClick={handleCreateSourceCV}
-              >
-                <Icon type="plus"/>
-              </Button>
-            </div>
-          </Form.Item>
-
-          <Form.Item label="HR Reference" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('hrRef', {
-              initialValue: '',
-              rules: [
-                {
-                  message: 'Vui lòng nhập tên HR Reference',
-                  required: false,
-                },
-              ],
-            })(
-              <Input placeholder="Tên HR Reference" className="bg-white text-black"/>
-            )}
-          </Form.Item>
-
-          <Form.Item label="SĐT" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('phoneNumber', {
-              initialValue: '',
-              rules: [
-                {
-                  message: 'Vui lòng nhập SDT',
-                  required: true,
-                },
-              ],
-            })(
-              <Input placeholder="SDT" className="bg-white text-black"/>
-            )}
-          </Form.Item>
-
-          <Form.Item label="Email" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('email', {
-              initialValue: '',
-              rules: [
-                {
-                  message: 'Vui lòng nhập Email',
-                  required: true,
-                },
-              ],
-            })(
-              <Input placeholder="Email" className="bg-white text-black"/>
-            )}
-          </Form.Item>
-
-          <Form.Item label="Giới tính" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('gender', {
-              initialValue: "Nam",
-              rules: [
-                {
-                  message: 'Vui lòng nhập Giới tính',
-                  required: false,
-                },
-              ],
-            })(
-              <Select className="bg-white text-black"
-              >
-                <Option value="Nam">Nam</Option>
-                <Option value="Nữ">Nữ</Option>
-              </Select>
-            )}
-          </Form.Item>
-
-          <Form.Item label="Năm sinh" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('dateOfBirth', {
-              // initialValue: '',
-              rules: [
-                {
-                  message: 'Vui lòng nhập năm sinh',
-                  required: false,
-                },
-              ],
-            })(
-              <DatePicker format={dateFormat} style={{width: "100%"}}/>
-            )}
-          </Form.Item>
-
-          <Form.Item label="Quê quán" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('hometown', {
-              initialValue: '',
-              rules: [
-                {
-                  message: 'Vui lòng nhập quê quán',
-                  required: false,
-                },
-              ],
-            })(
-              <Input placeholder="Quê quán" className="bg-white text-black"/>
-            )}
-          </Form.Item>
-
-          <Form.Item label="Trường học" className="mb-0" style={{...formItemStyle}}>
-            <div style={{display: 'flex'}}>
-              {getFieldDecorator('school', {
-                initialValue: '',
-                rules: [
-                  {
-                    message: 'Vui lòng nhập trường học',
-                    required: false,
-                  },
-                ],
-              })(
-                <Select className="bg-white text-black"
-                >
-                  {props.listSchool.rows?.map((item: any, index: any) => (
-                    <Option key={index} value={item.id}>{item.name}</Option>
-                  ))}
-                </Select>
-              )}
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                style={{height: '32px'}}
-                onClick={handleCreateSchool}
-              >
-                <Icon type="plus"/>
-              </Button>
-            </div>
-
-          </Form.Item>
-
-          <Form.Item label="Thời gian nộp" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('dateOfApply', {
-              // initialValue: '',
-              rules: [
-                {
-                  message: 'Vui lòng nhập thời gian',
-                  required: true,
-                },
-              ],
-            })(
-              <DatePicker format={dateFormat} style={{width: "100%"}}/>
-            )}
           </Form.Item>
 
           <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px'}} colon={false}>

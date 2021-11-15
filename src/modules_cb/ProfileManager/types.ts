@@ -29,7 +29,6 @@ export interface ProfileEntity {
 }
 
 export interface CreateProfileRequest {
-  dateOfApply: number,
   dateOfBirth: number,
   email: string,
   fullName: string,
@@ -41,9 +40,12 @@ export interface CreateProfileRequest {
   phoneNumber: string,
   school: string,
   sourceCV: string,
+  levelSchool: string,
+  mailRef: string,
+  skill: string,
   talentPool: string,
+  recruitment: string,
   department: string,
-
 }
 
 export interface UpdateProfileRequest {
