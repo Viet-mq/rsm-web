@@ -4,7 +4,7 @@ export interface ProfileEntity {
   dateOfApply: number,
   dateOfBirth: number,
   email: string,
-  fullName: string,
+  fullName: string|any,
   gender: string,
   hometown: string,
   hrRef: string,

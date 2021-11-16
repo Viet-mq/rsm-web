@@ -5,7 +5,7 @@ import {ColumnProps} from "antd/lib/table";
 import {Avatar, Badge, Button, Icon, Input, Popconfirm, Select, Table, Tooltip, TreeSelect} from "antd";
 import {emptyText} from "src/configs/locales";
 import {
-  deleteProfile,
+  deleteProfile, getActivityLogs,
   getElasticSearch,
   getListProfile,
   showFormBooking,
@@ -53,27 +53,9 @@ const connector = connect(mapStateToProps, {
   getListSourceCV,
   getListDepartment,
   getListTalentPool,
-  getListSchool
+  getListSchool,
+  getActivityLogs
 });
-
-// const saveJob:any=localStorage.getItem('list-job');
-// const saveJobLevel:any=localStorage.getItem('list-job-level');
-// const saveSchool:any=localStorage.getItem('list-school');
-// const saveDepartment:any=localStorage.getItem('list-department');
-// const saveSourceCV:any=localStorage.getItem('list-source-cv');
-// const saveStatusCV:any=localStorage.getItem('list-status-cv');
-// const saveTalentPool:any=localStorage.getItem('list-talent-pool');
-// const saveAccount:any=localStorage.getItem('list-account');
-//
-// const dataJob:JobListAction = JSON.parse(saveJob)?JSON.parse(saveJob):{}
-// const dataJobLevel:JobLevelListAction = JSON.parse(saveJobLevel)?JSON.parse(saveJobLevel):{}
-// const dataSchool:SchoolListAction = JSON.parse(saveSchool)?JSON.parse(saveSchool):{}
-// const dataDepartment:DepartmentListAction = JSON.parse(saveDepartment)?JSON.parse(saveDepartment):{}
-// const dataSourceCV:SourceCVListAction = JSON.parse(saveSourceCV)?JSON.parse(saveSourceCV):{}
-// const dataStatusCV:StatusCVListAction = JSON.parse(saveStatusCV)?JSON.parse(saveStatusCV):{}
-// const dataTalentPool:TalentPoolListAction = JSON.parse(saveTalentPool)?JSON.parse(saveTalentPool):{}
-// const dataAccount:AccountListAction = JSON.parse(saveAccount)?JSON.parse(saveAccount):{}
-
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -101,6 +83,23 @@ function ListProfile(props: ListProfileProps) {
     talentPool: null,
   })
 
+  const getInitials = (name:string) => {
+    let initials:any = name.split(' ');
+
+    if(initials.length > 1) {
+      initials = initials.shift().charAt(0) + initials.pop().charAt(0);
+    } else {
+      initials = name.substring(0, 2);
+    }
+
+    return initials.toUpperCase();
+  }
+
+  const setColor = () => {
+    const randomColor:string = Math.floor(Math.random()*16777215).toString(16);
+    return "#"+randomColor;
+  }
+
   const columns: ColumnProps<ProfileEntity>[] = [
     {
       title: 'STT',
@@ -122,7 +121,9 @@ function ListProfile(props: ListProfileProps) {
         return <div style={{display: 'flex', alignItems: 'center'}}>
           <div style={{marginRight: 10}}>
             {/*<Badge count={1}>*/}
-            <Avatar icon={record.image ? null : "user"} src={record.image ? record.image : "#"}/>
+            <Avatar  src={record.image ? record.image : "#"} >
+              {record.image ? null : getInitials(record.fullName)}
+            </Avatar>
             {/*</Badge>*/}
           </div>
 
@@ -133,6 +134,7 @@ function ListProfile(props: ListProfileProps) {
                 <span>{text}</span>
               </a>
               {record.gender === "Nam" ? <GiMale/> : <GiFemale/>}
+
             </div>
 
             <span style={{color: "#B2B2B2",}}>
