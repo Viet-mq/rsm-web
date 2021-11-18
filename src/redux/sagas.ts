@@ -16,6 +16,9 @@ import schoolManagerSaga from '../modules_cb/SchoolManager/redux/sagas';
 import profileManagerSaga from '../modules_cb/ProfileManager/redux/sagas';
 import viewGroupManagerSaga from '../modules_cb/ViewGroupManager/redux/sagas'
 import groupAPIManagerSaga from '../modules_cb/GroupAPIManager/redux/sagas'
+import skillManagerSaga from '../modules_cb/SkillManager/redux/sagas'
+import addressManagerSaga from '../modules_cb/AddressManager/redux/sagas'
+import reasonRejectManagerSaga from '../modules_cb/ReasonRejectManager/redux/sagas'
 import * as commonSaga from './common-saga';
 
 export default function* rootSaga() {
@@ -37,6 +40,9 @@ export default function* rootSaga() {
     profileManagerSaga(),
     viewGroupManagerSaga(),
     groupAPIManagerSaga(),
+    skillManagerSaga(),
+    addressManagerSaga(),
+    reasonRejectManagerSaga(),
     commonSaga.checkErrorAsync(),
   ]);
 }

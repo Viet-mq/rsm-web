@@ -18,6 +18,7 @@ import {getListDepartment, showFormCreate as showDepartmentFormCreate} from "../
 import Loading from "../../../components/Loading";
 import {getListTalentPool} from "../../TalentPoolManager/redux/actions";
 import CreateDepartmentForm from "../../DepartmentManager/components/CreateDepartmentForm";
+import moment from 'moment';
 
 const {Option} = Select;
 
@@ -74,7 +75,10 @@ function CreateProfileForm(props: CreateProfileFormProps) {
       sm: {span: 12},
     },
   };
-
+  const setColor = () => {
+    const randomColor:string = Math.floor(Math.random()*16777215).toString(16);
+    return "#"+randomColor;
+  }
   function onBtnCreateClicked(e: FormEvent) {
     e.preventDefault();
     (e.target as any).disabled = true;
@@ -83,6 +87,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
       if (!err) {
         let req: CreateProfileRequest = {
           fullName: values.fullName,
+          avatarColor:setColor(),
           dateOfBirth: values.dateOfBirth * 1,
           gender: values.gender,
           phoneNumber: values.phoneNumber,
@@ -93,12 +98,13 @@ function CreateProfileForm(props: CreateProfileFormProps) {
           sourceCV: values.sourceCV,
           job: values.job,
           levelJob: values.levelJob,
-          skill:values.skill,
+          skill:[],
           recruitment:values.recruitment,
           talentPool: values.talentPool,
           hrRef: values.hrRef,
           mailRef:values.mailRef,
           department:values.department,
+          dateOfApply: values.dateOfApply*1,
         }
         props.createProfile(req);
         return;
@@ -535,12 +541,12 @@ function CreateProfileForm(props: CreateProfileFormProps) {
               initialValue: '',
               rules: [
                 {
-                  message: 'Vui lòng nhập tên người giới thiệu',
+                  message: 'Vui lòng nhập email người giới thiệu',
                   required: false,
                 },
               ],
             })(
-              <Input placeholder="Tên HR Reference" className="bg-white text-black"/>
+              <Input placeholder="Email người giới thiệu" className="bg-white text-black"/>
             )}
           </Form.Item>
 
@@ -574,6 +580,21 @@ function CreateProfileForm(props: CreateProfileFormProps) {
               </Button>
             </div>
           </Form.Item>
+
+          <Form.Item label="Ngày tạo" className="mb-0" style={{...formItemStyle}}>
+            {getFieldDecorator('dateOfApply', {
+              initialValue: moment(),
+              rules: [
+                {
+                  message: 'Vui lòng nhập thời gian',
+                  required: false,
+                },
+              ],
+            })(
+              <DatePicker format={dateFormat} style={{width: "100%"}}/>
+            )}
+          </Form.Item>
+
 
           <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px'}} colon={false}>
             <Button className="mr-3 create-btn" htmlType="submit" onClick={onBtnCreateClicked}>

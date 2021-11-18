@@ -2,15 +2,16 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {createBooking, getActivityLogs, getBooking, showFormBooking, updateBooking} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, DatePicker, Form, Input, Modal, Select} from "antd";
+import {Button, Checkbox, Col, Form, Input, InputNumber, Modal, Row, Select} from "antd";
 import React, {FormEvent, useEffect} from "react";
 import {getListAccount} from "../../AccountManager/redux/actions";
 import {getListStatusCV} from "../../StatusCVManager/redux/actions";
 import moment from "moment";
 import {CreateBookingRequest, UpdateBookingRequest} from "../types";
+import DateBox from "devextreme-react/date-box";
 
 const {Option} = Select;
-const { TextArea } = Input;
+const {TextArea} = Input;
 
 const mapStateToProps = (state: RootState) => ({
   listAccount: state.accountManager.list,
@@ -78,25 +79,40 @@ function BookingForm(props: BookingFormProps) {
       if (!err) {
         let req: UpdateBookingRequest = {
           id: props.getBookingState.result?.id,
-          idProfile: props.getBookingState.result?.idProfile,
-          time: values.time * 1,
-          address: values.address,
-          form: values.form,
-          interviewer: values.interviewer,
-          interviewee: values.interviewee,
-          content: values.content,
-          question: values.question,
-          comments: values.comments,
-          evaluation: values.evaluation,
-          status: values.status,
-          reason: values.reason,
-          timeStart: values.timeStart * 1,
-          timeFinish: values.timeFinish * 1,
+          floor: values.floor,
+          interviewAddress: values.interviewAddress,
+          interviewTime: values.interviewTime,
+          interviewers: values.interviewers,
+          note: values.note,
+          recruitmentId: values.recruitmentId,
+          type: values.type,
+          date: values.date,
+
+          // id: props.getBookingState.result?.id,
+          // idProfile: props.getBookingState.result?.idProfile,
+          // time: values.time * 1,
+          // address: values.address,
+          // form: values.form,
+          // interviewer: values.interviewer,
+          // interviewee: values.interviewee,
+          // content: values.content,
+          // question: values.question,
+          // comments: values.comments,
+          // evaluation: values.evaluation,
+          // status: values.status,
+          // reason: values.reason,
+          // timeStart: values.timeStart * 1,
+          // timeFinish: values.timeFinish * 1,
         }
         props.updateBooking(req);
         return;
       }
     });
+  }
+
+  const setColor = () => {
+    const randomColor: string = Math.floor(Math.random() * 16777215).toString(16);
+    return "#" + randomColor;
   }
 
   function onBtnCreateClicked(e: FormEvent) {
@@ -107,22 +123,33 @@ function BookingForm(props: BookingFormProps) {
       if (!err) {
         let req: CreateBookingRequest = {
           idProfile: props.showBooking.data_booking?.id,
-          time: values.time * 1,
-          address: values.address,
-          form: values.form,
-          interviewer: values.interviewer,
-          interviewee: values.interviewee,
-          content: values.content,
-          question: values.question,
-          comments: values.comments,
-          evaluation: values.evaluation,
-          status: values.status,
-          reason: values.reason,
-          timeStart: values.timeStart * 1,
-          timeFinish: values.timeFinish * 1,
+          date: values.date,
+          avatarColor: setColor(),
+          floor: values.floor,
+          interviewAddress: values.interviewAddress,
+          interviewTime: values.interviewTime*1,
+          interviewers: values.interviewers,
+          note: values.note,
+          recruitmentId: values.recruitmentId,
+          type: values.type,
+
+          // time: values.time * 1,
+          // avatarColor:setColor(),
+          // address: values.address,
+          // form: values.form,
+          // interviewer: values.interviewer,
+          // interviewee: values.interviewee,
+          // content: values.content,
+          // question: values.question,
+          // comments: values.comments,
+          // evaluation: values.evaluation,
+          // status: values.status,
+          // reason: values.reason,
+          // timeStart: values.timeStart * 1,
+          // timeFinish: values.timeFinish * 1,
         }
         props.createBooking(req);
-        props.getActivityLogs({idProfile: props.showBooking.data_booking?.id});
+        // props.getActivityLogs({idProfile: props.showBooking.data_booking?.id});
         return;
       }
     });
@@ -132,481 +159,428 @@ function BookingForm(props: BookingFormProps) {
 
     <div>
       {props.getBookingState?.result !== undefined ?
-
         <div>
-          <Modal
-            zIndex={2}
-            maskClosable={false}
-            title="Sửa lịch phỏng vấn"
-            visible={props.showBooking.show_booking}
-            centered={true}
-            width="550px"
-            afterClose={() => {
-              resetFields();
-            }}
-            onCancel={() => {
-              resetFields();
-              props.showFormBooking(false);
-            }}
-            footer={""}>
+          <div>
+            <Modal
+              zIndex={2}
+              maskClosable={false}
+              visible={props.showBooking.show_booking}
+              centered={true}
+              width="580px"
+              className="custom"
+              afterClose={() => {
+                resetFields();
+              }}
+              onCancel={() => {
+                resetFields();
+                props.showFormBooking(false);
+              }}
+              footer={""}>
+              <div style={{padding: "24px 24px 20px 24px"}}>
+                <div className="schedule-detail-title">Sửa lịch</div>
+                <div className="main-1">
+                  <div className="main-1__candidate-name" style={{color: "#666"}}> {props.showBooking.data_booking?.fullName}</div>
+                  <div className="main-1__green-dot"></div>
+                  <div className="main-1__job-description">Business Analysis</div>
+                </div>
+              </div>
+              <div className="c-schedule-interview-popup" style={{overflowX: "hidden"}}>
+                <div className='ant-col-14 grid-left'>
+                  <Form>
+                    <Form.Item className="form-label" label="Tin tuyển dụng" labelCol={{span: 24}}
+                               wrapperCol={{span: 24}}>
+                      {getFieldDecorator('recruitmentId', {
+                        initialValue:props.getBookingState.result?.recruitmentId ||'',
+                        rules: [
+                          {
+                            message: 'Vui lòng chọn tin tuyển dụng',
+                            required: true,
+                          },
+                        ],
+                      })(
+                        <Select className="bg-white text-black"
+                        >
+                          <Option value="on">Business Analysis</Option>
+                          <Option value="off">iOS / Android Developer</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
 
-            <Form {...formItemLayout}>
+                    <Row>
+                      <Col span={8} style={{marginRight: 10}}>
+                        <Form.Item className="form-label" label="Ngày" labelCol={{span: 24}} wrapperCol={{span: 24}}>
+                          {getFieldDecorator('date', {
+                            initialValue: moment(props.getBookingState.result?.date) || null,
+                            rules: [
+                              {
+                                message: 'Vui lòng chọn ngày bắt đầu',
+                                required: true,
+                              },
+                            ],
+                          })(
+                            <DateBox displayFormat="dd/MM/yyyy"
+                                     type="date"/>
+                          )}
 
-              <Form.Item label="Họ Tên" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('interviewee', {
-                  initialValue: props.getBookingState.result?.interviewee || '',
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập họ tên',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <Input disabled placeholder="Họ tên" className="bg-white text-black"/>
-                )}
-              </Form.Item>
+                        </Form.Item>
+                      </Col>
+                      <Col span={6} style={{marginRight: 10}}>
+                        <Form.Item className="form-label" label="Giờ bắt đầu" labelCol={{span: 24}}
+                                   wrapperCol={{span: 24}}>
+                          {getFieldDecorator('timeStart', {
+                            initialValue: moment(),
+                            rules: [
+                              {
+                                message: 'Vui lòng chọn giờ bắt đầu',
+                                required: true,
+                              },
+                            ],
+                          })(
+                            <DateBox type="time"/>)}
 
-              <Form.Item label="Địa chỉ phỏng vấn" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('address', {
-                  initialValue: props.getBookingState.result?.address || '',
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập Địa chỉ phỏng vấn',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <Input placeholder="Địa chỉ phỏng vấn" className="bg-white text-black"/>
-                )}
-              </Form.Item>
+                        </Form.Item>
+                      </Col>
+                      <Col span={8}>
+                        <Form.Item className="form-label" label="Thời lượng(phút)" labelCol={{span: 24}}
+                                   wrapperCol={{span: 24}}>
+                          {getFieldDecorator('interviewTime', {
+                            initialValue: moment(props.getBookingState.result?.interviewTime) || null,
+                            rules: [
+                              {
+                                message: 'Vui lòng nhập thời lượng',
+                                required: true,
+                              },
+                            ],
+                          })(
+                            <InputNumber type="number" min={15} className="bg-white text-black"/>
+                          )}
+                        </Form.Item>
+                      </Col>
+                    </Row>
 
-              <Form.Item label="Nội dung phỏng vấn" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('content', {
-                  initialValue: props.getBookingState.result?.content || '',
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập Nội dung phỏng vấn',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <Input placeholder="Nội dung phỏng vấn" className="bg-white text-black"/>
-                )}
-              </Form.Item>
+                    <Row style={{marginTop: 15}}>
+                      <Col span={14} style={{paddingRight: 10}}>
+                        <Form.Item className="form-label" label="Địa điểm" labelCol={{span: 24}}
+                                   wrapperCol={{span: 24}}>
+                          {getFieldDecorator('interviewAddress', {
+                            initialValue:props.getBookingState.result?.interviewAddress || '',
+                            rules: [
+                              {
+                                message: 'Vui lòng nhập địa điểm',
+                                required: true,
+                              },
+                            ],
+                          })(
+                            <Input placeholder="Địa điểm" className="bg-white text-black"/>
+                          )}
+                        </Form.Item>
+                      </Col>
+                      <Col span={10}>
+                        <Form.Item className="form-label" label="Phòng" labelCol={{span: 24}}
+                                   wrapperCol={{span: 24}}>
+                          {getFieldDecorator('floor ', {
+                            initialValue: props.getBookingState.result?.floor || '',
+                            rules: [
+                              {
+                                message: 'Vui lòng nhập phòng',
+                                required: false,
+                              },
+                            ],
+                          })(
+                            <Input placeholder="Phòng" className="bg-white text-black"/>
+                          )}
+                        </Form.Item>
+                      </Col>
+                    </Row>
 
-              <Form.Item label="Hình thức" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('form', {
-                  initialValue: 'Online',
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập Hình thức phỏng vấn',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <Select className="bg-white text-black"
-                  >
-                    <Option value="on">Online</Option>
-                    <Option value="off">Offline</Option>
-                  </Select>
-                )}
-              </Form.Item>
+                    <Form.Item label="Hội đồng tuyển dụng" className="mb-0" labelCol={{span: 24}} wrapperCol={{span: 24}}>
+                      {getFieldDecorator('interviewers', {
+                        initialValue: props.getBookingState.result?.interviewers || '',
+                        rules: [
+                          {
+                            message: 'Vui lòng chọn Hội đồng tuyển dụng',
+                            required: true,
+                          },
+                        ],
+                      })(
+                        <Select className="bg-white text-black"
+                                mode="multiple"
+                                placeholder="Hội đồng tuyển dụng"
+                        >
+                          {props.listAccount.rows?.map((item: any, index: any) => (
+                            <Option key={index} value={item.username}>{item.fullName}</Option>
+                          ))}
+                        </Select>
+                      )}
+                    </Form.Item>
 
-              <Form.Item label="Người phỏng vấn" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('interviewer', {
-                  initialValue: props.getBookingState.result?.interviewer || '',
-                  rules: [
-                    {
-                      message: 'Vui lòng chọn người phỏng vấn',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <Select className="bg-white text-black"
-                          mode="multiple"
-                          placeholder="Please select"
-                  >
-                    {props.listAccount.rows?.map((item: any) => (
-                      <Option key={item.username} value={item.username}>{item.fullName}</Option>
-                    ))}
-                  </Select>
-                )}
-              </Form.Item>
+                    <Form.Item className="form-label" label="Hình thức" labelCol={{span: 24}} wrapperCol={{span: 24}}>
+                      {getFieldDecorator('type', {
+                        initialValue: props.getBookingState.result?.type || "Phỏng vấn trực tiếp",
+                        rules: [
+                          {
+                            message: 'Vui lòng chọn hình thức phỏng vấn',
+                            required: false,
+                          },
+                        ],
+                      })(
+                        <Select className="bg-white text-black"
+                        >
+                          <Option key="1" value="Phỏng vấn trực tiếp">Phỏng vấn trực tiếp</Option>
+                          <Option key="2" value="Thi tuyển">Thi tuyển</Option>
+                          <Option key="3" value="Phỏng vấn online ngoài ứng dụng">Phỏng vấn online ngoài ứng
+                            dụng</Option>
+                          <Option key="4" value="Thi tuyển online">Thi tuyển online</Option>
 
-              <Form.Item label="Đánh giá" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('evaluation', {
-                  initialValue: props.getBookingState.result?.evaluation || '',
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập Đánh giá',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <Input placeholder="Đánh giá" className="bg-white text-black"/>
-                )}
-              </Form.Item>
+                        </Select>
+                      )}
+                    </Form.Item>
 
-              <Form.Item label="Câu hỏi" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('question', {
-                  initialValue: props.getBookingState.result?.question || [],
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập câu hỏi',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <Input placeholder="Đánh giá" className="bg-white text-black"/>
-                )}
-              </Form.Item>
+                    <Form.Item className="form-label" label="Lưu ý cho ứng viên" labelCol={{span: 24}}
+                               wrapperCol={{span: 24}}>
+                      {getFieldDecorator('note', {
+                        initialValue: props.getBookingState.result?.note || "",
+                        rules: [
+                          {
+                            message: 'Vui lòng chọn mẫu đánh giá',
+                            required: false,
+                          },
+                        ],
+                      })(
+                        <TextArea placeholder="Nhập lưu ý" style={{height: 100}} className="bg-white text-black"/>
+                      )}
+                    </Form.Item>
 
-              <Form.Item label="Nhận xét" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('comments', {
-                  initialValue: props.getBookingState.result?.comments || [],
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập nhận xét',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <TextArea placeholder="Nhận xét" style={{height:"100px"}} className="bg-white text-black"/>
-                )}
-              </Form.Item>
+                    <Checkbox defaultChecked={true}>Email thông báo cho ứng viên</Checkbox>
+                    <Checkbox defaultChecked={true}>Email thông báo cho hội đồng</Checkbox>
 
-              <Form.Item label="Lý do" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('reason', {
-                  initialValue: props.getBookingState.result?.reason || '',
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập Lý do',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <Input placeholder="Lý do" className="bg-white text-black"/>
-                )}
-              </Form.Item>
+                  </Form>
+                </div>
+              </div>
+              <div className="footer-right">
+                <Button onClick={onBtnCancelClicked} type={"link"} style={{color: "black", marginRight: 15}}>Hủy</Button>
+                <Button onClick={onBtnUpdateClicked} type={"primary"}>Cập nhật</Button>
+              </div>
 
-              <Form.Item label="Trạng thái phỏng vấn" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('status', {
-                  initialValue: props.getBookingState.result?.statusId || '',
-                  rules: [
-                    {
-                      message: 'Vui lòng chọn Trạng thái phỏng vấn',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <Select className="bg-white text-black"
-                          placeholder="Please select"
-                  >
-                    {props.listStatus?.rows?.map((item: any) => (
-                      <Option key={item.id} value={item.id}>{item.name}</Option>
-                    ))}
-                  </Select>
-                )}
-              </Form.Item>
-
-              <Form.Item label="Thời gian dự kiến" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('time', {
-                  initialValue: moment(props.getBookingState.result?.time) || null,
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập Thời gian phỏng vấn dự kiến',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <DatePicker showTime format={dateFormat} style={{width: "100%"}}/>
-                )}
-              </Form.Item>
-
-              <Form.Item label="Thời gian bắt đầu" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('timeStart', {
-                  initialValue: moment(props.getBookingState.result?.timeStart) || null,
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập Thời gian bắt đầu',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <DatePicker showTime format={dateFormat} style={{width: "100%"}}>
-
-                  </DatePicker>
-                )}
-              </Form.Item>
-
-              <Form.Item label="Thời gian kết thúc" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('timeFinish', {
-                  initialValue: moment(props.getBookingState.result?.timeFinish) || null,
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập Thời gian kết thúc',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <DatePicker showTime format={dateFormat} style={{width: "100%"}}/>
-                )}
-              </Form.Item>
-
-              <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px'}} colon={false}>
-                <Button className="mr-3 create-btn" htmlType="submit" onClick={onBtnUpdateClicked}>
-                  Cập nhật
-                </Button>
-                <Button type="default" className="pl-5 pr-5" onClick={onBtnCancelClicked}>
-                  Hủy
-                </Button>
-              </Form.Item>
-
-            </Form>
-
-          </Modal>
+            </Modal>
+          </div>
 
         </div>
+
         :
         <div>
-          <Modal
-            zIndex={2}
-            maskClosable={false}
-            title="Lập lịch phỏng vấn"
-            visible={props.showBooking.show_booking}
-            centered={true}
-            width="550px"
-            afterClose={() => {
-              resetFields();
-            }}
-            onCancel={() => {
-              resetFields();
-              props.showFormBooking(false);
-            }}
-            footer={""}>
+          <div>
+            <Modal
+              zIndex={2}
+              maskClosable={false}
 
-            <Form {...formItemLayout}>
+              visible={props.showBooking.show_booking}
+              centered={true}
+              width="580px"
+              className="custom"
+              afterClose={() => {
+                resetFields();
+              }}
+              onCancel={() => {
+                resetFields();
+                props.showFormBooking(false);
+              }}
+              footer={""}>
+              <div style={{padding: "24px 24px 20px 24px"}}>
+                <div className="schedule-detail-title">Đặt lịch</div>
+                <div className="main-1">
+                  <div className="main-1__candidate-name" style={{color: "#666"}}>{props.showBooking.data_booking?.fullName}</div>
+                  <div className="main-1__green-dot"></div>
+                  <div className="main-1__job-description">Business Analysis</div>
+                </div>
+              </div>
+              <div className="c-schedule-interview-popup" style={{overflowX: "hidden"}}>
+                <div className='ant-col-14 grid-left'>
+                  <Form>
+                    <Form.Item className="form-label" label="Tin tuyển dụng" labelCol={{span: 24}}
+                               wrapperCol={{span: 24}}>
+                      {getFieldDecorator('recruitmentId', {
+                        initialValue: '',
+                        rules: [
+                          {
+                            message: 'Vui lòng chọn tin tuyển dụng',
+                            required: true,
+                          },
+                        ],
+                      })(
+                        <Select className="bg-white text-black"
+                        >
+                          <Option value="Business Analysis">Business Analysis</Option>
+                          <Option value="iOS / Android Developer">iOS / Android Developer</Option>
+                        </Select>
+                      )}
+                    </Form.Item>
 
-              <Form.Item label="Họ Tên" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('interviewee', {
-                  initialValue: props.showBooking.data_booking?.fullName || '',
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập họ tên',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <Input disabled placeholder="Họ tên" className="bg-white text-black"/>
-                )}
-              </Form.Item>
+                    <Row>
+                      <Col span={8} style={{marginRight: 10}}>
+                        <Form.Item className="form-label" label="Ngày" labelCol={{span: 24}} wrapperCol={{span: 24}}>
+                          {getFieldDecorator('date', {
+                            initialValue: moment(),
+                            rules: [
+                              {
+                                message: 'Vui lòng chọn ngày bắt đầu',
+                                required: true,
+                              },
+                            ],
+                          })(
+                            <DateBox displayFormat="dd/MM/yyyy"
+                                     type="date"/>
+                          )}
 
-              <Form.Item label="Địa chỉ phỏng vấn" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('address', {
-                  initialValue: "",
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập Địa chỉ phỏng vấn',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <Input placeholder="Địa chỉ phỏng vấn" className="bg-white text-black"/>
-                )}
-              </Form.Item>
+                        </Form.Item>
+                      </Col>
+                      <Col span={6} style={{marginRight: 10}}>
+                        <Form.Item className="form-label" label="Giờ bắt đầu" labelCol={{span: 24}}
+                                   wrapperCol={{span: 24}}>
+                          {getFieldDecorator('timeStart', {
+                            initialValue: moment(),
+                            rules: [
+                              {
+                                message: 'Vui lòng chọn giờ bắt đầu',
+                                required: true,
+                              },
+                            ],
+                          })(
+                            <DateBox type="time"/>)}
 
-              <Form.Item label="Nội dung phỏng vấn" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('content', {
-                  initialValue: "",
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập Nội dung phỏng vấn',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <Input placeholder="Nội dung phỏng vấn" className="bg-white text-black"/>
-                )}
-              </Form.Item>
+                        </Form.Item>
+                      </Col>
+                      <Col span={8}>
+                        <Form.Item className="form-label" label="Thời lượng(phút)" labelCol={{span: 24}}
+                                   wrapperCol={{span: 24}}>
+                          {getFieldDecorator('time', {
+                            initialValue: '15',
+                            rules: [
+                              {
+                                message: 'Vui lòng nhập thời lượng',
+                                required: true,
+                              },
+                            ],
+                          })(
+                            <InputNumber type="number" min={15} className="bg-white text-black"/>
+                          )}
+                        </Form.Item>
+                      </Col>
+                    </Row>
 
-              <Form.Item label="Hình thức" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('form', {
-                  initialValue: 'Online',
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập hình thức',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <Select className="bg-white text-black"
-                  >
-                    <Option key='1' value="Online">Online</Option>
-                    <Option key='2' value="Offline">Offline</Option>
-                  </Select>
-                )}
-              </Form.Item>
+                    <Row style={{marginTop: 15}}>
+                      <Col span={14} style={{paddingRight: 10}}>
+                        <Form.Item className="form-label" label="Địa điểm" labelCol={{span: 24}}
+                                   wrapperCol={{span: 24}}>
+                          {getFieldDecorator('interviewAddress', {
+                            initialValue: '',
+                            rules: [
+                              {
+                                message: 'Vui lòng nhập địa điểm',
+                                required: true,
+                              },
+                            ],
+                          })(
+                            <Input placeholder="Địa điểm" className="bg-white text-black"/>
+                          )}
+                        </Form.Item>
+                      </Col>
+                      <Col span={10}>
+                        <Form.Item className="form-label" label="Phòng" labelCol={{span: 24}}
+                                   wrapperCol={{span: 24}}>
+                          {getFieldDecorator('floor ', {
+                            initialValue: '',
+                            rules: [
+                              {
+                                message: 'Vui lòng nhập phòng',
+                                required: false,
+                              },
+                            ],
+                          })(
+                            <Input placeholder="Phòng" className="bg-white text-black"/>
+                          )}
+                        </Form.Item>
+                      </Col>
+                    </Row>
 
-              <Form.Item label="Người phỏng vấn" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('interviewer', {
-                  initialValue: undefined,
-                  rules: [
-                    {
-                      message: 'Vui lòng chọn người phỏng vấn',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <Select className="bg-white text-black"
-                          mode="multiple"
-                          placeholder="Please select"
-                  >
-                    {props.listAccount.rows?.map((item: any, index: any) => (
-                      <Option key={index} value={item.username}>{item.fullName}</Option>
-                    ))}
-                  </Select>
-                )}
-              </Form.Item>
+                    <Form.Item label="Hội đồng tuyển dụng" className="mb-0" labelCol={{span: 24}} wrapperCol={{span: 24}}>
+                      {getFieldDecorator('interviewers', {
+                        initialValue: undefined,
+                        rules: [
+                          {
+                            message: 'Vui lòng chọn Hội đồng tuyển dụng',
+                            required: true,
+                          },
+                        ],
+                      })(
+                        <Select className="bg-white text-black"
+                                mode="multiple"
+                                placeholder="Hội đồng tuyển dụng"
+                        >
+                          {props.listAccount.rows?.map((item: any, index: any) => (
+                            <Option key={index} value={item.username}>{item.fullName}</Option>
+                          ))}
+                        </Select>
+                      )}
+                    </Form.Item>
 
-              <Form.Item label="Câu hỏi" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('question', {
-                  initialValue: '',
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập nhận xét',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <TextArea placeholder="Nhận xét" style={{height:"100px"}} className="bg-white text-black"/>
-                )}
-              </Form.Item>
+                    <Form.Item className="form-label" label="Hình thức" labelCol={{span: 24}} wrapperCol={{span: 24}}>
+                      {getFieldDecorator('type', {
+                        initialValue: '',
+                        rules: [
+                          {
+                            message: 'Vui lòng chọn hình thức phỏng vấn',
+                            required: false,
+                          },
+                        ],
+                      })(
+                        <Select className="bg-white text-black"
+                        >
+                          <Option key="1" value="Phỏng vấn trực tiếp">Phỏng vấn trực tiếp</Option>
+                          <Option key="2" value="Thi tuyển">Thi tuyển</Option>
+                          <Option key="3" value="Phỏng vấn online ngoài ứng dụng">Phỏng vấn online ngoài ứng
+                            dụng</Option>
+                          <Option key="4" value="Thi tuyển online">Thi tuyển online</Option>
 
-              <Form.Item label="Đánh giá" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('evaluation', {
-                  initialValue: '',
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập Đánh giá',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <Input placeholder="Đánh giá" className="bg-white text-black"/>
-                )}
-              </Form.Item>
+                        </Select>
+                      )}
+                    </Form.Item>
 
-              <Form.Item label="Nhận xét" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('comments', {
-                  initialValue: [''],
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập nhận xét',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <Input placeholder="Đánh giá" className="bg-white text-black"/>
-                )}
-              </Form.Item>
+                    <Form.Item className="form-label" label="Lưu ý cho ứng viên" labelCol={{span: 24}}
+                               wrapperCol={{span: 24}}>
+                      {getFieldDecorator('note', {
+                        initialValue: '',
+                        rules: [
+                          {
+                            message: 'Vui lòng nhập lưu ý cho ứng viên',
+                            required: false,
+                          },
+                        ],
+                      })(
+                        <TextArea placeholder="Nhập lưu ý" style={{height: 100}} className="bg-white text-black"/>
+                      )}
+                    </Form.Item>
 
-              <Form.Item label="Lý do" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('reason', {
-                  initialValue: '',
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập Lý do',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <Input placeholder="Lý do" className="bg-white text-black"/>
-                )}
-              </Form.Item>
+                    <Checkbox defaultChecked={true}>Email thông báo cho ứng viên</Checkbox>
+                    <Checkbox defaultChecked={true}>Email thông báo cho hội đồng</Checkbox>
 
-              <Form.Item label="Trạng thái phỏng vấn" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('status', {
-                  initialValue: '',
-                  rules: [
-                    {
-                      message: 'Vui lòng chọn Trạng thái phỏng vấn',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <Select className="bg-white text-black"
-                          placeholder="Please select"
-                  >
-                    {props.listStatus.rows?.map((item: any) => (
-                      <Option key={item.id} value={item.id}>{item.name}</Option>
-                    ))}
-                  </Select>
-                )}
-              </Form.Item>
+                  </Form>
+                </div>
+              </div>
+              <div className="footer-right">
+                <Button onClick={onBtnCancelClicked} type={"link"} style={{color: "black", marginRight: 15}}>Hủy</Button>
+                <Button type={"primary"}  onClick={onBtnCreateClicked}>Tạo mới</Button>
+              </div>
 
-              <Form.Item label="Thời gian dự kiến" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('time', {
-                  initialValue: undefined,
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập Thời gian phỏng vấn dự kiến',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <DatePicker showTime format={dateFormat} style={{width: "100%"}}/>
-                )}
-              </Form.Item>
-
-              <Form.Item label="Thời gian bắt đầu" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('timeStart', {
-                  initialValue: undefined,
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập Thời gian bắt đầu',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <DatePicker showTime format={dateFormat} style={{width: "100%"}}>
-
-                  </DatePicker>
-                )}
-              </Form.Item>
-
-              <Form.Item label="Thời gian kết thúc" className="mb-0" style={{...formItemStyle}}>
-                {getFieldDecorator('timeFinish', {
-                  initialValue: undefined,
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập Thời gian kết thúc',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <DatePicker showTime format={dateFormat} style={{width: "100%"}}/>
-                )}
-              </Form.Item>
-
-              <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px'}} colon={false}>
-                <Button className="mr-3 create-btn" htmlType="submit" onClick={onBtnCreateClicked}>
-                  Tạo mới
-                </Button>
-                <Button type="default" className="pl-5 pr-5" onClick={onBtnCancelClicked}>
-                  Hủy
-                </Button>
-              </Form.Item>
-
-            </Form>
-
-          </Modal>
+            </Modal>
+          </div>
 
         </div>
-
       }
     </div>
 
 
   );
 }
+
 export default connector(Form.create<BookingFormProps>()(BookingForm));

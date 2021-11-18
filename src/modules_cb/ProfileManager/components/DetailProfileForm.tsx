@@ -17,7 +17,7 @@ import {
 } from "../redux/actions";
 import {showFormCreateNote, showFormUpdateNote} from "../../ProfileManager/redux/actions/note/showNote";
 
-import {Badge, Button, Icon, Pagination, Popconfirm, Popover, Table, Tag, Timeline, Tooltip} from "antd";
+import {Avatar, Button, Icon, Pagination, Popconfirm, Popover, Table, Tag, Timeline, Tooltip} from "antd";
 import React, {useEffect, useState} from "react";
 import {DataShowBooking, DeleteNoteRequest, DetailCV, NoteEntity} from "../types";
 import moment from "moment";
@@ -38,7 +38,8 @@ const mapStateToProps = (state: RootState) => ({
   account: state.accountManager.list,
   note: state.profileManager.getListNote,
   createNote: state.profileManager.createNote,
-  updateNote: state.profileManager.updateNote
+  updateNote: state.profileManager.updateNote,
+  skill:state.skillManager.list,
 })
 
 const connector = connect(mapStateToProps,
@@ -335,6 +336,21 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     props.showFormBooking(true, req);
   }
 
+  const getInitials = (name: string) => {
+    if (name) {
+      let initials: any = name.split(' ');
+
+      if (initials.length > 1) {
+        initials = initials.shift().charAt(0) + initials.pop().charAt(0);
+      } else {
+        initials = name.substring(0, 2);
+      }
+
+      return initials.toUpperCase();
+    }
+
+  }
+
   useEffect(() => {
     if (props.showDetail.id_detail) {
       props.getDetailProfile({idProfile: props.showDetail.id_detail});
@@ -385,26 +401,46 @@ function DetailProfileForm(props: DetailProfileFormProps) {
             content={content}
             trigger="click">
 
-            <img
+            <Avatar
               alt={"Ảnh đại diện"}
-              src={props.detail.result?.image ? props.detail.result?.image : require('src/assets/images/profile.png')}
-              style={{width: "100px", height: "100px", borderRadius: "50%"}}/>
+              size={100}
+              src={props.detail.result?.image ? props.detail.result?.image : "#"}
+              style={{backgroundColor: props.detail.result?.avatarColor, fontSize: 50, fontWeight: 600}}>
+              {props.detail.result?.image ? null : getInitials(props.detail.result?.fullName)}
+            </Avatar>
+
           </Popover>
           <div className="detail-paragraph-1__name">
 
             <div style={{display: "flex", justifyContent: "space-between"}}>
               <h2>{props.detail.result?.fullName}</h2>
               {
-               props.detail.result?.statusCVName === "APPLY" ? <Tag color="#cfcfcf" style={{height: 22,fontSize:17}}>{props.detail.result?.statusCVName}</Tag> :
-                 props.detail.result?.statusCVName === "INTERVIEW" ? <Tag color="#339cff" style={{height: 22,fontSize:17}}>{props.detail.result?.statusCVName}</Tag> :
-                   props.detail.result?.statusCVName === "OFFER" ? <Tag color="#fac000" style={{height: 22,fontSize:17}}>{props.detail.result?.statusCVName}</Tag> :
-                     props.detail.result?.statusCVName === "HIRED" ? <Tag color="#87d068" style={{height: 22,fontSize:17}}>{props.detail.result?.statusCVName}</Tag> :
-                       props.detail.result?.statusCVName === "REJECT" ? <Tag color="#fa0000" style={{height: 22,fontSize:17}}>{props.detail.result?.statusCVName}</Tag> :
-                         props.detail.result?.statusCVName === "TEST" ? <Tag color="#8900fa" style={{height: 22,fontSize:17}}>{props.detail.result?.statusCVName}</Tag> : null
+                props.detail.result?.statusCVName === "APPLY" ?
+                  <Tag color="#cfcfcf" style={{height: 22, fontSize: 17}}>{props.detail.result?.statusCVName}</Tag> :
+                  props.detail.result?.statusCVName === "INTERVIEW" ?
+                    <Tag color="#339cff" style={{height: 22, fontSize: 17}}>{props.detail.result?.statusCVName}</Tag> :
+                    props.detail.result?.statusCVName === "OFFER" ? <Tag color="#fac000" style={{
+                        height: 22,
+                        fontSize: 17
+                      }}>{props.detail.result?.statusCVName}</Tag> :
+                      props.detail.result?.statusCVName === "HIRED" ? <Tag color="#87d068" style={{
+                          height: 22,
+                          fontSize: 17
+                        }}>{props.detail.result?.statusCVName}</Tag> :
+                        props.detail.result?.statusCVName === "REJECT" ? <Tag color="#fa0000" style={{
+                            height: 22,
+                            fontSize: 17
+                          }}>{props.detail.result?.statusCVName}</Tag> :
+                          props.detail.result?.statusCVName === "TEST" ? <Tag color="#8900fa" style={{
+                            height: 22,
+                            fontSize: 17
+                          }}>{props.detail.result?.statusCVName}</Tag> : null
               }
 
             </div>
-
+            <div>{props.detail.result?.skill?.map((item:any,index:any)=>{
+              return item.name
+            })}</div>
             <StarRatings
               rating={rate}
               starRatedColor="#FEDE00"
@@ -459,14 +495,14 @@ function DetailProfileForm(props: DetailProfileFormProps) {
           <div className="detail-paragraph-3__content">
             <div>
               <Icon type="environment" className="mr-2"/>
-              <span>Địa chỉ phỏng vấn: {props.booking.result?.address}</span>
+              <span>Địa chỉ phỏng vấn: {props.booking.result?.interviewAddress}</span>
             </div>
 
             <div>
               <Icon type="team" className="mr-2"/>
               <span>Hội đồng tuyển dụng:</span>
               <ul>
-                {props.account.rows?.filter((item: any) => props.booking.result?.interviewer.includes(item.username))
+                {props.account.rows?.filter((item: any) => props.booking.result?.interviewers.includes(item.username))
                   .map((item: any, index: any) => {
                     return <li key={index}>
                       {item.fullName}
@@ -477,7 +513,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
             <div>
               <Icon type="calendar" className="mr-2"/>
-              <span>Thời gian phỏng vấn: {props.booking.result ? moment(unixTimeToDate(props.booking.result?.time)).format('HH:mm DD/MM/YYYY') : ''} </span>
+              <span>Thời gian phỏng vấn: {props.booking.result ? moment(unixTimeToDate(props.booking.result?.date)).format('HH:mm DD/MM/YYYY') : ''} </span>
             </div>
             <div style={{display: "flex", justifyContent: "space-between"}}>
               <h1>Trạng thái phỏng vấn</h1>
@@ -490,12 +526,12 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
             <div>
               <Icon type="audit" className="mr-2"/>
-              <span>Nội dung phỏng vấn: {props.booking.result?.content}</span>
+              {/*<span>Nội dung phỏng vấn: {props.booking.result?.content}</span>*/}
             </div>
 
             <div>
               <Icon type="question-circle" className="mr-2"/>
-              <span>Câu hỏi: {props.booking.result?.question}</span>
+              {/*<span>Câu hỏi: {props.booking.result?.question}</span>*/}
             </div>
 
             <Table
@@ -517,7 +553,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
             <div>
               <Icon type="check-circle" className="mr-2"/>
-              <span>Lý do: {props.booking.result?.reason}</span>
+              {/*<span>Lý do: {props.booking.result?.reason}</span>*/}
             </div>
 
 

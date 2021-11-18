@@ -11,6 +11,7 @@ export interface CreateBookingAction {
 export const CREATE_BOOKING = "CREATE_BOOKING";
 export const CREATE_BOOKING_SUCCESS = "CREATE_BOOKING_SUCCESS";
 export const CREATE_BOOKING_ERROR = "CREATE_BOOKING_ERROR";
+export const COUNT_BOOKING_NUMBER = "COUNT_BOOKING_NUMBER";
 
 export const createBooking = (request: CreateBookingRequest): CreateBookingAction => ({
   type: CREATE_BOOKING,
@@ -25,4 +26,7 @@ export const createBookingSuccess = (response: ResponseBase2): CreateBookingActi
 export const createBookingError = (error: AppError): CreateBookingAction => ({
   type: CREATE_BOOKING_ERROR,
   error
+});
+export const countBookingNumber = () => ({
+  type: COUNT_BOOKING_NUMBER,
 });

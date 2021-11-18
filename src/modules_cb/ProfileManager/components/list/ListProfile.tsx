@@ -121,7 +121,7 @@ function ListProfile(props: ListProfileProps) {
         return <div style={{display: 'flex', alignItems: 'center'}}>
           <div style={{marginRight: 10}}>
             {/*<Badge count={1}>*/}
-            <Avatar  src={record.image ? record.image : "#"} >
+            <Avatar  src={record.image ? record.image : "#"} style={{backgroundColor:record.avatarColor}}>
               {record.image ? null : getInitials(record.fullName)}
             </Avatar>
             {/*</Badge>*/}

@@ -22,6 +22,9 @@ import ViewGroupManagerPage from './modules_cb/ViewGroupManager/pages/ViewGroupM
 import GroupAPIManagerPage from "./modules_cb/GroupAPIManager/pages/GroupAPIManagerPage";
 import TalentPoolManagerPages from "./modules_cb/TalentPoolManager/pages/TalentPoolManagerPages";
  import ScheduleManagerPages from "./modules_cb/ScheduleManager/pages/ScheduleManagerPages";
+ import SkillManagerPages from "./modules_cb/SkillManager/pages/SkillManagerPages";
+ import AddressManagerPages from "./modules_cb/AddressManager/pages/AddressManagerPages";
+ import ReasonRejectManagerPages from "./modules_cb/ReasonRejectManager/pages/ReasonRejectManagerPages";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -65,6 +68,9 @@ const Routes = (props: PropsFromRedux) => {
         <Route path="/group-api-manager" component={GroupAPIManagerPage} isLogin={props.isLogin}/>
         <Route path="/talent-pool-manager" component={TalentPoolManagerPages} isLogin={props.isLogin}/>
         <Route path="/schedule" component={ScheduleManagerPages} isLogin={props.isLogin}/>
+        <Route path="/skill-manager" component={SkillManagerPages} isLogin={props.isLogin}/>
+        <Route path="/reason-reject-manager" component={ReasonRejectManagerPages} isLogin={props.isLogin}/>
+        <Route path="/address-manager" component={AddressManagerPages} isLogin={props.isLogin}/>
         <Redirect exact from="/*" to={'/home'}/>
       </Switch>
     </div>

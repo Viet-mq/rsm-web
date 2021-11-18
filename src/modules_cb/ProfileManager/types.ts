@@ -1,6 +1,7 @@
 //profile
 export interface ProfileEntity {
   id: string,
+  avatarColor:string,
   dateOfApply: number,
   dateOfBirth: number,
   email: string,
@@ -25,12 +26,18 @@ export interface ProfileEntity {
   cv: string,
   urlCV: string,
   departmentId: string,
-  departmentName: string
+  departmentName: string,
+  levelSchool: string
+  mailRef: string
+  recruitmentId: string
+  recruitmentName: string
+  skill: string[]
 }
 
 export interface CreateProfileRequest {
   dateOfBirth: number,
   email: string,
+  avatarColor:string,
   fullName: string,
   gender: string,
   hometown: string,
@@ -42,10 +49,12 @@ export interface CreateProfileRequest {
   sourceCV: string,
   levelSchool: string,
   mailRef: string,
-  skill: string,
+  skill: string[],
   talentPool: string,
   recruitment: string,
   department: string,
+  dateOfApply: number,
+  
 }
 
 export interface UpdateProfileRequest {
@@ -64,7 +73,10 @@ export interface UpdateProfileRequest {
   sourceCV: string,
   talentPool: string
   department: string,
-
+  levelSchool: string,
+  mailRef: string,
+  recruitment: string,
+  skill:string[]
 }
 
 export interface DeleteProfileRequest {
@@ -80,8 +92,6 @@ export interface SearchRequest {
   key: string ,
   size: number,
 }
-
-
 
 //cv
 export interface UploadCVRequest {
@@ -102,56 +112,93 @@ export interface DetailCV {
 //booking
 export interface BookingEntity {
   id: string | any,
+  avatarColor:string,
   idProfile: string | any,
-  time: number,
-  address: string,
-  form: string,
-  interviewer: string[],
-  interviewee: string,
-  content: string,
-  question: string,
-  comments: string,
-  evaluation: string,
-  statusId: string,
-  statusName: string,
-  reason: string,
-  timeStart: number,
-  timeFinish: number
+  floor: string,
+  interviewAddress: string,
+  interviewTime: number,
+  interviewers: string[],
+  note: string,
+  recruitmentId: string,
+  type: string
+  recruitmentName: string,
+  date: number,
+
+
+  // time: number,
+  // address: string,
+  // form: string,
+  // interviewer: string[],
+  // interviewee: string,
+  // content: string,
+  // question: string,
+  // comments: string,
+  // evaluation: string,
+  // statusId: string,
+  // statusName: string,
+  // reason: string,
+  // timeStart: number,
+  // timeFinish: number
+
+
 }
 
 export interface CreateBookingRequest {
-  idProfile: string | any,
-  time: number,
-  address: string,
-  form: string,
-  interviewer: string[],
-  interviewee: string,
-  content: string,
-  question: string[],
-  comments: string[],
-  evaluation: string,
-  status: string,
-  reason: string,
-  timeStart: number,
-  timeFinish: number
+  avatarColor:string,
+  idProfile: string|any ,
+  floor: string,
+  interviewAddress: string,
+  interviewTime: number,
+  interviewers: string[],
+  note: string,
+  recruitmentId: string,
+  type: string,
+  date: number,
+
+
+  // idProfile: string | any,
+  // time: number,
+  // avatarColor:string,
+  // address: string,
+  // form: string,
+  // interviewer: string[],
+  // interviewee: string,
+  // content: string,
+  // question: string[],
+  // comments: string[],
+  // evaluation: string,
+  // status: string,
+  // reason: string,
+  // timeStart: number,
+  // timeFinish: number
 }
 
 export interface UpdateBookingRequest {
+  date: number,
+  floor: string,
   id: string,
-  idProfile: string,
-  time: number,
-  address: string,
-  form: string,
-  interviewer: string[],
-  interviewee: string,
-  content: string,
-  question: string[],
-  comments: string[],
-  evaluation: string,
-  status: string,
-  reason: string,
-  timeStart: number,
-  timeFinish: number
+  interviewAddress: string,
+  interviewTime: number,
+  interviewers: string[],
+  note: string,
+  recruitmentId: string,
+  type: string
+  
+  // id: string,
+  // idProfile: string,
+  // time: number,
+  // address: string,
+  // form: string,
+  // interviewer: string[],
+  // interviewee: string,
+  // content: string,
+  // question: string[],
+  // comments: string[],
+  // evaluation: string,
+  // status: string,
+  // reason: string,
+  // timeStart: number,
+  // timeFinish: number
 }
 
 export interface DataShowBooking {
@@ -182,6 +229,7 @@ export interface UpdateDetailRequest {
 
 export interface DetailProfileEntity {
   id: string | any,
+  avatarColor:string,
   fullName: string | any,
   gender: string,
   phoneNumber: string,
@@ -207,7 +255,15 @@ export interface DetailProfileEntity {
   statusCVName: string,
   image: string,
   talentPoolId: string
-  talentPoolName: string
+  talentPoolName: string,
+  departmentId: string
+  departmentName: string
+  levelSchool: string
+  mailRef: string
+  recruitmentId: string
+  recruitmentName: string
+  skill: string[]
+
 }
 
 export interface ActivityLogsEntity {

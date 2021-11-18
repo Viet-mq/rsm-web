@@ -17,6 +17,9 @@ import profileManager,{ProfileManagerModuleState} from "../modules_cb/ProfileMan
 import viewGroupManager, {ViewGroupManagerModuleState} from "../modules_cb/ViewGroupManager/redux/reducers";
 import groupAPIManager,{GroupAPIModuleState} from "../modules_cb/GroupAPIManager/redux/reducers";
 import talentPoolManager,{TalentPoolManagerModuleState} from "../modules_cb/TalentPoolManager/redux/reducers";
+import skillManager,{SkillManagerModuleState} from "../modules_cb/SkillManager/redux/reducers";
+import addressManager,{AddressManagerModuleState} from "../modules_cb/AddressManager/redux/reducers";
+import reasonRejectManager,{ReasonRejectManagerModuleState} from "../modules_cb/ReasonRejectManager/redux/reducers";
 
 export interface RootState {
   auth: AuthModuleState;
@@ -36,6 +39,9 @@ export interface RootState {
   profileManager: ProfileManagerModuleState,
   viewGroupManager:ViewGroupManagerModuleState,
   groupAPIManager:GroupAPIModuleState,
+  skillManager:SkillManagerModuleState,
+  addressManager:AddressManagerModuleState,
+  reasonRejectManager:ReasonRejectManagerModuleState,
 }
 
 export default combineReducers<RootState>({
@@ -56,4 +62,7 @@ export default combineReducers<RootState>({
   viewGroupManager,
   groupAPIManager,
   talentPoolManager,
+  skillManager,
+  addressManager,
+  reasonRejectManager,
 });

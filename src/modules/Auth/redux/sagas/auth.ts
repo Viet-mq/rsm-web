@@ -15,6 +15,9 @@ import {getListTalentPool} from "../../../../modules_cb/TalentPoolManager/redux/
 import {getListStatusCV} from "../../../../modules_cb/StatusCVManager/redux/actions";
 import {getListSchool} from "../../../../modules_cb/SchoolManager/redux/actions";
 import {getListAccount} from "../../../../modules_cb/AccountManager/redux/actions";
+import {getListSkill} from "../../../../modules_cb/SkillManager/redux/actions";
+import {getListAddress} from "../../../../modules_cb/AddressManager/redux/actions";
+import {getListReasonReject} from "../../../../modules_cb/ReasonRejectManager/redux/actions";
 
 const TOKEN_KEY = 'auth-n-token';
 
@@ -42,6 +45,9 @@ export function* loginAsync(action: LoginAction) {
       yield put(getListStatusCV({page: 1, size: 100}))
       yield put(getListSchool({page: 1, size: 100}))
       yield put(getListAccount({page: 1, size: 100}))
+      yield put(getListSkill({page: 1, size: 100}))
+      yield put(getListAddress({page: 1, size: 100}))
+      yield put(getListReasonReject({page: 1, size: 100}))
 
 
     } else {

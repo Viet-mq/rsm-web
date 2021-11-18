@@ -1,4 +1,4 @@
-import {Icon, Menu, Avatar, Badge} from 'antd';
+import {Badge, Icon, Menu, Tag} from 'antd';
 import React from 'react';
 import {Link} from 'react-router-dom';
 import {RootState} from 'src/redux/reducers';
@@ -9,24 +9,27 @@ import {
   AiOutlineCheckCircle,
   AiOutlineFolderView,
   AiOutlineLinkedin,
+  AiOutlineMinusCircle,
   FaRegUser,
   FaSchool,
   FaUserLock,
   FaUsersCog,
+  GiSkills,
   HiOutlineUserGroup,
-  ImProfile,
   IoEyeSharp,
   IoIosListBox,
   MdOutlineSource,
   MdOutlineWorkOutline,
   RiFolderUserLine,
-  RiMailSettingsLine
+  RiMailSettingsLine,
+  RiMapPin2Line
 } from "react-icons/all";
 
 const mapStateToProps = (state: RootState) => {
   return {
     isLogin: state.auth.auth.data?.code === 0,
     auth: state.auth.auth.data,
+    count: state.profileManager.createBooking.count
   };
 };
 
@@ -65,15 +68,18 @@ const Nav = (props: IProps) => {
 
       <Menu.Item key="profile-manager" style={{display: 'flex', alignItems: 'center'}}>
         <Link to={`/profile-manager`}>
-          <Icon type="solution" />
+          <Icon type="solution"/>
           <span>Ứng viên</span>
         </Link>
       </Menu.Item>
 
       <Menu.Item key="schedule" style={{display: 'flex', alignItems: 'center'}}>
-        <Link to={`/schedule`}>
-          <Icon type="calendar" />
-          <span>Lịch</span>
+        <Link to={`/schedule`} style={{display: "flex", justifyContent: "space-between", width: "100%"}}>
+          <div>
+            <Icon type="calendar"/>
+            <span>Lịch</span>
+          </div>
+          {props.count ? <Tag color="#ae0900">{props.count}</Tag> : null}
         </Link>
       </Menu.Item>
 
@@ -118,10 +124,10 @@ const Nav = (props: IProps) => {
           </Link>
         </Menu.Item>
 
-        <Menu.Item key="department-manager" style={{display: 'flex', alignItems: 'center'}}>
-          <Link to={`/department-manager`}>
-            <HiOutlineUserGroup className="mr-2"/>
-            <span>Phòng ban </span>
+        <Menu.Item key="skill-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to={`/skill-manager`}>
+            <GiSkills className="mr-2"/>
+            <span>Kỹ năng công việc</span>
           </Link>
         </Menu.Item>
 
@@ -129,6 +135,13 @@ const Nav = (props: IProps) => {
           <Link to={`/joblevel-manager`}>
             <FaRegUser className="mr-2"/>
             <span>Cấp bậc công việc </span>
+          </Link>
+        </Menu.Item>
+
+        <Menu.Item key="department-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to={`/department-manager`}>
+            <HiOutlineUserGroup className="mr-2"/>
+            <span>Phòng ban </span>
           </Link>
         </Menu.Item>
 
@@ -160,6 +173,20 @@ const Nav = (props: IProps) => {
           </Link>
         </Menu.Item>
 
+        <Menu.Item key="reason-reject-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to={`/reason-reject-manager`}>
+            <AiOutlineMinusCircle className="mr-2"/>
+            <span>Lý do từ chối </span>
+          </Link>
+        </Menu.Item>
+
+        <Menu.Item key="address-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to={`/address-manager`}>
+            <RiMapPin2Line className="mr-2"/>
+            <span>Địa chỉ </span>
+          </Link>
+        </Menu.Item>
+
         <Menu.Item key="talent-pool-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/talent-pool-manager`}>
             <MdOutlineSource className="mr-2"/>
@@ -173,9 +200,9 @@ const Nav = (props: IProps) => {
         {props.auth?.pools.map((item: any) => {
           return <Menu.Item key={item.id} style={{display: 'flex'}}>
             <Link to={`/talent-pool-manager/${item.id}`} className='nav-element'>
-              <Icon  type="contacts"/>
+              <Icon type="contacts"/>
               <span className="nav-element__content">{item.name} </span>
-              <Badge style={{ backgroundColor: '#818181'}} count={item.count} overflowCount={999}/>
+              <Badge style={{backgroundColor: '#818181'}} count={item.count} overflowCount={999}/>
               {/*<Avatar style={{ backgroundColor: '#818181' }} shape="square" size={25}>{item.count}</Avatar>*/}
             </Link>
           </Menu.Item>

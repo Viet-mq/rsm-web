@@ -3,6 +3,7 @@ import {Avatar, Button, Icon, Input, Popover} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {
+  countBookingNumber,
   showFormBooking,
   showFormCreate,
   showFormUpdate,
@@ -52,7 +53,8 @@ const connector = connect(mapStateToProps, {
   showFormUpdate,
   showFormUploadCV,
   showFormBooking,
-  showFormUploadListCV
+  showFormUploadListCV,
+  countBookingNumber
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -64,7 +66,8 @@ interface IProps extends ReduxProps {
 function ScheduleManagerPages(props: IProps) {
   const dateFormat = 'DD/MM/YYYY';
   useEffect(() => {
-    document.title = "Ứng viên";
+    document.title = "Lịch";
+    props.countBookingNumber();
   }, []);
 
   const handleCreate = (e: any) => {
@@ -203,7 +206,7 @@ function ScheduleManagerPages(props: IProps) {
                 10:30 - 10:40
               </div>
               <div className="c-main-content border-bottom">
-                <Avatar size={25} style={{backgroundColor: setColor()}}>
+                <Avatar size={25} style={{backgroundColor: ''}}>
                   {getInitials("Hồ Đức Duy")}
                 </Avatar>
                 <div className="c-main-content__wrap-main">

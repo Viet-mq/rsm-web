@@ -1,17 +1,19 @@
 import {CreateBookingRequest} from "../../../types";
 import {AppError, ResponseBase2} from "../../../../../models/common";
 import * as Actions from "../../actions";
-import {CreateBookingAction} from "../../actions";
+import {COUNT_BOOKING_NUMBER, CreateBookingAction} from "../../actions";
 
 export interface CreateBookingState {
   loading: boolean,
   request?: CreateBookingRequest,
   response?: ResponseBase2,
-  error?: AppError
+  error?: AppError,
+  count: number
 }
 
 const initState: CreateBookingState = {
-  loading: false
+  loading: false,
+  count: 0,
 }
 
 export default (state = initState, {type, request, response, error}: CreateBookingAction): CreateBookingState => {
@@ -26,12 +28,19 @@ export default (state = initState, {type, request, response, error}: CreateBooki
       return {
         ...state,
         response,
-        loading: false
+        loading: false,
+        count: ++state.count,
       }
     case Actions.CREATE_BOOKING_ERROR:
       return {
         ...state,
         error,
+        loading: false
+      }
+    case Actions.COUNT_BOOKING_NUMBER:
+      return {
+        ...state,
+        count: 0,
         loading: false
       }
     default:
