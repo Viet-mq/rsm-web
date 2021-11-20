@@ -235,7 +235,7 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
                   rules: [
                     {
                       message: 'Vui lòng chọn tin tuyển dụng',
-                      required: true,
+                      required: false,
                     },
                   ],
                 })(

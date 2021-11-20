@@ -9,11 +9,13 @@ import {getListJob, showFormCreate as showJobFormCreate} from "../../JobManager/
 import {getListJobLevel, showFormCreate as showJobLevelFormCreate} from "../../JobLevelManager/redux/actions";
 import {getListSchool, showFormCreate as showSchoolFormCreate} from "../../SchoolManager/redux/actions";
 import {getListSourceCV, showFormCreate as showSourceCVFormCreate} from "../../SourceCVManager/redux/actions";
+import {getListSkill, showFormCreate as showSkillFormCreate} from "../../SkillManager/redux/actions";
 import CreateJobForm from "../../JobManager/components/CreateJobForm";
 import CreateJobLevelForm from "../../JobLevelManager/components/CreateJobLevelForm";
 import CreateSourceCVForm from "../../SourceCVManager/components/CreateSourceCVForm";
 import CreateSchoolForm from "../../SchoolManager/components/CreateSchoolForm";
 import CreateStatusCVForm from "../../StatusCVManager/components/CreateStatusCVForm";
+import CreateSkillForm from "../../SkillManager/components/CreateSkillForm";
 import {getListDepartment, showFormCreate as showDepartmentFormCreate} from "../../DepartmentManager/redux/actions";
 import Loading from "../../../components/Loading";
 import {getListTalentPool} from "../../TalentPoolManager/redux/actions";
@@ -34,7 +36,8 @@ const mapStateToProps = (state: RootState) => ({
   createSchool: state.schoolManager.create,
   createSourceCV: state.sourcecvManager.create,
   listDepartment:state.departmentManager.list,
-
+  listSkill:state.skillManager.list,
+  createSkill: state.skillManager.create
 })
 
 const connector = connect(mapStateToProps,
@@ -52,6 +55,8 @@ const connector = connect(mapStateToProps,
     getActivityLogs,
     getListTalentPool,
     getListDepartment,
+    getListSkill,
+    showSkillFormCreate,
     showDepartmentFormCreate
   });
 
@@ -63,7 +68,7 @@ interface CreateProfileFormProps extends FormComponentProps, ReduxProps {
 function CreateProfileForm(props: CreateProfileFormProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
-  const formItemStyle = {height: '60px'};
+  const formItemStyle = {height: '50px'};
 
   const formItemLayout = {
     labelCol: {
@@ -72,7 +77,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
     },
     wrapperCol: {
       xs: {span: 24},
-      sm: {span: 12},
+      sm: {span: 14},
     },
   };
   const setColor = () => {
@@ -98,7 +103,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
           sourceCV: values.sourceCV,
           job: values.job,
           levelJob: values.levelJob,
-          skill:[],
+          skill:values.skill,
           recruitment:values.recruitment,
           talentPool: values.talentPool,
           hrRef: values.hrRef,
@@ -145,6 +150,14 @@ function CreateProfileForm(props: CreateProfileFormProps) {
       e.target.disabled = false;
     }
     props.showJobLevelFormCreate(true);
+  }
+  const handleCreateSkill = (e: any) => {
+    e.preventDefault();
+    if (e?.target) {
+      e.target.disabled = true;
+      e.target.disabled = false;
+    }
+    props.showSkillFormCreate(true);
   }
   const handleCreateSourceCV = (e: any) => {
     e.preventDefault();
@@ -197,7 +210,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
       <Modal
         zIndex={2}
         maskClosable={false}
-        title="Tạo mới profile"
+        title="Tạo mới thông tin ứng viên"
         visible={props.profileManager.showForm.show_create}
         centered={true}
         width="550px"
@@ -451,20 +464,21 @@ function CreateProfileForm(props: CreateProfileFormProps) {
             </div>
           </Form.Item>
 
-          <Form.Item label="Kỹ năng công việc" className="mb-0" style={{...formItemStyle}}>
+          <Form.Item label="Kỹ năng công việc" className="mb-0" style={{paddingBottom:15}}>
             <div style={{display: 'flex'}}>
               {getFieldDecorator('skill', {
-                initialValue: '',
+                initialValue: undefined,
                 rules: [
                   {
-                    message: 'Vui lòng nhập kỹ năng công việc',
+                    message: 'Vui lòng chọn kỹ năng công việc',
                     required: false,
                   },
                 ],
               })(
                 <Select className="bg-white text-black"
+                        mode="multiple"
                 >
-                  {props.listJobLevel.rows?.map((item: any, index: any) => (
+                  {props.listSkill.rows?.map((item: any, index: any) => (
                     <Option key={index} value={item.id}>{item.name}</Option>
                   ))}
                 </Select>
@@ -473,14 +487,14 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                 size="small"
                 className="ant-btn ml-1 mr-1 ant-btn-sm"
                 style={{height: '32px'}}
-                onClick={handleCreateJobLevel}
+                onClick={handleCreateSkill}
               >
                 <Icon type="plus"/>
               </Button>
             </div>
           </Form.Item>
 
-          <Form.Item label="Tin tuyển dụng" className="mb-0" style={{...formItemStyle}}>
+          <Form.Item label="Tin tuyển dụng"  className="mb-0" style={{...formItemStyle}}>
             <div style={{display: 'flex'}}>
               {getFieldDecorator('recruitment', {
                 initialValue: '',
@@ -491,7 +505,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                   },
                 ],
               })(
-                <Select className="bg-white text-black"
+                <Select className="bg-white text-black" disabled
                 >
                   {props.listTalentPool.rows?.map((item: any, index: any) => (
                     <Option key={index} value={item.id}>{item.name}</Option>
@@ -615,6 +629,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
       <CreateSchoolForm/>
       <CreateStatusCVForm/>
       <CreateDepartmentForm/>
+      <CreateSkillForm/>
 
       {props.createJob.loading ||
       props.createJobLevel.loading ||

@@ -5,11 +5,11 @@ import {ColumnProps} from "antd/lib/table";
 import {Avatar, Badge, Button, Icon, Input, Popconfirm, Select, Table, Tooltip, TreeSelect} from "antd";
 import {emptyText} from "src/configs/locales";
 import {
-  deleteProfile, getActivityLogs,
+  deleteProfile,
+  getActivityLogs,
   getElasticSearch,
   getListProfile,
   showFormBooking,
-  showFormCreate,
   showFormDetail,
   showFormUpdate,
   showFormUploadCV
@@ -42,7 +42,6 @@ const mapStateToProps = (state: RootState) => ({
 const connector = connect(mapStateToProps, {
   getListProfile,
   deleteProfile,
-  showFormCreate,
   showFormUpdate,
   showFormDetail,
   showFormUploadCV,
@@ -83,10 +82,10 @@ function ListProfile(props: ListProfileProps) {
     talentPool: null,
   })
 
-  const getInitials = (name:string) => {
-    let initials:any = name.split(' ');
+  const getInitials = (name: string) => {
+    let initials: any = name.split(' ');
 
-    if(initials.length > 1) {
+    if (initials.length > 1) {
       initials = initials.shift().charAt(0) + initials.pop().charAt(0);
     } else {
       initials = name.substring(0, 2);
@@ -96,8 +95,8 @@ function ListProfile(props: ListProfileProps) {
   }
 
   const setColor = () => {
-    const randomColor:string = Math.floor(Math.random()*16777215).toString(16);
-    return "#"+randomColor;
+    const randomColor: string = Math.floor(Math.random() * 16777215).toString(16);
+    return "#" + randomColor;
   }
 
   const columns: ColumnProps<ProfileEntity>[] = [
@@ -121,7 +120,7 @@ function ListProfile(props: ListProfileProps) {
         return <div style={{display: 'flex', alignItems: 'center'}}>
           <div style={{marginRight: 10}}>
             {/*<Badge count={1}>*/}
-            <Avatar  src={record.image ? record.image : "#"} style={{backgroundColor:record.avatarColor}}>
+            <Avatar src={record.image ? record.image : "#"} style={{backgroundColor: record.avatarColor}}>
               {record.image ? null : getInitials(record.fullName)}
             </Avatar>
             {/*</Badge>*/}
@@ -511,15 +510,15 @@ function ListProfile(props: ListProfileProps) {
   }, [props.elasticSearch.triggerSearch])
 
   function btnSearchClicked() {
-      props.getListProfile({
-        fullName: selected.name,
-        job: selected.job,
-        levelJob: selected.jobLevel,
-        department: selected.department,
-        talentPool: selected.talentPool,
-        page: 1,
-        size: 30,
-      })
+    props.getListProfile({
+      fullName: selected.name,
+      job: selected.job,
+      levelJob: selected.jobLevel,
+      department: selected.department,
+      talentPool: selected.talentPool,
+      page: 1,
+      size: 30,
+    })
   }
 
   return (

@@ -1,11 +1,11 @@
 //profile
 export interface ProfileEntity {
   id: string,
-  avatarColor:string,
+  avatarColor: string,
   dateOfApply: number,
   dateOfBirth: number,
   email: string,
-  fullName: string|any,
+  fullName: string | any,
   gender: string,
   hometown: string,
   hrRef: string,
@@ -37,7 +37,7 @@ export interface ProfileEntity {
 export interface CreateProfileRequest {
   dateOfBirth: number,
   email: string,
-  avatarColor:string,
+  avatarColor: string,
   fullName: string,
   gender: string,
   hometown: string,
@@ -54,7 +54,7 @@ export interface CreateProfileRequest {
   recruitment: string,
   department: string,
   dateOfApply: number,
-  
+
 }
 
 export interface UpdateProfileRequest {
@@ -76,7 +76,7 @@ export interface UpdateProfileRequest {
   levelSchool: string,
   mailRef: string,
   recruitment: string,
-  skill:string[]
+  skill: string[]
 }
 
 export interface DeleteProfileRequest {
@@ -89,7 +89,7 @@ export interface UploadAvatarRequest {
 }
 
 export interface SearchRequest {
-  key: string ,
+  key: string,
   size: number,
 }
 
@@ -112,18 +112,19 @@ export interface DetailCV {
 //booking
 export interface BookingEntity {
   id: string | any,
-  avatarColor:string,
+  avatarColor: string,
   idProfile: string | any,
   floor: string,
-  interviewAddress: string,
   interviewTime: number,
   interviewers: string[],
   note: string,
   recruitmentId: string,
   type: string
   recruitmentName: string,
+  interviewAddressId: string,
+  interviewAddressName: string,
+  fullName: string,
   date: number,
-
 
   // time: number,
   // address: string,
@@ -144,8 +145,8 @@ export interface BookingEntity {
 }
 
 export interface CreateBookingRequest {
-  avatarColor:string,
-  idProfile: string|any ,
+  avatarColor: string,
+  idProfile: string | any,
   floor: string,
   interviewAddress: string,
   interviewTime: number,
@@ -183,7 +184,7 @@ export interface UpdateBookingRequest {
   note: string,
   recruitmentId: string,
   type: string
-  
+
   // id: string,
   // idProfile: string,
   // time: number,
@@ -229,7 +230,7 @@ export interface UpdateDetailRequest {
 
 export interface DetailProfileEntity {
   id: string | any,
-  avatarColor:string,
+  avatarColor: string,
   fullName: string | any,
   gender: string,
   phoneNumber: string,
@@ -286,8 +287,8 @@ export interface NoteEntity {
   evaluation: string,
   fileName?: any,
   url: string,
-  updateAt:number,
-  updateBy:string
+  updateAt: string,
+  updateBy: string
 }
 
 export interface UpdateNoteRequest {

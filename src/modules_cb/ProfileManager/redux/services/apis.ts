@@ -3,30 +3,30 @@ import {EXPORT, GET, POST, POSTIMAGE} from "src/services";
 import {NoteEntity, ProfileEntity, UploadAvatarRequest} from "../../types";
 
 export const getListProfile = async (params: any): Promise<ListResponseBase2<ProfileEntity>> => {
-  let url="api-svc/profile/list?"
-  if(params.fullName!==null&&params.fullName!==undefined){
+  let url = "api-svc/profile/list?"
+  if (params.fullName !== null && params.fullName !== undefined) {
     console.log(params.fullName)
-    url+="fullName="+params.fullName+"&"
+    url += "fullName=" + params.fullName + "&"
   }
-  if(params.job!==null&&params.job!==undefined){
-    url+="job="+params.job+"&"
+  if (params.job !== null && params.job !== undefined) {
+    url += "job=" + params.job + "&"
   }
-  if(params.levelJob!==null&&params.levelJob!==undefined){
-    url+="levelJob="+params.fullName+"&"
+  if (params.levelJob !== null && params.levelJob !== undefined) {
+    url += "levelJob=" + params.fullName + "&"
   }
-  if(params.department!==null&&params.department!==undefined){
-    url+="department="+params.department+"&"
+  if (params.department !== null && params.department !== undefined) {
+    url += "department=" + params.department + "&"
   }
-  if(params.talentPool!==null&&params.talentPool!==undefined){
-    url+="talentPool="+params.talentPool+"&"
+  if (params.talentPool !== null && params.talentPool !== undefined) {
+    url += "talentPool=" + params.talentPool + "&"
   }
-  if(params.page!==null&&params.page!==undefined){
-    url+="page="+params.page+"&"
+  if (params.page !== null && params.page !== undefined) {
+    url += "page=" + params.page + "&"
   }
-  if(params.size!==null&&params.size!==undefined){
-    url+="size="+params.size
+  if (params.size !== null && params.size !== undefined) {
+    url += "size=" + params.size
   }
-  const response = (await GET(url, )) as any;
+  const response = (await GET(url,)) as any;
   return {
     total: response.total,
     rows: response.rows || [],
@@ -109,7 +109,8 @@ export const getListNote = async (params: any): Promise<ListResponseBase2<NoteEn
 
 export const createNote = async (params?: any) => {
   let formData = new FormData();
-  formData.append('file', params.file);
+  if (params.file != null)
+    formData.append('file', params.file);
   formData.append('idProfile', params.idProfile);
   formData.append('username', params.username);
   formData.append('comment', params.comment);
@@ -127,7 +128,8 @@ export const deleteNote = async (params?: any): Promise<ResponseBase2> => {
 
 export const updateNote = async (params?: any) => {
   let formData = new FormData();
-  formData.append('file', params.file);
+  if (params.file != null)
+    formData.append('file', params.file);
   formData.append('id', params.id);
   formData.append('username', params.username);
   formData.append('comment', params.comment);
@@ -147,7 +149,7 @@ export const exportExcelFile = async (params?: any): Promise<ResponseBase2> => {
   return (await EXPORT('api-svc/excel/export', params)) as ResponseBase2;
 };
 
-export const uploadAvatar = async (params?:UploadAvatarRequest) => {
+export const uploadAvatar = async (params?: UploadAvatarRequest) => {
   let formData = new FormData();
   formData.append('image', params?.image);
   formData.append('idProfile', params?.profileId);

@@ -1,6 +1,6 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import { showFormUpdate, updateProfile} from "../redux/actions";
+import {showFormUpdate, updateProfile} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, DatePicker, Form, Icon, Input, Modal, Select, TreeSelect} from "antd";
 import React, {FormEvent, useEffect, useState} from "react";
@@ -14,11 +14,13 @@ import CreateJobForm from "../../JobManager/components/CreateJobForm";
 import CreateJobLevelForm from "../../JobLevelManager/components/CreateJobLevelForm";
 import CreateSourceCVForm from "../../SourceCVManager/components/CreateSourceCVForm";
 import CreateSchoolForm from "../../SchoolManager/components/CreateSchoolForm";
+import CreateSkillForm from "../../SkillManager/components/CreateSkillForm";
 
 import Loading from "../../../components/Loading";
 import {getListTalentPool} from "../../TalentPoolManager/redux/actions";
 import {getListDepartment, showFormCreate as showDepartmentFormCreate} from "../../DepartmentManager/redux/actions";
 import CreateDepartmentForm from "../../DepartmentManager/components/CreateDepartmentForm";
+import {showFormCreate as showSkillFormCreate} from "../../SkillManager/redux/actions";
 
 const {Option} = Select;
 
@@ -28,13 +30,14 @@ const mapStateToProps = (state: RootState) => ({
   listJobLevel: state.joblevelManager.list,
   listSchool: state.schoolManager.list,
   listSourceCV: state.sourcecvManager.list,
-  listDepartment:state.departmentManager.list,
+  listDepartment: state.departmentManager.list,
   createJob: state.jobManager.create,
   createJobLevel: state.joblevelManager.create,
   createSchool: state.schoolManager.create,
   createSourceCV: state.sourcecvManager.create,
-  listTalentPool:state.talentPoolManager.list,
-
+  listTalentPool: state.talentPoolManager.list,
+  listSkill:state.skillManager.list,
+  createSkill: state.skillManager.create
 })
 
 const connector = connect(mapStateToProps,
@@ -51,6 +54,7 @@ const connector = connect(mapStateToProps,
     showSourceCVFormCreate,
     getListTalentPool,
     getListDepartment,
+    showSkillFormCreate,
     showDepartmentFormCreate
   });
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -60,7 +64,7 @@ interface UpdateProfileFormProps extends FormComponentProps, ReduxProps {
 
 function UpdateProfileForm(props: UpdateProfileFormProps) {
   const {getFieldDecorator, resetFields} = props.form;
-  const formItemStyle = {height: '60px'};
+  const formItemStyle = {height: '50px'};
   const formItemLayout = {
     labelCol: {
       xs: {span: 24},
@@ -68,7 +72,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     },
     wrapperCol: {
       xs: {span: 24},
-      sm: {span: 16},
+      sm: {span: 14},
     },
   };
 
@@ -94,12 +98,11 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           sourceCV: values.sourceCV,
           gender: values.gender,
           talentPool: values.talentPoolId,
-          department:values.department,
+          department: values.department,
           levelSchool: values.levelSchool,
           mailRef: values.mailRef,
           recruitment: values.recruitment,
-          // skill:[values.skill]
-          skill:[]
+          skill:values.skill,
         }
         props.updateProfile(req);
         return;
@@ -159,32 +162,40 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     props.showDepartmentFormCreate(true);
   }
 
-  const convertArrayToTree = (arrays:any)=>{
-    let dataFetch:any=[];
-    for (let i=0;i<arrays.length;i++){
-      if(arrays[i]?.children){
+  const convertArrayToTree = (arrays: any) => {
+    let dataFetch: any = [];
+    for (let i = 0; i < arrays.length; i++) {
+      if (arrays[i]?.children) {
         dataFetch.push({
-          title:arrays[i].name,
-          key:arrays[i].id,
-          value:arrays[i].id,
-          children:convertArrayToTree(arrays[i].children)
+          title: arrays[i].name,
+          key: arrays[i].id,
+          value: arrays[i].id,
+          children: convertArrayToTree(arrays[i].children)
         })
-      }
-      else{
+      } else {
         dataFetch.push({
-          title:arrays[i].name,
-          key:arrays[i].id,
-          value:arrays[i].id,
+          title: arrays[i].name,
+          key: arrays[i].id,
+          value: arrays[i].id,
         })
       }
     }
     return dataFetch;
   }
 
-  const [treeData,setTreeData]=useState([])
-  useEffect(()=>{
+  const [treeData, setTreeData] = useState([])
+  useEffect(() => {
     setTreeData(convertArrayToTree(props.listDepartment.rows))
-  },[props.listDepartment.rows])
+  }, [props.listDepartment.rows])
+
+  const handleCreateSkill = (e: any) => {
+    e.preventDefault();
+    if (e?.target) {
+      e.target.disabled = true;
+      e.target.disabled = false;
+    }
+    props.showSkillFormCreate(true);
+  }
 
   return (
     <div>
@@ -192,7 +203,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
       <Modal
         zIndex={2}
         maskClosable={false}
-        title="Cập nhật Profile hệ thống"
+        title="Cập nhật thông tin ứng viên"
         visible={props.showForm.show_update}
         centered={true}
         width="550px"
@@ -234,7 +245,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
               <DatePicker format={dateFormat} style={{width: "100%"}}/>
             )}
           </Form.Item>
-          
+
           <Form.Item label="Giới tính" className="mb-0" style={{...formItemStyle}}>
             {getFieldDecorator('gender', {
               initialValue: props.showForm.data_update?.gender,
@@ -294,7 +305,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
               <Input placeholder="Quê quán" className="bg-white text-black"/>
             )}
           </Form.Item>
-          
+
           <Form.Item label="Trình độ học vấn" className="mb-0" style={{...formItemStyle}}>
             <div style={{display: 'flex'}}>
               {getFieldDecorator('levelSchool', {
@@ -446,10 +457,10 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
             </div>
           </Form.Item>
 
-          <Form.Item label="Kỹ năng công việc" className="mb-0" style={{...formItemStyle}}>
+          <Form.Item label="Kỹ năng công việc" className="mb-0" style={{paddingBottom:15}}>
             <div style={{display: 'flex'}}>
               {getFieldDecorator('skill', {
-                initialValue: '',
+                initialValue:props.showForm.data_update?.skill.map((item:any)=>item.id)||undefined,
                 rules: [
                   {
                     message: 'Vui lòng nhập kỹ năng công việc',
@@ -458,8 +469,9 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                 ],
               })(
                 <Select className="bg-white text-black"
+                        mode="multiple"
                 >
-                  {props.listJobLevel.rows?.map((item: any, index: any) => (
+                  {props.listSkill.rows?.map((item: any, index: any) => (
                     <Option key={index} value={item.id}>{item.name}</Option>
                   ))}
                 </Select>
@@ -468,7 +480,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                 size="small"
                 className="ant-btn ml-1 mr-1 ant-btn-sm"
                 style={{height: '32px'}}
-                onClick={handleCreateJobLevel}
+                onClick={handleCreateSkill}
               >
                 <Icon type="plus"/>
               </Button>
@@ -486,7 +498,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                   },
                 ],
               })(
-                <Select className="bg-white text-black"
+                <Select className="bg-white text-black" disabled
                 >
                   {props.listTalentPool.rows?.map((item: any, index: any) => (
                     <Option key={index} value={item.id}>{item.name}</Option>
@@ -558,7 +570,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
               })(
                 <TreeSelect
                   className="bg-white text-black"
-                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                  dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
                   treeData={treeData}
                   placeholder="Phòng ban"
                   treeDefaultExpandAll
@@ -607,7 +619,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
       <CreateSourceCVForm/>
       <CreateSchoolForm/>
       <CreateDepartmentForm/>
-
+      <CreateSkillForm/>
       {props.createJob.loading ||
       props.createJobLevel.loading ||
       props.createSchool.loading ||

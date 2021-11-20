@@ -14,10 +14,11 @@ import {RootState} from "src/redux/reducers";
 export function* createBookingAsync(action: CreateBookingAction) {
   try {
     const rs = yield apis.createBooking(action.request);
-    yield put(createBookingSuccess(rs));
     if (rs.code !== 0) {
+      yield put(createBookingError(new AppError(rs.message)));
       NotificationError('Lập lịch phỏng vấn không thành công', "Lỗi: " + rs.message)
     } else {
+      yield put(createBookingSuccess(rs));
       NotificationSuccess('Thành công', "Lập lịch phỏng vấn thành công");
       yield put(showFormBooking(false));
       const params = yield select((state: RootState) => state.profileManager.getBooking.params);

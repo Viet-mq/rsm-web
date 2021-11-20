@@ -39,7 +39,7 @@ const mapStateToProps = (state: RootState) => ({
   note: state.profileManager.getListNote,
   createNote: state.profileManager.createNote,
   updateNote: state.profileManager.updateNote,
-  skill:state.skillManager.list,
+  skill: state.skillManager.list,
 })
 
 const connector = connect(mapStateToProps,
@@ -168,12 +168,24 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     props.showFormCreateNote(true, props.detail.result?.id);
   }
 
-  const columns: ColumnProps<NoteEntity>[] = [
+  const  columns: ColumnProps<NoteEntity>[] = [
     {
       title: "Người phỏng vấn",
       dataIndex: "fullName",
-      width: 100,
-      key: '1'
+      width: 110,
+      key: 'fullName',
+      render: (text: string, record: NoteEntity) => {
+        return <div>
+          <div>
+          <span style={{color: "#B2B2B2"}}>
+                {moment(unixTimeToDate(parseInt(record.updateAt, 10))).format('DD/MM/YYYY HH:mm')}</span>
+          </div>
+
+          <span style={{fontWeight: 500,}}>
+                        {record.fullName}
+          </span>
+        </div>
+      }
     },
     {
       title: "Nhận xét",
@@ -184,7 +196,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     {
       title: "Đánh giá",
       dataIndex: "evaluation",
-      width: 100,
+      width: 70,
       key: "evaluation",
     },
     {
@@ -196,15 +208,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
                                                        target="_blank">{record.fileName}</a>,
 
     },
-    {
-      title: "Thời gian sửa",
-      dataIndex: "updateAt",
-      width: 100,
-      key: "updateAt",
-      render: (value: string) => {
-        return moment(unixTimeToDate(parseInt(value, 10))).format('DD/MM/YYYY HH:mm');
-      },
-    },
+
     {
       title: "Người sửa",
       dataIndex: "updateBy",
@@ -216,8 +220,9 @@ function DetailProfileForm(props: DetailProfileFormProps) {
         return <div style={{whiteSpace: 'nowrap'}}>Thao tác</div>;
       },
       dataIndex: 'action',
-      width: 90,
-      fixed: 'right',
+      width: 60,
+      align: "center",
+      // fixed: 'right',
       render: (_text: string, record: NoteEntity) => {
         return (
           <div style={{whiteSpace: 'nowrap'}}>
@@ -438,7 +443,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
               }
 
             </div>
-            <div>{props.detail.result?.skill?.map((item:any,index:any)=>{
+            <div>{props.detail.result?.skill?.map((item: any, index: any) => {
               return item.name
             })}</div>
             <StarRatings
@@ -488,21 +493,21 @@ function DetailProfileForm(props: DetailProfileFormProps) {
               <Button size="small" className="ant-btn mr-1 ant-btn-sm"
                       onClick={event => onBtnUpdateBooking(event)}
               >
-                <Icon type="edit"/>
+                <Icon type="calendar"/> Đặt/Sửa lịch
               </Button>
             </div>
           </div>
           <div className="detail-paragraph-3__content">
             <div>
               <Icon type="environment" className="mr-2"/>
-              <span>Địa chỉ phỏng vấn: {props.booking.result?.interviewAddress}</span>
+              <span>Địa chỉ phỏng vấn: {props.booking.result?.interviewAddressName}</span>
             </div>
 
             <div>
               <Icon type="team" className="mr-2"/>
               <span>Hội đồng tuyển dụng:</span>
               <ul>
-                {props.account.rows?.filter((item: any) => props.booking.result?.interviewers.includes(item.username))
+                {props.account.rows?.filter((item: any) => props.booking.result?.interviewers?.map((item: any) => item.username).includes(item.username))
                   .map((item: any, index: any) => {
                     return <li key={index}>
                       {item.fullName}
@@ -516,7 +521,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
               <span>Thời gian phỏng vấn: {props.booking.result ? moment(unixTimeToDate(props.booking.result?.date)).format('HH:mm DD/MM/YYYY') : ''} </span>
             </div>
             <div style={{display: "flex", justifyContent: "space-between"}}>
-              <h1>Trạng thái phỏng vấn</h1>
+              <h1>Đánh giá</h1>
               <Button size="small" className="ant-btn mr-1 ant-btn-sm"
                       style={{margin: "auto"}}
                       onClick={event => handleCreateNote(event)}>
@@ -524,15 +529,15 @@ function DetailProfileForm(props: DetailProfileFormProps) {
               </Button>
             </div>
 
-            <div>
-              <Icon type="audit" className="mr-2"/>
-              {/*<span>Nội dung phỏng vấn: {props.booking.result?.content}</span>*/}
-            </div>
+            {/*<div>*/}
+            {/*  <Icon type="audit" className="mr-2"/>*/}
+            {/*  <span>Nội dung phỏng vấn: {props.booking.result?.content}</span>*/}
+            {/*</div>*/}
 
-            <div>
-              <Icon type="question-circle" className="mr-2"/>
-              {/*<span>Câu hỏi: {props.booking.result?.question}</span>*/}
-            </div>
+            {/*<div>*/}
+            {/*  <Icon type="question-circle" className="mr-2"/>*/}
+            {/*  <span>Câu hỏi: {props.booking.result?.question}</span>*/}
+            {/*</div>*/}
 
             <Table
               scroll={{x: 1000}}
@@ -540,6 +545,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
               dataSource={props.note.result?.rows}
               columns={columns}
               rowKey="id"
+              bordered
               locale={{emptyText: emptyText}}
               pagination={{
                 current: page,
@@ -551,10 +557,10 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
             />
 
-            <div>
-              <Icon type="check-circle" className="mr-2"/>
-              {/*<span>Lý do: {props.booking.result?.reason}</span>*/}
-            </div>
+            {/*<div>*/}
+            {/*  <Icon type="check-circle" className="mr-2"/>*/}
+            {/*  <span>Lý do: {props.booking.result?.reason}</span>*/}
+            {/*</div>*/}
 
 
           </div>
