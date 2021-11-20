@@ -2,59 +2,23 @@ import React, {useEffect, useState} from "react";
 import {Avatar, Button, Icon, Input, Popover} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {
-  countBookingNumber,
-  showFormBooking,
-  showFormCreate,
-  showFormUpdate,
-  showFormUploadCV,
-  showFormUploadListCV,
-} from "../../ProfileManager/redux/actions";
+import {countBookingNumber,} from "../../ProfileManager/redux/actions";
 import {AiOutlineCalendar, FiChevronDown, GrNext, GrPrevious} from "react-icons/all";
 import moment from 'moment';
-import ScheduleInterview from "../ScheduleInterview";
+import ScheduleInterview from "../components/ScheduleInterview";
 import DateBox from "devextreme-react/date-box";
-import DetailScheduleInterview from "../DetailScheduleInterview";
+import DetailScheduleInterview from "../components/DetailScheduleInterview";
+import {getAllSchedule} from "../redux/actions";
 
 const {Search} = Input;
 
-const mapStateToProps = ({
-                           profileManager: {
-                             showForm,
-                             list,
-                             create,
-                             deleteProfile,
-                             update,
-                             uploadCV,
-                             showFormUpload,
-                             getBooking,
-                             createBooking,
-                             updateBooking,
-                             updateDetail,
-                             uploadListCV,
-
-                           }
-                         }: RootState) => ({
-  showForm,
-  list,
-  create,
-  deleteProfile,
-  update,
-  uploadCV,
-  showFormUpload,
-  getBooking,
-  createBooking,
-  updateBooking,
-  updateDetail,
-  uploadListCV
+const mapStateToProps = (state: RootState) => ({
+  schedule: state.scheduleManager.getSchedule,
 })
+
 const connector = connect(mapStateToProps, {
-  showFormCreate,
-  showFormUpdate,
-  showFormUploadCV,
-  showFormBooking,
-  showFormUploadListCV,
-  countBookingNumber
+  countBookingNumber,
+  getAllSchedule
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -65,28 +29,14 @@ interface IProps extends ReduxProps {
 
 function ScheduleManagerPages(props: IProps) {
   const dateFormat = 'DD/MM/YYYY';
+  const timeFormat = 'HH:mm';
+
   useEffect(() => {
     document.title = "Lịch";
     props.countBookingNumber();
+    props.getAllSchedule();
   }, []);
 
-  const handleCreate = (e: any) => {
-    e.preventDefault();
-    if (e?.target) {
-      e.target.disabled = true;
-      e.target.disabled = false;
-    }
-    props.showFormCreate(true);
-  }
-
-  const handleUploadListCV = (e: any) => {
-    e.stopPropagation();
-    if (e?.target) {
-      e.target.disabled = true;
-      e.target.disabled = false;
-    }
-    props.showFormUploadListCV(true);
-  }
   const [visiblePopover, setVisiblePopover] = useState<boolean>(false);
 
   const handleVisibleChange = (visible: any) => {
@@ -119,6 +69,7 @@ function ScheduleManagerPages(props: IProps) {
   function handlePopupScheduleInterview() {
     setVisible(true)
   }
+
   function handlePopupScheduleInterviewDetail() {
     setVisibleDetail(true)
   }
@@ -126,11 +77,10 @@ function ScheduleManagerPages(props: IProps) {
   function handleClosePopup() {
     setVisible(false)
   }
+
   function handleClosePopupDetail() {
     setVisibleDetail(false)
   }
-
-  const state: boolean = true;
 
   const getInitials = (name: string) => {
     let initials: any = name.split(' ');
@@ -197,30 +147,35 @@ function ScheduleManagerPages(props: IProps) {
             </Button>
           </div>
         </div>
-        {state ?
+        {props.schedule?.result?.length > 0 ?
           <div className="c-schedule-content">
 
             <div className="c-schedule-content__head">Hôm nay - 12 Tháng 11,2021</div>
-            <div className="c-item ">
-              <div className="c-time-flex">
-                10:30 - 10:40
-              </div>
-              <div className="c-main-content border-bottom">
-                <Avatar size={25} style={{backgroundColor: ''}}>
-                  {getInitials("Hồ Đức Duy")}
-                </Avatar>
-                <div className="c-main-content__wrap-main">
-                  <div className="main-1">
-                    <a className="main-1__candidate-name" onClick={handlePopupScheduleInterviewDetail}>Hồ Đức Duy</a>
-                    <div className="main-1__green-dot"></div>
-                    <div className="main-1__job-description">Business Analysis</div>
-                  </div>
-                  <div className="main-2">
-                    <div className="ellipsis">Phỏng vấn trực tiếp</div>
+            {props.schedule?.result?.map((item: any, index: any) => {
+              return <div className="c-item ">
+                <div className="c-time-flex">
+                  {moment(item.date).format(timeFormat)} - {moment(item.interviewTime).format(timeFormat)}
+                  <div> {moment(item.date).format(dateFormat)} - {moment(item.interviewTime).format(dateFormat)}</div>
+                </div>
+                <div className="c-main-content border-bottom">
+                  <Avatar size={25} style={{backgroundColor: item.avatarColor}}>
+                    {getInitials(item.fullName)}
+                  </Avatar>
+                  <div className="c-main-content__wrap-main">
+                    <div className="main-1">
+                      <a className="main-1__candidate-name"
+                         onClick={handlePopupScheduleInterviewDetail}>{item.fullName}</a>
+                      <div className="main-1__green-dot"></div>
+                      <div className="main-1__job-description">{item.recruitmentName}</div>
+                    </div>
+                    <div className="main-2">
+                      <div className="ellipsis">{item.type}</div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            })}
+
             <div className="c-item">
               <div className="c-time-flex">
                 10:30 - 10:40
@@ -241,7 +196,6 @@ function ScheduleManagerPages(props: IProps) {
                 </div>
               </div>
             </div>
-
           </div>
           :
           <div className="c-schedule-content-nodata">
@@ -267,7 +221,7 @@ function ScheduleManagerPages(props: IProps) {
       </div>
       <ScheduleInterview visible={visible} handlePopupScheduleInterview={handlePopupScheduleInterview}
                          handleClosePopup={handleClosePopup}/>
-      <DetailScheduleInterview  visible={visibleDetail} handleClosePopupDetail={handleClosePopupDetail}/>
+      <DetailScheduleInterview visible={visibleDetail} handleClosePopupDetail={handleClosePopupDetail}/>
     </>
 
   );

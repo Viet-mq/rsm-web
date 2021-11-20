@@ -19,6 +19,7 @@ import groupAPIManagerSaga from '../modules_cb/GroupAPIManager/redux/sagas'
 import skillManagerSaga from '../modules_cb/SkillManager/redux/sagas'
 import addressManagerSaga from '../modules_cb/AddressManager/redux/sagas'
 import reasonRejectManagerSaga from '../modules_cb/ReasonRejectManager/redux/sagas'
+import scheduleManagerSaga from '../modules_cb/ScheduleManager/redux/sagas';
 import * as commonSaga from './common-saga';
 
 export default function* rootSaga() {
@@ -43,6 +44,7 @@ export default function* rootSaga() {
     skillManagerSaga(),
     addressManagerSaga(),
     reasonRejectManagerSaga(),
+    scheduleManagerSaga(),
     commonSaga.checkErrorAsync(),
   ]);
 }

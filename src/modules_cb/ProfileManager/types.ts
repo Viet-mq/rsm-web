@@ -109,7 +109,7 @@ export interface DetailCV {
   detail: number,
 }
 
-//booking
+//schedule
 export interface BookingEntity {
   id: string | any,
   avatarColor: string,

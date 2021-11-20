@@ -79,12 +79,12 @@ function BookingForm(props: BookingFormProps) {
         const hh = time.getHours();
         const minutes = time.getMinutes();
         const dateChanged: any = new Date(yyyy, mm - 1, dd, hh, minutes, 0);
-
+        const interviewTime: any = new Date(yyyy, mm - 1, dd, hh, minutes+values.interviewTime, 0);
         let req: UpdateBookingRequest = {
           id: props.getBookingState.result?.id,
           floor: values.room,
           interviewAddress: values.interviewAddress,
-          interviewTime: values.interviewTime,
+          interviewTime: interviewTime,
           interviewers: values.interviewers,
           note: values.note,
           recruitmentId: values.recruitmentId,
@@ -134,6 +134,7 @@ function BookingForm(props: BookingFormProps) {
         const hh = time.getHours();
         const minutes = time.getMinutes();
         const dateChanged: any = new Date(yyyy, mm - 1, dd, hh, minutes, 0);
+        const interviewTime: any = new Date(yyyy, mm - 1, dd, hh, minutes+values.interviewTime, 0);
 
         let req: CreateBookingRequest = {
           idProfile: props.showBooking.data_booking?.id,
@@ -141,7 +142,7 @@ function BookingForm(props: BookingFormProps) {
           avatarColor: setColor(),
           floor: values.room,
           interviewAddress: values.interviewAddress,
-          interviewTime: values.interviewTime,
+          interviewTime: interviewTime,
           interviewers: values.interviewers,
           note: values.note,
           recruitmentId: values.recruitmentId,

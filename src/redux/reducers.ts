@@ -20,6 +20,7 @@ import talentPoolManager,{TalentPoolManagerModuleState} from "../modules_cb/Tale
 import skillManager,{SkillManagerModuleState} from "../modules_cb/SkillManager/redux/reducers";
 import addressManager,{AddressManagerModuleState} from "../modules_cb/AddressManager/redux/reducers";
 import reasonRejectManager,{ReasonRejectManagerModuleState} from "../modules_cb/ReasonRejectManager/redux/reducers";
+import scheduleManager,{ScheduleManagerModuleState} from "../modules_cb/ScheduleManager/redux/reducers";
 
 export interface RootState {
   auth: AuthModuleState;
@@ -42,6 +43,8 @@ export interface RootState {
   skillManager:SkillManagerModuleState,
   addressManager:AddressManagerModuleState,
   reasonRejectManager:ReasonRejectManagerModuleState,
+  scheduleManager: ScheduleManagerModuleState,
+
 }
 
 export default combineReducers<RootState>({
@@ -65,4 +68,6 @@ export default combineReducers<RootState>({
   skillManager,
   addressManager,
   reasonRejectManager,
+  scheduleManager,
+
 });

@@ -1,17 +1,17 @@
-import {RootState} from "../../redux/reducers";
+import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {Avatar, Button, Checkbox, Col, Form, Icon, Input, InputNumber, Modal, Row, Select, Table} from "antd";
 import React, {FormEvent, useEffect, useState} from "react";
-import {createJob, showFormCreate} from "../JobManager/redux/actions";
-import {CreateJobRequest} from "../JobManager/types";
+import {createJob, showFormCreate} from "../../JobManager/redux/actions";
+import {CreateJobRequest} from "../../JobManager/types";
 import TextArea from "antd/es/input/TextArea";
 import moment from "moment";
 import 'devextreme/dist/css/dx.light.css';
 
 import DateBox from 'devextreme-react/date-box';
-import {emptyText} from "../../configs/locales";
-import {ProfileEntity} from "../ProfileManager/types";
+import {emptyText} from "../../../configs/locales";
+import {ProfileEntity} from "../../ProfileManager/types";
 
 const mapStateToProps = ({jobManager}: RootState) => ({jobManager});
 const connector = connect(mapStateToProps, {createJob, showFormCreate});

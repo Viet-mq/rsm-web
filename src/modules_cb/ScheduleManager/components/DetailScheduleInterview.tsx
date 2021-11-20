@@ -1,13 +1,13 @@
-import {RootState} from "../../redux/reducers";
+import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {Avatar, Button, Form, Icon, Modal, Select} from "antd";
 import React, {FormEvent, useEffect, useState} from "react";
-import {createJob, showFormCreate} from "../JobManager/redux/actions";
-import {CreateJobRequest} from "../JobManager/types";
+import {createJob, showFormCreate} from "../../JobManager/redux/actions";
+import {CreateJobRequest} from "../../JobManager/types";
 import moment from "moment";
 import 'devextreme/dist/css/dx.light.css';
-import {ProfileEntity} from "../ProfileManager/types";
+import {ProfileEntity} from "../../ProfileManager/types";
 
 const mapStateToProps = ({jobManager}: RootState) => ({jobManager});
 const connector = connect(mapStateToProps, {createJob, showFormCreate});
@@ -230,13 +230,13 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
         </div>
         <div className="schedule-detail-content">
           <div>ỨNG VIÊN</div>
-          <div style={{fontWeight: 500,padding:0}}>Hồ Đức Duy</div>
-          <div><a style={{display:"flex"}}>Xem hồ sơ <Icon type="arrow-right" style={{fontSize: '22px'}}/></a></div>
+          <div style={{fontWeight: 500, padding: 0}}>Hồ Đức Duy</div>
+          <div><a style={{display: "flex"}}>Xem hồ sơ <Icon type="arrow-right" style={{fontSize: '22px'}}/></a></div>
           <div>THỜI GIAN</div>
           <div style={{fontWeight: 500}}>16/11/2021, 10:30 - 10:40</div>
-          <div style={{paddingTop:20}}>ĐỊA ĐIỂM</div>
+          <div style={{paddingTop: 20}}>ĐỊA ĐIỂM</div>
           <div style={{fontWeight: 500}}>16 ngõ 2</div>
-          <div style={{paddingTop:20}}>HỘI ĐỒNG</div>
+          <div style={{paddingTop: 20}}>HỘI ĐỒNG</div>
           <div><Avatar>HD</Avatar></div>
 
         </div>

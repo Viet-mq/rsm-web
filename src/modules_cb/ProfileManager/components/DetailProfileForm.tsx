@@ -531,12 +531,12 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
             {/*<div>*/}
             {/*  <Icon type="audit" className="mr-2"/>*/}
-            {/*  <span>Nội dung phỏng vấn: {props.booking.result?.content}</span>*/}
+            {/*  <span>Nội dung phỏng vấn: {props.schedule.result?.content}</span>*/}
             {/*</div>*/}
 
             {/*<div>*/}
             {/*  <Icon type="question-circle" className="mr-2"/>*/}
-            {/*  <span>Câu hỏi: {props.booking.result?.question}</span>*/}
+            {/*  <span>Câu hỏi: {props.schedule.result?.question}</span>*/}
             {/*</div>*/}
 
             <Table
@@ -559,7 +559,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
             {/*<div>*/}
             {/*  <Icon type="check-circle" className="mr-2"/>*/}
-            {/*  <span>Lý do: {props.booking.result?.reason}</span>*/}
+            {/*  <span>Lý do: {props.schedule.result?.reason}</span>*/}
             {/*</div>*/}
 
 
