@@ -296,7 +296,7 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
                         },
                       ],
                     })(
-                      <InputNumber type="number" min={15} className="bg-white text-black"/>
+                      <InputNumber type="number" min={15} max={60} className="bg-white text-black"/>
                     )}
                   </Form.Item>
                 </Col>

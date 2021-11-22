@@ -10,6 +10,7 @@ import {put, select} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
 import {AppError} from "src/models/common";
 import {RootState} from "src/redux/reducers";
+import {getAllSchedule} from "../../../../ScheduleManager/redux/actions";
 
 export function* updateBookingAsync(action: UpdateBookingAction) {
   try {
@@ -22,6 +23,8 @@ export function* updateBookingAsync(action: UpdateBookingAction) {
       yield put(showFormBooking(false));
       const params = yield select((state: RootState) => state.profileManager.getBooking.params);
       yield put(getBooking(params))
+      const paramsSchedule = yield select((state: RootState) => state.scheduleManager.getSchedule.params);
+      yield put(getAllSchedule(paramsSchedule))
     }
   } catch (e) {
     yield put(updateBookingError(new AppError(e.message)));

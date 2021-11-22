@@ -9,12 +9,14 @@ import ScheduleInterview from "../components/ScheduleInterview";
 import DateBox from "devextreme-react/date-box";
 import DetailScheduleInterview from "../components/DetailScheduleInterview";
 import {getAllSchedule} from "../redux/actions";
+import {DataShowSchedule} from "../types";
 
 const {Search} = Input;
 
 const mapStateToProps = (state: RootState) => ({
   schedule: state.scheduleManager.getSchedule,
 })
+
 
 const connector = connect(mapStateToProps, {
   countBookingNumber,
@@ -36,6 +38,8 @@ function ScheduleManagerPages(props: IProps) {
     props.countBookingNumber();
     props.getAllSchedule();
   }, []);
+
+  useEffect(()=>{},[])
 
   const [visiblePopover, setVisiblePopover] = useState<boolean>(false);
 
@@ -61,6 +65,7 @@ function ScheduleManagerPages(props: IProps) {
 
   const [visible, setVisible] = useState(false)
   const [visibleDetail, setVisibleDetail] = useState(false)
+  const [idDetail, setIdDetail] = useState<string>('');
 
   function handleDateChange() {
     console.log("haha")
@@ -70,7 +75,9 @@ function ScheduleManagerPages(props: IProps) {
     setVisible(true)
   }
 
-  function handlePopupScheduleInterviewDetail() {
+  function handlePopupScheduleInterviewDetail(values: DataShowSchedule) {
+    console.log(values)
+    setIdDetail(values.id)
     setVisibleDetail(true)
   }
 
@@ -83,21 +90,41 @@ function ScheduleManagerPages(props: IProps) {
   }
 
   const getInitials = (name: string) => {
-    let initials: any = name.split(' ');
-
-    if (initials.length > 1) {
-      initials = initials.shift().charAt(0) + initials.pop().charAt(0);
-    } else {
-      initials = name.substring(0, 2);
+    if (name) {
+      let initials: any = name.split(' ');
+      if (initials.length > 1) {
+        initials = initials.shift().charAt(0) + initials.pop().charAt(0);
+      } else {
+        initials = name.substring(0, 2);
+      }
+      return initials.toUpperCase();
     }
-
-    return initials.toUpperCase();
   }
   const setColor = () => {
     const randomColor: string = Math.floor(Math.random() * 16777215).toString(16);
     return "#" + randomColor;
   }
 
+  const outObject = props.schedule?.result?.reduce((acc: any, curr: any) => {
+    const queryResult = acc.find((qr: any) => {
+      const a: any = moment(qr.date);
+      const b: any = moment(curr.date);
+      const qrConvert: any = new Date(a)
+      const currConvert: any = new Date(b)
+      qrConvert.setHours(0, 0, 0);
+      currConvert.setHours(0, 0, 0);
+      const diffTime = Math.abs((qrConvert - currConvert) / (1000 * 60 * 60 * 24));
+      return diffTime === 0;
+    });
+    if (queryResult !== undefined) {
+      queryResult.data.push(curr)
+    } else {
+      let newQR = {date: moment(curr.date).format("LL"), data: [curr]};
+      acc.push(newQR);
+    }
+    return acc;
+  }, []);
+  console.log("outObject:", outObject)
   return (
     <>
       <div className="c-schedule-container">
@@ -117,7 +144,6 @@ function ScheduleManagerPages(props: IProps) {
               <DateBox defaultValue={moment()} displayFormat="dd/MM/yyyy"
                        type="date"/>
 
-              {/*<AiTwotoneCalendar size={20}/>*/}
             </div>
 
             <Popover
@@ -147,57 +173,39 @@ function ScheduleManagerPages(props: IProps) {
             </Button>
           </div>
         </div>
-        {props.schedule?.result?.length > 0 ?
-          <div className="c-schedule-content">
-
-            <div className="c-schedule-content__head">Hôm nay - 12 Tháng 11,2021</div>
-            {props.schedule?.result?.map((item: any, index: any) => {
-              return <div className="c-item ">
-                <div className="c-time-flex">
-                  {moment(item.date).format(timeFormat)} - {moment(item.interviewTime).format(timeFormat)}
-                  <div> {moment(item.date).format(dateFormat)} - {moment(item.interviewTime).format(dateFormat)}</div>
-                </div>
-                <div className="c-main-content border-bottom">
-                  <Avatar size={25} style={{backgroundColor: item.avatarColor}}>
-                    {getInitials(item.fullName)}
-                  </Avatar>
-                  <div className="c-main-content__wrap-main">
-                    <div className="main-1">
-                      <a className="main-1__candidate-name"
-                         onClick={handlePopupScheduleInterviewDetail}>{item.fullName}</a>
-                      <div className="main-1__green-dot"></div>
-                      <div className="main-1__job-description">{item.recruitmentName}</div>
+        {outObject?.length > 0 ?
+          outObject?.map((item: any, index: any) => {
+            return <div className="c-schedule-content" key={item.date}>
+              <div className="c-schedule-content__head">Hôm nay - {item.date}</div>
+              {item.data?.map((itemChild: any, index1: any) => {
+                return <div className="c-item " key={index1}>
+                  <div className="c-time-flex">
+                    {moment(itemChild.date).format(timeFormat)} - {moment(itemChild.interviewTime).format(timeFormat)}
+                  </div>
+                  <div className={index1 === item.data?.length - 1 ? "c-main-content" : "c-main-content border-bottom"}>
+                    <Avatar size={25} style={{backgroundColor: itemChild.avatarColor}}>
+                      {getInitials(itemChild.fullName)}
+                    </Avatar>
+                    <div className="c-main-content__wrap-main">
+                      <div className="main-1">
+                        <a className="main-1__candidate-name"
+                           onClick={() => handlePopupScheduleInterviewDetail(itemChild)}>{itemChild.fullName}</a>
+                        <div className="main-1__green-dot"></div>
+                        <div className="main-1__job-description">{itemChild.recruitmentName}</div>
+                      </div>
+                      <div className="main-2">
+                        <div className="ellipsis">{itemChild.type}</div>
+                      </div>
                     </div>
-                    <div className="main-2">
-                      <div className="ellipsis">{item.type}</div>
-                    </div>
                   </div>
                 </div>
-              </div>
-            })}
+              })}
 
-            <div className="c-item">
-              <div className="c-time-flex">
-                10:30 - 10:40
-              </div>
-              <div className="c-main-content">
-                <Avatar size={25} style={{backgroundColor: setColor()}}>
-                  {getInitials("Hồ Đức Duy")}
-                </Avatar>
-                <div className="c-main-content__wrap-main">
-                  <div className="main-1">
-                    <a className="main-1__candidate-name">Hồ Đức Duy</a>
-                    <div className="main-1__green-dot"></div>
-                    <div className="main-1__job-description">Business Analysis</div>
-                  </div>
-                  <div className="main-2">
-                    <div className="ellipsis">Phỏng vấn trực tiếp</div>
-                  </div>
-                </div>
-              </div>
             </div>
-          </div>
+          })
+
           :
+
           <div className="c-schedule-content-nodata">
             <div className="image-nodata-schedule">
               <img src={require('src/assets/images/Empty.png')}/>
@@ -219,13 +227,13 @@ function ScheduleManagerPages(props: IProps) {
         }
 
       </div>
+
       <ScheduleInterview visible={visible} handlePopupScheduleInterview={handlePopupScheduleInterview}
                          handleClosePopup={handleClosePopup}/>
-      <DetailScheduleInterview visible={visibleDetail} handleClosePopupDetail={handleClosePopupDetail}/>
+      <DetailScheduleInterview idDetail={idDetail} dataDetail={props.schedule.result} visible={visibleDetail}
+                               handleClosePopupDetail={handleClosePopupDetail}/>
     </>
-
   );
-
 }
 
 export default connector(ScheduleManagerPages);

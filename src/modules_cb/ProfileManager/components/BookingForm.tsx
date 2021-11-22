@@ -40,8 +40,12 @@ interface BookingFormProps extends FormComponentProps, ReduxProps {
 function BookingForm(props: BookingFormProps) {
   const {getFieldDecorator, resetFields} = props.form;
   const fontWeightStyle = {fontWeight: 400};
-
-
+  const dateFormat = 'DD/MM/YYYY';
+  const timeFormat = 'HH:mm';
+  const interviewTime: any = moment(props.getBookingState.result?.interviewTime)
+  const date: any = moment(props.getBookingState.result?.date)
+  const diffTime = interviewTime.diff(date, "minutes")
+  console.log(diffTime)
   useEffect(() => {
     if (props.showBooking.show_booking) {
       props.getListAccount({page: 1, size: 100});
@@ -55,8 +59,7 @@ function BookingForm(props: BookingFormProps) {
     }
 
   }, [props.showBooking.data_booking?.id])
-  const dateFormat = 'DD/MM/YYYY';
-  const timeFormat = 'HH:mm';
+
 
   function onBtnCancelClicked() {
     resetFields();
@@ -69,7 +72,7 @@ function BookingForm(props: BookingFormProps) {
     (e.target as any).disabled = false;
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log("values:",values)
+        console.log("values:", values)
 
         const date = new Date(values.date);
         const time = new Date(values.timeStart);
@@ -79,12 +82,13 @@ function BookingForm(props: BookingFormProps) {
         const hh = time.getHours();
         const minutes = time.getMinutes();
         const dateChanged: any = new Date(yyyy, mm - 1, dd, hh, minutes, 0);
-        const interviewTime: any = new Date(yyyy, mm - 1, dd, hh, minutes+values.interviewTime, 0);
+        const interviewTime: any = new Date(yyyy, mm - 1, dd, hh, minutes + values.interviewTime, 0);
+        console.log(interviewTime)
         let req: UpdateBookingRequest = {
           id: props.getBookingState.result?.id,
           floor: values.room,
           interviewAddress: values.interviewAddress,
-          interviewTime: interviewTime,
+          interviewTime: interviewTime * 1,
           interviewers: values.interviewers,
           note: values.note,
           recruitmentId: values.recruitmentId,
@@ -124,7 +128,7 @@ function BookingForm(props: BookingFormProps) {
     (e.target as any).disabled = true;
     (e.target as any).disabled = false;
     props.form.validateFieldsAndScroll((err, values) => {
-      console.log("values:",values)
+      console.log("values:", values)
       if (!err) {
         const date = new Date(values.date);
         const time = new Date(values.timeStart);
@@ -134,7 +138,7 @@ function BookingForm(props: BookingFormProps) {
         const hh = time.getHours();
         const minutes = time.getMinutes();
         const dateChanged: any = new Date(yyyy, mm - 1, dd, hh, minutes, 0);
-        const interviewTime: any = new Date(yyyy, mm - 1, dd, hh, minutes+values.interviewTime, 0);
+        const interviewTime: any = new Date(yyyy, mm - 1, dd, hh, minutes + values.interviewTime, 0);
 
         let req: CreateBookingRequest = {
           idProfile: props.showBooking.data_booking?.id,
@@ -142,7 +146,7 @@ function BookingForm(props: BookingFormProps) {
           avatarColor: setColor(),
           floor: values.room,
           interviewAddress: values.interviewAddress,
-          interviewTime: interviewTime,
+          interviewTime: interviewTime * 1,
           interviewers: values.interviewers,
           note: values.note,
           recruitmentId: values.recruitmentId,
@@ -259,7 +263,7 @@ function BookingForm(props: BookingFormProps) {
                         <Form.Item className="form-label" label="Thời lượng(phút)" labelCol={{span: 24}}
                                    wrapperCol={{span: 24}}>
                           {getFieldDecorator('interviewTime', {
-                            initialValue: props.getBookingState.result?.interviewTime || 15,
+                            initialValue: diffTime || 15,
                             rules: [
                               {
                                 message: 'Vui lòng nhập thời lượng',
@@ -267,7 +271,7 @@ function BookingForm(props: BookingFormProps) {
                               },
                             ],
                           })(
-                            <InputNumber type="number" min={15} className="bg-white text-black"/>
+                            <InputNumber type="number" min={15} max={60} className="bg-white text-black"/>
                           )}
                         </Form.Item>
                       </Col>

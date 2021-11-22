@@ -3,25 +3,25 @@ import {ShowScheduleAction} from "../../actions";
 import {DataShowSchedule} from "../../../types";
 
 export interface ScheduleState {
-  show_booking?: boolean
-  data_booking?:DataShowSchedule
+  show_schedule?: boolean
+  data_schedule?:DataShowSchedule
 }
 
 const initState: ScheduleState = {
-  show_booking: false,
+  show_schedule: false,
 }
 
 export default (state = initState, {
   type,
-  show_booking,
-  data_booking
+  show_schedule,
+  data_schedule
 }: ShowScheduleAction): ScheduleState => {
   switch (type) {
     case Actions.PROFILE_SHOW_FORM_SCHEDULE:
       return {
         ...state,
-        show_booking,
-        data_booking,
+        show_schedule,
+        data_schedule,
       }
     default:
       return state;

@@ -24,6 +24,7 @@ import {getListDepartment} from "../../../DepartmentManager/redux/actions";
 import {getListTalentPool} from "../../../TalentPoolManager/redux/actions";
 import {useHistory} from "react-router-dom";
 import {getListSchool} from "../../../SchoolManager/redux/actions";
+import BookingForm from "../BookingForm";
 
 const {Option} = Select;
 
@@ -622,6 +623,7 @@ function ListProfile(props: ListProfileProps) {
           showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,
         }}
       />
+
 
     </>
   );
