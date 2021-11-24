@@ -25,6 +25,7 @@ import TalentPoolManagerPages from "./modules_cb/TalentPoolManager/pages/TalentP
  import SkillManagerPages from "./modules_cb/SkillManager/pages/SkillManagerPages";
  import AddressManagerPages from "./modules_cb/AddressManager/pages/AddressManagerPages";
  import ReasonRejectManagerPages from "./modules_cb/ReasonRejectManager/pages/ReasonRejectManagerPages";
+ import RecruitmentManagerPages from "./modules_cb/RecruitmentManager/pages/RecruitmentManagerPages";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -71,6 +72,7 @@ const Routes = (props: PropsFromRedux) => {
         <Route path="/skill-manager" component={SkillManagerPages} isLogin={props.isLogin}/>
         <Route path="/reason-reject-manager" component={ReasonRejectManagerPages} isLogin={props.isLogin}/>
         <Route path="/address-manager" component={AddressManagerPages} isLogin={props.isLogin}/>
+        <Route path="/recruitment-manager" component={RecruitmentManagerPages} isLogin={props.isLogin}/>
         <Redirect exact from="/*" to={'/home'}/>
       </Switch>
     </div>

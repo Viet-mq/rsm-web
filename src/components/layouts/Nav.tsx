@@ -59,10 +59,10 @@ const Nav = (props: IProps) => {
         </Link>
       </Menu.Item>
 
-      <Menu.Item key="account-manager" style={{display: 'flex', alignItems: 'center'}}>
-        <Link to={`/account-manager`}>
-          <Icon type="user"/>
-          <span>Quản lý tài khoản </span>
+      <Menu.Item key="recruitment-manager" style={{display: 'flex', alignItems: 'center'}}>
+        <Link to={`/recruitment-manager`}>
+          <Icon type="inbox" />
+          <span>Tin tuyển dụng </span>
         </Link>
       </Menu.Item>
 
@@ -84,6 +84,13 @@ const Nav = (props: IProps) => {
       </Menu.Item>
 
       <SubMenu key="sub1" title={!props.hiddenLabel ? <span>CÀI ĐẶT</span> : <Icon type="setting"/>}>
+
+        <Menu.Item key="account-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to={`/account-manager`}>
+            <Icon type="user"/>
+            <span>Quản lý tài khoản </span>
+          </Link>
+        </Menu.Item>
 
         <Menu.Item key="view-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/view-manager`}>

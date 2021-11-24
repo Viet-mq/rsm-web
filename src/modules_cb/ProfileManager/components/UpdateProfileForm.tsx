@@ -460,7 +460,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           <Form.Item label="Kỹ năng công việc" className="mb-0" style={{paddingBottom:15}}>
             <div style={{display: 'flex'}}>
               {getFieldDecorator('skill', {
-                initialValue:props.showForm.data_update?.skill.map((item:any)=>item.id)||undefined,
+                initialValue:props.showForm.data_update?.skill?.map((item:any)=>item.id)||undefined,
                 rules: [
                   {
                     message: 'Vui lòng nhập kỹ năng công việc',

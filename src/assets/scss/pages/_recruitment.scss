@@ -1,0 +1,33 @@
+.header-align{
+  display: flex;
+  justify-content: space-between;
+}
+.recruitment-title{
+  align-items: center;
+  margin-bottom: 15px;
+  .tmp-title-page-size20{
+    margin: 0;
+    font-weight: 500;
+  }
+}
+
+.recruitment-option{
+  margin-bottom: 30px;
+  align-items: center;
+  &__pop-over{
+    display: flex;
+    .align{
+      margin-right: 20px;
+    }
+  }
+}
+#sort{
+  color:$color-text-dark-grey ;
+  margin-right: 5px;
+}
+
+.recruitment-list {
+  background-color: white;
+  padding: 20px;
+  margin-bottom: 15px;
+}

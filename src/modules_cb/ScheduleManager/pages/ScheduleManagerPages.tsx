@@ -112,7 +112,6 @@ function ScheduleManagerPages(props: IProps) {
   }
   const [outObject, setOutObject] = useState<ScheduleEntity | any>([])
 
-
   let getCurrWeek = new Date();
   let start= new Date(getCurrWeek);
   let end= new Date(getCurrWeek);
@@ -124,7 +123,6 @@ function ScheduleManagerPages(props: IProps) {
   end.setHours(0, 0, 0, 0);
 
   function getWeekDates(week: string) {
-    debugger
     switch (week) {
       case currWeek:
         getCurrWeek = new Date();
