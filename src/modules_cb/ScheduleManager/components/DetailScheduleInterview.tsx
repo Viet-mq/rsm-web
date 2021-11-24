@@ -37,16 +37,18 @@ interface ScheduleInterviewProps extends FormComponentProps, ReduxProps {
   handleClosePopupDetail: () => void;
   visible: boolean,
   dataDetail: ScheduleEntity[] | any,
-  idDetail:string
+  idDetail: string
 }
 
 function ScheduleInterview(props: ScheduleInterviewProps) {
+
   const [visible, setVisible] = useState(false);
   const dateFormat = 'DD/MM/YYYY';
   const timeFormat = 'HH:mm';
-  const dataDetail=props.dataDetail?.find((item:any)=>item.id===props.idDetail)
+  const dataDetail = props.dataDetail?.find((item: any) => item.id === props.idDetail)
   console.log("dataDetail", dataDetail)
-  useEffect(() => setVisible(props?.visible), [props?.visible])
+
+  useEffect(() => setVisible(props?.visible), [props?.visible]);
 
   const getInitials = (name?: string) => {
     if (name) {
@@ -58,7 +60,6 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
       }
       return initials.toUpperCase();
     }
-
   }
 
   const setColor = () => {

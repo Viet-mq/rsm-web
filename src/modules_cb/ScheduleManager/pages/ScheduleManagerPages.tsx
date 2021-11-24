@@ -106,62 +106,74 @@ function ScheduleManagerPages(props: IProps) {
       return initials.toUpperCase();
     }
   }
+
   const setColor = () => {
     const randomColor: string = Math.floor(Math.random() * 16777215).toString(16);
     return "#" + randomColor;
   }
+
   const [outObject, setOutObject] = useState<ScheduleEntity | any>([])
 
-  let getCurrWeek = new Date();
-  let start= new Date(getCurrWeek);
-  let end= new Date(getCurrWeek);
-  let dayOfWeek = getCurrWeek.getDay();
-  let numDay = getCurrWeek.getDate();
-  start.setDate(numDay - dayOfWeek + 1);
-  start.setHours(0, 0, 0, 0);
-  end.setDate(numDay + (7 - dayOfWeek));
-  end.setHours(0, 0, 0, 0);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+
+  useEffect(() => {
+    setCurrentDate();
+  }, []);
+
+  const setCurrentDate = (): any => {
+    let getCurrWeek = new Date();
+    let dayOfWeek = getCurrWeek.getDay();
+    let numDay = getCurrWeek.getDate();
+    let s = new Date(getCurrWeek);
+    let e = new Date(getCurrWeek);
+    s.setDate(numDay - dayOfWeek + 1);
+    s.setHours(0, 0, 0, 0);
+    e.setDate(numDay + (7 - dayOfWeek));
+    e.setHours(0, 0, 0, 0);
+    setStartDate(s);
+    setEndDate(e);
+    return [s, e];
+  }
+
+  const plusDays = (date: Date, count: number): Date => {
+    return new Date(date.getTime() + count * 24 * 60 * 60 * 1000);
+  }
 
   function getWeekDates(week: string) {
+
     switch (week) {
-      case currWeek:
-        getCurrWeek = new Date();
-        start = new Date(getCurrWeek);
-        end = new Date(getCurrWeek);
-        dayOfWeek = getCurrWeek.getDay();
-        numDay = getCurrWeek.getDate();
-        start.setDate(numDay - dayOfWeek + 1);
-        start.setHours(0, 0, 0, 0);
-        end.setDate(numDay + (7 - dayOfWeek));
-        end.setHours(0, 0, 0, 0);
-        break;
 
-      case preWeek:
-        start = new Date(start.getTime() - 7 * 24 * 60 * 60 * 1000);
-        end = new Date(end.getTime() - 7 * 24 * 60 * 60 * 1000);
-        break;
+      case preWeek: {
+        let s = plusDays(startDate, -7);
+        let e = plusDays(endDate, -7);
+        setStartDate(s);
+        setEndDate(e);
+        return [s, e];
+      }
 
-      case nextWeek:
-        start = new Date(start.getTime() + 7 * 24 * 60 * 60 * 1000);
-        end = new Date(end.getTime() + 7 * 24 * 60 * 60 * 1000);
-        break;
+      case nextWeek: {
+        let s = plusDays(startDate, 7);
+        let e = plusDays(endDate, 7);
+        setStartDate(s);
+        setEndDate(e);
+        return [s, e];
+      }
 
       default:
-        getCurrWeek = new Date();
-        start = new Date(getCurrWeek);
-        end = new Date(getCurrWeek);
-        dayOfWeek = getCurrWeek.getDay();
-        numDay = getCurrWeek.getDate();
-        start.setDate(numDay - dayOfWeek + 1);
-        start.setHours(0, 0, 0, 0);
-        end.setDate(numDay + (7 - dayOfWeek));
-        end.setHours(0, 0, 0, 0);
+        const [s, e] = setCurrentDate();
+        return [s, e];
+
     }
-    return [start, end];
+
   }
 
   function filterDatesByWeek(week: string, filterDate: ScheduleEntity[]) {
     let [start, end] = getWeekDates(week);
+
+    console.log("week start: " + start);
+    console.log("week end: " + end);
+
     const datesFilter: any = filterDate?.filter((d: any) => d.date >= +start && d.date < +end);
     const outObject = datesFilter?.reduce((acc: any, curr: any) => {
       const queryResult = acc.find((qr: any) => {
@@ -186,6 +198,9 @@ function ScheduleManagerPages(props: IProps) {
   }
 
   function handleWeekClicked(week: string) {
+
+    console.log("week: " + week);
+
     filterDatesByWeek(week, props.schedule?.result);
   }
 
