@@ -113,50 +113,52 @@ function ScheduleManagerPages(props: IProps) {
   const [outObject, setOutObject] = useState<ScheduleEntity | any>([])
 
 
+  let getCurrWeek = new Date();
+  let start= new Date(getCurrWeek);
+  let end= new Date(getCurrWeek);
+  let dayOfWeek = getCurrWeek.getDay();
+  let numDay = getCurrWeek.getDate();
+  start.setDate(numDay - dayOfWeek + 1);
+  start.setHours(0, 0, 0, 0);
+  end.setDate(numDay + (7 - dayOfWeek));
+  end.setHours(0, 0, 0, 0);
+
   function getWeekDates(week: string) {
-    let now = new Date();
-    let getNextWeek = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
-    let getPreWeek = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-
-    let start: any;
-    let end: any;
-    let dayOfWeek :any;
-    let numDay:any;
-
+    debugger
     switch (week) {
       case currWeek:
-        start = new Date(now);
-        end = new Date(now);
-         dayOfWeek = now.getDay();
-         numDay = now.getDate();
+        getCurrWeek = new Date();
+        start = new Date(getCurrWeek);
+        end = new Date(getCurrWeek);
+        dayOfWeek = getCurrWeek.getDay();
+        numDay = getCurrWeek.getDate();
+        start.setDate(numDay - dayOfWeek + 1);
+        start.setHours(0, 0, 0, 0);
+        end.setDate(numDay + (7 - dayOfWeek));
+        end.setHours(0, 0, 0, 0);
         break;
 
       case preWeek:
-        start = new Date(getPreWeek);
-        end = new Date(getPreWeek);
-        dayOfWeek = getPreWeek.getDay();
-        numDay = getPreWeek.getDate();
+        start = new Date(start.getTime() - 7 * 24 * 60 * 60 * 1000);
+        end = new Date(end.getTime() - 7 * 24 * 60 * 60 * 1000);
         break;
 
       case nextWeek:
-        start = new Date(getNextWeek);
-        end = new Date(getNextWeek);
-        dayOfWeek = getNextWeek.getDay();
-        numDay = getNextWeek.getDate();
+        start = new Date(start.getTime() + 7 * 24 * 60 * 60 * 1000);
+        end = new Date(end.getTime() + 7 * 24 * 60 * 60 * 1000);
         break;
 
       default:
-        start = new Date(now);
-        end = new Date(now);
-        dayOfWeek = now.getDay();
-        numDay = now.getDate();
+        getCurrWeek = new Date();
+        start = new Date(getCurrWeek);
+        end = new Date(getCurrWeek);
+        dayOfWeek = getCurrWeek.getDay();
+        numDay = getCurrWeek.getDate();
+        start.setDate(numDay - dayOfWeek + 1);
+        start.setHours(0, 0, 0, 0);
+        end.setDate(numDay + (7 - dayOfWeek));
+        end.setHours(0, 0, 0, 0);
     }
-
-    start.setDate(numDay - dayOfWeek + 1);
-    start.setHours(0, 0, 0, 0);
-
-    end.setDate(numDay + (7 - dayOfWeek));
-    end.setHours(0, 0, 0, 0);
     return [start, end];
   }
 
