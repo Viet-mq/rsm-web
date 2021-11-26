@@ -3,7 +3,7 @@ import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import env from "src/configs/env";
 import {ColumnProps} from "antd/lib/table";
-import {Avatar, Button, Icon, Popconfirm, Table} from "antd";
+import {Avatar, Button, Icon, Popconfirm, Popover, Table} from "antd";
 import {emptyText} from "src/configs/locales";
 import {
   deleteJob,
@@ -14,6 +14,7 @@ import {
 } from "../../redux/actions";
 import {JobEntity, DeleteJobRequest} from "../../types";
 import moment from "moment";
+import {BsThreeDots} from "react-icons/all";
 
 const mapStateToProps = ({jobManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
@@ -40,77 +41,75 @@ function ListRecruitment(props: IProps) {
     props.getListJob({page: 1, size: 100});
   }, []);
 
-  const handleDelete = (event: any, entity: JobEntity) => {
+  const handleDelete = (event: any) => {
     event.stopPropagation();
-    let req: DeleteJobRequest = {
-      id: entity.id
-    }
-    props.deleteJob(req);
+
   }
 
-  const handleEdit = (event: any, entity: JobEntity) => {
+  const handleEdit = (event: any) => {
     event.stopPropagation();
-    props.showFormUpdate(true, entity);
+    props.showFormUpdate(true);
   }
 
-  const columns: ColumnProps<JobEntity>[] = [
-    {
-      title: 'STT',
-      key: 'index',
-      width: 40,
-      align:"center",
-      render: (text, record, index) =>  {return (page - 1) * 10 + index + 1}
-    },
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      width: 100,
-    },
-    {
-      title: () => {
-        return <div style={{whiteSpace: 'nowrap'}}>Thao tác</div>;
-      },
-      dataIndex: 'action',
-      width: 100,
-      fixed: 'right',
-      render: (_text: string, record: JobEntity) => {
-        return (
-          <div style={{whiteSpace: 'nowrap'}}>
-            <Popconfirm
-              title="Bạn muốn xóa Job này chứ ?"
-              okText="Xóa"
-              onCancel={event => {
-                event?.stopPropagation();
-              }}
-              onConfirm={event => handleDelete(event, record)}
-            >
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                onClick={event => {
-                  event.stopPropagation();
-                }}
-              >
-                <Icon type="delete" theme="filled"/>
-              </Button>
-            </Popconfirm>
-            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
-                    onClick={event => handleEdit(event, record)}
-            >
-              <Icon type="edit"/>
-            </Button>
-          </div>
-        );
-      },
-    },
-  ];
+  const content = (
+    <ul style={{width: 160}} className="popup-popover">
+      <li>
+        <a >Chỉnh sửa</a>
+      </li>
+      <li>
+
+        <Popconfirm
+          title="Bạn muốn xóa Talent pool này chứ ?"
+          okText="Xóa"
+          onCancel={event => {
+            event?.stopPropagation();
+          }}
+          onConfirm={event => handleDelete(event)}
+        >
+          <a
+            onClick={event => {
+              event.stopPropagation();
+            }}
+          >
+            Xóa
+          </a>
+        </Popconfirm>
+      </li>
+    </ul>
+  );
+
+  const [visiblePopover, setVisiblePopover] = useState<boolean>(false);
+
+  const handleVisibleChange = (visible: any) => {
+    setVisiblePopover(visible);
+  };
 
   return (
     <>
       <div className="recruitment-list">
         <div>
-          <div></div>
-          <div></div>
+          <div style={{display:"flex",alignItems:"center"}}>
+            <div className="main-1__green-dot"></div>
+            <div className="main-1__job-description">dataDetail?.recruitmentName</div>
+          </div>
+          <div>
+            <div className="card-title">
+              <div className='card-title__title'>
+                <p>talentPool.name</p>
+                <Popover
+                  onVisibleChange={handleVisibleChange}
+                  visible={visiblePopover}
+                  className="header-user-info"
+                  placement="bottomRight"
+                  content={content}
+                  trigger="click">
+
+                  <BsThreeDots className="card-title__title--detail-icon" size='20px'/>
+                </Popover>
+              </div>
+              <p className="card-title__content">talentPool.description</p>
+            </div>
+          </div>
         </div>
       </div>
 
