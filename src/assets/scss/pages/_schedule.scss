@@ -232,3 +232,49 @@
   }
 }
 
+select-custom{
+  width: 200px;
+  font-weight: 600;
+  .ant-select-selection{
+    background-color: transparent;
+    box-sizing: content-box;
+    border: 0;
+    border-radius: 0;
+  }
+  .ant-select-focused .ant-select-selection:focus{
+    border-color: transparent;
+    border-right-width: 0;
+  }
+}
+
+.dropdown-container{
+  padding: 16px 24px 12px!important;
+  min-height: auto!important;
+  background-color:$color-bg ;
+  width: 300px;
+  box-shadow: 0 1px 3px grey;
+  border-radius: 5px;
+  height: 194px;
+  input{
+    width: 100%;
+  }
+}
+
+.scroll-label-content{
+  margin: 15px 0 0;
+  overflow-x: hidden;
+  height: 128px;
+}
+
+.label-content{
+  display: flex;
+  align-items: center;
+  padding: 7px;
+  color:$color-black;
+  &:hover{
+    background-color: $color-hover;
+    border-radius: 2px;
+  }
+}
+
+

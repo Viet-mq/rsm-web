@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Nav from './Nav';
-import {AutoComplete, Button, Col, Form, Icon, Layout, Row} from 'antd';
+import {AutoComplete, Button, Col, Form, Icon, Input, Layout, Row} from 'antd';
 import Header from './Header';
 import commonStyled from './styled/commonStyled';
 import env from 'src/configs/env';
@@ -139,6 +139,7 @@ const [rowsSearch,setRowsSearch]=useState<string[]|any>([])
                           // onSearch={onSearch}
                           placeholder={"Họ tên, Năm sinh, Quê quán, Trường học, Số điện thoại, Email, Công việc"}
                         >
+                          <Input suffix={<Icon type="search" className="certain-category-icon" />} />
                         </AutoComplete>
                       </div>
 

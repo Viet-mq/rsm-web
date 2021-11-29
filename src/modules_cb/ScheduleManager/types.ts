@@ -97,3 +97,9 @@ export interface DataShowSchedule {
   id: string,
   fullName: string
 }
+
+export interface DeleteScheduleRequest {
+  id: string,
+}
+
+

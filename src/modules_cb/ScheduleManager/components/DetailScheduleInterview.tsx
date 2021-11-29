@@ -11,17 +11,11 @@ import {getListStatusCV} from "../../StatusCVManager/redux/actions";
 import {ScheduleEntity} from "../types";
 import {DataShowBooking} from "../../ProfileManager/types";
 import BookingForm from "../../ProfileManager/components/BookingForm";
+import {deleteSchedule} from "../redux/actions";
 
 const mapStateToProps = (state: RootState) => ({
-  listAccount: state.accountManager.list,
-  listStatus: state.statuscvManager.list,
-  getBookingState: state.profileManager.getBooking,
-  updateBooking: state.profileManager.updateBooking,
-  createBooking: state.profileManager.createBooking,
-  showBooking: state.profileManager.showBooking,
-  listAddress: state.addressManager.list
+  delete:state.scheduleManager.deleteSchedule
 })
-
 const connector = connect(mapStateToProps,
   {
     getBooking,
@@ -30,6 +24,7 @@ const connector = connect(mapStateToProps,
     updateBooking,
     createBooking,
     showFormBooking,
+    deleteSchedule
   });
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -74,6 +69,11 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
       fullName: dataDetail.fullName
     }
     props.showFormBooking(true, req);
+  }
+
+  function btnDeleteScheduleClicked() {
+    props.deleteSchedule({id:dataDetail?.id})
+    props.handleClosePopupDetail();
   }
 
   return (
@@ -124,7 +124,7 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
           </div>
         </div>
         <div className="footer-left">
-          <Button onClick={props.handleClosePopupDetail} style={{color: "red", marginRight: 10}}><Icon type="delete"
+          <Button onClick={btnDeleteScheduleClicked} style={{color: "red", marginRight: 10}}><Icon type="delete"
                                                                                                        className="mr-1"/>Xóa</Button>
           <Button onClick={event => handleBooking(event)}><Icon type="edit" className="mr-1"/>Chỉnh sửa</Button>
 
@@ -132,6 +132,8 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
 
       </Modal>
       <BookingForm/>
+
+
     </>
   );
 

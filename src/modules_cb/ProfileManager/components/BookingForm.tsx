@@ -1,6 +1,6 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {createBooking, getActivityLogs, getBooking, showFormBooking, updateBooking} from "../redux/actions";
+import {createBooking, getBooking, showFormBooking, updateBooking} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Checkbox, Col, DatePicker, Form, Input, InputNumber, Modal, Row, Select, TimePicker} from "antd";
 import React, {FormEvent, useEffect} from "react";
@@ -19,7 +19,8 @@ const mapStateToProps = (state: RootState) => ({
   updateBooking: state.profileManager.updateBooking,
   createBooking: state.profileManager.createBooking,
   showBooking: state.profileManager.showBooking,
-  listAddress: state.addressManager.list
+  listAddress: state.addressManager.list,
+  listRecruitment: state.recruitmentManager.list,
 })
 
 const connector = connect(mapStateToProps,
@@ -30,7 +31,6 @@ const connector = connect(mapStateToProps,
     updateBooking,
     createBooking,
     showFormBooking,
-    getActivityLogs
   });
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -45,7 +45,7 @@ function BookingForm(props: BookingFormProps) {
   const interviewTime: any = moment(props.getBookingState.result?.interviewTime)
   const date: any = moment(props.getBookingState.result?.date)
   const diffTime = interviewTime.diff(date, "minutes")
-  console.log(diffTime)
+
   useEffect(() => {
     if (props.showBooking.show_booking) {
       props.getListAccount({page: 1, size: 100});
@@ -218,10 +218,11 @@ function BookingForm(props: BookingFormProps) {
                           },
                         ],
                       })(
-                        <Select className="bg-white text-black" disabled
+                        <Select className="bg-white text-black" style={fontWeightStyle}
                         >
-                          <Option value="on">Business Analysis</Option>
-                          <Option value="off">iOS / Android Developer</Option>
+                          {props.listRecruitment.rows?.map((item: any, index: any) => (
+                            <Option key={index} value={item.id}>{item.title}</Option>
+                          ))}
                         </Select>
                       )}
                     </Form.Item>
@@ -435,10 +436,11 @@ function BookingForm(props: BookingFormProps) {
                           },
                         ],
                       })(
-                        <Select disabled className="bg-white text-black"
+                        <Select className="bg-white text-black" style={fontWeightStyle}
                         >
-                          <Option value="Business Analysis">Business Analysis</Option>
-                          <Option value="iOS / Android Developer">iOS / Android Developer</Option>
+                          {props.listRecruitment.rows?.map((item: any, index: any) => (
+                            <Option key={index} value={item.id}>{item.title}</Option>
+                          ))}
                         </Select>
                       )}
                     </Form.Item>
@@ -517,9 +519,9 @@ function BookingForm(props: BookingFormProps) {
                           )}
                         </Form.Item>
                       </Col>
+
                       <Col span={10}>
-                        <Form.Item className="form-label" label="Phòng" labelCol={{span: 24}}
-                                   wrapperCol={{span: 24}}>
+                        <Form.Item className="form-label" label="Phòng" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                           {getFieldDecorator('room', {
                             initialValue: '',
                             rules: [

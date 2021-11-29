@@ -1,5 +1,5 @@
 import {
-  getListJob,
+  getListRecruitment,
   showFormUpdate,
   UpdateJobAction,
   updateJobError,
@@ -10,10 +10,11 @@ import {put, select} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
 import {AppError} from "src/models/common";
 import {RootState} from "src/redux/reducers";
+import {updateRecruitment} from "../services/apis";
 
 export function* updateJobAsync(action: UpdateJobAction) {
   try {
-    const rs = yield apis.updateJob(action.request);
+    const rs = yield apis.updateRecruitment(action.request);
     yield put(updateJobSuccess(rs));
     if (rs.code !== 0) {
       NotificationError('Cập nhật job không thành công', "Lỗi: " + rs.message)
@@ -21,7 +22,7 @@ export function* updateJobAsync(action: UpdateJobAction) {
       NotificationSuccess('Thành công', "Cập nhật job thành công");
       yield put(showFormUpdate(false));
       const params = yield select((state: RootState) => state.jobManager.list.params);
-      yield put(getListJob(params))
+      yield put(getListRecruitment(params))
     }
   } catch (e) {
     yield put(updateJobError(new AppError(e.message)));

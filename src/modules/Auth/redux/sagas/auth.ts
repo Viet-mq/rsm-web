@@ -18,8 +18,21 @@ import {getListAccount} from "../../../../modules_cb/AccountManager/redux/action
 import {getListSkill} from "../../../../modules_cb/SkillManager/redux/actions";
 import {getListAddress} from "../../../../modules_cb/AddressManager/redux/actions";
 import {getListReasonReject} from "../../../../modules_cb/ReasonRejectManager/redux/actions";
+import {getListRecruitment} from "../../../../modules_cb/RecruitmentManager/redux/actions";
 
 const TOKEN_KEY = 'auth-n-token';
+const SCHOOL ="list-school";
+const JOB_LEVEL ="list-job-level";
+const SOURCE_CV ="list-source-cv";
+const DEPARTMENT ="list-department";
+const JOB ="list-job";
+const STATUS_CV ="list-status-cv";
+const TALENT_POOL ="list-talent-pool";
+const REASON_REJECT ="list-reason-reject";
+const SKILL ="list-skill";
+const RECRUITMENT ="list-recruitment";
+const ACCOUNT ="list-account";
+const ADDRESS ="list-address";
 
 export function* loginAsync(action: LoginAction) {
   try {
@@ -48,6 +61,7 @@ export function* loginAsync(action: LoginAction) {
       yield put(getListSkill({page: 1, size: 100}))
       yield put(getListAddress({page: 1, size: 100}))
       yield put(getListReasonReject({page: 1, size: 100}))
+      yield put(getListRecruitment({page: 1, size: 100}))
 
 
     } else {
@@ -76,15 +90,18 @@ export function* loginCheckerAsync() {
     }
     yield take(LOGOUT);
     localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem("list-school");
-    localStorage.removeItem("list-job-level");
-    localStorage.removeItem("list-source-cv");
-    localStorage.removeItem("list-department");
-    localStorage.removeItem("list-job");
-    localStorage.removeItem("list-status-cv");
-    localStorage.removeItem("list-talent-pool");
-    localStorage.removeItem("list-talent-pool");
-    localStorage.removeItem("list-account");
+    localStorage.removeItem(SCHOOL);
+    localStorage.removeItem(JOB_LEVEL);
+    localStorage.removeItem(SOURCE_CV);
+    localStorage.removeItem(DEPARTMENT);
+    localStorage.removeItem(JOB);
+    localStorage.removeItem(STATUS_CV);
+    localStorage.removeItem(TALENT_POOL);
+    localStorage.removeItem(REASON_REJECT);
+    localStorage.removeItem(SKILL);
+    localStorage.removeItem(RECRUITMENT);
+    localStorage.removeItem(ACCOUNT);
+    localStorage.removeItem(ADDRESS);
 
   }
 }

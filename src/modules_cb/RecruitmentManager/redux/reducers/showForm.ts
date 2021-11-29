@@ -1,11 +1,11 @@
 import * as Actions from "../actions";
 import {JobFormAction} from "../actions";
-import {JobEntity} from "../../types";
+import {RecruitmentEntity} from "../../types";
 
 export interface JobFormState {
   show_create?: boolean,
   show_update?: boolean,
-  data_update?: JobEntity|any
+  data_update?: RecruitmentEntity|any
 }
 
 const initState: JobFormState = {

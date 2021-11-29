@@ -24,7 +24,6 @@ import {getListDepartment} from "../../../DepartmentManager/redux/actions";
 import {getListTalentPool} from "../../../TalentPoolManager/redux/actions";
 import {useHistory} from "react-router-dom";
 import {getListSchool} from "../../../SchoolManager/redux/actions";
-import BookingForm from "../BookingForm";
 
 const {Option} = Select;
 

@@ -7,18 +7,17 @@ import {Avatar, Button, Icon, Popconfirm, Popover, Table} from "antd";
 import {emptyText} from "src/configs/locales";
 import {
   deleteJob,
-  getListJob,
+  getListRecruitment,
   showFormCreate,
   showFormUpdate,
   updateJob
 } from "../../redux/actions";
-import {JobEntity, DeleteJobRequest} from "../../types";
-import moment from "moment";
+
 import {BsThreeDots} from "react-icons/all";
 
 const mapStateToProps = ({jobManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
-  getListJob,
+  getListRecruitment,
   deleteJob,
   showFormCreate,
   showFormUpdate,
@@ -38,7 +37,7 @@ function ListRecruitment(props: IProps) {
   const size = 10;
 
   useEffect(() => {
-    props.getListJob({page: 1, size: 100});
+    props.getListRecruitment({page: 1, size: 100});
   }, []);
 
   const handleDelete = (event: any) => {

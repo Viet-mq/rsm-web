@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Avatar, Button, Icon, Input, Popover, Tooltip} from "antd";
+import {Avatar, Button, Icon, Input, Popover, Select, Tooltip} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {countBookingNumber,} from "../../ProfileManager/redux/actions";
@@ -30,6 +30,7 @@ interface IProps extends ReduxProps {
 }
 
 function ScheduleManagerPages(props: IProps) {
+  const {Option} = Select;
   const dateFormat = 'DD/MM/YYYY';
   const timeFormat = 'HH:mm';
   const currWeek: string = 'currWeek';
@@ -58,20 +59,6 @@ function ScheduleManagerPages(props: IProps) {
     setVisiblePopover(visible);
   };
 
-  const content = (
-    <ul style={{width: 120}} className="popup-popover">
-      <li>
-        <a>Tôi tham gia</a>
-      </li>
-      <li>
-        <a>Tôi tạo</a>
-      </li>
-      <li>
-        <a>Tất cả</a>
-      </li>
-
-    </ul>
-  );
 
   const [visible, setVisible] = useState(false)
   const [visibleDetail, setVisibleDetail] = useState(false)
@@ -130,7 +117,7 @@ function ScheduleManagerPages(props: IProps) {
     s.setDate(numDay - dayOfWeek + 1);
     s.setHours(0, 0, 0, 0);
     e.setDate(numDay + (7 - dayOfWeek));
-    e.setHours(0, 0, 0, 0);
+    e.setHours(23, 59, 59, 0);
     setStartDate(s);
     setEndDate(e);
     return [s, e];
@@ -204,6 +191,15 @@ function ScheduleManagerPages(props: IProps) {
     filterDatesByWeek(week, props.schedule?.result);
   }
 
+  function handleFilterClicked(value: any) {
+    console.log(`selected ${value}`);
+    if(value!=="all"){
+      props.getAllSchedule({key: value})
+    }
+    else  props.getAllSchedule();
+    setVisible(false)
+  }
+
   return (
     <>
       <div className="c-schedule-container">
@@ -223,23 +219,21 @@ function ScheduleManagerPages(props: IProps) {
                 <GrNext/>
               </Button>
             </Tooltip>
-            <div style={{marginRight: 30}} className="align">
+            <div style={{marginRight: 5}} className="align">
               <DateBox defaultValue={moment()} displayFormat="dd/MM/yyyy"
                        type="date"/>
-
             </div>
 
-            <Popover
-              onVisibleChange={handleVisibleChange}
-              visible={visiblePopover}
-              className="header-user-info align"
-              placement="bottomRight"
-              content={content}
-              trigger="click">
+            <Select defaultValue="all" className="select-custom"
 
-              <span style={{fontWeight: 600}}>Tôi tham gia</span>
-              <FiChevronDown style={{marginLeft: 10}}/>
-            </Popover>
+                    style={{
+                      fontWeight: 600,
+                      width: 120,
+                    }} onChange={handleFilterClicked}>
+              <Option value="join">Tôi tham gia</Option>
+              <Option value="create">Tôi tạo</Option>
+              <Option value="all">Tất cả</Option>
+            </Select>
           </div>
 
           <div className="c-schedule-header__align-right align">

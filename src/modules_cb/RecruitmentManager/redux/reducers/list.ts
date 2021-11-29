@@ -1,42 +1,42 @@
-import {JobEntity} from "../../types";
+import {RecruitmentEntity} from "../../types";
 import {AppError} from "src/models/common";
 import * as Actions from "../actions";
-import {JobListAction} from "../actions";
+import {RecruitmentListAction} from "../actions";
 
-export interface JobListState {
+export interface RecruitmentListState {
   loading: boolean,
   params?: any,
-  rows?: JobEntity[]|any,
+  rows?: RecruitmentEntity[]|any,
   total?: number,
   error?: AppError
 }
 
-const initState: JobListState = {
+const initState: RecruitmentListState = {
   loading: false,
   params: {},
   rows: [],
   total: 0
 }
 
-const saveJob:any=localStorage.getItem('list-job');
-const dataJob:JobListState = JSON.parse(saveJob)?JSON.parse(saveJob):initState
+const saveRecruitment:any=localStorage.getItem('list-recruitment');
+const dataRecruitment:RecruitmentListState = JSON.parse(saveRecruitment)?JSON.parse(saveRecruitment):initState
 
-export default (state = dataJob, {type, total, rows, params, error}: JobListAction): JobListState => {
+export default (state = dataRecruitment, {type, total, rows, params, error}: RecruitmentListAction): RecruitmentListState => {
   switch (type) {
-    case Actions.GET_LIST_JOB:
+    case Actions.GET_LIST_RECRUITMENT:
       return {
         ...state,
         params,
         loading: true
       }
-    case Actions.GET_LIST_JOB_SUCCESS:
+    case Actions.GET_LIST_RECRUITMENT_SUCCESS:
       return {
         ...state,
         total,
         rows,
         loading: false
       }
-    case Actions.GET_LIST_JOB_ERROR:
+    case Actions.GET_LIST_RECRUITMENT_ERROR:
       return {
         ...state,
         error,

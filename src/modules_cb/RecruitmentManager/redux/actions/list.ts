@@ -1,30 +1,30 @@
-import {JobEntity} from "../../types";
+import {RecruitmentEntity} from "../../types";
 import {AppError} from "src/models/common";
 
-export interface JobListAction {
+export interface RecruitmentListAction {
   type: string,
   params?: any,
-  rows?: JobEntity[],
+  rows?: RecruitmentEntity[],
   total?: number,
   error?: AppError
 }
 
-export const GET_LIST_JOB = "GET_LIST_JOB";
-export const GET_LIST_JOB_SUCCESS = "GET_LIST_JOB_SUCCESS";
-export const GET_LIST_JOB_ERROR = "GET_LIST_JOB_ERROR";
+export const GET_LIST_RECRUITMENT = "GET_LIST_RECRUITMENT";
+export const GET_LIST_RECRUITMENT_SUCCESS = "GET_LIST_RECRUITMENT_SUCCESS";
+export const GET_LIST_RECRUITMENT_ERROR = "GET_LIST_RECRUITMENT_ERROR";
 
-export const getListJob = (params: any): JobListAction => ({
-  type: GET_LIST_JOB,
+export const getListRecruitment = (params: any): RecruitmentListAction => ({
+  type: GET_LIST_RECRUITMENT,
   params
 });
 
-export const getListJobSuccess = (total: number, rows: JobEntity[]): JobListAction => ({
-  type: GET_LIST_JOB_SUCCESS,
+export const getListRecruitmentSuccess = (total: number, rows: RecruitmentEntity[]): RecruitmentListAction => ({
+  type: GET_LIST_RECRUITMENT_SUCCESS,
   total,
   rows
 });
 
-export const getListJobError = (error: AppError): JobListAction => ({
-  type: GET_LIST_JOB_ERROR,
+export const getListRecruitmentError = (error: AppError): RecruitmentListAction => ({
+  type: GET_LIST_RECRUITMENT_ERROR,
   error
 });

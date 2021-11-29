@@ -1,22 +1,22 @@
-import {JobListAction, getListJobError, getListJobSuccess} from "../actions";
+import {RecruitmentListAction, getListRecruitmentError, getListRecruitmentSuccess} from "../actions";
 import * as apis from '../services/apis'
 import {put} from "redux-saga/effects";
 import {AppError} from "src/models/common";
 import {NotificationError} from "src/components/Notification/Notification";
 
-export function* getListJobAsync(action: JobListAction) {
+export function* getListRecruitmentAsync(action: RecruitmentListAction) {
   try {
-    const rs = yield apis.getListJob(action.params);
+    const rs = yield apis.getListRecruitment(action.params);
     if (rs.code !== 0) {
-      NotificationError('Lấy danh sách Job không thành công', "Lỗi: " + rs.message);
+      NotificationError('Lấy danh sách tin tuyển dụng không thành công', "Lỗi: " + rs.message);
 
     }
     else {
-      localStorage.setItem("list-job", JSON.stringify(rs || {}));
-      yield put(getListJobSuccess(rs.total, rs.rows))
+      localStorage.setItem("list-recruitment", JSON.stringify(rs || {}));
+      yield put(getListRecruitmentSuccess(rs.total, rs.rows))
     }
   } catch (e) {
-    yield put(getListJobError(new AppError(e.message)));
-    NotificationError('Lấy danh sách Job không thành công', "Lỗi: " + e.message);
+    yield put(getListRecruitmentError(new AppError(e.message)));
+    NotificationError('Lấy danh sách tin tuyển dụng không thành công', "Lỗi: " + e.message);
   }
 }
