@@ -309,8 +309,8 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
         zIndex={2}
         maskClosable={false}
         title="Đặt lịch"
-        // visible={visible}
-        visible={true}
+        visible={visible}
+        /*visible={true}*/
         centered={true}
         width="990px"
         className="custom"
