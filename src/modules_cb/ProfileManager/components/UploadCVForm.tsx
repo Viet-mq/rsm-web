@@ -60,7 +60,7 @@ function UploadCVForm(props: CreateUploadFormProps) {
 
     <Modal
       zIndex={2}
-      title={props.showFormUpload.show_upload ? "Thêm CV" : "Thêm Danh sách CV"}
+      title={props.showFormUpload.show_upload ? "Thêm ứng viên" : "Thêm Danh sách ứng viên"}
       visible={props.showFormUpload.show_upload || props.showFormUpload.show_upload_list}
       centered={true}
       width="550px"

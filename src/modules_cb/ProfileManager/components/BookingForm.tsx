@@ -72,7 +72,6 @@ function BookingForm(props: BookingFormProps) {
     (e.target as any).disabled = false;
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log("values:", values)
 
         const date = new Date(values.date);
         const time = new Date(values.timeStart);
@@ -83,7 +82,11 @@ function BookingForm(props: BookingFormProps) {
         const minutes = time.getMinutes();
         const dateChanged: any = new Date(yyyy, mm - 1, dd, hh, minutes, 0);
         const interviewTime: any = new Date(yyyy, mm - 1, dd, hh, minutes + values.interviewTime, 0);
-        console.log(interviewTime)
+        console.log("UpdateBooking------------")
+        console.log("values.interviewTime:",values.interviewTime)
+        console.log("interviewTime:",interviewTime,yyyy,mm,dd,hh,minutes)
+        console.log("start:",dateChanged,"end:",interviewTime)
+        console.log("-------------------------")
         let req: UpdateBookingRequest = {
           id: props.getBookingState.result?.id,
           floor: values.room,
@@ -111,7 +114,6 @@ function BookingForm(props: BookingFormProps) {
           // timeStart: values.timeStart * 1,
           // timeFinish: values.timeFinish * 1,
         }
-        console.log(req)
         props.updateBooking(req);
         return;
       }
@@ -128,7 +130,7 @@ function BookingForm(props: BookingFormProps) {
     (e.target as any).disabled = true;
     (e.target as any).disabled = false;
     props.form.validateFieldsAndScroll((err, values) => {
-      console.log("values:", values)
+
       if (!err) {
         const date = new Date(values.date);
         const time = new Date(values.timeStart);
@@ -139,7 +141,11 @@ function BookingForm(props: BookingFormProps) {
         const minutes = time.getMinutes();
         const dateChanged: any = new Date(yyyy, mm - 1, dd, hh, minutes, 0);
         const interviewTime: any = new Date(yyyy, mm - 1, dd, hh, minutes + values.interviewTime, 0);
-
+        console.log("CreateBooking------------")
+        console.log("values.interviewTime:",values.interviewTime)
+        console.log("interviewTime:",interviewTime,yyyy,mm,dd,hh,minutes)
+        console.log("start:",dateChanged,"end:",interviewTime)
+        console.log("-------------------------")
         let req: CreateBookingRequest = {
           idProfile: props.showBooking.data_booking?.id,
           date: dateChanged * 1,
@@ -167,11 +173,11 @@ function BookingForm(props: BookingFormProps) {
           // timeStart: values.timeStart * 1,
           // timeFinish: values.timeFinish * 1,
         }
-        console.log(req)
         props.createBooking(req);
         return;
       }
     });
+
   }
 
   return (
@@ -483,7 +489,7 @@ function BookingForm(props: BookingFormProps) {
                         <Form.Item className="form-label" label="Thời lượng(phút)" labelCol={{span: 24}}
                                    wrapperCol={{span: 24}}>
                           {getFieldDecorator('interviewTime', {
-                            initialValue: '15',
+                            initialValue: 15,
                             rules: [
                               {
                                 message: 'Vui lòng nhập thời lượng',

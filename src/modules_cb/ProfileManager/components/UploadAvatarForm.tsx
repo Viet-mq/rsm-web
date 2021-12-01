@@ -78,7 +78,7 @@ function UploadAvatarForm(props: CreateUploadFormProps) {
         }}
       >
         <form id="form-upload">
-          <img id="blah" src={imageUpload} alt="your image" width="30%" height="30%" style={{marginBottom: "15px"}}/>
+          <img id="blah" src={imageUpload} width="30%" height="30%" style={{marginBottom: "15px"}}/>
           <input id="upload" type="file" style={{width: "100%", border: "1px solid"}}
                  onChange={onFileChange}
                  accept="image/*"/>

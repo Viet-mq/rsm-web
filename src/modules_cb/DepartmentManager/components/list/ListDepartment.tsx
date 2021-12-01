@@ -12,8 +12,7 @@ import {
   showFormUpdate,
   updateDepartment
 } from "../../redux/actions";
-import {DepartmentEntity, DeleteDepartmentRequest} from "../../types";
-import {ProfileEntity} from "../../../ProfileManager/types";
+import {DeleteDepartmentRequest, DepartmentEntity} from "../../types";
 
 const mapStateToProps = ({departmentManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
@@ -60,7 +59,7 @@ function ListDepartment(props: IProps) {
       title: 'Name',
       dataIndex: 'name',
       width: 100,
-    },   
+    },
 
     {
       title: () => {

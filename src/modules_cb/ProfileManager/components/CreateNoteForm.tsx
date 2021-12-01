@@ -32,7 +32,6 @@ interface CreateProfileFormProps extends FormComponentProps, ReduxProps {
 function CreateProfileForm(props: CreateProfileFormProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
-  const formItemStyle = {height: '60px'};
   const [file, setFile] = useState(null);
 
   const formItemLayout = {

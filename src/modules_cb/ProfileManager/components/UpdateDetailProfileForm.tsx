@@ -3,7 +3,7 @@ import {connect, ConnectedProps} from "react-redux";
 import {getActivityLogs, showFormDetail, showFormUpdateDetail, updateDetail,} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, DatePicker, Form, Icon, Input, Modal, Select} from "antd";
-import React, {FormEvent, useEffect} from "react";
+import React, {FormEvent} from "react";
 import {DetailCV, UpdateDetailRequest} from "../types";
 import {getListJob, showFormCreate as showJobFormCreate} from "../../JobManager/redux/actions";
 import {getListJobLevel, showFormCreate as showJobLevelFormCreate} from "../../JobLevelManager/redux/actions";
@@ -29,7 +29,7 @@ const mapStateToProps = (state: RootState) => ({
   createJobLevel: state.joblevelManager.create,
   createSchool: state.schoolManager.create,
   createSourceCV: state.sourcecvManager.create,
-  listTalentPool:state.talentPoolManager.list,
+  listTalentPool: state.talentPoolManager.list,
 
 })
 
@@ -92,9 +92,9 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           school: values.school,
           sourceCV: values.sourceCV,
           lastApply: values.lastApply * 1,
-          talentPool:values.talentPoolId
+          talentPool: values.talentPoolId
         }
-        console.log("req:",req)
+        console.log("req:", req)
         props.updateDetail(req);
 
         return;

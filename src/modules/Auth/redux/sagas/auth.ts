@@ -1,4 +1,4 @@
-import {put, select, take} from 'redux-saga/effects';
+import {put, take} from 'redux-saga/effects';
 import * as apis from './../../services/apis';
 import {LoginAction, loginError, loginSuccess, LoginSuccessAction, LOGOUT} from '../actions';
 import {AppError} from '../../../../models/common';
@@ -6,7 +6,6 @@ import {setToken} from '../../../../helpers/token';
 import {LoginResponse2} from '../../types';
 import history from 'src/history';
 import {NotificationError, NotificationSuccess} from 'src/components/Notification/Notification';
-import {RootState} from "../../../../redux/reducers";
 import {getListJob} from "../../../../modules_cb/JobManager/redux/actions";
 import {getListJobLevel} from "../../../../modules_cb/JobLevelManager/redux/actions";
 import {getListDepartment} from "../../../../modules_cb/DepartmentManager/redux/actions";

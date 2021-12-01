@@ -41,7 +41,6 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
   const dateFormat = 'DD/MM/YYYY';
   const timeFormat = 'HH:mm';
   const dataDetail = props.dataDetail?.find((item: any) => item.id === props.idDetail)
-  console.log("dataDetail", dataDetail)
 
   useEffect(() => setVisible(props?.visible), [props?.visible]);
 
@@ -55,11 +54,6 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
       }
       return initials.toUpperCase();
     }
-  }
-
-  const setColor = () => {
-    const randomColor: string = Math.floor(Math.random() * 16777215).toString(16);
-    return "#" + randomColor;
   }
 
   const handleBooking = (event: any) => {

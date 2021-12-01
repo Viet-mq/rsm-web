@@ -1,7 +1,7 @@
 import {CreateBookingRequest} from "../../../types";
 import {AppError, ResponseBase2} from "../../../../../models/common";
 import * as Actions from "../../actions";
-import {COUNT_BOOKING_NUMBER, CreateBookingAction} from "../../actions";
+import {CreateBookingAction} from "../../actions";
 
 export interface CreateBookingState {
   loading: boolean,

@@ -37,7 +37,8 @@ const mapStateToProps = (state: RootState) => ({
   createSourceCV: state.sourcecvManager.create,
   listDepartment:state.departmentManager.list,
   listSkill:state.skillManager.list,
-  createSkill: state.skillManager.create
+  createSkill: state.skillManager.create,
+  listRecruitment: state.recruitmentManager.list,
 })
 
 const connector = connect(mapStateToProps,
@@ -104,7 +105,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
           job: values.job,
           levelJob: values.levelJob,
           skill:values.skill,
-          recruitment:values.recruitment,
+          recruitment:values.recruitmentId,
           talentPool: values.talentPool,
           hrRef: values.hrRef,
           mailRef:values.mailRef,
@@ -496,7 +497,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
 
           <Form.Item label="Tin tuyển dụng"  className="mb-0" style={{...formItemStyle}}>
             <div style={{display: 'flex'}}>
-              {getFieldDecorator('recruitment', {
+              {getFieldDecorator('recruitmentId', {
                 initialValue: '',
                 rules: [
                   {
@@ -505,10 +506,10 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                   },
                 ],
               })(
-                <Select className="bg-white text-black" disabled
+                <Select className="bg-white text-black"
                 >
-                  {props.listTalentPool.rows?.map((item: any, index: any) => (
-                    <Option key={index} value={item.id}>{item.name}</Option>
+                  {props.listRecruitment.rows?.map((item: any, index: any) => (
+                    <Option key={index} value={item.id}>{item.title}</Option>
                   ))}
                 </Select>
               )}

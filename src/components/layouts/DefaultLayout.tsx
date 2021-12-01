@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Nav from './Nav';
-import {AutoComplete, Button, Col, Form, Icon, Input, Layout, Row} from 'antd';
+import {AutoComplete, Col, Form, Icon, Input, Layout, Row} from 'antd';
 import Header from './Header';
 import commonStyled from './styled/commonStyled';
 import env from 'src/configs/env';
@@ -35,14 +35,12 @@ const DefaultLayout = (props: LayoutProps) => {
 
   const screenWidth = document.documentElement.clientWidth;
   const [collapsed, setCollapsed] = useState(screenWidth <= env.tabletWidth ? true : false)
-  const {getFieldDecorator, resetFields} = props.form;
-  const [isLoading,setIsLoading]=useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const history = useHistory();
   const [state, setState] = useState<any>({
     value: '',
     dataSource: [],
   });
-const [rowsSearch,setRowsSearch]=useState<string[]|any>([])
 
   function toggle() {
     setCollapsed(!collapsed)
@@ -83,20 +81,20 @@ const [rowsSearch,setRowsSearch]=useState<string[]|any>([])
     })
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     setState({
       ...state,
-      dataSource: !state.value ? [] : Array.from(new Set([state.value ].concat(props.elasticSearch.rowsSearch?.map((item: any) => item.fullName)))) ,
+      dataSource: !state.value ? [] : Array.from(new Set([state.value].concat(props.elasticSearch.rowsSearch?.map((item: any) => item.fullName)))),
     })
-  },[props.elasticSearch.rowsSearch])
+  }, [props.elasticSearch.rowsSearch])
 
-  function onSelect(value:any) {
+  function onSelect(value: any) {
     console.log('onSelect', value);
-    if(value){
+    if (value) {
       props.getElasticSearch({key: value, size: 100})
       props.triggerSearch();
     }
-    if(state.value){
+    if (state.value) {
       setIsLoading(true);
     }
   }
@@ -104,31 +102,31 @@ const [rowsSearch,setRowsSearch]=useState<string[]|any>([])
   return (
     <div>
 
-    <commonStyled.Container>
-      <Layout>
+      <commonStyled.Container>
         <Layout>
-          <Sider className="menu" trigger={null} collapsible collapsed={collapsed} width={250}>
-            {}
-            <div className="logo">
-              {collapsed ? null : <img src={require('src/assets/images/logo-edsolabs.png')}/>
-              }
-            </div>
-            <Nav hiddenLabel={collapsed}/>
-          </Sider>
-          <Layout className="content">
-            <Header>
-              <Icon
-                className="trigger-menu"
-                type={collapsed ? 'menu-unfold' : 'menu-fold'}
-                onClick={toggle}
-              />
-              <span className="ml-5" style={{fontWeight: 500, marginRight: '-21px'}}>Tìm kiếm</span>
+          <Layout>
+            <Sider className="menu" trigger={null} collapsible collapsed={collapsed} width={250}>
+              {}
+              <div className="logo">
+                {collapsed ? null : <img src={require('src/assets/images/logo-edsolabs.png')}/>
+                }
+              </div>
+              <Nav hiddenLabel={collapsed}/>
+            </Sider>
+            <Layout className="content">
+              <Header>
+                <Icon
+                  className="trigger-menu"
+                  type={collapsed ? 'menu-unfold' : 'menu-fold'}
+                  onClick={toggle}
+                />
+                <span className="ml-5" style={{fontWeight: 500, marginRight: '-21px'}}>Tìm kiếm</span>
 
-              <Form style={{
-                display: "flex", flexWrap: "wrap", marginLeft: "25px", flex: "1"
-              }}>
+                <Form style={{
+                  display: "flex", flexWrap: "wrap", marginLeft: "25px", flex: "1"
+                }}>
 
-                <Form.Item style={{margin: "-5px 10px 0 5px", width: "40%"}}>
+                  <Form.Item style={{margin: "-5px 10px 0 5px", width: "40%"}}>
                     <>
                       <div style={{display: "flex"}}>
                         <AutoComplete
@@ -139,33 +137,33 @@ const [rowsSearch,setRowsSearch]=useState<string[]|any>([])
                           // onSearch={onSearch}
                           placeholder={"Họ tên, Năm sinh, Quê quán, Trường học, Số điện thoại, Email, Công việc"}
                         >
-                          <Input suffix={<Icon type="search" className="certain-category-icon" />} />
+                          <Input suffix={<Icon type="search" className="certain-category-icon"/>}/>
                         </AutoComplete>
                       </div>
 
                     </>
-                </Form.Item>
-              </Form>
-            </Header>
+                  </Form.Item>
+                </Form>
+              </Header>
 
-            <div>
-              <Row>
-                <Col span={props.showFormDetail?.show_detail?.general}
-                     style={{height: "calc(100vh - 60px)", overflow: "auto"}}>
-                  {props.children}
-                </Col>
+              <div>
+                <Row>
+                  <Col span={props.showFormDetail?.show_detail?.general}
+                       style={{height: "calc(100vh - 60px)", overflow: "auto"}}>
+                    {props.children}
+                  </Col>
 
-                <Col span={props.showFormDetail?.show_detail?.detail}>
-                  <DetailProfileForm/>
-                </Col>
-              </Row>
-            </div>
+                  <Col span={props.showFormDetail?.show_detail?.detail}>
+                    <DetailProfileForm/>
+                  </Col>
+                </Row>
+              </div>
+            </Layout>
           </Layout>
         </Layout>
-      </Layout>
-    </commonStyled.Container>
+      </commonStyled.Container>
 
-      {props.elasticSearch.loadingRs?<Loading/>:null}
+      {props.elasticSearch.loadingRs ? <Loading/> : null}
     </div>
   );
 

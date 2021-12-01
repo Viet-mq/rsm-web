@@ -37,7 +37,9 @@ const mapStateToProps = (state: RootState) => ({
   createSourceCV: state.sourcecvManager.create,
   listTalentPool: state.talentPoolManager.list,
   listSkill:state.skillManager.list,
-  createSkill: state.skillManager.create
+  createSkill: state.skillManager.create,
+  listRecruitment: state.recruitmentManager.list,
+
 })
 
 const connector = connect(mapStateToProps,
@@ -101,7 +103,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           department: values.department,
           levelSchool: values.levelSchool,
           mailRef: values.mailRef,
-          recruitment: values.recruitment,
+          recruitment: values.recruitmentId,
           skill:values.skill,
         }
         props.updateProfile(req);
@@ -489,8 +491,8 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
 
           <Form.Item label="Tin tuyển dụng" className="mb-0" style={{...formItemStyle}}>
             <div style={{display: 'flex'}}>
-              {getFieldDecorator('recruitment', {
-                initialValue: props.showForm.data_update?.recruitment,
+              {getFieldDecorator('recruitmentId', {
+                initialValue: props.showForm.data_update?.recruitmentName,
                 rules: [
                   {
                     message: 'Vui lòng chọn tin tuyển dụng',
@@ -498,10 +500,10 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                   },
                 ],
               })(
-                <Select className="bg-white text-black" disabled
+                <Select className="bg-white text-black"
                 >
-                  {props.listTalentPool.rows?.map((item: any, index: any) => (
-                    <Option key={index} value={item.id}>{item.name}</Option>
+                  {props.listRecruitment.rows?.map((item: any, index: any) => (
+                    <Option key={index} value={item.id}>{item.title}</Option>
                   ))}
                 </Select>
               )}

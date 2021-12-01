@@ -2,7 +2,7 @@ import {ResponseBase2} from "src/models/common";
 import {GET, POST} from "src/services";
 
 export const createSchedule = async (params?: any): Promise<ResponseBase2> => {
-  return (await POST('api-svc/calendar/create', params)) as ResponseBase2;
+  return (await POST('api-svc/calendars/create', params)) as ResponseBase2;
 };
 
 export const updateSchedule = async (params?: any): Promise<ResponseBase2> => {

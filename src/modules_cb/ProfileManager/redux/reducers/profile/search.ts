@@ -1,6 +1,6 @@
 import {AppError} from "../../../../../models/common";
 import * as Actions from "../../actions";
-import {GetElasticSearchAction, TRIGGER_SEARCH} from "../../actions";
+import {GetElasticSearchAction} from "../../actions";
 import {ProfileEntity, SearchRequest} from "../../../types";
 
 export interface GetElasticSearchState {
@@ -62,7 +62,7 @@ export default (state = initState, {
         loading: false,
         loadingRs: false
       }
-   case Actions.TRIGGER_SEARCH:
+    case Actions.TRIGGER_SEARCH:
       return {
         ...state,
         loadingRs: true

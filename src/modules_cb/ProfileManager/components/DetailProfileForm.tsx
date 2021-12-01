@@ -168,7 +168,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     props.showFormCreateNote(true, props.detail.result?.id);
   }
 
-  const  columns: ColumnProps<NoteEntity>[] = [
+  const columns: ColumnProps<NoteEntity>[] = [
     {
       title: "Người phỏng vấn",
       dataIndex: "fullName",

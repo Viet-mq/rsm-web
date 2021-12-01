@@ -4,7 +4,6 @@ import {put, select} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
 import {RootState} from "src/redux/reducers";
 import {AppError} from "src/models/common";
-import {deleteRecruitment} from "../services/apis";
 
 export function* deleteJobAsync(action: DeleteJobAction) {
   try {

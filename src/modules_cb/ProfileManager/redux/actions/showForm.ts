@@ -1,4 +1,4 @@
-import {DetailCV, DetailProfileEntity, ProfileEntity, UploadAvatarRequest} from "../../types";
+import {DetailCV, DetailProfileEntity, ProfileEntity} from "../../types";
 
 export interface ProfileFormAction {
   type: string,
@@ -10,7 +10,7 @@ export interface ProfileFormAction {
   data_update_detail?: DetailProfileEntity
   id_detail?: string,
   show_upload_avatar?: boolean,
-  id_upload_avatar?:string
+  id_upload_avatar?: string
 
 }
 
@@ -43,10 +43,10 @@ export const showFormDetail = (show?: DetailCV, id_detail?: string): ProfileForm
   id_detail: id_detail
 });
 
-export const showFormUploadAvatar = (show_upload_avatar: boolean,id_upload_avatar?:string): ProfileFormAction => ({
+export const showFormUploadAvatar = (show_upload_avatar: boolean, id_upload_avatar?: string): ProfileFormAction => ({
   type: PROFILE_SHOW_FORM_UPLOAD_AVATAR,
   show_upload_avatar: show_upload_avatar,
-  id_upload_avatar:id_upload_avatar
+  id_upload_avatar: id_upload_avatar
 });
 
 

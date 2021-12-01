@@ -8,6 +8,9 @@ export const getListProfile = async (params: any): Promise<ListResponseBase2<Pro
     console.log(params.fullName)
     url += "fullName=" + params.fullName + "&"
   }
+  if (params.calendar !== null && params.calendar !== undefined) {
+    url += "calendar=" + params.calendar + "&"
+  }
   if (params.job !== null && params.job !== undefined) {
     url += "job=" + params.job + "&"
   }
@@ -19,6 +22,9 @@ export const getListProfile = async (params: any): Promise<ListResponseBase2<Pro
   }
   if (params.talentPool !== null && params.talentPool !== undefined) {
     url += "talentPool=" + params.talentPool + "&"
+  }
+  if (params.recruitment !== null && params.recruitment !== undefined) {
+    url += "recruitment=" + params.recruitment + "&"
   }
   if (params.page !== null && params.page !== undefined) {
     url += "page=" + params.page + "&"

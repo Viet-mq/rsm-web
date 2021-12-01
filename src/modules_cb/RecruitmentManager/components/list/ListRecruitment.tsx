@@ -1,17 +1,8 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
-import env from "src/configs/env";
-import {ColumnProps} from "antd/lib/table";
-import {Avatar, Button, Icon, Popconfirm, Popover, Table} from "antd";
-import {emptyText} from "src/configs/locales";
-import {
-  deleteJob,
-  getListRecruitment,
-  showFormCreate,
-  showFormUpdate,
-  updateJob
-} from "../../redux/actions";
+import {Popconfirm, Popover} from "antd";
+import {deleteJob, getListRecruitment, showFormCreate, showFormUpdate, updateJob} from "../../redux/actions";
 
 import {BsThreeDots} from "react-icons/all";
 
@@ -31,11 +22,6 @@ interface IProps extends ReduxProps {
 
 function ListRecruitment(props: IProps) {
 
-  let screenWidth = document.documentElement.clientWidth;
-  const [page, setPage] = useState(1);
-  const scroll = screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false};
-  const size = 10;
-
   useEffect(() => {
     props.getListRecruitment({page: 1, size: 100});
   }, []);
@@ -53,7 +39,7 @@ function ListRecruitment(props: IProps) {
   const content = (
     <ul style={{width: 160}} className="popup-popover">
       <li>
-        <a >Chỉnh sửa</a>
+        <a>Chỉnh sửa</a>
       </li>
       <li>
 
@@ -87,7 +73,7 @@ function ListRecruitment(props: IProps) {
     <>
       <div className="recruitment-list">
         <div>
-          <div style={{display:"flex",alignItems:"center"}}>
+          <div style={{display: "flex", alignItems: "center"}}>
             <div className="main-1__green-dot"></div>
             <div className="main-1__job-description">dataDetail?.recruitmentName</div>
           </div>

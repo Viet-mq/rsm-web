@@ -1,26 +1,27 @@
 import React, {useEffect, useState} from "react";
-import {Avatar, Button, Icon, Input, Popover, Select, Tooltip} from "antd";
+import {Avatar, Button, Icon, Input, Select, Tooltip} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {countBookingNumber,} from "../../ProfileManager/redux/actions";
-import {AiOutlineCalendar, FiChevronDown, GrNext, GrPrevious} from "react-icons/all";
+import {AiOutlineCalendar, GrNext, GrPrevious} from "react-icons/all";
 import moment from 'moment';
 import ScheduleInterview from "../components/ScheduleInterview";
-import DateBox from "devextreme-react/date-box";
 import DetailScheduleInterview from "../components/DetailScheduleInterview";
-import {getAllSchedule} from "../redux/actions";
+import {getAllSchedule, showFormSchedule} from "../redux/actions";
 import {DataShowSchedule, ScheduleEntity} from "../types";
 
 const {Search} = Input;
 
 const mapStateToProps = (state: RootState) => ({
   schedule: state.scheduleManager.getSchedule,
+  showSchedule: state.scheduleManager.showSchedule
 })
 
 
 const connector = connect(mapStateToProps, {
   countBookingNumber,
-  getAllSchedule
+  getAllSchedule,
+  showFormSchedule,
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -36,14 +37,12 @@ function ScheduleManagerPages(props: IProps) {
   const currWeek: string = 'currWeek';
   const preWeek: string = 'preWeek';
   const nextWeek: string = 'nextWeek';
+  const [keySearch, setKeySearch] = useState<string>('')
 
   useEffect(() => {
     document.title = "Lịch";
     props.countBookingNumber();
     props.getAllSchedule();
-    // if(props.schedule?.result){
-    //   filterDatesByCurrentWeek(props.schedule?.result);
-    // }
   }, []);
 
   useEffect(() => {
@@ -60,22 +59,21 @@ function ScheduleManagerPages(props: IProps) {
   };
 
 
-  const [visible, setVisible] = useState(false)
   const [visibleDetail, setVisibleDetail] = useState(false)
   const [idDetail, setIdDetail] = useState<string>('');
 
-  function handlePopupScheduleInterview() {
-    setVisible(true)
+  function handlePopupScheduleInterview(e: any) {
+    e.preventDefault();
+    if (e?.target) {
+      e.target.disabled = true;
+      e.target.disabled = false;
+    }
+    props.showFormSchedule(true);
   }
 
   function handlePopupScheduleInterviewDetail(values: DataShowSchedule) {
-    console.log(values)
     setIdDetail(values.id)
     setVisibleDetail(true)
-  }
-
-  function handleClosePopup() {
-    setVisible(false)
   }
 
   function handleClosePopupDetail() {
@@ -92,11 +90,6 @@ function ScheduleManagerPages(props: IProps) {
       }
       return initials.toUpperCase();
     }
-  }
-
-  const setColor = () => {
-    const randomColor: string = Math.floor(Math.random() * 16777215).toString(16);
-    return "#" + randomColor;
   }
 
   const [outObject, setOutObject] = useState<ScheduleEntity | any>([])
@@ -138,7 +131,6 @@ function ScheduleManagerPages(props: IProps) {
         setEndDate(e);
         return [s, e];
       }
-
       case nextWeek: {
         let s = plusDays(startDate, 7);
         let e = plusDays(endDate, 7);
@@ -146,20 +138,14 @@ function ScheduleManagerPages(props: IProps) {
         setEndDate(e);
         return [s, e];
       }
-
       default:
         const [s, e] = setCurrentDate();
         return [s, e];
-
     }
-
   }
 
   function filterDatesByWeek(week: string, filterDate: ScheduleEntity[]) {
     let [start, end] = getWeekDates(week);
-
-    console.log("week start: " + start);
-    console.log("week end: " + end);
 
     const datesFilter: any = filterDate?.filter((d: any) => d.date >= +start && d.date < +end);
     const outObject = datesFilter?.reduce((acc: any, curr: any) => {
@@ -185,19 +171,28 @@ function ScheduleManagerPages(props: IProps) {
   }
 
   function handleWeekClicked(week: string) {
-
     console.log("week: " + week);
-
     filterDatesByWeek(week, props.schedule?.result);
   }
 
   function handleFilterClicked(value: any) {
     console.log(`selected ${value}`);
-    if(value!=="all"){
+    if (value !== "all") {
       props.getAllSchedule({key: value})
-    }
-    else  props.getAllSchedule();
-    setVisible(false)
+    } else props.getAllSchedule();
+  }
+
+  function onSearch(value: string) {
+    value.trim()
+    setKeySearch(value.trim())
+    props.getAllSchedule({keySearch: value.trim()})
+  }
+
+  console.log(outObject)
+
+  function onBtnResetClicked() {
+    setKeySearch('')
+    props.getAllSchedule();
   }
 
   return (
@@ -219,10 +214,10 @@ function ScheduleManagerPages(props: IProps) {
                 <GrNext/>
               </Button>
             </Tooltip>
-            <div style={{marginRight: 5}} className="align">
-              <DateBox defaultValue={moment()} displayFormat="dd/MM/yyyy"
-                       type="date"/>
-            </div>
+            {/*<div style={{marginRight: 5}} className="align">*/}
+            {/*  <DateBox defaultValue={moment()} displayFormat="dd/MM/yyyy"*/}
+            {/*           type="date"/>*/}
+            {/*</div>*/}
 
             <Select defaultValue="all" className="select-custom"
 
@@ -239,7 +234,7 @@ function ScheduleManagerPages(props: IProps) {
           <div className="c-schedule-header__align-right align">
             <Search
               placeholder="Tìm kiếm lịch theo tên ứng viên, tin tuyển dụng"
-              onSearch={value => console.log(value)}
+              onSearch={value => onSearch(value)}
               style={{width: 340}}
             />
             <Button type="primary"
@@ -250,10 +245,21 @@ function ScheduleManagerPages(props: IProps) {
             </Button>
           </div>
         </div>
+        {keySearch ?
+          <div style={{marginLeft: 15}}>
+            <span>Kết quả tìm kiếm cho: </span>
+            <span
+              className="c-search-profile"
+            >
+              {keySearch}
+            </span>
+            <a style={{color: "black", fontStyle: "italic"}} onClick={onBtnResetClicked}>x</a>
+          </div>
+          : null}
         {outObject?.length > 0 ?
           outObject?.map((item: any, index: any) => {
             return <div className="c-schedule-content" key={item.date}>
-              <div className="c-schedule-content__head">Hôm nay - {item.date}</div>
+              <div className="c-schedule-content__head">{item.date}</div>
               {item.data?.map((itemChild: any, index1: any) => {
                 return <div className="c-item " key={index1}>
                   <div className="c-time-flex">
@@ -305,8 +311,7 @@ function ScheduleManagerPages(props: IProps) {
 
       </div>
 
-      <ScheduleInterview visible={visible} handlePopupScheduleInterview={handlePopupScheduleInterview}
-                         handleClosePopup={handleClosePopup}/>
+      <ScheduleInterview/>
       <DetailScheduleInterview idDetail={idDetail} dataDetail={props.schedule.result} visible={visibleDetail}
                                handleClosePopupDetail={handleClosePopupDetail}/>
     </>

@@ -1,5 +1,3 @@
-
-
 //schedule
 export interface ScheduleEntity {
   id: string | any,
@@ -16,53 +14,24 @@ export interface ScheduleEntity {
   interviewAddressName: string,
   fullName: string,
   date: number,
-
-  // time: number,
-  // address: string,
-  // form: string,
-  // interviewer: string[],
-  // interviewee: string,
-  // content: string,
-  // question: string,
-  // comments: string,
-  // evaluation: string,
-  // statusId: string,
-  // statusName: string,
-  // reason: string,
-  // timeStart: number,
-  // timeFinish: number
-
-
 }
 
 export interface CreateScheduleRequest {
-  avatarColor: string,
-  idProfile: string | any,
   floor: string,
   interviewAddress: string,
-  interviewTime: number,
   interviewers: string[],
   note: string,
   recruitmentId: string,
-  type: string,
+  times: ScheduleTime[],
+  type: string
+}
+
+export interface ScheduleTime{
+  avatarColor: string,
   date: number,
-
-
-  // idProfile: string | any,
-  // time: number,
-  // avatarColor:string,
-  // address: string,
-  // form: string,
-  // interviewer: string[],
-  // interviewee: string,
-  // content: string,
-  // question: string[],
-  // comments: string[],
-  // evaluation: string,
-  // status: string,
-  // reason: string,
-  // timeStart: number,
-  // timeFinish: number
+  idProfile: string,
+  fullName:string,
+  interviewTime: number
 }
 
 export interface UpdateScheduleRequest {

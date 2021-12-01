@@ -3,7 +3,6 @@ import * as apis from '../../services/apis'
 import {NotificationError} from "../../../../../components/Notification/Notification";
 import {put} from "redux-saga/effects";
 import {AppError} from "../../../../../models/common";
-import {getScheduleSuccess} from "../../../../ScheduleManager/redux/actions";
 
 export function* getBookingAsync(action: GetBookingAction) {
   try {

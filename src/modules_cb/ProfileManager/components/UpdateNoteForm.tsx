@@ -32,7 +32,6 @@ interface UpdateProfileFormProps extends FormComponentProps, ReduxProps {
 function UpdateProfileForm(props: UpdateProfileFormProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
-  const formItemStyle = {height: '60px'};
   const [file, setFile] = useState(null);
 
   const formItemLayout = {

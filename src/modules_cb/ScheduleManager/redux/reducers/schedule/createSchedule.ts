@@ -18,20 +18,20 @@ const initState: CreateScheduleState = {
 
 export default (state = initState, {type, request, response, error}: CreateScheduleAction): CreateScheduleState => {
   switch (type) {
-    case Actions.CREATE_SCHEDULE:
+    case Actions.CREATE_LIST_SCHEDULE:
       return {
         ...state,
         request,
         loading: true
       }
-    case Actions.CREATE_SCHEDULE_SUCCESS:
+    case Actions.CREATE_LIST_SCHEDULE_SUCCESS:
       return {
         ...state,
         response,
         loading: false,
         count: ++state.count,
       }
-    case Actions.CREATE_SCHEDULE_ERROR:
+    case Actions.CREATE_LIST_SCHEDULE_ERROR:
       return {
         ...state,
         error,

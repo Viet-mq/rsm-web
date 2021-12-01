@@ -1,7 +1,7 @@
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Form, Input, Modal, Select} from "antd";
+import {Button, Form, Input, Modal} from "antd";
 import React, {FormEvent} from "react";
 import {createSkill, showFormCreate} from "../redux/actions";
 import {CreateSkillRequest} from "../types";

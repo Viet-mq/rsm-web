@@ -37,6 +37,7 @@ const mapStateToProps = (state: RootState) => ({
   listDepartment: state.departmentManager.list,
   listTalentPool: state.talentPoolManager.list,
   listJob: state.jobManager.list,
+  listRecruitment: state.recruitmentManager.list,
 
 })
 const connector = connect(mapStateToProps, {
@@ -65,6 +66,7 @@ function ListProfile(props: ListProfileProps) {
   const history = useHistory();
   const [page, setPage] = useState(1);
   const size = 30;
+  const width={width:"11%"};
   const [state, setState] = useState<any>(
     {
       filteredInfo: null,
@@ -74,12 +76,14 @@ function ListProfile(props: ListProfileProps) {
       },
     }
   );
+
   const [selected, setSelected] = useState<any>({
     name: null,
     job: null,
     jobLevel: null,
     department: null,
     talentPool: null,
+    recruitment:null
   })
 
   const getInitials = (name: string) => {
@@ -92,11 +96,6 @@ function ListProfile(props: ListProfileProps) {
     }
 
     return initials.toUpperCase();
-  }
-
-  const setColor = () => {
-    const randomColor: string = Math.floor(Math.random() * 16777215).toString(16);
-    return "#" + randomColor;
   }
 
   const columns: ColumnProps<ProfileEntity>[] = [
@@ -191,7 +190,7 @@ function ListProfile(props: ListProfileProps) {
       ellipsis: true,
     },
     {
-      title: 'Công việc',
+      title: 'Vị trí công việc',
       dataIndex: 'jobName',
       width: 150,
       key: 'jobName',
@@ -200,15 +199,15 @@ function ListProfile(props: ListProfileProps) {
       sortOrder: state.sortedInfo.columnKey === 'jobName' && state.sortedInfo.order,
       ellipsis: true,
     },
-    // {
-    //   title: 'Vị trí tuyển dụng',
-    //   dataIndex: 'levelJobName',
-    //   width: 170,
-    //   key: 'levelJobName',
-    //   sorter: (a, b) => a.levelJobName.length - b.levelJobName.length,
-    //   sortOrder: state.sortedInfo.columnKey === 'levelJobName' && state.sortedInfo.order,
-    //   ellipsis: true,
-    // },
+    {
+      title: 'Tin tuyển dụng',
+      dataIndex: 'recruitmentName',
+      width: 170,
+      key: 'recruitmentName',
+      sorter: (a, b) => a.recruitmentName.length - b.recruitmentName.length,
+      sortOrder: state.sortedInfo.columnKey === 'recruitmentName' && state.sortedInfo.order,
+      ellipsis: true,
+    },
     {
       title: 'Phòng ban',
       dataIndex: 'departmentName',
@@ -430,6 +429,7 @@ function ListProfile(props: ListProfileProps) {
       jobLevel: null,
       department: null,
       talentPool: null,
+      recruitment:null
     })
     props.getListProfile({page: 1, size: 30});
 
@@ -546,7 +546,7 @@ function ListProfile(props: ListProfileProps) {
 
                  placeholder="Họ tên" prefix={<Icon type="search"/>}/>
 
-          <Select style={{width: "13%"}}
+          <Select  style={width}
                   placeholder="Công việc"
                   value={selected.job ? selected.job : undefined}
                   onChange={(value: any) => setSelected({...selected, job: value})}
@@ -556,7 +556,7 @@ function ListProfile(props: ListProfileProps) {
             ))}
           </Select>
 
-          <Select style={{width: "13%"}}
+          <Select  style={width}
                   value={selected.jobLevel ? selected.jobLevel : undefined}
                   onChange={(value: any) => setSelected({...selected, jobLevel: value})}
                   placeholder="Vị trí tuyển dụng"
@@ -567,7 +567,7 @@ function ListProfile(props: ListProfileProps) {
           </Select>
 
           <TreeSelect
-            style={{width: "13%"}}
+            style={width}
             value={selected.department ? selected.department : undefined}
             dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
             treeData={treeData}
@@ -577,9 +577,18 @@ function ListProfile(props: ListProfileProps) {
           />
 
           <Select
-            style={{
-              width: "13%"
-            }}
+            style={width}
+            value={selected.recruitment ? selected.recruitment : undefined}
+            onChange={(value: any) => setSelected({...selected, recruitment: value})}
+            placeholder="Tin tuyển dụng"
+          >
+            {props.listRecruitment.rows?.map((item: any, index: any) => (
+              <Option key={index} value={item.id}>{item.title}</Option>
+            ))}
+          </Select>
+
+          <Select
+            style={width}
             value={selected.talentPool ? selected.talentPool : undefined}
             onChange={(value: any) => setSelected({...selected, talentPool: value})}
             placeholder="Talent Pools"
@@ -589,15 +598,11 @@ function ListProfile(props: ListProfileProps) {
             ))}
           </Select>
 
-          <Button type="primary" style={{
-            width: "13%"
-          }}
+          <Button type="primary"  style={width}
                   onClick={btnSearchClicked}
           >Tìm kiếm</Button>
 
-          <Button style={{
-            width: "13%"
-          }} onClick={clearAll}>Reset</Button>
+          <Button  style={width} onClick={clearAll}>Reset</Button>
 
         </div>
 

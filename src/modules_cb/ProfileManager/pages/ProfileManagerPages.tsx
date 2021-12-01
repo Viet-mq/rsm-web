@@ -16,8 +16,6 @@ import UpdateProfileForm from "../components/UpdateProfileForm";
 import UploadCVForm from "../components/UploadCVForm";
 import BookingForm from "../components/BookingForm";
 import UpdateDetailProfileForm from "../components/UpdateDetailProfileForm";
-import env from 'src/configs/env';
-import {RouteComponentProps} from 'react-router-dom';
 import {exportExcelFile} from "../redux/services/apis";
 
 const mapStateToProps = ({
@@ -89,15 +87,15 @@ function ProfileManagerPages(props: IProps) {
   }
 
   function BtnExportExcel() {
-   exportExcelFile(undefined).then((value:any) => {
-     var data = new Blob([value], {type: 'application/json'});
-     var xlsxURL = window.URL.createObjectURL(data);
-     console.log("value",xlsxURL)
-     const tempLink = document.createElement('a');
-     tempLink.href = xlsxURL;
-     tempLink.setAttribute('download', 'file.xlsx');
-     tempLink.click();
-   });
+    exportExcelFile(undefined).then((value: any) => {
+      var data = new Blob([value], {type: 'application/json'});
+      var xlsxURL = window.URL.createObjectURL(data);
+      console.log("value", xlsxURL)
+      const tempLink = document.createElement('a');
+      tempLink.href = xlsxURL;
+      tempLink.setAttribute('download', 'file.xlsx');
+      tempLink.click();
+    });
   }
 
   return (
@@ -115,10 +113,10 @@ function ProfileManagerPages(props: IProps) {
                   <Icon type="plus"/> Thêm ứng viên
                 </Button>
                 <Button onClick={event => handleUploadListCV(event)}>
-                  <Icon type="upload"/> Upload List CV
+                  <Icon type="upload"/> Upload DS ứng viên
                 </Button>
                 <Button>
-                  <a onClick={BtnExportExcel}><Icon type="export" /> Xuất Excel</a>
+                  <a onClick={BtnExportExcel}><Icon type="export"/> Xuất Excel</a>
                 </Button>
               </div>
             </div>
@@ -126,7 +124,7 @@ function ProfileManagerPages(props: IProps) {
         </Row>
       </div>
 
-      <ListProfile />
+      <ListProfile/>
       <CreateProfileForm/>
       <UpdateProfileForm/>
       <UploadCVForm/>
