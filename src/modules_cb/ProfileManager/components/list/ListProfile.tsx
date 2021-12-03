@@ -24,6 +24,7 @@ import {getListDepartment} from "../../../DepartmentManager/redux/actions";
 import {getListTalentPool} from "../../../TalentPoolManager/redux/actions";
 import {useHistory} from "react-router-dom";
 import {getListSchool} from "../../../SchoolManager/redux/actions";
+import Search from "antd/es/input/Search";
 
 const {Option} = Select;
 
@@ -66,7 +67,7 @@ function ListProfile(props: ListProfileProps) {
   const history = useHistory();
   const [page, setPage] = useState(1);
   const size = 30;
-  const width={width:"11%"};
+  const width = {width: "11%"};
   const [state, setState] = useState<any>(
     {
       filteredInfo: null,
@@ -76,28 +77,16 @@ function ListProfile(props: ListProfileProps) {
       },
     }
   );
-
+  const [keySearch, setKeySearch] = useState<string>('')
+  const [dataSource, setDataSource] = useState<ProfileEntity[] | any>(undefined)
   const [selected, setSelected] = useState<any>({
     name: null,
     job: null,
     jobLevel: null,
     department: null,
     talentPool: null,
-    recruitment:null
+    recruitment: null
   })
-
-  const getInitials = (name: string) => {
-    let initials: any = name.split(' ');
-
-    if (initials.length > 1) {
-      initials = initials.shift().charAt(0) + initials.pop().charAt(0);
-    } else {
-      initials = name.substring(0, 2);
-    }
-
-    return initials.toUpperCase();
-  }
-
   const columns: ColumnProps<ProfileEntity>[] = [
     {
       title: 'STT',
@@ -367,20 +356,34 @@ function ListProfile(props: ListProfileProps) {
       },
     },
   ];
+  const [treeData, setTreeData] = useState([])
 
-  // useEffect(() => {
-  //   props.getListJob({page: 1, size: 100});
-  //   props.getListJobLevel({page: 1, size: 100});
-  //   props.getListSourceCV({page: 1, size: 100});
-  //   props.getListTalentPool({page: 1, size: 100});
-  //   props.getListDepartment({page: 1, size: 100});
-  //   props.getListSchool({page: 1, size: 100});
-  // }, [])
-
+  useEffect(() => {
+    setTreeData(convertArrayToTree(props.listDepartment.rows))
+  }, [props.listDepartment.rows])
   useEffect(() => {
     props.getListProfile({page: page, size: 30});
 
   }, [page])
+
+  useEffect(() => {
+    setDataSource(props.elasticSearch.rowsRs);
+    if (props.elasticSearch.request?.key) {
+      setKeySearch(props.elasticSearch.request?.key)
+    }
+  }, [props.elasticSearch.triggerSearch])
+
+
+  const getInitials = (name: string) => {
+    let initials: any = name.split(' ');
+
+    if (initials.length > 1) {
+      initials = initials.shift().charAt(0) + initials.pop().charAt(0);
+    } else {
+      initials = name.substring(0, 2);
+    }
+    return initials.toUpperCase();
+  }
 
   const convertArrayToTree = (arrays: any) => {
     let dataFetch: any = [];
@@ -403,11 +406,6 @@ function ListProfile(props: ListProfileProps) {
     return dataFetch;
   }
 
-  const [treeData, setTreeData] = useState([])
-  useEffect(() => {
-    setTreeData(convertArrayToTree(props.listDepartment.rows))
-  }, [props.listDepartment.rows])
-
   const handleChange = (pagination: any, filters: any, sorter: any) => {
     console.log('Various parameters', pagination, filters, sorter);
     setState({
@@ -429,10 +427,9 @@ function ListProfile(props: ListProfileProps) {
       jobLevel: null,
       department: null,
       talentPool: null,
-      recruitment:null
+      recruitment: null
     })
     props.getListProfile({page: 1, size: 30});
-
   };
 
   function unixTimeToDate(unixTime: number): Date {
@@ -485,8 +482,6 @@ function ListProfile(props: ListProfileProps) {
     props.showFormDetail(req, entity.id);
   }
 
-  const [keySearch, setKeySearch] = useState<string>('')
-
   function onBtnResetClicked() {
     setDataSource(undefined);
     setState({
@@ -500,15 +495,6 @@ function ListProfile(props: ListProfileProps) {
     props.getListProfile({page: 1, size: 100});
   }
 
-  const [dataSource, setDataSource] = useState<ProfileEntity[] | any>(undefined)
-
-  useEffect(() => {
-    setDataSource(props.elasticSearch.rowsRs);
-    if (props.elasticSearch.request?.key) {
-      setKeySearch(props.elasticSearch.request?.key)
-    }
-  }, [props.elasticSearch.triggerSearch])
-
   function btnSearchClicked() {
     props.getListProfile({
       fullName: selected.name,
@@ -516,6 +502,7 @@ function ListProfile(props: ListProfileProps) {
       levelJob: selected.jobLevel,
       department: selected.department,
       talentPool: selected.talentPool,
+      recruitment:selected.recruitment,
       page: 1,
       size: 30,
     })
@@ -540,13 +527,13 @@ function ListProfile(props: ListProfileProps) {
 
         <div className="c-filter-profile">
 
-          <Input style={{display: "inline"}}
+          <Search style={{display: "inline"}}
                  value={selected.name}
                  onChange={e => setSelected({...selected, name: e.target.value})}
+                 onSearch={btnSearchClicked}
+                 placeholder="Họ tên"/>
 
-                 placeholder="Họ tên" prefix={<Icon type="search"/>}/>
-
-          <Select  style={width}
+          <Select style={width}
                   placeholder="Công việc"
                   value={selected.job ? selected.job : undefined}
                   onChange={(value: any) => setSelected({...selected, job: value})}
@@ -556,7 +543,7 @@ function ListProfile(props: ListProfileProps) {
             ))}
           </Select>
 
-          <Select  style={width}
+          <Select style={width}
                   value={selected.jobLevel ? selected.jobLevel : undefined}
                   onChange={(value: any) => setSelected({...selected, jobLevel: value})}
                   placeholder="Vị trí tuyển dụng"
@@ -598,11 +585,11 @@ function ListProfile(props: ListProfileProps) {
             ))}
           </Select>
 
-          <Button type="primary"  style={width}
+          <Button type="primary" style={width}
                   onClick={btnSearchClicked}
           >Tìm kiếm</Button>
 
-          <Button  style={width} onClick={clearAll}>Reset</Button>
+          <Button style={width} onClick={clearAll}>Reset</Button>
 
         </div>
 

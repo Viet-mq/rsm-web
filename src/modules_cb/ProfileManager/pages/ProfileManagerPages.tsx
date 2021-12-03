@@ -90,7 +90,6 @@ function ProfileManagerPages(props: IProps) {
     exportExcelFile(undefined).then((value: any) => {
       var data = new Blob([value], {type: 'application/json'});
       var xlsxURL = window.URL.createObjectURL(data);
-      console.log("value", xlsxURL)
       const tempLink = document.createElement('a');
       tempLink.href = xlsxURL;
       tempLink.setAttribute('download', 'file.xlsx');

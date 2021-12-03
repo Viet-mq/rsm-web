@@ -271,7 +271,7 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
               <Form>
                 <Form.Item className="form-label" label="Tin tuyển dụng" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                   {getFieldDecorator('recruitmentId', {
-                    initialValue: '',
+                    initialValue: undefined,
                     rules: [
                       {
                         message: 'Vui lòng chọn tin tuyển dụng',
@@ -280,7 +280,7 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
                     ],
                   })(
                     <Select className="bg-white text-black" style={fontWeightStyle}
-                            onSelect={handleSelectRecruitment}
+                            onSelect={handleSelectRecruitment} placeholder="Chọn tin tuyển dụng"
                     >
                       {props.listRecruitment.rows?.map((item: any, index: any) => (
                         <Option key={index} value={item.id}>{item.title}</Option>
@@ -340,13 +340,13 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
                   </Col>
                 </Row>
 
-                <Checkbox>Các ứng viên tham gia đồng thời</Checkbox>
+                {/*<Checkbox>Các ứng viên tham gia đồng thời</Checkbox>*/}
 
                 <Row style={{marginTop: 15}}>
                   <Col span={14} style={{paddingRight: 10}}>
                     <Form.Item className="form-label" label="Địa điểm" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                       {getFieldDecorator('interviewAddress', {
-                        initialValue: '',
+                        initialValue: props.listAddress.rows[0]?.id,
                         rules: [
                           {
                             message: 'Vui lòng nhập địa điểm',
@@ -354,7 +354,7 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
                           },
                         ],
                       })(
-                        <Select className="bg-white text-black" style={fontWeightStyle}
+                        <Select className="bg-white text-black" style={fontWeightStyle} placeholder="Nhập địa chỉ"
                         >
                           {props.listAddress.rows?.map((item: any, index: any) => (
                             <Option key={index} value={item.id}>{item.officeName} - {item.name}</Option>
@@ -375,13 +375,13 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
                           },
                         ],
                       })(
-                        <Input placeholder="Phòng" className="bg-white text-black"/>
+                        <Input placeholder="Nhập tên phòng" className="bg-white text-black"/>
                       )}
                     </Form.Item>
                   </Col>
                 </Row>
 
-                <Form.Item label="Hội đồng tuyển dụng" className="mb-0" labelCol={{span: 24}} wrapperCol={{span: 24}}>
+                <Form.Item label="Hội đồng tuyển dụng" className="form-label" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                   {getFieldDecorator('interviewers', {
                     initialValue: undefined,
                     rules: [
@@ -393,7 +393,7 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
                   })(
                     <Select className="bg-white text-black" style={fontWeightStyle}
                             mode="multiple"
-                            placeholder="Hội đồng tuyển dụng"
+                            placeholder="Chọn thành viên"
                     >
                       {props.listAccount.rows?.map((item: any, index: any) => (
                         <Option key={index} value={item.username}>{item.fullName}</Option>
@@ -402,9 +402,9 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
                   )}
                 </Form.Item>
 
-                <Form.Item className="form-label" label="Hình thức" labelCol={{span: 24}} wrapperCol={{span: 24}}>
+                <Form.Item className="form-label" label="Loại lịch" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                   {getFieldDecorator('type', {
-                    initialValue: '',
+                    initialValue: 'Phỏng vấn trực tiếp',
                     rules: [
                       {
                         message: 'Vui lòng chọn hình thức phỏng vấn',
@@ -425,7 +425,7 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
                   )}
                 </Form.Item>
 
-                <Form.Item className="form-label" label="Lưu ý cho ứng viên" labelCol={{span: 24}}
+                <Form.Item className="form-label" label="Ghi chép nội bộ" labelCol={{span: 24}}
                            wrapperCol={{span: 24}}>
                   {getFieldDecorator('note', {
                     initialValue: '',
@@ -436,7 +436,7 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
                       },
                     ],
                   })(
-                    <TextArea placeholder="Nhập lưu ý" style={{height: 100}} className="bg-white text-black"/>
+                    <TextArea placeholder="Nhập nội dung" style={{height: 100}} className="bg-white text-black"/>
                   )}
                 </Form.Item>
 

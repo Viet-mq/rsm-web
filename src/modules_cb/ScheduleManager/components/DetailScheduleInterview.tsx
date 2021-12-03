@@ -36,14 +36,10 @@ interface ScheduleInterviewProps extends FormComponentProps, ReduxProps {
 }
 
 function ScheduleInterview(props: ScheduleInterviewProps) {
-
   const [visible, setVisible] = useState(false);
   const dateFormat = 'DD/MM/YYYY';
   const timeFormat = 'HH:mm';
   const dataDetail = props.dataDetail?.find((item: any) => item.id === props.idDetail)
-
-  useEffect(() => setVisible(props?.visible), [props?.visible]);
-
   const getInitials = (name?: string) => {
     if (name) {
       let initials: any = name.split(' ');
@@ -55,7 +51,6 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
       return initials.toUpperCase();
     }
   }
-
   const handleBooking = (event: any) => {
     event.stopPropagation();
     let req: DataShowBooking = {
@@ -64,6 +59,10 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
     }
     props.showFormBooking(true, req);
   }
+  const fontWeight={
+    fontWeight:500
+  }
+  useEffect(() => setVisible(props?.visible), [props?.visible]);
 
   function btnDeleteScheduleClicked() {
     props.deleteSchedule({id:dataDetail?.id})
@@ -95,17 +94,22 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
             </div>
           </div>
           <div className="schedule-detail-content">
-            <div>ỨNG VIÊN</div>
-            <div style={{fontWeight: 500, padding: 0}}>{dataDetail?.fullName}</div>
-            <div><a style={{display: "flex"}}>Xem hồ sơ <Icon type="arrow-right" style={{fontSize: '22px'}}/></a></div>
-            <div>THỜI GIAN</div>
-            <div
-              style={{fontWeight: 500}}>{moment(dataDetail?.date).format(dateFormat)}, {moment(dataDetail?.date).format(timeFormat)} - {moment(dataDetail?.interviewTime).format(timeFormat)}
+
+            <div style={{...fontWeight}}>Ứng viên</div>
+            <div style={{ ...fontWeight,padding: 0}}>{dataDetail?.fullName}</div>
+            <div><a style={{display: "flex"}}>Xem hồ sơ <Icon type="arrow-right" style={{fontSize: '22px',marginTop:3}}/></a></div>
+
+            <div style={{...fontWeight}}>Thời gian</div>
+            <div>{moment(dataDetail?.date).format(dateFormat)}, {moment(dataDetail?.date).format(timeFormat)} - {moment(dataDetail?.interviewTime).format(timeFormat)}
             </div>
-            <div style={{paddingTop: 20}}>ĐỊA ĐIỂM</div>
-            <div
-              style={{fontWeight: 500}}>{dataDetail?.floor ? dataDetail?.floor + '-' : null} {dataDetail?.interviewAddressName}</div>
-            <div style={{paddingTop: 20}}>HỘI ĐỒNG</div>
+
+            <div style={{...fontWeight,paddingTop: 20}}>Địa điểm</div>
+            <div>{dataDetail?.interviewAddressName}</div>
+
+            <div style={{...fontWeight,paddingTop: 20}}>Phòng</div>
+            <div>{dataDetail?.floor}</div>
+
+            <div style={{...fontWeight,paddingTop: 20}}>Hội đồng</div>
             <div>
               {
                 dataDetail?.interviewers.map((item: any, index: any) => {
@@ -115,6 +119,9 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
                 })
               }
             </div>
+
+            <div style={{...fontWeight,paddingTop: 20}}>Ghi chép nội bộ</div>
+            <div>{dataDetail?.note}</div>
           </div>
         </div>
         <div className="footer-left">

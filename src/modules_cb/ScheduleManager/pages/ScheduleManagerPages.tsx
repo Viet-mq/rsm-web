@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Avatar, Button, Icon, Input, Select, Tooltip} from "antd";
+import {Avatar, Button, Icon, Input, Select, Tooltip,DatePicker} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {countBookingNumber,} from "../../ProfileManager/redux/actions";
@@ -9,6 +9,7 @@ import ScheduleInterview from "../components/ScheduleInterview";
 import DetailScheduleInterview from "../components/DetailScheduleInterview";
 import {getAllSchedule, showFormSchedule} from "../redux/actions";
 import {DataShowSchedule, ScheduleEntity} from "../types";
+
 
 const {Search} = Input;
 
@@ -38,7 +39,7 @@ function ScheduleManagerPages(props: IProps) {
   const preWeek: string = 'preWeek';
   const nextWeek: string = 'nextWeek';
   const [keySearch, setKeySearch] = useState<string>('')
-
+  const { RangePicker } = DatePicker;
   useEffect(() => {
     document.title = "Lịch";
     props.countBookingNumber();
@@ -195,6 +196,13 @@ function ScheduleManagerPages(props: IProps) {
     props.getAllSchedule();
   }
 
+
+  function onChange(dates:any, dateStrings:any) {
+    console.log('From: ', dates[0], ', to: ', dates[1]);
+    console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
+  }
+
+
   return (
     <>
       <div className="c-schedule-container">
@@ -214,10 +222,15 @@ function ScheduleManagerPages(props: IProps) {
                 <GrNext/>
               </Button>
             </Tooltip>
-            {/*<div style={{marginRight: 5}} className="align">*/}
-            {/*  <DateBox defaultValue={moment()} displayFormat="dd/MM/yyyy"*/}
-            {/*           type="date"/>*/}
-            {/*</div>*/}
+            <div style={{marginRight: 5}} className="align">
+              <RangePicker
+                ranges={{
+                  Today: [moment(), moment()],
+                  'This Month': [moment().startOf('month'), moment().endOf('month')],
+                }}
+                onChange={onChange}
+              />
+            </div>
 
             <Select defaultValue="all" className="select-custom"
 
@@ -234,7 +247,7 @@ function ScheduleManagerPages(props: IProps) {
           <div className="c-schedule-header__align-right align">
             <Search
               placeholder="Tìm kiếm lịch theo tên ứng viên, tin tuyển dụng"
-              onSearch={value => onSearch(value)}
+              onSearch={(value:any) => onSearch(value)}
               style={{width: 340}}
             />
             <Button type="primary"

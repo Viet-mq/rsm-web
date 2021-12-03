@@ -120,6 +120,12 @@
 .form-label {
   //font-size: 13px;
   font-weight: 600;
+  .ant-form-explain{
+    font-weight: 400;
+  }
+  .ant-select-selection .ant-select-selection__placeholder {
+    color:$color-place-holder !important;
+  }
 }
 
 .c-schedule-content {
