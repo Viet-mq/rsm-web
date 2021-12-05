@@ -5,6 +5,7 @@ import createSchedule, {CreateScheduleState} from "./schedule/createSchedule";
 import updateSchedule, {UpdateScheduleState} from "./schedule/updateSchedule";
 import deleteSchedule, {DeleteScheduleState} from "./schedule/deleteSchedule";
 import getCandidates, {GetCandidatesState} from "./schedule/getCandidates";
+import searchCandidates, {SearchCandidatesState} from "./schedule/searchCandidates";
 
 export interface ScheduleManagerModuleState {
   showSchedule: ScheduleState,
@@ -13,6 +14,7 @@ export interface ScheduleManagerModuleState {
   updateSchedule: UpdateScheduleState,
   deleteSchedule:DeleteScheduleState,
   getCandidates:GetCandidatesState,
+  searchCandidates:SearchCandidatesState;
 }
 
 export default combineReducers<ScheduleManagerModuleState>({
@@ -22,4 +24,5 @@ export default combineReducers<ScheduleManagerModuleState>({
   createSchedule,
   deleteSchedule,
   getCandidates,
+  searchCandidates,
 });

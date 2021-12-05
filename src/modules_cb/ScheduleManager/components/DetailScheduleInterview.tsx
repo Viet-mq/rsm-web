@@ -1,7 +1,7 @@
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Avatar, Button, Form, Icon, Modal} from "antd";
+import {Button, Form, Icon, Modal} from "antd";
 import React, {useEffect, useState} from "react";
 import moment from "moment";
 import 'devextreme/dist/css/dx.light.css';
@@ -14,7 +14,7 @@ import BookingForm from "../../ProfileManager/components/BookingForm";
 import {deleteSchedule} from "../redux/actions";
 
 const mapStateToProps = (state: RootState) => ({
-  delete:state.scheduleManager.deleteSchedule
+  delete: state.scheduleManager.deleteSchedule
 })
 const connector = connect(mapStateToProps,
   {
@@ -40,17 +40,7 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
   const dateFormat = 'DD/MM/YYYY';
   const timeFormat = 'HH:mm';
   const dataDetail = props.dataDetail?.find((item: any) => item.id === props.idDetail)
-  const getInitials = (name?: string) => {
-    if (name) {
-      let initials: any = name.split(' ');
-      if (initials.length > 1) {
-        initials = initials.shift().charAt(0) + initials.pop().charAt(0);
-      } else {
-        initials = name.substring(0, 2);
-      }
-      return initials.toUpperCase();
-    }
-  }
+
   const handleBooking = (event: any) => {
     event.stopPropagation();
     let req: DataShowBooking = {
@@ -59,13 +49,13 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
     }
     props.showFormBooking(true, req);
   }
-  const fontWeight={
-    fontWeight:500
+  const fontWeight = {
+    fontWeight: 500
   }
   useEffect(() => setVisible(props?.visible), [props?.visible]);
 
   function btnDeleteScheduleClicked() {
-    props.deleteSchedule({id:dataDetail?.id})
+    props.deleteSchedule({id: dataDetail?.id})
     props.handleClosePopupDetail();
   }
 
@@ -96,37 +86,42 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
           <div className="schedule-detail-content">
 
             <div style={{...fontWeight}}>Ứng viên</div>
-            <div style={{ ...fontWeight,padding: 0}}>{dataDetail?.fullName}</div>
-            <div><a style={{display: "flex"}}>Xem hồ sơ <Icon type="arrow-right" style={{fontSize: '22px',marginTop:3}}/></a></div>
+            <div style={{...fontWeight, padding: 0}}>{dataDetail?.fullName}</div>
+            <div><a style={{display: "flex"}}>Xem hồ sơ <Icon type="arrow-right"
+                                                              style={{fontSize: '22px', marginTop: 3}}/></a></div>
 
             <div style={{...fontWeight}}>Thời gian</div>
             <div>{moment(dataDetail?.date).format(dateFormat)}, {moment(dataDetail?.date).format(timeFormat)} - {moment(dataDetail?.interviewTime).format(timeFormat)}
             </div>
 
-            <div style={{...fontWeight,paddingTop: 20}}>Địa điểm</div>
+            <div style={{...fontWeight, paddingTop: 20}}>Địa điểm</div>
             <div>{dataDetail?.interviewAddressName}</div>
 
-            <div style={{...fontWeight,paddingTop: 20}}>Phòng</div>
+            <div style={{...fontWeight, paddingTop: 20}}>Phòng</div>
             <div>{dataDetail?.floor}</div>
 
-            <div style={{...fontWeight,paddingTop: 20}}>Hội đồng</div>
+            <div style={{...fontWeight, paddingTop: 20}}>Hội đồng</div>
             <div>
-              {
-                dataDetail?.interviewers.map((item: any, index: any) => {
-                  return <Avatar key={index} style={{backgroundColor: dataDetail?.avatarColor, marginRight: 5}}>
-                    {getInitials(item.full_name)}
-                  </Avatar>
+              <ul>
+                {dataDetail?.interviewers.map((item: any, index: any) => {
+                  return <li key={index}>{item.full_name}</li>
+                  //
+                  // <Avatar key={index} style={{backgroundColor: dataDetail?.avatarColor, marginRight: 5}}>
+                  //   {getInitials(item.full_name)}
+                  // </Avatar>
                 })
-              }
+                }
+              </ul>
+
             </div>
 
-            <div style={{...fontWeight,paddingTop: 20}}>Ghi chép nội bộ</div>
+            <div style={{...fontWeight, paddingTop: 20}}>Ghi chép nội bộ</div>
             <div>{dataDetail?.note}</div>
           </div>
         </div>
         <div className="footer-left">
           <Button onClick={btnDeleteScheduleClicked} style={{color: "red", marginRight: 10}}><Icon type="delete"
-                                                                                                       className="mr-1"/>Xóa</Button>
+                                                                                                   className="mr-1"/>Xóa</Button>
           <Button onClick={event => handleBooking(event)}><Icon type="edit" className="mr-1"/>Chỉnh sửa</Button>
 
         </div>

@@ -138,6 +138,7 @@
     font-weight: 500;
     color: #1e2633;
   }
+
 }
 
 .c-time-flex {
@@ -152,6 +153,9 @@
   grid-template-columns: 105px 1fr;
   margin-right: 24px;
   position: relative;
+  &:hover{
+    background-color: $color-blue-hover;
+  }
 }
 
 .c-main-content {
@@ -198,6 +202,11 @@
   color: #6a727d;
   font-size: 14px;
   max-width: 500px;
+  font-weight: 500;
+  span{
+    font-weight: 400;
+    color:$color-text-light-grey
+  }
 }
 
 .ellipsis {
@@ -257,7 +266,6 @@
   padding: 16px 24px 12px!important;
   min-height: auto!important;
   background-color:$color-bg ;
-  width: 300px;
   box-shadow: 0 1px 3px grey;
   border-radius: 5px;
   height: 205px;
@@ -282,5 +290,7 @@
     border-radius: 2px;
   }
 }
+
+
 
 

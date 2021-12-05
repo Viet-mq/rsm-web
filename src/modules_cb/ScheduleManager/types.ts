@@ -14,6 +14,8 @@ export interface ScheduleEntity {
   interviewAddressName: string,
   fullName: string,
   date: number,
+  createAt: number,
+  createBy: string
 }
 
 export interface CreateScheduleRequest {

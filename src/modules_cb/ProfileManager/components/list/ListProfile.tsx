@@ -2,7 +2,7 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import {ColumnProps} from "antd/lib/table";
-import {Avatar, Badge, Button, Icon, Input, Popconfirm, Select, Table, Tooltip, TreeSelect} from "antd";
+import {Avatar, Badge, Button, Icon, Popconfirm, Select, Table, Tooltip, TreeSelect} from "antd";
 import {emptyText} from "src/configs/locales";
 import {
   deleteProfile,
@@ -502,7 +502,7 @@ function ListProfile(props: ListProfileProps) {
       levelJob: selected.jobLevel,
       department: selected.department,
       talentPool: selected.talentPool,
-      recruitment:selected.recruitment,
+      recruitment: selected.recruitment,
       page: 1,
       size: 30,
     })
@@ -528,10 +528,10 @@ function ListProfile(props: ListProfileProps) {
         <div className="c-filter-profile">
 
           <Search style={{display: "inline"}}
-                 value={selected.name}
-                 onChange={e => setSelected({...selected, name: e.target.value})}
-                 onSearch={btnSearchClicked}
-                 placeholder="Họ tên"/>
+                  value={selected.name}
+                  onChange={e => setSelected({...selected, name: e.target.value})}
+                  onSearch={btnSearchClicked}
+                  placeholder="Họ tên"/>
 
           <Select style={width}
                   placeholder="Công việc"

@@ -20,7 +20,6 @@ import {
 import React, {FormEvent, useEffect, useRef, useState} from "react";
 import TextArea from "antd/es/input/TextArea";
 import moment from "moment";
-import 'devextreme/dist/css/dx.light.css';
 import {emptyText} from "../../../configs/locales";
 import {getListAccount} from "../../AccountManager/redux/actions";
 import {createSchedule, getCandidates, resetCandidates, showFormSchedule} from "../redux/actions";
@@ -28,6 +27,7 @@ import Loading from "../../../components/Loading";
 import {ProfileEntity} from "../../ProfileManager/types";
 import {CreateScheduleRequest, ScheduleEntity} from "../types";
 import {ColumnProps} from "antd/lib/table";
+import {searchCandidates} from "../redux/actions/schedule/searchCandidates";
 
 
 const mapStateToProps = (state: RootState) => ({
@@ -35,7 +35,8 @@ const mapStateToProps = (state: RootState) => ({
   listAddress: state.addressManager.list,
   listAccount: state.accountManager.list,
   listCandidate: state.scheduleManager.getCandidates,
-  showSchedule:state.scheduleManager.showSchedule
+  searchCandidatesState:state.scheduleManager.searchCandidates,
+  showSchedule: state.scheduleManager.showSchedule
 
 })
 
@@ -46,6 +47,7 @@ const connector = connect(mapStateToProps,
     createSchedule,
     resetCandidates,
     showFormSchedule,
+    searchCandidates
   });
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -60,6 +62,7 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
   const fontWeightStyle = {fontWeight: 400};
   const wrapperRef = useRef<any>(null);
   const {getFieldDecorator, resetFields} = props.form;
+  const [recruitment, setRecruitment] = useState(null)
   const columns: ColumnProps<ScheduleEntity>[] = [
     {
       title: 'Họ và tên',
@@ -117,24 +120,30 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
     },
   ];
   const [dataSource, setDatasource] = useState<any>([]);
-  const [listCandidates, setListCandidates] = useState<ProfileEntity[]|any>([]);
+  const [listCandidates, setListCandidates] = useState<ProfileEntity[] | any>([]);
   const [visibleCandidate, setVisibleCandidate] = useState(false)
+  const [keySearch, setKeySearch] = useState(undefined);
 
   useEffect(() => {
-    // if (props.listCandidate) {
-    setDatasource([])
     setListCandidates(props.listCandidate.rows);
-    // }
   }, [props.listCandidate]);
 
-  useEffect(()=>{
-    if(props.showSchedule.show_schedule===false){
+  useEffect(() => {
+    setListCandidates(props.searchCandidatesState.rows);
+  }, [props.searchCandidatesState]);
+
+  useEffect(() => {
+    setDatasource([])
+  }, [recruitment])
+
+  useEffect(() => {
+    if (props.showSchedule.show_schedule === false) {
       props.resetCandidates();
       resetFields();
       setDatasource([]);
       setListCandidates([]);
     }
-  },[props.showSchedule.show_schedule])
+  }, [props.showSchedule.show_schedule])
 
   useEffect(() => {
     function handleClickOutside(event: any) {
@@ -150,10 +159,6 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [wrapperRef]);
-
-  function onBtnCreateClicked(e: FormEvent) {
-    e.preventDefault();
-  }
 
   function onBtnCancelClicked() {
     props.showFormSchedule(false)
@@ -177,7 +182,7 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
 
   function handleDelete(e: any, values: any) {
     e.stopPropagation();
-    const filterCandidate:ProfileEntity|any=props.listCandidate.rows?.filter((item:any)=>item.id===values)
+    const filterCandidate: ProfileEntity | any = props.searchCandidatesState.rows?.filter((item: any) => item.id === values)
     setDatasource(dataSource.filter((item: any) => item.idProfile !== values))
     setListCandidates(filterCandidate.concat(listCandidates))
   }
@@ -194,13 +199,6 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
         const minutes = time.getMinutes();
         const dateChanged: any = new Date(yyyy, mm - 1, dd, hh, minutes, 0);
         const interviewTime: any = new Date(yyyy, mm - 1, dd, hh, minutes + values.interviewTime, 0);
-
-        console.log("Schedule---------------")
-        console.log("values.interviewTime:", values.interviewTime)
-        console.log("interviewTime:", interviewTime, yyyy, mm, dd, hh, minutes)
-        console.log("start:", dateChanged, "end:", interviewTime)
-        console.log("-------------------------")
-
         setListCandidates(listCandidates.filter((item: ProfileEntity) => item.id !== value.id));
         const newData = {
           idProfile: value.id,
@@ -217,8 +215,10 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
 
   };
 
-  function handleSearchCandidate(e: any) {
-    console.log(e.target.value)
+  function handleSearchCandidate(e?: any) {
+    console.log(e?.target.value)
+    setKeySearch(e?.target.value)
+    props.searchCandidates({fullName: e?.target.value, recruitment: recruitment, calendar: "notSet", page: 1, size: 15})
   }
 
   function showScrollCandidate() {
@@ -226,7 +226,8 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
   }
 
   function handleSelectRecruitment(value: any) {
-    props.getCandidates({recruitment: value,calendar:"notSet"})
+    setRecruitment(value);
+    props.getCandidates({recruitment: value, calendar: "notSet", page: 1, size: 15})
   }
 
   function btnListScheduleClicked(e: FormEvent) {
@@ -288,12 +289,11 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
                     </Select>
                   )}
                 </Form.Item>
-
-                <Row>
-                  <Col span={8} style={{marginRight: 10}}>
+                <div className="flex-space-between">
+                  <div className="mr-2">
                     <Form.Item className="form-label" label="Ngày" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                       {getFieldDecorator('date', {
-                        initialValue: moment().add(1,'days'),
+                        initialValue: moment().add(1, 'days'),
                         rules: [
                           {
                             message: 'Vui lòng chọn ngày bắt đầu',
@@ -305,8 +305,8 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
                       )}
 
                     </Form.Item>
-                  </Col>
-                  <Col span={6} style={{marginRight: 10}}>
+                  </div>
+                  <div className="mr-2">
                     <Form.Item className="form-label" label="Giờ bắt đầu" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                       {getFieldDecorator('timeStart', {
                         initialValue: moment(),
@@ -321,8 +321,8 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
                         />)}
 
                     </Form.Item>
-                  </Col>
-                  <Col span={7}>
+                  </div>
+                  <div>
                     <Form.Item className="form-label" label="Thời lượng(phút)" labelCol={{span: 24}}
                                wrapperCol={{span: 24}}>
                       {getFieldDecorator('interviewTime', {
@@ -334,13 +334,13 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
                           },
                         ],
                       })(
-                        <InputNumber type="number" min={15} className="bg-white text-black"/>
+                        <InputNumber style={{width: "100%"}} type="number" min={15} className="bg-white text-black"/>
                       )}
                     </Form.Item>
-                  </Col>
-                </Row>
+                  </div>
+                </div>
 
-                {/*<Checkbox>Các ứng viên tham gia đồng thời</Checkbox>*/}
+                <Checkbox defaultChecked disabled>Các ứng viên tham gia đồng thời</Checkbox>
 
                 <Row style={{marginTop: 15}}>
                   <Col span={14} style={{paddingRight: 10}}>
@@ -381,7 +381,8 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
                   </Col>
                 </Row>
 
-                <Form.Item label="Hội đồng tuyển dụng" className="form-label" labelCol={{span: 24}} wrapperCol={{span: 24}}>
+                <Form.Item label="Hội đồng tuyển dụng" className="form-label" labelCol={{span: 24}}
+                           wrapperCol={{span: 24}}>
                   {getFieldDecorator('interviewers', {
                     initialValue: undefined,
                     rules: [
@@ -462,13 +463,14 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
                     locale={{emptyText: emptyText}}
                   />
                   <div>
-                    <Button type={"link"} style={{marginTop: 15, color: "#02a7f0"}} onClick={showScrollCandidate}><Icon
+                    <Button type={"link"} style={{marginTop: 15, paddingLeft: 0, color: "#02a7f0"}}
+                            onClick={showScrollCandidate}><Icon
                       type="plus" style={{marginRight: 5}}/>
                       Thêm ứng viên
                     </Button>
                     {visibleCandidate ?
                       <div ref={wrapperRef} className="dropdown-container">
-                        <Input onChange={event => handleSearchCandidate(event)} placeholder="Tìm kiếm ứng viên"/>
+                        <Input onChange={event => handleSearchCandidate(event)} value={keySearch} placeholder="Tìm kiếm ứng viên"/>
                         <div className="scroll-label-content">
                           {listCandidates.length !== 0 ? listCandidates.map((item: any, index: any) => {
                             return (<div key={item.id} onClick={event => handleAdd(event, item)}>

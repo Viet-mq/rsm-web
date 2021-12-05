@@ -35,7 +35,6 @@ const DefaultLayout = (props: LayoutProps) => {
 
   const screenWidth = document.documentElement.clientWidth;
   const [collapsed, setCollapsed] = useState(screenWidth <= env.tabletWidth ? true : false)
-  const [isLoading, setIsLoading] = useState(false)
   const history = useHistory();
   const [state, setState] = useState<any>({
     value: '',
@@ -69,7 +68,6 @@ const DefaultLayout = (props: LayoutProps) => {
       history.push({
         pathname: "/profile-manager",
       });
-      setIsLoading(false)
     }
   }, [props.elasticSearch.triggerSearch])
 
@@ -95,7 +93,6 @@ const DefaultLayout = (props: LayoutProps) => {
       props.triggerSearch();
     }
     if (state.value) {
-      setIsLoading(true);
     }
   }
 

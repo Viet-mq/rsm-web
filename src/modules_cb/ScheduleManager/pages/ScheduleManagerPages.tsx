@@ -1,23 +1,24 @@
 import React, {useEffect, useState} from "react";
-import {Avatar, Button, Icon, Input, Select, Tooltip,DatePicker} from "antd";
+import {Avatar, Button, DatePicker, Icon, Input, Select, Tooltip} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {countBookingNumber,} from "../../ProfileManager/redux/actions";
 import {AiOutlineCalendar, GrNext, GrPrevious} from "react-icons/all";
 import moment from 'moment';
+import 'moment/locale/vi';
 import ScheduleInterview from "../components/ScheduleInterview";
 import DetailScheduleInterview from "../components/DetailScheduleInterview";
 import {getAllSchedule, showFormSchedule} from "../redux/actions";
 import {DataShowSchedule, ScheduleEntity} from "../types";
 
-
 const {Search} = Input;
+const {Option} = Select;
+const {RangePicker} = DatePicker;
 
 const mapStateToProps = (state: RootState) => ({
   schedule: state.scheduleManager.getSchedule,
   showSchedule: state.scheduleManager.showSchedule
 })
-
 
 const connector = connect(mapStateToProps, {
   countBookingNumber,
@@ -28,18 +29,21 @@ const connector = connect(mapStateToProps, {
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends ReduxProps {
-
 }
 
 function ScheduleManagerPages(props: IProps) {
-  const {Option} = Select;
   const dateFormat = 'DD/MM/YYYY';
   const timeFormat = 'HH:mm';
   const currWeek: string = 'currWeek';
   const preWeek: string = 'preWeek';
   const nextWeek: string = 'nextWeek';
   const [keySearch, setKeySearch] = useState<string>('')
-  const { RangePicker } = DatePicker;
+  const [outObject, setOutObject] = useState<ScheduleEntity | any>([])
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [visibleDetail, setVisibleDetail] = useState(false)
+  const [idDetail, setIdDetail] = useState<string>('');
+  const [valueDateRange, setValueDateRange] = useState<any[]>([moment().startOf("week"), moment().endOf('week')])
   useEffect(() => {
     document.title = "Lịch";
     props.countBookingNumber();
@@ -52,16 +56,9 @@ function ScheduleManagerPages(props: IProps) {
     }
   }, [props.schedule?.result])
 
-  const [visiblePopover, setVisiblePopover] = useState<boolean>(false);
-
-  const handleVisibleChange = (visible: any) => {
-    console.log(visible)
-    setVisiblePopover(visible);
-  };
-
-
-  const [visibleDetail, setVisibleDetail] = useState(false)
-  const [idDetail, setIdDetail] = useState<string>('');
+  useEffect(() => {
+    setCurrentDate();
+  }, []);
 
   function handlePopupScheduleInterview(e: any) {
     e.preventDefault();
@@ -93,15 +90,6 @@ function ScheduleManagerPages(props: IProps) {
     }
   }
 
-  const [outObject, setOutObject] = useState<ScheduleEntity | any>([])
-
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-
-  useEffect(() => {
-    setCurrentDate();
-  }, []);
-
   const setCurrentDate = (): any => {
     let getCurrWeek = new Date();
     let dayOfWeek = getCurrWeek.getDay();
@@ -122,9 +110,7 @@ function ScheduleManagerPages(props: IProps) {
   }
 
   function getWeekDates(week: string) {
-
     switch (week) {
-
       case preWeek: {
         let s = plusDays(startDate, -7);
         let e = plusDays(endDate, -7);
@@ -147,32 +133,13 @@ function ScheduleManagerPages(props: IProps) {
 
   function filterDatesByWeek(week: string, filterDate: ScheduleEntity[]) {
     let [start, end] = getWeekDates(week);
-
+    setValueDateRange([moment(start), moment(end)])
     const datesFilter: any = filterDate?.filter((d: any) => d.date >= +start && d.date < +end);
-    const outObject = datesFilter?.reduce((acc: any, curr: any) => {
-      const queryResult = acc.find((qr: any) => {
-        const a: any = moment(qr.date);
-        const b: any = moment(curr.date);
-        const qrConvert: any = new Date(a)
-        const currConvert: any = new Date(b)
-        qrConvert.setHours(0, 0, 0);
-        currConvert.setHours(0, 0, 0);
-        const diffTime = Math.abs((qrConvert - currConvert) / (1000 * 60 * 60 * 24));
-        return diffTime === 0;
-      });
-      if (queryResult !== undefined) {
-        queryResult.data.push(curr)
-      } else {
-        let newQR = {date: moment(curr.date).format("LL"), data: [curr]};
-        acc.push(newQR);
-      }
-      return acc;
-    }, []);
+    const outObject = dateFilter(datesFilter)
     return setOutObject(outObject)
   }
 
   function handleWeekClicked(week: string) {
-    console.log("week: " + week);
     filterDatesByWeek(week, props.schedule?.result);
   }
 
@@ -184,24 +151,52 @@ function ScheduleManagerPages(props: IProps) {
   }
 
   function onSearch(value: string) {
-    value.trim()
+    console.log(value)
     setKeySearch(value.trim())
     props.getAllSchedule({keySearch: value.trim()})
   }
-
-  console.log(outObject)
 
   function onBtnResetClicked() {
     setKeySearch('')
     props.getAllSchedule();
   }
 
+  function dateFilter(values: any) {
+    const outObject = values.reduce((acc: any, curr: any) => {
+      const queryResult = acc.find((qr: any) => {
+        const a: any = qr.date;
+        const b: any = moment(curr.date).format("DD [tháng] MM, YYYY");
+        // const qrConvert: any = new Date(a)
+        // const currConvert: any = new Date(b)
+        // qrConvert.setHours(0, 0, 0);
+        // currConvert.setHours(0, 0, 0);
+        // const diffTime = Math.abs((qrConvert - currConvert) / (1000 * 60 * 60 * 24));
+        const diffTime = a.localeCompare(b)
+        return diffTime === 0;
 
-  function onChange(dates:any, dateStrings:any) {
-    console.log('From: ', dates[0], ', to: ', dates[1]);
-    console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
+      });
+      if (queryResult !== undefined) {
+        queryResult.data.push(curr)
+      } else {
+        let newQR = {date: moment(curr.date).format("DD [tháng] MM, YYYY"), data: [curr]};
+        acc.push(newQR);
+      }
+      return acc;
+    }, []);
+    return outObject
   }
 
+  function onChangeDateRange(dates: any) {
+    dates[0].set({hour: 0, minute: 0, second: 0})
+    dates[1].set({hour: 23, minute: 59, second: 59})
+    let [start, end] = [dates[0], dates[1]];
+    setValueDateRange([start, end])
+    const datesFilter: any = props.schedule?.result?.filter((d: any) => d.date >= +start && d.date < +end);
+    const outObject = dateFilter(datesFilter)
+    return setOutObject(outObject)
+  }
+
+  console.log(outObject)
 
   return (
     <>
@@ -222,13 +217,16 @@ function ScheduleManagerPages(props: IProps) {
                 <GrNext/>
               </Button>
             </Tooltip>
-            <div style={{marginRight: 5}} className="align">
+            <div style={{marginRight: 5, width: 250}} className="align">
               <RangePicker
+                format={dateFormat}
+                value={valueDateRange}
+                allowClear={false}
                 ranges={{
-                  Today: [moment(), moment()],
-                  'This Month': [moment().startOf('month'), moment().endOf('month')],
+                  'Hôm nay': [moment(), moment()],
+                  'Tháng này': [moment().startOf('month'), moment().endOf('month')],
                 }}
-                onChange={onChange}
+                onChange={onChangeDateRange}
               />
             </div>
 
@@ -247,7 +245,7 @@ function ScheduleManagerPages(props: IProps) {
           <div className="c-schedule-header__align-right align">
             <Search
               placeholder="Tìm kiếm lịch theo tên ứng viên, tin tuyển dụng"
-              onSearch={(value:any) => onSearch(value)}
+              onSearch={value => onSearch(value)}
               style={{width: 340}}
             />
             <Button type="primary"
@@ -272,25 +270,46 @@ function ScheduleManagerPages(props: IProps) {
         {outObject?.length > 0 ?
           outObject?.map((item: any, index: any) => {
             return <div className="c-schedule-content" key={item.date}>
-              <div className="c-schedule-content__head">{item.date}</div>
+              <div
+                className="c-schedule-content__head">{item.date.localeCompare(moment().format("DD [tháng] MM, YYYY")) === 0 ? "Hôm nay - " : null}{item.date}</div>
               {item.data?.map((itemChild: any, index1: any) => {
-                return <div className="c-item " key={index1}>
+                return <div className="c-item " onClick={() => handlePopupScheduleInterviewDetail(itemChild)} key={index1}>
                   <div className="c-time-flex">
-                    {moment(itemChild.date).format(timeFormat)} - {moment(itemChild.interviewTime).format(timeFormat)}
+                    <div>
+                      {moment(itemChild.date).format(timeFormat)} - {moment(itemChild.interviewTime).format(timeFormat)}
+                    </div>
+                    <div>
+                      {itemChild.date>+moment()?
+                        <span style={{color:"#1890ff"}}>Sắp diễn ra</span>
+                        :
+                        itemChild.interviewTime<+moment()?
+                          <span style={{color:"red"}}>Đã kết thức</span>
+                          :
+                          <span style={{color:"#ffbd24"}}>Đang diễn ra</span>}
+                    </div>
                   </div>
+
                   <div className={index1 === item.data?.length - 1 ? "c-main-content" : "c-main-content border-bottom"}>
                     <Avatar size={25} style={{backgroundColor: itemChild.avatarColor}}>
                       {getInitials(itemChild.fullName)}
                     </Avatar>
                     <div className="c-main-content__wrap-main">
                       <div className="main-1">
-                        <a className="main-1__candidate-name"
-                           onClick={() => handlePopupScheduleInterviewDetail(itemChild)}>{itemChild.fullName}</a>
+                        <a className="main-1__candidate-name">{itemChild.fullName}</a>
                         <div className="main-1__green-dot"></div>
                         <div className="main-1__job-description">{itemChild.recruitmentName}</div>
                       </div>
                       <div className="main-2">
                         <div className="ellipsis">{itemChild.type}</div>
+                      </div>
+
+                      <div className="main-2" style={{marginBottom: "-10px"}}>
+                        <div className="ellipsis"><span>Người tạo:</span> {itemChild.createBy}</div>
+                      </div>
+
+                      <div className="main-2">
+                        <div className="ellipsis"><span>Ngày tạo:</span> {moment(itemChild.createAt).format(dateFormat)}
+                        </div>
                       </div>
                     </div>
                   </div>

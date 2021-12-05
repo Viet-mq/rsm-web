@@ -1,28 +1,33 @@
-.header-align{
+.header-align {
   display: flex;
   justify-content: space-between;
 }
-.recruitment-title{
+
+.recruitment-title {
   align-items: center;
   margin-bottom: 15px;
-  .tmp-title-page-size20{
+
+  .tmp-title-page-size20 {
     margin: 0;
     font-weight: 500;
   }
 }
 
-.recruitment-option{
+.recruitment-option {
   margin-bottom: 30px;
   align-items: center;
-  &__pop-over{
+
+  &__pop-over {
     display: flex;
-    .align{
+    align-items: center;
+    .align {
       margin-right: 20px;
     }
   }
 }
-#sort{
-  color:$color-text-dark-grey ;
+
+#sort {
+  color: $color-text-dark-grey;
   margin-right: 5px;
 }
 
@@ -30,6 +35,80 @@
   background-color: white;
   padding: 20px;
   margin-bottom: 15px;
+  border-radius: 5px;
 }
+
+.header-box {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-bottom: 15px;
+  border-bottom: 1px solid $color-schedule-interview;
+
+  .main-1__green-dot {
+    margin-top: 12px;
+  }
+
+  .ant-select {
+    margin-right: 10px;
+  }
+}
+
+.header-box-main {
+  flex: 1;
+}
+
+.p {
+  font-size: 20px;
+  font-weight: 500;
+  margin: 0 0 7px;
+  color: black;
+}
+
+.detail-flex {
+  display: flex;
+  text-align: center;
+  height: 20px;
+
+  .p {
+    font-size: 14px;
+    font-weight: 400;
+    margin: 0;
+    padding-right: 15px;
+    border-right: 2px solid $color-schedule-interview;
+  }
+}
+
+#three-dot {
+  &:hover {
+    color: $color-blue;
+  }
+}
+
+.list-process {
+  margin: 15px 0;
+  display: flex;
+}
+
+.flex-1 {
+  flex: 1;
+  padding: 0 30px;
+  height: 50px;
+  border-right: 1px solid $color-schedule-interview;
+}
+
+.bold-text {
+  font-weight: 500;
+}
+
+.padding-process {
+  padding: 5px 20px;
+  border-radius: 5px;
+text-align: center;
+  &:hover {
+    background-color: $color-blue-hover;
+  }
+}
+
 
 

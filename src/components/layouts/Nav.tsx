@@ -204,7 +204,7 @@ const Nav = (props: IProps) => {
       </SubMenu>
 
       <SubMenu key="sub3" title={!props.hiddenLabel ? <span>TALENT POOLS</span> : <RiFolderUserLine/>}>
-        {props.auth?.pools.map((item: any) => {
+        {props.auth?.pools?.map((item: any) => {
           return <Menu.Item key={item.id} style={{display: 'flex'}}>
             <Link to={`/talent-pool-manager/${item.id}`} className='nav-element'>
               <Icon type="contacts"/>

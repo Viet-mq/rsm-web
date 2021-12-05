@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Button, Icon, Popover} from "antd";
+import {Button, Icon, Popover, Select} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {showFormCreate, showFormUpdate} from "../redux/actions";
@@ -22,6 +22,7 @@ const mapStateToProps = ({
   deleteJob,
   update,
 })
+const {Option}=Select;
 const connector = connect(mapStateToProps, {showFormCreate, showFormUpdate});
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -111,30 +112,35 @@ function RecruitmentManagerPages(props: IProps) {
       </div>
       <div className='header-align recruitment-option'>
         <div className='recruitment-option__pop-over'>
-          <Popover
-            onVisibleChange={handleVisibleChange}
-            visible={visiblePopover}
-            className="align"
-            placement="bottomRight"
-            content={content}
-            trigger="click">
-            <span style={{fontWeight: 600}}>Đang tuyển dụng</span>
-            <FiChevronDown style={{marginLeft: 5}}/>
-          </Popover>
+          <Select defaultValue="all" className="select-custom"
 
-          <div style={{display: "flex"}}>
+                  style={{
+                    fontWeight: 600,
+                    width: 120,
+                    marginRight:15
+                  }}>
+            <Option value="all">Tất cả</Option>
+            <Option value="join">Đang tuyển dụng</Option>
+            <Option value="public">Công khai</Option>
+            <Option value="internal">Nội bộ</Option>
+            <Option value="stop">Ngưng nhận hồ sơ</Option>
+            <Option value="draft">Nháp</Option>
+            <Option value="close">Đóng</Option>
+          </Select>
+
+          <div style={{display: "flex",alignItems:"center"}}>
             <span id='sort'>Sắp xếp theo</span>
-            <Popover
-              onVisibleChange={handleVisibleSortChange}
-              visible={visibleSort}
-              className="header-user-info align"
-              placement="bottomRight"
-              content={contentSort}
-              trigger="click">
+            <Select defaultValue="createAt" className="select-custom"
 
-              <span style={{fontWeight: 600}}>Ngày tạo</span>
-              <FiChevronDown style={{marginLeft: 5}}/>
-            </Popover>
+                    style={{
+                      fontWeight: 600,
+                      width: 120,
+                    }}>
+              <Option value="createAt">Ngày tạo</Option>
+              <Option value="title">Tiêu đề tin</Option>
+              <Option value="unitUse">Tên đơn vị sử dụng</Option>
+
+            </Select>
           </div>
 
         </div>
@@ -161,6 +167,8 @@ function RecruitmentManagerPages(props: IProps) {
 
       </div>
 
+      <ListRecruitment/>
+      <ListRecruitment/>
       <ListRecruitment/>
     </div>
   );
