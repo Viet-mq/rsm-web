@@ -83,9 +83,9 @@ function BookingForm(props: BookingFormProps) {
         const dateChanged: any = new Date(yyyy, mm - 1, dd, hh, minutes, 0);
         const interviewTime: any = new Date(yyyy, mm - 1, dd, hh, minutes + values.interviewTime, 0);
         console.log("UpdateBooking------------")
-        console.log("values.interviewTime:",values.interviewTime)
-        console.log("interviewTime:",interviewTime,yyyy,mm,dd,hh,minutes)
-        console.log("start:",dateChanged,"end:",interviewTime)
+        console.log("values.interviewTime:", values.interviewTime)
+        console.log("interviewTime:", interviewTime, yyyy, mm, dd, hh, minutes)
+        console.log("start:", dateChanged, "end:", interviewTime)
         console.log("-------------------------")
         let req: UpdateBookingRequest = {
           id: props.getBookingState.result?.id,
@@ -142,9 +142,9 @@ function BookingForm(props: BookingFormProps) {
         const dateChanged: any = new Date(yyyy, mm - 1, dd, hh, minutes, 0);
         const interviewTime: any = new Date(yyyy, mm - 1, dd, hh, minutes + values.interviewTime, 0);
         console.log("CreateBooking------------")
-        console.log("values.interviewTime:",values.interviewTime)
-        console.log("interviewTime:",interviewTime,yyyy,mm,dd,hh,minutes)
-        console.log("start:",dateChanged,"end:",interviewTime)
+        console.log("values.interviewTime:", values.interviewTime)
+        console.log("interviewTime:", interviewTime, yyyy, mm, dd, hh, minutes)
+        console.log("start:", dateChanged, "end:", interviewTime)
         console.log("-------------------------")
         let req: CreateBookingRequest = {
           idProfile: props.showBooking.data_booking?.id,
@@ -206,8 +206,11 @@ function BookingForm(props: BookingFormProps) {
                 <div className="main-1">
                   <div className="main-1__candidate-name"
                        style={{color: "#666"}}> {props.showBooking.data_booking?.fullName}</div>
-                  <div className="main-1__green-dot"></div>
-                  <div className="main-1__job-description">Business Analysis</div>
+                  {props.getBookingState.result?.recruitmentName ? <>
+                    <div className="main-1__green-dot"></div>
+                    <div className="main-1__job-description">{props.getBookingState.result?.recruitmentName}</div>
+                  </> : null}
+
                 </div>
               </div>
               <div className="c-schedule-interview-popup" style={{overflowX: "hidden"}}>
@@ -224,7 +227,8 @@ function BookingForm(props: BookingFormProps) {
                           },
                         ],
                       })(
-                        <Select className="bg-white text-black" style={fontWeightStyle}
+                        <Select disabled className="bg-white text-black" style={fontWeightStyle}
+                                placeholder="Chọn tin tuyển dụng"
                         >
                           {props.listRecruitment.rows?.map((item: any, index: any) => (
                             <Option key={index} value={item.id}>{item.title}</Option>
@@ -233,8 +237,8 @@ function BookingForm(props: BookingFormProps) {
                       )}
                     </Form.Item>
 
-                    <Row>
-                      <Col span={8} style={{marginRight: 10}}>
+                    <div className="flex-space-between">
+                      <div className="mr-2">
                         <Form.Item className="form-label" label="Ngày" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                           {getFieldDecorator('date', {
                             initialValue: moment(props.getBookingState.result?.date) || null,
@@ -249,8 +253,8 @@ function BookingForm(props: BookingFormProps) {
                           )}
 
                         </Form.Item>
-                      </Col>
-                      <Col span={6} style={{marginRight: 10}}>
+                      </div>
+                      <div className="mr-2">
                         <Form.Item className="form-label" label="Giờ bắt đầu" labelCol={{span: 24}}
                                    wrapperCol={{span: 24}}>
                           {getFieldDecorator('timeStart', {
@@ -262,11 +266,12 @@ function BookingForm(props: BookingFormProps) {
                               },
                             ],
                           })(
-                            <TimePicker format={timeFormat} minuteStep={30}/>)}
+                            <TimePicker format={timeFormat} minuteStep={30} style={{width: "100%"}}
+                            />)}
 
                         </Form.Item>
-                      </Col>
-                      <Col span={8}>
+                      </div>
+                      <div>
                         <Form.Item className="form-label" label="Thời lượng(phút)" labelCol={{span: 24}}
                                    wrapperCol={{span: 24}}>
                           {getFieldDecorator('interviewTime', {
@@ -278,11 +283,12 @@ function BookingForm(props: BookingFormProps) {
                               },
                             ],
                           })(
-                            <InputNumber type="number" min={15} max={60} className="bg-white text-black"/>
+                            <InputNumber style={{width: "100%"}} type="number" min={15}
+                                         className="bg-white text-black"/>
                           )}
                         </Form.Item>
-                      </Col>
-                    </Row>
+                      </div>
+                    </div>
 
                     <Row style={{marginTop: 15}}>
                       <Col span={14} style={{paddingRight: 10}}>
@@ -297,7 +303,7 @@ function BookingForm(props: BookingFormProps) {
                               },
                             ],
                           })(
-                            <Select className="bg-white text-black" style={fontWeightStyle}
+                            <Select className="bg-white text-black" style={fontWeightStyle} placeholder="Nhập địa chỉ"
                             >
                               {props.listAddress.rows?.map((item: any, index: any) => (
                                 <Option key={index} value={item.id}>{item.officeName} - {item.name}</Option>
@@ -305,11 +311,11 @@ function BookingForm(props: BookingFormProps) {
                             </Select>
                           )}
                         </Form.Item>
+
                       </Col>
                       <Col span={10}>
-                        <Form.Item className="form-label" label="Phòng" labelCol={{span: 24}}
-                                   wrapperCol={{span: 24}}>
-                          {getFieldDecorator('room', {
+                        <Form.Item className="form-label" label="Phòng" labelCol={{span: 24}} wrapperCol={{span: 24}}>
+                          {getFieldDecorator('floor', {
                             initialValue: props.getBookingState.result?.floor || '',
                             rules: [
                               {
@@ -318,7 +324,7 @@ function BookingForm(props: BookingFormProps) {
                               },
                             ],
                           })(
-                            <Input placeholder="Phòng" className="bg-white text-black"/>
+                            <Input placeholder="Nhập tên phòng" className="bg-white text-black"/>
                           )}
                         </Form.Item>
                       </Col>
@@ -330,14 +336,14 @@ function BookingForm(props: BookingFormProps) {
                         initialValue: props.getBookingState.result?.interviewers?.map((item: any) => item.username) || undefined,
                         rules: [
                           {
-                            message: 'Vui lòng chọn hội đồng tuyển dụng',
+                            message: 'Vui lòng chọn Hội đồng tuyển dụng',
                             required: true,
                           },
                         ],
                       })(
                         <Select className="bg-white text-black" style={fontWeightStyle}
                                 mode="multiple"
-                                placeholder="Hội đồng tuyển dụng"
+                                placeholder="Chọn thành viên"
                         >
                           {props.listAccount.rows?.map((item: any, index: any) => (
                             <Option key={index} value={item.username}>{item.fullName}</Option>
@@ -346,7 +352,7 @@ function BookingForm(props: BookingFormProps) {
                       )}
                     </Form.Item>
 
-                    <Form.Item className="form-label" label="Hình thức" labelCol={{span: 24}} wrapperCol={{span: 24}}>
+                    <Form.Item className="form-label" label="Loại lịch" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                       {getFieldDecorator('type', {
                         initialValue: props.getBookingState.result?.type || "Phỏng vấn trực tiếp",
                         rules: [
@@ -364,22 +370,23 @@ function BookingForm(props: BookingFormProps) {
                           {/*<Option key="3" value="Phỏng vấn online ngoài ứng dụng">Phỏng vấn online ngoài ứng*/}
                           {/*  dụng</Option>*/}
                           {/*<Option key="4" value="Thi tuyển online">Thi tuyển online</Option>*/}
+
                         </Select>
                       )}
                     </Form.Item>
 
-                    <Form.Item className="form-label" label="Lưu ý cho ứng viên" labelCol={{span: 24}}
+                    <Form.Item className="form-label" label="Ghi chép nội bộ" labelCol={{span: 24}}
                                wrapperCol={{span: 24}}>
                       {getFieldDecorator('note', {
                         initialValue: props.getBookingState.result?.note || "",
                         rules: [
                           {
-                            message: 'Vui lòng chọn mẫu đánh giá',
+                            message: 'Vui lòng nhập lưu ý cho ứng viên',
                             required: false,
                           },
                         ],
                       })(
-                        <TextArea placeholder="Nhập lưu ý" style={{height: 100}} className="bg-white text-black"/>
+                        <TextArea placeholder="Nhập nội dung" style={{height: 100}} className="bg-white text-black"/>
                       )}
                     </Form.Item>
 
@@ -394,12 +401,9 @@ function BookingForm(props: BookingFormProps) {
                         style={{color: "black", marginRight: 15}}>Hủy</Button>
                 <Button onClick={onBtnUpdateClicked} type={"primary"}>Cập nhật</Button>
               </div>
-
             </Modal>
           </div>
-
         </div>
-
         :
         <div>
           <div>
@@ -424,17 +428,18 @@ function BookingForm(props: BookingFormProps) {
                 <div className="main-1">
                   <div className="main-1__candidate-name"
                        style={{color: "#666"}}>{props.showBooking.data_booking?.fullName}</div>
-                  <div className="main-1__green-dot"></div>
-                  <div className="main-1__job-description">Business Analysis</div>
+                  {/*<div className="main-1__green-dot"></div>*/}
+                  {/*<div className="main-1__job-description">Business Analysis</div>*/}
                 </div>
               </div>
               <div className="c-schedule-interview-popup" style={{overflowX: "hidden"}}>
                 <div className='ant-col-14 grid-left'>
                   <Form>
+
                     <Form.Item className="form-label" label="Tin tuyển dụng" labelCol={{span: 24}}
                                wrapperCol={{span: 24}}>
                       {getFieldDecorator('recruitmentId', {
-                        initialValue: '',
+                        initialValue: undefined,
                         rules: [
                           {
                             message: 'Vui lòng chọn tin tuyển dụng',
@@ -443,6 +448,7 @@ function BookingForm(props: BookingFormProps) {
                         ],
                       })(
                         <Select className="bg-white text-black" style={fontWeightStyle}
+                                placeholder="Chọn tin tuyển dụng"
                         >
                           {props.listRecruitment.rows?.map((item: any, index: any) => (
                             <Option key={index} value={item.id}>{item.title}</Option>
@@ -451,11 +457,11 @@ function BookingForm(props: BookingFormProps) {
                       )}
                     </Form.Item>
 
-                    <Row>
-                      <Col span={8} style={{marginRight: 10}}>
+                    <div className="flex-space-between">
+                      <div className="mr-2">
                         <Form.Item className="form-label" label="Ngày" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                           {getFieldDecorator('date', {
-                            initialValue: moment(),
+                            initialValue: moment().add(1, 'days'),
                             rules: [
                               {
                                 message: 'Vui lòng chọn ngày bắt đầu',
@@ -467,8 +473,8 @@ function BookingForm(props: BookingFormProps) {
                           )}
 
                         </Form.Item>
-                      </Col>
-                      <Col span={6} style={{marginRight: 10}}>
+                      </div>
+                      <div className="mr-2">
                         <Form.Item className="form-label" label="Giờ bắt đầu" labelCol={{span: 24}}
                                    wrapperCol={{span: 24}}>
                           {getFieldDecorator('timeStart', {
@@ -484,8 +490,8 @@ function BookingForm(props: BookingFormProps) {
                             />)}
 
                         </Form.Item>
-                      </Col>
-                      <Col span={8}>
+                      </div>
+                      <div>
                         <Form.Item className="form-label" label="Thời lượng(phút)" labelCol={{span: 24}}
                                    wrapperCol={{span: 24}}>
                           {getFieldDecorator('interviewTime', {
@@ -497,18 +503,19 @@ function BookingForm(props: BookingFormProps) {
                               },
                             ],
                           })(
-                            <InputNumber type="number" min={15} className="bg-white text-black"/>
+                            <InputNumber style={{width: "100%"}} type="number" min={15}
+                                         className="bg-white text-black"/>
                           )}
                         </Form.Item>
-                      </Col>
-                    </Row>
+                      </div>
+                    </div>
 
                     <Row style={{marginTop: 15}}>
                       <Col span={14} style={{paddingRight: 10}}>
                         <Form.Item className="form-label" label="Địa điểm" labelCol={{span: 24}}
                                    wrapperCol={{span: 24}}>
                           {getFieldDecorator('interviewAddress', {
-                            initialValue: '',
+                            initialValue: props.listAddress.rows[0]?.id,
                             rules: [
                               {
                                 message: 'Vui lòng nhập địa điểm',
@@ -516,7 +523,7 @@ function BookingForm(props: BookingFormProps) {
                               },
                             ],
                           })(
-                            <Select className="bg-white text-black" style={fontWeightStyle}
+                            <Select className="bg-white text-black" style={fontWeightStyle} placeholder="Nhập địa chỉ"
                             >
                               {props.listAddress.rows?.map((item: any, index: any) => (
                                 <Option key={index} value={item.id}>{item.officeName} - {item.name}</Option>
@@ -524,11 +531,11 @@ function BookingForm(props: BookingFormProps) {
                             </Select>
                           )}
                         </Form.Item>
-                      </Col>
 
+                      </Col>
                       <Col span={10}>
                         <Form.Item className="form-label" label="Phòng" labelCol={{span: 24}} wrapperCol={{span: 24}}>
-                          {getFieldDecorator('room', {
+                          {getFieldDecorator('floor', {
                             initialValue: '',
                             rules: [
                               {
@@ -537,13 +544,13 @@ function BookingForm(props: BookingFormProps) {
                               },
                             ],
                           })(
-                            <Input placeholder="Phòng" className="bg-white text-black"/>
+                            <Input placeholder="Nhập tên phòng" className="bg-white text-black"/>
                           )}
                         </Form.Item>
                       </Col>
                     </Row>
 
-                    <Form.Item label="Hội đồng tuyển dụng" className="mb-0" labelCol={{span: 24}}
+                    <Form.Item label="Hội đồng tuyển dụng" className="form-label" labelCol={{span: 24}}
                                wrapperCol={{span: 24}}>
                       {getFieldDecorator('interviewers', {
                         initialValue: undefined,
@@ -556,7 +563,7 @@ function BookingForm(props: BookingFormProps) {
                       })(
                         <Select className="bg-white text-black" style={fontWeightStyle}
                                 mode="multiple"
-                                placeholder="Hội đồng tuyển dụng"
+                                placeholder="Chọn thành viên"
                         >
                           {props.listAccount.rows?.map((item: any, index: any) => (
                             <Option key={index} value={item.username}>{item.fullName}</Option>
@@ -565,9 +572,9 @@ function BookingForm(props: BookingFormProps) {
                       )}
                     </Form.Item>
 
-                    <Form.Item className="form-label" label="Hình thức" labelCol={{span: 24}} wrapperCol={{span: 24}}>
+                    <Form.Item className="form-label" label="Loại lịch" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                       {getFieldDecorator('type', {
-                        initialValue: '',
+                        initialValue: 'Phỏng vấn trực tiếp',
                         rules: [
                           {
                             message: 'Vui lòng chọn hình thức phỏng vấn',
@@ -588,7 +595,7 @@ function BookingForm(props: BookingFormProps) {
                       )}
                     </Form.Item>
 
-                    <Form.Item className="form-label" label="Lưu ý cho ứng viên" labelCol={{span: 24}}
+                    <Form.Item className="form-label" label="Ghi chép nội bộ" labelCol={{span: 24}}
                                wrapperCol={{span: 24}}>
                       {getFieldDecorator('note', {
                         initialValue: '',
@@ -599,7 +606,7 @@ function BookingForm(props: BookingFormProps) {
                           },
                         ],
                       })(
-                        <TextArea placeholder="Nhập lưu ý" style={{height: 100}} className="bg-white text-black"/>
+                        <TextArea placeholder="Nhập nội dung" style={{height: 100}} className="bg-white text-black"/>
                       )}
                     </Form.Item>
 

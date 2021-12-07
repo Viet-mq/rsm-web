@@ -141,6 +141,7 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
       props.resetCandidates();
       resetFields();
       setDatasource([]);
+      setKeySearch(undefined)
       setListCandidates([]);
     }
   }, [props.showSchedule.show_schedule])
@@ -165,6 +166,7 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
     props.resetCandidates();
     resetFields();
     setDatasource([]);
+    setKeySearch(undefined)
     setListCandidates([]);
   }
 
@@ -289,6 +291,7 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
                     </Select>
                   )}
                 </Form.Item>
+
                 <div className="flex-space-between">
                   <div className="mr-2">
                     <Form.Item className="form-label" label="Ngày" labelCol={{span: 24}} wrapperCol={{span: 24}}>
@@ -381,8 +384,7 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
                   </Col>
                 </Row>
 
-                <Form.Item label="Hội đồng tuyển dụng" className="form-label" labelCol={{span: 24}}
-                           wrapperCol={{span: 24}}>
+                <Form.Item label="Hội đồng tuyển dụng" className="form-label" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                   {getFieldDecorator('interviewers', {
                     initialValue: undefined,
                     rules: [
@@ -426,8 +428,7 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
                   )}
                 </Form.Item>
 
-                <Form.Item className="form-label" label="Ghi chép nội bộ" labelCol={{span: 24}}
-                           wrapperCol={{span: 24}}>
+                <Form.Item className="form-label" label="Ghi chép nội bộ" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                   {getFieldDecorator('note', {
                     initialValue: '',
                     rules: [

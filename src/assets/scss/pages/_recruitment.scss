@@ -1,3 +1,9 @@
+.recruitment-container{
+  .menu-left {
+    height: calc(100vh - 110px);
+  }
+}
+
 .header-align {
   display: flex;
   justify-content: space-between;
@@ -14,12 +20,13 @@
 }
 
 .recruitment-option {
-  margin-bottom: 30px;
+  margin-bottom: 15px;
   align-items: center;
 
   &__pop-over {
     display: flex;
     align-items: center;
+
     .align {
       margin-right: 20px;
     }
@@ -93,7 +100,6 @@
 .flex-1 {
   flex: 1;
   padding: 0 30px;
-  height: 50px;
   border-right: 1px solid $color-schedule-interview;
 }
 
@@ -104,10 +110,84 @@
 .padding-process {
   padding: 5px 20px;
   border-radius: 5px;
-text-align: center;
+  text-align: center;
+
   &:hover {
     background-color: $color-blue-hover;
   }
+}
+
+.header-recruitment-create {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  height: 50px;
+  box-shadow: 0px 0px 5px $color-box-shadow;
+  z-index: 1;
+
+  span {
+    font-size: 20px;
+    font-weight: 500;
+    margin-left: 15px;
+  }
+}
+
+.header-recruitment-create {
+  background-color: $color-bg !important;
+
+  .ant-breadcrumb {
+    float: left;
+    left: 40px;
+    position: absolute;
+  }
+
+  .ant-breadcrumb-link {
+    .active {
+      font-weight: bold;
+    }
+  }
+}
+
+.region-action {
+  width: 250px;
+  height: 145px;
+  background-color: white;
+  border-radius: 5px;
+  margin: 15px;
+  padding: 25px;
+  .ant-btn.ant-btn-primary{
+    span{
+      width: 135px;
+    }
+  }
+}
+
+.detail-action{
+  width: 200px;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.main-content{
+  background-color: $color-bg;
+  width: 645px;
+  margin: 15px 0 15px 6%;
+  .schedule-detail-title {
+    font-weight: 500;
+    font-size: 18px;
+  }
+  .c-schedule-interview-popup{
+    width: 1105px;
+  }
+}
+
+.content-right{
+  width: 1500px;
+  overflow-x: auto;
+.ant-layout{
+  background: inherit;
+}
 }
 
 

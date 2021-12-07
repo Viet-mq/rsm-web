@@ -93,6 +93,7 @@ function ScheduleManagerPages(props: IProps) {
   const setCurrentDate = (): any => {
     let getCurrWeek = new Date();
     let dayOfWeek = getCurrWeek.getDay();
+    if(dayOfWeek===0) dayOfWeek=7;
     let numDay = getCurrWeek.getDate();
     let s = new Date(getCurrWeek);
     let e = new Date(getCurrWeek);

@@ -1186,6 +1186,9 @@ input[type='number'] {
   align-items: center;
 }
 .header {
+  background-color:#f5f7f8 !important;
+  box-shadow: 0 0 5px rgba(178,178,178,0.7);
+  z-index: 2;
   .ant-breadcrumb {
     float: left;
     left: 40px;

@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react";
-import {Button, Icon, Popover, Select} from "antd";
+import {Button, Icon, Select} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {showFormCreate, showFormUpdate} from "../redux/actions";
-import {FiChevronDown} from "react-icons/all";
 import Search from "antd/es/input/Search";
 import ListRecruitment from "../components/list/ListRecruitment";
+import {Link} from "react-router-dom";
 
 const mapStateToProps = ({
                            jobManager: {
@@ -22,7 +22,7 @@ const mapStateToProps = ({
   deleteJob,
   update,
 })
-const {Option}=Select;
+const {Option} = Select;
 const connector = connect(mapStateToProps, {showFormCreate, showFormUpdate});
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -32,7 +32,7 @@ interface IProps extends ReduxProps {
 
 function RecruitmentManagerPages(props: IProps) {
   useEffect(() => {
-    document.title = "Quản lý vị trí công việc";
+    document.title = "Quản lý tin tuyển dụng";
   }, []);
 
   const handleCreate = (e: any) => {
@@ -104,10 +104,12 @@ function RecruitmentManagerPages(props: IProps) {
       <div className='header-align recruitment-title'>
         <div className="tmp-title-page-size20">Tin tuyển dụng</div>
         <div>
-          <Button type="primary">
-            <Icon type="plus" style={{fontSize: "125%"}}/>
-            Thêm mới
-          </Button>
+          <Link to={`/recruitment-manager/create`}>
+            <Button type="primary">
+              <Icon type="plus" style={{fontSize: "125%"}}/>
+              Thêm mới
+            </Button>
+          </Link>
         </div>
       </div>
       <div className='header-align recruitment-option'>
@@ -117,7 +119,7 @@ function RecruitmentManagerPages(props: IProps) {
                   style={{
                     fontWeight: 600,
                     width: 120,
-                    marginRight:15
+                    marginRight: 15
                   }}>
             <Option value="all">Tất cả</Option>
             <Option value="join">Đang tuyển dụng</Option>
@@ -128,7 +130,7 @@ function RecruitmentManagerPages(props: IProps) {
             <Option value="close">Đóng</Option>
           </Select>
 
-          <div style={{display: "flex",alignItems:"center"}}>
+          <div style={{display: "flex", alignItems: "center"}}>
             <span id='sort'>Sắp xếp theo</span>
             <Select defaultValue="createAt" className="select-custom"
 

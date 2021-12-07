@@ -146,7 +146,7 @@ const DefaultLayout = (props: LayoutProps) => {
               <div>
                 <Row>
                   <Col span={props.showFormDetail?.show_detail?.general}
-                       style={{height: "calc(100vh - 60px)", overflow: "auto"}}>
+                       style={{height: "calc(100vh - 60px)", overflow: "overlay"}}>
                     {props.children}
                   </Col>
 

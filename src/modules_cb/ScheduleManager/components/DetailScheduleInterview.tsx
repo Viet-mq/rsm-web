@@ -48,6 +48,7 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
       fullName: dataDetail.fullName
     }
     props.showFormBooking(true, req);
+    props.handleClosePopupDetail()
   }
   const fontWeight = {
     fontWeight: 500

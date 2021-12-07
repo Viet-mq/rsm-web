@@ -597,7 +597,7 @@ function ListProfile(props: ListProfileProps) {
       <br/>
 
       <Table
-        scroll={{x: "1500px", y: "600px"}}
+        scroll={{x: "1500px", y: "638px"}}
         className="custom-table -webkit-scrollbar"
         dataSource={dataSource ? dataSource : props.list.rows}
         columns={columns}
