@@ -55,7 +55,7 @@ function JobManagerPages(props: IProps) {
             <div className="tmp-btn">
               <div>
                 <Button onClick={handleCreate}>
-                  <Icon type="plus"/> Tạo job
+                  <Icon type="plus"/> Tạo vị trí công việc
                 </Button>
               </div>
             </div>

@@ -2,6 +2,7 @@ import {Icon, Menu} from 'antd';
 import React from 'react';
 import {RootState} from 'src/redux/reducers';
 import {connect, ConnectedProps} from 'react-redux';
+import {Link} from 'react-router-dom';
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -26,23 +27,29 @@ const Nav = (props: IProps) => {
   return (
     <Menu
       className="menu-left"
-      defaultOpenKeys={[paths[1]]}
-      defaultSelectedKeys={['information']}
+      defaultSelectedKeys={[paths[3]?paths[3]:"information"]}
       mode="inline"
     >
       <Menu.Item key="information" style={{display: 'flex', alignItems: 'center'}}>
-        <Icon type="form"/>
-        <span>Thông tin ứng tuyển</span>
+       <Link to={`/recruitment-manager/create/information`}>
+         <Icon type="form"/>
+         <span>Thông tin ứng tuyển</span>
+       </Link>
+
       </Menu.Item>
 
-      <Menu.Item key="recruitment-manager" style={{display: 'flex', alignItems: 'center'}}>
+      <Menu.Item key="process" style={{display: 'flex', alignItems: 'center'}}>
+        <Link to={`/recruitment-manager/create/process`}>
         <Icon type="team"/>
         <span>Quy trình tuyển dụng</span>
+        </Link>
       </Menu.Item>
 
-      <Menu.Item key="profile-manager" style={{display: 'flex', alignItems: 'center'}}>
+      <Menu.Item key="interviewers" style={{display: 'flex', alignItems: 'center'}}>
+        <Link to={`/recruitment-manager/create/interviewers`}>
         <Icon type="solution"/>
         <span>Hội đông tuyển dụng</span>
+        </Link>
       </Menu.Item>
     </Menu>
   );

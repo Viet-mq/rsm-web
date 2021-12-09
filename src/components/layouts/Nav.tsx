@@ -45,6 +45,7 @@ interface IProps extends ParentProps, PropsFromRedux {
 
 const Nav = (props: IProps) => {
   const paths = window.location.pathname.split('/');
+
   return (
     <Menu
       className="menu-left"

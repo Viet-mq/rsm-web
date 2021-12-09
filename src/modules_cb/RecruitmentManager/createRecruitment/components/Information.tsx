@@ -41,6 +41,7 @@ function InformationForm(props: IProps) {
   const timeFormat = 'HH:mm';
   const formItemHeight = {height: 250}
   const textEditorHeight = {height: 150}
+
   /*
    * Quill modules to attach to editor
    * See https://quilljs.com/docs/modules/ for complete options
@@ -87,11 +88,7 @@ function InformationForm(props: IProps) {
         const minutes = time.getMinutes();
         const dateChanged: any = new Date(yyyy, mm - 1, dd, hh, minutes, 0);
         const interviewTime: any = new Date(yyyy, mm - 1, dd, hh, minutes + values.interviewTime, 0);
-        console.log("CreateBooking------------")
-        console.log("values.interviewTime:", values.interviewTime)
-        console.log("interviewTime:", interviewTime, yyyy, mm, dd, hh, minutes)
-        console.log("start:", dateChanged, "end:", interviewTime)
-        console.log("-------------------------")
+
         let req: CreateBookingRequest = {
           idProfile: props.showBooking.data_booking?.id,
           date: dateChanged * 1,
@@ -393,7 +390,7 @@ function InformationForm(props: IProps) {
                   modules={modules}
                   formats={formats}
                   bounds={'.app'}
-                  placeholder="Mô tả công việc"
+                  placeholder="Quyền lợi"
                 />)}
             </Form.Item>
 

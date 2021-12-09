@@ -3,13 +3,15 @@ import {Badge, Button, Dropdown, Form, Layout, Menu} from 'antd';
 import env from 'src/configs/env';
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {useHistory} from "react-router-dom";
+import {Redirect, Route, Switch, useHistory, Link} from "react-router-dom";
 import {RootState} from "../../../../redux/reducers";
 import Loading from "../../../../components/Loading";
 import Header from '../components/Header';
 import {ImArrowLeft2} from "react-icons/all";
 import Nav from "../components/Nav";
 import InformationForm from "../components/Information";
+import Process from "../components/Process";
+import Interviewers from "../components/Interviewers";
 
 const {Sider} = Layout;
 
@@ -87,7 +89,9 @@ const CreateLayout = (props: LayoutProps) => {
       <Layout>
         <Layout>
           <Header>
+            <Link to={`/recruitment-manager`} style={{display:"flex", color:"black"}}>
             <ImArrowLeft2 size={20}/>
+            </Link>
             <span>Thêm mới</span>
           </Header>
         </Layout>
@@ -95,19 +99,29 @@ const CreateLayout = (props: LayoutProps) => {
           <Sider theme="light" width={200}>
             <Nav/>
           </Sider>
-          <div  className='content-right'>
-          <Layout>
-            <div style={{display: "flex", alignItems: "self-start"}}>
-
-              <InformationForm/>
-              <div className="region-action ">
-                <Dropdown.Button overlay={menu} style={{marginBottom: 15}} size='large' type="primary">Lưu và đăng
-                  tin</Dropdown.Button>
-                <Button className="btn-save" size='large'>Lưu nháp</Button>
+          <div className='content-right'>
+            <Layout>
+              <div style={{display: "flex", alignItems: "self-start"}}>
+                <Switch>
+                  <Route path="/recruitment-manager/create/information">
+                    <InformationForm/>
+                  </Route>
+                  <Route path="/recruitment-manager/create/process">
+                    <Process/>
+                  </Route>
+                  <Route path="/recruitment-manager/create/interviewers">
+                    <Interviewers/>
+                  </Route>
+                  <Redirect exact from="/recruitment-manager/create/" to={'/recruitment-manager/create/information'}/>
+                </Switch>
+                <div className="region-action ">
+                  <Dropdown.Button overlay={menu} style={{marginBottom: 15}} size='large' type="primary">Lưu và đăng
+                    tin</Dropdown.Button>
+                  <Button className="btn-save" size='large'>Lưu nháp</Button>
+                </div>
               </div>
-            </div>
 
-          </Layout>
+            </Layout>
           </div>
         </Layout>
       </Layout>

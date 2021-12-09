@@ -1,24 +1,24 @@
-import {RootState} from "../../../redux/reducers";
+import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
+
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Input, Modal} from "antd";
 import React, {FormEvent} from "react";
-import {createJob, showFormCreate} from "../redux/actions";
-import {CreateJobRequest} from "../types";
+import {showFormUpdate, updateJob} from "../../redux/actions";
 
-const mapStateToProps = ({jobManager}: RootState) => ({jobManager});
-const connector = connect(mapStateToProps, {createJob, showFormCreate});
 
+const mapState = ({jobManager: {showForm}}: RootState) => ({showForm})
+
+const connector = connect(mapState, {showFormUpdate, updateJob});
 type ReduxProps = ConnectedProps<typeof connector>;
 
-interface CreateJobFormProps extends FormComponentProps, ReduxProps {
+interface UpdateJobFormProps extends FormComponentProps, ReduxProps {
 }
 
-function CreateJobForm(props: CreateJobFormProps) {
+function UpdateProcessForm(props: UpdateJobFormProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
   const formItemStyle = {height: '60px'};
-
   const formItemLayout = {
     labelCol: {
       xs: {span: 24},
@@ -30,24 +30,20 @@ function CreateJobForm(props: CreateJobFormProps) {
     },
   };
 
-  function onBtnCreateClicked(e: FormEvent) {
+  function onBtnUpdateClicked(e: FormEvent) {
     e.preventDefault();
     (e.target as any).disabled = true;
     (e.target as any).disabled = false;
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        let req: CreateJobRequest = {
-          name: values.name,
-        }
-        props.createJob(req);
-        return;
+
       }
     });
   }
 
   function onBtnCancelClicked() {
     resetFields();
-    props.showFormCreate(false);
+    props.showFormUpdate(false);
   }
 
   return (
@@ -55,8 +51,8 @@ function CreateJobForm(props: CreateJobFormProps) {
     <Modal
       zIndex={2}
       maskClosable={false}
-      title="Tạo mới vị trí công việc"
-      visible={props.jobManager.showForm.show_create}
+      title="Sửa vòng"
+      visible={props.showForm.show_update}
       centered={true}
       width="550px"
       afterClose={() => {
@@ -64,27 +60,29 @@ function CreateJobForm(props: CreateJobFormProps) {
       }}
       onCancel={() => {
         resetFields();
-        props.showFormCreate(false);
+        props.showFormUpdate(false);
       }}
       footer={""}>
 
       <Form {...formItemLayout}>
 
-        <Form.Item label="Tên job" className="mb-0" style={{...formItemStyle}}>
+        <Form.Item label="Tên vòng" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('name', {
-            initialValue: '',
+            initialValue: props.showForm.data_update?.name,
             rules: [
               {
-                message: 'Vui lòng nhập tên vị trí tuyển dụng',
+                message: 'Vui lòng nhập tên vòng tuyển dụng',
                 required: true,
               },
             ],
-          })(<Input placeholder="Nhập tên vị trí tuyển dụng" className="bg-white text-black"/>)}
+          })(
+            <Input placeholder="Tên vòng tuyển dụng" className="bg-white text-black"/>
+          )}
         </Form.Item>
 
         <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px'}} colon={false}>
-          <Button className="mr-3 create-btn" htmlType="submit" onClick={onBtnCreateClicked}>
-            Tạo mới
+          <Button className="mr-3 create-btn" htmlType="submit" onClick={onBtnUpdateClicked}>
+            Cập nhật
           </Button>
           <Button type="default" className="pl-5 pr-5" onClick={onBtnCancelClicked}>
             Hủy
@@ -95,8 +93,7 @@ function CreateJobForm(props: CreateJobFormProps) {
 
     </Modal>
 
-  );
-
+  )
 }
 
-export default connector(Form.create<CreateJobFormProps>()(CreateJobForm));
+export default connector(Form.create<UpdateJobFormProps>()(UpdateProcessForm));
