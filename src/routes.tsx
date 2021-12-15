@@ -1,5 +1,5 @@
- import React,{useEffect} from 'react';
-import {Redirect, Route, Switch,useLocation} from 'react-router-dom';
+import React, {useEffect} from 'react';
+import {Redirect, Route, Switch, useLocation} from 'react-router-dom';
 import {connect, ConnectedProps} from 'react-redux';
 import Dashboard from './modules/Dashboard/index';
 
@@ -21,12 +21,13 @@ import {DetailCV} from "./modules_cb/ProfileManager/types";
 import ViewGroupManagerPage from './modules_cb/ViewGroupManager/pages/ViewGroupManagerPage';
 import GroupAPIManagerPage from "./modules_cb/GroupAPIManager/pages/GroupAPIManagerPage";
 import TalentPoolManagerPages from "./modules_cb/TalentPoolManager/pages/TalentPoolManagerPages";
- import ScheduleManagerPages from "./modules_cb/ScheduleManager/pages/ScheduleManagerPages";
- import SkillManagerPages from "./modules_cb/SkillManager/pages/SkillManagerPages";
- import AddressManagerPages from "./modules_cb/AddressManager/pages/AddressManagerPages";
- import ReasonRejectManagerPages from "./modules_cb/ReasonRejectManager/pages/ReasonRejectManagerPages";
- import RecruitmentManagerPages from "./modules_cb/RecruitmentManager/pages/RecruitmentManagerPages";
+import ScheduleManagerPages from "./modules_cb/ScheduleManager/pages/ScheduleManagerPages";
+import SkillManagerPages from "./modules_cb/SkillManager/pages/SkillManagerPages";
+import AddressManagerPages from "./modules_cb/AddressManager/pages/AddressManagerPages";
+import ReasonRejectManagerPages from "./modules_cb/ReasonRejectManager/pages/ReasonRejectManagerPages";
+import RecruitmentManagerPages from "./modules_cb/RecruitmentManager/pages/RecruitmentManagerPages";
 import CreateLayout from "./modules_cb/RecruitmentManager/createRecruitment/pages/CreateLayout";
+import DetailRecruitment from "./modules_cb/RecruitmentManager/components/DetailRecruitment";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -75,6 +76,8 @@ const Routes = (props: PropsFromRedux) => {
         <Route path="/address-manager" component={AddressManagerPages} isLogin={props.isLogin}/>
         <Route path="/recruitment-manager" exact component={RecruitmentManagerPages} isLogin={props.isLogin}/>
         <Route path="/recruitment-manager/create" component={CreateLayout} isLogin={props.isLogin}/>
+        <Route path="/recruitment-manager/edit" component={CreateLayout} isLogin={props.isLogin}/>
+        <Route path="/recruitment-manager/detail" component={DetailRecruitment} isLogin={props.isLogin}/>
         <Redirect exact from="/*" to={'/home'}/>
       </Switch>
     </div>

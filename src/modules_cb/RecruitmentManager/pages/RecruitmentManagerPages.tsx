@@ -168,10 +168,12 @@ function RecruitmentManagerPages(props: IProps) {
         </div>
 
       </div>
+      <div>
+        <ListRecruitment/>
+        <ListRecruitment/>
+        <ListRecruitment/>
+      </div>
 
-      <ListRecruitment/>
-      <ListRecruitment/>
-      <ListRecruitment/>
     </div>
   );
 

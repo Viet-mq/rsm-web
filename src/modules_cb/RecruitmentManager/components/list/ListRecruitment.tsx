@@ -5,6 +5,7 @@ import {Popconfirm, Popover, Select} from "antd";
 import {deleteJob, getListRecruitment, showFormCreate, showFormUpdate, updateJob} from "../../redux/actions";
 
 import {BsDot, BsThreeDotsVertical} from "react-icons/all";
+import {Link} from "react-router-dom";
 
 const {Option} = Select;
 const mapStateToProps = ({jobManager: {list}}: RootState) => ({list})
@@ -23,8 +24,7 @@ interface IProps extends ReduxProps {
 
 function ListRecruitment(props: IProps) {
   const [visiblePopover, setVisiblePopover] = useState<boolean>(false);
-  const content = (
-    <ul style={{width: 160}} className="popup-popover">
+  const content = (<ul style={{width: 160}} className="popup-popover">
       <li>
         <a>Sửa tin</a>
       </li>
@@ -56,8 +56,14 @@ function ListRecruitment(props: IProps) {
           </a>
         </Popconfirm>
       </li>
-    </ul>
-  );
+    </ul>);
+  const contentMore = (<div className="content-more">
+    <div className="flex-items-center">
+      <div className='border-right pr-3'>Người tạo:<span className="bold-text"> Hồ Đức Duy</span></div>
+      <div className=" ml-3">Ngày tạo:<span className="bold-text"> 29/11/2021</span></div>
+    </div>
+    <div className='border-right' style={{width:200}}>Thời hạn dự kiến: <span className="bold-text"> 29/12/2021</span></div>
+  </div>)
 
   useEffect(() => {
     props.getListRecruitment({page: 1, size: 100});
@@ -80,10 +86,10 @@ function ListRecruitment(props: IProps) {
   return (
     <>
       <div className="recruitment-list">
-        <div className="header-box">
+        <div className="header-box border-bottom">
           <div className="main-1__green-dot"></div>
           <div className="header-box-main">
-            <div className="p">Business Analysis</div>
+            <Link to={`/recruitment-manager/detail`} className="p">Business Analysis</Link>
             <div className="detail-flex">
               <div>Business Analysis</div>
               <div><BsDot size={20}/></div>
@@ -95,7 +101,9 @@ function ListRecruitment(props: IProps) {
               <div className="ml-3">Hạn nộp hồ sơ:</div>
               <div className="p">28/01/2022</div>
 
-              <a className="ml-3">Xem thêm</a>
+              <Popover content={contentMore} trigger="click">
+                <a className="ml-3">Xem thêm</a>
+              </Popover>
             </div>
           </div>
           <div>
@@ -106,10 +114,11 @@ function ListRecruitment(props: IProps) {
                       width: 150,
                     }}>
               <Option value="join">
-                Tôi tham gia
+                Công khai
               </Option>
-              <Option value="create">Tôi tạo</Option>
-              <Option value="all">Tất cả</Option>
+              <Option value="create">Nội bộ</Option>
+              <Option value="all">Ngưng nhận hồ sơ</Option>
+              <Option value="close">Đóng</Option>
             </Select>
 
             <Popover

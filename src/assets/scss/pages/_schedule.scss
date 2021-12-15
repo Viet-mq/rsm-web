@@ -82,6 +82,7 @@
   margin: 0px;
   left: 0px;
   top: 0px;
+
 }
 
 .grid-left {
@@ -109,6 +110,10 @@
 .footer-right {
   @extend .schedule-popup-footer;
   text-align: right;
+
+  .ant-btn {
+    position: inherit;
+  }
 }
 
 .footer-left {
@@ -301,7 +306,7 @@
 
 .main-process {
 
-  .ql-container.ql-snow{
+  .ql-container.ql-snow {
     height: 170px;
   }
 }
@@ -317,6 +322,7 @@
 
 .add-process-button {
   margin-bottom: 15px;
+
   button {
     color: $color-blue-link;
     border-color: $color-blue-link;
@@ -325,8 +331,8 @@
   }
 }
 
-.process-system{
-  background:$color-light-grey ;
+.process-system {
+  background: $color-light-grey;
 }
 
 

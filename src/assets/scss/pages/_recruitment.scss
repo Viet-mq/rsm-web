@@ -1,4 +1,4 @@
-.recruitment-container{
+.recruitment-container {
   .menu-left {
     height: calc(100vh - 110px);
   }
@@ -50,7 +50,6 @@
   align-items: flex-start;
   justify-content: space-between;
   padding-bottom: 15px;
-  border-bottom: 1px solid $color-schedule-interview;
 
   .main-1__green-dot {
     margin-top: 12px;
@@ -103,9 +102,6 @@
   border-right: 1px solid $color-schedule-interview;
 }
 
-.bold-text {
-  font-weight: 500;
-}
 
 .padding-process {
   padding: 5px 20px;
@@ -156,39 +152,115 @@
   border-radius: 5px;
   margin: 15px;
   padding: 25px;
-  .ant-btn.ant-btn-primary{
-    span{
+
+  .ant-btn.ant-btn-primary {
+    span {
       width: 135px;
     }
   }
 }
 
-.detail-action{
+.detail-action {
   width: 200px;
   font-weight: 500;
   font-size: 16px;
 }
 
-.main-content{
+.main-content {
   background-color: $color-bg;
   width: 645px;
   margin: 15px 0 15px 6%;
+
   .schedule-detail-title {
     font-weight: 500;
     font-size: 18px;
   }
-  .c-schedule-interview-popup{
+
+  .c-schedule-interview-popup {
     width: 1105px;
   }
 }
 
-.content-right{
+.content-right {
   width: 1500px;
   overflow-x: auto;
-.ant-layout{
-  background: inherit;
-}
+
+  .ant-layout {
+    background: inherit;
+  }
 }
 
+.schedule-tab-detail {
+  .c-schedule-container {
+    margin: 0;
+  }
+}
 
+.header-detail {
+  padding: 15px 15px 10px 20px;
+  background: $color-bg;
+}
+
+.tab-detail {
+  .ant-tabs-nav-scroll {
+    padding: 0 20px;
+    background: $color-bg;
+  }
+
+  .ant-tabs-content {
+    padding: 0 20px;
+  }
+}
+
+.content-more {
+  padding-top: 5px;
+}
+
+.kanban-process {
+
+}
+
+.drag-context-kanban {
+  display: grid;
+  margin: 10vh auto;
+  width: 80%;
+  height: 80vh;
+  gap: 8px;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.kanban-column{
+  padding: 24px 0;
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+
+  h2{
+    margin: 0;
+    padding: 0 16px
+  }
+}
+
+.kanban-column{
+  background-color: #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin-top: 8px
+}
+
+.kanban-card{
+  background-color: #eee;
+  border-radius: 4px;
+  padding: 4px 8px;
+  transition: background-color .8s ease-out;
+  margin-top: 8px;
+
+:hover {
+  background-color: #fff;
+  transition: background-color .1s ease-in
+}
+}
 
