@@ -40,8 +40,7 @@ import {
 import {showFormUpdate} from "../redux/actions";
 import {DataShowBooking, DeleteProfileRequest, DetailCV, ProfileEntity} from "../../ProfileManager/types";
 import ScheduleManagerPages from "../../ScheduleManager/pages/ScheduleManagerPages";
-import KanBanProcess from "./KanBanProcess";
-import {getDataCard} from "./kanbanComponent/Data";
+import KanbanProcess from "./KanbanProcess";
 
 const {Option} = Select;
 const {TabPane} = Tabs;
@@ -591,10 +590,6 @@ function DetailRecruitment(props: IProps) {
   function callback(key: any) {
     console.log(key);
   }
-  const quoteMap = {
-    alpha: getDataCard(7),
-    beta: getDataCard(7)
-  };
 
 
   return (
@@ -632,7 +627,7 @@ function DetailRecruitment(props: IProps) {
 
         <Tabs defaultActiveKey="1" className="tab-detail" onChange={callback}>
           <TabPane tab="Ứng viên" className="tab-detail__candidate" key="1" style={{background: "#e8e8e8"}}>
-            <KanBanProcess initial={quoteMap} isCombineEnabled/>
+            <KanbanProcess/>
             <Table
               scroll={{x: "1500px", y: "638px"}}
               className="custom-table -webkit-scrollbar"
