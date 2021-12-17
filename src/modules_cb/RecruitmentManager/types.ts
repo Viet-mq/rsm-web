@@ -13,8 +13,12 @@ export interface RecruitmentEntity {
   talentPoolId:string,
   talentPoolName:string,
   interviewer: null,
-  interviewProcess:InterviewProcess[]
+  interviewProcess:InterviewProcess[],
+  interest: string,
+
 }
+
+
 
 export interface InterviewProcess {
   id: string,

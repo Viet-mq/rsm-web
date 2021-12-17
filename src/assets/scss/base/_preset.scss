@@ -7,9 +7,19 @@
   align-items: center;
 }
 
-.font-20-bold{
+.flex-items-start{
+  display: flex;
+  align-items: start;
+}
+
+.font-20-bold-500{
   font-size: 20px;
   font-weight: 500;
+}
+
+.font-20-bold-600{
+  font-size: 20px;
+  font-weight: 600;
 }
 
 .flex-process{

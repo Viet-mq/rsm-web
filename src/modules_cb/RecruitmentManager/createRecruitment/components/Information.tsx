@@ -268,7 +268,7 @@ function InformationForm(props: IProps) {
               </div>
             </Form.Item>
 
-            <div className={"font-20-bold"}>Mức lương</div>
+            <div className={"font-20-bold-500"}>Mức lương</div>
 
             <Row style={{marginTop: 15}}>
               <Col span={12} style={{paddingRight: 10}}>
@@ -329,7 +329,7 @@ function InformationForm(props: IProps) {
                 </Select>)}
             </Form.Item>
 
-            <div className="font-20-bold mb-4">Mô tả công việc</div>
+            <div className="font-20-bold-500 mb-4">Mô tả công việc</div>
 
             <Form.Item className="form-label" label="Mô tả chung về công việc" labelCol={{span: 24}}
                        style={formItemHeight} wrapperCol={{span: 24}}>

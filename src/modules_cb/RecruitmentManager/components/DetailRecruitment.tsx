@@ -5,21 +5,20 @@ import {ColumnProps} from "antd/lib/table";
 import {
   Avatar,
   Badge,
-  Button,
+  Button, Col,
   Dropdown,
   Icon,
+  Layout,
   Menu,
   Popconfirm,
-  Popover,
+  Popover, Row,
   Select,
   Table,
   Tabs,
-  Tooltip,
-  TreeSelect
+  Tooltip
 } from "antd";
-import {emptyText} from "src/configs/locales";
 import moment from "moment";
-import {BsDot, GiFemale, GiMale, ImArrowLeft2, ImPhoneHangUp} from "react-icons/all";
+import {BsDot, GiFemale, GiMale, HiOutlineAdjustments, ImArrowLeft2, ImPhoneHangUp} from "react-icons/all";
 import {getListJobLevel} from "../../JobLevelManager/redux/actions";
 import {getListJob} from "../../JobManager/redux/actions";
 import {getListSourceCV} from "../../SourceCVManager/redux/actions";
@@ -41,9 +40,12 @@ import {showFormUpdate} from "../redux/actions";
 import {DataShowBooking, DeleteProfileRequest, DetailCV, ProfileEntity} from "../../ProfileManager/types";
 import ScheduleManagerPages from "../../ScheduleManager/pages/ScheduleManagerPages";
 import KanbanProcess from "./KanbanProcess";
+import {emptyText} from "../../../configs/locales";
 
 const {Option} = Select;
 const {TabPane} = Tabs;
+const {SubMenu} = Menu;
+const {Header, Content, Footer, Sider} = Layout;
 
 const mapStateToProps = (state: RootState) => ({
   list: state.profileManager.list,
@@ -372,40 +374,6 @@ function DetailRecruitment(props: IProps) {
     },
   ];
   const [treeData, setTreeData] = useState([])
-  const [visiblePopover, setVisiblePopover] = useState<boolean>(false);
-  const content = (<ul style={{width: 160}} className="popup-popover">
-    <li>
-      <a>Sửa tin</a>
-    </li>
-    <li>
-      <a>Nhân bản</a>
-    </li>
-    <li>
-      <a>Chia sẻ</a>
-    </li>
-    <li>
-      <a>Xem tin tuyển dụng</a>
-    </li>
-    <li>
-
-      <Popconfirm
-        title="Bạn muốn xóa tin tuyển dụng này chứ ?"
-        okText="Xóa"
-        onCancel={event => {
-          event?.stopPropagation();
-        }}
-        onConfirm={event => handleDelete1(event)}
-      >
-        <a
-          onClick={event => {
-            event.stopPropagation();
-          }}
-        >
-          Xóa
-        </a>
-      </Popconfirm>
-    </li>
-  </ul>);
   const contentMore = (<div className="content-more">
     <div className="flex-items-center">
       <div className='border-right pr-3'>Người tạo:<span className="bold-text"> Hồ Đức Duy</span></div>
@@ -414,16 +382,14 @@ function DetailRecruitment(props: IProps) {
     <div className='border-right' style={{width: 200}}>Thời hạn dự kiến: <span className="bold-text"> 29/12/2021</span>
     </div>
   </div>)
-  const menu = (
-    <Menu className='detail-action'>
-      <Menu.Item key="1">
-        <div><Icon type="plus"/><span> Thêm hàng loạt</span></div>
-      </Menu.Item>
-      <Menu.Item key="2">
-        <div><Icon type="export"/><span> Xuất Excel</span></div>
-      </Menu.Item>
-    </Menu>
-  );
+  const menu = (<Menu className='detail-action'>
+    <Menu.Item key="1">
+      <div><Icon type="plus"/><span> Thêm hàng loạt</span></div>
+    </Menu.Item>
+    <Menu.Item key="2">
+      <div><Icon type="export"/><span> Xuất Excel</span></div>
+    </Menu.Item>
+  </Menu>);
 
   useEffect(() => {
     setTreeData(convertArrayToTree(props.listDepartment.rows))
@@ -445,10 +411,6 @@ function DetailRecruitment(props: IProps) {
     }
   }, [props.elasticSearch.triggerSearch])
 
-  const handleDelete1 = (event: any) => {
-    event.stopPropagation();
-
-  }
   const getInitials = (name: string) => {
     let initials: any = name.split(' ');
 
@@ -583,14 +545,45 @@ function DetailRecruitment(props: IProps) {
     })
   }
 
-  const handleVisibleChange = (visible: any) => {
-    setVisiblePopover(visible);
-  };
-
   function callback(key: any) {
     console.log(key);
   }
 
+  const operations = <Select className="tab-operator" defaultValue={"Công khai"}>
+    <Option key={1} value={"Công khai"}>Công khai</Option>
+    <Option key={2} value={"Nội bộ"}>Nội bộ</Option>
+    <Option key={3} value={"Ngưng nhận hồ sơ"}>Ngưng nhận hồ sơ</Option>
+    <Option key={4} value={"Đóng"}>Đóng</Option>
+  </Select>;
+
+  const [visibleType, setVisibleType] = useState<string>('list')
+
+  function candidateListClicked() {
+    setVisibleType("list")
+  }
+
+  function candidateKanbanClicked() {
+    setVisibleType("kanban")
+  }
+
+  const [col,setCol]=useState({
+    list:24,
+    filter:0,
+  })
+
+  function onOpenFilterClicked() {
+    setCol({
+      list:19,
+      filter:5,
+    })
+  }
+
+  function onCloseFilterClicked() {
+    setCol({
+      list:24,
+      filter:0,
+    })
+  }
 
   return (
     <>
@@ -625,126 +618,74 @@ function DetailRecruitment(props: IProps) {
           </div>
         </div>
 
-        <Tabs defaultActiveKey="1" className="tab-detail" onChange={callback}>
-          <TabPane tab="Ứng viên" className="tab-detail__candidate" key="1" style={{background: "#e8e8e8"}}>
-            <KanbanProcess/>
-            <Table
-              scroll={{x: "1500px", y: "638px"}}
-              className="custom-table -webkit-scrollbar"
-              dataSource={dataSource ? dataSource : props.list.rows}
-              columns={columns}
-              rowKey="id"
-              size="small"
-              bordered
-              onChange={handleChange}
-              locale={{emptyText: emptyText}}
-              pagination={{
-                current: page,
-                pageSize: size,
-                total: dataSource ? dataSource.length : props.list.total,
-                onChange: value => setPage(value),
-                showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,
-              }}
-            />
+        <Tabs defaultActiveKey="1" className="tab-detail" onChange={callback} tabBarExtraContent={operations}>
+          <TabPane tab="Ứng viên" className="tab-candidate-detail" key="1" style={{background: "#e8e8e8"}}>
+            <Layout className="layout-candidate-detail">
+              <Header className="header-candidate-detail flex-items-start">
+                <Button size="large" className={visibleType === 'list' ? "icon-list is-active" : "icon-list"}
+                        onClick={candidateListClicked}><Icon type="unordered-list" style={{fontSize: "150%"}}/></Button>
+                <Button size="large" className={visibleType === 'kanban' ? "is-active" : undefined}
+                        onClick={candidateKanbanClicked}><Icon type="project" style={{fontSize: "150%"}}/></Button>
+
+                <div className="search-wrap">
+                  <Search
+                    value={selected.name}
+                    onChange={e => setSelected({...selected, name: e.target.value})}
+                    onSearch={btnSearchClicked}
+                    placeholder="Tìm kiếm nhanh"/>
+                </div>
+
+                <Button onClick={onOpenFilterClicked} className="ml-2" size={"large"}><HiOutlineAdjustments className="mr-1"/>Bộ lọc</Button>
+                <Button className="ml-2" size={"large"}><Icon type="export" className="mr-1"/>Xuất dữ liệu</Button>
+              </Header>
+
+              <Content>
+                <Row gutter={16}>
+                  <Col span={col.list} >
+                    {visibleType === 'list' ? <Table
+                        scroll={{x: "1500px", y: "638px"}}
+                        className="custom-table -webkit-scrollbar"
+                        dataSource={dataSource ? dataSource : props.list.rows}
+                        columns={columns}
+                        rowKey="id"
+                        size="small"
+                        bordered
+                        onChange={handleChange}
+                        locale={{emptyText: emptyText}}
+                        pagination={{
+                          current: page,
+                          pageSize: size,
+                          total: dataSource ? dataSource.length : props.list.total,
+                          onChange: value => setPage(value),
+                          showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,
+                        }}
+                      /> :
+                      <KanbanProcess/>
+                    }
+                  </Col>
+                  <Col span={col.filter}><div className="filter-recruitment">
+                    <div className="flex-space-between">
+                      <div className="font-20-bold-600">Bộ lọc</div>
+                      <div><Icon onClick={onCloseFilterClicked} type="close" className="font-20-bold-500" /></div>
+                    </div>
+                    <div className={"button-filter"}>
+                      <Button className={"mr-2"} >Bỏ lọc</Button>
+                      <Button type={"primary"}>Áp dụng</Button>
+                    </div>
+                  </div></Col>
+                </Row>
+
+              </Content>
+            </Layout>
           </TabPane>
+
           <TabPane tab="Lịch phỏng vấn" key="2" style={{background: "#e8e8e8", marginLeft: 40}}>
             <div className="schedule-tab-detail">
-
               <ScheduleManagerPages/>
             </div>
           </TabPane>
         </Tabs>
-
       </div>
-
-
-      <div>
-        {keySearch ?
-          <div style={{marginLeft: 15}}>
-            <span>Kết quả tìm kiếm cho: </span>
-            <span
-              className="c-search-profile"
-            >
-              {keySearch}
-            </span>
-            <a style={{color: "black", fontStyle: "italic"}} onClick={onBtnResetClicked}>x</a>
-          </div>
-          : null}
-
-        <br/>
-
-        <div className="c-filter-profile">
-
-          <Search style={{display: "inline"}}
-                  value={selected.name}
-                  onChange={e => setSelected({...selected, name: e.target.value})}
-                  onSearch={btnSearchClicked}
-                  placeholder="Họ tên"/>
-
-          <Select style={width}
-                  placeholder="Công việc"
-                  value={selected.job ? selected.job : undefined}
-                  onChange={(value: any) => setSelected({...selected, job: value})}
-          >
-            {props.listJob.rows?.map((item: any, index: any) => (
-              <Option key={index} value={item.id}>{item.name}</Option>
-            ))}
-          </Select>
-
-          <Select style={width}
-                  value={selected.jobLevel ? selected.jobLevel : undefined}
-                  onChange={(value: any) => setSelected({...selected, jobLevel: value})}
-                  placeholder="Vị trí tuyển dụng"
-          >
-            {props.listJobLevel.rows?.map((item: any, index: any) => (
-              <Option key={index} value={item.id}>{item.name}</Option>
-            ))}
-          </Select>
-
-          <TreeSelect
-            style={width}
-            value={selected.department ? selected.department : undefined}
-            dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
-            treeData={treeData}
-            placeholder="Phòng ban"
-            treeDefaultExpandAll
-            onChange={(value: any) => setSelected({...selected, department: value})}
-          />
-
-          <Select
-            style={width}
-            value={selected.recruitment ? selected.recruitment : undefined}
-            onChange={(value: any) => setSelected({...selected, recruitment: value})}
-            placeholder="Tin tuyển dụng"
-          >
-            {props.listRecruitment.rows?.map((item: any, index: any) => (
-              <Option key={index} value={item.id}>{item.title}</Option>
-            ))}
-          </Select>
-
-          <Select
-            style={width}
-            value={selected.talentPool ? selected.talentPool : undefined}
-            onChange={(value: any) => setSelected({...selected, talentPool: value})}
-            placeholder="Talent Pools"
-          >
-            {props.listTalentPool.rows?.map((item: any, index: any) => (
-              <Option key={index} value={item.id}>{item.name}</Option>
-            ))}
-          </Select>
-
-          <Button type="primary" style={width}
-                  onClick={btnSearchClicked}
-          >Tìm kiếm</Button>
-
-          <Button style={width} onClick={clearAll}>Reset</Button>
-
-        </div>
-
-      </div>
-      <br/>
-
-
     </>
   );
 

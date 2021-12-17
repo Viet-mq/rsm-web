@@ -3,9 +3,11 @@ import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import {Popconfirm, Popover, Select} from "antd";
 import {deleteJob, getListRecruitment, showFormCreate, showFormUpdate, updateJob} from "../../redux/actions";
-
 import {BsDot, BsThreeDotsVertical} from "react-icons/all";
 import {Link} from "react-router-dom";
+import {RecruitmentEntity} from "../../types";
+import moment from "moment";
+import 'moment/locale/vi';
 
 const {Option} = Select;
 const mapStateToProps = ({jobManager: {list}}: RootState) => ({list})
@@ -20,10 +22,13 @@ const connector = connect(mapStateToProps, {
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends ReduxProps {
+  recruitment:RecruitmentEntity
 }
 
 function ListRecruitment(props: IProps) {
   const [visiblePopover, setVisiblePopover] = useState<boolean>(false);
+  const dateFormat = 'DD/MM/YYYY';
+  const timeFormat = 'HH:mm';
   const content = (<ul style={{width: 160}} className="popup-popover">
       <li>
         <a>Sửa tin</a>
@@ -89,17 +94,18 @@ function ListRecruitment(props: IProps) {
         <div className="header-box border-bottom">
           <div className="main-1__green-dot"></div>
           <div className="header-box-main">
-            <Link to={`/recruitment-manager/detail`} className="p">Business Analysis</Link>
+            <Link to={`/recruitment-manager/detail`} className="p">{props.recruitment.title}</Link>
             <div className="detail-flex">
-              <div>Business Analysis</div>
+              <div>{props.recruitment?.jobName}</div>
               <div><BsDot size={20}/></div>
-              <div className="p">444</div>
+              <div >Mức lương:</div>
+              <div className="p">{props.recruitment?.detailOfSalary}</div>
 
               <div className="ml-3">SL cần tuyển:</div>
-              <div className="p">1</div>
+              <div className="p">{props.recruitment?.quantity}</div>
 
               <div className="ml-3">Hạn nộp hồ sơ:</div>
-              <div className="p">28/01/2022</div>
+              <div className="p">{moment(props.recruitment?.quantity).format(dateFormat)}</div>
 
               <Popover content={contentMore} trigger="click">
                 <a className="ml-3">Xem thêm</a>
@@ -131,36 +137,41 @@ function ListRecruitment(props: IProps) {
 
               <BsThreeDotsVertical id="three-dot"/>
             </Popover>
+
+
           </div>
         </div>
         <div className="list-process">
-          <div className="flex-1">
-            <div className="padding-process">
-            <div className="p">2</div>
-            <div className="bold-text">Ứng tuyển</div>
+          {props.recruitment.interviewProcess.map((item:any, index:any)=>{
+            return  <div className="flex-1" key={index}>
+              <div className="padding-process">
+                <div className="p">2</div>
+                <div className="bold-text">{item.name}</div>
+              </div>
             </div>
-          </div>
+          })}
 
-          <div className="flex-1">
-            <div className="padding-process">
-            <div className="p">2</div>
-            <div className="bold-text">Thi tuyển</div>
-            </div>
-          </div>
 
-          <div className="flex-1">
-            <div className="padding-process">
-            <div className="p">2</div>
-            <div className="bold-text">Phỏng vấn</div>
-            </div>
-          </div>
+          {/*<div className="flex-1">*/}
+          {/*  <div className="padding-process">*/}
+          {/*  <div className="p">2</div>*/}
+          {/*  <div className="bold-text">Thi tuyển</div>*/}
+          {/*  </div>*/}
+          {/*</div>*/}
 
-          <div className="flex-1">
-            <div className="padding-process">
-            <div className="p">2</div>
-            <div className="bold-text">Offer</div>
-            </div>
-          </div>
+          {/*<div className="flex-1">*/}
+          {/*  <div className="padding-process">*/}
+          {/*  <div className="p">2</div>*/}
+          {/*  <div className="bold-text">Phỏng vấn</div>*/}
+          {/*  </div>*/}
+          {/*</div>*/}
+
+          {/*<div className="flex-1">*/}
+          {/*  <div className="padding-process">*/}
+          {/*  <div className="p">2</div>*/}
+          {/*  <div className="bold-text">Offer</div>*/}
+          {/*  </div>*/}
+          {/*</div>*/}
 
           <div className="flex-1" style={{borderRight:0}}>
             <div className="padding-process">
@@ -168,6 +179,7 @@ function ListRecruitment(props: IProps) {
             <div className="bold-text">Đã tuyển</div>
             </div>
           </div>
+
         </div>
       </div>
 

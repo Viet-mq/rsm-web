@@ -1,26 +1,26 @@
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {FormComponentProps} from "antd/lib/form";
 import React, {useState} from "react";
-import {createJob, showFormCreate} from "../redux/actions";
 import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
+import {Avatar, Button} from "antd";
+import moment from "moment";
 
 const mapStateToProps = ({jobManager}: RootState) => ({jobManager});
-const connector = connect(mapStateToProps, {createJob, showFormCreate});
+const connector = connect(mapStateToProps, {});
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
-interface IProps extends  ReduxProps {
+interface IProps extends ReduxProps {
 }
-
-const getItems = (count: any, offset = 0) =>
-  Array.from({length: count}, (v, k) => k).map(k => ({
-    id: `item-${k + offset}-${new Date().getTime()}`,
-    content: `item ${k + offset}`
-  }));
 
 
 function KanbanProcess(props: IProps) {
+  const getItems = (count: any, offset = 0) =>
+    Array.from({length: count}, (v, k) => k).map(k => ({
+      id: `item-${k + offset}-${new Date().getTime()}`,
+      content: `item ${k + offset}`
+    }));
+
   const [cards, setCards] = useState<any>([getItems(10), getItems(5, 10)]);
   const reorder = (list: any, startIndex: any, endIndex: any) => {
     const result = Array.from(list);
@@ -75,49 +75,62 @@ function KanbanProcess(props: IProps) {
 
     return result;
   };
-  const grid = 8;
+  const grid = 17;
 
   const getItemStyle = (isDragging: any, draggableStyle: any) => ({
     // some basic styles to make the items look a bit nicer
     userSelect: "none",
-    padding: grid * 2,
-    margin: `0 0 ${grid}px 0`,
-
+    marginBottom:10,
+    borderRadius: "5px",
+    boxShadow: " 1px 1px 1px rgba(0, 0, 0, 0.25)",
     // change background colour if dragging
-    background: isDragging ? "lightgreen" : "grey",
-
+    background: isDragging ? "#e6f7ff" : "#fff",
     // styles we need to apply on draggables
     ...draggableStyle
+
   });
   const getListStyle = (isDraggingOver: any) => ({
-    background: isDraggingOver ? "lightblue" : "lightgrey",
+    // background: isDraggingOver ? "#e6f7ff" : "#F4F4F4",
+    background: "#F4F4F4",
     padding: grid,
-    width: 250
+    width: 250,
+    marginRight: 10,
+    height: 650,
   });
 
+  const getInitials = (name: string) => {
+    if (name) {
+      let initials: any = name.split(' ');
+      if (initials.length > 1) {
+        initials = initials.shift().charAt(0) + initials.pop().charAt(0);
+      } else {
+        initials = name.substring(0, 2);
+      }
+      return initials.toUpperCase();
+    }
+  }
 
   return (
     <>
       <div>
-        <button
-          type="button"
+        <Button
           onClick={() => {
             setCards([...cards, []]);
           }}
         >
           Add new group
-        </button>
-        <button
-          type="button"
+        </Button>
+        <Button
           onClick={() => {
             setCards([...cards, getItems(1)]);
           }}
         >
           Add new item
-        </button>
+        </Button>
         <div style={{display: "flex"}}>
           <DragDropContext onDragEnd={onDragEnd}>
             {cards.map((el: any, ind: any) => (
+
               <Droppable key={ind} droppableId={`${ind}`}>
                 {(provided, snapshot) => (
                   <div
@@ -125,6 +138,7 @@ function KanbanProcess(props: IProps) {
                     style={getListStyle(snapshot.isDraggingOver)}
                     {...provided.droppableProps}
                   >
+                    <div className="kanban-title-list">Tuyển dụng</div>
                     {el.map((item: any, index: any) => (
                       <Draggable
                         key={item.id}
@@ -141,25 +155,34 @@ function KanbanProcess(props: IProps) {
                               provided.draggableProps.style
                             )}
                           >
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "space-around"
-                              }}
-                            >
-                              {item.content}
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  const newState = [...cards];
-                                  newState[ind].splice(index, 1);
-                                  setCards(
-                                    newState.filter(group => group.length)
-                                  );
-                                }}
-                              >
-                                delete
-                              </button>
+                            <div className="kanban-item-list">
+                              <div className="c-main-content">
+                                <Avatar size={25} style={{backgroundColor:"#ffbd24"}}>
+                                  {getInitials("Vũ Điệp Chi")}
+                                </Avatar>
+                                <div className="c-main-content__wrap-main" style={{width:160,gridRowGap:4}}>
+                                  <div className="main-1">
+                                    <a className="main-1__candidate-name">Vũ Điệp Chi</a>
+                                  </div>
+                                    <div className="ellipsis">0808 332 1114</div>
+                                    <div className="ellipsis">tranthuy.nute@gmail.com</div>
+                                  <div>{item.content}</div>
+                                </div>
+                              </div>
+
+
+                              {/*<button*/}
+                              {/*  type="button"*/}
+                              {/*  onClick={() => {*/}
+                              {/*    const newState = [...cards];*/}
+                              {/*    newState[ind].splice(index, 1);*/}
+                              {/*    setCards(*/}
+                              {/*      newState.filter(group => group.length)*/}
+                              {/*    );*/}
+                              {/*  }}*/}
+                              {/*>*/}
+                              {/*  delete*/}
+                              {/*</button>*/}
                             </div>
                           </div>
                         )}
@@ -169,6 +192,7 @@ function KanbanProcess(props: IProps) {
                   </div>
                 )}
               </Droppable>
+
             ))}
           </DragDropContext>
         </div>

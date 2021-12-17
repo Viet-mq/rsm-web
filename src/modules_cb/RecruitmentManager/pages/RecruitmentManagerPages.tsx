@@ -1,29 +1,25 @@
 import React, {useEffect, useState} from "react";
-import {Button, Icon, Select} from "antd";
+import {Button, DatePicker, Icon, Select} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {showFormCreate, showFormUpdate} from "../redux/actions";
+import {getListRecruitment} from "../redux/actions";
 import Search from "antd/es/input/Search";
 import ListRecruitment from "../components/list/ListRecruitment";
 import {Link} from "react-router-dom";
+import moment from "moment";
+import 'moment/locale/vi';
 
-const mapStateToProps = ({
-                           jobManager: {
-                             showForm,
-                             list,
-                             create,
-                             deleteJob,
-                             update,
-                           }
-                         }: RootState) => ({
-  showForm,
-  list,
-  create,
-  deleteJob,
-  update,
-})
 const {Option} = Select;
-const connector = connect(mapStateToProps, {showFormCreate, showFormUpdate});
+const {RangePicker} = DatePicker;
+
+const mapStateToProps = (state: RootState) => ({
+  listRecruitment: state.recruitmentManager.list
+})
+
+const connector = connect(mapStateToProps, {
+  getListRecruitment,
+});
+
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -31,73 +27,25 @@ interface IProps extends ReduxProps {
 }
 
 function RecruitmentManagerPages(props: IProps) {
+
+  const dateFormat = 'DD/MM/YYYY';
+  const timeFormat = 'HH:mm';
+  const [valueDateRange, setValueDateRange] = useState<any[]>([moment().startOf("week"), moment().endOf('week')])
+
   useEffect(() => {
     document.title = "Quản lý tin tuyển dụng";
+    props.getListRecruitment({page:1,size:100});
   }, []);
 
-  const handleCreate = (e: any) => {
-    e.preventDefault();
-    if (e?.target) {
-      e.target.disabled = true;
-      e.target.disabled = false;
-    }
-    props.showFormCreate(true);
+  function onChangeDateRange(dates: any) {
+    dates[0].set({hour: 0, minute: 0, second: 0})
+    dates[1].set({hour: 23, minute: 59, second: 59})
+    let [start, end] = [dates[0], dates[1]];
+    setValueDateRange([start, end])
+    // const datesFilter: any = props.schedule?.result?.filter((d: any) => d.date >= +start && d.date < +end);
+    // const outObject = dateFilter(datesFilter)
+    // return setOutObject(outObject)
   }
-
-  const content = (
-    <ul style={{width: 120}} className="popup-popover">
-      <li>
-        <a>Tất cả</a>
-      </li>
-      <li>
-        <a>Đang tuyển dụng</a>
-      </li>
-      <li>
-        <a>Công khai</a>
-      </li>
-      <li>
-        <a>Nội bộ</a>
-      </li>
-      <li>
-        <a>Ngưng nhận hồ sơ</a>
-      </li>
-      <li>
-        <a>Nháp</a>
-      </li>
-      <li>
-        <a>Đóng</a>
-      </li>
-
-    </ul>
-  );
-
-  const contentSort = (
-    <ul style={{width: 120}} className="popup-popover">
-      <li>
-        <a>Ngày tạo</a>
-      </li>
-      <li>
-        <a>Tiêu đề tin</a>
-      </li>
-      <li>
-        <a>Tên đơn vị sử dụng</a>
-      </li>
-    </ul>
-  );
-
-
-  const [visiblePopover, setVisiblePopover] = useState<boolean>(false);
-  const [visibleSort, setVisibleSort] = useState<boolean>(false);
-
-  const handleVisibleChange = (visible: any) => {
-    console.log(visible)
-    setVisiblePopover(visible);
-  };
-
-  const handleVisibleSortChange = (visible: any) => {
-    console.log(visible)
-    setVisibleSort(visible);
-  };
 
   return (
     <div className="c-schedule-container">
@@ -114,7 +62,7 @@ function RecruitmentManagerPages(props: IProps) {
       </div>
       <div className='header-align recruitment-option'>
         <div className='recruitment-option__pop-over'>
-          <Select defaultValue="all" className="select-custom"
+          <Select defaultValue="join" className="select-custom"
 
                   style={{
                     fontWeight: 600,
@@ -138,11 +86,24 @@ function RecruitmentManagerPages(props: IProps) {
                       fontWeight: 600,
                       width: 120,
                     }}>
-              <Option value="createAt">Ngày tạo</Option>
-              <Option value="title">Tiêu đề tin</Option>
-              <Option value="unitUse">Tên đơn vị sử dụng</Option>
+              <Option value="createAt">Tât cả</Option>
+              <Option value="title">Tôi tạo</Option>
+              <Option value="unitUse">Tôi tham gia</Option>
 
             </Select>
+          </div>
+
+          <div style={{marginLeft: 5, width: 250}} className="align">
+            <RangePicker
+              format={dateFormat}
+              value={valueDateRange}
+              allowClear={false}
+              ranges={{
+                'Hôm nay': [moment(), moment()],
+                'Tháng này': [moment().startOf('month'), moment().endOf('month')],
+              }}
+              onChange={onChangeDateRange}
+            />
           </div>
 
         </div>
@@ -155,25 +116,18 @@ function RecruitmentManagerPages(props: IProps) {
           <Button
             // onClick={handlePopupScheduleInterview}
             style={{marginLeft: 10}}>
-            <Icon type="filter" style={{fontSize: "125%"}}/>
-            Bộ lọc
-          </Button>
-
-          <Button
-            // onClick={handlePopupScheduleInterview}
-            style={{marginLeft: 10}}>
             <Icon type="export" style={{fontSize: "125%"}}/>
             Xuât file
           </Button>
         </div>
-
       </div>
+
       <div>
-        <ListRecruitment/>
-        <ListRecruitment/>
-        <ListRecruitment/>
-      </div>
+        {props.listRecruitment.rows.length>0?props.listRecruitment.rows.map((item:any,index:any)=>{
+          return <div key={index}><ListRecruitment recruitment={item}/></div>
 
+        }):null}
+      </div>
     </div>
   );
 
