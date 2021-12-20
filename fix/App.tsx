@@ -3,7 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import DefaultLayout from './components/layouts/DefaultLayout';
 import AuthLayout from './components/layouts/AuthLayout';
 import Routes from './routes';
-import Login from './modules/Auth/pages/login';
+import Login from './modules/Auth/layout/login';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from './redux/redux';
 // import history from './history';

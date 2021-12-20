@@ -6,9 +6,9 @@ import {FormComponentProps} from "antd/lib/form";
 import {Redirect, Route, Switch, useHistory, Link} from "react-router-dom";
 import {RootState} from "../../../../redux/reducers";
 import Loading from "../../../../components/Loading";
-import Header from '../components/Header';
+import Header from './Header';
 import {ImArrowLeft2} from "react-icons/all";
-import Nav from "../components/Nav";
+import Nav from "./Nav";
 import InformationForm from "../components/Information";
 import Process from "../components/Process";
 import Interviewers from "../components/Interviewers";
@@ -26,11 +26,12 @@ const connector = connect(mapStateToProps, {});
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface LayoutProps extends FormComponentProps, ReduxProps {
-  children: React.ReactNode;
+  // children: React.ReactNode;
+  path:string;
 }
 
 const CreateLayout = (props: LayoutProps) => {
-
+  console.log("path:",props.path)
   const screenWidth = document.documentElement.clientWidth;
   const [collapsed, setCollapsed] = useState(screenWidth <= env.tabletWidth ? true : false)
   const history = useHistory();
@@ -103,16 +104,16 @@ const CreateLayout = (props: LayoutProps) => {
             <Layout>
               <div style={{display: "flex", alignItems: "self-start"}}>
                 <Switch>
-                  <Route path="/recruitment-manager/create/information">
+                  <Route path={`/recruitment-manager/${props.path}/information`}>
                     <InformationForm/>
                   </Route>
-                  <Route path="/recruitment-manager/create/process">
+                  <Route path={`/recruitment-manager/${props.path}/process`}>
                     <Process/>
                   </Route>
-                  <Route path="/recruitment-manager/create/interviewers">
+                  <Route path={`/recruitment-manager/${props.path}/interviewers`}>
                     <Interviewers/>
                   </Route>
-                  <Redirect exact from="/recruitment-manager/create/" to={'/recruitment-manager/create/information'}/>
+                  <Redirect exact from={`/recruitment-manager/${props.path}/`} to={`/recruitment-manager/${props.path}/information`}/>
                 </Switch>
                 <div className="region-action ">
                   <Dropdown.Button overlay={menu} style={{marginBottom: 15}} size='large' type="primary">Lưu và đăng

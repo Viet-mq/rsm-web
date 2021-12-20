@@ -1,28 +1,28 @@
-import {UpdateJobRequest} from "../../types";
+import {UpdateRecruitmentRequest} from "../../types";
 import {AppError, ResponseBase2} from "src/models/common";
 
-export interface UpdateJobAction {
+export interface UpdateRecruitmentAction {
   type: string,
-  request?: UpdateJobRequest,
+  request?: UpdateRecruitmentRequest,
   response?: ResponseBase2,
   error?: AppError
 }
 
-export const UPDATE_JOB = "UPDATE_JOB";
-export const UPDATE_JOB_SUCCESS = "UPDATE_JOB_SUCCESS";
-export const UPDATE_JOB_ERROR = "UPDATE_JOB_ERROR";
+export const UPDATE_RECRUITMENT = "UPDATE_RECRUITMENT";
+export const UPDATE_RECRUITMENT_SUCCESS = "UPDATE_RECRUITMENT_SUCCESS";
+export const UPDATE_RECRUITMENT_ERROR = "UPDATE_RECRUITMENT_ERROR";
 
-export const updateJob = (request: UpdateJobRequest): UpdateJobAction => ({
-  type: UPDATE_JOB,
+export const updateRecruitment = (request: UpdateRecruitmentRequest): UpdateRecruitmentAction => ({
+  type: UPDATE_RECRUITMENT,
   request
 });
 
-export const updateJobSuccess = (response: ResponseBase2): UpdateJobAction => ({
-  type: UPDATE_JOB_SUCCESS,
+export const updateRecruitmentSuccess = (response: ResponseBase2): UpdateRecruitmentAction => ({
+  type: UPDATE_RECRUITMENT_SUCCESS,
   response
 });
 
-export const updateJobError = (error: AppError): UpdateJobAction => ({
-  type: UPDATE_JOB_ERROR,
+export const updateRecruitmentError = (error: AppError): UpdateRecruitmentAction => ({
+  type: UPDATE_RECRUITMENT_ERROR,
   error
 });

@@ -1,34 +1,34 @@
-import {CreateJobRequest} from "../../types";
+import {CreateRecruitmentRequest} from "../../types";
 import {AppError, ResponseBase2} from "../../../../models/common";
 import * as Actions from "../actions";
-import {CreateJobAction} from "../actions";
+import {CreateRecruitmentAction} from "../actions";
 
-export interface CreateJobState {
+export interface CreateRecruitmentState {
   loading: boolean,
-  request?: CreateJobRequest,
+  request?: CreateRecruitmentRequest,
   response?: ResponseBase2,
   error?: AppError
 }
 
-const initState: CreateJobState = {
+const initState: CreateRecruitmentState = {
   loading: false
 }
 
-export default (state = initState, {type, request, response, error}: CreateJobAction): CreateJobState => {
+export default (state = initState, {type, request, response, error}: CreateRecruitmentAction): CreateRecruitmentState => {
   switch (type) {
-    case Actions.CREATE_JOB:
+    case Actions.CREATE_RECRUITMENT:
       return {
         ...state,
         request,
         loading: true
       }
-    case Actions.CREATE_JOB_SUCCESS:
+    case Actions.CREATE_RECRUITMENT_SUCCESS:
       return {
         ...state,
         response,
         loading: false
       }
-    case Actions.CREATE_JOB_ERROR:
+    case Actions.CREATE_RECRUITMENT_ERROR:
       return {
         ...state,
         error,

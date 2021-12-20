@@ -67,13 +67,13 @@ function ProcessForm(props: IProps) {
   ]
   const [schema, setSchema] = useState([
     {
-      id: "123",
+      id: "receiving",
       type: "a",
       text: "Tiếp nhận hồ sơ",
       isDragDisabled: true,
     },
     {
-      id: "345",
+      id: "interview",
       type: "b",
       text: "Phỏng vấn",
       isDragDisabled: false
@@ -137,7 +137,7 @@ function ProcessForm(props: IProps) {
                 >
                   {
                     schema.map((it, i) => (
-                      it.isDragDisabled ? <div className="process-list process-system flex-items-center">
+                      it.isDragDisabled ? <div key={it.id} className="process-list process-system flex-items-center">
                           <MdDragIndicator className={"mr-2"}/>
                           <div className={"flex-process"}>
                             {it.text}
@@ -149,12 +149,10 @@ function ProcessForm(props: IProps) {
                         (
                           <>
                             <Draggable
-
                               key={it.id}
                               draggableId={it.id}
                               index={i}
                               isDragDisabled={it.isDragDisabled}
-
                             >
                               {(provided, snap) => (
                                 <div

@@ -4,18 +4,18 @@ import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Input, Modal} from "antd";
 import React, {FormEvent} from "react";
-import {showFormUpdate, updateJob} from "../../redux/actions";
+import {updateRecruitment} from "../../redux/actions";
 
 
 const mapState = ({jobManager: {showForm}}: RootState) => ({showForm})
 
-const connector = connect(mapState, {showFormUpdate, updateJob});
+const connector = connect(mapState, {updateRecruitment});
 type ReduxProps = ConnectedProps<typeof connector>;
 
-interface UpdateJobFormProps extends FormComponentProps, ReduxProps {
+interface IProps extends FormComponentProps, ReduxProps {
 }
 
-function UpdateProcessForm(props: UpdateJobFormProps) {
+function UpdateProcessForm(props: IProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
   const formItemStyle = {height: '60px'};
@@ -43,7 +43,7 @@ function UpdateProcessForm(props: UpdateJobFormProps) {
 
   function onBtnCancelClicked() {
     resetFields();
-    props.showFormUpdate(false);
+    // props.showFormUpdate(false);
   }
 
   return (
@@ -60,7 +60,7 @@ function UpdateProcessForm(props: UpdateJobFormProps) {
       }}
       onCancel={() => {
         resetFields();
-        props.showFormUpdate(false);
+        // props.showFormUpdate(false);
       }}
       footer={""}>
 
@@ -96,4 +96,4 @@ function UpdateProcessForm(props: UpdateJobFormProps) {
   )
 }
 
-export default connector(Form.create<UpdateJobFormProps>()(UpdateProcessForm));
+export default connector(Form.create<IProps>()(UpdateProcessForm));

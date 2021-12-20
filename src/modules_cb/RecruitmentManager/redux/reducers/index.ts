@@ -1,22 +1,22 @@
 import {combineReducers} from "redux";
 import list, {RecruitmentListState} from "./list";
-import deleteJob, {DeleteJobState} from "./deleteJob";
-import create, {CreateJobState} from "./create";
-import showForm, {JobFormState} from "./showForm";
-import update, {UpdateJobState} from "./update";
+import deleteRecruitment, {DeleteRecruitmentState} from "./deleteRecruitment";
+import create, {CreateRecruitmentState} from "./create";
+// import showForm, {RecruitmentFormState} from "./showForm";
+import update, {UpdateRecruitmentState} from "./update";
 
 export interface RecruitmentManagerModuleState {
   list: RecruitmentListState,
-  deleteJob: DeleteJobState,
-  create: CreateJobState,
-  showForm: JobFormState,
-  update: UpdateJobState,
+  deleteRecruitment: DeleteRecruitmentState,
+  create: CreateRecruitmentState,
+  // showForm: RecruitmentFormState,
+  update: UpdateRecruitmentState,
 }
 
 export default combineReducers<RecruitmentManagerModuleState>({
   list,
-  deleteJob,
+  deleteRecruitment,
   create,
-  showForm,
+  // showForm,
   update,
 });

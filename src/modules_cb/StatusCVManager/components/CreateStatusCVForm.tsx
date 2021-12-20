@@ -56,7 +56,7 @@ function CreateStatusCVForm(props: CreateStatusCVFormProps) {
     <Modal
       zIndex={2}
       maskClosable={false}
-      title="Tạo mới trạng thái CV"
+      title="Thêm mới vòng tuyển dụng"
       visible={props.statuscvManager.showForm.show_create}
       centered={true}
       width="550px"
@@ -71,16 +71,16 @@ function CreateStatusCVForm(props: CreateStatusCVFormProps) {
 
       <Form {...formItemLayout}>
 
-        <Form.Item label="Tên trạng thái CV" className="mb-0" style={{...formItemStyle}}>
+        <Form.Item label="Tên vòng" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('name', {
             initialValue: '',
             rules: [
               {
-                message: 'Vui lòng nhập tên trạng thái CV',
+                message: 'Vui lòng nhập tên vòng tuyển dụng',
                 required: true,
               },
             ],
-          })(<Input placeholder="Nhập tên trạng thái CV" className="bg-white text-black"/>)}
+          })(<Input placeholder="Tên vòng" className="bg-white text-black"/>)}
         </Form.Item>
 
         <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px'}} colon={false}>

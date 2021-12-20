@@ -1,14 +1,15 @@
-
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Input, Modal} from "antd";
 import React, {FormEvent} from "react";
 import {RootState} from "../../../../redux/reducers";
-import {createJob, showFormCreate} from "../../redux/actions";
+import {createRecruitment} from "../../redux/actions";
 
+const mapStateToProps = (state: RootState) => ({
+  jobManager: state.jobManager
+})
 
-const mapStateToProps = ({jobManager}: RootState) => ({jobManager});
-const connector = connect(mapStateToProps, {createJob, showFormCreate});
+const connector = connect(mapStateToProps, {createRecruitment});
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -16,10 +17,8 @@ interface CreateJobFormProps extends FormComponentProps, ReduxProps {
 }
 
 function CreateProcessForm(props: CreateJobFormProps) {
-
   const {getFieldDecorator, resetFields} = props.form;
   const formItemStyle = {height: '60px'};
-
   const formItemLayout = {
     labelCol: {
       xs: {span: 24},
@@ -42,7 +41,7 @@ function CreateProcessForm(props: CreateJobFormProps) {
 
   function onBtnCancelClicked() {
     resetFields();
-    props.showFormCreate(false);
+
   }
 
   return (
@@ -60,12 +59,9 @@ function CreateProcessForm(props: CreateJobFormProps) {
       }}
       onCancel={() => {
         resetFields();
-        props.showFormCreate(false);
       }}
       footer={""}>
-
       <Form {...formItemLayout}>
-
         <Form.Item label="Tên vòng" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('name', {
             initialValue: '',
@@ -82,17 +78,14 @@ function CreateProcessForm(props: CreateJobFormProps) {
           <Button className="mr-3 create-btn" htmlType="submit" onClick={onBtnCreateClicked}>
             Sửa
           </Button>
+
           <Button type="default" className="pl-5 pr-5" onClick={onBtnCancelClicked}>
             Hủy
           </Button>
         </Form.Item>
-
       </Form>
-
     </Modal>
-
   );
-
 }
 
 export default connector(Form.create<CreateJobFormProps>()(CreateProcessForm));

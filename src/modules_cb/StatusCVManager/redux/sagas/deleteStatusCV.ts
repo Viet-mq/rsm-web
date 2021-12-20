@@ -10,14 +10,14 @@ export function* deleteStatusCVAsync(action: DeleteStatusCVAction) {
     const rs = yield apis.deleteStatusCV(action.request);
     yield put(deleteStatusCVSuccess(rs));
     if (rs.code !== 0) {
-      NotificationError('Xóa trạng thái CV không thành công', "Lỗi: " + rs.message)
+      NotificationError('Xóa quy trình tuyển dụng không thành công', "Lỗi: " + rs.message)
     } else {
-      NotificationSuccess('Thành công', "Xóa trạng thái CV thành công");
+      NotificationSuccess('Thành công', "Xóa quy trình tuyển dụng thành công");
       const params = yield select((state: RootState) => state.statuscvManager.list.params);
       yield put(getListStatusCV(params))
     }
   } catch (e) {
     yield put(deleteStatusCVError(new AppError(e.message)));
-    NotificationError('Xóa trạng thái CV không thành công', "Lỗi: " + e.message);
+    NotificationError('Xóa quy trình tuyển dụng không thành công', "Lỗi: " + e.message);
   }
 }

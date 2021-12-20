@@ -26,7 +26,7 @@ import SkillManagerPages from "./modules_cb/SkillManager/pages/SkillManagerPages
 import AddressManagerPages from "./modules_cb/AddressManager/pages/AddressManagerPages";
 import ReasonRejectManagerPages from "./modules_cb/ReasonRejectManager/pages/ReasonRejectManagerPages";
 import RecruitmentManagerPages from "./modules_cb/RecruitmentManager/pages/RecruitmentManagerPages";
-import CreateLayout from "./modules_cb/RecruitmentManager/createRecruitment/pages/CreateLayout";
+import CreateLayout from "./modules_cb/RecruitmentManager/createRecruitment/layout/CreateLayout";
 import DetailRecruitment from "./modules_cb/RecruitmentManager/components/DetailRecruitment";
 
 const mapStateToProps = (state: RootState) => {
@@ -75,9 +75,9 @@ const Routes = (props: PropsFromRedux) => {
         <Route path="/reason-reject-manager" component={ReasonRejectManagerPages} isLogin={props.isLogin}/>
         <Route path="/address-manager" component={AddressManagerPages} isLogin={props.isLogin}/>
         <Route path="/recruitment-manager" exact component={RecruitmentManagerPages} isLogin={props.isLogin}/>
-        <Route path="/recruitment-manager/create" component={CreateLayout} isLogin={props.isLogin}/>
-        <Route path="/recruitment-manager/edit" component={CreateLayout} isLogin={props.isLogin}/>
-        <Route path="/recruitment-manager/detail" component={DetailRecruitment} isLogin={props.isLogin}/>
+        <Route path="/recruitment-manager/create" isLogin={props.isLogin} render={(props:any) => (<CreateLayout path={"create"}/>)} />
+        <Route path="/recruitment-manager/edit" render={(props:any) => (<CreateLayout path={"edit"}/>)}  isLogin={props.isLogin}/>
+        <Route path="/recruitment-manager/detail/" component={DetailRecruitment} isLogin={props.isLogin}/>
         <Redirect exact from="/*" to={'/home'}/>
       </Switch>
     </div>

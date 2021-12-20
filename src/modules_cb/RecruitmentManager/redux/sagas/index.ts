@@ -1,15 +1,15 @@
 import {all, takeLatest} from 'redux-saga/effects';
-import {createJobAsync} from "./create";
-import {deleteJobAsync} from "./deleteJob";
+import {createRecruitmentAsync} from "./create";
+import {deleteRecruitmentAsync} from "./deleteRecruitment";
 import {getListRecruitmentAsync} from "./list";
-import {updateJobAsync} from "./update";
-import { CREATE_JOB, DELETE_JOB, GET_LIST_RECRUITMENT, UPDATE_JOB} from "../actions";
+import {updateRecruitmentAsync} from "./update";
+import { CREATE_RECRUITMENT, DELETE_RECRUITMENT, GET_LIST_RECRUITMENT, UPDATE_RECRUITMENT} from "../actions";
 
 export default function* root() {
   return all([
-    yield takeLatest(CREATE_JOB, createJobAsync),
-    yield takeLatest(DELETE_JOB, deleteJobAsync),
+    yield takeLatest(CREATE_RECRUITMENT, createRecruitmentAsync),
+    yield takeLatest(DELETE_RECRUITMENT, deleteRecruitmentAsync),
     yield takeLatest(GET_LIST_RECRUITMENT, getListRecruitmentAsync),
-    yield takeLatest(UPDATE_JOB, updateJobAsync),
+    yield takeLatest(UPDATE_RECRUITMENT, updateRecruitmentAsync),
   ]);
 }

@@ -16,6 +16,7 @@ export interface ScheduleEntity {
   date: number,
   createAt: number,
   createBy: string
+
 }
 
 export interface CreateScheduleRequest {

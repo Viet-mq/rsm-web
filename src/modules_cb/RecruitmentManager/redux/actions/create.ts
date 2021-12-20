@@ -1,28 +1,28 @@
-import {CreateJobRequest} from "../../types";
+import {CreateRecruitmentRequest} from "../../types";
 import {AppError, ResponseBase2} from "src/models/common";
 
-export interface CreateJobAction {
+export interface CreateRecruitmentAction {
   type: string,
-  request?: CreateJobRequest,
+  request?: CreateRecruitmentRequest,
   response?: ResponseBase2,
   error?: AppError
 }
 
-export const CREATE_JOB = "CREATE_JOB";
-export const CREATE_JOB_SUCCESS = "CREATE_JOB_SUCCESS";
-export const CREATE_JOB_ERROR = "CREATE_JOB_ERROR";
+export const CREATE_RECRUITMENT = "CREATE_RECRUITMENT";
+export const CREATE_RECRUITMENT_SUCCESS = "CREATE_RECRUITMENT_SUCCESS";
+export const CREATE_RECRUITMENT_ERROR = "CREATE_RECRUITMENT_ERROR";
 
-export const createJob = (request: CreateJobRequest): CreateJobAction => ({
-  type: CREATE_JOB,
+export const createRecruitment = (request: CreateRecruitmentRequest): CreateRecruitmentAction => ({
+  type: CREATE_RECRUITMENT,
   request
 });
 
-export const createJobSuccess = (response: ResponseBase2): CreateJobAction => ({
-  type: CREATE_JOB_SUCCESS,
+export const createRecruitmentSuccess = (response: ResponseBase2): CreateRecruitmentAction => ({
+  type: CREATE_RECRUITMENT_SUCCESS,
   response
 });
 
-export const createJobError = (error: AppError): CreateJobAction => ({
-  type: CREATE_JOB_ERROR,
+export const createRecruitmentError = (error: AppError): CreateRecruitmentAction => ({
+  type: CREATE_RECRUITMENT_ERROR,
   error
 });

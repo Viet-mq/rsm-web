@@ -76,7 +76,7 @@ function ListStatusCV(props: IProps) {
         return (
           <div style={{whiteSpace: 'nowrap'}}>
             <Popconfirm
-              title="Bạn muốn xóa trạng thái CV này chứ ?"
+              title="Bạn muốn xóa quy trình tuyển dụng này chứ ?"
               okText="Xóa"
               onCancel={event => {
                 event?.stopPropagation();

@@ -36,7 +36,7 @@ import {
   showFormDetail,
   showFormUploadCV
 } from "../../ProfileManager/redux/actions";
-import {showFormUpdate} from "../redux/actions";
+// import {showFormUpdate} from "../redux/actions";
 import {DataShowBooking, DeleteProfileRequest, DetailCV, ProfileEntity} from "../../ProfileManager/types";
 import ScheduleManagerPages from "../../ScheduleManager/pages/ScheduleManagerPages";
 import KanbanProcess from "./KanbanProcess";
@@ -63,7 +63,7 @@ const mapStateToProps = (state: RootState) => ({
 const connector = connect(mapStateToProps, {
   getListProfile,
   deleteProfile,
-  showFormUpdate,
+  // showFormUpdate,
   showFormDetail,
   showFormUploadCV,
   showFormBooking,
@@ -486,7 +486,7 @@ function DetailRecruitment(props: IProps) {
 
   const handleEdit = (event: any, entity: ProfileEntity) => {
     event.stopPropagation();
-    props.showFormUpdate(true);
+    // props.showFormUpdate(true);
   }
 
   const handleBooking = (event: any, entity: ProfileEntity) => {

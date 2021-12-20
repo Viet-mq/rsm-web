@@ -16,15 +16,15 @@ export function* createStatusCVAsync(action: CreateStatusCVAction) {
     const rs = yield apis.createStatusCV(action.request);
     yield put(createStatusCVSuccess(rs));
     if (rs.code !== 0) {
-      NotificationError('Tạo trạng thái CV không thành công', "Lỗi: " + rs.message)
+      NotificationError('Thêm vòng tuyển dụng không thành công', "Lỗi: " + rs.message)
     } else {
-      NotificationSuccess('Thành công', "Tạo trạng thái CV thành công");
+      NotificationSuccess('Thành công', "Thêm vòng tuyển dụng thành công");
       yield put(showFormCreate(false));
       const params = yield select((state: RootState) => state.statuscvManager.list.params);
       yield put(getListStatusCV(params))
     }
   } catch (e) {
     yield put(createStatusCVError(new AppError(e.message)));
-    NotificationError('Tạo trạng thái CV không thành công', "Lỗi: " + e.message);
+    NotificationError('Thêm vòng tuyển dụng không thành công', "Lỗi: " + e.message);
   }
 }

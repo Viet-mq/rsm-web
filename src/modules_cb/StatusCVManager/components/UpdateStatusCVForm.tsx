@@ -55,7 +55,7 @@ function UpdateStatusCVForm(props: UpdateStatusCVFormProps) {
     <Modal
       zIndex={2}
       maskClosable={false}
-      title="Cập nhật trạng thái CV hệ thống"
+      title="Cập nhật quy trình tuyển dụng"
       visible={props.showForm.show_update}
       centered={true}
       width="550px"
@@ -70,17 +70,17 @@ function UpdateStatusCVForm(props: UpdateStatusCVFormProps) {
 
       <Form {...formItemLayout}>
 
-        <Form.Item label="Tên trạng thái CV" className="mb-0" style={{...formItemStyle}}>
+        <Form.Item label="Tên quy trình tuyển dụng" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('name', {
             initialValue: props.showForm.data_update?.name,
             rules: [
               {
-                message: 'Vui lòng nhập tên trạng thái CV',
+                message: 'Vui lòng nhập tên quy trình tuyển dụng',
                 required: true,
               },
             ],
           })(
-            <Input placeholder="Tên trạng thái CV" className="bg-white text-black"/>
+            <Input placeholder="Tên quy trình tuyển dụng" className="bg-white text-black"/>
           )}
         </Form.Item>
 

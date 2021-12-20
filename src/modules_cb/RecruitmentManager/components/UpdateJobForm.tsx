@@ -1,20 +1,26 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {showFormUpdate, updateJob} from "../redux/actions";
+import {updateRecruitment} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Input, Modal} from "antd";
 import React, {FormEvent} from "react";
-import {UpdateJobRequest} from "../types";
+import {UpdateRecruitmentRequest} from "../../RecruitmentManager/types";
 
-const mapState = ({jobManager: {showForm}}: RootState) => ({showForm})
 
-const connector = connect(mapState, {showFormUpdate, updateJob});
+const mapStateToProps = (state: RootState) => ({
+  showForm: state.profileManager.showForm,
+  elasticSearch: state.profileManager.search,
+
+})
+
+const connector = connect(mapStateToProps, {updateRecruitment});
+
 type ReduxProps = ConnectedProps<typeof connector>;
 
-interface UpdateJobFormProps extends FormComponentProps, ReduxProps {
+interface IProps extends FormComponentProps, ReduxProps {
 }
 
-function UpdateJobForm(props: UpdateJobFormProps) {
+function UpdateRecruitmentForm(props: IProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
   const formItemStyle = {height: '60px'};
@@ -35,11 +41,11 @@ function UpdateJobForm(props: UpdateJobFormProps) {
     (e.target as any).disabled = false;
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        let req: UpdateJobRequest = {
-          id: props.showForm.data_update?.id,
-          name: values.name,
-        }
-        props.updateJob(req);
+        // let req: UpdateRecruitmentRequest = {
+        //   id: props.showForm.data_update?.id,
+        //   name: values.name,
+        // }
+        // props.updateRecruitment(req);
         return;
       }
     });
@@ -47,7 +53,7 @@ function UpdateJobForm(props: UpdateJobFormProps) {
 
   function onBtnCancelClicked() {
     resetFields();
-    props.showFormUpdate(false);
+    // props.showFormUpdate(false);
   }
 
   return (
@@ -64,7 +70,7 @@ function UpdateJobForm(props: UpdateJobFormProps) {
       }}
       onCancel={() => {
         resetFields();
-        props.showFormUpdate(false);
+        // props.showFormUpdate(false);
       }}
       footer={""}>
 
@@ -88,16 +94,14 @@ function UpdateJobForm(props: UpdateJobFormProps) {
           <Button className="mr-3 create-btn" htmlType="submit" onClick={onBtnUpdateClicked}>
             Cập nhật
           </Button>
+
           <Button type="default" className="pl-5 pr-5" onClick={onBtnCancelClicked}>
             Hủy
           </Button>
         </Form.Item>
-
       </Form>
-
     </Modal>
-
   )
 }
 
-export default connector(Form.create<UpdateJobFormProps>()(UpdateJobForm));
+export default connector(Form.create<IProps>()(UpdateRecruitmentForm));
