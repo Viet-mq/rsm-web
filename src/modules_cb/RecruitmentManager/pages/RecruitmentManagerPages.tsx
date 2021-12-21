@@ -66,7 +66,7 @@ function RecruitmentManagerPages(props: IProps) {
 
                   style={{
                     fontWeight: 600,
-                    width: 120,
+                    width: 155,
                     marginRight: 15
                   }}>
             <Option value="all">Tất cả</Option>

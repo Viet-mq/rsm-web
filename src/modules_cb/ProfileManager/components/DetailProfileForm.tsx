@@ -8,7 +8,7 @@ import {
   getDetailProfile,
   getListNote,
   showFormBooking,
-  showFormDetail,
+  showFormDetail, showFormReasonReject,
   showFormUpdate,
   showFormUpdateDetail,
   showFormUploadAvatar,
@@ -16,8 +16,7 @@ import {
   updateNote
 } from "../redux/actions";
 import {showFormCreateNote, showFormUpdateNote} from "../../ProfileManager/redux/actions/note/showNote";
-
-import {Avatar, Button, Icon, Pagination, Popconfirm, Popover, Table, Tag, Timeline, Tooltip} from "antd";
+import {Avatar, Badge, Button, Icon, Pagination, Popconfirm, Popover, Steps, Table, Tag, Timeline, Tooltip} from "antd";
 import React, {useEffect, useState} from "react";
 import {DataShowBooking, DeleteNoteRequest, DetailCV, NoteEntity} from "../types";
 import moment from "moment";
@@ -26,9 +25,14 @@ import {emptyText} from "../../../configs/locales";
 import Loading from "../../../components/Loading";
 import CreateNoteForm from "./CreateNoteForm";
 import UpdateNoteForm from "./UpdateNoteForm";
-import {RiFullscreenExitLine, RiFullscreenLine} from "react-icons/all";
+import {BsThreeDotsVertical, FaLongArrowAltRight, RiFullscreenExitLine, RiFullscreenLine} from "react-icons/all";
 import StarRatings from 'react-star-ratings';
 import UploadAvatarForm from "./UploadAvatarForm";
+import CreateReasonRejectForm from "./CreateReasonRejectForm";
+import {getListRecruitment} from "../../RecruitmentManager/redux/actions";
+import ChangeProcessForm from "./ChangeProcessForm";
+
+const {Step} = Steps;
 
 const mapStateToProps = (state: RootState) => ({
   showDetail: state.profileManager.showForm,
@@ -40,6 +44,7 @@ const mapStateToProps = (state: RootState) => ({
   createNote: state.profileManager.createNote,
   updateNote: state.profileManager.updateNote,
   skill: state.skillManager.list,
+  recruitment:state.recruitmentManager.list
 })
 
 const connector = connect(mapStateToProps,
@@ -58,7 +63,9 @@ const connector = connect(mapStateToProps,
     getDetailProfile,
     getBooking,
     getListNote,
-    showFormUploadAvatar
+    showFormUploadAvatar,
+    showFormReasonReject,
+    getListRecruitment,
   });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -129,8 +136,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     // props.deleteTalentPool(req);
   }
 
-  const content = (
-    <ul style={{width: 165}} className="popup-popover">
+  const content = (<ul style={{width: 165}} className="popup-popover">
       <li>
         <a onClick={handleUploadAvatar}>Cập nhật ảnh đại diện</a>
       </li>
@@ -139,34 +145,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
         <a onClick={handleDeleteAvatar} style={{color: "red"}}>Xóa ảnh đại diện</a>
       </li>
 
-    </ul>
-  );
-
-  const handleVisibleChange = (visible: any) => {
-    console.log(visible)
-    setVisiblePopover(visible);
-  };
-
-
-  const handleDeleteNote = (event: any, entity: NoteEntity) => {
-    event.stopPropagation();
-    let req: DeleteNoteRequest = {
-      id: entity.id
-    }
-    props.deleteNote({id: req.id});
-
-  }
-
-  const handleEditNote = (event: any, entity: NoteEntity) => {
-    event.stopPropagation();
-    // console.log("handleEditNote:",entity)
-    props.showFormUpdateNote(true, entity);
-  }
-
-  function handleCreateNote(event: any) {
-    event.stopPropagation();
-    props.showFormCreateNote(true, props.detail.result?.id);
-  }
+    </ul>);
 
   const columns: ColumnProps<NoteEntity>[] = [
     {
@@ -274,7 +253,18 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       maxIndex: size
     })
   }, [props.activityLogs.total])
-  const handeClose = (e: any) => {
+
+  useEffect(() => {
+    if (props.showDetail.id_detail) {
+      props.getDetailProfile({idProfile: props.showDetail.id_detail});
+      props.getActivityLogs({idProfile: props.showDetail.id_detail});
+      props.getBooking({idProfile: props.showDetail.id_detail});
+      props.getListNote({idProfile: props.showDetail.id_detail})
+      props.getListRecruitment({id:props.detail.result?.recruitmentId})
+    }
+  }, [props.showDetail.id_detail])
+
+  const handleClose = (e: any) => {
     e.preventDefault();
     if (e?.target) {
       e.target.disabled = true;
@@ -287,6 +277,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     }
     props.showFormDetail(req);
   }
+
   const handleFullScreen = (e: any) => {
     e.preventDefault();
     setIsFull(!isFull);
@@ -308,6 +299,16 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     props.showFormDetail(req);
   }
 
+  const handleEditNote = (event: any, entity: NoteEntity) => {
+    event.stopPropagation();
+    // console.log("handleEditNote:",entity)
+    props.showFormUpdateNote(true, entity);
+  }
+
+  function handleCreateNote(event: any) {
+    event.stopPropagation();
+    props.showFormCreateNote(true, props.detail.result?.id);
+  }
 
   function handleChangeActivityLogs(page: any) {
     setActiveLogs({
@@ -341,6 +342,20 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     props.showFormBooking(true, req);
   }
 
+  const handleVisibleChange = (visible: any) => {
+    console.log(visible)
+    setVisiblePopover(visible);
+  };
+
+  const handleDeleteNote = (event: any, entity: NoteEntity) => {
+    event.stopPropagation();
+    let req: DeleteNoteRequest = {
+      id: entity.id
+    }
+    props.deleteNote({id: req.id});
+
+  }
+
   const getInitials = (name: string) => {
     if (name) {
       let initials: any = name.split(' ');
@@ -356,14 +371,10 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
   }
 
-  useEffect(() => {
-    if (props.showDetail.id_detail) {
-      props.getDetailProfile({idProfile: props.showDetail.id_detail});
-      props.getActivityLogs({idProfile: props.showDetail.id_detail});
-      props.getBooking({idProfile: props.showDetail.id_detail});
-      props.getListNote({idProfile: props.showDetail.id_detail})
-    }
-  }, [props.showDetail.id_detail])
+  function handleShowReasonRejectForm(event:any) {
+    event.stopPropagation();
+    props.showFormReasonReject(true);
+  }
 
   return (
     <>
@@ -389,7 +400,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
             </div>
 
             <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm btn-delete"
-                    onClick={handeClose}
+                    onClick={handleClose}
             >
               <Icon type="close"/>
             </Button>
@@ -520,6 +531,31 @@ function DetailProfileForm(props: DetailProfileFormProps) {
               <Icon type="calendar" className="mr-2"/>
               <span>Thời gian phỏng vấn: {props.booking.result ? moment(unixTimeToDate(props.booking.result?.date)).format('HH:mm DD/MM/YYYY') : ''} </span>
             </div>
+
+            <div className='apply-position-box'>
+              <div className="apply-position-title font-15-bold-500"><Badge color="green"/>{props.detail.result?.recruitmentName}</div>
+              <div className="apply-option flex-items-center">
+                <div className="apply-step">
+
+                  <Steps current={1} progressDot className="apply-step">
+                    {
+                      props.recruitment.rows[0]?.interviewProcess?.map((item:any,index:any)=>{
+                       return <Step key={index} className="width-apply-position"/>
+                      })
+                    }
+                  </Steps>
+                  <div style={{textAlign: "center", width: 225}}>
+                    {props.detail.result?.statusCVName}
+                  </div>
+                </div>
+                <div className="flex-items-center">
+                  <Button className='mr-2'><FaLongArrowAltRight style={{color: "#64d271", marginRight: 5}}/>Chuyển vòng</Button>
+                  <Button className='mr-2' onClick={handleShowReasonRejectForm}><Icon type="stop" style={{fontSize: "120%", marginTop: 5}}/></Button>
+                  <Button><BsThreeDotsVertical size={20} className="mt-1"/></Button>
+                </div>
+              </div>
+            </div>
+
             <div style={{display: "flex", justifyContent: "space-between"}}>
               <h1>Đánh giá</h1>
               <Button size="small" className="ant-btn mr-1 ant-btn-sm"
@@ -528,16 +564,6 @@ function DetailProfileForm(props: DetailProfileFormProps) {
                 <Icon type="plus"/> Tạo đánh giá
               </Button>
             </div>
-
-            {/*<div>*/}
-            {/*  <Icon type="audit" className="mr-2"/>*/}
-            {/*  <span>Nội dung phỏng vấn: {props.schedule.result?.content}</span>*/}
-            {/*</div>*/}
-
-            {/*<div>*/}
-            {/*  <Icon type="question-circle" className="mr-2"/>*/}
-            {/*  <span>Câu hỏi: {props.schedule.result?.question}</span>*/}
-            {/*</div>*/}
 
             <Table
               scroll={{x: 1000}}
@@ -644,10 +670,13 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       <CreateNoteForm/>
       <UpdateNoteForm/>
       <UploadAvatarForm/>
+      <CreateReasonRejectForm/>
+     <ChangeProcessForm/>
 
       {props.createNote.loading ||
       props.updateNote.loading ||
       props.detail.loading
+
         ? <Loading/> : null}
 
     </>

@@ -36,6 +36,7 @@
 
   &__name {
     padding-left: 15px;
+
     h2 {
       color: $color-blue;
     }
@@ -66,7 +67,8 @@
   &__title {
     border-bottom: 2px solid $color-light-grey;
     display: flex;
-    &--button{
+
+    &--button {
       position: relative;
       width: calc(100% - 181.42px);
       text-align: right;
@@ -106,7 +108,8 @@
   &__title {
     border-bottom: 2px solid $color-light-grey;
     display: flex;
-    &--button{
+
+    &--button {
       position: relative;
       width: calc(100% - 177px);
       text-align: right;
@@ -135,18 +138,20 @@
     //padding: 15px;
   }
 
-  &__title{
+  &__title {
     padding: 15px 15px 0;
     display: flex;
     border-bottom: 2px solid $color-light-grey;
-    &--button{
+
+    &--button {
       position: relative;
       width: calc(100% - 135.55px);
       text-align: right;
       //padding: 15px 15px;
     }
   }
-  &__content{
+
+  &__content {
     padding: 15px;
   }
 }
@@ -167,10 +172,11 @@
   }
 
   &__content {
-    span{
+    span {
       padding-left: 15px;
       box-sizing: border-box;
     }
+
     padding: 10px 15px 0 30px;
     border-bottom: 2px solid $color-light-grey;
 
@@ -188,7 +194,7 @@
   }
 }
 
-.pagination{
+.pagination {
   margin-bottom: 30px;
   text-align: center;
 }
@@ -197,17 +203,46 @@
   height: 7px
 }
 
-.btn-delete{
+.btn-delete {
   position: fixed;
   color: red;
   border: 1px solid;
   z-index: 2;
 }
 
-img{
+img {
   &:hover {
     opacity: 0.8;
   }
 }
 
+.apply-position-box {
+  margin-top: 15px;
+  padding: 10px;
+  border: 1px solid $color-schedule-interview;
+  border-radius: 3px;
+}
 
+.apply-position-title {
+  color: $color-blue-link;
+  padding-bottom: 10px;
+}
+
+.apply-option {
+  .ant-steps-dot .ant-steps-item-tail {
+    margin: 0 0 0 3px;
+  }
+
+  .ant-steps-dot .ant-steps-item-icon {
+    margin-left: inherit;
+  }
+}
+
+.apply-step {
+  width: 260px;
+  align-self: flex-start;
+}
+
+.width-apply-position {
+  width: calc(260px / 6);
+}

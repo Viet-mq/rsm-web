@@ -51,7 +51,6 @@ export interface CreateProfileRequest {
   mailRef: string,
   skill: string[],
   talentPool: string,
-  recruitment: string,
   department: string,
   dateOfApply: number,
 
@@ -81,6 +80,11 @@ export interface UpdateProfileRequest {
 
 export interface DeleteProfileRequest {
   id: string,
+}
+
+export interface ReasonRejectRequest {
+  idProfile?: string,
+  reason:string
 }
 
 export interface UploadAvatarRequest {

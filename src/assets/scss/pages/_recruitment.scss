@@ -108,6 +108,23 @@
   border-radius: 5px;
   text-align: center;
 
+  * {
+    color: $color-black;
+  }
+
+  &:hover {
+    background-color: $color-blue-hover;
+  }
+}
+
+.process-active{
+  padding: 5px 20px;
+  border-radius: 5px;
+  text-align: center;
+
+  * {
+    color: $color-blue-text;
+  }
   &:hover {
     background-color: $color-blue-hover;
   }
@@ -202,7 +219,13 @@
 }
 
 .header-candidate-detail {
-  justify-content: flex-end;
+  .ant-calendar-range-picker-separator {
+    margin-top: 4px;
+  }
+
+  .ant-calendar-picker-input.ant-input {
+    height: 40px;
+  }
 }
 
 .tab-detail {
@@ -211,8 +234,14 @@
     background: $color-bg;
   }
 
+  .recruitment-list {
+    padding: 1px;
+    margin-bottom: inherit;
+    border-radius: 5px 5px 0px 0px;
+  }
+
   .ant-tabs-content {
-    padding:0 15px 0 20px;
+    padding: 0 15px 0 20px;
   }
 
   .ant-tabs-extra-content {
@@ -220,7 +249,8 @@
     background: $color-bg;
     height: 44px;
   }
-  .ant-layout-header{
+
+  .ant-layout-header {
     line-height: inherit;
   }
 }
@@ -248,7 +278,8 @@
 
 .icon-list {
   margin-right: 2px;
-  :target{
+
+  :target {
     color: $color-blue-text;
   }
 }
@@ -262,38 +293,38 @@
   }
 }
 
-.kanban-title-list{
+.kanban-title-list {
   text-align: center;
   font-size: 20px;
   font-weight: 500;
   padding-bottom: 15px;
 }
 
-.is-active{
+.is-active {
   color: $color-blue-text;
   border: 1px solid;
 }
 
-.kanban-item-list{
-  .c-main-content{
+.kanban-item-list {
+  .c-main-content {
     padding: 10px;
   }
 }
 
-.filter-recruitment{
+.filter-recruitment {
   background-color: $color-bg;
   border-radius: 3px;
   padding: 20px 15px 15px;
   height: calc(100vh - 211px);
 }
 
-.layout-candidate-detail{
-  .ant-layout-header{
+.layout-candidate-detail {
+  .ant-layout-header {
     height: 55px;
   }
 }
 
-.button-filter{
+.button-filter {
   bottom: 15px;
   right: 25px;
   position: absolute;

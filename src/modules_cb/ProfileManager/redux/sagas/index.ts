@@ -6,7 +6,7 @@ import {updateProfileAsync} from "./profile/update";
 import {getDetailProfileAsync} from "./detail/detail";
 import {
   CREATE_BOOKING, CREATE_NOTE,
-  CREATE_PROFILE, DELETE_NOTE,
+  CREATE_PROFILE, CREATE_REASON_REJECT, DELETE_NOTE,
   DELETE_PROFILE,
   GET_ACTIVITY,
   GET_BOOKING,
@@ -32,6 +32,7 @@ import {createNoteAsync} from "./note/createNote";
 import {updateNoteAsync} from "./note/updateNote";
 import {deleteNoteAsync} from "./note/deleteNote";
 import {uploadAvatarAsync} from "./profile/uploadAvatar";
+import {createReasonRejectAsync} from "./profile/createReasonReject";
 
 export default function* root() {
   return all([
@@ -53,6 +54,7 @@ export default function* root() {
     yield takeLatest(UPDATE_NOTE, updateNoteAsync),
     yield takeLatest(DELETE_NOTE, deleteNoteAsync),
     yield takeLatest(UPLOAD_AVATAR, uploadAvatarAsync),
+    yield takeLatest(CREATE_REASON_REJECT, createReasonRejectAsync),
 
   ]);
 }

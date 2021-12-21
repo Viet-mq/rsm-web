@@ -43,6 +43,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 const Routes = (props: PropsFromRedux) => {
   const location = useLocation();
+
   useEffect(() => {
     let req: DetailCV = {
       show_detail: false,
@@ -75,10 +76,13 @@ const Routes = (props: PropsFromRedux) => {
         <Route path="/reason-reject-manager" component={ReasonRejectManagerPages} isLogin={props.isLogin}/>
         <Route path="/address-manager" component={AddressManagerPages} isLogin={props.isLogin}/>
         <Route path="/recruitment-manager" exact component={RecruitmentManagerPages} isLogin={props.isLogin}/>
-        <Route path="/recruitment-manager/create" isLogin={props.isLogin} render={(props:any) => (<CreateLayout path={"create"}/>)} />
-        <Route path="/recruitment-manager/edit" render={(props:any) => (<CreateLayout path={"edit"}/>)}  isLogin={props.isLogin}/>
-        <Route path="/recruitment-manager/detail/" component={DetailRecruitment} isLogin={props.isLogin}/>
-        <Redirect exact from="/*" to={'/home'}/>
+        <Route path="/recruitment-manager/create" isLogin={props.isLogin}
+               render={(props: any) => (<CreateLayout path={"create"}/>)}/>
+        <Route path="/recruitment-manager/edit" render={(props: any) => (<CreateLayout path={"edit"}/>)}
+               isLogin={props.isLogin}/>
+        <Route path={`/recruitment-manager/detail/:idRecruitment`} exact={true} render={(props: any) => (<DetailRecruitment {...props}/>)}
+               isLogin={props.isLogin}/>
+        {/*<Redirect exact from="/*" to={'/home'}/>*/}
       </Switch>
     </div>
   );

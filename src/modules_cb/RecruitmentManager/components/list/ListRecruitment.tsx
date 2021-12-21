@@ -16,13 +16,14 @@ const mapStateToProps = (state: RootState) => ({
 const connector = connect(mapStateToProps, {
   getListRecruitment,
   deleteRecruitment,
-  updateRecruitment
+  updateRecruitment,
+
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends ReduxProps {
-  recruitment:RecruitmentEntity
+  recruitment: RecruitmentEntity
 }
 
 function ListRecruitment(props: IProps) {
@@ -31,39 +32,41 @@ function ListRecruitment(props: IProps) {
   const dateFormat = 'DD/MM/YYYY';
   const timeFormat = 'HH:mm';
   const content = (<ul style={{width: 160}} className="popup-popover">
-      <li>
-        <a>Sửa tin</a>
-      </li>
-      <li>
-        <a>Xem tin tuyển dụng</a>
-      </li>
-      <li>
+    <li>
+      <Link to={`/recruitment-manager/edit`}>Sửa tin</Link>
+    </li>
+    <li>
+      <a>Xem tin tuyển dụng</a>
+    </li>
+    <li>
 
-        <Popconfirm
-          title="Bạn muốn xóa tin tuyển dụng này chứ ?"
-          okText="Xóa"
-          placement="bottom"
-          onCancel={event => {
-            event?.stopPropagation();
+      <Popconfirm
+        title="Bạn muốn xóa tin tuyển dụng này chứ ?"
+        okText="Xóa"
+        placement="bottom"
+        onCancel={event => {
+          event?.stopPropagation();
+        }}
+        onConfirm={event => handleDelete(event)}
+      >
+        <a
+          onClick={event => {
+            event.stopPropagation();
           }}
-          onConfirm={event => handleDelete(event)}
         >
-          <a
-            onClick={event => {
-              event.stopPropagation();
-            }}
-          >
-            Xóa
-          </a>
-        </Popconfirm>
-      </li>
-    </ul>);
+          Xóa
+        </a>
+      </Popconfirm>
+    </li>
+  </ul>);
   const contentMore = (<div className="content-more">
     <div className="flex-items-center">
-      <div className='border-right pr-3'>Người tạo: <span className="bold-text"> {props.recruitment.createBy}</span></div>
-      <div className=" ml-3">Ngày tạo: <span className="bold-text">{moment(props.recruitment.createAt).format(dateFormat)}</span></div>
+      <div className='border-right pr-3'>Người tạo: <span className="bold-text"> {props.recruitment.createBy}</span>
+      </div>
+      <div className=" ml-3">Ngày tạo: <span
+        className="bold-text">{moment(props.recruitment.createAt).format(dateFormat)}</span></div>
     </div>
-    <div className='border-right' style={{width:200}}>Thời hạn dự kiến: <span className="bold-text"></span></div>
+    <div className='border-right' style={{width: 200}}>Thời hạn dự kiến: <span className="bold-text"></span></div>
   </div>)
 
   useEffect(() => {
@@ -72,7 +75,7 @@ function ListRecruitment(props: IProps) {
 
   const handleDelete = (event: any) => {
     event.stopPropagation();
-
+    props.deleteRecruitment({id: props.recruitment?.id})
   }
 
   const handleVisibleChange = (visible: any) => {
@@ -85,17 +88,19 @@ function ListRecruitment(props: IProps) {
         <div className="header-box border-bottom">
           <div className="main-1__green-dot"></div>
           <div className="header-box-main">
-            <Link to={`/recruitment-manager/detail`} className="p">{props.recruitment.title}</Link>
+            <Link to={`/recruitment-manager/detail/${props.recruitment?.id}?roundID=${props.recruitment.interviewProcess[0].id}`}
+                  className="p">{props.recruitment.title}</Link>
             <div className="detail-flex">
               <div>{props.recruitment?.jobName}</div>
               <div><BsDot size={20}/></div>
-              <div >Mức lương: <span className="p"> {props.recruitment?.salary}</span>
+              <div>Mức lương: <span className="p"> {props.recruitment?.salary}</span>
               </div>
 
               <div className="ml-3">SL cần tuyển: <span className="p">{props.recruitment?.quantity}</span>
               </div>
 
-              <div className="ml-3">Hạn nộp hồ sơ: <span className="p">{moment(props.recruitment?.quantity).format(dateFormat)}</span>
+              <div className="ml-3">Hạn nộp hồ sơ: <span
+                className="p">{moment(props.recruitment?.deadLine).format(dateFormat)}</span>
               </div>
 
               <Popover content={contentMore} trigger="click">
@@ -133,11 +138,15 @@ function ListRecruitment(props: IProps) {
           </div>
         </div>
         <div className="list-process">
-          {props.recruitment.interviewProcess.map((item:any, index:any)=>{
-            return  <div className="flex-1" style={index === props.recruitment?.interviewProcess?.length - 1?{borderRight:0}:undefined} key={index}>
+          {props.recruitment.interviewProcess.map((item: any, index: any) => {
+            return <div className="flex-1"
+                        style={index === props.recruitment?.interviewProcess?.length - 1 ? {borderRight: 0} : undefined}
+                        key={index}>
               <div className="padding-process">
-                <div className="p">2</div>
-                <div className="bold-text">{item.name}</div>
+                <Link to={`/recruitment-manager/detail/${props.recruitment?.id}?roundID=${item.id}`}>
+                  <div className="p">2</div>
+                  <div className="bold-text">{item.name}</div>
+                </Link>
               </div>
             </div>
           })}

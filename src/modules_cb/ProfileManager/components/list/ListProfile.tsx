@@ -22,7 +22,7 @@ import {getListJob} from "../../../JobManager/redux/actions";
 import {getListSourceCV} from "../../../SourceCVManager/redux/actions";
 import {getListDepartment} from "../../../DepartmentManager/redux/actions";
 import {getListTalentPool} from "../../../TalentPoolManager/redux/actions";
-import {useHistory} from "react-router-dom";
+import {useHistory, useLocation} from "react-router-dom";
 import {getListSchool} from "../../../SchoolManager/redux/actions";
 import Search from "antd/es/input/Search";
 
@@ -48,35 +48,28 @@ const connector = connect(mapStateToProps, {
   showFormDetail,
   showFormUploadCV,
   showFormBooking,
-  getElasticSearch,
-  getListJobLevel,
-  getListJob,
-  getListSourceCV,
-  getListDepartment,
-  getListTalentPool,
-  getListSchool,
-  getActivityLogs
+
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface ListProfileProps extends ReduxProps {
+  idRecruitment?:any,
 }
 
 function ListProfile(props: ListProfileProps) {
   const history = useHistory();
+  const {pathname} =useLocation();
   const [page, setPage] = useState(1);
   const size = 30;
   const width = {width: "11%"};
-  const [state, setState] = useState<any>(
-    {
+  const [state, setState] = useState<any>({
       filteredInfo: null,
       sortedInfo: {
         order: null,
         columnKey: null,
       },
-    }
-  );
+    });
   const [keySearch, setKeySearch] = useState<string>('')
   const [dataSource, setDataSource] = useState<ProfileEntity[] | any>(undefined)
   const [selected, setSelected] = useState<any>({
@@ -361,10 +354,11 @@ function ListProfile(props: ListProfileProps) {
   useEffect(() => {
     setTreeData(convertArrayToTree(props.listDepartment.rows))
   }, [props.listDepartment.rows])
-  useEffect(() => {
-    props.getListProfile({page: page, size: 30});
 
-  }, [page])
+  useEffect(() => {
+    if(pathname.includes("recruitment-manager")) props.getListProfile({recruitment:props.idRecruitment,page: page, size: 30});
+    else props.getListProfile({page: page, size: 30});
+    }, [page])
 
   useEffect(() => {
     setDataSource(props.elasticSearch.rowsRs);
@@ -372,7 +366,6 @@ function ListProfile(props: ListProfileProps) {
       setKeySearch(props.elasticSearch.request?.key)
     }
   }, [props.elasticSearch.triggerSearch])
-
 
   const getInitials = (name: string) => {
     let initials: any = name.split(' ');
@@ -510,91 +503,95 @@ function ListProfile(props: ListProfileProps) {
 
   return (
     <>
-      <div>
-        {keySearch ?
-          <div style={{marginLeft: 15}}>
-            <span>Kết quả tìm kiếm cho: </span>
-            <span
-              className="c-search-profile"
-            >
+      {pathname==='/profile-manager'?(
+        <>
+          <div>
+            {keySearch ?
+              <div style={{marginLeft: 15}}>
+                <span>Kết quả tìm kiếm cho: </span>
+                <span
+                  className="c-search-profile"
+                >
               {keySearch}
             </span>
-            <a style={{color: "black", fontStyle: "italic"}} onClick={onBtnResetClicked}>x</a>
+                <a style={{color: "black", fontStyle: "italic"}} onClick={onBtnResetClicked}>x</a>
+              </div>
+              : null}
+
+            <br/>
+
+            <div className="c-filter-profile">
+
+              <Search style={{display: "inline"}}
+                      value={selected.name}
+                      onChange={e => setSelected({...selected, name: e.target.value})}
+                      onSearch={btnSearchClicked}
+                      placeholder="Họ tên"/>
+
+              <Select style={width}
+                      placeholder="Công việc"
+                      value={selected.job ? selected.job : undefined}
+                      onChange={(value: any) => setSelected({...selected, job: value})}
+              >
+                {props.listJob.rows?.map((item: any, index: any) => (
+                  <Option key={index} value={item.id}>{item.name}</Option>
+                ))}
+              </Select>
+
+              <Select style={width}
+                      value={selected.jobLevel ? selected.jobLevel : undefined}
+                      onChange={(value: any) => setSelected({...selected, jobLevel: value})}
+                      placeholder="Vị trí tuyển dụng"
+              >
+                {props.listJobLevel.rows?.map((item: any, index: any) => (
+                  <Option key={index} value={item.id}>{item.name}</Option>
+                ))}
+              </Select>
+
+              <TreeSelect
+                style={width}
+                value={selected.department ? selected.department : undefined}
+                dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
+                treeData={treeData}
+                placeholder="Phòng ban"
+                treeDefaultExpandAll
+                onChange={(value: any) => setSelected({...selected, department: value})}
+              />
+
+              <Select
+                style={width}
+                value={selected.recruitment ? selected.recruitment : undefined}
+                onChange={(value: any) => setSelected({...selected, recruitment: value})}
+                placeholder="Tin tuyển dụng"
+              >
+                {props.listRecruitment.rows?.map((item: any, index: any) => (
+                  <Option key={index} value={item.id}>{item.title}</Option>
+                ))}
+              </Select>
+
+              <Select
+                style={width}
+                value={selected.talentPool ? selected.talentPool : undefined}
+                onChange={(value: any) => setSelected({...selected, talentPool: value})}
+                placeholder="Talent Pools"
+              >
+                {props.listTalentPool.rows?.map((item: any, index: any) => (
+                  <Option key={index} value={item.id}>{item.name}</Option>
+                ))}
+              </Select>
+
+              <Button type="primary" style={width}
+                      onClick={btnSearchClicked}
+              >Tìm kiếm</Button>
+
+              <Button style={width} onClick={clearAll}>Reset</Button>
+
+            </div>
+
           </div>
-          : null}
-
-        <br/>
-
-        <div className="c-filter-profile">
-
-          <Search style={{display: "inline"}}
-                  value={selected.name}
-                  onChange={e => setSelected({...selected, name: e.target.value})}
-                  onSearch={btnSearchClicked}
-                  placeholder="Họ tên"/>
-
-          <Select style={width}
-                  placeholder="Công việc"
-                  value={selected.job ? selected.job : undefined}
-                  onChange={(value: any) => setSelected({...selected, job: value})}
-          >
-            {props.listJob.rows?.map((item: any, index: any) => (
-              <Option key={index} value={item.id}>{item.name}</Option>
-            ))}
-          </Select>
-
-          <Select style={width}
-                  value={selected.jobLevel ? selected.jobLevel : undefined}
-                  onChange={(value: any) => setSelected({...selected, jobLevel: value})}
-                  placeholder="Vị trí tuyển dụng"
-          >
-            {props.listJobLevel.rows?.map((item: any, index: any) => (
-              <Option key={index} value={item.id}>{item.name}</Option>
-            ))}
-          </Select>
-
-          <TreeSelect
-            style={width}
-            value={selected.department ? selected.department : undefined}
-            dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
-            treeData={treeData}
-            placeholder="Phòng ban"
-            treeDefaultExpandAll
-            onChange={(value: any) => setSelected({...selected, department: value})}
-          />
-
-          <Select
-            style={width}
-            value={selected.recruitment ? selected.recruitment : undefined}
-            onChange={(value: any) => setSelected({...selected, recruitment: value})}
-            placeholder="Tin tuyển dụng"
-          >
-            {props.listRecruitment.rows?.map((item: any, index: any) => (
-              <Option key={index} value={item.id}>{item.title}</Option>
-            ))}
-          </Select>
-
-          <Select
-            style={width}
-            value={selected.talentPool ? selected.talentPool : undefined}
-            onChange={(value: any) => setSelected({...selected, talentPool: value})}
-            placeholder="Talent Pools"
-          >
-            {props.listTalentPool.rows?.map((item: any, index: any) => (
-              <Option key={index} value={item.id}>{item.name}</Option>
-            ))}
-          </Select>
-
-          <Button type="primary" style={width}
-                  onClick={btnSearchClicked}
-          >Tìm kiếm</Button>
-
-          <Button style={width} onClick={clearAll}>Reset</Button>
-
-        </div>
-
-      </div>
-      <br/>
+          <br/>
+        </>
+        ):null}
 
       <Table
         scroll={{x: "1500px", y: "638px"}}
@@ -614,8 +611,6 @@ function ListProfile(props: ListProfileProps) {
           showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,
         }}
       />
-
-
     </>
   );
 

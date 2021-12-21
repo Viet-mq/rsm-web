@@ -21,11 +21,13 @@ import getListNote,{GetListNoteState} from "./note/getListNote";
 import showNote,{ ShowNoteState} from "./note/showNote";
 import updateNote,{UpdateNoteState} from "./note/updateNote";
 import uploadAvatar, {UploadAvatarState} from "./profile/uploadAvatar";
+import createReasonReject, {CreateReasonRejectState} from "./profile/createReasonReject";
 
 export interface ProfileManagerModuleState {
   list: ProfileListState,
   deleteProfile: DeleteProfileState,
   create: CreateProfileState,
+  createReasonReject: CreateReasonRejectState,
   showForm: ProfileFormState,
   update: UpdateProfileState,
   updateDetail: UpdateDetailState,
@@ -51,6 +53,7 @@ export default combineReducers<ProfileManagerModuleState>({
   list,
   deleteProfile,
   create,
+  createReasonReject,
   showForm,
   update,
   updateDetail,

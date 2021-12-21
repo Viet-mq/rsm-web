@@ -10,7 +10,8 @@ export interface ProfileFormAction {
   data_update_detail?: DetailProfileEntity
   id_detail?: string,
   show_upload_avatar?: boolean,
-  id_upload_avatar?: string
+  id_upload_avatar?: string,
+  show_reason_reject?:boolean,
 
 }
 
@@ -19,10 +20,16 @@ export const PROFILE_SHOW_FORM_UPDATE = "PROFILE_SHOW_FORM_UPDATE";
 export const PROFILE_SHOW_FORM_UPDATE_DETAIL = "PROFILE_SHOW_FORM_UPDATE_DETAIL";
 export const PROFILE_SHOW_FORM_DETAIL = "PROFILE_SHOW_FORM_DETAIL";
 export const PROFILE_SHOW_FORM_UPLOAD_AVATAR = "PROFILE_SHOW_FORM_UPLOAD_AVATAR";
+export const REASON_REJECT_SHOW_FORM = "REASON_REJECT_SHOW_FORM";
 
 export const showFormCreate = (show: boolean): ProfileFormAction => ({
   type: PROFILE_SHOW_FORM_CREATE,
   show_create: show
+});
+
+export const showFormReasonReject = (show: boolean): ProfileFormAction => ({
+  type: REASON_REJECT_SHOW_FORM,
+  show_reason_reject: show
 });
 
 export const showFormUpdate = (show: boolean, dataUpdate?: ProfileEntity): ProfileFormAction => ({

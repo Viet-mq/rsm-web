@@ -44,6 +44,7 @@ function ScheduleManagerPages(props: IProps) {
   const [visibleDetail, setVisibleDetail] = useState(false)
   const [idDetail, setIdDetail] = useState<string>('');
   const [valueDateRange, setValueDateRange] = useState<any[]>([moment().startOf("week"), moment().endOf('week')])
+
   useEffect(() => {
     document.title = "Lịch";
     props.countBookingNumber();

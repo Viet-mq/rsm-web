@@ -26,6 +26,9 @@ export const getListProfile = async (params: any): Promise<ListResponseBase2<Pro
   if (params.recruitment !== null && params.recruitment !== undefined) {
     url += "recruitment=" + params.recruitment + "&"
   }
+  if (params.statusCV !== null && params.statusCV !== undefined) {
+    url += "statusCV=" + params.statusCV + "&"
+  }
   if (params.page !== null && params.page !== undefined) {
     url += "page=" + params.page + "&"
   }
@@ -47,6 +50,10 @@ export const createProfile = async (params?: any): Promise<ResponseBase2> => {
 
 export const deleteProfile = async (params?: any): Promise<ResponseBase2> => {
   return (await POST('api-svc/profile/delete', params)) as ResponseBase2;
+};
+
+export const createReasonReject = async (params?: any): Promise<ResponseBase2> => {
+  return (await POST('api-svc/profile/reject', params)) as ResponseBase2;
 };
 
 export const updateProfile = async (params?: any): Promise<ResponseBase2> => {

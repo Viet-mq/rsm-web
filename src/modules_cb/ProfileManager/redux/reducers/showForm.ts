@@ -11,12 +11,15 @@ export interface ProfileFormState {
   data_update?: ProfileEntity | any,
   id_detail?: string,
   show_upload_avatar?: boolean,
-  id_upload_avatar?: string
+  id_upload_avatar?: string,
+  show_reason_reject?:boolean
+
 }
 
 const initState: ProfileFormState = {
   show_create: false,
   show_update: false,
+  show_reason_reject:false,
   show_update_detail: false,
   show_upload_avatar: false,
   show_detail: {
@@ -30,7 +33,7 @@ export default (state = initState, {
   type,
   show_create,
   show_update,
-  show_detail,
+  show_detail,show_reason_reject,
   show_update_detail,
   data_update,
   id_detail,
@@ -50,6 +53,15 @@ export default (state = initState, {
         //   general: 24,
         //   detail: 0,
         // },
+        show_upload_avatar: false
+      }
+      case Actions.REASON_REJECT_SHOW_FORM:
+      return {
+        ...state,
+        show_reason_reject,
+        show_create:false,
+        show_update: false,
+        show_update_detail: false,
         show_upload_avatar: false
       }
     case Actions.PROFILE_SHOW_FORM_UPDATE:

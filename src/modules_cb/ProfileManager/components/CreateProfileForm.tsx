@@ -104,7 +104,6 @@ function CreateProfileForm(props: CreateProfileFormProps) {
           job: values.job,
           levelJob: values.levelJob,
           skill: values.skill,
-          recruitment: values.recruitmentId,
           talentPool: values.talentPool,
           hrRef: values.hrRef,
           mailRef: values.mailRef,
@@ -482,27 +481,6 @@ function CreateProfileForm(props: CreateProfileFormProps) {
               >
                 <Icon type="plus"/>
               </Button>
-            </div>
-          </Form.Item>
-
-          <Form.Item label="Tin tuyển dụng" className="mb-0" style={{...formItemStyle}}>
-            <div style={{display: 'flex'}}>
-              {getFieldDecorator('recruitmentId', {
-                initialValue: '',
-                rules: [
-                  {
-                    message: 'Vui lòng chọn tin tuyển dụng',
-                    required: false,
-                  },
-                ],
-              })(
-                <Select className="bg-white text-black"
-                >
-                  {props.listRecruitment.rows?.map((item: any, index: any) => (
-                    <Option key={index} value={item.id}>{item.title}</Option>
-                  ))}
-                </Select>
-              )}
             </div>
           </Form.Item>
 

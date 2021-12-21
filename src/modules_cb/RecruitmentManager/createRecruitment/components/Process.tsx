@@ -204,14 +204,14 @@ function ProcessForm(props: IProps) {
           </div>
           <div>Khi ứng viên ứng tuyển vào tin tuyển dụng này, hệ thống sẽ tự động gửi email cho ứng viên</div>
 
-          <div className="schedule-detail-title mb-4">Mô tả công việc</div>
+          <div className="schedule-detail-title mb-4">Nội dung email</div>
           <ReactQuill
             style={fontWeightStyle}
             theme={'snow'}
             modules={modules}
             formats={formats}
             bounds={'.app'}
-            placeholder="Mô tả công việc"
+            placeholder="Nội dung email"
           />
 
         </div>
