@@ -55,7 +55,7 @@ function CreateReasonRejectForm(props: CreateReasonRejectFormProps) {
     <Modal
       zIndex={2}
       maskClosable={false}
-      title="Tạo mới lý do từ chối"
+      title="Tạo mới lý do loại"
       visible={props.reasonRejectManager.showForm.show_create}
       centered={true}
       width="550px"

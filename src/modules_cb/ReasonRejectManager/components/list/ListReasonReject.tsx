@@ -61,7 +61,7 @@ function ListReasonReject(props: IProps) {
       render: (text, record, index) =>  {return (page - 1) * 10 + index + 1}
     },
     {
-      title: 'Lý do từ chối',
+      title: 'Lý do loại',
       dataIndex: 'reason',
       width: 100,
     },

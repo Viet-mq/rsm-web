@@ -30,21 +30,26 @@ function RecruitmentManagerPages(props: IProps) {
 
   const dateFormat = 'DD/MM/YYYY';
   const timeFormat = 'HH:mm';
-  const [valueDateRange, setValueDateRange] = useState<any[]>([moment().startOf("week"), moment().endOf('week')])
+  const [valueDateRange, setValueDateRange] = useState<any[]>([moment(props.listRecruitment.rows[props.listRecruitment?.rows.length - 1]?.deadLine), moment(props.listRecruitment.rows[0]?.deadLine)])
 
   useEffect(() => {
     document.title = "Quản lý tin tuyển dụng";
-    props.getListRecruitment({page:1,size:100});
+    props.getListRecruitment({page: 1, size: 100});
   }, []);
 
   function onChangeDateRange(dates: any) {
     dates[0].set({hour: 0, minute: 0, second: 0})
     dates[1].set({hour: 23, minute: 59, second: 59})
     let [start, end] = [dates[0], dates[1]];
+    props.getListRecruitment({from: +start, to: +end, page: 1, size: 100});
     setValueDateRange([start, end])
-    // const datesFilter: any = props.schedule?.result?.filter((d: any) => d.date >= +start && d.date < +end);
-    // const outObject = dateFilter(datesFilter)
-    // return setOutObject(outObject)
+  }
+
+  function handleCreateBySelected(value:any) {
+    console.log(`selected ${value}`);
+    if (value !== "all") {
+      props.getListRecruitment({key: value})
+    } else props.getListRecruitment({page: 1, size: 100});
   }
 
   return (
@@ -79,16 +84,16 @@ function RecruitmentManagerPages(props: IProps) {
           </Select>
 
           <div style={{display: "flex", alignItems: "center"}}>
-            <span id='sort'>Sắp xếp theo</span>
-            <Select defaultValue="createAt" className="select-custom"
-
+            <span id='sort'>Lọc theo</span>
+            <Select defaultValue="all" className="select-custom"
+                    onSelect={handleCreateBySelected}
                     style={{
                       fontWeight: 600,
                       width: 120,
                     }}>
-              <Option value="createAt">Tât cả</Option>
-              <Option value="title">Tôi tạo</Option>
-              <Option value="unitUse">Tôi tham gia</Option>
+              <Option value="all">Tât cả</Option>
+              <Option value="create">Tôi tạo</Option>
+              <Option value="join">Tôi tham gia</Option>
 
             </Select>
           </div>
@@ -99,7 +104,7 @@ function RecruitmentManagerPages(props: IProps) {
               value={valueDateRange}
               allowClear={false}
               ranges={{
-                'Hôm nay': [moment(), moment()],
+                // 'Hôm nay': [moment(), moment()],
                 'Tháng này': [moment().startOf('month'), moment().endOf('month')],
               }}
               onChange={onChangeDateRange}
@@ -110,7 +115,7 @@ function RecruitmentManagerPages(props: IProps) {
         <div className="c-schedule-header__align-right align">
           <Search
             placeholder="Tìm kiếm nhanh trong danh sách"
-            onSearch={value => console.log(value)}
+            onSearch={value => props.getListRecruitment({key:value,page: 1, size: 100})}
             style={{width: 340}}
           />
           <Button
@@ -123,10 +128,10 @@ function RecruitmentManagerPages(props: IProps) {
       </div>
 
       <div>
-        {props.listRecruitment.rows.length>0?props.listRecruitment.rows.map((item:any,index:any)=>{
+        {props.listRecruitment.rows.length > 0 ? props.listRecruitment.rows.map((item: any, index: any) => {
           return <div key={index}><ListRecruitment recruitment={item}/></div>
 
-        }):null}
+        }) : null}
       </div>
     </div>
   );

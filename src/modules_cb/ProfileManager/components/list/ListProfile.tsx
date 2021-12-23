@@ -6,8 +6,6 @@ import {Avatar, Badge, Button, Icon, Popconfirm, Select, Table, Tooltip, TreeSel
 import {emptyText} from "src/configs/locales";
 import {
   deleteProfile,
-  getActivityLogs,
-  getElasticSearch,
   getListProfile,
   showFormBooking,
   showFormDetail,
@@ -17,13 +15,7 @@ import {
 import {DataShowBooking, DeleteProfileRequest, DetailCV, ProfileEntity} from "../../types";
 import moment from "moment";
 import {GiFemale, GiMale, ImPhoneHangUp} from "react-icons/all";
-import {getListJobLevel} from "../../../JobLevelManager/redux/actions";
-import {getListJob} from "../../../JobManager/redux/actions";
-import {getListSourceCV} from "../../../SourceCVManager/redux/actions";
-import {getListDepartment} from "../../../DepartmentManager/redux/actions";
-import {getListTalentPool} from "../../../TalentPoolManager/redux/actions";
 import {useHistory, useLocation} from "react-router-dom";
-import {getListSchool} from "../../../SchoolManager/redux/actions";
 import Search from "antd/es/input/Search";
 
 const {Option} = Select;
@@ -54,22 +46,23 @@ const connector = connect(mapStateToProps, {
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface ListProfileProps extends ReduxProps {
-  idRecruitment?:any,
+  idRecruitment?: any,
+  idProcess?:any,
 }
 
 function ListProfile(props: ListProfileProps) {
   const history = useHistory();
-  const {pathname} =useLocation();
+  const {pathname} = useLocation();
   const [page, setPage] = useState(1);
   const size = 30;
   const width = {width: "11%"};
   const [state, setState] = useState<any>({
-      filteredInfo: null,
-      sortedInfo: {
-        order: null,
-        columnKey: null,
-      },
-    });
+    filteredInfo: null,
+    sortedInfo: {
+      order: null,
+      columnKey: null,
+    },
+  });
   const [keySearch, setKeySearch] = useState<string>('')
   const [dataSource, setDataSource] = useState<ProfileEntity[] | any>(undefined)
   const [selected, setSelected] = useState<any>({
@@ -128,7 +121,6 @@ function ListProfile(props: ListProfileProps) {
       sortOrder: state.sortedInfo.columnKey === 'fullName' && state.sortedInfo.order,
       // ellipsis: true,
     },
-
     {
       title: 'Thông tin liên hệ',
       width: 230,
@@ -271,7 +263,6 @@ function ListProfile(props: ListProfileProps) {
         return moment(unixTimeToDate(value)).format('DD/MM/YYYY');
       },
     },
-
     {
       title: 'Quê quán',
       dataIndex: 'hometown',
@@ -287,7 +278,6 @@ function ListProfile(props: ListProfileProps) {
       key: '5',
       ellipsis: true
     },
-
     {
       title: () => {
         return <div style={{whiteSpace: 'nowrap'}}>Thao tác</div>;
@@ -356,9 +346,14 @@ function ListProfile(props: ListProfileProps) {
   }, [props.listDepartment.rows])
 
   useEffect(() => {
-    if(pathname.includes("recruitment-manager")) props.getListProfile({recruitment:props.idRecruitment,page: page, size: 30});
+    if (pathname.includes("recruitment-manager")) props.getListProfile({
+      recruitment: props.idRecruitment,
+      statusCV:props.idProcess,
+      page: page,
+      size: 30
+    });
     else props.getListProfile({page: page, size: 30});
-    }, [page])
+  }, [page])
 
   useEffect(() => {
     setDataSource(props.elasticSearch.rowsRs);
@@ -503,7 +498,7 @@ function ListProfile(props: ListProfileProps) {
 
   return (
     <>
-      {pathname==='/profile-manager'?(
+      {pathname === '/profile-manager' ? (
         <>
           <div>
             {keySearch ?
@@ -591,7 +586,7 @@ function ListProfile(props: ListProfileProps) {
           </div>
           <br/>
         </>
-        ):null}
+      ) : null}
 
       <Table
         scroll={{x: "1500px", y: "638px"}}

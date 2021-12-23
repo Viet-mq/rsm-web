@@ -31,7 +31,7 @@ interface IProps extends ReduxProps {
 }
 function ReasonRejectManagerPages(props: IProps) {
   useEffect(() => {
-    document.title = "Quản lý lý do từ chối";
+    document.title = "Quản lý lý do loại";
   }, []);
 
   const handleCreate = (e: any) => {
@@ -49,7 +49,7 @@ function ReasonRejectManagerPages(props: IProps) {
       <div className="entryHeader">
         <Row>
           <Col md={16}>
-            <div className="tmp-title-page-size20">Quản lý lý do từ chối</div>
+            <div className="tmp-title-page-size20">Quản lý lý do loại</div>
           </Col>
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">

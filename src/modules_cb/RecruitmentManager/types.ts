@@ -14,16 +14,18 @@ export interface RecruitmentEntity {
   interviewer: null,
   interviewProcess:InterviewProcess[],
   interest: string,
-  salary:string,
   createAt: string,
   createBy: string,
-
-
+  detailOfSalary: string,
+  from: number,
+  to: number,
+  status: string,
 }
 
 export interface InterviewProcess {
   id: string,
-  name: string
+  name: string,
+  total:string,
 }
 
 export interface CreateRecruitmentRequest {
@@ -36,11 +38,12 @@ export interface CreateRecruitmentRequest {
   jobDescription: string,
   quantity: number,
   requirementOfJob: string,
-  salary: string,
   talentPool: string,
   title: string,
   typeOfJob: string
-
+  detailOfSalary: string,
+  from: number,
+  to: number,
 }
 
 export interface UpdateRecruitmentRequest {

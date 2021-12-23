@@ -48,7 +48,14 @@
       margin-left: 9px;
     }
   }
+  .apply-step {
+    width: 520px !important;
+    align-self: flex-start !important;
+  }
 
+  .width-apply-position {
+    width: calc(520px / 6);
+  }
 
 }
 

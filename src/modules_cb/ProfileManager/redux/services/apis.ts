@@ -52,8 +52,11 @@ export const deleteProfile = async (params?: any): Promise<ResponseBase2> => {
   return (await POST('api-svc/profile/delete', params)) as ResponseBase2;
 };
 
-export const createReasonReject = async (params?: any): Promise<ResponseBase2> => {
+export const createRejectCandidate = async (params?: any): Promise<ResponseBase2> => {
   return (await POST('api-svc/profile/reject', params)) as ResponseBase2;
+};
+export const changeProcess = async (params?: any): Promise<ResponseBase2> => {
+  return (await POST('api-svc/profile/change', params)) as ResponseBase2;
 };
 
 export const updateProfile = async (params?: any): Promise<ResponseBase2> => {

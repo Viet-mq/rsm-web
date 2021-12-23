@@ -55,6 +55,7 @@ const connector = connect(mapStateToProps,
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface CreateProfileFormProps extends FormComponentProps, ReduxProps {
+  idRecruitment?:string
 }
 
 function CreateProfileForm(props: CreateProfileFormProps) {

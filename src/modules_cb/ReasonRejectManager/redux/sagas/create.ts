@@ -16,15 +16,15 @@ export function* createReasonRejectAsync(action: CreateReasonRejectAction) {
     const rs = yield apis.createReasonReject(action.request);
     yield put(createReasonRejectSuccess(rs));
     if (rs.code !== 0) {
-      NotificationError('Tạo lý do từ chối không thành công', "Lỗi: " + rs.message)
+      NotificationError('Tạo lý do loại không thành công', "Lỗi: " + rs.message)
     } else {
-      NotificationSuccess('Thành công', "Tạo lý do từ chối thành công");
+      NotificationSuccess('Thành công', "Tạo lý do loại thành công");
       yield put(showFormCreate(false));
       const params = yield select((state: RootState) => state.reasonRejectManager.list.params);
       yield put(getListReasonReject(params))
     }
   } catch (e) {
     yield put(createReasonRejectError(new AppError(e.message)));
-    NotificationError('Tạo lý do từ chối không thành công', "Lỗi: " + e.message);
+    NotificationError('Tạo lý do loại không thành công', "Lỗi: " + e.message);
   }
 }

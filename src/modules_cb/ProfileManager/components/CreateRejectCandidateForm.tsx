@@ -3,8 +3,8 @@ import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Modal, Select} from "antd";
 import React, {FormEvent} from "react";
-import {createReasonReject, showFormReasonReject} from "../redux/actions";
-import {ReasonRejectRequest} from "../types";
+import {createRejectCandidate, showFormReasonReject} from "../redux/actions";
+import {CreateRejectCandidateRequest} from "../types";
 
 const {Option} = Select;
 
@@ -14,8 +14,8 @@ const mapStateToProps = (state: RootState) => ({
 })
 
 const connector = connect(mapStateToProps, {
-  createReasonReject,
-  showFormReasonReject
+  showFormReasonReject,
+  createRejectCandidate
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -23,7 +23,7 @@ type ReduxProps = ConnectedProps<typeof connector>;
 interface IProps extends FormComponentProps, ReduxProps {
 }
 
-function CreateReasonRejectForm(props: IProps) {
+function CreateRejectCandidateForm(props: IProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
   const formItemStyle = {height: '60px'};
@@ -45,11 +45,11 @@ function CreateReasonRejectForm(props: IProps) {
     (e.target as any).disabled = false;
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        let req: ReasonRejectRequest = {
+        let req: CreateRejectCandidateRequest = {
           idProfile: props.profileManager.showForm?.id_detail,
           reason: values.reason
         }
-        props.createReasonReject(req);
+        props.createRejectCandidate(req);
         return;
       }
     });
@@ -82,7 +82,7 @@ function CreateReasonRejectForm(props: IProps) {
 
         <Form.Item label="Lý do loại" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('reason', {
-            initialValue: undefined,
+            initialValue: null,
             rules: [
               {
                 message: 'Chọn lý do loại',
@@ -115,4 +115,4 @@ function CreateReasonRejectForm(props: IProps) {
 
 }
 
-export default connector(Form.create<IProps>()(CreateReasonRejectForm));
+export default connector(Form.create<IProps>()(CreateRejectCandidateForm));

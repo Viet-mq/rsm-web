@@ -10,14 +10,14 @@ export function* deleteReasonRejectAsync(action: DeleteReasonRejectAction) {
     const rs = yield apis.deleteReasonReject(action.request);
     yield put(deleteReasonRejectSuccess(rs));
     if (rs.code !== 0) {
-      NotificationError('Xóa lý do từ chối không thành công', "Lỗi: " + rs.message)
+      NotificationError('Xóa lý do loại không thành công', "Lỗi: " + rs.message)
     } else {
-      NotificationSuccess('Thành công', "Xóa lý do từ chối thành công");
+      NotificationSuccess('Thành công', "Xóa lý do loại thành công");
       const params = yield select((state: RootState) => state.reasonRejectManager.list.params);
       yield put(getListReasonReject(params))
     }
   } catch (e) {
     yield put(deleteReasonRejectError(new AppError(e.message)));
-    NotificationError('Xóa lý do từ chối không thành công', "Lỗi: " + e.message);
+    NotificationError('Xóa lý do loại không thành công', "Lỗi: " + e.message);
   }
 }

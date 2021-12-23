@@ -5,13 +5,15 @@ import {Button, DatePicker, Dropdown, Icon, Layout, Menu, Popover, Select, Tabs}
 import {BsDot, ImArrowLeft2} from "react-icons/all";
 import {Link, useParams} from "react-router-dom";
 import Search from "antd/es/input/Search";
-import {getListProfile} from "../../ProfileManager/redux/actions";
+import {getListProfile, showFormCreate} from "../../ProfileManager/redux/actions";
 import ScheduleManagerPages from "../../ScheduleManager/pages/ScheduleManagerPages";
 import KanbanProcess from "./KanbanProcess";
 import ListProfile from "../../ProfileManager/components/list/ListProfile";
 import moment from "moment";
 import 'moment/locale/vi';
 import {getListRecruitment} from "../redux/actions";
+import CreateProfileForm from "../../ProfileManager/components/CreateProfileForm";
+import Loading from "../../../components/Loading";
 
 const {Option} = Select;
 const {TabPane} = Tabs;
@@ -21,10 +23,12 @@ const {Header, Content} = Layout;
 const mapStateToProps = (state: RootState) => ({
   listCandidate: state.profileManager.list,
   listRecruitment: state.recruitmentManager.list,
+  createCandidate: state.profileManager.create,
 })
 const connector = connect(mapStateToProps, {
   getListRecruitment,
   getListProfile,
+  showFormCreate
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -39,14 +43,16 @@ function DetailRecruitment(props: IProps) {
   const [page, setPage] = useState(1);
   const dateFormat = 'DD/MM/YYYY';
   const timeFormat = 'HH:mm';
-  const [idProcess,setIdProcess]=useState<any>(query);
+  const [idProcess, setIdProcess] = useState<any>(query);
   const [valueDateRange, setValueDateRange] = useState<any[]>([moment().startOf("week"), moment().endOf('week')])
   const contentMore = (<div className="content-more">
     <div className="flex-items-center">
-      <div className='border-right pr-3'>Người tạo:<span className="bold-text"> Hồ Đức Duy</span></div>
-      <div className=" ml-3">Ngày tạo:<span className="bold-text"> 29/11/2021</span></div>
+      <div className='border-right pr-3'>Người tạo:<span
+        className="bold-text"> {props.listRecruitment?.rows[0]?.createBy}</span></div>
+      <div className=" ml-3">Ngày tạo:<span className="bold-text"> {props.listRecruitment?.rows[0]?.createAt}</span>
+      </div>
     </div>
-    <div className='border-right' style={{width: 200}}>Thời hạn dự kiến: <span className="bold-text"> 29/12/2021</span>
+    <div className='border-right' style={{width: 200}}>Thời hạn dự kiến: <span className="bold-text"></span>
     </div>
   </div>)
   const menu = (<Menu className='detail-action'>
@@ -57,17 +63,24 @@ function DetailRecruitment(props: IProps) {
       <div><Icon type="export"/><span> Xuất Excel</span></div>
     </Menu.Item>
   </Menu>);
+  const operations = <Select className="tab-operator" defaultValue={"Công khai"}>
+    <Option key={1} value={"Công khai"}>Công khai</Option>
+    <Option key={2} value={"Nội bộ"}>Nội bộ</Option>
+    <Option key={3} value={"Ngưng nhận hồ sơ"}>Ngưng nhận hồ sơ</Option>
+    <Option key={4} value={"Đóng"}>Đóng</Option>
+  </Select>;
+  const [visibleType, setVisibleType] = useState<string>('list')
 
   useEffect(() => {
-    props.getListProfile({recruitment: idRecruitment,statusCV:idProcess, page: page, size: 30});
-  }, [page, idRecruitment,idProcess])
+    props.getListProfile({recruitment: idRecruitment, statusCV: idProcess, page: page, size: 30});
+  }, [page, idRecruitment, idProcess])
 
   useEffect(() => {
     document.title = "Chi tiết tin tuyển dụng";
   }, [document.title]);
 
   useEffect(() => {
-    props.getListRecruitment({id:idRecruitment,page: 1, size: 100})
+    props.getListRecruitment({id: idRecruitment, page: 1, size: 100})
   }, []);
 
   const convertArrayToTree = (arrays: any) => {
@@ -95,15 +108,6 @@ function DetailRecruitment(props: IProps) {
     console.log(key);
   }
 
-  const operations = <Select className="tab-operator" defaultValue={"Công khai"}>
-    <Option key={1} value={"Công khai"}>Công khai</Option>
-    <Option key={2} value={"Nội bộ"}>Nội bộ</Option>
-    <Option key={3} value={"Ngưng nhận hồ sơ"}>Ngưng nhận hồ sơ</Option>
-    <Option key={4} value={"Đóng"}>Đóng</Option>
-  </Select>;
-
-  const [visibleType, setVisibleType] = useState<string>('list')
-
   function candidateListClicked() {
     setVisibleType("list")
   }
@@ -112,23 +116,14 @@ function DetailRecruitment(props: IProps) {
     setVisibleType("kanban")
   }
 
-  const [col, setCol] = useState({
-    list: 24,
-    filter: 0,
-  })
-
   function onChangeDateRange(dates: any) {
     dates[0].set({hour: 0, minute: 0, second: 0})
     dates[1].set({hour: 23, minute: 59, second: 59})
     let [start, end] = [dates[0], dates[1]];
     setValueDateRange([start, end])
-    // const datesFilter: any = props.schedule?.result?.filter((d: any) => d.date >= +start && d.date < +end);
-    // const outObject = dateFilter(datesFilter)
-    // return setOutObject(outObject)
   }
 
-
-  function handleProcessClicked(value:string) {
+  function handleProcessClicked(value: string) {
     setIdProcess(value);
   }
 
@@ -154,7 +149,7 @@ function DetailRecruitment(props: IProps) {
               </div>
 
               <div className="ml-3">Hạn nộp hồ sơ: <span
-                className="p">{moment(props.listRecruitment?.rows[0]?.quantity).format(dateFormat)}</span>
+                className="p">{moment(props.listRecruitment?.rows[0]?.deadLine).format(dateFormat)}</span>
               </div>
 
               <Popover content={contentMore} trigger="click">
@@ -162,10 +157,10 @@ function DetailRecruitment(props: IProps) {
               </Popover>
             </div>
           </div>
-          <div>
-            <Dropdown.Button overlay={menu} style={{marginBottom: 15}} type="primary">Thêm ứng viên</Dropdown.Button>
+          {/*<div>*/}
+          {/*  <Dropdown.Button overlay={menu} style={{marginBottom: 15}}  type="primary">Thêm ứng viên</Dropdown.Button>*/}
 
-          </div>
+          {/*</div>*/}
         </div>
 
         <Tabs defaultActiveKey="1" className="tab-detail" onChange={callback} tabBarExtraContent={operations}>
@@ -174,12 +169,11 @@ function DetailRecruitment(props: IProps) {
               <Header className='header-candidate-detail'>
                 <div className='header-align recruitment-option'>
                   <div className='recruitment-option__pop-over'>
-                    <Select defaultValue="join" className="select-custom"
-                            style={{
-                              fontWeight: 600,
-                              width: 145,
-                              marginRight: 15
-                            }}>
+                    <Select defaultValue="join" className="select-custom" style={{
+                      fontWeight: 600,
+                      width: 145,
+                      marginRight: 15
+                    }}>
                       <Option value="all">Tất cả</Option>
                       <Option value="join">Tiếp nhận hồ sơ</Option>
                       <Option value="public">Phỏng vấn</Option>
@@ -200,8 +194,8 @@ function DetailRecruitment(props: IProps) {
                         onChange={onChangeDateRange}
                       />
                     </div>
-
                   </div>
+
                   <div className="c-schedule-header__align-right align">
                     <Button size="large" className={visibleType === 'list' ? "icon-list is-active" : "icon-list"}
                             onClick={candidateListClicked}><Icon type="unordered-list"
@@ -231,9 +225,9 @@ function DetailRecruitment(props: IProps) {
                           {props.listRecruitment?.rows[0]?.interviewProcess.map((item: any, index: any) => {
                             return <div className="flex-1"
                                         style={index === props.listRecruitment?.rows[0]?.interviewProcess?.length - 1 ? {borderRight: 0} : undefined}
-                                        key={index} onClick={()=>handleProcessClicked(item.id)}>
-                              <div className={item.id.includes(idProcess)?"process-active":"padding-process"}>
-                                <div className="p">2</div>
+                                        key={index} onClick={() => handleProcessClicked(item.id)}>
+                              <div className={item.id.includes(idProcess) ? "process-active" : "padding-process"}>
+                                <div className="p">{item.total ? item.total : "0"}</div>
                                 <div className="bold-text">{item.name}</div>
                               </div>
                             </div>
@@ -241,7 +235,7 @@ function DetailRecruitment(props: IProps) {
                         </div>
                       </div>
                     </>
-                    <ListProfile idRecruitment={idRecruitment}/>
+                    <ListProfile idRecruitment={idRecruitment} idProcess={idProcess}/>
                   </>
                   :
                   <KanbanProcess/>
@@ -252,11 +246,16 @@ function DetailRecruitment(props: IProps) {
 
           <TabPane tab="Lịch phỏng vấn" key="2" style={{background: "#e8e8e8", marginLeft: 40}}>
             <div className="schedule-tab-detail">
-              <ScheduleManagerPages/>
+              <ScheduleManagerPages idRecruitment={idRecruitment}/>
             </div>
           </TabPane>
         </Tabs>
       </div>
+      {/*<CreateProfileForm/>*/}
+
+      {/*{*/}
+      {/*  props.createCandidate.loading ? <Loading/> : null*/}
+      {/*}*/}
     </>
   );
 

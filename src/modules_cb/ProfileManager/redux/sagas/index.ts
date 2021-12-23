@@ -5,8 +5,9 @@ import {getListProfileAsync} from "./profile/list";
 import {updateProfileAsync} from "./profile/update";
 import {getDetailProfileAsync} from "./detail/detail";
 import {
+  CHANGE_PROCESS,
   CREATE_BOOKING, CREATE_NOTE,
-  CREATE_PROFILE, CREATE_REASON_REJECT, DELETE_NOTE,
+  CREATE_PROFILE, CREATE_REJECT_CANDIDATE, DELETE_NOTE,
   DELETE_PROFILE,
   GET_ACTIVITY,
   GET_BOOKING,
@@ -32,7 +33,8 @@ import {createNoteAsync} from "./note/createNote";
 import {updateNoteAsync} from "./note/updateNote";
 import {deleteNoteAsync} from "./note/deleteNote";
 import {uploadAvatarAsync} from "./profile/uploadAvatar";
-import {createReasonRejectAsync} from "./profile/createReasonReject";
+import {createRejectCandidateAsync} from "./profile/createRejectCandidate";
+import {changeProcessAsync} from "./profile/changeProcess";
 
 export default function* root() {
   return all([
@@ -54,7 +56,8 @@ export default function* root() {
     yield takeLatest(UPDATE_NOTE, updateNoteAsync),
     yield takeLatest(DELETE_NOTE, deleteNoteAsync),
     yield takeLatest(UPLOAD_AVATAR, uploadAvatarAsync),
-    yield takeLatest(CREATE_REASON_REJECT, createReasonRejectAsync),
+    yield takeLatest(CREATE_REJECT_CANDIDATE, createRejectCandidateAsync),
+    yield takeLatest(CHANGE_PROCESS, changeProcessAsync),
 
   ]);
 }

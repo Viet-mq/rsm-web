@@ -82,9 +82,9 @@ export interface DeleteProfileRequest {
   id: string,
 }
 
-export interface ReasonRejectRequest {
+export interface CreateRejectCandidateRequest {
   idProfile?: string,
-  reason:string
+  reason: string
 }
 
 export interface UploadAvatarRequest {
@@ -208,7 +208,8 @@ export interface UpdateBookingRequest {
 
 export interface DataShowBooking {
   id: string,
-  fullName: string
+  fullName: string,
+  idRecruitment?:string,
 }
 
 //detail
@@ -314,3 +315,11 @@ export interface CreateNoteRequest {
 export interface DeleteNoteRequest {
   id: string,
 }
+
+export interface ChangeProcessRequest {
+  idProfile?: string,
+  recruitmentId?: string,
+  statusCVId?: string
+}
+
+

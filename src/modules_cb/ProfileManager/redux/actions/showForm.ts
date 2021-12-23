@@ -1,4 +1,4 @@
-import {DetailCV, DetailProfileEntity, ProfileEntity} from "../../types";
+import {ChangeProcessRequest, DetailCV, DetailProfileEntity, ProfileEntity} from "../../types";
 
 export interface ProfileFormAction {
   type: string,
@@ -12,6 +12,10 @@ export interface ProfileFormAction {
   show_upload_avatar?: boolean,
   id_upload_avatar?: string,
   show_reason_reject?:boolean,
+  show_change_process?:boolean,
+  id_recruitment?:string,
+  show_change_recruitment?:boolean,
+  change_process?:ChangeProcessRequest
 
 }
 
@@ -21,10 +25,24 @@ export const PROFILE_SHOW_FORM_UPDATE_DETAIL = "PROFILE_SHOW_FORM_UPDATE_DETAIL"
 export const PROFILE_SHOW_FORM_DETAIL = "PROFILE_SHOW_FORM_DETAIL";
 export const PROFILE_SHOW_FORM_UPLOAD_AVATAR = "PROFILE_SHOW_FORM_UPLOAD_AVATAR";
 export const REASON_REJECT_SHOW_FORM = "REASON_REJECT_SHOW_FORM";
+export const SHOW_CHANGE_PROCESS_FORM = "SHOW_CHANGE_PROCESS_FORM";
+export const SHOW_CHANGE_RECRUITMENT_FORM = "SHOW_CHANGE_RECRUITMENT_FORM";
 
 export const showFormCreate = (show: boolean): ProfileFormAction => ({
   type: PROFILE_SHOW_FORM_CREATE,
   show_create: show
+});
+
+export const showChangeProcessForm = (show: boolean,changeProcess?:ChangeProcessRequest): ProfileFormAction => ({
+  type: SHOW_CHANGE_PROCESS_FORM,
+  show_change_process: show,
+  change_process:changeProcess
+});
+
+export const showChangeRecruitmentForm = (show: boolean,idRecruitment?:string): ProfileFormAction => ({
+  type: SHOW_CHANGE_RECRUITMENT_FORM,
+  show_change_recruitment: show,
+  id_recruitment:idRecruitment
 });
 
 export const showFormReasonReject = (show: boolean): ProfileFormAction => ({

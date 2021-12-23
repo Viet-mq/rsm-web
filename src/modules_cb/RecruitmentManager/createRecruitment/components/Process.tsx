@@ -127,7 +127,6 @@ function ProcessForm(props: IProps) {
       </div>
       <div className="c-schedule-interview-popup">
         <div className='ant-col-14 grid-left'>
-
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="column1">
               {(provided, snap) => (

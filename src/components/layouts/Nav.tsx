@@ -184,7 +184,7 @@ const Nav = (props: IProps) => {
         <Menu.Item key="reason-reject-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/reason-reject-manager`}>
             <AiOutlineMinusCircle className="mr-2"/>
-            <span>Lý do từ chối </span>
+            <span>Lý do loại</span>
           </Link>
         </Menu.Item>
 

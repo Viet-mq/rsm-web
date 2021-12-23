@@ -1,58 +1,57 @@
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Form, Icon, Modal} from "antd";
+import {Button, Form, Modal, Radio} from "antd";
 import React, {useEffect, useState} from "react";
-import moment from "moment";
 import 'devextreme/dist/css/dx.light.css';
-import {createBooking, getBooking, showFormBooking, updateBooking} from "../../ProfileManager/redux/actions";
-import {getListAccount} from "../../AccountManager/redux/actions";
-import {getListStatusCV} from "../../StatusCVManager/redux/actions";
-
-import {DataShowBooking} from "../../ProfileManager/types";
-import BookingForm from "../../ProfileManager/components/BookingForm";
-
+import {changeProcess, showChangeProcessForm} from "../../ProfileManager/redux/actions";
+import {getListRecruitment} from "../../RecruitmentManager/redux/actions";
 
 const mapStateToProps = (state: RootState) => ({
-  delete: state.scheduleManager.deleteSchedule
+  profileManager: state.profileManager,
+  recruitment: state.recruitmentManager.list
 })
+
 const connector = connect(mapStateToProps,
   {
-    getBooking,
-    getListAccount,
-    getListStatusCV,
-    updateBooking,
-    createBooking,
-    showFormBooking,
+    showChangeProcessForm,
+    changeProcess,
+    getListRecruitment
+  })
 
-  });
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends FormComponentProps, ReduxProps {
-
 }
 
 function ChangeProcessForm(props: IProps) {
-  const [visible, setVisible] = useState(false);
-
-
-  const handleBooking = (event: any) => {
-    event.stopPropagation();
-    // let req: DataShowBooking = {
-    //   id: dataDetail.idProfile,
-    //   fullName: dataDetail.fullName
-    // }
-    // props.showFormBooking(true, req);
-    // props.handleClosePopupDetail()
-  }
   const fontWeight = {
     fontWeight: 500
   }
-  // useEffect(() => setVisible(props?.visible), [props?.visible]);
+const [process,setProcess]=useState(props.profileManager.showForm.change_process?.statusCVId)
+  console.log(props.profileManager.showForm.change_process?.statusCVId)
+  useEffect(() => {
+    if (props.profileManager.showForm.show_change_process) {
+      props.getListRecruitment({id: props.profileManager.showForm.change_process?.recruitmentId})
+    }
+  }, [])
+  console.log(props.recruitment.rows[0]?.interviewProcess)
+  const handleCloseForm = (event: any) => {
+    event.stopPropagation();
+    props.showChangeProcessForm(false)
+  }
 
-  function btnDeleteScheduleClicked() {
+  function btnChangeProcessClicked() {
+    // props.changeProcess({
+    //   idProfile: "string",
+    //   recruitmentId: "string",
+    //   statusCVId: "string"
+    // })
+  }
 
-    // props.handleClosePopupDetail();
+  function handleChangeProcess(event:any) {
+    console.log(event.value)
+    setProcess(event.value)
   }
 
   return (
@@ -60,15 +59,14 @@ function ChangeProcessForm(props: IProps) {
       <Modal
         zIndex={2}
         maskClosable={false}
-        visible={visible}
-        // visible={true}
+        visible={props.profileManager.showForm.show_change_process}
         centered={true}
         width="530px"
         className="custom"
         afterClose={() => {
         }}
         onCancel={() => {
-          // props.handleClosePopupDetail()
+          props.showChangeProcessForm(false)
         }}
         footer={""}>
         <div className="schedule-detail">
@@ -77,23 +75,25 @@ function ChangeProcessForm(props: IProps) {
           </div>
           <div className="schedule-detail-content">
             <div style={{...fontWeight}}>Vòng tuyển dụng</div>
-        
+
+            <Radio.Group onChange={handleChangeProcess} value={process}>
+              {props.recruitment.rows[0]?.interviewProcess.map((item: any, index: any) => {
+                return <Radio key={index} value={item.id} className="flex-items-center">
+                  {item.name}
+                </Radio>
+              })}
+            </Radio.Group>
+
           </div>
         </div>
-        <div className="footer-left">
-          <Button onClick={btnDeleteScheduleClicked} style={{color: "red", marginRight: 10}}><Icon type="delete"
-                                                                                                   className="mr-1"/>Xóa</Button>
-          <Button onClick={event => handleBooking(event)}><Icon type="edit" className="mr-1"/>Chỉnh sửa</Button>
 
+        <div className="footer-right">
+          <Button onClick={handleCloseForm}>Hủy</Button>
+          <Button onClick={btnChangeProcessClicked} type={"primary"} className="ml-2">Chuyển</Button>
         </div>
-
       </Modal>
-      <BookingForm/>
-
-
     </>
   );
-
 }
 
 export default connector(Form.create<IProps>()(ChangeProcessForm));

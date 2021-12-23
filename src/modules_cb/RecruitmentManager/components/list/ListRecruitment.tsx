@@ -93,7 +93,7 @@ function ListRecruitment(props: IProps) {
             <div className="detail-flex">
               <div>{props.recruitment?.jobName}</div>
               <div><BsDot size={20}/></div>
-              <div>Mức lương: <span className="p"> {props.recruitment?.salary}</span>
+              <div>Mức lương: <span className="p"> {props.recruitment?.detailOfSalary}</span>
               </div>
 
               <div className="ml-3">SL cần tuyển: <span className="p">{props.recruitment?.quantity}</span>
@@ -144,7 +144,7 @@ function ListRecruitment(props: IProps) {
                         key={index}>
               <div className="padding-process">
                 <Link to={`/recruitment-manager/detail/${props.recruitment?.id}?roundID=${item.id}`}>
-                  <div className="p">2</div>
+                  <div className="p">{item.total?item.total:"0"}</div>
                   <div className="bold-text">{item.name}</div>
                 </Link>
               </div>

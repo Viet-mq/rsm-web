@@ -439,7 +439,7 @@ function BookingForm(props: BookingFormProps) {
                     <Form.Item className="form-label" label="Tin tuyển dụng" labelCol={{span: 24}}
                                wrapperCol={{span: 24}}>
                       {getFieldDecorator('recruitmentId', {
-                        initialValue: undefined,
+                        initialValue: props.showBooking.data_booking?.idRecruitment,
                         rules: [
                           {
                             message: 'Vui lòng chọn tin tuyển dụng',
@@ -447,7 +447,7 @@ function BookingForm(props: BookingFormProps) {
                           },
                         ],
                       })(
-                        <Select className="bg-white text-black" style={fontWeightStyle}
+                        <Select disabled className="bg-white text-black" style={fontWeightStyle}
                                 placeholder="Chọn tin tuyển dụng"
                         >
                           {props.listRecruitment.rows?.map((item: any, index: any) => (

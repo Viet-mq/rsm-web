@@ -39,3 +39,9 @@
   font-weight: 500;
 }
 
+.select-option{
+  .ant-select-selection .ant-select-selection__placeholder {
+    color: $color-place-holder !important;
+  }
+}
+

@@ -10,6 +10,7 @@ import ScheduleInterview from "../components/ScheduleInterview";
 import DetailScheduleInterview from "../components/DetailScheduleInterview";
 import {getAllSchedule, showFormSchedule} from "../redux/actions";
 import {DataShowSchedule, ScheduleEntity} from "../types";
+import {useLocation} from "react-router-dom";
 
 const {Search} = Input;
 const {Option} = Select;
@@ -29,6 +30,7 @@ const connector = connect(mapStateToProps, {
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends ReduxProps {
+  idRecruitment?:string,
 }
 
 function ScheduleManagerPages(props: IProps) {
@@ -44,11 +46,16 @@ function ScheduleManagerPages(props: IProps) {
   const [visibleDetail, setVisibleDetail] = useState(false)
   const [idDetail, setIdDetail] = useState<string>('');
   const [valueDateRange, setValueDateRange] = useState<any[]>([moment().startOf("week"), moment().endOf('week')])
+  const {pathname} = useLocation();
 
   useEffect(() => {
     document.title = "Lịch";
     props.countBookingNumber();
-    props.getAllSchedule();
+
+    if (pathname.includes("recruitment-manager")) props.getAllSchedule({
+      recruitment: props.idRecruitment,
+    });
+    else props.getAllSchedule();
   }, []);
 
   useEffect(() => {

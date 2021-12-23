@@ -10,6 +10,8 @@ import {put, select} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
 import {AppError} from "src/models/common";
 import {RootState} from "src/redux/reducers";
+import {createRecruitment} from "../../../../RecruitmentManager/redux/actions";
+import {ChangeProcessRequest} from "../../../types";
 
 export function* createProfileAsync(action: CreateProfileAction) {
   try {
@@ -21,7 +23,8 @@ export function* createProfileAsync(action: CreateProfileAction) {
       NotificationSuccess('Thành công', "Tạo Profile thành công");
       yield put(showFormCreate(false));
       const params = yield select((state: RootState) => state.profileManager.list.params);
-      yield put(getListProfile(params))
+      yield put(getListProfile(params));
+
     }
   } catch (e) {
     yield put(createProfileError(new AppError(e.message)));

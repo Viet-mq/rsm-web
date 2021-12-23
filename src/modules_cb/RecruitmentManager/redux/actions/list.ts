@@ -13,7 +13,7 @@ export const GET_LIST_RECRUITMENT = "GET_LIST_RECRUITMENT";
 export const GET_LIST_RECRUITMENT_SUCCESS = "GET_LIST_RECRUITMENT_SUCCESS";
 export const GET_LIST_RECRUITMENT_ERROR = "GET_LIST_RECRUITMENT_ERROR";
 
-export const getListRecruitment = (params: any): RecruitmentListAction => ({
+export const getListRecruitment = (params?: any): RecruitmentListAction => ({
   type: GET_LIST_RECRUITMENT,
   params
 });

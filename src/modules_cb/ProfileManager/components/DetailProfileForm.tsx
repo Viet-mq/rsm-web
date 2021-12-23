@@ -7,8 +7,11 @@ import {
   getBooking,
   getDetailProfile,
   getListNote,
+  showChangeProcessForm,
+  showChangeRecruitmentForm,
   showFormBooking,
-  showFormDetail, showFormReasonReject,
+  showFormDetail,
+  showFormReasonReject,
   showFormUpdate,
   showFormUpdateDetail,
   showFormUploadAvatar,
@@ -18,7 +21,7 @@ import {
 import {showFormCreateNote, showFormUpdateNote} from "../../ProfileManager/redux/actions/note/showNote";
 import {Avatar, Badge, Button, Icon, Pagination, Popconfirm, Popover, Steps, Table, Tag, Timeline, Tooltip} from "antd";
 import React, {useEffect, useState} from "react";
-import {DataShowBooking, DeleteNoteRequest, DetailCV, NoteEntity} from "../types";
+import {ChangeProcessRequest, DataShowBooking, DeleteNoteRequest, DetailCV, NoteEntity} from "../types";
 import moment from "moment";
 import {ColumnProps} from "antd/lib/table";
 import {emptyText} from "../../../configs/locales";
@@ -28,9 +31,10 @@ import UpdateNoteForm from "./UpdateNoteForm";
 import {BsThreeDotsVertical, FaLongArrowAltRight, RiFullscreenExitLine, RiFullscreenLine} from "react-icons/all";
 import StarRatings from 'react-star-ratings';
 import UploadAvatarForm from "./UploadAvatarForm";
-import CreateReasonRejectForm from "./CreateReasonRejectForm";
+import CreateReasonRejectForm from "./CreateRejectCandidateForm";
 import {getListRecruitment} from "../../RecruitmentManager/redux/actions";
 import ChangeProcessForm from "./ChangeProcessForm";
+import ChangeRecruitmentForm from "./ChangeRecruitmentForm";
 
 const {Step} = Steps;
 
@@ -44,7 +48,7 @@ const mapStateToProps = (state: RootState) => ({
   createNote: state.profileManager.createNote,
   updateNote: state.profileManager.updateNote,
   skill: state.skillManager.list,
-  recruitment:state.recruitmentManager.list
+  recruitment: state.recruitmentManager.list
 })
 
 const connector = connect(mapStateToProps,
@@ -66,6 +70,8 @@ const connector = connect(mapStateToProps,
     showFormUploadAvatar,
     showFormReasonReject,
     getListRecruitment,
+    showChangeProcessForm,
+    showChangeRecruitmentForm
   });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -110,43 +116,27 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
     },
   ]
-
-  function unixTimeToDate(unixTime: number): Date {
-    return new Date(unixTime);
-  }
-
   const [visiblePopover, setVisiblePopover] = useState<boolean>(false);
-
-  const handleUploadAvatar = (e: any) => {
-    e.preventDefault();
-    setVisiblePopover(false)
-    if (e?.target) {
-      e.target.disabled = true;
-      e.target.disabled = false;
-    }
-    props.showFormUploadAvatar(true, props.detail.result?.id);
-  }
-
-  const handleDeleteAvatar = (event: any) => {
-    event.stopPropagation();
-    setVisiblePopover(false)
-    // let req: DeleteTalentPoolRequest = {
-    //   id: talentPool.id
-    // }
-    // props.deleteTalentPool(req);
-  }
-
+  const [popoverRecruitment, setPopoverRecruitment] = useState<boolean>(false);
   const content = (<ul style={{width: 165}} className="popup-popover">
+    <li>
+      <a onClick={handleUploadAvatar}>Cập nhật ảnh đại diện</a>
+    </li>
+
+    <li>
+      <a onClick={handleDeleteAvatar} style={{color: "red"}}>Xóa ảnh đại diện</a>
+    </li>
+
+  </ul>);
+
+
+  const contentMore = (
+    <ul style={{width: 185}} className="popup-popover">
       <li>
-        <a onClick={handleUploadAvatar}>Cập nhật ảnh đại diện</a>
+        <a onClick={handleShowRecruitment}><Icon type="inbox" className="mr-1"/>Chuyển sang tin khác</a>
       </li>
-
-      <li>
-        <a onClick={handleDeleteAvatar} style={{color: "red"}}>Xóa ảnh đại diện</a>
-      </li>
-
-    </ul>);
-
+    </ul>
+  );
   const columns: ColumnProps<NoteEntity>[] = [
     {
       title: "Người phỏng vấn",
@@ -260,9 +250,34 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       props.getActivityLogs({idProfile: props.showDetail.id_detail});
       props.getBooking({idProfile: props.showDetail.id_detail});
       props.getListNote({idProfile: props.showDetail.id_detail})
-      props.getListRecruitment({id:props.detail.result?.recruitmentId})
+      if (props.detail.result?.recruitmentId) props.getListRecruitment({id: props.detail.result?.recruitmentId})
     }
   }, [props.showDetail.id_detail])
+
+
+  function handleUploadAvatar(e: any) {
+    e.preventDefault();
+    setVisiblePopover(false)
+    if (e?.target) {
+      e.target.disabled = true;
+      e.target.disabled = false;
+    }
+    props.showFormUploadAvatar(true, props.detail.result?.id);
+  }
+
+  function handleDeleteAvatar(event: any) {
+    event.stopPropagation();
+    setVisiblePopover(false)
+  }
+
+  function handleShowRecruitment() {
+    setPopoverRecruitment(false)
+    props.showChangeRecruitmentForm(true, props.detail.result?.recruitmentId)
+  }
+
+  function unixTimeToDate(unixTime: number): Date {
+    return new Date(unixTime);
+  }
 
   const handleClose = (e: any) => {
     e.preventDefault();
@@ -337,7 +352,8 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     event.stopPropagation();
     let req: DataShowBooking = {
       id: props.detail.result?.id,
-      fullName: props.detail.result?.fullName
+      fullName: props.detail.result?.fullName,
+      idRecruitment:props.detail.result?.recruitmentId
     }
     props.showFormBooking(true, req);
   }
@@ -346,6 +362,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     console.log(visible)
     setVisiblePopover(visible);
   };
+
 
   const handleDeleteNote = (event: any, entity: NoteEntity) => {
     event.stopPropagation();
@@ -371,9 +388,20 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
   }
 
-  function handleShowReasonRejectForm(event:any) {
+  function handleShowReasonRejectForm(event: any) {
     event.stopPropagation();
     props.showFormReasonReject(true);
+  }
+
+  function handleChangeProcess() {
+    let req: ChangeProcessRequest = (
+      {
+        idProfile: props.detail.result?.id,
+        recruitmentId: props.detail.result?.recruitmentId,
+        statusCVId: props.detail.result?.statusCVId
+      }
+    )
+    props.showChangeProcessForm(true, req)
   }
 
   return (
@@ -500,13 +528,14 @@ function DetailProfileForm(props: DetailProfileFormProps) {
         <div className="detail-paragraph-3">
           <div className="detail-paragraph-3__title">
             <h1>Lịch phỏng vấn</h1>
-            <div className="detail-paragraph-3__title--button">
-              <Button size="small" className="ant-btn mr-1 ant-btn-sm"
-                      onClick={event => onBtnUpdateBooking(event)}
-              >
-                <Icon type="calendar"/> Đặt/Sửa lịch
-              </Button>
-            </div>
+            {props.detail.result?.recruitmentId ? (<div className="detail-paragraph-3__title--button">
+                <Button size="small" className="ant-btn mr-1 ant-btn-sm"
+                        onClick={event => onBtnUpdateBooking(event)}
+                >
+                  <Icon type="calendar"/> Đặt/Sửa lịch
+                </Button>
+              </div>
+            ) : null}
           </div>
           <div className="detail-paragraph-3__content">
             <div>
@@ -533,27 +562,55 @@ function DetailProfileForm(props: DetailProfileFormProps) {
             </div>
 
             <div className='apply-position-box'>
-              <div className="apply-position-title font-15-bold-500"><Badge color="green"/>{props.detail.result?.recruitmentName}</div>
-              <div className="apply-option flex-items-center">
-                <div className="apply-step">
+              {props.detail.result?.recruitmentId ? (
+                <>
+                  <div className="apply-position-title font-15-bold-500"><Badge
+                    color="green"/>{props.detail.result?.recruitmentName}</div>
+                  <div className="apply-option flex-items-center">
 
-                  <Steps current={1} progressDot className="apply-step">
-                    {
-                      props.recruitment.rows[0]?.interviewProcess?.map((item:any,index:any)=>{
-                       return <Step key={index} className="width-apply-position"/>
-                      })
-                    }
-                  </Steps>
-                  <div style={{textAlign: "center", width: 225}}>
-                    {props.detail.result?.statusCVName}
+                    <div className="apply-step">
+                      <Steps
+                        current={props.recruitment?.rows[0]?.interviewProcess.findIndex((item: any) => item.name === props.detail.result?.statusCVName)}
+                        progressDot className="apply-step">
+                        {
+                          props.recruitment?.rows[0]?.interviewProcess?.map((item: any, index: any) => {
+                            return <Step key={index} className="width-apply-position"/>
+                          })
+                        }
+                      </Steps>
+                      <div style={{textAlign: "center", width: 225}}>
+                        {props.detail.result?.statusCVName}
+                      </div>
+                    </div>
+
+                    <div className="flex-items-center">
+                      <Button onClick={handleChangeProcess}
+                              className='mr-2'><FaLongArrowAltRight style={{color: "#64d271", marginRight: 5}}/>Chuyển
+                        vòng</Button>
+                      <Button className='mr-2' onClick={handleShowReasonRejectForm}><Icon type="stop" style={{
+                        fontSize: "120%",
+                        marginTop: 5
+                      }}/></Button>
+                      <Popover content={contentMore}
+                               onVisibleChange={(visible: any) => setPopoverRecruitment(visible)}
+                               visible={popoverRecruitment}
+                               placement="bottomRight"
+                               trigger="click">
+                        <Button><BsThreeDotsVertical size={20} className="mt-1"/></Button>
+                      </Popover>
+                    </div>
                   </div>
-                </div>
-                <div className="flex-items-center">
-                  <Button className='mr-2'><FaLongArrowAltRight style={{color: "#64d271", marginRight: 5}}/>Chuyển vòng</Button>
-                  <Button className='mr-2' onClick={handleShowReasonRejectForm}><Icon type="stop" style={{fontSize: "120%", marginTop: 5}}/></Button>
-                  <Button><BsThreeDotsVertical size={20} className="mt-1"/></Button>
-                </div>
-              </div>
+                </>
+              ) : (
+                <>
+                  <div className="p-2">
+                    <div className="pb-2">Ứng viên chưa thuộc tin tuyển dụng nào</div>
+                    <div><Button onClick={handleShowRecruitment} type={"primary"} size={"large"}><Icon type="inbox"/>Chuyển
+                      ứng viên vào tin</Button></div>
+                  </div>
+                </>
+              )}
+
             </div>
 
             <div style={{display: "flex", justifyContent: "space-between"}}>
@@ -671,7 +728,8 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       <UpdateNoteForm/>
       <UploadAvatarForm/>
       <CreateReasonRejectForm/>
-     <ChangeProcessForm/>
+      <ChangeProcessForm/>
+      <ChangeRecruitmentForm/>
 
       {props.createNote.loading ||
       props.updateNote.loading ||

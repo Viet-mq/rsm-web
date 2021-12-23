@@ -55,7 +55,7 @@ function UpdateReasonRejectForm(props: UpdateReasonRejectFormProps) {
     <Modal
       zIndex={2}
       maskClosable={false}
-      title="Cập nhật lý do từ chối"
+      title="Cập nhật lý do loại"
       visible={props.showForm.show_update}
       centered={true}
       width="550px"
