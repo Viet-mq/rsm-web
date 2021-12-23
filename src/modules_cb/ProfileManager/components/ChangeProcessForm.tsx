@@ -6,6 +6,7 @@ import React, {useEffect, useState} from "react";
 import 'devextreme/dist/css/dx.light.css';
 import {changeProcess, showChangeProcessForm} from "../../ProfileManager/redux/actions";
 import {getListRecruitment} from "../../RecruitmentManager/redux/actions";
+import {ChangeProcessRequest} from "../types";
 
 const mapStateToProps = (state: RootState) => ({
   profileManager: state.profileManager,
@@ -28,30 +29,30 @@ function ChangeProcessForm(props: IProps) {
   const fontWeight = {
     fontWeight: 500
   }
-const [process,setProcess]=useState(props.profileManager.showForm.change_process?.statusCVId)
-  console.log(props.profileManager.showForm.change_process?.statusCVId)
+  const [process, setProcess] = useState<any>('')
+
   useEffect(() => {
     if (props.profileManager.showForm.show_change_process) {
       props.getListRecruitment({id: props.profileManager.showForm.change_process?.recruitmentId})
+      setProcess(props.profileManager.showForm.change_process?.statusCVId)
     }
-  }, [])
-  console.log(props.recruitment.rows[0]?.interviewProcess)
+  }, [props.profileManager.showForm.show_change_process])
   const handleCloseForm = (event: any) => {
     event.stopPropagation();
     props.showChangeProcessForm(false)
   }
 
   function btnChangeProcessClicked() {
-    // props.changeProcess({
-    //   idProfile: "string",
-    //   recruitmentId: "string",
-    //   statusCVId: "string"
-    // })
+    let req: ChangeProcessRequest = ({
+        idProfile: props.profileManager.showForm.change_process?.idProfile,
+        recruitmentId: props.profileManager.showForm.change_process?.recruitmentId,
+        statusCVId: process
+      })
+    props.changeProcess(req)
   }
 
-  function handleChangeProcess(event:any) {
-    console.log(event.value)
-    setProcess(event.value)
+  function handleChangeProcess(event: any) {
+    setProcess(event.target.value)
   }
 
   return (

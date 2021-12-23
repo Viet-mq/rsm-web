@@ -34,10 +34,10 @@ function ChangeRecruitmentForm(props: IProps) {
   }
   const [addRecruitment, setAddRecruitment] = useState('')
   const [filterRecruitment,setFilterRecruitment]=useState<RecruitmentEntity[]>([])
+  const [process, setProcess] = useState<any>('')
 
   useEffect(() => {
     if (props.profileManager.showForm.show_change_recruitment) {
-      // props.getListRecruitment({id: props.profileManager.showForm.id_recruitment})
       props.getListRecruitment();
     }
   }, [props.profileManager.showForm.show_change_recruitment])
@@ -47,6 +47,10 @@ function ChangeRecruitmentForm(props: IProps) {
       setFilterRecruitment(props.recruitment.rows.filter((item: any) => item.id !== props.profileManager.showForm?.id_recruitment))
     }
   },[props.recruitment])
+
+  useEffect(()=>{
+    setProcess(filterRecruitment[0]?.interviewProcess[0].id)
+  },[filterRecruitment])
 
   const handleCloseForm = (event: any) => {
     event.stopPropagation();
@@ -69,6 +73,14 @@ function ChangeRecruitmentForm(props: IProps) {
 
   function handleSelectRecruitment(value: any) {
     setAddRecruitment(value);
+  }
+
+  function handleChangeProcess(event:any) {
+    setProcess(event.target.value)
+  }
+
+  function handleChangeRecruitment(event:any) {
+    console.log(event.target?.value)
   }
 
   return (
@@ -95,7 +107,7 @@ function ChangeRecruitmentForm(props: IProps) {
             <div className="select-option">
               <Select style={{width: "100%", paddingTop: 15}}
                       defaultValue={filterRecruitment[0]?.id}
-                      // onSelect={handleSelectRecruitment}
+                      onSelect={handleChangeRecruitment}
                       placeholder={"Chọn tin tuyển dụng"}>
                 {filterRecruitment?.map((item: any, index: any) => {
                   return <Option key={index} value={item.id}>{item.title}</Option>
@@ -107,12 +119,14 @@ function ChangeRecruitmentForm(props: IProps) {
             <div className="schedule-detail-content">
               <div style={{...fontWeight}}>Vòng tuyển dụng</div>
 
-              {filterRecruitment[0]?.interviewProcess.map((item: any, index: any) => {
+              <Radio.Group onChange={handleChangeProcess} value={process}>
+                {filterRecruitment[0]?.interviewProcess.map((item: any, index: any) => {
+                  return <Radio key={index}  value={item.id} className="flex-items-center">
+                    {item.name}
+                  </Radio>
+                })}
+              </Radio.Group>
 
-                return <Radio key={index} defaultChecked={index===0?true:false} className="flex-items-center">
-                  {item.name}
-                </Radio>
-              })}
             </div>
 
           </div>
@@ -144,7 +158,7 @@ function ChangeRecruitmentForm(props: IProps) {
             <div className="select-option">
               <Select style={{width: "100%", paddingTop: 15}} onSelect={handleSelectRecruitment}
                       placeholder={"Chọn tin tuyển dụng"}>
-                {props.recruitment.rows.map((item: any, index: any) => {
+                {props.recruitment.rows?.map((item: any, index: any) => {
                   return <Option key={index} value={item.id}>{item.title}</Option>
                 })}
               </Select>
