@@ -1,6 +1,6 @@
 import {AppError} from "../../../../../models/common";
 import * as Actions from "../../actions";
-import {GetElasticSearchAction} from "../../actions";
+import {GetElasticSearchAction, RESET_SEARCH} from "../../actions";
 import {ProfileEntity, SearchRequest} from "../../../types";
 
 export interface GetElasticSearchState {
@@ -34,6 +34,12 @@ export default (state = initState, {
 }: GetElasticSearchAction): GetElasticSearchState => {
   switch (type) {
     case Actions.GET_ELASTIC_SEARCH:
+      return {
+        ...state,
+        request,
+        loading: true,
+      }
+      case Actions.RESET_SEARCH:
       return {
         ...state,
         request,

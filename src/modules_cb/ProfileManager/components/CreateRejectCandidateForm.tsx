@@ -82,15 +82,15 @@ function CreateRejectCandidateForm(props: IProps) {
 
         <Form.Item label="Lý do loại" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('reason', {
-            initialValue: null,
+            initialValue: undefined,
             rules: [
               {
-                message: 'Chọn lý do loại',
+                message: 'Vui lòng chọn lý do loại',
                 required: true,
               },
             ],
           })(
-            <Select className="bg-white text-black"
+            <Select className="bg-white text-black" placeholder={"Chọn lý do loại"}
             >
               {props.reasonReject.rows?.map((item: any, index: any) => (
                 <Option key={index} value={item.id}>{item.reason}</Option>

@@ -94,7 +94,7 @@ export interface UploadAvatarRequest {
 
 export interface SearchRequest {
   key: string,
-  size: number,
+  size?: number,
 }
 
 //cv

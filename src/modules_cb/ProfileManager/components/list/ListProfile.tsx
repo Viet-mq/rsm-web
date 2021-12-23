@@ -6,7 +6,7 @@ import {Avatar, Badge, Button, Icon, Popconfirm, Select, Table, Tooltip, TreeSel
 import {emptyText} from "src/configs/locales";
 import {
   deleteProfile,
-  getListProfile,
+  getListProfile, resetSearch,
   showFormBooking,
   showFormDetail,
   showFormUpdate,
@@ -40,7 +40,7 @@ const connector = connect(mapStateToProps, {
   showFormDetail,
   showFormUploadCV,
   showFormBooking,
-
+  resetSearch
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -356,8 +356,8 @@ function ListProfile(props: ListProfileProps) {
   }, [page])
 
   useEffect(() => {
-    setDataSource(props.elasticSearch.rowsRs);
     if (props.elasticSearch.request?.key) {
+      setDataSource(props.elasticSearch.rowsRs);
       setKeySearch(props.elasticSearch.request?.key)
     }
   }, [props.elasticSearch.triggerSearch])
@@ -479,7 +479,8 @@ function ListProfile(props: ListProfileProps) {
         columnKey: null,
       },
     });
-    setKeySearch('')
+    props.resetSearch({key:""})
+    setKeySearch("")
     props.getListProfile({page: 1, size: 100});
   }
 

@@ -4,10 +4,10 @@ import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Modal, Radio, Select} from "antd";
 import React, {useEffect, useState} from "react";
 import 'devextreme/dist/css/dx.light.css';
-import {changeProcess, showChangeProcessForm} from "../../ProfileManager/redux/actions";
+import {changeProcess, showChangeProcessForm} from "../redux/actions";
 import {getListRecruitment} from "../../RecruitmentManager/redux/actions";
 import {ChangeProcessRequest} from "../types";
-import {RecruitmentEntity} from "../../RecruitmentManager/types";
+import {InterviewProcess, RecruitmentEntity} from "../../RecruitmentManager/types";
 
 const {Option} = Select;
 
@@ -29,12 +29,12 @@ interface IProps extends FormComponentProps, ReduxProps {
 }
 
 function ChangeRecruitmentForm(props: IProps) {
-  const fontWeight = {
-    fontWeight: 500
-  }
+  const fontWeight = {fontWeight: 500}
   const [addRecruitment, setAddRecruitment] = useState('')
-  const [filterRecruitment,setFilterRecruitment]=useState<RecruitmentEntity[]>([])
+  const [filterRecruitment, setFilterRecruitment] = useState<RecruitmentEntity[]>([])
   const [process, setProcess] = useState<any>('')
+  const [filterProcess, setFilterProcess] = useState<InterviewProcess[]|any>([])
+  const [valuesSelect, setValueSelect] = useState('')
 
   useEffect(() => {
     if (props.profileManager.showForm.show_change_recruitment) {
@@ -42,22 +42,27 @@ function ChangeRecruitmentForm(props: IProps) {
     }
   }, [props.profileManager.showForm.show_change_recruitment])
 
-  useEffect(()=>{
-    if (props.profileManager.showForm.show_change_recruitment){
+  useEffect(() => {
+    if (props.profileManager.showForm.show_change_recruitment) {
       setFilterRecruitment(props.recruitment.rows.filter((item: any) => item.id !== props.profileManager.showForm?.id_recruitment))
     }
-  },[props.recruitment])
+  }, [props.recruitment])
 
-  useEffect(()=>{
+  useEffect(() => {
     setProcess(filterRecruitment[0]?.interviewProcess[0].id)
-  },[filterRecruitment])
+    setFilterProcess(filterRecruitment[0]?.interviewProcess)
+    setValueSelect(filterRecruitment[0]?.id)
+  }, [filterRecruitment])
 
   const handleCloseForm = (event: any) => {
     event.stopPropagation();
     props.showChangeProcessForm(false)
+    setAddRecruitment('')
+    setFilterRecruitment([])
+    setProcess('')
   }
 
-  function btnChangeRecruitmentClicked() {
+  function btnAddRecruitmentClicked() {
     if (addRecruitment) {
       const findRecruitment = props.recruitment.rows.find((item: any) => item.id === addRecruitment)
 
@@ -68,19 +73,28 @@ function ChangeRecruitmentForm(props: IProps) {
       }
       props.changeProcess(req)
     }
-
   }
 
   function handleSelectRecruitment(value: any) {
     setAddRecruitment(value);
   }
 
-  function handleChangeProcess(event:any) {
+  function handleChangeProcess(event: any) {
     setProcess(event.target.value)
   }
 
-  function handleChangeRecruitment(event:any) {
-    console.log(event.target?.value)
+  function handleChangeRecruitment(value: any) {
+    setValueSelect(value)
+    setFilterProcess(filterRecruitment.find((item: any) => item.id === value)?.interviewProcess)
+  }
+
+  function btnChangeRecruitmentClicked() {
+    let req: ChangeProcessRequest = {
+      idProfile: props.profileManager.showForm?.id_detail,
+      recruitmentId: valuesSelect,
+      statusCVId: process,
+    }
+    props.changeProcess(req)
   }
 
   return (
@@ -95,9 +109,7 @@ function ChangeRecruitmentForm(props: IProps) {
           className="custom"
           afterClose={() => {
           }}
-          onCancel={() => {
-            props.showChangeProcessForm(false)
-          }}
+          onCancel={handleCloseForm}
           footer={""}>
           <div className="schedule-detail">
             <div className="schedule-detail-head">
@@ -106,7 +118,7 @@ function ChangeRecruitmentForm(props: IProps) {
 
             <div className="select-option">
               <Select style={{width: "100%", paddingTop: 15}}
-                      defaultValue={filterRecruitment[0]?.id}
+                      value={valuesSelect}
                       onSelect={handleChangeRecruitment}
                       placeholder={"Chọn tin tuyển dụng"}>
                 {filterRecruitment?.map((item: any, index: any) => {
@@ -120,8 +132,8 @@ function ChangeRecruitmentForm(props: IProps) {
               <div style={{...fontWeight}}>Vòng tuyển dụng</div>
 
               <Radio.Group onChange={handleChangeProcess} value={process}>
-                {filterRecruitment[0]?.interviewProcess.map((item: any, index: any) => {
-                  return <Radio key={index}  value={item.id} className="flex-items-center">
+                {filterProcess?.map((item: any, index: any) => {
+                  return <Radio key={index} value={item.id} className="flex-items-center">
                     {item.name}
                   </Radio>
                 })}
@@ -167,7 +179,7 @@ function ChangeRecruitmentForm(props: IProps) {
 
           <div className="footer-right">
             <Button onClick={handleCloseForm}>Hủy</Button>
-            <Button onClick={btnChangeRecruitmentClicked} type={"primary"} className="ml-2">Chuyển</Button>
+            <Button onClick={btnAddRecruitmentClicked} type={"primary"} className="ml-2">Chuyển</Button>
           </div>
         </Modal>)
       }
