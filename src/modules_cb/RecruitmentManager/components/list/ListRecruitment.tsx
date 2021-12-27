@@ -69,10 +69,6 @@ function ListRecruitment(props: IProps) {
     <div className='border-right' style={{width: 200}}>Thời hạn dự kiến: <span className="bold-text"></span></div>
   </div>)
 
-  useEffect(() => {
-    props.getListRecruitment({page: 1, size: 90});
-  }, []);
-
   const handleDelete = (event: any) => {
     event.stopPropagation();
     props.deleteRecruitment({id: props.recruitment?.id})
