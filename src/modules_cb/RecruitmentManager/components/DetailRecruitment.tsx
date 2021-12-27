@@ -1,7 +1,7 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
-import {Button, DatePicker, Dropdown, Icon, Layout, Menu, Popover, Select, Tabs} from "antd";
+import {Button, DatePicker, Icon, Layout, Menu, Popover, Select, Tabs} from "antd";
 import {BsDot, ImArrowLeft2} from "react-icons/all";
 import {Link, useParams} from "react-router-dom";
 import Search from "antd/es/input/Search";
@@ -11,9 +11,7 @@ import KanbanProcess from "./KanbanProcess";
 import ListProfile from "../../ProfileManager/components/list/ListProfile";
 import moment from "moment";
 import 'moment/locale/vi';
-import {getListRecruitment} from "../redux/actions";
-import CreateProfileForm from "../../ProfileManager/components/CreateProfileForm";
-import Loading from "../../../components/Loading";
+import {getDetailRecruitment} from "../redux/actions";
 
 const {Option} = Select;
 const {TabPane} = Tabs;
@@ -22,11 +20,11 @@ const {Header, Content} = Layout;
 
 const mapStateToProps = (state: RootState) => ({
   listCandidate: state.profileManager.list,
-  listRecruitment: state.recruitmentManager.list,
+  detailRecruitment: state.recruitmentManager.detailRecruitment,
   createCandidate: state.profileManager.create,
 })
 const connector = connect(mapStateToProps, {
-  getListRecruitment,
+  getDetailRecruitment,
   getListProfile,
   showFormCreate
 });
@@ -48,8 +46,8 @@ function DetailRecruitment(props: IProps) {
   const contentMore = (<div className="content-more">
     <div className="flex-items-center">
       <div className='border-right pr-3'>Người tạo:<span
-        className="bold-text"> {props.listRecruitment?.rows[0]?.createBy}</span></div>
-      <div className=" ml-3">Ngày tạo:<span className="bold-text"> {props.listRecruitment?.rows[0]?.createAt}</span>
+        className="bold-text"> {props.detailRecruitment?.rows[0]?.createBy}</span></div>
+      <div className=" ml-3">Ngày tạo:<span className="bold-text"> {props.detailRecruitment?.rows[0]?.createAt}</span>
       </div>
     </div>
     <div className='border-right' style={{width: 200}}>Thời hạn dự kiến: <span className="bold-text"></span>
@@ -80,7 +78,7 @@ function DetailRecruitment(props: IProps) {
   }, [document.title]);
 
   useEffect(() => {
-    props.getListRecruitment({id: idRecruitment, page: 1, size: 95})
+    props.getDetailRecruitment({id: idRecruitment, page: 1, size: 95})
   }, []);
 
   const convertArrayToTree = (arrays: any) => {
@@ -135,21 +133,21 @@ function DetailRecruitment(props: IProps) {
             <ImArrowLeft2 size={20}/>
           </Link>
           <div className="header-box-main">
-            <span className="p">{props.listRecruitment?.rows[0]?.title}</span>
+            <span className="p">{props.detailRecruitment?.rows[0]?.title}</span>
             <Link to={`/recruitment-manager/edit`}>
               <Icon type={"edit"} style={{fontSize: "150%", marginLeft: 15}}></Icon>
             </Link>
             <div className="detail-flex">
-              <div>{props.listRecruitment?.rows[0]?.jobName}</div>
+              <div>{props.detailRecruitment?.rows[0]?.jobName}</div>
               <div><BsDot size={20}/></div>
-              <div>Mức lương: <span className="p"> {props.listRecruitment?.rows[0]?.salary}</span>
+              <div>Mức lương: <span className="p"> {props.detailRecruitment?.rows[0]?.salary}</span>
               </div>
 
-              <div className="ml-3">SL cần tuyển: <span className="p">{props.listRecruitment?.rows[0]?.quantity}</span>
+              <div className="ml-3">SL cần tuyển: <span className="p">{props.detailRecruitment?.rows[0]?.quantity}</span>
               </div>
 
               <div className="ml-3">Hạn nộp hồ sơ: <span
-                className="p">{moment(props.listRecruitment?.rows[0]?.deadLine).format(dateFormat)}</span>
+                className="p">{moment(props.detailRecruitment?.rows[0]?.deadLine).format(dateFormat)}</span>
               </div>
 
               <Popover content={contentMore} trigger="click">
@@ -222,9 +220,9 @@ function DetailRecruitment(props: IProps) {
                     <>
                       <div className='recruitment-list'>
                         <div className="list-process">
-                          {props.listRecruitment?.rows[0]?.interviewProcess.map((item: any, index: any) => {
+                          {props.detailRecruitment?.rows[0]?.interviewProcess.map((item: any, index: any) => {
                             return <div className="flex-1"
-                                        style={index === props.listRecruitment?.rows[0]?.interviewProcess?.length - 1 ? {borderRight: 0} : undefined}
+                                        style={index === props.detailRecruitment?.rows[0]?.interviewProcess?.length - 1 ? {borderRight: 0} : undefined}
                                         key={index} onClick={() => handleProcessClicked(item.id)}>
                               <div className={item.id.includes(idProcess) ? "process-active" : "padding-process"}>
                                 <div className="p">{item.total ? item.total : "0"}</div>

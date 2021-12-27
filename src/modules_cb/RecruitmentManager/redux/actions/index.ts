@@ -1,5 +1,5 @@
 export * from './list'
 export * from './deleteRecruitment'
 export * from './create'
-// export * from './showForm'
+export * from './detail'
 export * from './update'
