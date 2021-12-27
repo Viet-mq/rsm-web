@@ -84,7 +84,9 @@ export interface DeleteProfileRequest {
 
 export interface CreateRejectCandidateRequest {
   idProfile?: string,
-  reason: string
+  reason: string,
+  recruitmentId?: string,
+  statusCVId?: string
 }
 
 export interface UploadAvatarRequest {

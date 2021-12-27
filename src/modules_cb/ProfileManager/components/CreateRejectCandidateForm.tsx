@@ -46,8 +46,10 @@ function CreateRejectCandidateForm(props: IProps) {
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         let req: CreateRejectCandidateRequest = {
-          idProfile: props.profileManager.showForm?.id_detail,
-          reason: values.reason
+          idProfile: props.profileManager.detail?.params.idProfile,
+          reason: values.reason,
+          recruitmentId: props.profileManager.detail?.result?.recruitmentId,
+          statusCVId: props.profileManager.detail?.result?.statusCVId
         }
         props.createRejectCandidate(req);
         return;

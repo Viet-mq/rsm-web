@@ -34,14 +34,14 @@ function RecruitmentManagerPages(props: IProps) {
 
   useEffect(() => {
     document.title = "Quản lý tin tuyển dụng";
-    props.getListRecruitment({page: 1, size: 100});
+    props.getListRecruitment({page: 1, size: 91});
   }, []);
 
   function onChangeDateRange(dates: any) {
     dates[0].set({hour: 0, minute: 0, second: 0})
     dates[1].set({hour: 23, minute: 59, second: 59})
     let [start, end] = [dates[0], dates[1]];
-    props.getListRecruitment({from: +start, to: +end, page: 1, size: 100});
+    props.getListRecruitment({from: +start, to: +end, page: 1, size: 92});
     setValueDateRange([start, end])
   }
 
@@ -49,7 +49,9 @@ function RecruitmentManagerPages(props: IProps) {
     console.log(`selected ${value}`);
     if (value !== "all") {
       props.getListRecruitment({key: value})
-    } else props.getListRecruitment({page: 1, size: 100});
+    } else{
+      props.getListRecruitment({page: 1, size: 93});
+    }
   }
 
   return (
@@ -115,7 +117,7 @@ function RecruitmentManagerPages(props: IProps) {
         <div className="c-schedule-header__align-right align">
           <Search
             placeholder="Tìm kiếm nhanh trong danh sách"
-            onSearch={value => props.getListRecruitment({key:value,page: 1, size: 100})}
+            onSearch={value => props.getListRecruitment({keySearch:value,page: 1, size: 94})}
             style={{width: 340}}
           />
           <Button

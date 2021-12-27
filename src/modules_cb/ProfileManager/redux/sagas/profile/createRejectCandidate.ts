@@ -10,6 +10,7 @@ import {
   createRejectCandidateSuccess,
   getListProfile, showFormReasonReject
 } from "../../actions";
+import {getListRecruitment} from "../../../../RecruitmentManager/redux/actions";
 
 export function* createRejectCandidateAsync(action: CreateRejectCandidateAction) {
   try {
@@ -21,7 +22,9 @@ export function* createRejectCandidateAsync(action: CreateRejectCandidateAction)
       NotificationSuccess('Thành công', "Tạo lý do loại thành công");
       yield put(showFormReasonReject(false));
       const params = yield select((state: RootState) => state.profileManager.list.params);
+      const paramsRecruitment= yield select((state:RootState)=>state.recruitmentManager.list.params)
       yield put(getListProfile(params))
+      yield put(getListRecruitment(paramsRecruitment))
     }
   } catch (e) {
     yield put(createRejectCandidateError(new AppError(e.message)));

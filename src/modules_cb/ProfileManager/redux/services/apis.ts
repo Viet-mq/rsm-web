@@ -15,7 +15,7 @@ export const getListProfile = async (params: any): Promise<ListResponseBase2<Pro
     url += "job=" + params.job + "&"
   }
   if (params.levelJob !== null && params.levelJob !== undefined) {
-    url += "levelJob=" + params.fullName + "&"
+    url += "levelJob=" + params.levelJob + "&"
   }
   if (params.department !== null && params.department !== undefined) {
     url += "department=" + params.department + "&"

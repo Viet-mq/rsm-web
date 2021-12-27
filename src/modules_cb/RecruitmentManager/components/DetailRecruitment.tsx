@@ -80,7 +80,7 @@ function DetailRecruitment(props: IProps) {
   }, [document.title]);
 
   useEffect(() => {
-    props.getListRecruitment({id: idRecruitment, page: 1, size: 100})
+    props.getListRecruitment({id: idRecruitment, page: 1, size: 95})
   }, []);
 
   const convertArrayToTree = (arrays: any) => {

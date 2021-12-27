@@ -2,12 +2,13 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Col, DatePicker, Form, Icon, Input, InputNumber, Row, Select, Switch} from "antd";
-import React, {FormEvent} from "react";
+import React, {FormEvent, useEffect, useState} from "react";
 import moment from "moment";
 import {showFormCreate as showJobFormCreate} from "../../../JobManager/redux/actions";
 import 'devextreme/dist/css/dx.light.css';
 import ReactQuill from "react-quill";
-import {CreateRecruitmentRequest} from "../../types";
+import {Prompt, useHistory} from "react-router-dom";
+import {CreateRecruitmentRequest, InterviewProcess} from "../../types";
 
 const {Option} = Select;
 
@@ -72,39 +73,53 @@ function InformationForm(props: IProps) {
     'link', 'image', 'video'
   ]
 
-  function onBtnCreateClicked(e: FormEvent) {
-    e.preventDefault();
-    (e.target as any).disabled = true;
-    (e.target as any).disabled = false;
-    props.form.validateFieldsAndScroll((err, values) => {
+  const history = useHistory()
 
-      if (!err) {
-        const date = new Date(values.date);
-        const time = new Date(values.timeStart);
-        const dd = date.getDate();
-        const mm = date.getMonth() + 1;
-        const yyyy = date.getFullYear();
-        const hh = time.getHours();
-        const minutes = time.getMinutes();
-        const dateChanged: any = new Date(yyyy, mm - 1, dd, hh, minutes, 0);
-        const interviewTime: any = new Date(yyyy, mm - 1, dd, hh, minutes + values.interviewTime, 0);
+  useEffect(() => {
 
-        return;
+    return history.listen((location) => {
+      if(location.pathname==='/recruitment-manager/create/process'){
+        onFormChange();
       }
-    });
+    })
+  },[])
+
+  function onFormChange() {
+
+      props.form.validateFieldsAndScroll((err, values) => {
+        if (!err) {
+          let req:CreateRecruitmentRequest={
+            job : values.job,
+            address : values.address,
+            typeOfJob : values.typeOfJob,
+            quantity : values.quantity,
+            deadLine : values.deadLine,
+            talentPool : values.talentPool,
+            from : values.from,
+            to : values.to,
+            detailOfSalary : values.detailOfSalary,
+            jobDescription : values.jobDescription,
+            requirementOfJob : values.requirementOfJob,
+            interest : values.interest,
+          }
+          return;
+        }
+
+      });
 
   }
 
+  console.log("/recruitment-manager/create/process")
   return (
+    <>
     <div className="main-content">
       <div style={{padding: "24px 24px 0 24px"}}>
         <div className="schedule-detail-title">Thông tin chung</div>
       </div>
       <div className="c-schedule-interview-popup">
         <div className='ant-col-14 grid-left'>
-          <Form>
-            <Form.Item className="form-label" label="Tiều đề tin tuyển dụng" labelCol={{span: 24}}
-                       wrapperCol={{span: 24}}>
+          <Form >
+            <Form.Item className="form-label" label="Tiều đề tin tuyển dụng" labelCol={{span: 24}} wrapperCol={{span: 24}}>
               {getFieldDecorator('title', {
                 initialValue: '',
                 rules: [
@@ -147,8 +162,7 @@ function InformationForm(props: IProps) {
 
             <Row style={{marginTop: 15}}>
               <Col span={12} style={{paddingRight: 10}}>
-                <Form.Item className="form-label" label="Địa điểm làm việc" labelCol={{span: 24}}
-                           wrapperCol={{span: 24}}>
+                <Form.Item className="form-label" label="Địa điểm làm việc" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                   {getFieldDecorator('address', {
                     initialValue: undefined,
                     rules: [
@@ -166,11 +180,10 @@ function InformationForm(props: IProps) {
                     </Select>
                   )}
                 </Form.Item>
-
               </Col>
+
               <Col span={12}>
-                <Form.Item className="form-label" label="Loại hình công việc" labelCol={{span: 24}}
-                           wrapperCol={{span: 24}}>
+                <Form.Item className="form-label" label="Loại hình công việc" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                   {getFieldDecorator('typeOfJob', {
                     initialValue: 'Toàn thời gian',
                     rules: [
@@ -212,6 +225,7 @@ function InformationForm(props: IProps) {
                 </Form.Item>
 
               </Col>
+
               <Col span={12}>
                 <Form.Item className="form-label" label="Hạn nộp hồ sơ" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                   {getFieldDecorator('deadLine', {
@@ -276,8 +290,7 @@ function InformationForm(props: IProps) {
 
               </Col>
               <Col span={12}>
-                <Form.Item className="form-label" label="Đến" labelCol={{span: 24}}
-                           wrapperCol={{span: 24}}>
+                <Form.Item className="form-label" label="Đến" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                   {getFieldDecorator('to', {
                     initialValue: 0,
                     rules: [
@@ -291,12 +304,10 @@ function InformationForm(props: IProps) {
                                  className="bg-white text-black"/>
                   )}
                 </Form.Item>
-
               </Col>
             </Row>
 
-            <Form.Item className="form-label" label="Hiển thị trên tin tuyển dụng" labelCol={{span: 24}}
-                       wrapperCol={{span: 24}}>
+            <Form.Item className="form-label" label="Hiển thị trên tin tuyển dụng" labelCol={{span: 24}} wrapperCol={{span: 24}}>
               {getFieldDecorator('detailOfSalary', {
                 initialValue: 'Chi tiết mức lương',
                 rules: [
@@ -317,8 +328,7 @@ function InformationForm(props: IProps) {
 
             <div className="font-20-bold-500 mb-4">Mô tả công việc</div>
 
-            <Form.Item className="form-label" label="Mô tả chung về công việc" labelCol={{span: 24}}
-                       style={formItemHeight} wrapperCol={{span: 24}}>
+            <Form.Item className="form-label" label="Mô tả chung về công việc" labelCol={{span: 24}} style={formItemHeight} wrapperCol={{span: 24}}>
               {getFieldDecorator('jobDescription', {
                 initialValue: '',
                 rules: [
@@ -338,8 +348,7 @@ function InformationForm(props: IProps) {
                 />)}
             </Form.Item>
 
-            <Form.Item className="form-label" label="Yêu cầu công việc" labelCol={{span: 24}} style={formItemHeight}
-                       wrapperCol={{span: 24}}>
+            <Form.Item className="form-label" label="Yêu cầu công việc" labelCol={{span: 24}} style={formItemHeight} wrapperCol={{span: 24}}>
               {getFieldDecorator('requirementOfJob', {
                 initialValue: '',
                 rules: [
@@ -359,8 +368,7 @@ function InformationForm(props: IProps) {
                 />)}
             </Form.Item>
 
-            <Form.Item className="form-label" label="Quyền lợi" labelCol={{span: 24}} style={formItemHeight}
-                       wrapperCol={{span: 24}}>
+            <Form.Item className="form-label" label="Quyền lợi" labelCol={{span: 24}} style={formItemHeight} wrapperCol={{span: 24}}>
               {getFieldDecorator('interest', {
                 initialValue: '',
                 rules: [
@@ -384,6 +392,8 @@ function InformationForm(props: IProps) {
         </div>
       </div>
     </div>
+    </>
+
   );
 }
 

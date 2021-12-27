@@ -175,12 +175,7 @@ function ScheduleManagerPages(props: IProps) {
       const queryResult = acc.find((qr: any) => {
         const a: any = qr.date;
         const b: any = moment(curr.date).format("DD [tháng] MM, YYYY");
-        // const qrConvert: any = new Date(a)
-        // const currConvert: any = new Date(b)
-        // qrConvert.setHours(0, 0, 0);
-        // currConvert.setHours(0, 0, 0);
-        // const diffTime = Math.abs((qrConvert - currConvert) / (1000 * 60 * 60 * 24));
-        const diffTime = a.localeCompare(b)
+       const diffTime = a.localeCompare(b)
         return diffTime === 0;
 
       });
@@ -204,8 +199,6 @@ function ScheduleManagerPages(props: IProps) {
     const outObject = dateFilter(datesFilter)
     return setOutObject(outObject)
   }
-
-  console.log(outObject)
 
   return (
     <>

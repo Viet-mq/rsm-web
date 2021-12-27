@@ -29,21 +29,21 @@ export interface InterviewProcess {
 }
 
 export interface CreateRecruitmentRequest {
-  address: string,
-  deadLine: number,
-  interest: string,
-  interviewProcess: InterviewProcess[],
-  interviewer: null,
+  address?: string,
+  deadLine?: number,
+  interest?: string,
+  interviewProcess?: InterviewProcess[],
+  interviewer?: null,
   job: string,
-  jobDescription: string,
-  quantity: number,
-  requirementOfJob: string,
-  talentPool: string,
-  title: string,
-  typeOfJob: string
-  detailOfSalary: string,
-  from: number,
-  to: number,
+  jobDescription?: string,
+  quantity?: number,
+  requirementOfJob?: string,
+  talentPool?: string,
+  title?: string,
+  typeOfJob?: string
+  detailOfSalary?: string,
+  from?: number,
+  to?: number,
 }
 
 export interface UpdateRecruitmentRequest {

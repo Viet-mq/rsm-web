@@ -70,7 +70,7 @@ function ListRecruitment(props: IProps) {
   </div>)
 
   useEffect(() => {
-    props.getListRecruitment({page: 1, size: 100});
+    props.getListRecruitment({page: 1, size: 90});
   }, []);
 
   const handleDelete = (event: any) => {

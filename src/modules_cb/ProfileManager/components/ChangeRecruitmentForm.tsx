@@ -33,7 +33,7 @@ function ChangeRecruitmentForm(props: IProps) {
   const [addRecruitment, setAddRecruitment] = useState('')
   const [filterRecruitment, setFilterRecruitment] = useState<RecruitmentEntity[]>([])
   const [process, setProcess] = useState<any>('')
-  const [filterProcess, setFilterProcess] = useState<InterviewProcess[]|any>([])
+  const [filterProcess, setFilterProcess] = useState<InterviewProcess[] | any>([])
   const [valuesSelect, setValueSelect] = useState('')
 
   useEffect(() => {

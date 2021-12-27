@@ -497,6 +497,7 @@ function ListProfile(props: ListProfileProps) {
     })
   }
 
+  console.log(selected)
   return (
     <>
       {pathname === '/profile-manager' ? (
@@ -525,7 +526,7 @@ function ListProfile(props: ListProfileProps) {
                       placeholder="Họ tên"/>
 
               <Select style={width}
-                      placeholder="Công việc"
+                      placeholder="Vị trí công việc"
                       value={selected.job ? selected.job : undefined}
                       onChange={(value: any) => setSelected({...selected, job: value})}
               >
@@ -537,7 +538,7 @@ function ListProfile(props: ListProfileProps) {
               <Select style={width}
                       value={selected.jobLevel ? selected.jobLevel : undefined}
                       onChange={(value: any) => setSelected({...selected, jobLevel: value})}
-                      placeholder="Vị trí tuyển dụng"
+                      placeholder="Cấp bậc công việc"
               >
                 {props.listJobLevel.rows?.map((item: any, index: any) => (
                   <Option key={index} value={item.id}>{item.name}</Option>

@@ -31,7 +31,6 @@ interface LayoutProps extends FormComponentProps, ReduxProps {
 }
 
 const CreateLayout = (props: LayoutProps) => {
-  console.log("path:",props.path)
   const screenWidth = document.documentElement.clientWidth;
   const [collapsed, setCollapsed] = useState(screenWidth <= env.tabletWidth ? true : false)
   const history = useHistory();
