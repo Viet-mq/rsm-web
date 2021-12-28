@@ -7,10 +7,10 @@ import {RootState} from "src/redux/reducers";
 import {
   CreateRejectCandidateAction,
   createRejectCandidateError,
-  createRejectCandidateSuccess,
+  createRejectCandidateSuccess, getDetailProfile,
   getListProfile, showFormReasonReject
 } from "../../actions";
-import {getListRecruitment} from "../../../../RecruitmentManager/redux/actions";
+import {getDetailRecruitment, getListRecruitment} from "../../../../RecruitmentManager/redux/actions";
 
 export function* createRejectCandidateAsync(action: CreateRejectCandidateAction) {
   try {
@@ -22,9 +22,11 @@ export function* createRejectCandidateAsync(action: CreateRejectCandidateAction)
       NotificationSuccess('Thành công', "Tạo lý do loại thành công");
       yield put(showFormReasonReject(false));
       const params = yield select((state: RootState) => state.profileManager.list.params);
-      const paramsRecruitment= yield select((state:RootState)=>state.recruitmentManager.list.params)
+      const paramsDetailRecruitment = yield select((state: RootState) => state.recruitmentManager.detailRecruitment.params);
+      const paramsDetail=yield select((state:RootState)=>state.profileManager.detail.params)
       yield put(getListProfile(params))
-      yield put(getListRecruitment(paramsRecruitment))
+      yield put(getDetailRecruitment(paramsDetailRecruitment))
+      yield put(getDetailProfile(paramsDetail))
     }
   } catch (e) {
     yield put(createRejectCandidateError(new AppError(e.message)));

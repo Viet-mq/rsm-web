@@ -48,7 +48,7 @@ function ChangeProcessForm(props: IProps) {
         recruitmentId: props.profileManager.showForm.change_process?.recruitmentId,
         statusCVId: process
       })
-    props.changeProcess(req)
+    props.changeProcess(req,false)
   }
 
   function handleChangeProcess(event: any) {

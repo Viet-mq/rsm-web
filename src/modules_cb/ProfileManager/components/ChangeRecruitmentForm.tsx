@@ -71,7 +71,7 @@ function ChangeRecruitmentForm(props: IProps) {
         recruitmentId: addRecruitment,
         statusCVId: findRecruitment.interviewProcess[0].id,
       }
-      props.changeProcess(req)
+      props.changeProcess(req,true)
     }
   }
 
@@ -94,7 +94,7 @@ function ChangeRecruitmentForm(props: IProps) {
       recruitmentId: valuesSelect,
       statusCVId: process,
     }
-    props.changeProcess(req)
+    props.changeProcess(req,true)
   }
 
   return (

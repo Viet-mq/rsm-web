@@ -5,16 +5,18 @@ export interface ChangeProcessAction {
   type: string,
   request?: ChangeProcessRequest,
   response?: ResponseBase2,
-  error?: AppError
+  error?: AppError,
+  isChangeRecruitment?:boolean
 }
 
 export const CHANGE_PROCESS = "CHANGE_PROCESS";
 export const CHANGE_PROCESS_SUCCESS = "CHANGE_PROCESS_SUCCESS";
 export const CHANGE_PROCESS_ERROR = "CHANGE_PROCESS_ERROR";
 
-export const changeProcess = (request: ChangeProcessRequest): ChangeProcessAction => ({
+export const changeProcess = (request: ChangeProcessRequest,isChangeRecruitment:boolean): ChangeProcessAction => ({
   type: CHANGE_PROCESS,
-  request
+  request,
+  isChangeRecruitment
 });
 
 export const changeProcessSuccess = (response: ResponseBase2): ChangeProcessAction => ({
