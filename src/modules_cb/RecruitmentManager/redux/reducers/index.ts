@@ -2,9 +2,9 @@ import {combineReducers} from "redux";
 import list, {RecruitmentListState} from "./list";
 import deleteRecruitment, {DeleteRecruitmentState} from "./deleteRecruitment";
 import create, {CreateRecruitmentState} from "./create";
-// import showForm, {RecruitmentFormState} from "./showForm";
 import update, {UpdateRecruitmentState} from "./update";
 import detailRecruitment,{ DetailRecruitmentState } from "./detail";
+import listKanbanCandidate, { ListKanbanCandidateState } from "./listKanbanCandidate";
 
 export interface RecruitmentManagerModuleState {
   list: RecruitmentListState,
@@ -12,6 +12,7 @@ export interface RecruitmentManagerModuleState {
   create: CreateRecruitmentState,
   detailRecruitment:DetailRecruitmentState,
   update: UpdateRecruitmentState,
+  listKanbanCandidate:ListKanbanCandidateState,
 }
 
 export default combineReducers<RecruitmentManagerModuleState>({
@@ -20,4 +21,5 @@ export default combineReducers<RecruitmentManagerModuleState>({
   create,
   detailRecruitment,
   update,
+  listKanbanCandidate,
 });

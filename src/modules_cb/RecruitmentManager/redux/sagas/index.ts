@@ -7,10 +7,12 @@ import {
   CREATE_RECRUITMENT,
   DELETE_RECRUITMENT,
   GET_DETAIL_RECRUITMENT,
+  GET_LIST_KANBAN_CANDIDATE,
   GET_LIST_RECRUITMENT,
   UPDATE_RECRUITMENT
 } from "../actions";
 import {getDetailRecruitmentAsync} from "./detail";
+import {getListKanbanCandidateAsync} from "./listKanbanCandidate";
 
 export default function* root() {
   return all([
@@ -19,5 +21,6 @@ export default function* root() {
     yield takeLatest(GET_LIST_RECRUITMENT, getListRecruitmentAsync),
     yield takeLatest(GET_DETAIL_RECRUITMENT, getDetailRecruitmentAsync),
     yield takeLatest(UPDATE_RECRUITMENT, updateRecruitmentAsync),
+    yield takeLatest(GET_LIST_KANBAN_CANDIDATE, getListKanbanCandidateAsync),
   ]);
 }

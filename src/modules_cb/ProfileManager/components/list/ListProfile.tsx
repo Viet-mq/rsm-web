@@ -497,7 +497,6 @@ function ListProfile(props: ListProfileProps) {
     })
   }
 
-  console.log(selected)
   return (
     <>
       {pathname === '/profile-manager' ? (
