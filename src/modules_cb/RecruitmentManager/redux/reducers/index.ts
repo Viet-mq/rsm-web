@@ -10,7 +10,7 @@ export interface RecruitmentManagerModuleState {
   list: RecruitmentListState,
   deleteRecruitment: DeleteRecruitmentState,
   create: CreateRecruitmentState,
-  detailRecruitment:DetailRecruitmentState,
+  detailRecruitment: DetailRecruitmentState,
   update: UpdateRecruitmentState,
   listKanbanCandidate:ListKanbanCandidateState,
 }

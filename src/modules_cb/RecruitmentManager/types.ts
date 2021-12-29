@@ -2,17 +2,17 @@ export interface RecruitmentEntity {
   id: string,
   title: string,
   jobId: string,
-  jobName:string,
-  address:string,
-  typeOfJob:string,
+  jobName: string,
+  address: string,
+  typeOfJob: string,
   quantity: number,
   jobDescription: string,
-  requirementOfJob:string,
+  requirementOfJob: string,
   deadLine: number,
-  talentPoolId:string,
-  talentPoolName:string,
+  talentPoolId: string,
+  talentPoolName: string,
   interviewer: null,
-  interviewProcess:InterviewProcess[],
+  interviewProcess: InterviewProcess[],
   interest: string,
   createAt: string,
   createBy: string,
@@ -25,7 +25,7 @@ export interface RecruitmentEntity {
 export interface InterviewProcess {
   id: string,
   name: string,
-  total:string,
+  total: string,
 }
 
 export interface CreateRecruitmentRequest {
@@ -66,5 +66,26 @@ export interface UpdateRecruitmentRequest {
 
 export interface DeleteRecruitmentRequest {
   id: string,
+}
+
+export interface StepNavInfo {
+  key: string,
+  style: any,
+  link: string,
+  icon: string,
+  styleText: any,
+  text: string
+}
+
+export const STEP_NAV_INFORMATION = "information";
+export const STEP_NAV_PROCESS = "process";
+export const STEP_NAV_INTERVIEWERS = "interviewers";
+
+export interface StepNavAction {
+  type: string,
+  id: string,
+  disable: boolean,
+  info_check?: boolean,
+  process_check?: boolean
 }
 
