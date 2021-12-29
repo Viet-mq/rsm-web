@@ -1,13 +1,14 @@
-import {STEP_NAV_INFORMATION, STEP_NAV_INTERVIEWERS, STEP_NAV_PROCESS, StepNavAction, StepNavInfo} from "../../types";
-import {CHANGE_INFO_CHECK, CHANGE_PROCESS_CHECK, CHANGE_STATE_NAV_STEP} from "../actions";
+import {STEP_NAV_INFORMATION, STEP_NAV_INTERVIEWERS, STEP_NAV_PROCESS, StepNavInfo} from "../../types";
+import * as Actions from "../actions";
+import {StepNavAction} from "../actions";
 
-export interface NavSteps {
+export interface NavStepsState {
   navs: StepNavInfo[]
   info_check: boolean
   process_check: boolean
 }
 
-const initState: NavSteps = {
+const initState: NavStepsState = {
   info_check: true,
   process_check: false,
   navs: [
@@ -24,7 +25,7 @@ const initState: NavSteps = {
       style: {display: 'flex', alignItems: 'center', pointerEvents: 'none'},
       link: '/recruitment-manager/create/process',
       icon: 'team',
-      styleText: {color: 'red'},
+      styleText: {color: '#969C9D'},
       text: 'Quy trình tuyển dụng'
     },
     {
@@ -32,35 +33,35 @@ const initState: NavSteps = {
       style: {display: 'flex', alignItems: 'center', pointerEvents: 'none'},
       link: '/recruitment-manager/create/interviewers',
       icon: 'solution',
-      styleText: {color: 'red'},
+      styleText: {color: '#969C9D'},
       text: 'Hội đông tuyển dụng'
     }
   ]
 }
 
 
-export default (state = initState, action: StepNavAction): NavSteps => {
+export default (state = initState, action: StepNavAction): NavStepsState => {
   switch (action.type) {
-    case CHANGE_STATE_NAV_STEP:
-      let st = [...state.navs];
-      for (let i = 0; i < st.length; i++) {
-        if (st[i].key === action.id) {
-          let style;
-          let styleText;
-          if (action.disable) {
-            style = {display: 'flex', alignItems: 'center', pointerEvents: 'none'};
-            styleText = {color: 'red'}
-          } else {
-            style = {display: 'flex', alignItems: 'center'};
-            styleText = {}
-          }
-          st[i].style = style;
-          st[i].styleText = styleText;
-          break;
-        }
-      }
-      return {...state, navs: st}
-    case CHANGE_INFO_CHECK: {
+    // case CHANGE_STATE_NAV_STEP:
+    //   let st = [...state.navs];
+    //   for (let i = 0; i < st.length; i++) {
+    //     if (st[i].key === action.id) {
+    //       let style;
+    //       let styleText;
+    //       if (action.disable) {
+    //         style = {display: 'flex', alignItems: 'center', pointerEvents: 'none'};
+    //         styleText = {color: '#969C9D'}
+    //       } else {
+    //         style = {display: 'flex', alignItems: 'center'};
+    //         styleText = {}
+    //       }
+    //       st[i].style = style;
+    //       st[i].styleText = styleText;
+    //       break;
+    //     }
+    //   }
+    //   return {...state, navs: st}
+    case Actions.CHANGE_INFO_CHECK: {
       let st = [...state.navs];
       for (let i = 0; i < st.length; i++) {
         if (st[i].key === STEP_NAV_PROCESS || st[i].key === STEP_NAV_INTERVIEWERS) {
@@ -68,7 +69,7 @@ export default (state = initState, action: StepNavAction): NavSteps => {
           let styleText;
           if (!action.info_check) {
             style = {display: 'flex', alignItems: 'center', pointerEvents: 'none'};
-            styleText = {color: 'red'}
+            styleText = {color: '#969C9D'}
           } else {
             style = {display: 'flex', alignItems: 'center'};
             styleText = {}
@@ -80,7 +81,7 @@ export default (state = initState, action: StepNavAction): NavSteps => {
       }
       return {...state, navs: st}
     }
-    case CHANGE_PROCESS_CHECK: {
+    case Actions.CHANGE_PROCESS_CHECK: {
       let st = [...state.navs];
       for (let i = 0; i < st.length; i++) {
         if (st[i].key === STEP_NAV_INTERVIEWERS) {
@@ -88,7 +89,7 @@ export default (state = initState, action: StepNavAction): NavSteps => {
           let styleText;
           if (!action.info_check) {
             style = {display: 'flex', alignItems: 'center', pointerEvents: 'none'};
-            styleText = {color: 'red'}
+            styleText = {color: '#969C9D'}
           } else {
             style = {display: 'flex', alignItems: 'center'};
             styleText = {}

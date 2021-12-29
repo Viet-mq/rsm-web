@@ -4,7 +4,7 @@ import {RootState} from 'src/redux/reducers';
 import {connect, ConnectedProps} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {StepNavInfo} from "../../types";
-import {setEnableNavStep} from "../../redux/actions";
+// import {setEnableNavStep} from "../../redux/actions";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -15,11 +15,9 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-interface ParentProps {
+interface ParentProps {}
 
-}
-
-const connector = connect(mapStateToProps, {setEnableNavStep});
+const connector = connect(mapStateToProps, {});
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 interface IProps extends ParentProps, PropsFromRedux {
@@ -35,7 +33,7 @@ const Nav = ({navSteps}: IProps) => {
       defaultSelectedKeys={[paths[3] ? paths[3] : "information"]}
       mode="inline"
     >
-      {navSteps.navs.map((item: StepNavInfo, index: any) => {
+      {navSteps.navs.map((item: StepNavInfo) => {
         return (
           <Menu.Item key={item.key} style={item.style}>
             <Link to={item.link}>

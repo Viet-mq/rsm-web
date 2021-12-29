@@ -83,8 +83,7 @@ function InformationForm(props: IProps) {
         <div className="c-schedule-interview-popup">
           <div className='ant-col-14 grid-left'>
             <Form>
-              <Form.Item className="form-label" label="Tiều đề tin tuyển dụng" labelCol={{span: 24}}
-                         wrapperCol={{span: 24}}>
+              <Form.Item className="form-label" label="Tiều đề tin tuyển dụng" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                 {getFieldDecorator('title', {
                   initialValue: '',
                   rules: [
@@ -151,8 +150,7 @@ function InformationForm(props: IProps) {
                 </Col>
 
                 <Col span={12}>
-                  <Form.Item className="form-label" label="Loại hình công việc" labelCol={{span: 24}}
-                             wrapperCol={{span: 24}}>
+                  <Form.Item className="form-label" label="Loại hình công việc" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                     {getFieldDecorator('typeOfJob', {
                       initialValue: 'Toàn thời gian',
                       rules: [
@@ -162,8 +160,7 @@ function InformationForm(props: IProps) {
                         },
                       ],
                     })(
-                      <Select className="bg-white text-black" style={fontWeightStyle}
-                      >
+                      <Select className="bg-white text-black" style={fontWeightStyle}>
                         <Option key="1" value="Toàn thời gian">Toàn thời gian</Option>
                         <Option key="2" value="Bán thời gian">Bán thời gian</Option>
                         <Option key="3" value="Hợp đồng thời vụ">Hợp đồng thời vụ</Option>
@@ -177,8 +174,7 @@ function InformationForm(props: IProps) {
 
               <Row style={{marginTop: 15}}>
                 <Col span={12} style={{paddingRight: 10}}>
-                  <Form.Item className="form-label" label="Số lượng tuyển dụng" labelCol={{span: 24}}
-                             wrapperCol={{span: 24}}>
+                  <Form.Item className="form-label" label="Số lượng tuyển dụng" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                     {getFieldDecorator('quantity', {
                       initialValue: 0,
                       rules: [
@@ -192,7 +188,6 @@ function InformationForm(props: IProps) {
                                    className="bg-white text-black"/>
                     )}
                   </Form.Item>
-
                 </Col>
 
                 <Col span={12}>
@@ -227,8 +222,7 @@ function InformationForm(props: IProps) {
                       },
                     ],
                   })(
-                    <Select className="bg-white text-black" style={fontWeightStyle} placeholder={"Chọn talent pool"}
-                    >
+                    <Select className="bg-white text-black" style={fontWeightStyle} placeholder={"Chọn talent pool"}>
                       {props.listTalentPool.rows?.map((item: any, index: any) => (
                         <Option key={index} value={item.id}>{item.name}</Option>
                       ))}
@@ -276,8 +270,7 @@ function InformationForm(props: IProps) {
                 </Col>
               </Row>
 
-              <Form.Item className="form-label" label="Hiển thị trên tin tuyển dụng" labelCol={{span: 24}}
-                         wrapperCol={{span: 24}}>
+              <Form.Item className="form-label" label="Hiển thị trên tin tuyển dụng" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                 {getFieldDecorator('detailOfSalary', {
                   initialValue: 'Chi tiết mức lương',
                   rules: [
@@ -287,8 +280,7 @@ function InformationForm(props: IProps) {
                     },
                   ],
                 })(
-                  <Select className="bg-white text-black" style={fontWeightStyle}
-                  >
+                  <Select className="bg-white text-black" style={fontWeightStyle}>
                     <Option key="1" value="Chi tiết mức lương">Chi tiết mức lương</Option>
                     <Option key="2" value="Bán thời gian">Thỏa thuận</Option>
                     <Option key="3" value="Từ">Từ ...</Option>
@@ -298,8 +290,7 @@ function InformationForm(props: IProps) {
 
               <div className="font-20-bold-500 mb-4">Mô tả công việc</div>
 
-              <Form.Item className="form-label" label="Mô tả chung về công việc" labelCol={{span: 24}}
-                         style={formItemHeight} wrapperCol={{span: 24}}>
+              <Form.Item className="form-label" label="Mô tả chung về công việc" labelCol={{span: 24}} style={formItemHeight} wrapperCol={{span: 24}}>
                 {getFieldDecorator('jobDescription', {
                   initialValue: '',
                   rules: [
@@ -310,6 +301,7 @@ function InformationForm(props: IProps) {
                   ],
                 })(
                   <ReactQuill
+
                     style={{...fontWeightStyle, ...textEditorHeight}}
                     theme={'snow'}
                     modules={modules}
@@ -319,8 +311,7 @@ function InformationForm(props: IProps) {
                   />)}
               </Form.Item>
 
-              <Form.Item className="form-label" label="Yêu cầu công việc" labelCol={{span: 24}} style={formItemHeight}
-                         wrapperCol={{span: 24}}>
+              <Form.Item className="form-label" label="Yêu cầu công việc" labelCol={{span: 24}} style={formItemHeight} wrapperCol={{span: 24}}>
                 {getFieldDecorator('requirementOfJob', {
                   initialValue: '',
                   rules: [
@@ -331,6 +322,7 @@ function InformationForm(props: IProps) {
                   ],
                 })(
                   <ReactQuill
+
                     style={{...fontWeightStyle, ...textEditorHeight}}
                     theme={'snow'}
                     modules={modules}
@@ -340,8 +332,7 @@ function InformationForm(props: IProps) {
                   />)}
               </Form.Item>
 
-              <Form.Item className="form-label" label="Quyền lợi" labelCol={{span: 24}} style={formItemHeight}
-                         wrapperCol={{span: 24}}>
+              <Form.Item className="form-label" label="Quyền lợi" labelCol={{span: 24}} style={formItemHeight} wrapperCol={{span: 24}}>
                 {getFieldDecorator('interest', {
                   initialValue: '',
                   rules: [
@@ -353,6 +344,7 @@ function InformationForm(props: IProps) {
                 })(
                   <ReactQuill
                     style={{...fontWeightStyle, ...textEditorHeight}}
+
                     theme={'snow'}
                     modules={modules}
                     formats={formats}

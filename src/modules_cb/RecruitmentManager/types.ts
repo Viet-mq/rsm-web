@@ -81,11 +81,5 @@ export const STEP_NAV_INFORMATION = "information";
 export const STEP_NAV_PROCESS = "process";
 export const STEP_NAV_INTERVIEWERS = "interviewers";
 
-export interface StepNavAction {
-  type: string,
-  id: string,
-  disable: boolean,
-  info_check?: boolean,
-  process_check?: boolean
-}
+
 
