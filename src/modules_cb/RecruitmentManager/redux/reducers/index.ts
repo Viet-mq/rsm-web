@@ -3,8 +3,9 @@ import list, {RecruitmentListState} from "./list";
 import deleteRecruitment, {DeleteRecruitmentState} from "./deleteRecruitment";
 import create, {CreateRecruitmentState} from "./create";
 import update, {UpdateRecruitmentState} from "./update";
-import detailRecruitment,{ DetailRecruitmentState } from "./detail";
-import listKanbanCandidate, { ListKanbanCandidateState } from "./listKanbanCandidate";
+import detailRecruitment, {DetailRecruitmentState} from "./detail";
+import listKanbanCandidate, {ListKanbanCandidateState} from "./listKanbanCandidate";
+import navSteps, {NavSteps} from "./navSteps";
 
 export interface RecruitmentManagerModuleState {
   list: RecruitmentListState,
@@ -12,7 +13,8 @@ export interface RecruitmentManagerModuleState {
   create: CreateRecruitmentState,
   detailRecruitment: DetailRecruitmentState,
   update: UpdateRecruitmentState,
-  listKanbanCandidate:ListKanbanCandidateState,
+  listKanbanCandidate: ListKanbanCandidateState,
+  navSteps: NavSteps,
 }
 
 export default combineReducers<RecruitmentManagerModuleState>({
@@ -22,4 +24,5 @@ export default combineReducers<RecruitmentManagerModuleState>({
   detailRecruitment,
   update,
   listKanbanCandidate,
+  navSteps
 });
