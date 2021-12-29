@@ -5,13 +5,14 @@ import {Button, DatePicker, Icon, Layout, Menu, Popover, Select, Tabs} from "ant
 import {BsDot, ImArrowLeft2} from "react-icons/all";
 import {Link, useParams} from "react-router-dom";
 import Search from "antd/es/input/Search";
-import {getListProfile, showFormCreate} from "../../ProfileManager/redux/actions";
+import {getListProfile, showFormCreate, showFormDetail} from "../../ProfileManager/redux/actions";
 import ScheduleManagerPages from "../../ScheduleManager/pages/ScheduleManagerPages";
 import KanbanProcess from "./KanbanProcess";
 import ListProfile from "../../ProfileManager/components/list/ListProfile";
 import moment from "moment";
 import 'moment/locale/vi';
 import {getDetailRecruitment} from "../redux/actions";
+import {DetailCV} from "../../ProfileManager/types";
 
 const {Option} = Select;
 const {TabPane} = Tabs;
@@ -26,7 +27,8 @@ const mapStateToProps = (state: RootState) => ({
 const connector = connect(mapStateToProps, {
   getDetailRecruitment,
   getListProfile,
-  showFormCreate
+  showFormCreate,
+  showFormDetail
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -112,6 +114,12 @@ function DetailRecruitment(props: IProps) {
 
   function candidateKanbanClicked() {
     setVisibleType("kanban")
+    let req: DetailCV = {
+      show_detail: false,
+      general: 24,
+      detail: 0
+    }
+    props.showFormDetail(req);
   }
 
   function onChangeDateRange(dates: any) {

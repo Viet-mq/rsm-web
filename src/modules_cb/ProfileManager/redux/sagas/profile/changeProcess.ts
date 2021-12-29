@@ -32,8 +32,11 @@ export function* changeProcessAsync(action: ChangeProcessAction) {
       }
       else{
         yield put(showChangeProcessForm(false));
+
+        if(paramsDetail?.idProfile){
+          yield put(getDetailProfile(paramsDetail))
+        }
         yield put(getDetailRecruitment(paramsDetailRecruitment))
-        yield put(getDetailProfile(paramsDetail))
       }
 
 

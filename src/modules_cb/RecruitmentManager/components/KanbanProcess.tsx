@@ -4,6 +4,8 @@ import React, {useEffect, useState} from "react";
 import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
 import {Avatar} from "antd";
 import {getDetailRecruitment, getListKanbanCandidate} from "../redux/actions";
+import {ChangeProcessRequest} from "../../ProfileManager/types";
+import {changeProcess} from "../../ProfileManager/redux/actions";
 
 const mapStateToProps = (state: RootState) => ({
   listKanbanCandidate: state.recruitmentManager.listKanbanCandidate,
@@ -13,6 +15,7 @@ const mapStateToProps = (state: RootState) => ({
 const connector = connect(mapStateToProps, {
   getListKanbanCandidate,
   getDetailRecruitment,
+  changeProcess
 
 });
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -23,115 +26,6 @@ interface IProps extends ReduxProps {
 }
 
 function KanbanProcess(props: IProps) {
-  const [cards, setCards] = useState<any>([
-    [
-      {
-       id: "1",
-        fullName: "Vũ Điệp Chi 1",
-        phoneNumber: "0904 993 1124",
-        email: "tranthuy.nute@gmail.com"
-      },
-      {
-       id: "2",
-        fullName: "Vũ Điệp Chi 2",
-        phoneNumber: "0904 993 1124",
-        email: "tranthuy.nute@gmail.com"
-      },
-      {
-       id: "3",
-        fullName: "Vũ Điệp Chi 3",
-        phoneNumber: "0904 993 1124",
-        email: "tranthuy.nute@gmail.com"
-      },
-      {
-       id: "4",
-        fullName: "Vũ Điệp Chi 4",
-        phoneNumber: "0904 993 1124",
-        email: "tranthuy.nute@gmail.com"
-      },
-      {
-       id: "5",
-        fullName: "Vũ Điệp Chi 5",
-        phoneNumber: "0904 993 1124",
-        email: "tranthuy.nute@gmail.com"
-      },
-      {
-       id: "6",
-        fullName: "Vũ Điệp Chi 6",
-        phoneNumber: "0904 993 1124",
-        email: "tranthuy.nute@gmail.com"
-      },
-      {
-       id: "7",
-        fullName: "Vũ Điệp Chi 7",
-        phoneNumber: "0904 993 1124",
-        email: "tranthuy.nute@gmail.com"
-      },
-      {
-       id: "8",
-        fullName: "Vũ Điệp Chi 8",
-        phoneNumber: "0904 993 1124",
-        email: "tranthuy.nute@gmail.com"
-      },
-    ],
-    [
-      {
-       id: "9",
-        fullName: "Vũ Điệp Chi 9",
-        phoneNumber: "0904 993 1124",
-        email: "tranthuy.nute@gmail.com"
-      },
-      {
-       id: "10",
-        fullName: "Vũ Điệp Chi 10",
-        phoneNumber: "0904 993 1124",
-        email: "tranthuy.nute@gmail.com"
-      },
-      {
-       id: "11",
-        fullName: "Vũ Điệp Chi 11",
-        phoneNumber: "0904 993 1124",
-        email: "tranthuy.nute@gmail.com"
-      },
-      {
-       id: "12",
-        fullName: "Vũ Điệp Chi 12",
-        phoneNumber: "0904 993 1124",
-        email: "tranthuy.nute@gmail.com"
-      },
-      {
-       id: "13",
-        fullName: "Vũ Điệp Chi 13",
-        phoneNumber: "0904 993 1124",
-        email: "tranthuy.nute@gmail.com"
-      },
-    ],
-    [
-      {
-       id: "14",
-        fullName: "Vũ Điệp Chi 14",
-        phoneNumber: "0904 993 1124",
-        email: "tranthuy.nute@gmail.com"
-      },
-      {
-       id: "15",
-        fullName: "Vũ Điệp Chi 15",
-        phoneNumber: "0904 993 1124",
-        email: "tranthuy.nute@gmail.com"
-      },
-      {
-       id: "16",
-        fullName: "Vũ Điệp Chi 16",
-        phoneNumber: "0904 993 1124",
-        email: "tranthuy.nute@gmail.com"
-      },],
-    [
-      {
-       id: "17",
-        fullName: "Vũ Điệp Chi 17",
-        phoneNumber: "0904 993 1124",
-        email: "tranthuy.nute@gmail.com"
-      }]]);
   const [filterCandidate, setFilterCandidate] = useState<any>([])
 
   useEffect(() => {
@@ -209,7 +103,7 @@ function KanbanProcess(props: IProps) {
   };
 
   function onDragEnd(result: any) {
-    const {source, destination} = result;
+    const {source, destination,draggableId} = result;
     // dropped outside the list
     if (!destination) {
       return;
@@ -218,17 +112,23 @@ function KanbanProcess(props: IProps) {
     const dInd = +destination.droppableId;
 
     if (sInd === dInd) {
-      const items = reorder(cards[sInd], source.index, destination.index);
-      const newState = [...cards];
-      newState[sInd] = items;
-      setCards(newState);
+      const items = reorder(filterCandidate[sInd]?.result, source.index, destination.index);
+      const newState = [...filterCandidate];
+      newState[sInd].result = items;
+      setFilterCandidate(newState);
     } else {
-      const result = move(cards[sInd], cards[dInd], source, destination);
-      const newState = [...cards];
-      newState[sInd] = result[sInd];
-      newState[dInd] = result[dInd];
+      const result = move(filterCandidate[sInd]?.result, filterCandidate[dInd]?.result, source, destination);
+      const newState = [...filterCandidate];
+      newState[sInd].result = result[sInd];
+      newState[dInd].result = result[dInd];
+      setFilterCandidate(newState);
 
-      setCards(newState);
+      let req: ChangeProcessRequest = ({
+        idProfile: draggableId,
+        recruitmentId: props.idRecruitment,
+        statusCVId: newState[dInd].id
+      })
+      props.changeProcess(req,false)
     }
   }
 

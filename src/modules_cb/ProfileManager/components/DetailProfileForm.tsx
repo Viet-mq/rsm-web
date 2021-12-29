@@ -353,7 +353,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     let req: DataShowBooking = {
       id: props.detail.result?.id,
       fullName: props.detail.result?.fullName,
-      idRecruitment:props.detail.result?.recruitmentId
+      idRecruitment: props.detail.result?.recruitmentId
     }
     props.showFormBooking(true, req);
   }
@@ -584,9 +584,10 @@ function DetailProfileForm(props: DetailProfileFormProps) {
                     </div>
 
                     <div className="flex-items-center">
-                      <Button onClick={handleChangeProcess}
-                              className='mr-2'><FaLongArrowAltRight style={{color: "#64d271", marginRight: 5}}/>Chuyển
-                        vòng</Button>
+                      <Button onClick={handleChangeProcess} className='mr-2'><FaLongArrowAltRight
+                        style={{color: "#64d271", marginRight: 5}}/>
+                        Chuyển vòng
+                      </Button>
                       <Button className='mr-2' onClick={handleShowReasonRejectForm}><Icon type="stop" style={{
                         fontSize: "120%",
                         marginTop: 5
