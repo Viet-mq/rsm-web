@@ -3,12 +3,15 @@ import React from 'react';
 import {RootState} from 'src/redux/reducers';
 import {connect, ConnectedProps} from 'react-redux';
 import {Link} from 'react-router-dom';
+import {StepNavInfo} from "../../types";
+import {setEnableNavStep} from "../../redux/actions";
 
 const mapStateToProps = (state: RootState) => {
   return {
     isLogin: state.auth.auth.data?.code === 0,
     auth: state.auth.auth.data,
-    count: state.profileManager.createBooking.count
+    count: state.profileManager.createBooking.count,
+    navSteps: state.recruitmentManager.navSteps
   };
 };
 
@@ -16,41 +19,32 @@ interface ParentProps {
 
 }
 
-const connector = connect(mapStateToProps, {});
+const connector = connect(mapStateToProps, {setEnableNavStep});
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 interface IProps extends ParentProps, PropsFromRedux {
 }
 
-const Nav = (props: IProps) => {
+const Nav = ({navSteps}: IProps) => {
+
   const paths = window.location.pathname.split('/');
+
   return (
     <Menu
       className="menu-left"
-      defaultSelectedKeys={[paths[3]?paths[3]:"information"]}
+      defaultSelectedKeys={[paths[3] ? paths[3] : "information"]}
       mode="inline"
     >
-      <Menu.Item key="information" style={{display: 'flex', alignItems: 'center'}}>
-       <Link to={`/recruitment-manager/create/information`}>
-         <Icon type="form"/>
-         <span>Thông tin ứng tuyển</span>
-       </Link>
-
-      </Menu.Item>
-
-      <Menu.Item key="process" style={{display: 'flex', alignItems: 'center'}}>
-        <Link to={`/recruitment-manager/create/process`}>
-        <Icon type="team"/>
-        <span>Quy trình tuyển dụng</span>
-        </Link>
-      </Menu.Item>
-
-      <Menu.Item key="interviewers" style={{display: 'flex', alignItems: 'center'}}>
-        <Link to={`/recruitment-manager/create/interviewers`}>
-        <Icon type="solution"/>
-        <span>Hội đông tuyển dụng</span>
-        </Link>
-      </Menu.Item>
+      {navSteps.navs.map((item: StepNavInfo, index: any) => {
+        return (
+          <Menu.Item key={item.key} style={item.style}>
+            <Link to={item.link}>
+              <Icon type={item.icon}/>
+              <span style={item.styleText}>{item.text}</span>
+            </Link>
+          </Menu.Item>
+        )
+      })}
     </Menu>
   );
 };
