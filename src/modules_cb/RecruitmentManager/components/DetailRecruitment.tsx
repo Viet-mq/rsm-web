@@ -236,7 +236,7 @@ function DetailRecruitment(props: IProps) {
                     <ListProfile idRecruitment={idRecruitment} idProcess={idProcess}/>
                   </>
                   :
-                  <KanbanProcess/>
+                  <KanbanProcess idRecruitment={idRecruitment} visibleType={visibleType}/>
                 }
               </Content>
             </Layout>

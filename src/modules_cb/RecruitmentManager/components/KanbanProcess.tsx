@@ -1,127 +1,207 @@
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
-import {Avatar, Button} from "antd";
+import {Avatar} from "antd";
+import {getDetailRecruitment, getListKanbanCandidate} from "../redux/actions";
 
-const mapStateToProps = ({jobManager}: RootState) => ({jobManager});
-const connector = connect(mapStateToProps, {});
+const mapStateToProps = (state: RootState) => ({
+  listKanbanCandidate: state.recruitmentManager.listKanbanCandidate,
+  detailRecruitment: state.recruitmentManager.detailRecruitment,
 
+})
+const connector = connect(mapStateToProps, {
+  getListKanbanCandidate,
+  getDetailRecruitment,
+
+});
 type ReduxProps = ConnectedProps<typeof connector>;
+
 interface IProps extends ReduxProps {
+  idRecruitment: string,
+  visibleType: string
 }
 
 function KanbanProcess(props: IProps) {
   const [cards, setCards] = useState<any>([
     [
-    {
-      id: "1",
-      name: "Vũ Điệp Chi 1",
-      phone: "0904 993 1124",
-      mail: "tranthuy.nute@gmail.com"
-    },
-    {
-      id: "2",
-      name: "Vũ Điệp Chi 2",
-      phone: "0904 993 1124",
-      mail: "tranthuy.nute@gmail.com"
-    },
-    {
-      id: "3",
-      name: "Vũ Điệp Chi 3",
-      phone: "0904 993 1124",
-      mail: "tranthuy.nute@gmail.com"
-    },
-    {
-      id: "4",
-      name: "Vũ Điệp Chi 4",
-      phone: "0904 993 1124",
-      mail: "tranthuy.nute@gmail.com"
-    },
-    {
-      id: "5",
-      name: "Vũ Điệp Chi 5",
-      phone: "0904 993 1124",
-      mail: "tranthuy.nute@gmail.com"
-    },
-    {
-      id: "6",
-      name: "Vũ Điệp Chi 6",
-      phone: "0904 993 1124",
-      mail: "tranthuy.nute@gmail.com"
-    },
-    {
-      id: "7",
-      name: "Vũ Điệp Chi 7",
-      phone: "0904 993 1124",
-      mail: "tranthuy.nute@gmail.com"
-    },
-    {
-      id: "8",
-      name: "Vũ Điệp Chi 8",
-      phone: "0904 993 1124",
-      mail: "tranthuy.nute@gmail.com"
-    },
-  ],
+      {
+       id: "1",
+        fullName: "Vũ Điệp Chi 1",
+        phoneNumber: "0904 993 1124",
+        email: "tranthuy.nute@gmail.com"
+      },
+      {
+       id: "2",
+        fullName: "Vũ Điệp Chi 2",
+        phoneNumber: "0904 993 1124",
+        email: "tranthuy.nute@gmail.com"
+      },
+      {
+       id: "3",
+        fullName: "Vũ Điệp Chi 3",
+        phoneNumber: "0904 993 1124",
+        email: "tranthuy.nute@gmail.com"
+      },
+      {
+       id: "4",
+        fullName: "Vũ Điệp Chi 4",
+        phoneNumber: "0904 993 1124",
+        email: "tranthuy.nute@gmail.com"
+      },
+      {
+       id: "5",
+        fullName: "Vũ Điệp Chi 5",
+        phoneNumber: "0904 993 1124",
+        email: "tranthuy.nute@gmail.com"
+      },
+      {
+       id: "6",
+        fullName: "Vũ Điệp Chi 6",
+        phoneNumber: "0904 993 1124",
+        email: "tranthuy.nute@gmail.com"
+      },
+      {
+       id: "7",
+        fullName: "Vũ Điệp Chi 7",
+        phoneNumber: "0904 993 1124",
+        email: "tranthuy.nute@gmail.com"
+      },
+      {
+       id: "8",
+        fullName: "Vũ Điệp Chi 8",
+        phoneNumber: "0904 993 1124",
+        email: "tranthuy.nute@gmail.com"
+      },
+    ],
     [
-    {
-      id: "9",
-      name: "Vũ Điệp Chi 9",
-      phone: "0904 993 1124",
-      mail: "tranthuy.nute@gmail.com"
-    },
-    {
-      id: "10",
-      name: "Vũ Điệp Chi 10",
-      phone: "0904 993 1124",
-      mail: "tranthuy.nute@gmail.com"
-    },
-    {
-      id: "11",
-      name: "Vũ Điệp Chi 11",
-      phone: "0904 993 1124",
-      mail: "tranthuy.nute@gmail.com"
-    },
-    {
-      id: "12",
-      name: "Vũ Điệp Chi 12",
-      phone: "0904 993 1124",
-      mail: "tranthuy.nute@gmail.com"
-    },
-    {
-      id: "13",
-      name: "Vũ Điệp Chi 13",
-      phone: "0904 993 1124",
-      mail: "tranthuy.nute@gmail.com"
-    },
-  ],
+      {
+       id: "9",
+        fullName: "Vũ Điệp Chi 9",
+        phoneNumber: "0904 993 1124",
+        email: "tranthuy.nute@gmail.com"
+      },
+      {
+       id: "10",
+        fullName: "Vũ Điệp Chi 10",
+        phoneNumber: "0904 993 1124",
+        email: "tranthuy.nute@gmail.com"
+      },
+      {
+       id: "11",
+        fullName: "Vũ Điệp Chi 11",
+        phoneNumber: "0904 993 1124",
+        email: "tranthuy.nute@gmail.com"
+      },
+      {
+       id: "12",
+        fullName: "Vũ Điệp Chi 12",
+        phoneNumber: "0904 993 1124",
+        email: "tranthuy.nute@gmail.com"
+      },
+      {
+       id: "13",
+        fullName: "Vũ Điệp Chi 13",
+        phoneNumber: "0904 993 1124",
+        email: "tranthuy.nute@gmail.com"
+      },
+    ],
     [
-    {
-    id: "14",
-    name: "Vũ Điệp Chi 14",
-    phone: "0904 993 1124",
-    mail: "tranthuy.nute@gmail.com"
-  },
-    {
-      id: "15",
-      name: "Vũ Điệp Chi 15",
-      phone: "0904 993 1124",
-      mail: "tranthuy.nute@gmail.com"
-    },
-    {
-      id: "16",
-      name: "Vũ Điệp Chi 16",
-      phone: "0904 993 1124",
-      mail: "tranthuy.nute@gmail.com"
-    },],
+      {
+       id: "14",
+        fullName: "Vũ Điệp Chi 14",
+        phoneNumber: "0904 993 1124",
+        email: "tranthuy.nute@gmail.com"
+      },
+      {
+       id: "15",
+        fullName: "Vũ Điệp Chi 15",
+        phoneNumber: "0904 993 1124",
+        email: "tranthuy.nute@gmail.com"
+      },
+      {
+       id: "16",
+        fullName: "Vũ Điệp Chi 16",
+        phoneNumber: "0904 993 1124",
+        email: "tranthuy.nute@gmail.com"
+      },],
     [
-    {
-    id: "17",
-    name: "Vũ Điệp Chi 17",
-    phone: "0904 993 1124",
-    mail: "tranthuy.nute@gmail.com"
-  }]]);
-  const reorder = (list: any, startIndex: any, endIndex: any) => {
+      {
+       id: "17",
+        fullName: "Vũ Điệp Chi 17",
+        phoneNumber: "0904 993 1124",
+        email: "tranthuy.nute@gmail.com"
+      }]]);
+  const [filterCandidate, setFilterCandidate] = useState<any>([])
+
+  useEffect(() => {
+    if (props.visibleType !== 'list')
+      props.getListKanbanCandidate({
+        recruitment: props.idRecruitment,
+        page: 1,
+        size: 100
+      })
+  }, [props.visibleType])
+
+  useEffect(() => {
+    if (props.listKanbanCandidate.rows?.length) {
+      handleFilterCandidate(props.listKanbanCandidate.rows);
+    }
+  }, [props.listKanbanCandidate.rows])
+
+  function handleFilterCandidate(values:any) {
+      const queryFilter = values.reduce((curr: any, next: any) => {
+        const queryCandidate = curr.find((item: any) => {
+          return item.statusCVId === next.statusCVId
+        })
+        if (queryCandidate && queryCandidate.statusCVId !== '') {
+          queryCandidate.result?.push(next)
+        } else if (next.statusCVId !== '') {
+          let newQuery = {
+            statusCVId: next.statusCVId,
+            statusCVName: next.statusCVName,
+            result: [next]
+          }
+          curr.push(newQuery)
+        }
+        return curr;
+      }, [])
+
+      const result: any = [];
+      props.detailRecruitment?.rows[0]?.interviewProcess.forEach((element: any) => {
+        const findInQueryFilter = queryFilter.find((item: any) => {
+          return item.statusCVId === element.id
+        })
+        result.push({
+          id: element.id,
+          name: element.name,
+          total: element.total,
+          result: findInQueryFilter?findInQueryFilter.result:[]
+        })
+      })
+      setFilterCandidate(result)
+      return result
+  }
+
+// fake data generator
+  /**
+   * Moves an item from one list to another list.
+   */
+  function move(source: any, destination: any, droppableSource: any, droppableDestination: any){
+    const sourceClone = Array.from(source);
+    const destClone = Array.from(destination);
+    const [removed] = sourceClone.splice(droppableSource.index, 1);
+
+    destClone.splice(droppableDestination.index, 0, removed);
+
+    const result: any = {};
+    result[droppableSource.droppableId] = sourceClone;
+    result[droppableDestination.droppableId] = destClone;
+
+    return result;
+  };
+
+  function reorder(list: any, startIndex: any, endIndex: any){
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
     result.splice(endIndex, 0, removed);
@@ -152,25 +232,8 @@ function KanbanProcess(props: IProps) {
     }
   }
 
-// fake data generator
-  /**
-   * Moves an item from one list to another list.
-   */
-  const move = (source: any, destination: any, droppableSource: any, droppableDestination: any) => {
-    const sourceClone = Array.from(source);
-    const destClone = Array.from(destination);
-    const [removed] = sourceClone.splice(droppableSource.index, 1);
-
-    destClone.splice(droppableDestination.index, 0, removed);
-
-    const result: any = {};
-    result[droppableSource.droppableId] = sourceClone;
-    result[droppableDestination.droppableId] = destClone;
-
-    return result;
-  };
-
   const getItemStyle = (isDragging: any, draggableStyle: any) => ({
+
     // some basic styles to make the items look a bit nicer
     userSelect: "none",
     marginBottom: 10,
@@ -181,14 +244,6 @@ function KanbanProcess(props: IProps) {
     // styles we need to apply on draggables
     ...draggableStyle
 
-  });
-  const getListStyle = (isDraggingOver: any) => ({
-    // background: isDraggingOver ? "#e6f7ff" : "#F4F4F4",
-    background: "#F4F4F4",
-    padding: 17,
-    width: 250,
-    marginRight: 10,
-    height: 685,
   });
 
   const getInitials = (name: string) => {
@@ -203,66 +258,67 @@ function KanbanProcess(props: IProps) {
     }
   }
 
+  console.log(filterCandidate)
+  console.log(filterCandidate[0])
   return (
     <>
-        <div style={{display: "flex"}}>
-          <DragDropContext onDragEnd={onDragEnd}>
-            {cards.map((element: any, ind: any) => (
-
-              <Droppable key={ind} droppableId={`${ind}`}>
-                {(provided, snapshot) => (
-                  <div
-                    ref={provided.innerRef}
-                    style={getListStyle(snapshot.isDraggingOver)}
-                    {...provided.droppableProps}
-                  >
-                    <div className="kanban-title-list">Tuyển dụng</div>
-                    <div style={{overflow:"auto",height:610}}>
-                      {element.map((item: any, index: any) => (
-                        <Draggable
-                          key={item.id}
-                          draggableId={item.id}
-                          index={index}
-                        >
-                          {(provided, snapshot) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              style={getItemStyle(
-                                snapshot.isDragging,
-                                provided.draggableProps.style
-                              )}
-                            >
-                              <div className="kanban-item-list">
-                                <div className="c-main-content">
-                                  <Avatar size={25} style={{backgroundColor: "#ffbd24"}}>
-                                    {getInitials(item.name)}
-                                  </Avatar>
-                                  <div className="c-main-content__wrap-main" style={{width: 160, gridRowGap: 4}}>
-                                    <div className="main-1">
-                                      <a className="main-1__candidate-name">{item.name}</a>
-                                    </div>
-                                    <div className="ellipsis">{item.phone}</div>
-                                    <div className="ellipsis">{item.mail}</div>
+      <div style={{display: "flex"}}>
+        <DragDropContext onDragEnd={onDragEnd}>
+          {filterCandidate.map((element: any, ind: any) => (
+            <Droppable key={ind} droppableId={`${ind}`}>
+              {(provided, snapshot) => (
+                <div
+                  className="kanban-droppable"
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                >
+                  <div className="kanban-title-list">{element?.name}</div>
+                  <div style={{overflow: "auto", height: 610}}>
+                    {element.result?.map((item: any, index: any) => (
+                      <Draggable
+                        key={item.id}
+                        draggableId={item.id}
+                        index={index}
+                      >
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            style={getItemStyle(
+                              snapshot.isDragging,
+                              provided.draggableProps.style,
+                            )}
+                          >
+                            <div className="kanban-item-list">
+                              <div className="c-main-content">
+                                <Avatar size={25} style={{backgroundColor: "#ffbd24"}}>
+                                  {getInitials(item.fullName)}
+                                </Avatar>
+                                <div className="c-main-content__wrap-main" style={{width: 160, gridRowGap: 4}}>
+                                  <div className="main-1">
+                                    <a className="main-1__candidate-name">{item.fullName}</a>
                                   </div>
+                                  <div className="ellipsis">{item.phoneNumber}</div>
+                                  <div className="ellipsis">{item.email}</div>
                                 </div>
-
                               </div>
+
                             </div>
-                          )}
-                        </Draggable>
-                      ))}
-                    </div>
-
-                    {provided.placeholder}
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
                   </div>
-                )}
-              </Droppable>
 
-            ))}
-          </DragDropContext>
-        </div>
+                  {provided.placeholder}
+
+                </div>
+              )}
+            </Droppable>
+          ))}
+        </DragDropContext>
+      </div>
     </>
   );
 
