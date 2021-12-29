@@ -87,6 +87,13 @@ function ListAccount(props: IProps) {
       dataIndex: 'fullName',
       width: 80,
     },
+
+    {
+      title: 'Email',
+      // sorter: true,
+      dataIndex: 'email',
+      width: 150,
+    },
     {
       title: 'Ngày sinh',
       dataIndex: 'dateOfBirth',
@@ -205,7 +212,6 @@ function ListAccount(props: IProps) {
         className="custom-table"
         dataSource={props.list.rows}
         columns={columns}
-        rowSelection={rowSelection}
         rowKey="username"
         locale={{emptyText: emptyText}}
         pagination={{

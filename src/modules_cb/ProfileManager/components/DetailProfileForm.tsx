@@ -28,7 +28,13 @@ import {emptyText} from "../../../configs/locales";
 import Loading from "../../../components/Loading";
 import CreateNoteForm from "./CreateNoteForm";
 import UpdateNoteForm from "./UpdateNoteForm";
-import {BsThreeDotsVertical, FaLongArrowAltRight, RiFullscreenExitLine, RiFullscreenLine} from "react-icons/all";
+import {
+  BsThreeDotsVertical,
+  FaLongArrowAltRight,
+  MdOutlineSource,
+  RiFullscreenExitLine,
+  RiFullscreenLine
+} from "react-icons/all";
 import StarRatings from 'react-star-ratings';
 import UploadAvatarForm from "./UploadAvatarForm";
 import CreateReasonRejectForm from "./CreateRejectCandidateForm";
@@ -131,9 +137,12 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
 
   const contentMore = (
-    <ul style={{width: 185}} className="popup-popover">
+    <ul style={{width: 220}} className="popup-popover">
       <li>
         <a onClick={handleShowRecruitment}><Icon type="inbox" className="mr-1"/>Chuyển sang tin khác</a>
+      </li>
+      <li>
+        <a onClick={handleShowTalentPools}><MdOutlineSource className="mr-1"/>Chuyển đến kho tiềm năng</a>
       </li>
     </ul>
   );
@@ -273,6 +282,11 @@ function DetailProfileForm(props: DetailProfileFormProps) {
   function handleShowRecruitment() {
     setPopoverRecruitment(false)
     props.showChangeRecruitmentForm(true, props.detail.result?.recruitmentId)
+  }
+
+  function handleShowTalentPools() {
+    setPopoverRecruitment(false)
+    // props.showChangeRecruitmentForm(true, props.detail.result?.recruitmentId)
   }
 
   function unixTimeToDate(unixTime: number): Date {

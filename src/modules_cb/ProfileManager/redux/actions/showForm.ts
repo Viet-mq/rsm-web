@@ -33,18 +33,6 @@ export const showFormCreate = (show: boolean): ProfileFormAction => ({
   show_create: show
 });
 
-export const showChangeProcessForm = (show: boolean,changeProcess?:ChangeProcessRequest): ProfileFormAction => ({
-  type: SHOW_CHANGE_PROCESS_FORM,
-  show_change_process: show,
-  change_process:changeProcess
-});
-
-export const showChangeRecruitmentForm = (show: boolean,idRecruitment?:string): ProfileFormAction => ({
-  type: SHOW_CHANGE_RECRUITMENT_FORM,
-  show_change_recruitment: show,
-  id_recruitment:idRecruitment
-});
-
 export const showFormReasonReject = (show: boolean): ProfileFormAction => ({
   type: REASON_REJECT_SHOW_FORM,
   show_reason_reject: show
@@ -73,6 +61,26 @@ export const showFormUploadAvatar = (show_upload_avatar: boolean, id_upload_avat
   show_upload_avatar: show_upload_avatar,
   id_upload_avatar: id_upload_avatar
 });
+
+
+export const showChangeProcessForm = (show: boolean,changeProcess?:ChangeProcessRequest): ProfileFormAction => ({
+  type: SHOW_CHANGE_PROCESS_FORM,
+  show_change_process: show,
+  change_process:changeProcess
+});
+
+export const showChangeRecruitmentForm = (show: boolean,idRecruitment?:string): ProfileFormAction => ({
+  type: SHOW_CHANGE_RECRUITMENT_FORM,
+  show_change_recruitment: show,
+  id_recruitment:idRecruitment
+});
+
+export const showChangeTalentPoolsForm = (show: boolean,idRecruitment?:string): ProfileFormAction => ({
+  type: SHOW_CHANGE_RECRUITMENT_FORM,
+  show_change_recruitment: show,
+  id_recruitment:idRecruitment
+});
+
 
 
 

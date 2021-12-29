@@ -27,7 +27,7 @@ import Loading from "../../../components/Loading";
 import {ProfileEntity} from "../../ProfileManager/types";
 import {CreateScheduleRequest, ScheduleEntity} from "../types";
 import {ColumnProps} from "antd/lib/table";
-import {searchCandidates} from "../redux/actions/schedule/searchCandidates";
+import {searchCandidates} from "../redux/actions";
 
 
 const mapStateToProps = (state: RootState) => ({

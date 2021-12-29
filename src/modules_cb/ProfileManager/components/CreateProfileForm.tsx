@@ -1,7 +1,7 @@
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, DatePicker, Form, Icon, Input, Modal, Select, TreeSelect} from "antd";
+import {Avatar, Button, DatePicker, Form, Icon, Input, Modal, Select, TreeSelect} from "antd";
 import React, {FormEvent, useEffect, useState} from "react";
 import {createProfile, showFormCreate} from "../redux/actions";
 import {CreateProfileRequest} from "../types";
@@ -38,6 +38,7 @@ const mapStateToProps = (state: RootState) => ({
   listSkill: state.skillManager.list,
   createSkill: state.skillManager.create,
   listRecruitment: state.recruitmentManager.list,
+  listAccount: state.accountManager.list
 })
 
 const connector = connect(mapStateToProps,
@@ -55,21 +56,21 @@ const connector = connect(mapStateToProps,
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface CreateProfileFormProps extends FormComponentProps, ReduxProps {
-  idRecruitment?:string
+  idRecruitment?: string
 }
 
 function CreateProfileForm(props: CreateProfileFormProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
-  const formItemStyle = {height: '50px'};
+  const fontWeightStyle = {fontWeight: 400};
   const formItemLayout = {
     labelCol: {
       xs: {span: 24},
-      sm: {span: 8},
+      sm: {span: 24},
     },
     wrapperCol: {
       xs: {span: 24},
-      sm: {span: 14},
+      sm: {span: 24},
     },
   };
   const dateFormat = 'DD/MM/YYYY';
@@ -195,6 +196,17 @@ function CreateProfileForm(props: CreateProfileFormProps) {
     return dataFetch;
   }
 
+  const getInitials = (name: string) => {
+    if (name) {
+      let initials: any = name.split(' ');
+      if (initials.length > 1) {
+        initials = initials.shift().charAt(0) + initials.pop().charAt(0);
+      } else {
+        initials = name.substring(0, 2);
+      }
+      return initials.toUpperCase();
+    }
+  }
 
   return (
     <div>
@@ -214,9 +226,8 @@ function CreateProfileForm(props: CreateProfileFormProps) {
         }}
         footer={""}>
 
-        <Form {...formItemLayout}>
-
-          <Form.Item label="Họ Tên" className="mb-0" style={{...formItemStyle}}>
+        <Form className="form-create">
+          <Form.Item label="Họ Tên" className="form-label"  {...formItemLayout}>
             {getFieldDecorator('fullName', {
               initialValue: '',
               rules: [
@@ -226,96 +237,108 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                 },
               ],
             })(
-              <Input placeholder="Họ tên" className="bg-white text-black"/>
+              <Input placeholder="Nhập họ và tên" className="bg-white text-black"/>
             )}
           </Form.Item>
 
-          <Form.Item label="Năm sinh" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('dateOfBirth', {
-              // initialValue: '',
-              rules: [
-                {
-                  message: 'Vui lòng nhập năm sinh',
-                  required: false,
-                },
-              ],
-            })(
-              <DatePicker format={dateFormat} style={{width: "100%"}}/>
-            )}
-          </Form.Item>
+          <div className="flex-space-between">
+            <div className="mr-2">
+              <Form.Item label="Năm sinh" className="form-label"  {...formItemLayout}>
+                {getFieldDecorator('dateOfBirth', {
+                  // initialValue: '',
+                  rules: [
+                    {
+                      message: 'Vui lòng nhập năm sinh',
+                      required: false,
+                    },
+                  ],
+                })(
+                  <DatePicker placeholder="dd/mm/yyyy" format={dateFormat} style={{width: "100%"}}/>
+                )}
+              </Form.Item>
+            </div>
 
-          <Form.Item label="Giới tính" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('gender', {
-              initialValue: "Nam",
-              rules: [
-                {
-                  message: 'Vui lòng nhập Giới tính',
-                  required: false,
-                },
-              ],
-            })(
-              <Select className="bg-white text-black"
-              >
-                <Option value="Nam">Nam</Option>
-                <Option value="Nữ">Nữ</Option>
-              </Select>
-            )}
-          </Form.Item>
+            <div className="flex-process">
+              <Form.Item label="Giới tính" className="form-label"  {...formItemLayout}>
+                {getFieldDecorator('gender', {
+                  initialValue: "Nam",
+                  rules: [
+                    {
+                      message: 'Vui lòng nhập Giới tính',
+                      required: false,
+                    },
+                  ],
+                })(
+                  <Select className="bg-white text-black" style={fontWeightStyle}
+                  >
+                    <Option value="Nam">Nam</Option>
+                    <Option value="Nữ">Nữ</Option>
+                  </Select>
+                )}
+              </Form.Item>
+            </div>
+          </div>
 
-          <Form.Item label="SĐT" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('phoneNumber', {
-              initialValue: '',
-              rules: [
-                {
-                  message: 'Vui lòng nhập SDT',
-                  required: false,
-                },
-              ],
-            })(
-              <Input placeholder="SDT" className="bg-white text-black"/>
-            )}
-          </Form.Item>
+          <div className="flex-space-between">
+            <div className="mr-2" style={{width: 230}}>
+              <Form.Item label="Số điện thoại" className="form-label"  {...formItemLayout}>
+                {getFieldDecorator('phoneNumber', {
+                  initialValue: '',
+                  rules: [
+                    {
+                      message: 'Vui lòng nhập số điện thoại',
+                      required: false,
+                    },
+                  ],
+                })(
+                  <Input placeholder="Nhập số điện thoại" className="bg-white text-black"/>
+                )}
+              </Form.Item>
+            </div>
 
-          <Form.Item label="Email" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('email', {
-              initialValue: '',
-              rules: [
-                {
-                  message: 'Vui lòng nhập Email',
-                  required: true,
-                },
-              ],
-            })(
-              <Input placeholder="Email" className="bg-white text-black"/>
-            )}
-          </Form.Item>
+            <div className="flex-process">
+              <Form.Item label="Email" className="form-label"  {...formItemLayout}>
+                {getFieldDecorator('email', {
+                  initialValue: '',
+                  rules: [
+                    {
+                      message: 'Vui lòng nhập Email',
+                      required: true,
+                    },
+                  ],
+                })(
+                  <Input placeholder="Email" className="bg-white text-black"/>
+                )}
+              </Form.Item>
+            </div>
+          </div>
 
-          <Form.Item label="Địa chỉ" className="mb-0" style={{...formItemStyle}}>
+          <Form.Item label="Địa chỉ" className="form-label"  {...formItemLayout}>
             {getFieldDecorator('hometown', {
               initialValue: '',
               rules: [
                 {
-                  message: 'Vui lòng nhập quê quán',
+                  message: 'Vui lòng nhập địa chỉ',
                   required: false,
                 },
               ],
             })(
-              <Input placeholder="Quê quán" className="bg-white text-black"/>
+              <Input placeholder="Địa chỉ" className="bg-white text-black"/>
             )}
           </Form.Item>
 
-          <Form.Item label="Trình độ học vấn" className="mb-0" style={{...formItemStyle}}>
+          <Form.Item label="Trình độ đào tạo" className="form-label"  {...formItemLayout}>
             <div style={{display: 'flex'}}>
               {getFieldDecorator('levelSchool', {
-                initialValue: '',
+                initialValue: undefined,
                 rules: [
                   {
-                    message: 'Vui lòng chọn cấp bậc',
+                    message: 'Vui lòng chọn trình độ đào tạo',
                     required: false,
                   },
                 ],
               })(
-                <Select className="bg-white text-black"
+                <Select className="bg-white text-black" style={fontWeightStyle} placeholder="Chọn trình độ đào tạo"
                 >
                   <Option key="1" value="Trung cấp">Trung cấp</Option>
                   <Option key="2" value="Đại học">Đại học</Option>
@@ -337,18 +360,18 @@ function CreateProfileForm(props: CreateProfileFormProps) {
 
           </Form.Item>
 
-          <Form.Item label="Nơi đào tạo" className="mb-0" style={{...formItemStyle}}>
+          <Form.Item label="Nơi đào tạo" className="form-label"  {...formItemLayout}>
             <div style={{display: 'flex'}}>
               {getFieldDecorator('school', {
-                initialValue: '',
+                initialValue: undefined,
                 rules: [
                   {
-                    message: 'Vui lòng nhập trường học',
+                    message: 'Vui lòng chọn nơi đào tạo',
                     required: false,
                   },
                 ],
               })(
-                <Select className="bg-white text-black"
+                <Select className="bg-white text-black" style={fontWeightStyle} placeholder="Chọn nơi đào tạo"
                 >
                   {props.listSchool.rows?.map((item: any, index: any) => (
                     <Option key={index} value={item.id}>{item.name}</Option>
@@ -367,47 +390,67 @@ function CreateProfileForm(props: CreateProfileFormProps) {
 
           </Form.Item>
 
-          <Form.Item label="Nguồn ứng tuyển" className="mb-0" style={{...formItemStyle}}>
-            <div style={{display: 'flex'}}>
-              {getFieldDecorator('sourceCV', {
-                initialValue: '',
-                rules: [
-                  {
-                    message: 'Vui lòng nhập nguồn ứng tuyển',
-                    required: true,
-                  },
-                ],
-              })(
-                <Select className="bg-white text-black"
-                >
-                  {props.listSourceCV.rows?.map((item: any, index: any) => (
-                    <Option key={index} value={item.id}>{item.name}</Option>
-                  ))}
-                </Select>
-              )}
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                style={{height: '32px'}}
-                onClick={handleCreateSourceCV}
-              >
-                <Icon type="plus"/>
-              </Button>
+          <div className="flex-space-between">
+            <div className="mr-2" style={{width: 230}}>
+              <Form.Item label="Ngày ứng tuyển" className="form-label"  {...formItemLayout}>
+                {getFieldDecorator('dateOfApply', {
+                  initialValue: moment(),
+                  rules: [
+                    {
+                      message: 'Vui lòng nhập ngày ứng tuyển',
+                      required: false,
+                    },
+                  ],
+                })(
+                  <DatePicker placeholder="dd/mm/yyyy" format={dateFormat} style={{width: "100%"}}/>
+                )}
+              </Form.Item>
             </div>
-          </Form.Item>
 
-          <Form.Item label="Vị trí công việc" className="mb-0" style={{...formItemStyle}}>
+            <div className="flex-process">
+              <Form.Item label="Nguồn ứng tuyển" className="form-label"  {...formItemLayout}>
+                <div style={{display: 'flex', padding: "4px 0"}}>
+                  {getFieldDecorator('sourceCV', {
+                    initialValue: props.listSourceCV.rows[0]?.id,
+                    rules: [
+                      {
+                        message: 'Vui lòng nhập nguồn ứng tuyển',
+                        required: true,
+                      },
+                    ],
+                  })(
+                    <Select className="bg-white text-black" style={fontWeightStyle}
+                    >
+                      {props.listSourceCV.rows?.map((item: any, index: any) => (
+                        <Option key={index} value={item.id}>{item.name}</Option>
+                      ))}
+                    </Select>
+                  )}
+                  <Button
+                    size="small"
+                    className="ant-btn ml-1 mr-1 ant-btn-sm"
+                    style={{height: '32px'}}
+                    onClick={handleCreateSourceCV}
+                  >
+                    <Icon type="plus"/>
+                  </Button>
+                </div>
+              </Form.Item>
+            </div>
+          </div>
+
+          <Form.Item label="Vị trí công việc" className="form-label"  {...formItemLayout}>
             <div style={{display: 'flex'}}>
               {getFieldDecorator('job', {
-                initialValue: '',
+                initialValue: undefined,
                 rules: [
                   {
-                    message: 'Vui lòng nhập vị trí công việc',
+                    message: 'Vui lòng chọn vị trí công việc',
                     required: true,
                   },
                 ],
               })(
-                <Select className="bg-white text-black"
+                <Select className="bg-white text-black" placeholder="Chọn vị trí công việc" style={fontWeightStyle}
                 >
                   {props.listJob.rows?.map((item: any, index: any) => (
                     <Option key={index} value={item.id}>{item.name}</Option>
@@ -426,10 +469,10 @@ function CreateProfileForm(props: CreateProfileFormProps) {
             </div>
           </Form.Item>
 
-          <Form.Item label="Cấp bậc công việc" className="mb-0" style={{...formItemStyle}}>
+          <Form.Item label="Cấp bậc công việc" className="form-label"  {...formItemLayout}>
             <div style={{display: 'flex'}}>
               {getFieldDecorator('levelJob', {
-                initialValue: '',
+                initialValue: undefined,
                 rules: [
                   {
                     message: 'Vui lòng nhập cấp bậc công việc',
@@ -437,7 +480,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                   },
                 ],
               })(
-                <Select className="bg-white text-black"
+                <Select className="bg-white text-black" placeholder="Câp bậc công việc" style={fontWeightStyle}
                 >
                   {props.listJobLevel.rows?.map((item: any, index: any) => (
                     <Option key={index} value={item.id}>{item.name}</Option>
@@ -455,7 +498,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
             </div>
           </Form.Item>
 
-          <Form.Item label="Kỹ năng công việc" className="mb-0" style={{paddingBottom: 15}}>
+          <Form.Item label="Kỹ năng công việc" className="form-label" style={{paddingBottom: 15}}>
             <div style={{display: 'flex'}}>
               {getFieldDecorator('skill', {
                 initialValue: undefined,
@@ -466,8 +509,8 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                   },
                 ],
               })(
-                <Select className="bg-white text-black"
-                        mode="multiple"
+                <Select className="bg-white text-black" placeholder="Chọn kỹ năng công việc"
+                        mode="multiple" style={fontWeightStyle}
                 >
                   {props.listSkill.rows?.map((item: any, index: any) => (
                     <Option key={index} value={item.id}>{item.name}</Option>
@@ -485,62 +528,45 @@ function CreateProfileForm(props: CreateProfileFormProps) {
             </div>
           </Form.Item>
 
-          <Form.Item label="Talent pools" className="mb-0" style={{...formItemStyle}}>
+          <Form.Item label="Người giới thiệu" className="form-label"  {...formItemLayout}>
+            {getFieldDecorator('hrRef', {
+              initialValue: undefined,
+              rules: [
+                {
+                  message: 'Vui lòng chọn người giới thiệu',
+                  required: false,
+                },
+              ],
+            })(
+              <Select className="bg-white text-black select-account-custom" style={fontWeightStyle}
+                      placeholder="Chọn người giới thiệu">
+                {props.listAccount.rows?.map((item: any, index: any) => (
+                  <Option key={index} value={item.username} label={item.fullName}>
+                    <div className="flex-items-center" style={{paddingTop:5}}>
+                      <div style={{marginRight: 10}}>
+                        <Avatar src={item.image ? item.image : "#"}
+                                style={{backgroundColor: item?.avatarColor, marginRight: 5}}>
+                          {getInitials(item.fullName)}
+                        </Avatar>
+                      </div>
+                      <div className="c-list-profile" style={{fontWeight: 500}}>
+                        <div style={{height: 25}}>{item.fullName}</div>
+                        <div style={{height: 25}} className="more-information">{item.email}</div>
+                      </div>
+                    </div>
+                  </Option>
+                ))}
+              </Select>
+            )}
+          </Form.Item>
+
+          <Form.Item label="Phòng ban" className="form-label"  {...formItemLayout}>
             <div style={{display: 'flex'}}>
-              {getFieldDecorator('talentPool', {
+              {getFieldDecorator('department', {
                 initialValue: undefined,
                 rules: [
                   {
-                    message: 'Vui lòng chọn talent pools',
-                    required: false,
-                  },
-                ],
-              })(
-                <Select className="bg-white text-black" placeholder={"Chọn talent pools"}
-                >
-                  {props.listTalentPool.rows?.map((item: any, index: any) => (
-                    <Option key={index} value={item.id}>{item.name}</Option>
-                  ))}
-                </Select>
-              )}
-            </div>
-          </Form.Item>
-
-          <Form.Item label="Người giới thiệu" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('hrRef', {
-              initialValue: '',
-              rules: [
-                {
-                  message: 'Vui lòng nhập tên người giới thiệu',
-                  required: false,
-                },
-              ],
-            })(
-              <Input placeholder="Tên HR Reference" className="bg-white text-black"/>
-            )}
-          </Form.Item>
-
-          <Form.Item label="Email người giới thiệu" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('emailRef', {
-              initialValue: '',
-              rules: [
-                {
-                  message: 'Vui lòng nhập email người giới thiệu',
-                  required: false,
-                },
-              ],
-            })(
-              <Input placeholder="Email người giới thiệu" className="bg-white text-black"/>
-            )}
-          </Form.Item>
-
-          <Form.Item label="Phòng ban" className="mb-0" style={{...formItemStyle}}>
-            <div style={{display: 'flex'}}>
-              {getFieldDecorator('department', {
-                initialValue: "",
-                rules: [
-                  {
-                    message: 'Vui lòng nhập Phòng ban',
+                    message: 'Vui lòng nhập phòng ban',
                     required: false,
                   },
                 ],
@@ -549,7 +575,8 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                   className="bg-white text-black"
                   dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
                   treeData={treeData}
-                  placeholder="Phòng ban"
+                  style={fontWeightStyle}
+                  placeholder="Chọn bộ phận, phòng ban"
                   treeDefaultExpandAll
                 />
               )}
@@ -564,22 +591,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
             </div>
           </Form.Item>
 
-          <Form.Item label="Ngày tạo" className="mb-0" style={{...formItemStyle}}>
-            {getFieldDecorator('dateOfApply', {
-              initialValue: moment(),
-              rules: [
-                {
-                  message: 'Vui lòng nhập thời gian',
-                  required: false,
-                },
-              ],
-            })(
-              <DatePicker format={dateFormat} style={{width: "100%"}}/>
-            )}
-          </Form.Item>
-
-
-          <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px'}} colon={false}>
+          <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px', textAlign: "right"}} colon={false}>
             <Button className="mr-3 create-btn" htmlType="submit" onClick={onBtnCreateClicked}>
               Tạo mới
             </Button>
