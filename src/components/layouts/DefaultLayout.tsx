@@ -156,6 +156,7 @@ const DefaultLayout = (props: LayoutProps) => {
                 </Row>
               </div>
             </Layout>
+
           </Layout>
         </Layout>
       </commonStyled.Container>

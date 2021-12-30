@@ -93,7 +93,7 @@ function RecruitmentManagerPages(props: IProps) {
                       fontWeight: 600,
                       width: 120,
                     }}>
-              <Option value="all">Tât cả</Option>
+              <Option value="all">Tất cả</Option>
               <Option value="create">Tôi tạo</Option>
               <Option value="join">Tôi tham gia</Option>
 

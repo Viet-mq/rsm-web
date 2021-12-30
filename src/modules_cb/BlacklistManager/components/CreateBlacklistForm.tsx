@@ -1,10 +1,11 @@
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Form, Input, Modal} from "antd";
+import {AutoComplete, Button, Form, Icon, Input, Modal} from "antd";
 import React, {FormEvent} from "react";
 import {createBlacklist, showFormCreate} from "../redux/actions";
 import {CreateBlacklistRequest} from "../types";
+import {fontWeight} from "html2canvas/dist/types/css/property-descriptors/font-weight";
 
 const mapStateToProps = ({blacklistManager}: RootState) => ({blacklistManager});
 const connector = connect(mapStateToProps, {createBlacklist, showFormCreate});
@@ -18,6 +19,7 @@ function CreateBlacklistForm(props: CreateBlacklistFormProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
   const formItemStyle = {height: '60px'};
+  const { TextArea } = Input;
 
   const formItemLayout = {
     labelCol: {
@@ -55,98 +57,74 @@ function CreateBlacklistForm(props: CreateBlacklistFormProps) {
   }
 
 
+
   return (
 
-    <Modal
-      zIndex={2}
-      maskClosable={false}
-      title="Tạo mới Blacklist"
-      visible={props.blacklistManager.showForm.show_create}
-      centered={true}
-      width="550px"
-      afterClose={() => {
-        resetFields();
-      }}
-      onCancel={() => {
-        resetFields();
-        props.showFormCreate(false);
-      }}
-      footer={""}>
+  <Modal
+    zIndex={2}
+    maskClosable={false}
+    title="Blacklist hồ sơ ứng viên"
+    visible={props.blacklistManager.showForm.show_create}
+    centered={true}
+    width="550px"
+    afterClose={() => {
+      resetFields();
+    }}
+    onCancel={() => {
+      resetFields();
+      props.showFormCreate(false);
+    }}
+    footer={""}>
 
-      <Form {...formItemLayout}>
+    <Form {...formItemLayout}>
 
-        <Form.Item label="Tên" className="mb-0" style={{...formItemStyle}}>
-          {getFieldDecorator('name', {
-            initialValue: '',
-            rules: [
-              {
-                message: 'Vui lòng nhập tên',
-                required: true,
-              },
-            ],
-          })(<Input placeholder="Nhập tên" className="bg-white text-black"/>)}
-        </Form.Item>
+      <Form.Item className="form-label" label="Tên hồ sơ" labelCol={{span: 24}} wrapperCol={{span: 24}}>
+        {getFieldDecorator('recruitmentId', {
+          initialValue: '',
+          rules: [
+            {
+              message: 'Vui lòng nhập tên hồ sơ',
+              required: true,
+            },
+          ],
+        })(<AutoComplete>
+          <Input placeholder="Tìm kiếm ứng viên" suffix={<Icon type="search" className="certain-category-icon"/>}/>
+        </AutoComplete>)}
+      </Form.Item>
 
-        <Form.Item label="Email" className="mb-0" style={{...formItemStyle}}>
-          {getFieldDecorator('email', {
-            initialValue: '',
-            rules: [
-              {
-                message: 'Vui lòng nhập Email',
-                required: true,
-              },
-            ],
-          })(<Input placeholder="Nhập Email" className="bg-white text-black"/>)}
-        </Form.Item>
+      <Form.Item className="form-label" label="Email" labelCol={{span: 24}} wrapperCol={{span: 24}}>
+        {getFieldDecorator('recruitmentId', {
+          initialValue: '',
+          rules: [
+            {
+              message: 'Vui lòng chọn tin tuyển dụng',
+              required: true,
+            },
+          ],
+        })(<Input className="bg-white text-black"/>)}
+      </Form.Item>
 
-        <Form.Item label="SĐT" className="mb-0" style={{...formItemStyle}}>
-          {getFieldDecorator('phoneNumber', {
-            initialValue: '',
-            rules: [
-              {
-                message: 'Vui lòng nhập SĐT',
-                required: true,
-              },
-            ],
-          })(<Input placeholder="Nhập SĐT" className="bg-white text-black"/>)}
-        </Form.Item>
+      <Form.Item className="form-label" label="Số điện thoại" labelCol={{span: 24}} wrapperCol={{span: 24}}>
+        {getFieldDecorator('recruitmentId')(<Input className="bg-white text-black"/>)}
+      </Form.Item>
 
-        <Form.Item label="Lý do" className="mb-0" style={{...formItemStyle}}>
-          {getFieldDecorator('reason', {
-            initialValue: '',
-            rules: [
-              {
-                message: 'Vui lòng nhập Lý do',
-                required: true,
-              },
-            ],
-          })(<Input placeholder="Nhập Lý do" className="bg-white text-black"/>)}
-        </Form.Item>
+      <Form.Item className="form-label" label="Nguyên nhân đưa vào blacklist" labelCol={{span: 24}} wrapperCol={{span: 24}}>
+        {getFieldDecorator('recruitmentId')(<TextArea placeholder={"Nhập nguyên nhân đưa vào blacklist (Không bắt buộc)"} rows={4} />)}
+      </Form.Item>
 
-        <Form.Item label="SSN" className="mb-0" style={{...formItemStyle}}>
-          {getFieldDecorator('ssn', {
-            initialValue: '',
-            rules: [
-              {
-                message: 'Vui lòng nhập SSN',
-                required: true,
-              },
-            ],
-          })(<Input placeholder="Nhập SSN" className="bg-white text-black"/>)}
-        </Form.Item>
 
-        <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px'}} colon={false}>
-          <Button className="mr-3 create-btn" htmlType="submit" onClick={onBtnCreateClicked}>
-            Tạo mới
-          </Button>
-          <Button type="default" className="pl-5 pr-5" onClick={onBtnCancelClicked}>
-            Hủy
-          </Button>
-        </Form.Item>
+      <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px', textAlign:"right"}} colon={false}>
+        <Button type="default" className="pl-5 pr-5" onClick={onBtnCancelClicked}>
+          Hủy
+        </Button>
+        <Button className="ml-3 create-btn" htmlType="submit" onClick={onBtnCreateClicked}>
+          Đưa vào blacklist
+        </Button>
+      </Form.Item>
 
-      </Form>
+    </Form>
 
-    </Modal>
+  </Modal>
 
   );
 
