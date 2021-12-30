@@ -301,7 +301,6 @@ function InformationForm(props: IProps) {
                   ],
                 })(
                   <ReactQuill
-
                     style={{...fontWeightStyle, ...textEditorHeight}}
                     theme={'snow'}
                     modules={modules}
@@ -322,7 +321,6 @@ function InformationForm(props: IProps) {
                   ],
                 })(
                   <ReactQuill
-
                     style={{...fontWeightStyle, ...textEditorHeight}}
                     theme={'snow'}
                     modules={modules}
@@ -344,7 +342,6 @@ function InformationForm(props: IProps) {
                 })(
                   <ReactQuill
                     style={{...fontWeightStyle, ...textEditorHeight}}
-
                     theme={'snow'}
                     modules={modules}
                     formats={formats}

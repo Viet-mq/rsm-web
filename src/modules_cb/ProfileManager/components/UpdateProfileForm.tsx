@@ -36,7 +36,7 @@ const mapStateToProps = (state: RootState) => ({
   createSchool: state.schoolManager.create,
   createSourceCV: state.sourcecvManager.create,
   listTalentPool: state.talentPoolManager.list,
-  listSkill:state.skillManager.list,
+  listSkill: state.skillManager.list,
   createSkill: state.skillManager.create,
   listRecruitment: state.recruitmentManager.list,
   listAccount: state.accountManager.list
@@ -107,7 +107,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           levelSchool: values.levelSchool,
           mailRef: values.mailRef,
           recruitment: values.recruitmentId,
-          skill:values.skill,
+          skill: values.skill,
         }
         props.updateProfile(req);
         return;
@@ -233,370 +233,372 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
         }}
         footer={""}>
         <Form className="form-create">
-          <Form.Item label="Họ Tên" className="form-label"  {...formItemLayout}>
-            {getFieldDecorator('fullName', {
-              initialValue: props.showForm.data_update?.fullName,
-              rules: [
-                {
-                  message: 'Vui lòng nhập họ tên',
-                  required: true,
-                },
-              ],
-            })(
-              <Input placeholder="Nhập họ và tên" className="bg-white text-black"/>
-            )}
-          </Form.Item>
+          <div className="modal-overflow">
 
-          <div className="flex-space-between">
-            <div className="mr-2">
-              <Form.Item label="Năm sinh" className="form-label"  {...formItemLayout}>
-                {getFieldDecorator('dateOfBirth', {
-                  initialValue: moment(props.showForm.data_update?.dateOfBirth),
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập năm sinh',
-                      required: false,
-                    },
-                  ],
-                })(
-                  <DatePicker placeholder="dd/mm/yyyy" format={dateFormat} style={{width: "100%"}}/>
-                )}
-              </Form.Item>
-            </div>
-
-            <div className="flex-process">
-              <Form.Item label="Giới tính" className="form-label"  {...formItemLayout}>
-                {getFieldDecorator('gender', {
-                  initialValue: props.showForm.data_update?.gender,
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập Giới tính',
-                      required: false,
-                    },
-                  ],
-                })(
-                  <Select className="bg-white text-black" style={fontWeightStyle}
-                  >
-                    <Option value="Nam">Nam</Option>
-                    <Option value="Nữ">Nữ</Option>
-                  </Select>
-                )}
-              </Form.Item>
-            </div>
-          </div>
-
-          <div className="flex-space-between">
-            <div className="mr-2" style={{width: 230}}>
-              <Form.Item label="Số điện thoại" className="form-label"  {...formItemLayout}>
-                {getFieldDecorator('phoneNumber', {
-                  initialValue: props.showForm.data_update?.phoneNumber,
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập số điện thoại',
-                      required: false,
-                    },
-                  ],
-                })(
-                  <Input placeholder="Nhập số điện thoại" className="bg-white text-black"/>
-                )}
-              </Form.Item>
-            </div>
-
-            <div className="flex-process">
-              <Form.Item label="Email" className="form-label"  {...formItemLayout}>
-                {getFieldDecorator('email', {
-                  initialValue: props.showForm.data_update?.email,
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập Email',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <Input placeholder="Email" className="bg-white text-black"/>
-                )}
-              </Form.Item>
-            </div>
-          </div>
-
-          <Form.Item label="Địa chỉ" className="form-label"  {...formItemLayout}>
-            {getFieldDecorator('hometown', {
-              initialValue: props.showForm.data_update?.hometown,
-              rules: [
-                {
-                  message: 'Vui lòng nhập địa chỉ',
-                  required: false,
-                },
-              ],
-            })(
-              <Input placeholder="Địa chỉ" className="bg-white text-black"/>
-            )}
-          </Form.Item>
-
-          <Form.Item label="Trình độ đào tạo" className="form-label"  {...formItemLayout}>
-            <div style={{display: 'flex'}}>
-              {getFieldDecorator('levelSchool', {
-                initialValue: props.showForm.data_update?.levelSchool,
+            <Form.Item label="Họ Tên" className="form-label"  {...formItemLayout}>
+              {getFieldDecorator('fullName', {
+                initialValue: props.showForm.data_update?.fullName,
                 rules: [
                   {
-                    message: 'Vui lòng chọn trình độ đào tạo',
-                    required: false,
+                    message: 'Vui lòng nhập họ tên',
+                    required: true,
                   },
                 ],
               })(
-                <Select className="bg-white text-black" style={fontWeightStyle} placeholder="Chọn trình độ đào tạo"
-                >
-                  <Option key="1" value="Trung cấp">Trung cấp</Option>
-                  <Option key="2" value="Đại học">Đại học</Option>
-                  <Option key="3" value="Cao đẳng">Cao đẳng</Option>
-                  <Option key="4" value="Thạc sĩ">Thạc sĩ</Option>
-                  <Option key="5" value="Tiến sĩ">Tiến sĩ</Option>
-                  <Option key="6" value="Giáo sư">Giáo sư</Option>
-                </Select>
+                <Input placeholder="Nhập họ và tên" className="bg-white text-black"/>
               )}
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                style={{height: '32px'}}
-                onClick={handleCreateSchool}
-              >
-                <Icon type="plus"/>
-              </Button>
-            </div>
+            </Form.Item>
 
-          </Form.Item>
-
-          <Form.Item label="Nơi đào tạo" className="form-label"  {...formItemLayout}>
-            <div style={{display: 'flex'}}>
-              {getFieldDecorator('school', {
-                initialValue: props.showForm.data_update?.schoolId,
-                rules: [
-                  {
-                    message: 'Vui lòng chọn nơi đào tạo',
-                    required: false,
-                  },
-                ],
-              })(
-                <Select className="bg-white text-black" style={fontWeightStyle} placeholder="Chọn nơi đào tạo"
-                >
-                  {props.listSchool.rows?.map((item: any, index: any) => (
-                    <Option key={index} value={item.id}>{item.name}</Option>
-                  ))}
-                </Select>
-              )}
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                style={{height: '32px'}}
-                onClick={handleCreateSchool}
-              >
-                <Icon type="plus"/>
-              </Button>
-            </div>
-
-          </Form.Item>
-
-          <div className="flex-space-between">
-            <div className="mr-2" style={{width: 230}}>
-              <Form.Item label="Ngày ứng tuyển" className="form-label"  {...formItemLayout}>
-                {getFieldDecorator('dateOfApply', {
-                  initialValue: moment(props.showForm.data_update?.dateOfApply),
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập ngày ứng tuyển',
-                      required: false,
-                    },
-                  ],
-                })(
-                  <DatePicker placeholder="dd/mm/yyyy" format={dateFormat} style={{width: "100%"}}/>
-                )}
-              </Form.Item>
-            </div>
-
-            <div className="flex-process">
-              <Form.Item label="Nguồn ứng tuyển" className="form-label"  {...formItemLayout}>
-                <div style={{display: 'flex', padding: "4px 0"}}>
-                  {getFieldDecorator('sourceCV', {
-                    initialValue: props.showForm.data_update?.sourceCVId,
+            <div className="flex-space-between">
+              <div className="mr-2">
+                <Form.Item label="Năm sinh" className="form-label"  {...formItemLayout}>
+                  {getFieldDecorator('dateOfBirth', {
+                    initialValue: moment(props.showForm.data_update?.dateOfBirth),
                     rules: [
                       {
-                        message: 'Vui lòng nhập nguồn ứng tuyển',
-                        required: true,
+                        message: 'Vui lòng nhập năm sinh',
+                        required: false,
+                      },
+                    ],
+                  })(
+                    <DatePicker placeholder="dd/mm/yyyy" format={dateFormat} style={{width: "100%"}}/>
+                  )}
+                </Form.Item>
+              </div>
+
+              <div className="flex-process">
+                <Form.Item label="Giới tính" className="form-label"  {...formItemLayout}>
+                  {getFieldDecorator('gender', {
+                    initialValue: props.showForm.data_update?.gender,
+                    rules: [
+                      {
+                        message: 'Vui lòng nhập Giới tính',
+                        required: false,
                       },
                     ],
                   })(
                     <Select className="bg-white text-black" style={fontWeightStyle}
                     >
-                      {props.listSourceCV.rows?.map((item: any, index: any) => (
-                        <Option key={index} value={item.id}>{item.name}</Option>
-                      ))}
+                      <Option value="Nam">Nam</Option>
+                      <Option value="Nữ">Nữ</Option>
                     </Select>
                   )}
-                  <Button
-                    size="small"
-                    className="ant-btn ml-1 mr-1 ant-btn-sm"
-                    style={{height: '32px'}}
-                    onClick={handleCreateSourceCV}
+                </Form.Item>
+              </div>
+            </div>
+
+            <div className="flex-space-between">
+              <div className="mr-2" style={{width: 230}}>
+                <Form.Item label="Số điện thoại" className="form-label"  {...formItemLayout}>
+                  {getFieldDecorator('phoneNumber', {
+                    initialValue: props.showForm.data_update?.phoneNumber,
+                    rules: [
+                      {
+                        message: 'Vui lòng nhập số điện thoại',
+                        required: false,
+                      },
+                    ],
+                  })(
+                    <Input placeholder="Nhập số điện thoại" className="bg-white text-black"/>
+                  )}
+                </Form.Item>
+              </div>
+
+              <div className="flex-process">
+                <Form.Item label="Email" className="form-label"  {...formItemLayout}>
+                  {getFieldDecorator('email', {
+                    initialValue: props.showForm.data_update?.email,
+                    rules: [
+                      {
+                        message: 'Vui lòng nhập Email',
+                        required: true,
+                      },
+                    ],
+                  })(
+                    <Input placeholder="Email" className="bg-white text-black"/>
+                  )}
+                </Form.Item>
+              </div>
+            </div>
+
+            <Form.Item label="Địa chỉ" className="form-label"  {...formItemLayout}>
+              {getFieldDecorator('hometown', {
+                initialValue: props.showForm.data_update?.hometown,
+                rules: [
+                  {
+                    message: 'Vui lòng nhập địa chỉ',
+                    required: false,
+                  },
+                ],
+              })(
+                <Input placeholder="Địa chỉ" className="bg-white text-black"/>
+              )}
+            </Form.Item>
+
+            <Form.Item label="Trình độ đào tạo" className="form-label"  {...formItemLayout}>
+              <div style={{display: 'flex'}}>
+                {getFieldDecorator('levelSchool', {
+                  initialValue: props.showForm.data_update?.levelSchool,
+                  rules: [
+                    {
+                      message: 'Vui lòng chọn trình độ đào tạo',
+                      required: false,
+                    },
+                  ],
+                })(
+                  <Select className="bg-white text-black" style={fontWeightStyle} placeholder="Chọn trình độ đào tạo"
                   >
-                    <Icon type="plus"/>
-                  </Button>
-                </div>
-              </Form.Item>
+                    <Option key="1" value="Trung cấp">Trung cấp</Option>
+                    <Option key="2" value="Đại học">Đại học</Option>
+                    <Option key="3" value="Cao đẳng">Cao đẳng</Option>
+                    <Option key="4" value="Thạc sĩ">Thạc sĩ</Option>
+                    <Option key="5" value="Tiến sĩ">Tiến sĩ</Option>
+                    <Option key="6" value="Giáo sư">Giáo sư</Option>
+                  </Select>
+                )}
+                <Button
+                  size="small"
+                  className="ant-btn ml-1 mr-1 ant-btn-sm"
+                  style={{height: '32px'}}
+                  onClick={handleCreateSchool}
+                >
+                  <Icon type="plus"/>
+                </Button>
+              </div>
+
+            </Form.Item>
+
+            <Form.Item label="Nơi đào tạo" className="form-label"  {...formItemLayout}>
+              <div style={{display: 'flex'}}>
+                {getFieldDecorator('school', {
+                  initialValue: props.showForm.data_update?.schoolId,
+                  rules: [
+                    {
+                      message: 'Vui lòng chọn nơi đào tạo',
+                      required: false,
+                    },
+                  ],
+                })(
+                  <Select className="bg-white text-black" style={fontWeightStyle} placeholder="Chọn nơi đào tạo"
+                  >
+                    {props.listSchool.rows?.map((item: any, index: any) => (
+                      <Option key={index} value={item.id}>{item.name}</Option>
+                    ))}
+                  </Select>
+                )}
+                <Button
+                  size="small"
+                  className="ant-btn ml-1 mr-1 ant-btn-sm"
+                  style={{height: '32px'}}
+                  onClick={handleCreateSchool}
+                >
+                  <Icon type="plus"/>
+                </Button>
+              </div>
+
+            </Form.Item>
+
+            <div className="flex-space-between">
+              <div className="mr-2" style={{width: 230}}>
+                <Form.Item label="Ngày ứng tuyển" className="form-label"  {...formItemLayout}>
+                  {getFieldDecorator('dateOfApply', {
+                    initialValue: moment(props.showForm.data_update?.dateOfApply),
+                    rules: [
+                      {
+                        message: 'Vui lòng nhập ngày ứng tuyển',
+                        required: false,
+                      },
+                    ],
+                  })(
+                    <DatePicker placeholder="dd/mm/yyyy" format={dateFormat} style={{width: "100%"}}/>
+                  )}
+                </Form.Item>
+              </div>
+
+              <div className="flex-process">
+                <Form.Item label="Nguồn ứng tuyển" className="form-label"  {...formItemLayout}>
+                  <div style={{display: 'flex', padding: "4px 0"}}>
+                    {getFieldDecorator('sourceCV', {
+                      initialValue: props.showForm.data_update?.sourceCVId,
+                      rules: [
+                        {
+                          message: 'Vui lòng nhập nguồn ứng tuyển',
+                          required: true,
+                        },
+                      ],
+                    })(
+                      <Select className="bg-white text-black" style={fontWeightStyle}
+                      >
+                        {props.listSourceCV.rows?.map((item: any, index: any) => (
+                          <Option key={index} value={item.id}>{item.name}</Option>
+                        ))}
+                      </Select>
+                    )}
+                    <Button
+                      size="small"
+                      className="ant-btn ml-1 mr-1 ant-btn-sm"
+                      style={{height: '32px'}}
+                      onClick={handleCreateSourceCV}
+                    >
+                      <Icon type="plus"/>
+                    </Button>
+                  </div>
+                </Form.Item>
+              </div>
             </div>
+
+            <Form.Item label="Vị trí công việc" className="form-label"  {...formItemLayout}>
+              <div style={{display: 'flex'}}>
+                {getFieldDecorator('job', {
+                  initialValue: props.showForm.data_update?.jobId,
+                  rules: [
+                    {
+                      message: 'Vui lòng chọn vị trí công việc',
+                      required: true,
+                    },
+                  ],
+                })(
+                  <Select className="bg-white text-black" placeholder="Chọn vị trí công việc" style={fontWeightStyle}
+                  >
+                    {props.listJob.rows?.map((item: any, index: any) => (
+                      <Option key={index} value={item.id}>{item.name}</Option>
+                    ))}
+                  </Select>
+                )}
+                <Button
+                  size="small"
+                  className="ant-btn ml-1 mr-1 ant-btn-sm"
+                  style={{height: '32px'}}
+                  onClick={handleCreateJob}
+                >
+                  <Icon type="plus"/>
+                </Button>
+
+              </div>
+            </Form.Item>
+
+            <Form.Item label="Cấp bậc công việc" className="form-label"  {...formItemLayout}>
+              <div style={{display: 'flex'}}>
+                {getFieldDecorator('levelJob', {
+                  initialValue: props.showForm.data_update?.levelJobId,
+                  rules: [
+                    {
+                      message: 'Vui lòng nhập cấp bậc công việc',
+                      required: false,
+                    },
+                  ],
+                })(
+                  <Select className="bg-white text-black" placeholder="Câp bậc công việc" style={fontWeightStyle}
+                  >
+                    {props.listJobLevel.rows?.map((item: any, index: any) => (
+                      <Option key={index} value={item.id}>{item.name}</Option>
+                    ))}
+                  </Select>
+                )}
+                <Button
+                  size="small"
+                  className="ant-btn ml-1 mr-1 ant-btn-sm"
+                  style={{height: '32px'}}
+                  onClick={handleCreateJobLevel}
+                >
+                  <Icon type="plus"/>
+                </Button>
+              </div>
+            </Form.Item>
+
+            <Form.Item label="Kỹ năng công việc" className="form-label" style={{paddingBottom: 15}}>
+              <div style={{display: 'flex'}}>
+                {getFieldDecorator('skill', {
+                  initialValue: props.showForm.data_update?.skill?.map((item: any) => item.id) || undefined,
+                  rules: [
+                    {
+                      message: 'Vui lòng chọn kỹ năng công việc',
+                      required: false,
+                    },
+                  ],
+                })(
+                  <Select className="bg-white text-black" placeholder="Chọn kỹ năng công việc"
+                          mode="multiple" style={fontWeightStyle}
+                  >
+                    {props.listSkill.rows?.map((item: any, index: any) => (
+                      <Option key={index} value={item.id}>{item.name}</Option>
+                    ))}
+                  </Select>
+                )}
+                <Button
+                  size="small"
+                  className="ant-btn ml-1 mr-1 ant-btn-sm"
+                  style={{height: '32px'}}
+                  onClick={handleCreateSkill}
+                >
+                  <Icon type="plus"/>
+                </Button>
+              </div>
+            </Form.Item>
+
+            <Form.Item label="Người giới thiệu" className="form-label"  {...formItemLayout}>
+              {getFieldDecorator('hrRef', {
+                initialValue: props.showForm.data_update?.hrRef,
+                rules: [
+                  {
+                    message: 'Vui lòng chọn người giới thiệu',
+                    required: false,
+                  },
+                ],
+              })(
+                <Select className="bg-white text-black select-account-custom" style={fontWeightStyle}
+                        placeholder="Chọn người giới thiệu">
+                  {props.listAccount.rows?.map((item: any, index: any) => (
+                    <Option key={index} value={item.username} label={item.fullName}>
+                      <div className="flex-items-center" style={{paddingTop: 5}}>
+                        <div style={{marginRight: 10}}>
+                          <Avatar src={item.image ? item.image : "#"}
+                                  style={{backgroundColor: item?.avatarColor, marginRight: 5}}>
+                            {getInitials(item.fullName)}
+                          </Avatar>
+                        </div>
+                        <div className="c-list-profile" style={{fontWeight: 500}}>
+                          <div style={{height: 25}}>{item.fullName}</div>
+                          <div style={{height: 25}} className="more-information">{item.email}</div>
+                        </div>
+                      </div>
+                    </Option>
+                  ))}
+                </Select>
+              )}
+            </Form.Item>
+
+            <Form.Item label="Phòng ban" className="form-label"  {...formItemLayout}>
+              <div style={{display: 'flex'}}>
+                {getFieldDecorator('department', {
+                  initialValue: props.showForm.data_update?.department,
+                  rules: [
+                    {
+                      message: 'Vui lòng nhập phòng ban',
+                      required: false,
+                    },
+                  ],
+                })(
+                  <TreeSelect
+                    className="bg-white text-black"
+                    dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
+                    treeData={treeData}
+                    style={fontWeightStyle}
+                    placeholder="Chọn bộ phận, phòng ban"
+                    treeDefaultExpandAll
+                  />
+                )}
+                <Button
+                  size="small"
+                  className="ant-btn ml-1 mr-1 ant-btn-sm"
+                  style={{height: '32px'}}
+                  onClick={handleCreateDepartment}
+                >
+                  <Icon type="plus"/>
+                </Button>
+              </div>
+            </Form.Item>
           </div>
-
-          <Form.Item label="Vị trí công việc" className="form-label"  {...formItemLayout}>
-            <div style={{display: 'flex'}}>
-              {getFieldDecorator('job', {
-                initialValue: props.showForm.data_update?.jobId,
-                rules: [
-                  {
-                    message: 'Vui lòng chọn vị trí công việc',
-                    required: true,
-                  },
-                ],
-              })(
-                <Select className="bg-white text-black" placeholder="Chọn vị trí công việc" style={fontWeightStyle}
-                >
-                  {props.listJob.rows?.map((item: any, index: any) => (
-                    <Option key={index} value={item.id}>{item.name}</Option>
-                  ))}
-                </Select>
-              )}
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                style={{height: '32px'}}
-                onClick={handleCreateJob}
-              >
-                <Icon type="plus"/>
-              </Button>
-
-            </div>
-          </Form.Item>
-
-          <Form.Item label="Cấp bậc công việc" className="form-label"  {...formItemLayout}>
-            <div style={{display: 'flex'}}>
-              {getFieldDecorator('levelJob', {
-                initialValue: props.showForm.data_update?.levelJobId,
-                rules: [
-                  {
-                    message: 'Vui lòng nhập cấp bậc công việc',
-                    required: false,
-                  },
-                ],
-              })(
-                <Select className="bg-white text-black" placeholder="Câp bậc công việc" style={fontWeightStyle}
-                >
-                  {props.listJobLevel.rows?.map((item: any, index: any) => (
-                    <Option key={index} value={item.id}>{item.name}</Option>
-                  ))}
-                </Select>
-              )}
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                style={{height: '32px'}}
-                onClick={handleCreateJobLevel}
-              >
-                <Icon type="plus"/>
-              </Button>
-            </div>
-          </Form.Item>
-
-          <Form.Item label="Kỹ năng công việc" className="form-label" style={{paddingBottom: 15}}>
-            <div style={{display: 'flex'}}>
-              {getFieldDecorator('skill', {
-                initialValue: props.showForm.data_update?.skill?.map((item:any)=>item.id)||undefined,
-                rules: [
-                  {
-                    message: 'Vui lòng chọn kỹ năng công việc',
-                    required: false,
-                  },
-                ],
-              })(
-                <Select className="bg-white text-black" placeholder="Chọn kỹ năng công việc"
-                        mode="multiple" style={fontWeightStyle}
-                >
-                  {props.listSkill.rows?.map((item: any, index: any) => (
-                    <Option key={index} value={item.id}>{item.name}</Option>
-                  ))}
-                </Select>
-              )}
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                style={{height: '32px'}}
-                onClick={handleCreateSkill}
-              >
-                <Icon type="plus"/>
-              </Button>
-            </div>
-          </Form.Item>
-
-          <Form.Item label="Người giới thiệu" className="form-label"  {...formItemLayout}>
-            {getFieldDecorator('hrRef', {
-              initialValue: props.showForm.data_update?.hrRef,
-              rules: [
-                {
-                  message: 'Vui lòng chọn người giới thiệu',
-                  required: false,
-                },
-              ],
-            })(
-              <Select className="bg-white text-black select-account-custom" style={fontWeightStyle}
-                      placeholder="Chọn người giới thiệu">
-                {props.listAccount.rows?.map((item: any, index: any) => (
-                  <Option key={index} value={item.username} label={item.fullName}>
-                    <div className="flex-items-center" style={{paddingTop:5}}>
-                      <div style={{marginRight: 10}}>
-                        <Avatar src={item.image ? item.image : "#"}
-                                style={{backgroundColor: item?.avatarColor, marginRight: 5}}>
-                          {getInitials(item.fullName)}
-                        </Avatar>
-                      </div>
-                      <div className="c-list-profile" style={{fontWeight: 500}}>
-                        <div style={{height: 25}}>{item.fullName}</div>
-                        <div style={{height: 25}} className="more-information">{item.email}</div>
-                      </div>
-                    </div>
-                  </Option>
-                ))}
-              </Select>
-            )}
-          </Form.Item>
-
-          <Form.Item label="Phòng ban" className="form-label"  {...formItemLayout}>
-            <div style={{display: 'flex'}}>
-              {getFieldDecorator('department', {
-                initialValue: props.showForm.data_update?.department,
-                rules: [
-                  {
-                    message: 'Vui lòng nhập phòng ban',
-                    required: false,
-                  },
-                ],
-              })(
-                <TreeSelect
-                  className="bg-white text-black"
-                  dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
-                  treeData={treeData}
-                  style={fontWeightStyle}
-                  placeholder="Chọn bộ phận, phòng ban"
-                  treeDefaultExpandAll
-                />
-              )}
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                style={{height: '32px'}}
-                onClick={handleCreateDepartment}
-              >
-                <Icon type="plus"/>
-              </Button>
-            </div>
-          </Form.Item>
-
           <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px', textAlign: "right"}} colon={false}>
             <Button className="mr-3 create-btn" htmlType="submit" onClick={onBtnUpdateClicked}>
               Cập nhật
