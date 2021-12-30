@@ -29,21 +29,21 @@ export interface InterviewProcess {
 }
 
 export interface CreateRecruitmentRequest {
-  address?: string,
-  deadLine?: number,
-  interest?: string,
+  address: string,
+  deadLine: number,
   interviewProcess?: InterviewProcess[],
   interviewer?: null,
   job: string,
-  jobDescription?: string,
-  quantity?: number,
-  requirementOfJob?: string,
+  quantity: number,
   talentPool?: string,
-  title?: string,
+  title: string,
   typeOfJob?: string
   detailOfSalary?: string,
   from?: number,
   to?: number,
+  requirementOfJob: string,
+  jobDescription: string,
+  interest: string,
 }
 
 export interface UpdateRecruitmentRequest {
@@ -67,19 +67,4 @@ export interface UpdateRecruitmentRequest {
 export interface DeleteRecruitmentRequest {
   id: string,
 }
-
-export interface StepNavInfo {
-  key: string,
-  style: any,
-  link: string,
-  icon: string,
-  styleText: any,
-  text: string
-}
-
-export const STEP_NAV_INFORMATION = "information";
-export const STEP_NAV_PROCESS = "process";
-export const STEP_NAV_INTERVIEWERS = "interviewers";
-
-
 

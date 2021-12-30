@@ -106,7 +106,7 @@ const CreateLayout = (props: LayoutProps) => {
                   <Route path={`/recruitment-manager/${props.path}/information`}>
                     <InformationForm/>
                   </Route>
-                  <Route path={`/recruitment-manager/${props.path}/process`}>
+                  <Route path={`/recruitment-manager1/${props.path}/process`}>
                     <Process/>
                   </Route>
                   <Route path={`/recruitment-manager/${props.path}/interviewers`}>

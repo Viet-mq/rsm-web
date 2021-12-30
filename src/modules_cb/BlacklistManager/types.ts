@@ -12,7 +12,6 @@ export interface CreateBlacklistRequest {
   name: string,
   phoneNumber: string,
   reason: string,
-  ssn: string
 }
 
 export interface UpdateBlacklistRequest {
