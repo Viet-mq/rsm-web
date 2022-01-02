@@ -1,8 +1,7 @@
 export interface StatusCVEntity {
-  id:string,
-  name:string,
-  page:number,
-  size:number,
+  id: string,
+  name: string,
+  isDragDisabled: boolean
 }
 
 export interface CreateStatusCVRequest {

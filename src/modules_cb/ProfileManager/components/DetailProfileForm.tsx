@@ -18,7 +18,7 @@ import {
   showFormUploadCV,
   updateNote
 } from "../redux/actions";
-import {showFormCreateNote, showFormUpdateNote} from "../../ProfileManager/redux/actions/note/showNote";
+import {showFormCreateNote, showFormUpdateNote} from "../redux/actions";
 import {Avatar, Badge, Button, Icon, Pagination, Popconfirm, Popover, Steps, Table, Tag, Timeline, Tooltip} from "antd";
 import React, {useEffect, useState} from "react";
 import {ChangeProcessRequest, DataShowBooking, DeleteNoteRequest, DetailCV, NoteEntity} from "../types";
@@ -325,12 +325,12 @@ function DetailProfileForm(props: DetailProfileFormProps) {
         general: 0,
         detail: 24
       }
+
     props.showFormDetail(req);
   }
 
   const handleEditNote = (event: any, entity: NoteEntity) => {
     event.stopPropagation();
-    // console.log("handleEditNote:",entity)
     props.showFormUpdateNote(true, entity);
   }
 

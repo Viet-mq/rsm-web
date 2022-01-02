@@ -16,8 +16,7 @@ import Interviewers from "../components/Interviewers";
 const {Sider} = Layout;
 
 const mapStateToProps = (state: RootState) => ({
-  showFormDetail: state.profileManager.showForm,
-  elasticSearch: state.profileManager.search,
+  checkValidate: state.recruitmentManager.createSteps
 
 })
 
@@ -26,46 +25,10 @@ const connector = connect(mapStateToProps, {});
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface LayoutProps extends FormComponentProps, ReduxProps {
-  // children: React.ReactNode;
   path:string;
 }
 
 const CreateLayout = (props: LayoutProps) => {
-  const screenWidth = document.documentElement.clientWidth;
-  const [collapsed, setCollapsed] = useState(screenWidth <= env.tabletWidth ? true : false)
-  const history = useHistory();
-  const [state, setState] = useState<any>({
-    value: '',
-    dataSource: [],
-  });
-
-  useEffect(() => {
-    function updateSize() {
-      if (document.documentElement.clientWidth < env.desktopWidth) setCollapsed(true)
-      else setCollapsed(false)
-    }
-
-    window.addEventListener('resize', updateSize);
-    updateSize();
-    return () => window.removeEventListener('resize', updateSize);
-
-  }, []);
-
-
-  useEffect(() => {
-    if (props.elasticSearch.rowsRs && state.value) {
-      history.push({
-        pathname: "/profile-manager",
-      });
-    }
-  }, [props.elasticSearch.triggerSearch])
-
-  useEffect(() => {
-    setState({
-      ...state,
-      dataSource: !state.value ? [] : Array.from(new Set([state.value].concat(props.elasticSearch.rowsSearch?.map((item: any) => item.fullName)))),
-    })
-  }, [props.elasticSearch.rowsSearch])
 
   const menu = (
     <Menu className='detail-action'>
@@ -106,7 +69,7 @@ const CreateLayout = (props: LayoutProps) => {
                   <Route path={`/recruitment-manager/${props.path}/information`}>
                     <InformationForm/>
                   </Route>
-                  <Route path={`/recruitment-manager1/${props.path}/process`}>
+                  <Route path={`/recruitment-manager/${props.path}/process`}>
                     <Process/>
                   </Route>
                   <Route path={`/recruitment-manager/${props.path}/interviewers`}>
@@ -115,8 +78,9 @@ const CreateLayout = (props: LayoutProps) => {
                   <Redirect exact from={`/recruitment-manager/${props.path}/`} to={`/recruitment-manager/${props.path}/information`}/>
                 </Switch>
                 <div className="region-action ">
-                  <Dropdown.Button overlay={menu} style={{marginBottom: 15}} size='large' type="primary">Lưu và đăng
-                    tin</Dropdown.Button>
+                  <Dropdown.Button overlay={menu} style={{marginBottom: 15}} size='large' type={"primary"} className={props.checkValidate.isValidate ?"":"button-color"}>
+                    Lưu và đăng tin
+                  </Dropdown.Button>
                   <Button className="btn-save" size='large'>Lưu nháp</Button>
                 </div>
               </div>
@@ -126,7 +90,6 @@ const CreateLayout = (props: LayoutProps) => {
         </Layout>
       </Layout>
 
-      {props.elasticSearch.loadingRs ? <Loading/> : null}
     </div>
   );
 

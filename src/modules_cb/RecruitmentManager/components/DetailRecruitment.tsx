@@ -119,6 +119,7 @@ function DetailRecruitment(props: IProps) {
       general: 24,
       detail: 0
     }
+
     props.showFormDetail(req);
   }
 

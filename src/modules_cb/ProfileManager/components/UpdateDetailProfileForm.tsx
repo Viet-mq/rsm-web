@@ -110,6 +110,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
       general: 12,
       detail: 12,
     }
+
     props.showFormDetail(req);
   }
 
@@ -172,6 +173,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
             general: 12,
             detail: 12,
           }
+
           props.showFormDetail(req);
         }}
         footer={""}>

@@ -40,7 +40,7 @@ const DefaultLayout = (props: LayoutProps) => {
     value: '',
     dataSource: [],
   });
-
+  console.log(history)
   function toggle() {
     setCollapsed(!collapsed)
   }
@@ -147,7 +147,9 @@ const DefaultLayout = (props: LayoutProps) => {
                 <Row>
                   <Col span={props.showFormDetail?.show_detail?.general}
                        style={{height: "calc(100vh - 60px)", overflow: "auto"}}>
-                    {props.children}
+                    <div style={history.location.pathname==='/statuscv-manager'?{background:"white",height:"100%"}:{height:"100%"}}>
+                      {props.children}
+                    </div>
                   </Col>
 
                   <Col span={props.showFormDetail?.show_detail?.detail}>

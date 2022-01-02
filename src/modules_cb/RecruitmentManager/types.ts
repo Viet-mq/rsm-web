@@ -35,12 +35,12 @@ export interface CreateRecruitmentRequest {
   interviewer?: null,
   job: string,
   quantity: number,
-  talentPool?: string,
+  talentPool: string,
   title: string,
-  typeOfJob?: string
-  detailOfSalary?: string,
-  from?: number,
-  to?: number,
+  typeOfJob: string
+  detailOfSalary: string,
+  from: number,
+  to: number,
   requirementOfJob: string,
   jobDescription: string,
   interest: string,

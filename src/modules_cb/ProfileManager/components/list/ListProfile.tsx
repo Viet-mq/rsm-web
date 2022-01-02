@@ -466,7 +466,9 @@ function ListProfile(props: ListProfileProps) {
       show_detail: true,
       general: 12,
       detail: 12,
+
     }
+
     props.showFormDetail(req, entity.id);
   }
 

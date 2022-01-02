@@ -9,7 +9,6 @@ export interface CreateStepsAction {
 
 export const CREATE_STEPS = "CREATE_STEPS";
 export const CHECK_INFORMATION_VALIDATE = "CHECK_INFORMATION_VALIDATE";
-export const TRIGGER_CHECK_INFORMATION = "TRIGGER_CHECK_INFORMATION";
 
 
 export const createSteps = (request: CreateRecruitmentRequest): CreateStepsAction => ({
@@ -22,6 +21,3 @@ export const checkInformationValidate = (isValidate?:boolean): CreateStepsAction
   isValidate
 });
 
-export const triggerCheckInformation = (): CreateStepsAction => ({
-  type: TRIGGER_CHECK_INFORMATION,
-});
