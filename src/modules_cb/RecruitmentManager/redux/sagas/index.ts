@@ -10,10 +10,12 @@ import {
   GET_DETAIL_RECRUITMENT,
   GET_LIST_KANBAN_CANDIDATE,
   GET_LIST_RECRUITMENT,
+  SEARCH_USER,
   UPDATE_RECRUITMENT
 } from "../actions";
 import {getDetailRecruitmentAsync} from "./detail";
 import {getListKanbanCandidateAsync} from "./listKanbanCandidate";
+import {searchUserAsync} from "./searchUser";
 import {createInterviewProcessAsync} from "./createInterviewProcess";
 
 export default function* root() {
@@ -25,5 +27,6 @@ export default function* root() {
     yield takeLatest(UPDATE_RECRUITMENT, updateRecruitmentAsync),
     yield takeLatest(GET_LIST_KANBAN_CANDIDATE, getListKanbanCandidateAsync),
     yield takeLatest(CREATE_INTERVIEW_PROCESS, createInterviewProcessAsync),
+    yield takeLatest(SEARCH_USER, searchUserAsync),
   ]);
 }

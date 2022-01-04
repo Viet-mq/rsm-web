@@ -71,6 +71,7 @@ function CreateProcessForm(props: CreateJobFormProps) {
       if (!err) {
         let req: CreateStatusCVRequest = {
           name: values.name,
+          statusCVS: props.schema
         }
         props.createInterviewProcess(req);
         return;

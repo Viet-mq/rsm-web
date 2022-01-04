@@ -12,17 +12,19 @@ import Nav from "./Nav";
 import InformationForm from "../components/Information";
 import Process from "../components/Process";
 import Interviewers from "../components/Interviewers";
-import {resetCreateSteps} from "../../redux/actions";
+import {createRecruitment, resetCreateSteps} from "../../redux/actions";
 
 const {Sider} = Layout;
 
 const mapStateToProps = (state: RootState) => ({
-  checkValidate: state.recruitmentManager.createSteps
+  checkValidate: state.recruitmentManager.createSteps,
+  createSteps: state.recruitmentManager.createSteps
 
 })
 
 const connector = connect(mapStateToProps, {
-  resetCreateSteps
+  resetCreateSteps,
+  createRecruitment
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -49,6 +51,11 @@ const CreateLayout = (props: LayoutProps) => {
       </Menu.Item>
     </Menu>
   );
+
+  function btnCreateClicked() {
+    console.log("props.createSteps.request:",props.createSteps.request)
+    // props.createRecruitment(props.createSteps.request)
+  }
 
   return (
     <div className="recruitment-container">
@@ -81,7 +88,7 @@ const CreateLayout = (props: LayoutProps) => {
                   <Redirect exact from={`/recruitment-manager/${props.path}/`} to={`/recruitment-manager/${props.path}/information`}/>
                 </Switch>
                 <div className="region-action ">
-                  <Dropdown.Button overlay={menu} style={{marginBottom: 15}} size='large' type={"primary"} className={props.checkValidate.isValidate ?"":"button-color"}>
+                  <Dropdown.Button onClick={btnCreateClicked} overlay={menu} style={{marginBottom: 15}} size='large' type={"primary"} className={props.checkValidate.isValidate ?"":"button-color"}>
                     Lưu và đăng tin
                   </Dropdown.Button>
                   <Button className="btn-save" size='large'>Lưu nháp</Button>

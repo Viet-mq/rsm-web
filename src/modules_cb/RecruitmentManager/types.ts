@@ -39,7 +39,7 @@ export interface CreateRecruitmentRequest {
   address?: string,
   deadLine?: number,
   interviewProcess?: InterviewProcess[],
-  interviewer?: null,
+  interviewer?: [],
   job?: string,
   quantity?: number,
   talentPool?: string,
@@ -51,6 +51,7 @@ export interface CreateRecruitmentRequest {
   requirementOfJob?: string,
   jobDescription?: string,
   interest?: string,
+
 }
 
 export interface UpdateRecruitmentRequest {

@@ -4,7 +4,7 @@ import {CreateStepsAction} from "../actions";
 
 
 export interface CreateStepsState {
-  request?: CreateRecruitmentRequest,
+  request?: CreateRecruitmentRequest|any,
   isValidate?: boolean,
 }
 

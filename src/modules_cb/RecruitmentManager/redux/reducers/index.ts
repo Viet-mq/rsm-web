@@ -5,6 +5,7 @@ import create, {CreateRecruitmentState} from "./create";
 import update, {UpdateRecruitmentState} from "./update";
 import detailRecruitment, {DetailRecruitmentState} from "./detail";
 import listKanbanCandidate, {ListKanbanCandidateState} from "./listKanbanCandidate";
+import searchUser, {SearchUserState} from "./searchUser";
 import createSteps, {CreateStepsState} from "./createSteps";
 import showForm, {ProcessFormState} from "./showForm";
 import createInterviewProcess, {CreateInterviewProcessState} from "./createInterviewProcess";
@@ -18,7 +19,8 @@ export interface RecruitmentManagerModuleState {
   listKanbanCandidate: ListKanbanCandidateState,
   createSteps: CreateStepsState,
   showForm:ProcessFormState,
-  createInterviewProcess:CreateInterviewProcessState
+  createInterviewProcess:CreateInterviewProcessState,
+  searchUser:SearchUserState
 }
 
 export default combineReducers<RecruitmentManagerModuleState>({
@@ -31,4 +33,5 @@ export default combineReducers<RecruitmentManagerModuleState>({
   createSteps,
   showForm,
   createInterviewProcess,
+  searchUser,
 });

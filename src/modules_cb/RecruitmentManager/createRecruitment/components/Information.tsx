@@ -92,7 +92,8 @@ function InformationForm(props: IProps) {
           requirementOfJob: values.requirementOfJob,
           jobDescription: values.jobDescription,
           interest: values.interest,
-          interviewProcess:props.listProcess.rows
+          interviewProcess:props.listProcess.rows,
+          interviewer:[]
         })
         props.createSteps(req)
         props.checkInformationValidate(true)
