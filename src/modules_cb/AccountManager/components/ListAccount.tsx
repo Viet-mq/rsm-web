@@ -49,7 +49,6 @@ function ListAccount(props: IProps) {
   }
 
   function handleDelete(event: any, userAccount: UserAccount) {
-    console.log('chatBotUserAccount => ', userAccount)
     event.stopPropagation();
     let req: DeleteAccountRequest = {
       username: userAccount.username
@@ -60,6 +59,7 @@ function ListAccount(props: IProps) {
   function handleEdit(event: any, userAccount: UserAccount) {
     event.stopPropagation();
     props.showFormUpdate(true, userAccount);
+
   }
 
   function handleChangePassword(event: any, userAccount: UserAccount) {
@@ -68,6 +68,13 @@ function ListAccount(props: IProps) {
   }
 
   const columns: ColumnProps<UserAccount>[] = [
+    {
+      title: 'STT',
+      key: 'index',
+      width: 40,
+      align:"center",
+      render: (text, record, index) =>  {return (page - 1) * 10 + index + 1}
+    },
     {
       title: 'Tên đăng nhập',
       dataIndex: 'username',
@@ -79,6 +86,13 @@ function ListAccount(props: IProps) {
       sorter: true,
       dataIndex: 'fullName',
       width: 80,
+    },
+
+    {
+      title: 'Email',
+      // sorter: true,
+      dataIndex: 'email',
+      width: 150,
     },
     {
       title: 'Ngày sinh',
@@ -191,7 +205,6 @@ function ListAccount(props: IProps) {
     selectedRowKeys,
     onChange: onSelectedRowKeysChange,
   };
-
   return (
     <>
       <Table
@@ -199,7 +212,6 @@ function ListAccount(props: IProps) {
         className="custom-table"
         dataSource={props.list.rows}
         columns={columns}
-        rowSelection={rowSelection}
         rowKey="username"
         locale={{emptyText: emptyText}}
         pagination={{

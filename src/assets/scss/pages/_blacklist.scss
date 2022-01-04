@@ -1,0 +1,6 @@
+.modal-custom-width{
+  width:200px;
+  .ant-modal{
+    min-width: inherit;
+  }
+}

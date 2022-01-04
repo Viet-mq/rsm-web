@@ -17,7 +17,6 @@ export const createViewFrontEnd = async (params?: any): Promise<ResponseBase2> =
 };
 
 export const deleteViewFrontEnd = async (params?: any): Promise<ResponseBase2> => {
-  console.log("deleteViewFrontEnd: " + JSON.stringify(params));
   return (await POST('acc-svc/frontend-view/delete', params)) as ResponseBase2;
 };
 

@@ -1,0 +1,49 @@
+.c-list-profile {
+  a {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.cv-overflow {
+  white-space: nowrap;
+  width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+
+}
+
+.c-search-profile {
+  text-decoration: underline;
+  margin-right: 5px;
+  font-style: italic;
+  color: $color-blue-link
+}
+
+.c-filter-profile > * {
+  //display: flex;
+  //flex-wrap: wrap;
+  margin: 0 10px 5px 0;
+
+  input {
+    width: 15%;
+  }
+}
+
+.form-create {
+  .ant-form-item-label {
+    height: 30px;
+  }
+
+  .ant-form-item {
+    margin-bottom: 5px;
+  }
+}
+
+.select-account-custom {
+  .ant-select-selection--single {
+    padding-bottom: 60px;
+  }
+}

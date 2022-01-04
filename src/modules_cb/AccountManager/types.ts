@@ -9,6 +9,7 @@ export interface UserAccount {
   lastChangePasswordAt: number,
   createBy: string,
   updateBy: string,
+  email:string,
 }
 
 export interface CreateAccountRequest {
