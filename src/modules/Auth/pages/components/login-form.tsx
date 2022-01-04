@@ -61,7 +61,7 @@ export const Login = (props: IProps) => {
                       message: 'Vui lòng điền mật khẩu',
                     },
                   ],
-                })(<Input.Password type="password" placeholder="Nhập mật khẩu"/>)}
+                })(<Input type="password" placeholder="Nhập mật khẩu"/>)}
               </Form.Item>
               <Form.Item>
                 <Checkbox checked={data.remember} onChange={onCheckRememberPasswordChange}>

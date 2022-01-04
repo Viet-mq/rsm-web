@@ -1,5 +1,0 @@
-export * from './list'
-export * from './deleteSkill'
-export * from './create'
-export * from './showForm'
-export * from './update'

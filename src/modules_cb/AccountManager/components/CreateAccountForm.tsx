@@ -3,7 +3,7 @@ import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {createAccount, showFormCreate} from "../redux/actions";
 import {Button, Form, Input, Modal, Select} from "antd";
-import React, {FormEvent} from "react";
+import React, {FormEvent, useState} from "react";
 import {CreateAccountRequest} from "../types";
 
 const {Option} = Select;
@@ -19,6 +19,7 @@ interface CreateAccountFormProps extends FormComponentProps, ReduxProps {
 function CreateAccountForm(props: CreateAccountFormProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
+  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
   const formItemLayout = {
     labelCol: {
@@ -52,6 +53,7 @@ function CreateAccountForm(props: CreateAccountFormProps) {
 
   function onBtnCancelClicked() {
     resetFields();
+    setCompensatoryDataSource([]);
     props.showFormCreate(false);
   }
 
@@ -66,9 +68,11 @@ function CreateAccountForm(props: CreateAccountFormProps) {
       width="550px"
       afterClose={() => {
         resetFields();
+        setCompensatoryDataSource([]);
       }}
       onCancel={() => {
         resetFields();
+        setCompensatoryDataSource([]);
         props.showFormCreate(false);
       }}
       footer={""}>
@@ -113,7 +117,7 @@ function CreateAccountForm(props: CreateAccountFormProps) {
               },
             ],
           })(
-            <Input placeholder="Mật khẩu" type={'password'} className="bg-white text-black"/>
+            <Input placeholder="Mật khẩu" className="bg-white text-black"/>
           )}
         </Form.Item>
 

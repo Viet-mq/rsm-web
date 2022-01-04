@@ -18,10 +18,7 @@ const initState: AccountListState = {
   total: 0
 }
 
-const saveAccount:any=localStorage.getItem('list-account');
-const dataAccount:AccountListState = JSON.parse(saveAccount)?JSON.parse(saveAccount):initState
-
-export default (state = dataAccount, {type, total, rows, params, error}: AccountListAction): AccountListState => {
+export default (state = initState, {type, total, rows, params, error}: AccountListAction): AccountListState => {
   switch (type) {
     case Actions.GET_LIST_ACCOUNT:
       return {

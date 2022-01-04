@@ -18,6 +18,7 @@ function UpdateViewForm(props: UpdateViewFormProps) {
 
   const [show, setShow] = useState<boolean>(true);
   const {getFieldDecorator, resetFields} = props.form;
+  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
 
   const formItemLayout = {
@@ -43,6 +44,7 @@ function UpdateViewForm(props: UpdateViewFormProps) {
           icon: values.icon,
           show: show
         }
+        console.log("values: " + JSON.stringify(req));
         props.updateViewFrontEnd(req);
         return;
       }
@@ -51,6 +53,7 @@ function UpdateViewForm(props: UpdateViewFormProps) {
 
   function onBtnCancelClicked() {
     resetFields();
+    setCompensatoryDataSource([]);
     props.showFrontEndViewUpdateForm(false);
   }
 
@@ -77,9 +80,11 @@ function UpdateViewForm(props: UpdateViewFormProps) {
       width="550px"
       afterClose={() => {
         resetFields();
+        setCompensatoryDataSource([]);
       }}
       onCancel={() => {
         resetFields();
+        setCompensatoryDataSource([]);
         props.showFrontEndViewUpdateForm(false);
       }}
       footer={""}>

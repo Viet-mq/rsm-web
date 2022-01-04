@@ -24,7 +24,7 @@ function ListApiRole(props: IProps) {
 
   let screenWidth = document.documentElement.clientWidth;
   const [page, setPage] = useState(1);
-  const scroll = screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false};
+  const [scroll, setScroll] = useState(screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false});
   const size = 10;
   const [state, setState] = useState<any>({
     selectedRowKeys: [],
@@ -46,13 +46,6 @@ function ListApiRole(props: IProps) {
   }
 
   const columns: ColumnProps<ApiRoleEntity>[] = [
-    {
-      title: 'STT',
-      key: 'index',
-      align:"center",
-      width: 40,
-      render: (text, record, index) =>  {return (page - 1) * 10 + index + 1}
-    },
     {
       title: 'Name',
       dataIndex: 'name',

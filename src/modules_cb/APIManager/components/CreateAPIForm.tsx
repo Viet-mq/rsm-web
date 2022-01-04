@@ -3,7 +3,7 @@ import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {createApi, showFormCreateApi} from "../redux/actions";
 import {Button, Form, Input, Modal, Select} from "antd";
-import React, {FormEvent} from "react";
+import React, {FormEvent, useState} from "react";
 import {CreateApiRoleRequest} from "../types";
 
 const {Option} = Select;
@@ -19,6 +19,7 @@ interface CreateApiFormProps extends FormComponentProps, ReduxProps {
 function CreateApiForm(props: CreateApiFormProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
+  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '40px'};
   const formItemLayout = {
     labelCol: {
@@ -50,6 +51,7 @@ function CreateApiForm(props: CreateApiFormProps) {
 
   function onBtnCancelClicked() {
     resetFields();
+    setCompensatoryDataSource([]);
     props.showFormCreateApi(false);
   }
 
@@ -64,9 +66,11 @@ function CreateApiForm(props: CreateApiFormProps) {
       width="550px"
       afterClose={() => {
         resetFields();
+        setCompensatoryDataSource([]);
       }}
       onCancel={() => {
         resetFields();
+        setCompensatoryDataSource([]);
         props.showFormCreateApi(false);
       }}
       footer={""}>
