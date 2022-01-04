@@ -173,7 +173,6 @@ function BookingForm(props: BookingFormProps) {
           // timeStart: values.timeStart * 1,
           // timeFinish: values.timeFinish * 1,
         }
-        // console.log(req)
         props.createBooking(req);
         return;
       }

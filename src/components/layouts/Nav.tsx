@@ -163,7 +163,7 @@ const Nav = (props: IProps) => {
         <Menu.Item key="sourcecv-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/sourcecv-manager`}>
             <AiOutlineLinkedin className="mr-2"/>
-            <span>Nguồn CV </span>
+            <span>Nguồn ứng viên </span>
           </Link>
         </Menu.Item>
 

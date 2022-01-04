@@ -16,15 +16,15 @@ export function* updateSourceCVAsync(action: UpdateSourceCVAction) {
     const rs = yield apis.updateSourceCV(action.request);
     yield put(updateSourceCVSuccess(rs));
     if (rs.code !== 0) {
-      NotificationError('Cập nhật nguồn CV không thành công', "Lỗi: " + rs.message)
+      NotificationError('Cập nhật Nguồn ứng viên không thành công', "Lỗi: " + rs.message)
     } else {
-      NotificationSuccess('Thành công', "Cập nhật nguồn CV thành công");
+      NotificationSuccess('Thành công', "Cập nhật Nguồn ứng viên thành công");
       yield put(showFormUpdate(false));
       const params = yield select((state: RootState) => state.sourcecvManager.list.params);
       yield put(getListSourceCV(params))
     }
   } catch (e) {
     yield put(updateSourceCVError(new AppError(e.message)));
-    NotificationError('Cập nhật nguồn CV không thành công', "Lỗi: " + e.message);
+    NotificationError('Cập nhật Nguồn ứng viên không thành công', "Lỗi: " + e.message);
   }
 }

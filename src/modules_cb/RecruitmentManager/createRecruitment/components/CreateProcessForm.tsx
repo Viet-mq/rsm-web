@@ -1,23 +1,30 @@
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Input, Modal} from "antd";
-import React, {FormEvent} from "react";
+import React, {FormEvent, useEffect} from "react";
 import {RootState} from "../../../../redux/reducers";
-import {showFormCreate} from "../../redux/actions";
+import {createInterviewProcess, createSteps, showFormCreate} from "../../redux/actions";
+import {CreateStatusCVRequest, StatusCVEntity} from "../../../StatusCVManager/types";
+import {CreateRecruitmentRequest} from "../../types";
 
 const mapStateToProps = (state: RootState) => ({
-  showForm: state.recruitmentManager.showForm
+  showForm: state.recruitmentManager.showForm,
+  createInterviewProcessState:state.recruitmentManager.createInterviewProcess
 })
 
 const connector = connect(mapStateToProps, {
   showFormCreate,
+  createInterviewProcess,
+  createSteps
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface CreateJobFormProps extends FormComponentProps, ReduxProps {
-  schema:any,
-  setSchema:any
+  schema: any,
+  setSchema: any,
+  lastElement:any,
+  setLastElement:any,
 }
 
 function CreateProcessForm(props: CreateJobFormProps) {
@@ -34,42 +41,42 @@ function CreateProcessForm(props: CreateJobFormProps) {
     },
   };
 
+  useEffect(()=>{
+    if(props.createInterviewProcessState?.response){
+      const schemaCopy:any = props.schema?.slice();
+
+      let dataAdd: StatusCVEntity=({
+        id: props.createInterviewProcessState?.response.id,
+        name: props.createInterviewProcessState?.response.name,
+        isDragDisabled: props.createInterviewProcessState?.response.isDragDisabled
+    })
+        // put the removed one into destination.
+        schemaCopy.splice(props.lastElement+1, 0, dataAdd);
+      props.setLastElement(schemaCopy.map((el:any) => el.isDragDisabled).lastIndexOf(false))
+
+      let req: CreateRecruitmentRequest = ({
+        interviewProcess:schemaCopy
+      })
+      props.createSteps(req)
+      // props.setSchema(schemaCopy);
+      props.showFormCreate(false)
+    }
+  },[props.createInterviewProcessState?.response])
+
   function onBtnCreateClicked(e: FormEvent) {
-    debugger
     e.preventDefault();
     (e.target as any).disabled = true;
     (e.target as any).disabled = false;
-    props.setSchema([
-      {
-        id: "receiving",
-        text: "Tiếp nhận hồ sơ",
-        isDragDisabled: true,
-      },
-      {
-        id: "interview",
-        text: "Phỏng vấn",
-        isDragDisabled: false
-      },
-      {
-        id: "567",
-        text: "Phỏng vấn CEO",
-        isDragDisabled: false
-      },
-      {
-        id: "789",
-        text: "Offer",
-        isDragDisabled: true
-      },
-      {
-        id: "8910",
-        text: "Đã tuyển",
-        isDragDisabled: true
-      }
-    ])
-    props.showFormCreate(false)
     props.form.validateFieldsAndScroll((err, values) => {
-
+      if (!err) {
+        let req: CreateStatusCVRequest = {
+          name: values.name,
+        }
+        props.createInterviewProcess(req);
+        return;
+      }
     });
+
   }
 
   function onBtnCancelClicked() {

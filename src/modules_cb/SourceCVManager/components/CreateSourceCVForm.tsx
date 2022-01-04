@@ -56,7 +56,7 @@ function CreateSourceCVForm(props: CreateSourceCVFormProps) {
     <Modal
       zIndex={2}
       maskClosable={false}
-      title="Tạo mới nguồn CV"
+      title="Tạo mới Nguồn ứng viên"
       visible={props.sourcecvManager.showForm.show_create}
       centered={true}
       width="550px"
@@ -71,16 +71,16 @@ function CreateSourceCVForm(props: CreateSourceCVFormProps) {
 
       <Form {...formItemLayout}>
 
-        <Form.Item label="Tên nguồn CV" className="mb-0" style={{...formItemStyle}}>
+        <Form.Item label="Tên Nguồn ứng viên" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('name', {
             initialValue: '',
             rules: [
               {
-                message: 'Vui lòng nhập tên nguồn CV',
+                message: 'Vui lòng nhập tên Nguồn ứng viên',
                 required: true,
               },
             ],
-          })(<Input placeholder="Nhập tên nguồn CV" className="bg-white text-black"/>)}
+          })(<Input placeholder="Nhập tên Nguồn ứng viên" className="bg-white text-black"/>)}
         </Form.Item>
 
         <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px'}} colon={false}>

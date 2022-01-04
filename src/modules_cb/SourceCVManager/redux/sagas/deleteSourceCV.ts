@@ -10,14 +10,14 @@ export function* deleteSourceCVAsync(action: DeleteSourceCVAction) {
     const rs = yield apis.deleteSourceCV(action.request);
     yield put(deleteSourceCVSuccess(rs));
     if (rs.code !== 0) {
-      NotificationError('Xóa nguồn CV không thành công', "Lỗi: " + rs.message)
+      NotificationError('Xóa Nguồn ứng viên không thành công', "Lỗi: " + rs.message)
     } else {
-      NotificationSuccess('Thành công', "Xóa nguồn CV thành công");
+      NotificationSuccess('Thành công', "Xóa Nguồn ứng viên thành công");
       const params = yield select((state: RootState) => state.sourcecvManager.list.params);
       yield put(getListSourceCV(params))
     }
   } catch (e) {
     yield put(deleteSourceCVError(new AppError(e.message)));
-    NotificationError('Xóa nguồn CV không thành công', "Lỗi: " + e.message);
+    NotificationError('Xóa Nguồn ứng viên không thành công', "Lỗi: " + e.message);
   }
 }

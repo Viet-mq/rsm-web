@@ -77,7 +77,7 @@ function ListSourceCV(props: IProps) {
         return (
           <div style={{whiteSpace: 'nowrap'}}>
             <Popconfirm
-              title="Bạn muốn xóa nguồn CV này chứ ?"
+              title="Bạn muốn xóa Nguồn ứng viên này chứ ?"
               okText="Xóa"
               onCancel={event => {
                 event?.stopPropagation();

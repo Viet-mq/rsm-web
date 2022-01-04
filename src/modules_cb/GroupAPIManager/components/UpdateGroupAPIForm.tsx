@@ -22,7 +22,6 @@ interface UpdateGroupAPIFormProps extends FormComponentProps, ReduxProps {
 }
 
 function UpdateGroupAPIForm(props: UpdateGroupAPIFormProps) {
-  console.log("props:", props.groupAPIManager.showForm?.view)
   const {getFieldDecorator, resetFields} = props.form;
   const formItemStyle = {height: '60px'};
 

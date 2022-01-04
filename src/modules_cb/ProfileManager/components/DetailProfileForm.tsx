@@ -373,7 +373,6 @@ function DetailProfileForm(props: DetailProfileFormProps) {
   }
 
   const handleVisibleChange = (visible: any) => {
-    console.log(visible)
     setVisiblePopover(visible);
   };
 

@@ -1,18 +1,21 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Form, Icon, Switch} from "antd";
-import React, {useState} from "react";
+import {Button, Form, Icon, Input, Switch} from "antd";
+import React, {useEffect, useState} from "react";
 import 'devextreme/dist/css/dx.light.css';
-import ReactQuill from "react-quill";
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import {MdDragIndicator} from "react-icons/all";
 import CreateProcessForm from "./CreateProcessForm";
 import UpdateProcessForm from "./UpdateProcessForm";
 import {showFormCreate, showFormUpdate} from "../../redux/actions";
+import {CreateRecruitmentRequest} from "../../types";
+
+const {TextArea} = Input;
 
 const mapStateToProps = (state: RootState) => ({
-  listProcess: state.statuscvManager.list,
+  showForm: state.recruitmentManager.showForm,
+  createSteps: state.recruitmentManager.createSteps
 })
 
 const connector = connect(mapStateToProps, {
@@ -55,21 +58,29 @@ function ProcessForm(props: IProps) {
     'list', 'bullet', 'indent',
     'link', 'image', 'video'
   ]
-  const [schema, setSchema] = useState(props.listProcess.rows)
-  const [lastElement, setLastElement] = useState<any>(schema?.map(el => el.isDragDisabled).lastIndexOf(false));
+  const [schema, setSchema] = useState(props.createSteps.request?.interviewProcess)
+  const [lastElement, setLastElement] = useState<any>(schema?.map((el: any) => el.isDragDisabled).lastIndexOf(false));
+
+  useEffect(() => {
+    document.title = "Quản lý tin tuyển dụng";
+  }, []);
+
+  useEffect(() => {
+    setSchema(props.createSteps.request?.interviewProcess)
+  }, [props.createSteps.request?.interviewProcess])
+
 
   const onDragEnd = (result: any) => {
     // dropped outside the list
     if (!result.destination) {
       return;
     }
-
     // reorder using index of source and destination.
-    const schemaCopy:any = schema?.slice();
+    const schemaCopy: any = schema?.slice();
     const [removed] = schemaCopy.splice(result.source.index, 1);
     // put the removed one into destination.
     schemaCopy.splice(result.destination.index, 0, removed);
-    setLastElement(schemaCopy.map((el:any) => el.isDragDisabled).lastIndexOf(false))
+    setLastElement(schemaCopy.map((el: any) => el.isDragDisabled).lastIndexOf(false))
     setSchema(schemaCopy);
   };
 
@@ -77,9 +88,16 @@ function ProcessForm(props: IProps) {
     props.showFormCreate(true)
   }
 
+  function onFormChange() {
+    // let req: CreateRecruitmentRequest = ({
+    //
+    // })
+    // props.createSteps(req)
+    // props.checkInformationValidate(true)
+  }
+
   return (
     <>
-
       <div className="main-content main-process">
         <div style={{padding: "24px 24px 0 24px"}}>
           <div className="schedule-detail-title">Quy trình tuyển dụng</div>
@@ -95,11 +113,12 @@ function ProcessForm(props: IProps) {
                     {...provided.droppableProps}
                   >
                     {
-                      schema?.map((it, i) => (
-                        it.isDragDisabled ? <div key={it.id} className="process-list process-system flex-items-center">
+                      schema?.map((item: any, index: any) => (
+                        item.isDragDisabled ?
+                          <div key={item.id} className="process-list process-system flex-items-center">
                             <MdDragIndicator className={"mr-2"}/>
                             <div className={"flex-process"}>
-                              {it.name}
+                              {item.name}
                             </div>
                             <div>
                               <Icon type="edit" style={{fontSize: '130%'}}></Icon>
@@ -108,10 +127,10 @@ function ProcessForm(props: IProps) {
                           (
                             <>
                               <Draggable
-                                key={it.id}
-                                draggableId={it.id}
-                                index={i}
-                                isDragDisabled={it.isDragDisabled}
+                                key={item.id}
+                                draggableId={item.id}
+                                index={index}
+                                isDragDisabled={item.isDragDisabled}
                               >
                                 {(provided, snap) => (
                                   <div
@@ -129,7 +148,7 @@ function ProcessForm(props: IProps) {
 
                                     <MdDragIndicator className={"mr-2"}/>
                                     <div className={"flex-process"}>
-                                      {it.name}
+                                      {item.name}
                                     </div>
                                     <div>
                                       <Icon type="edit" style={{fontSize: '130%', marginRight: 15}}></Icon>
@@ -141,7 +160,7 @@ function ProcessForm(props: IProps) {
 
                                 )}
                               </Draggable>
-                              {i === lastElement ?
+                              {index === lastElement ?
                                 <>
                                   {provided.placeholder}
                                   <div className="add-process-button" onClick={showFormProcess}>
@@ -166,20 +185,24 @@ function ProcessForm(props: IProps) {
             <div>Khi ứng viên ứng tuyển vào tin tuyển dụng này, hệ thống sẽ tự động gửi email cho ứng viên</div>
 
             <div className="schedule-detail-title mb-4">Nội dung email</div>
-            <ReactQuill
-              style={fontWeightStyle}
-              theme={'snow'}
-              modules={modules}
-              formats={formats}
-              bounds={'.app'}
-              placeholder="Nội dung email"
-            />
+            {/*<ReactQuill*/}
+            {/*  style={fontWeightStyle}*/}
+            {/*  theme={'snow'}*/}
+            {/*  modules={modules}*/}
+            {/*  formats={formats}*/}
+            {/*  bounds={'.app'}*/}
+            {/*  placeholder="Nội dung email"*/}
+            {/*/>*/}
+
+            <TextArea onChange={onFormChange} placeholder="Quyền lợi" style={{height: 150}}
+                      className="bg-white text-black"/>
 
           </div>
         </div>
       </div>
 
-      <CreateProcessForm schema={schema} setSchema={setSchema}/>
+      <CreateProcessForm schema={schema} setSchema={setSchema} lastElement={lastElement}
+                         setLastElement={setLastElement}/>
       <UpdateProcessForm/>
     </>
   );

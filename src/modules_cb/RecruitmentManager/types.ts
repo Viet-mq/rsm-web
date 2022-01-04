@@ -25,25 +25,32 @@ export interface RecruitmentEntity {
 export interface InterviewProcess {
   id: string,
   name: string,
-  total: string,
+  total?: string,
+}
+export interface InterviewProcessResponse {
+  code: 0,
+  id: string,
+  isDragDisabled: boolean,
+  message: string,
+  name: string
 }
 
 export interface CreateRecruitmentRequest {
-  address: string,
-  deadLine: number,
+  address?: string,
+  deadLine?: number,
   interviewProcess?: InterviewProcess[],
   interviewer?: null,
-  job: string,
-  quantity: number,
-  talentPool: string,
-  title: string,
-  typeOfJob: string
-  detailOfSalary: string,
-  from: number,
-  to: number,
-  requirementOfJob: string,
-  jobDescription: string,
-  interest: string,
+  job?: string,
+  quantity?: number,
+  talentPool?: string,
+  title?: string,
+  typeOfJob?: string
+  detailOfSalary?: string,
+  from?: number,
+  to?: number,
+  requirementOfJob?: string,
+  jobDescription?: string,
+  interest?: string,
 }
 
 export interface UpdateRecruitmentRequest {

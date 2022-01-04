@@ -12,6 +12,7 @@ import Nav from "./Nav";
 import InformationForm from "../components/Information";
 import Process from "../components/Process";
 import Interviewers from "../components/Interviewers";
+import {resetCreateSteps} from "../../redux/actions";
 
 const {Sider} = Layout;
 
@@ -20,7 +21,9 @@ const mapStateToProps = (state: RootState) => ({
 
 })
 
-const connector = connect(mapStateToProps, {});
+const connector = connect(mapStateToProps, {
+  resetCreateSteps
+});
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -52,7 +55,7 @@ const CreateLayout = (props: LayoutProps) => {
       <Layout>
         <Layout>
           <Header>
-            <Link to={`/recruitment-manager`} style={{display:"flex", color:"black"}}>
+            <Link to={`/recruitment-manager`} onClick={props.resetCreateSteps} style={{display:"flex", color:"black"}}>
             <ImArrowLeft2 size={20}/>
             </Link>
             <span>Thêm mới</span>

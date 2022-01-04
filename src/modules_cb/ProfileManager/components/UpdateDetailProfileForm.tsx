@@ -94,7 +94,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           lastApply: values.lastApply * 1,
           talentPool: values.talentPoolId
         }
-        console.log("req:", req)
         props.updateDetail(req);
 
         return;
@@ -392,13 +391,13 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
             )}
           </Form.Item>
 
-          <Form.Item label="Nguồn CV" className="mb-0" style={{...formItemStyle}}>
+          <Form.Item label="Nguồn ứng viên" className="mb-0" style={{...formItemStyle}}>
             <div style={{display: 'flex'}}>
               {getFieldDecorator('sourceCV', {
                 initialValue: props.showForm.data_update_detail?.sourceCVId,
                 rules: [
                   {
-                    message: 'Vui lòng nhập Nguồn CV',
+                    message: 'Vui lòng nhập Nguồn ứng viên',
                     required: true,
                   },
                 ],
@@ -421,7 +420,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
             </div>
           </Form.Item>
 
-          <Form.Item label="HR Ref" className="mb-0" style={{...formItemStyle}}>
+          <Form.Item label="Người giới thiệu" className="mb-0" style={{...formItemStyle}}>
             {getFieldDecorator('hrRef', {
               initialValue: props.showForm.data_update_detail?.hrRef,
               rules: [
@@ -431,7 +430,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                 },
               ],
             })(
-              <Input placeholder="Tên HR Ref" className="bg-white text-black"/>
+              <Input placeholder="Tên Người giới thiệu" className="bg-white text-black"/>
             )}
           </Form.Item>
 

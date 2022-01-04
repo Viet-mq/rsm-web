@@ -199,7 +199,7 @@ function ListProfile(props: ListProfileProps) {
       render: (text, record) => <a className="cv-overflow" href={record.urlCV} target="_blank">{record.cv}</a>
     },
     {
-      title: 'Nguồn CV',
+      title: 'Nguồn ứng viên',
       dataIndex: 'sourceCVName',
       width: 130,
       key: 'sourceCVName',
@@ -231,10 +231,20 @@ function ListProfile(props: ListProfileProps) {
       ellipsis: true,
     },
     {
-      title: 'HR Ref',
+      title: 'Người giới thiệu',
       dataIndex: 'hrRef',
       width: 160,
       key: 'hrRef',
+      render: (text: string, record: ProfileEntity) => {
+        return <div>
+          <div style={{display: 'flex', alignItems: 'center'}}>
+            <span style={{fontWeight: 500}}>{record.hrRef}</span>
+          </div>
+          <div>
+            <span style={{color: "#B2B2B2"}}>{record.mailRef}</span>
+          </div>
+        </div>
+      }
     },
     {
       title: 'Thời gian nộp',
@@ -248,12 +258,7 @@ function ListProfile(props: ListProfileProps) {
       sortOrder: state.sortedInfo.columnKey === 'talentPoolName' && state.sortedInfo.order,
       ellipsis: true,
     },
-    {
-      title: 'Loại CV',
-      dataIndex: 'cvType',
-      width: 100,
-      key: '14',
-    },
+
     {
       title: 'Năm sinh',
       dataIndex: 'dateOfBirth',

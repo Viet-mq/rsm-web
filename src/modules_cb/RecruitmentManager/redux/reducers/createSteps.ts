@@ -10,6 +10,7 @@ export interface CreateStepsState {
 
 const initState: CreateStepsState = {
   isValidate: false,
+  request: undefined
 }
 
 export default (state = initState, {type, request, isValidate}: CreateStepsAction): CreateStepsState => {
@@ -18,6 +19,11 @@ export default (state = initState, {type, request, isValidate}: CreateStepsActio
       return {
         ...state,
         request,
+      }
+
+    case Actions.RESET_CREATE_STEPS:
+      return {
+        ...initState
       }
 
     case Actions.CHECK_INFORMATION_VALIDATE:

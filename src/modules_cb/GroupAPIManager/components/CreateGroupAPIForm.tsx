@@ -106,7 +106,6 @@ function CreateGroupAPIForm(props: CreateViewFormProps) {
           roleIds: listApi.api?.map((item: any) => item.id),
         }
 
-        console.log("props.createGroupAPI(req):", req)
         // props.createGroupAPI(req);
         return;
       }

@@ -40,7 +40,6 @@ const DefaultLayout = (props: LayoutProps) => {
     value: '',
     dataSource: [],
   });
-  console.log(history)
   function toggle() {
     setCollapsed(!collapsed)
   }
@@ -72,7 +71,6 @@ const DefaultLayout = (props: LayoutProps) => {
   }, [props.elasticSearch.triggerSearch])
 
   function onChange(value: any) {
-    console.log('onChange', value);
     setState({
       ...state,
       value
@@ -87,7 +85,6 @@ const DefaultLayout = (props: LayoutProps) => {
   }, [props.elasticSearch.rowsSearch])
 
   function onSelect(value: any) {
-    console.log('onSelect', value);
     if (value) {
       props.getElasticSearch({key: value, size: 100})
       props.triggerSearch();

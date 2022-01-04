@@ -33,7 +33,7 @@ interface IProps extends ReduxProps {
 function SourceCVManagerPages(props: IProps) {
 
   useEffect(() => {
-    document.title = "Quản lý nguồn CV";
+    document.title = "Quản lý Nguồn ứng viên";
   }, []);
 
   const handleCreate = (e: any) => {
@@ -51,13 +51,13 @@ function SourceCVManagerPages(props: IProps) {
       <div className="entryHeader">
         <Row>
           <Col md={16}>
-            <div className="tmp-title-page-size20">Quản lý nguồn CV</div>
+            <div className="tmp-title-page-size20">Quản lý Nguồn ứng viên</div>
           </Col>
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div>
                 <Button onClick={handleCreate}>
-                  <Icon type="plus"/> Tạo nguồn CV
+                  <Icon type="plus"/> Tạo Nguồn ứng viên
                 </Button>
               </div>
             </div>

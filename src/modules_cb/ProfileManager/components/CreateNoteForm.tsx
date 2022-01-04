@@ -64,7 +64,6 @@ function CreateProfileForm(props: CreateProfileFormProps) {
           evaluation: values.evaluation,
           file: file,
         }
-        console.log(req)
         props.createNote(req);
         return;
       }

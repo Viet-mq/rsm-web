@@ -8,13 +8,13 @@ export function* getListSourceCVAsync(action: SourceCVListAction) {
   try {
     const rs = yield apis.getListSourceCV(action.params);
     if (rs.code !== 0) {
-      NotificationError('Lấy danh sách nguồn CV không thành công', "Lỗi: " + rs.message);
+      NotificationError('Lấy danh sách Nguồn ứng viên không thành công', "Lỗi: " + rs.message);
     } else {
       localStorage.setItem("list-source-cv", JSON.stringify(rs || {}));
       yield put(getListSourceCVSuccess(rs.total, rs.rows))
     }
   } catch (e) {
     yield put(getListSourceCVError(new AppError(e.message)));
-    NotificationError('Lấy danh sách nguồn CV không thành công', "Lỗi: " + e.message);
+    NotificationError('Lấy danh sách Nguồn ứng viên không thành công', "Lỗi: " + e.message);
   }
 }

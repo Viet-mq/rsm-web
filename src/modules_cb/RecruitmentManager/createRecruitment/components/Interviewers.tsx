@@ -2,8 +2,8 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {Avatar, Button, Col, DatePicker, Form, Icon, Input, InputNumber, Row, Select, Switch} from "antd";
-import React, {FormEvent} from "react";
-import {CreateBookingRequest} from "../../../ProfileManager/types";
+import React, {FormEvent, useEffect, useRef, useState} from "react";
+import {CreateBookingRequest, ProfileEntity} from "../../../ProfileManager/types";
 import moment from "moment";
 import {showFormCreate as showJobFormCreate} from "../../../JobManager/redux/actions";
 import 'devextreme/dist/css/dx.light.css';
@@ -42,6 +42,11 @@ function InterviewersForm(props: IProps) {
   const timeFormat = 'HH:mm';
   const formItemHeight = {height: 250}
   const textEditorHeight = {height: 150}
+  const [visibleCandidate, setVisibleCandidate] = useState(false)
+  const wrapperRef = useRef<any>(null);
+  const [keySearch, setKeySearch] = useState(undefined);
+  const [listCandidates, setListCandidates] = useState<ProfileEntity[] | any>([]);
+
   /*
    * Quill modules to attach to editor
    * See https://quilljs.com/docs/modules/ for complete options
@@ -71,6 +76,26 @@ function InterviewersForm(props: IProps) {
     'list', 'bullet', 'indent',
     'link', 'image', 'video'
   ]
+
+  useEffect(() => {
+    document.title = "Quản lý tin tuyển dụng";
+  }, []);
+
+  useEffect(() => {
+    function handleClickOutside(event: any) {
+      if (wrapperRef.current && !wrapperRef.current?.contains(event.target)) {
+        setVisibleCandidate(false)
+      }
+    }
+
+    // Bind the event listener
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      // Unbind the event listener on clean up
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [wrapperRef]);
+
 
   function onBtnCreateClicked(e: FormEvent) {
     e.preventDefault();
@@ -124,6 +149,46 @@ function InterviewersForm(props: IProps) {
     }
   }
 
+  function handleSearchCandidate(e?: any) {
+    // console.log(e?.target.value)
+    // setKeySearch(e?.target.value)
+    // props.searchCandidates({fullName: e?.target.value, recruitment: recruitment, calendar: "notSet", page: 1, size: 15})
+    //
+  }
+
+  function handleAdd(e: FormEvent, value: any) {
+    // props.form.validateFieldsAndScroll((err, values) => {
+    //   if (!err) {
+    //     const date = new Date(values.date);
+    //     const time = new Date(values.timeStart);
+    //     const dd = date.getDate();
+    //     const mm = date.getMonth() + 1;
+    //     const yyyy = date.getFullYear();
+    //     const hh = time.getHours();
+    //     const minutes = time.getMinutes();
+    //     const dateChanged: any = new Date(yyyy, mm - 1, dd, hh, minutes, 0);
+    //     const interviewTime: any = new Date(yyyy, mm - 1, dd, hh, minutes + values.interviewTime, 0);
+    //     setListCandidates(listCandidates.filter((item: ProfileEntity) => item.id !== value.id));
+    //     const newData = {
+    //       idProfile: value.id,
+    //       fullName: value.fullName,
+    //       date: dateChanged * 1,
+    //       interviewTime: interviewTime * 1,
+    //       avatarColor: value.avatarColor
+    //     };
+    //     setDatasource([...dataSource, newData]);
+    //
+    //     return;
+    //   }
+    // });
+
+  };
+
+
+  function showScrollCandidate() {
+    setVisibleCandidate(!visibleCandidate)
+  }
+
   return (
     <div className="main-content">
       <div style={{padding: "24px 24px 0 24px"}}>
@@ -144,18 +209,45 @@ function InterviewersForm(props: IProps) {
                 <a className="c-list-profile" style={{marginRight: "1px"}}>
                   <span>Hồ Đức Duy</span>
                 </a>
-
               </div>
 
               <span style={{color: "#B2B2B2",}}>hieunh@edsolabs.com</span>
             </div>
-
           </div>
 
-          <Button type={"link"} style={{marginTop: 15, paddingLeft: 0, color: "#02a7f0"}}><Icon
-            type="plus" style={{marginRight: 5}}/>
-            Thêm ứng viên
-          </Button>
+          <div>
+            <Button onClick={showScrollCandidate}  type={"link"} style={{marginTop: 15, paddingLeft: 0, color: "#02a7f0"}}>
+              <Icon type="plus" style={{marginRight: 5}}/>
+              Thêm thành viên
+            </Button>
+            {visibleCandidate ?
+              <div ref={wrapperRef} className="dropdown-container">
+                <Input onChange={event => handleSearchCandidate(event)} value={keySearch} placeholder="Tìm kiếm ứng viên"/>
+                <div className="scroll-label-content">
+                  {listCandidates.length !== 0 ? listCandidates.map((item: any, index: any) => {
+                    return (<div key={item.id} onClick={event => handleAdd(event, item)}>
+                      <a className="label-content">
+                        <div style={{marginRight: 10}}>
+                          <Avatar src={item.image ? item.image : "#"}
+                                  style={{backgroundColor: item?.avatarColor, marginRight: 5}}>
+                            {getInitials(item.fullName)}
+                          </Avatar>
+                        </div>
+                        <div>
+                          <div>
+                            <div className="c-list-profile" style={{marginRight: "1px", fontWeight: 500}}>
+                              <span>{item.fullName}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                    </div>)
+                  }) : <span>Vui lòng nhập  tìm kiếm để tìm thêm thành viên</span>}
+                </div>
+              </div>
+              : null}
+          </div>
+
         </div>
       </div>
     </div>

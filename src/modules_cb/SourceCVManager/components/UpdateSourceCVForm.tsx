@@ -55,7 +55,7 @@ function UpdateSourceCVForm(props: UpdateSourceCVFormProps) {
     <Modal
       zIndex={2}
       maskClosable={false}
-      title="Cập nhật nguồn CV hệ thống"
+      title="Cập nhật Nguồn ứng viên hệ thống"
       visible={props.showForm.show_update}
       centered={true}
       width="550px"
@@ -70,17 +70,17 @@ function UpdateSourceCVForm(props: UpdateSourceCVFormProps) {
 
       <Form {...formItemLayout}>
 
-        <Form.Item label="Tên nguồn CV" className="mb-0" style={{...formItemStyle}}>
+        <Form.Item label="Tên Nguồn ứng viên" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('name', {
             initialValue: props.showForm.data_update?.name,
             rules: [
               {
-                message: 'Vui lòng nhập tên nguồn CV',
+                message: 'Vui lòng nhập tên Nguồn ứng viên',
                 required: true,
               },
             ],
           })(
-            <Input placeholder="Tên nguồn CV" className="bg-white text-black"/>
+            <Input placeholder="Tên Nguồn ứng viên" className="bg-white text-black"/>
           )}
         </Form.Item>
 
