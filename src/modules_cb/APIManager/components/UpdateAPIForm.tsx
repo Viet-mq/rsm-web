@@ -3,7 +3,7 @@ import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {showFormUpdateApi, updateApi} from "../redux/actions";
 import {Button, Form, Input, Modal, Select} from "antd";
-import React, {FormEvent} from "react";
+import React, {FormEvent, useState} from "react";
 import {UpdateApiRoleRequest} from "../types";
 
 const {Option} = Select;
@@ -19,6 +19,7 @@ interface UpdateApiFormProps extends FormComponentProps, ReduxProps {
 function UpdateApiForm(props: UpdateApiFormProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
+  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '40px'};
   const formItemLayout = {
     labelCol: {
@@ -49,6 +50,7 @@ function UpdateApiForm(props: UpdateApiFormProps) {
 
   function onBtnCancelClicked() {
     resetFields();
+    setCompensatoryDataSource([]);
     props.showFormUpdateApi(false);
   }
 
@@ -63,9 +65,11 @@ function UpdateApiForm(props: UpdateApiFormProps) {
       width="550px"
       afterClose={() => {
         resetFields();
+        setCompensatoryDataSource([]);
       }}
       onCancel={() => {
         resetFields();
+        setCompensatoryDataSource([]);
         props.showFormUpdateApi(false);
       }}
       footer={""}>

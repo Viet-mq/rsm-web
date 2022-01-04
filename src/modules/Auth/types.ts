@@ -1,5 +1,4 @@
 import {ResponseBase} from '../../models/common';
-import {TalentPoolEntity} from "../../modules_cb/TalentPoolManager/types";
 
 export interface LoginInput {
   username: string;
@@ -27,7 +26,7 @@ export interface LoginResponse2 {
   fullName: string;
   username: string;
   permission: string[],
-  pools: TalentPoolEntity[],
+
   //
   role: number,
   is_admin: number,

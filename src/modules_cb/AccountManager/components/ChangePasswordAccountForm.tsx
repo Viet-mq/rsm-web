@@ -3,7 +3,7 @@ import {connect, ConnectedProps} from "react-redux";
 import {changePassword, showFormChangePassword} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Input, Modal} from "antd";
-import React, {FormEvent} from "react";
+import React, {FormEvent, useState} from "react";
 import {ChangePasswordAccRequest} from "../types";
 
 const mapState = ({accountManager: {showForm}}: RootState) => ({showForm})
@@ -17,6 +17,7 @@ interface ChangePasswordFormProps extends FormComponentProps, ReduxProps {
 function ChangePasswordAccountForm(props: ChangePasswordFormProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
+  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
   const formItemLayout = {
     labelCol: {
@@ -48,6 +49,7 @@ function ChangePasswordAccountForm(props: ChangePasswordFormProps) {
 
   function onBtnCancelClicked() {
     resetFields();
+    setCompensatoryDataSource([]);
     props.showFormChangePassword(false);
   }
 
@@ -62,9 +64,11 @@ function ChangePasswordAccountForm(props: ChangePasswordFormProps) {
       width="550px"
       afterClose={() => {
         resetFields();
+        setCompensatoryDataSource([]);
       }}
       onCancel={() => {
         resetFields();
+        setCompensatoryDataSource([]);
         props.showFormChangePassword(false);
       }}
       footer={""}>
@@ -95,10 +99,7 @@ function ChangePasswordAccountForm(props: ChangePasswordFormProps) {
               },
             ],
           })(
-            <Input.Password
-              placeholder="Mật khẩu mới"
-              className="bg-white text-black"
-            />
+            <Input placeholder="Mật khẩu mới" className="bg-white text-black"/>
           )}
         </Form.Item>
 

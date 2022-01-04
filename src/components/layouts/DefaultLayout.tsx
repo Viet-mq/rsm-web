@@ -1,33 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import Nav from './Nav';
-import {AutoComplete, Col, Form, Icon, Input, Layout, Row} from 'antd';
+import {Icon, Layout} from 'antd';
 import Header from './Header';
 import commonStyled from './styled/commonStyled';
 import env from 'src/configs/env';
-import DetailProfileForm from "../../modules_cb/ProfileManager/components/DetailProfileForm";
-import {RootState} from "../../redux/reducers";
-import {connect, ConnectedProps} from "react-redux";
-import {FormComponentProps} from "antd/lib/form";
-import {getElasticSearch, triggerSearch} from "../../modules_cb/ProfileManager/redux/actions";
-import {useHistory} from "react-router-dom";
-import Loading from "../Loading";
 
 const {Sider} = Layout;
 
-const mapStateToProps = (state: RootState) => ({
-  showFormDetail: state.profileManager.showForm,
-  elasticSearch: state.profileManager.search,
-
-})
-
-const connector = connect(mapStateToProps, {
-  getElasticSearch,
-  triggerSearch
-});
-
-type ReduxProps = ConnectedProps<typeof connector>;
-
-interface LayoutProps extends FormComponentProps, ReduxProps {
+interface LayoutProps {
   children: React.ReactNode;
 }
 
@@ -35,16 +15,13 @@ const DefaultLayout = (props: LayoutProps) => {
 
   const screenWidth = document.documentElement.clientWidth;
   const [collapsed, setCollapsed] = useState(screenWidth <= env.tabletWidth ? true : false)
-  const history = useHistory();
-  const [state, setState] = useState<any>({
-    value: '',
-    dataSource: [],
-  });
+
   function toggle() {
     setCollapsed(!collapsed)
   }
 
   useEffect(() => {
+
     function updateSize() {
       if (document.documentElement.clientWidth < env.desktopWidth) setCollapsed(true)
       else setCollapsed(false)
@@ -52,118 +29,37 @@ const DefaultLayout = (props: LayoutProps) => {
 
     window.addEventListener('resize', updateSize);
     updateSize();
-    return () => window.removeEventListener('resize', updateSize);
+      return () => window.removeEventListener('resize', updateSize);
 
   }, []);
 
-  useEffect(() => {
-    if (state.value) {
-      props.getElasticSearch({key: state.value, size: 10})
-    }
-  }, [state.value])
-
-  useEffect(() => {
-    if (props.elasticSearch.rowsRs && state.value) {
-      history.push({
-        pathname: "/profile-manager",
-      });
-    }
-  }, [props.elasticSearch.triggerSearch])
-
-  function onChange(value: any) {
-    setState({
-      ...state,
-      value
-    })
-  }
-
-  useEffect(() => {
-    setState({
-      ...state,
-      dataSource: !state.value ? [] : Array.from(new Set([state.value].concat(props.elasticSearch.rowsSearch?.map((item: any) => item.fullName)))),
-    })
-  }, [props.elasticSearch.rowsSearch])
-
-  function onSelect(value: any) {
-    if (value) {
-      props.getElasticSearch({key: value, size: 100})
-      props.triggerSearch();
-    }
-    if (state.value) {
-    }
-  }
-
   return (
-    <div>
-
-      <commonStyled.Container>
+    <commonStyled.Container>
+      <Layout>
         <Layout>
-          <Layout>
-            <Sider className="menu" trigger={null} collapsible collapsed={collapsed} width={250}>
+          <Sider className="menu" trigger={null} collapsible collapsed={collapsed} width={250}>
+            {}
+            <div className="logo">
               {}
-              <div className="logo">
-                {collapsed ? null : <img src={require('src/assets/images/logo-edsolabs.png')}/>
-                }
-              </div>
-              <Nav hiddenLabel={collapsed}/>
-            </Sider>
-            <Layout className="content">
-              <Header>
-                <Icon
-                  className="trigger-menu"
-                  type={collapsed ? 'menu-unfold' : 'menu-fold'}
-                  onClick={toggle}
-                />
-                <span className="ml-5" style={{fontWeight: 500, marginRight: '-21px'}}>Tìm kiếm</span>
-
-                <Form style={{
-                  display: "flex", flexWrap: "wrap", marginLeft: "25px", flex: "1"
-                }}>
-
-                  <Form.Item style={{margin: "-5px 10px 0 5px", width: "40%"}}>
-                    <>
-                      <div style={{display: "flex"}}>
-                        <AutoComplete
-                          dataSource={state.dataSource}
-                          style={{width: 400}}
-                          onChange={onChange}
-                          onSelect={onSelect}
-                          // onSearch={onSearch}
-                          placeholder={"Họ tên, Năm sinh, Quê quán, Trường học, Số điện thoại, Email, Công việc"}
-                        >
-                          <Input suffix={<Icon type="search" className="certain-category-icon"/>}/>
-                        </AutoComplete>
-                      </div>
-
-                    </>
-                  </Form.Item>
-                </Form>
-              </Header>
-
-              <div>
-                <Row>
-                  <Col span={props.showFormDetail?.show_detail?.general}
-                       style={{height: "calc(100vh - 60px)", overflow: "auto"}}>
-                    <div style={history.location.pathname==='/statuscv-manager'?{background:"white",height:"100%"}:{height:"100%"}}>
-                      {props.children}
-                    </div>
-                  </Col>
-
-                  <Col span={props.showFormDetail?.show_detail?.detail}>
-                    <DetailProfileForm/>
-                  </Col>
-                </Row>
-              </div>
-            </Layout>
-
+              {collapsed ? (<h1 className="collapsed-logo"/>) : null}
+            </div>
+            <Nav hiddenLabel={collapsed}/>
+          </Sider>
+          <Layout className="content">
+            <Header>
+              <Icon
+                className="trigger-menu"
+                type={collapsed ? 'menu-unfold' : 'menu-fold'}
+                onClick={toggle}
+              />
+            </Header>
+            {props.children}
           </Layout>
         </Layout>
-      </commonStyled.Container>
-
-      {props.elasticSearch.loadingRs ? <Loading/> : null}
-    </div>
+      </Layout>
+    </commonStyled.Container>
   );
 
 };
 
-export default connector(Form.create<LayoutProps>()(DefaultLayout));
+export default DefaultLayout;

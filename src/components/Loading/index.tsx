@@ -9,13 +9,13 @@ interface TransferProps {
 
 const Loading = ({type = "fullpage", style = {}}: TransferProps) => {
 
-  if (type === 'inline') {
+  if (type == 'inline') {
     return (
       <Row style={style}><Spin/></Row>
     )
   }
 
-  if (type === 'modal') {
+  if (type == 'modal') {
     return (
       <CoverModal style={{...style, position: "absolute"}}><Spin/></CoverModal>
     )

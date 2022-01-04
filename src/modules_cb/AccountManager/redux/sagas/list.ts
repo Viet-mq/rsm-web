@@ -7,12 +7,11 @@ import {NotificationError} from "src/components/Notification/Notification";
 export function* getListAccountAsync(action: AccountListAction) {
   try {
     const rs = yield apis.getListAccount(action.params);
+    console.log("rs: " + JSON.stringify(rs));
     if (rs.code !== 0) {
       NotificationError('Lấy danh sách tài khoản không thành công', "Lỗi: " + rs.message);
-    } else {
-      localStorage.setItem("list-account", JSON.stringify(rs || {}));
-      yield put(getListAccountSuccess(rs.total, rs.rows))
     }
+    yield put(getListAccountSuccess(rs.total, rs.rows))
   } catch (e) {
     yield put(getListAccountError(new AppError(e.message)));
     NotificationError('Lấy danh sách tài khoản không thành công', "Lỗi: " + e.message);

@@ -1,5 +1,0 @@
-export * from './list'
-export * from './deleteStatusCV'
-export * from './create'
-export * from './showForm'
-export * from './update'

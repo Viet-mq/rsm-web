@@ -3,7 +3,7 @@ import {connect, ConnectedProps} from "react-redux";
 import {showFormUpdate, updateAccount} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Input, Modal} from "antd";
-import React, {FormEvent} from "react";
+import React, {FormEvent, useState} from "react";
 import {UpdateAccountRequest} from "../types";
 
 const mapState = ({accountManager: {showForm}}: RootState) => ({showForm})
@@ -17,6 +17,7 @@ interface UpdateAccountFormProps extends FormComponentProps, ReduxProps {
 function UpdateAccountForm(props: UpdateAccountFormProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
+  const [compensatoryDataSource, setCompensatoryDataSource] = useState([] as any[]);
   const formItemStyle = {height: '60px'};
   const formItemLayout = {
     labelCol: {
@@ -48,6 +49,7 @@ function UpdateAccountForm(props: UpdateAccountFormProps) {
 
   function onBtnCancelClicked() {
     resetFields();
+    setCompensatoryDataSource([]);
     props.showFormUpdate(false);
   }
 
@@ -62,9 +64,11 @@ function UpdateAccountForm(props: UpdateAccountFormProps) {
       width="550px"
       afterClose={() => {
         resetFields();
+        setCompensatoryDataSource([]);
       }}
       onCancel={() => {
         resetFields();
+        setCompensatoryDataSource([]);
         props.showFormUpdate(false);
       }}
       footer={""}>

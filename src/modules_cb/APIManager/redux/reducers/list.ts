@@ -6,8 +6,8 @@ import {GetListApiRoleAction} from "../actions";
 export interface GetListApiRoleState {
   loading: boolean,
   params?: any,
-  rows?: ApiRoleEntity[]|any,
-  total?: number|any,
+  rows?: ApiRoleEntity[],
+  total?: number,
   error?: AppError
 }
 

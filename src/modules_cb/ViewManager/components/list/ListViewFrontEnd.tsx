@@ -32,7 +32,7 @@ function ListViewFrontEnd(props: IProps) {
 
   let screenWidth = document.documentElement.clientWidth;
   const [page, setPage] = useState(1);
-  const scroll = screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false};
+  const [scroll, setScroll] = useState(screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false});
   const size = 10;
   const [state, setState] = useState<any>({
     selectedRowKeys: [],
@@ -56,20 +56,15 @@ function ListViewFrontEnd(props: IProps) {
 
   const removeAction = (event: any, entity: FrontendViewEntity, action: ActionView) => {
     let req: AddActionToViewRequest = {
-      viewId: entity.id,
+      viewId: action.viewId,
       actionId: action.actionId,
+      actionName: action.actionName,
+      desc: action.desc
     }
     props.removeAction(req);
   }
 
   const columns: ColumnProps<FrontendViewEntity>[] = [
-    {
-      title: 'STT',
-      key: 'index',
-      width: 40,
-      align:"center",
-      render: (text, record, index) =>  {return (page - 1) * 10 + index + 1}
-    },
     {
       title: 'Path',
       dataIndex: 'id',
@@ -92,8 +87,7 @@ function ListViewFrontEnd(props: IProps) {
       render: (value: boolean) => {
         return value ? 'Show' : 'Hidden';
       },
-    },
-    {
+    }, {
       title: 'Actions',
       dataIndex: 'actions',
       width: 150,
