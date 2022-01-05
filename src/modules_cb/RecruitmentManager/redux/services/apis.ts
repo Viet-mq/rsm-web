@@ -36,5 +36,5 @@ export const updateRecruitment = async (params?: any): Promise<ResponseBase2> =>
 };
 
 export const createInterviewProcess = async (params?: any): Promise<ResponseBase2> => {
-  return (await GET('api-svc/id/create', params)) as ResponseBase2;
+  return (await POST('api-svc/id/create', params)) as ResponseBase2;
 };

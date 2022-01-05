@@ -1,11 +1,17 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {Popconfirm, Popover, Select} from "antd";
-import {deleteRecruitment, getListRecruitment, updateRecruitment} from "../../redux/actions";
+import {
+  checkInformationValidate,
+  createSteps,
+  deleteRecruitment,
+  getListRecruitment,
+  updateRecruitment
+} from "../../redux/actions";
 import {BsDot, BsThreeDotsVertical} from "react-icons/all";
 import {Link} from "react-router-dom";
-import {RecruitmentEntity} from "../../types";
+import {CreateRecruitmentRequest, RecruitmentEntity} from "../../types";
 import moment from "moment";
 import 'moment/locale/vi';
 
@@ -17,7 +23,8 @@ const connector = connect(mapStateToProps, {
   getListRecruitment,
   deleteRecruitment,
   updateRecruitment,
-
+  checkInformationValidate,
+  createSteps
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -32,14 +39,9 @@ function ListRecruitment(props: IProps) {
   const dateFormat = 'DD/MM/YYYY';
   const timeFormat = 'HH:mm';
   const content = (<ul style={{width: 160}} className="popup-popover">
+    <li><Link to={`/recruitment-manager/edit`} onClick={btnEditClicked}>Sửa tin</Link></li>
+    <li><Link to={`/recruitment-manager/detail/${props.recruitment?.id}?roundID=${props.recruitment.interviewProcess[0].id}`}>Xem tin tuyển dụng</Link></li>
     <li>
-      <Link to={`/recruitment-manager/edit`}>Sửa tin</Link>
-    </li>
-    <li>
-      <a>Xem tin tuyển dụng</a>
-    </li>
-    <li>
-
       <Popconfirm
         title="Bạn muốn xóa tin tuyển dụng này chứ ?"
         okText="Xóa"
@@ -47,18 +49,13 @@ function ListRecruitment(props: IProps) {
         onCancel={event => {
           event?.stopPropagation();
         }}
-        onConfirm={event => handleDelete(event)}
+        onConfirm={handleDelete}
       >
-        <a
-          onClick={event => {
-            event.stopPropagation();
-          }}
-        >
-          Xóa
-        </a>
+        <a>Xóa</a>
       </Popconfirm>
     </li>
   </ul>);
+
   const contentMore = (<div className="content-more">
     <div className="flex-items-center">
       <div className='border-right pr-3'>Người tạo: <span className="bold-text"> {props.recruitment.createBy}</span>
@@ -66,12 +63,35 @@ function ListRecruitment(props: IProps) {
       <div className=" ml-3">Ngày tạo: <span
         className="bold-text">{moment(props.recruitment.createAt).format(dateFormat)}</span></div>
     </div>
-    <div className='border-right' style={{width: 200}}>Thời hạn dự kiến: <span className="bold-text"></span></div>
+    <div className='border-right' style={{width: 200}}>Thời hạn dự kiến: <span className="bold-text"/></div>
   </div>)
 
-  const handleDelete = (event: any) => {
-    event.stopPropagation();
+  function handleDelete() {
+    console.log(props.recruitment?.id)
     props.deleteRecruitment({id: props.recruitment?.id})
+  }
+
+  function btnEditClicked() {
+    let req: CreateRecruitmentRequest = ({
+      address: props.recruitment?.address,
+      deadLine: props.recruitment?.deadLine*1,
+      job: props.recruitment?.jobId,
+      quantity: props.recruitment?.quantity,
+      talentPool: props.recruitment?.talentPoolId,
+      title: props.recruitment?.title,
+      typeOfJob: props.recruitment?.typeOfJob,
+      detailOfSalary: props.recruitment?.detailOfSalary,
+      from: props.recruitment?.from,
+      to: props.recruitment?.to,
+      requirementOfJob: props.recruitment?.requirementOfJob,
+      jobDescription: props.recruitment?.jobDescription,
+      interest: props.recruitment?.interest,
+      interviewProcess:props.recruitment?.interviewProcess,
+      interviewer:props.recruitment?.interviewer
+    })
+    props.createSteps(req,props.recruitment?.id)
+    props.checkInformationValidate(true)
+
   }
 
   const handleVisibleChange = (visible: any) => {
@@ -82,10 +102,11 @@ function ListRecruitment(props: IProps) {
     <>
       <div className="recruitment-list">
         <div className="header-box border-bottom">
-          <div className="main-1__green-dot"></div>
+          <div className="main-1__green-dot"/>
           <div className="header-box-main">
-            <Link to={`/recruitment-manager/detail/${props.recruitment?.id}?roundID=${props.recruitment.interviewProcess[0].id}`}
-                  className="p">{props.recruitment.title}</Link>
+            <Link
+              to={`/recruitment-manager/detail/${props.recruitment?.id}?roundID=${props.recruitment.interviewProcess[0].id}`}
+              className="p">{props.recruitment.title}</Link>
             <div className="detail-flex">
               <div>{props.recruitment?.jobName}</div>
               <div><BsDot size={20}/></div>
@@ -140,7 +161,7 @@ function ListRecruitment(props: IProps) {
                         key={index}>
               <div className="padding-process">
                 <Link to={`/recruitment-manager/detail/${props.recruitment?.id}?roundID=${item.id}`}>
-                  <div className="p">{item.total?item.total:"0"}</div>
+                  <div className="p">{item.total ? item.total : "0"}</div>
                   <div className="bold-text">{item.name}</div>
                 </Link>
               </div>

@@ -1,21 +1,18 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Avatar, Button, Form, Icon, Input, Select} from "antd";
+import {Avatar, Button, Form, Icon, Input} from "antd";
 import React, {FormEvent, useEffect, useRef, useState} from "react";
-import {CreateBookingRequest, ProfileEntity} from "../../../ProfileManager/types";
 import {showFormCreate as showJobFormCreate} from "../../../JobManager/redux/actions";
 import 'devextreme/dist/css/dx.light.css';
 import {createSteps, searchUser} from "../../redux/actions";
 import {UserAccount} from "../../../AccountManager/types";
 import {CreateRecruitmentRequest} from "../../types";
 
-const {Option} = Select;
-
 const mapStateToProps = (state: RootState) => ({
   showBooking: state.profileManager.showBooking,
   searchUserState: state.recruitmentManager.searchUser,
-  interviewer: state.recruitmentManager.createSteps.request
+  createStepsState: state.recruitmentManager.createSteps.request
 
 })
 
@@ -118,19 +115,18 @@ function InterviewersForm(props: IProps) {
     const newData = ({
       username: value.username,
       fullName: value.fullName,
-      email:value.email,
+      email: value.email,
     });
     const found = dataSource.some((el: any) => el.username === newData.username);
     if (!found) {
       let req: CreateRecruitmentRequest = ({
-        interviewer:dataSource.concat(newData),
+        ...props.createStepsState,
+        interviewer: dataSource.map((item:any)=>item.username).concat(newData.username),
       })
       props.createSteps(req)
       setDatasource([...dataSource, newData]);
     }
-
     return;
-
   };
 
   function showScrollCandidate() {
@@ -141,7 +137,8 @@ function InterviewersForm(props: IProps) {
   function handleDelete(values: any) {
     const filterListUser: UserAccount | any = props.searchUserState.rows?.filter((item: any) => item.username === values)
     let req: CreateRecruitmentRequest = ({
-      interviewer:dataSource.filter((item: any) => item.username !== values),
+      ...props.createStepsState,
+      interviewer: dataSource.filter((item: any) => item.username !== values).map((item:any)=>item.username),
     })
     props.createSteps(req)
     setDatasource(dataSource.filter((item: any) => item.username !== values))
@@ -156,8 +153,9 @@ function InterviewersForm(props: IProps) {
       </div>
       <div className="c-schedule-interview-popup">
         <div className='ant-col-14 grid-left'>
-          {dataSource.map((item:any)=>{
-           return <div key={item.username} className="border-bottom flex-space-between-item-center" style={{padding:" 15px 0"}}>
+          {dataSource.map((item: any) => {
+            return <div key={item.username} className="border-bottom flex-space-between-item-center"
+                        style={{padding: " 15px 0"}}>
               <div className="flex-items-flex-start">
                 <div style={{marginRight: 10}}>
                   <Avatar size={25} style={{backgroundColor: "red"}}>
@@ -175,7 +173,7 @@ function InterviewersForm(props: IProps) {
                 </div>
               </div>
 
-              <div onClick={()=>handleDelete( item.username)} className="icon-delete">
+              <div onClick={() => handleDelete(item.username)} className="icon-delete">
                 <Icon type="delete" style={{color: 'red', fontSize: '150%'}}></Icon>
               </div>
             </div>

@@ -11,7 +11,7 @@ export interface RecruitmentEntity {
   deadLine: number,
   talentPoolId: string,
   talentPoolName: string,
-  interviewer: null,
+  interviewer: [],
   interviewProcess: InterviewProcess[],
   interest: string,
   createAt: string,
