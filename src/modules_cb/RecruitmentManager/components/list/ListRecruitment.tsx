@@ -4,14 +4,14 @@ import React, {useState} from "react";
 import {Popconfirm, Popover, Select} from "antd";
 import {
   checkInformationValidate,
-  createSteps,
   deleteRecruitment,
+  getDataRecruitmentUpdate,
   getListRecruitment,
   updateRecruitment
 } from "../../redux/actions";
 import {BsDot, BsThreeDotsVertical} from "react-icons/all";
 import {Link} from "react-router-dom";
-import {CreateRecruitmentRequest, RecruitmentEntity} from "../../types";
+import {RecruitmentEntity} from "../../types";
 import moment from "moment";
 import 'moment/locale/vi';
 
@@ -24,7 +24,7 @@ const connector = connect(mapStateToProps, {
   deleteRecruitment,
   updateRecruitment,
   checkInformationValidate,
-  createSteps
+  getDataRecruitmentUpdate
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -40,7 +40,9 @@ function ListRecruitment(props: IProps) {
   const timeFormat = 'HH:mm';
   const content = (<ul style={{width: 160}} className="popup-popover">
     <li><Link to={`/recruitment-manager/edit`} onClick={btnEditClicked}>Sửa tin</Link></li>
-    <li><Link to={`/recruitment-manager/detail/${props.recruitment?.id}?roundID=${props.recruitment.interviewProcess[0].id}`}>Xem tin tuyển dụng</Link></li>
+    <li><Link
+      to={`/recruitment-manager/detail/${props.recruitment?.id}?roundID=${props.recruitment.interviewProcess[0].id}`}>Xem
+      tin tuyển dụng</Link></li>
     <li>
       <Popconfirm
         title="Bạn muốn xóa tin tuyển dụng này chứ ?"
@@ -72,26 +74,8 @@ function ListRecruitment(props: IProps) {
   }
 
   function btnEditClicked() {
-    let req: CreateRecruitmentRequest = ({
-      address: props.recruitment?.address,
-      deadLine: props.recruitment?.deadLine*1,
-      job: props.recruitment?.jobId,
-      quantity: props.recruitment?.quantity,
-      talentPool: props.recruitment?.talentPoolId,
-      title: props.recruitment?.title,
-      typeOfJob: props.recruitment?.typeOfJob,
-      detailOfSalary: props.recruitment?.detailOfSalary,
-      from: props.recruitment?.from,
-      to: props.recruitment?.to,
-      requirementOfJob: props.recruitment?.requirementOfJob,
-      jobDescription: props.recruitment?.jobDescription,
-      interest: props.recruitment?.interest,
-      interviewProcess:props.recruitment?.interviewProcess,
-      interviewer:props.recruitment?.interviewer
-    })
-    props.createSteps(req,props.recruitment?.id)
+    props.getDataRecruitmentUpdate(props.recruitment)
     props.checkInformationValidate(true)
-
   }
 
   const handleVisibleChange = (visible: any) => {

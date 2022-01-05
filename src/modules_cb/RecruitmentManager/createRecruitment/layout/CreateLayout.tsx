@@ -2,7 +2,7 @@ import React from 'react';
 import {Badge, Button, Dropdown, Form, Layout, Menu} from 'antd';
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Link, Redirect, Route, Switch} from "react-router-dom";
+import {Link, Redirect, Route, Switch, useLocation} from "react-router-dom";
 import {RootState} from "../../../../redux/reducers";
 import Header from './Header';
 import {ImArrowLeft2} from "react-icons/all";
@@ -10,19 +10,22 @@ import Nav from "./Nav";
 import InformationForm from "../components/Information";
 import Process from "../components/Process";
 import Interviewers from "../components/Interviewers";
-import {createRecruitment, resetCreateSteps} from "../../redux/actions";
+import {createRecruitment, resetCreateSteps, updateRecruitment} from "../../redux/actions";
+import {UpdateRecruitmentRequest} from "../../types";
 
 const {Sider} = Layout;
 
 const mapStateToProps = (state: RootState) => ({
   checkValidate: state.recruitmentManager.createSteps,
-  createSteps: state.recruitmentManager.createSteps
+  createSteps: state.recruitmentManager.createSteps,
+  dataUpdate: state.recruitmentManager.update.dataUpdate
 
 })
 
 const connector = connect(mapStateToProps, {
   resetCreateSteps,
-  createRecruitment
+  createRecruitment,
+  updateRecruitment
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -32,7 +35,7 @@ interface LayoutProps extends FormComponentProps, ReduxProps {
 }
 
 const CreateLayout = (props: LayoutProps) => {
-
+  const location = useLocation();
   const menu = (
     <Menu className='detail-action'>
       <Menu.Item key="1">
@@ -52,7 +55,29 @@ const CreateLayout = (props: LayoutProps) => {
 
   function btnCreateClicked() {
     // console.log("props.createSteps.request:", props.createSteps.request)
-    props.createRecruitment(props.createSteps.request)
+    if (location.pathname.includes("edit")) {
+      let req: UpdateRecruitmentRequest = {
+        address: props.dataUpdate?.addressId,
+        deadLine: props.dataUpdate?.deadLine,
+        id: props.dataUpdate?.id,
+        interest: props.dataUpdate?.interest,
+        interviewProcess: props.dataUpdate?.interviewProcess,
+        interviewer: props.dataUpdate?.interviewer.map((item:any)=>item.username),
+        job: props.dataUpdate?.jobId,
+        jobDescription: props.dataUpdate?.jobDescription,
+        quantity: props.dataUpdate?.quantity,
+        requirementOfJob: props.dataUpdate?.requirementOfJob,
+        talentPool: props.dataUpdate?.talentPoolId,
+        title: props.dataUpdate?.title,
+        typeOfJob: props.dataUpdate?.typeOfJob,
+        detailOfSalary: props.dataUpdate?.detailOfSalary,
+        from: props.dataUpdate?.from,
+        to: props.dataUpdate?.to,
+      }
+      props.updateRecruitment(req)
+    } else {
+      props.createRecruitment(props.createSteps.request)
+    }
   }
 
   return (
@@ -64,7 +89,7 @@ const CreateLayout = (props: LayoutProps) => {
                   style={{display: "flex", color: "black"}}>
               <ImArrowLeft2 size={20}/>
             </Link>
-            <span>{props.path==='create'?'Thêm mới':"Sửa tin"}</span>
+            <span>{props.path === 'create' ? 'Thêm mới' : "Sửa tin"}</span>
           </Header>
         </Layout>
         <Layout>

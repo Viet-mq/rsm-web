@@ -8,20 +8,24 @@ import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import {MdDragIndicator} from "react-icons/all";
 import CreateProcessForm from "./CreateProcessForm";
 import UpdateProcessForm from "./UpdateProcessForm";
-import {createSteps, showFormCreate, showFormUpdate} from "../../redux/actions";
-import {CreateRecruitmentRequest} from "../../types";
+import {createSteps, getDataRecruitmentUpdate, showFormCreate, showFormUpdate} from "../../redux/actions";
+import {CreateRecruitmentRequest, RecruitmentEntity} from "../../types";
+import {useLocation} from "react-router-dom";
 
 const {TextArea} = Input;
 
 const mapStateToProps = (state: RootState) => ({
   showForm: state.recruitmentManager.showForm,
-  createStepsState: state.recruitmentManager.createSteps
+  createStepsState: state.recruitmentManager.createSteps,
+  dataUpdate: state.recruitmentManager.update.dataUpdate
+
 })
 
 const connector = connect(mapStateToProps, {
   showFormCreate,
   showFormUpdate,
-  createSteps
+  createSteps,
+  getDataRecruitmentUpdate
 
 });
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -30,6 +34,7 @@ interface IProps extends FormComponentProps, ReduxProps {
 }
 
 function ProcessForm(props: IProps) {
+  const location = useLocation();
   const fontWeightStyle = {fontWeight: 400, height: 215};
   /*
    * Quill modules to attach to editor
@@ -60,15 +65,16 @@ function ProcessForm(props: IProps) {
     'list', 'bullet', 'indent',
     'link', 'image', 'video'
   ]
-  const [schema, setSchema] = useState(props.createStepsState.request?.interviewProcess)
+  const [schema, setSchema] = useState<any>([])
   const [lastElement, setLastElement] = useState<any>(schema?.map((el: any) => el.isDragDisabled).lastIndexOf(false));
   useEffect(() => {
     document.title = "Quản lý tin tuyển dụng";
   }, []);
 
   useEffect(() => {
-    setSchema(props.createStepsState.request?.interviewProcess)
-  }, [props.createStepsState.request?.interviewProcess])
+    location.pathname.includes("edit") ? setSchema(props.dataUpdate?.interviewProcess) : setSchema(props.createStepsState.request?.interviewProcess)
+
+  }, [props.createStepsState.request, props.dataUpdate])
 
 
   const onDragEnd = (result: any) => {
@@ -83,12 +89,24 @@ function ProcessForm(props: IProps) {
     schemaCopy.splice(result.destination.index, 0, removed);
     setLastElement(schemaCopy.map((el: any) => el.isDragDisabled).lastIndexOf(false))
 
-    let req: CreateRecruitmentRequest = ({
-      ...props.createStepsState.request,
-      interviewProcess:schemaCopy,
 
-    })
-    props.createSteps(req)
+    if (location.pathname.includes("edit")) {
+      if (props.dataUpdate) {
+        let req: RecruitmentEntity = {
+          ...props.dataUpdate,
+          interviewProcess: schemaCopy
+        }
+        props.getDataRecruitmentUpdate(req)
+      }
+
+    } else {
+      let req: CreateRecruitmentRequest = ({
+        ...props.createStepsState.request,
+        interviewProcess: schemaCopy
+      })
+      props.createSteps(req)
+    }
+
     setSchema(schemaCopy);
   };
 
@@ -102,6 +120,30 @@ function ProcessForm(props: IProps) {
     // })
     // props.createSteps(req)
     // props.checkInformationValidate(true)
+  }
+
+  function btnDeleteProcessClicked(values:any,index:any) {
+    schema.splice(index,1)
+    if (location.pathname.includes("edit")) {
+      if (props.dataUpdate) {
+        let req: RecruitmentEntity = {
+          ...props.dataUpdate,
+          interviewProcess: schema
+        }
+        props.getDataRecruitmentUpdate(req)
+      }
+
+    } else {
+      let req: CreateRecruitmentRequest = ({
+        ...props.createStepsState.request,
+        interviewProcess: schema
+      })
+      props.createSteps(req)
+    }
+
+    setSchema(schema)
+    setLastElement(schema.map((el: any) => el.isDragDisabled).lastIndexOf(false))
+
   }
 
   return (
@@ -129,7 +171,7 @@ function ProcessForm(props: IProps) {
                               {item.name}
                             </div>
                             <div>
-                              <Icon type="edit" style={{fontSize: '130%'}}></Icon>
+                              <Icon type="edit" style={{fontSize: '130%'}}/>
                             </div>
                           </div> :
                           (
@@ -159,10 +201,10 @@ function ProcessForm(props: IProps) {
                                       {item.name}
                                     </div>
                                     <div>
-                                      <Icon type="edit" style={{fontSize: '130%', marginRight: 15}}></Icon>
+                                      <Icon type="edit" style={{fontSize: '130%', marginRight: 15}}/>
                                     </div>
-                                    <div>
-                                      <Icon type="delete" style={{color: 'red', fontSize: '130%'}}></Icon>
+                                    <div className="icon-delete" onClick={()=>btnDeleteProcessClicked(item,index)}>
+                                      <Icon type="delete" style={{color: 'red', fontSize: '130%'}}/>
                                     </div>
                                   </div>
 

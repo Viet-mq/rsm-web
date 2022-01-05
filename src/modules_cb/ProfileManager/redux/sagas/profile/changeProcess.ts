@@ -1,9 +1,11 @@
 import {
   ChangeProcessAction,
   changeProcessError,
-  changeProcessSuccess, getDetailProfile,
-  getListProfile, showChangeProcessForm, showChangeRecruitmentForm,
-  showFormCreate
+  changeProcessSuccess,
+  getDetailProfile,
+  getListProfile,
+  showChangeProcessForm,
+  showChangeRecruitmentForm
 } from "../../actions";
 import * as apis from "../../services/apis";
 import {put, select} from "redux-saga/effects";
@@ -23,17 +25,16 @@ export function* changeProcessAsync(action: ChangeProcessAction) {
       const params = yield select((state: RootState) => state.profileManager.list.params);
       const paramsRecruitment = yield select((state: RootState) => state.recruitmentManager.list.params);
       const paramsDetailRecruitment = yield select((state: RootState) => state.recruitmentManager.detailRecruitment.params);
-      const paramsDetail=yield select((state:RootState)=>state.profileManager.detail.params)
+      const paramsDetail = yield select((state: RootState) => state.profileManager.detail.params)
 
-      if(action.isChangeRecruitment){
+      if (action.isChangeRecruitment) {
         yield put(showChangeRecruitmentForm(false));
         yield put(getListProfile(params))
         yield put(getListRecruitment(paramsRecruitment))
-      }
-      else{
+      } else {
         yield put(showChangeProcessForm(false));
 
-        if(paramsDetail?.idProfile){
+        if (paramsDetail?.idProfile) {
           yield put(getDetailProfile(paramsDetail))
         }
         yield put(getDetailRecruitment(paramsDetailRecruitment))

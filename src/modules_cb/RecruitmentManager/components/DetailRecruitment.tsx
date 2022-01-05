@@ -11,7 +11,7 @@ import KanbanProcess from "./KanbanProcess";
 import ListProfile from "../../ProfileManager/components/list/ListProfile";
 import moment from "moment";
 import 'moment/locale/vi';
-import {getDetailRecruitment} from "../redux/actions";
+import {checkInformationValidate, getDataRecruitmentUpdate, getDetailRecruitment} from "../redux/actions";
 import {DetailCV} from "../../ProfileManager/types";
 
 const {Option} = Select;
@@ -28,7 +28,9 @@ const connector = connect(mapStateToProps, {
   getDetailRecruitment,
   getListProfile,
   showFormCreate,
-  showFormDetail
+  showFormDetail,
+  checkInformationValidate,
+  getDataRecruitmentUpdate
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -134,6 +136,11 @@ function DetailRecruitment(props: IProps) {
     setIdProcess(value);
   }
 
+  function btnEditClicked() {
+    props.getDataRecruitmentUpdate(props.detailRecruitment?.rows[0])
+    props.checkInformationValidate(true)
+  }
+
   return (
     <>
       <div>
@@ -143,8 +150,8 @@ function DetailRecruitment(props: IProps) {
           </Link>
           <div className="header-box-main">
             <span className="p">{props.detailRecruitment?.rows[0]?.title}</span>
-            <Link to={`/recruitment-manager/edit`}>
-              <Icon type={"edit"} style={{fontSize: "150%", marginLeft: 15}}></Icon>
+            <Link to={`/recruitment-manager/edit`} onClick={btnEditClicked}>
+              <Icon type={"edit"} style={{fontSize: "150%", marginLeft: 15}}/>
             </Link>
             <div className="detail-flex">
               <div>{props.detailRecruitment?.rows[0]?.jobName}</div>

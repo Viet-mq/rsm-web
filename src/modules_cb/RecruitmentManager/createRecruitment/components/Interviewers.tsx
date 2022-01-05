@@ -5,14 +5,16 @@ import {Avatar, Button, Form, Icon, Input} from "antd";
 import React, {FormEvent, useEffect, useRef, useState} from "react";
 import {showFormCreate as showJobFormCreate} from "../../../JobManager/redux/actions";
 import 'devextreme/dist/css/dx.light.css';
-import {createSteps, searchUser} from "../../redux/actions";
+import {createSteps, getDataRecruitmentUpdate, searchUser} from "../../redux/actions";
 import {UserAccount} from "../../../AccountManager/types";
-import {CreateRecruitmentRequest} from "../../types";
+import {CreateRecruitmentRequest, RecruitmentEntity} from "../../types";
+import {useLocation} from "react-router-dom";
 
 const mapStateToProps = (state: RootState) => ({
   showBooking: state.profileManager.showBooking,
   searchUserState: state.recruitmentManager.searchUser,
-  createStepsState: state.recruitmentManager.createSteps.request
+  createStepsState: state.recruitmentManager.createSteps.request,
+  dataUpdate: state.recruitmentManager.update.dataUpdate
 
 })
 
@@ -20,7 +22,9 @@ const connector = connect(mapStateToProps,
   {
     showJobFormCreate,
     searchUser,
-    createSteps
+    createSteps,
+    getDataRecruitmentUpdate
+
   });
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -28,6 +32,7 @@ interface IProps extends FormComponentProps, ReduxProps {
 }
 
 function InterviewersForm(props: IProps) {
+  const location = useLocation();
   const {getFieldDecorator, resetFields} = props.form;
   const fontWeightStyle = {fontWeight: 400};
   const dateFormat = 'DD/MM/YYYY';
@@ -75,6 +80,11 @@ function InterviewersForm(props: IProps) {
   }, []);
 
   useEffect(() => {
+    if(location.pathname.includes("edit")){
+      setDatasource(props.dataUpdate?.interviewer)
+    }
+  }, [props.dataUpdate]);
+  useEffect(() => {
     function handleClickOutside(event: any) {
       if (wrapperRef.current && !wrapperRef.current?.contains(event.target)) {
         setVisibleCandidate(false)
@@ -111,19 +121,32 @@ function InterviewersForm(props: IProps) {
   }
 
   function handleAdd(e: FormEvent, value: any) {
+    console.log(value)
     setListUser(listUser.filter((item: UserAccount) => item.username !== value.username));
     const newData = ({
       username: value.username,
       fullName: value.fullName,
       email: value.email,
     });
-    const found = dataSource.some((el: any) => el.username === newData.username);
+    const found = dataSource?.some((el: any) => el.username === newData.username);
     if (!found) {
-      let req: CreateRecruitmentRequest = ({
-        ...props.createStepsState,
-        interviewer: dataSource.map((item:any)=>item.username).concat(newData.username),
-      })
-      props.createSteps(req)
+      if(location.pathname.includes("edit")){
+        if (props.dataUpdate) {
+          let req: RecruitmentEntity = {
+            ...props.dataUpdate,
+            interviewer: dataSource.concat(newData),
+          }
+          props.getDataRecruitmentUpdate(req)
+        }
+
+      }else{
+        let req: CreateRecruitmentRequest = ({
+          ...props.createStepsState,
+          interviewer: dataSource?.map((item: any) => item.username).concat(newData.username),
+        })
+        props.createSteps(req)
+      }
+
       setDatasource([...dataSource, newData]);
     }
     return;
@@ -138,10 +161,10 @@ function InterviewersForm(props: IProps) {
     const filterListUser: UserAccount | any = props.searchUserState.rows?.filter((item: any) => item.username === values)
     let req: CreateRecruitmentRequest = ({
       ...props.createStepsState,
-      interviewer: dataSource.filter((item: any) => item.username !== values).map((item:any)=>item.username),
+      interviewer: dataSource?.filter((item: any) => item.username !== values).map((item: any) => item.username),
     })
     props.createSteps(req)
-    setDatasource(dataSource.filter((item: any) => item.username !== values))
+    setDatasource(dataSource?.filter((item: any) => item.username !== values))
     setListUser(filterListUser.concat(listUser))
   }
 
@@ -153,8 +176,9 @@ function InterviewersForm(props: IProps) {
       </div>
       <div className="c-schedule-interview-popup">
         <div className='ant-col-14 grid-left'>
-          {dataSource.map((item: any) => {
-            return <div key={item.username} className="border-bottom flex-space-between-item-center"
+          {dataSource?.map((item: any,index:any) => {
+            console.log(dataSource)
+            return <div key={index} className="border-bottom flex-space-between-item-center"
                         style={{padding: " 15px 0"}}>
               <div className="flex-items-flex-start">
                 <div style={{marginRight: 10}}>
@@ -174,7 +198,7 @@ function InterviewersForm(props: IProps) {
               </div>
 
               <div onClick={() => handleDelete(item.username)} className="icon-delete">
-                <Icon type="delete" style={{color: 'red', fontSize: '150%'}}></Icon>
+                <Icon type="delete" style={{color: 'red', fontSize: '150%'}}/>
               </div>
             </div>
 

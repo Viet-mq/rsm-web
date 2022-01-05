@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import ListStatusCV from "../components/list/ListStatusCV";
 import {Button, Icon} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
@@ -65,13 +64,13 @@ function StatusCVManagerPages(props: IProps) {
     'list', 'bullet', 'indent',
     'link', 'image', 'video'
   ]
-  const [schema, setSchema] = useState<StatusCVEntity[]|any>(undefined)
+  const [schema, setSchema] = useState<StatusCVEntity[] | any>(undefined)
 
   // useEffect(()=>{
   //   setSchema(props.list.rows)
   // },[props.list.rows])
 
-  const [lastElement, setLastElement] = useState<any>(props.list.rows?.map((el:any) => el.isDragDisabled).lastIndexOf(false));
+  const [lastElement, setLastElement] = useState<any>(props.list.rows?.map((el: any) => el.isDragDisabled).lastIndexOf(false));
 
   const onDragEnd = (result: any) => {
     // dropped outside the list
@@ -80,11 +79,11 @@ function StatusCVManagerPages(props: IProps) {
     }
 
     // reorder using index of source and destination.
-    const schemaCopy:any = props.list.rows;
+    const schemaCopy: any = props.list.rows;
     const [removed] = schemaCopy.splice(result.source.index, 1);
     // put the removed one into destination.
     schemaCopy.splice(result.destination.index, 0, removed);
-    setLastElement(schemaCopy?.map((el:any) => el.isDragDisabled).lastIndexOf(false))
+    setLastElement(schemaCopy?.map((el: any) => el.isDragDisabled).lastIndexOf(false))
     setSchema(schemaCopy);
   };
   useEffect(() => {
@@ -117,7 +116,7 @@ function StatusCVManagerPages(props: IProps) {
               {...provided.droppableProps}
             >
               {
-                props.list.rows?.map((item:any, index:any) => (
+                props.list.rows?.map((item: any, index: any) => (
                   item.isDragDisabled ? <div key={item.id} className="process-list process-system flex-items-center">
                       <MdDragIndicator className={"mr-2"}/>
                       <div className={"flex-process"}>

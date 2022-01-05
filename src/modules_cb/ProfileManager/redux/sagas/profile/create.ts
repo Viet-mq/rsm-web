@@ -10,8 +10,6 @@ import {put, select} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
 import {AppError} from "src/models/common";
 import {RootState} from "src/redux/reducers";
-import {createRecruitment} from "../../../../RecruitmentManager/redux/actions";
-import {ChangeProcessRequest} from "../../../types";
 
 export function* createProfileAsync(action: CreateProfileAction) {
   try {

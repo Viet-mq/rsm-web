@@ -1,4 +1,3 @@
-
 import * as apis from "../../services/apis";
 import {put, select} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
@@ -7,10 +6,12 @@ import {RootState} from "src/redux/reducers";
 import {
   CreateRejectCandidateAction,
   createRejectCandidateError,
-  createRejectCandidateSuccess, getDetailProfile,
-  getListProfile, showFormReasonReject
+  createRejectCandidateSuccess,
+  getDetailProfile,
+  getListProfile,
+  showFormReasonReject
 } from "../../actions";
-import {getDetailRecruitment, getListRecruitment} from "../../../../RecruitmentManager/redux/actions";
+import {getDetailRecruitment} from "../../../../RecruitmentManager/redux/actions";
 
 export function* createRejectCandidateAsync(action: CreateRejectCandidateAction) {
   try {
@@ -23,7 +24,7 @@ export function* createRejectCandidateAsync(action: CreateRejectCandidateAction)
       yield put(showFormReasonReject(false));
       const params = yield select((state: RootState) => state.profileManager.list.params);
       const paramsDetailRecruitment = yield select((state: RootState) => state.recruitmentManager.detailRecruitment.params);
-      const paramsDetail=yield select((state:RootState)=>state.profileManager.detail.params)
+      const paramsDetail = yield select((state: RootState) => state.profileManager.detail.params)
       yield put(getListProfile(params))
       yield put(getDetailRecruitment(paramsDetailRecruitment))
       yield put(getDetailProfile(paramsDetail))

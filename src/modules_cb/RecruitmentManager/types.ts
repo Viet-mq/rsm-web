@@ -3,7 +3,8 @@ export interface RecruitmentEntity {
   title: string,
   jobId: string,
   jobName: string,
-  address: string,
+  addressId: string,
+  addressName: string,
   typeOfJob: string,
   quantity: number,
   jobDescription: string,
@@ -20,15 +21,17 @@ export interface RecruitmentEntity {
   from: number,
   to: number,
   status: string,
+
 }
 
 export interface InterviewProcess {
   id: string,
   name: string,
   total?: string,
+  isDragDisabled?:boolean
 }
 export interface InterviewProcessResponse {
-  code: 0,
+  code: number,
   id: string,
   isDragDisabled: boolean,
   message: string,
@@ -55,20 +58,22 @@ export interface CreateRecruitmentRequest {
 }
 
 export interface UpdateRecruitmentRequest {
-  address: string,
-  deadLine: number,
-  id: string,
-  interest: string,
-  interviewProcess: InterviewProcess[],
-  interviewer: null,
-  job: string,
-  jobDescription: string,
-  quantity: number,
-  requirementOfJob: string,
-  salary: string,
-  talentPool: string,
-  title: string,
-  typeOfJob: string
+  id?: string,
+  address?: string,
+  deadLine?: number,
+  interviewProcess?: InterviewProcess[],
+  interviewer?: []|any,
+  job?: string,
+  quantity?: number,
+  talentPool?: string,
+  title?: string,
+  typeOfJob?: string
+  detailOfSalary?: string,
+  from?: number,
+  to?: number,
+  requirementOfJob?: string,
+  jobDescription?: string,
+  interest?: string,
 }
 
 
