@@ -16,6 +16,7 @@ interface ParentProps {
 }
 
 const connector = connect(mapStateToProps, {
+  ///
 });
 type PropsFromRedux = ConnectedProps<typeof connector>;
 

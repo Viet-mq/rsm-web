@@ -471,7 +471,7 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
                     </Button>
                     {visibleCandidate ?
                       <div ref={wrapperRef} className="dropdown-container">
-                        <Input onChange={event => handleSearchCandidate(event)} value={keySearch} placeholder="Tìm kiếm ứng viên"/>
+                        <Input onChange={event => handleSearchCandidate(event)} value={keySearch} placeholder="Tìm kiếm thành viên"/>
                         <div className="scroll-label-content">
                           {listCandidates.length !== 0 ? listCandidates.map((item: any, index: any) => {
                             return (<div key={item.id} onClick={event => handleAdd(event, item)}>

@@ -9,7 +9,9 @@ import {CreateRecruitmentRequest} from "../../types";
 
 const mapStateToProps = (state: RootState) => ({
   showForm: state.recruitmentManager.showForm,
-  createInterviewProcessState:state.recruitmentManager.createInterviewProcess
+  createInterviewProcessState: state.recruitmentManager.createInterviewProcess,
+  createStepsState: state.recruitmentManager.createSteps
+
 })
 
 const connector = connect(mapStateToProps, {
@@ -23,8 +25,8 @@ type ReduxProps = ConnectedProps<typeof connector>;
 interface CreateJobFormProps extends FormComponentProps, ReduxProps {
   schema: any,
   setSchema: any,
-  lastElement:any,
-  setLastElement:any,
+  lastElement: any,
+  setLastElement: any,
 }
 
 function CreateProcessForm(props: CreateJobFormProps) {
@@ -41,27 +43,27 @@ function CreateProcessForm(props: CreateJobFormProps) {
     },
   };
 
-  useEffect(()=>{
-    if(props.createInterviewProcessState?.response){
-      const schemaCopy:any = props.schema?.slice();
-
-      let dataAdd: StatusCVEntity=({
+  useEffect(() => {
+    if (props.createInterviewProcessState?.response?.code===0) {
+      const schemaCopy: any = props.schema?.slice();
+      let dataAdd: StatusCVEntity = ({
         id: props.createInterviewProcessState?.response.id,
         name: props.createInterviewProcessState?.response.name,
         isDragDisabled: props.createInterviewProcessState?.response.isDragDisabled
-    })
-        // put the removed one into destination.
-        schemaCopy.splice(props.lastElement+1, 0, dataAdd);
-      props.setLastElement(schemaCopy.map((el:any) => el.isDragDisabled).lastIndexOf(false))
+      })
+      schemaCopy.splice(props.lastElement + 1, 0, dataAdd);
+
+      props.setLastElement(schemaCopy.map((el: any) => el.isDragDisabled).lastIndexOf(false))
 
       let req: CreateRecruitmentRequest = ({
-        interviewProcess:schemaCopy
+        ...props.createStepsState.request,
+        interviewProcess: schemaCopy
       })
       props.createSteps(req)
       // props.setSchema(schemaCopy);
       props.showFormCreate(false)
     }
-  },[props.createInterviewProcessState?.response])
+  }, [props.createInterviewProcessState?.response])
 
   function onBtnCreateClicked(e: FormEvent) {
     e.preventDefault();
@@ -71,6 +73,7 @@ function CreateProcessForm(props: CreateJobFormProps) {
       if (!err) {
         let req: CreateStatusCVRequest = {
           name: values.name,
+          statusCVS: props.schema
         }
         props.createInterviewProcess(req);
         return;

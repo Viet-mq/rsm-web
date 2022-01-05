@@ -8,19 +8,21 @@ import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import {MdDragIndicator} from "react-icons/all";
 import CreateProcessForm from "./CreateProcessForm";
 import UpdateProcessForm from "./UpdateProcessForm";
-import {showFormCreate, showFormUpdate} from "../../redux/actions";
+import {createSteps, showFormCreate, showFormUpdate} from "../../redux/actions";
 import {CreateRecruitmentRequest} from "../../types";
 
 const {TextArea} = Input;
 
 const mapStateToProps = (state: RootState) => ({
   showForm: state.recruitmentManager.showForm,
-  createSteps: state.recruitmentManager.createSteps
+  createStepsState: state.recruitmentManager.createSteps
 })
 
 const connector = connect(mapStateToProps, {
   showFormCreate,
-  showFormUpdate
+  showFormUpdate,
+  createSteps
+
 });
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -58,16 +60,15 @@ function ProcessForm(props: IProps) {
     'list', 'bullet', 'indent',
     'link', 'image', 'video'
   ]
-  const [schema, setSchema] = useState(props.createSteps.request?.interviewProcess)
+  const [schema, setSchema] = useState(props.createStepsState.request?.interviewProcess)
   const [lastElement, setLastElement] = useState<any>(schema?.map((el: any) => el.isDragDisabled).lastIndexOf(false));
-
   useEffect(() => {
     document.title = "Quản lý tin tuyển dụng";
   }, []);
 
   useEffect(() => {
-    setSchema(props.createSteps.request?.interviewProcess)
-  }, [props.createSteps.request?.interviewProcess])
+    setSchema(props.createStepsState.request?.interviewProcess)
+  }, [props.createStepsState.request?.interviewProcess])
 
 
   const onDragEnd = (result: any) => {
@@ -81,6 +82,13 @@ function ProcessForm(props: IProps) {
     // put the removed one into destination.
     schemaCopy.splice(result.destination.index, 0, removed);
     setLastElement(schemaCopy.map((el: any) => el.isDragDisabled).lastIndexOf(false))
+
+    let req: CreateRecruitmentRequest = ({
+      ...props.createStepsState.request,
+      interviewProcess:schemaCopy,
+
+    })
+    props.createSteps(req)
     setSchema(schemaCopy);
   };
 

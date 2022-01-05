@@ -6,6 +6,7 @@ export interface StatusCVEntity {
 
 export interface CreateStatusCVRequest {
   name: string,
+  statusCVS?: StatusCVEntity[]
 }
 
 export interface UpdateStatusCVRequest {

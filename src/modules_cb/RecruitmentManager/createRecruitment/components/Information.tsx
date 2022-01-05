@@ -92,7 +92,8 @@ function InformationForm(props: IProps) {
           requirementOfJob: values.requirementOfJob,
           jobDescription: values.jobDescription,
           interest: values.interest,
-          interviewProcess:props.listProcess.rows
+          interviewProcess:props.listProcess.rows,
+          interviewer:[]
         })
         props.createSteps(req)
         props.checkInformationValidate(true)
@@ -224,7 +225,7 @@ function InformationForm(props: IProps) {
                   <Form.Item className="form-label" label="Số lượng tuyển dụng" labelCol={{span: 24}}
                              wrapperCol={{span: 24}}>
                     {getFieldDecorator('quantity', {
-                      initialValue: props.createStepsState.request?.quantity||0,
+                      initialValue: props.createStepsState.request?.quantity||1,
                       rules: [
                         {
                           message: 'Vui lòng chọn số lượng',

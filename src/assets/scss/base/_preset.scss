@@ -2,6 +2,8 @@
   display: flex;
   justify-content: space-between;
 }
+
+
 .flex-items-center{
   display: flex;
   align-items: center;
@@ -10,6 +12,17 @@
 .flex-items-start{
   display: flex;
   align-items: start;
+}
+
+.flex-items-flex-start{
+  display: flex;
+  align-items: flex-start;
+}
+
+.flex-space-between-item-center{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .font-20-bold-500{
@@ -70,5 +83,11 @@
   .ant-btn-primary{
     background-color: $color-border-process;
     border-color: $color-border-process;
+  }
+}
+
+.icon-delete{
+  &:hover{
+    cursor: pointer;
   }
 }
