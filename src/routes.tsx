@@ -82,7 +82,7 @@ const Routes = (props: PropsFromRedux) => {
                isLogin={props.isLogin}/>
         <Route path={`/recruitment-manager/detail/:idRecruitment`} exact={true} render={(props: any) => (<DetailRecruitment {...props}/>)}
                isLogin={props.isLogin}/>
-        {/*<Redirect exact from="/*" to={'/home'}/>*/}
+        <Redirect exact from="/*" to={'/home'}/>
       </Switch>
     </div>
   );

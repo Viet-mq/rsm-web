@@ -3,21 +3,24 @@ import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Input, Modal} from "antd";
 import React, {FormEvent, useEffect} from "react";
 import {RootState} from "../../../../redux/reducers";
-import {createInterviewProcess, createSteps, showFormCreate} from "../../redux/actions";
+import {createInterviewProcess, createSteps, getDataRecruitmentUpdate, showFormCreate} from "../../redux/actions";
 import {CreateStatusCVRequest, StatusCVEntity} from "../../../StatusCVManager/types";
-import {CreateRecruitmentRequest} from "../../types";
+import {CreateRecruitmentRequest, RecruitmentEntity} from "../../types";
+import {useLocation} from "react-router-dom";
 
 const mapStateToProps = (state: RootState) => ({
   showForm: state.recruitmentManager.showForm,
   createInterviewProcessState: state.recruitmentManager.createInterviewProcess,
-  createStepsState: state.recruitmentManager.createSteps
+  createStepsState: state.recruitmentManager.createSteps,
+  dataUpdate: state.recruitmentManager.update.dataUpdate
 
 })
 
 const connector = connect(mapStateToProps, {
   showFormCreate,
   createInterviewProcess,
-  createSteps
+  createSteps,
+  getDataRecruitmentUpdate
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -30,6 +33,7 @@ interface CreateJobFormProps extends FormComponentProps, ReduxProps {
 }
 
 function CreateProcessForm(props: CreateJobFormProps) {
+  const location = useLocation();
   const {getFieldDecorator, resetFields} = props.form;
   const formItemStyle = {height: '60px'};
   const formItemLayout = {
@@ -44,22 +48,34 @@ function CreateProcessForm(props: CreateJobFormProps) {
   };
 
   useEffect(() => {
-    if (props.createInterviewProcessState?.response?.code===0) {
+    if (props.createInterviewProcessState?.response?.code === 0) {
       const schemaCopy: any = props.schema?.slice();
       let dataAdd: StatusCVEntity = ({
         id: props.createInterviewProcessState?.response.id,
         name: props.createInterviewProcessState?.response.name,
         isDragDisabled: props.createInterviewProcessState?.response.isDragDisabled
       })
-      schemaCopy.splice(props.lastElement + 1, 0, dataAdd);
+      schemaCopy?.splice(props.lastElement + 1, 0, dataAdd);
 
       props.setLastElement(schemaCopy.map((el: any) => el.isDragDisabled).lastIndexOf(false))
 
-      let req: CreateRecruitmentRequest = ({
-        ...props.createStepsState.request,
-        interviewProcess: schemaCopy
-      })
-      props.createSteps(req)
+      if (location.pathname.includes("edit")) {
+        if (props.dataUpdate) {
+          let req: RecruitmentEntity = {
+            ...props.dataUpdate,
+            interviewProcess: schemaCopy
+          }
+          props.getDataRecruitmentUpdate(req)
+        }
+
+      } else {
+        let req: CreateRecruitmentRequest = ({
+          ...props.createStepsState.request,
+          interviewProcess: schemaCopy
+        })
+        props.createSteps(req)
+      }
+
       // props.setSchema(schemaCopy);
       props.showFormCreate(false)
     }

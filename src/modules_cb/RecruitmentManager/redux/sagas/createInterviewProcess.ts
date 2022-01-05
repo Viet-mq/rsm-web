@@ -1,9 +1,4 @@
-import {
-  CreateInterviewProcessAction,
-  createInterviewProcessError,
-  createInterviewProcessSuccess,
-  showFormCreate
-} from "../actions";
+import {CreateInterviewProcessAction, createInterviewProcessError, createInterviewProcessSuccess} from "../actions";
 import * as apis from "../services/apis";
 import {put} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";

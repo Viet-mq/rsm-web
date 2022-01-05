@@ -4,6 +4,7 @@ import {put, select} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
 import {AppError} from "src/models/common";
 import {RootState} from "src/redux/reducers";
+import history from 'src/history';
 
 export function* updateRecruitmentAsync(action: UpdateRecruitmentAction) {
   try {
@@ -14,6 +15,8 @@ export function* updateRecruitmentAsync(action: UpdateRecruitmentAction) {
     } else {
       NotificationSuccess('Thành công', "Cập nhật tin tuyển dụng thành công");
       // yield put(showFormUpdate(false));
+      history.push('/recruitment-manager');
+
       const params = yield select((state: RootState) => state.recruitmentManager.list.params);
       yield put(getListRecruitment(params))
     }

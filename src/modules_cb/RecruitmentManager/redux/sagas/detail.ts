@@ -1,9 +1,4 @@
-import {
-  RecruitmentListAction,
-  getListRecruitmentError,
-  getListRecruitmentSuccess,
-  DetailRecruitmentAction, getDetailRecruitmentSuccess, getDetailRecruitmentError
-} from "../actions";
+import {DetailRecruitmentAction, getDetailRecruitmentError, getDetailRecruitmentSuccess} from "../actions";
 import * as apis from '../services/apis'
 import {put} from "redux-saga/effects";
 import {AppError} from "src/models/common";
@@ -15,8 +10,7 @@ export function* getDetailRecruitmentAsync(action: DetailRecruitmentAction) {
     if (rs.code !== 0) {
       NotificationError('Lấy chi tiết tin tuyển dụng không thành công', "Lỗi: " + rs.message);
 
-    }
-    else {
+    } else {
       yield put(getDetailRecruitmentSuccess(rs.total, rs.rows))
     }
   } catch (e) {

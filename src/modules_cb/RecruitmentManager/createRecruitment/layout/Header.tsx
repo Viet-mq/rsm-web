@@ -1,9 +1,7 @@
 import React, {useState} from 'react';
-import {Avatar, Icon, Layout, Popover} from 'antd';
+import {Layout} from 'antd';
 import {connect, ConnectedProps} from 'react-redux';
 import {Link} from 'react-router-dom';
-
-import ChangePasswordModal from 'src/modules/Auth/components/ChangePasswordModal';
 import {RootState} from "../../../../redux/reducers";
 
 const {Header} = Layout;
@@ -12,9 +10,7 @@ const mapState = ({auth: {auth: {data: auth},},}: RootState) => ({
 
 });
 
-const connector = connect(mapState, {
-
-});
+const connector = connect(mapState, {});
 
 interface ParentProps {
   children: any;
@@ -60,7 +56,6 @@ const Head = (props: IProps) => {
     </>
   );
 };
-
 
 
 export default connector(Head);

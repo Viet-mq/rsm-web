@@ -6,8 +6,9 @@ import React, {useEffect, useRef} from "react";
 import moment from "moment";
 import {showFormCreate as showJobFormCreate} from "../../../JobManager/redux/actions";
 import 'devextreme/dist/css/dx.light.css';
-import {checkInformationValidate, createSteps} from "../../redux/actions";
-import {CreateRecruitmentRequest} from "../../types";
+import {checkInformationValidate, createSteps, getDataRecruitmentUpdate} from "../../redux/actions";
+import {CreateRecruitmentRequest, RecruitmentEntity} from "../../types";
+import {useLocation} from "react-router-dom";
 
 const {TextArea} = Input;
 
@@ -25,24 +26,24 @@ const mapStateToProps = (state: RootState) => ({
   listJob: state.jobManager.list,
   createJob: state.jobManager.create,
   listProcess: state.statuscvManager.list,
-  createStepsState: state.recruitmentManager.createSteps
-
+  createStepsState: state.recruitmentManager.createSteps,
+  dataUpdate: state.recruitmentManager.update.dataUpdate
 })
 
 const connector = connect(mapStateToProps,
   {
     showJobFormCreate,
     checkInformationValidate,
-    createSteps
+    createSteps,
+    getDataRecruitmentUpdate
   });
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends FormComponentProps, ReduxProps {
 }
 
-
 function InformationForm(props: IProps) {
-
+  const location = useLocation();
   const {getFieldDecorator} = props.form;
   const fontWeightStyle = {fontWeight: 400};
   const dateFormat = 'DD/MM/YYYY';
@@ -78,24 +79,48 @@ function InformationForm(props: IProps) {
   function onFormChange() {
     setTimeout(() => props.form.validateFields((err, values) => {
       if (!err) {
-        let req: CreateRecruitmentRequest = ({
-          address: values.address,
-          deadLine: values.deadLine*1,
-          job: values.job,
-          quantity: values.quantity,
-          talentPool: values.talentPool,
-          title: values.title,
-          typeOfJob: values.typeOfJob,
-          detailOfSalary: values.detailOfSalary,
-          from: values.from,
-          to: values.to,
-          requirementOfJob: values.requirementOfJob,
-          jobDescription: values.jobDescription,
-          interest: values.interest,
-          interviewProcess:props.listProcess.rows,
-          interviewer:[]
-        })
-        props.createSteps(req)
+        if (location.pathname.includes("edit")){
+          if (props.dataUpdate) {
+            let req: RecruitmentEntity = {
+              ...props.dataUpdate,
+              addressId: values.address,
+              deadLine: values.deadLine * 1,
+              jobId: values.job,
+              quantity: values.quantity,
+              talentPoolId: values.talentPool,
+              title: values.title,
+              typeOfJob: values.typeOfJob,
+              detailOfSalary: values.detailOfSalary,
+              from: values.from,
+              to: values.to,
+              requirementOfJob: values.requirementOfJob,
+              jobDescription: values.jobDescription,
+              interest: values.interest,
+            }
+            props.getDataRecruitmentUpdate(req)
+          }
+        }
+        else{
+          let req: CreateRecruitmentRequest = ({
+            address: values.address,
+            deadLine: values.deadLine * 1,
+            job: values.job,
+            quantity: values.quantity,
+            talentPool: values.talentPool,
+            title: values.title,
+            typeOfJob: values.typeOfJob,
+            detailOfSalary: values.detailOfSalary,
+            from: values.from,
+            to: values.to,
+            requirementOfJob: values.requirementOfJob,
+            jobDescription: values.jobDescription,
+            interest: values.interest,
+            interviewProcess: props.listProcess.rows,
+            interviewer: []
+          })
+          props.createSteps(req)
+        }
+
         props.checkInformationValidate(true)
       } else {
         props.checkInformationValidate(false)
@@ -132,7 +157,7 @@ function InformationForm(props: IProps) {
               <Form.Item className="form-label" label="Tiều đề tin tuyển dụng" labelCol={{span: 24}}
                          wrapperCol={{span: 24}}>
                 {getFieldDecorator('title', {
-                  initialValue: props.createStepsState.request?.title||'',
+                  initialValue: location.pathname.includes("edit") ? props.dataUpdate?.title : props.createStepsState.request?.title || '',
                   rules: [
                     {
                       message: 'Vui lòng nhập tin tuyển dụng',
@@ -147,7 +172,7 @@ function InformationForm(props: IProps) {
               <Form.Item className="form-label" label="Vị trí tuyển dụng" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                 <div style={{display: 'flex'}}>
                   {getFieldDecorator('job', {
-                    initialValue: props.createStepsState.request?.job||undefined,
+                    initialValue: location.pathname.includes("edit") ? props.dataUpdate?.jobId : props.createStepsState.request?.job || undefined,
                     rules: [
                       {
                         message: 'Vui lòng nhập vị trí tuyển dụng',
@@ -177,7 +202,7 @@ function InformationForm(props: IProps) {
                   <Form.Item className="form-label" label="Địa điểm làm việc" labelCol={{span: 24}}
                              wrapperCol={{span: 24}}>
                     {getFieldDecorator('address', {
-                      initialValue: props.createStepsState.request?.address|| undefined,
+                      initialValue: location.pathname.includes("edit") ? props.dataUpdate?.addressId : props.createStepsState.request?.address || undefined,
                       rules: [
                         {
                           message: 'Vui lòng nhập địa điểm',
@@ -200,7 +225,7 @@ function InformationForm(props: IProps) {
                   <Form.Item className="form-label" label="Loại hình công việc" labelCol={{span: 24}}
                              wrapperCol={{span: 24}}>
                     {getFieldDecorator('typeOfJob', {
-                      initialValue: props.createStepsState.request?.typeOfJob||'Toàn thời gian',
+                      initialValue: location.pathname.includes("edit") ? props.dataUpdate?.typeOfJob : props.createStepsState.request?.typeOfJob || 'Toàn thời gian',
                       rules: [
                         {
                           message: 'Vui lòng chọn loại hình công việc',
@@ -225,7 +250,7 @@ function InformationForm(props: IProps) {
                   <Form.Item className="form-label" label="Số lượng tuyển dụng" labelCol={{span: 24}}
                              wrapperCol={{span: 24}}>
                     {getFieldDecorator('quantity', {
-                      initialValue: props.createStepsState.request?.quantity||1,
+                      initialValue: location.pathname.includes("edit") ? props.dataUpdate?.quantity : props.createStepsState.request?.quantity || 1,
                       rules: [
                         {
                           message: 'Vui lòng chọn số lượng',
@@ -242,7 +267,7 @@ function InformationForm(props: IProps) {
                 <Col span={12}>
                   <Form.Item className="form-label" label="Hạn nộp hồ sơ" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                     {getFieldDecorator('deadLine', {
-                      initialValue:moment(props.createStepsState.request?.deadLine)|| moment().add(30, 'days'),
+                      initialValue: location.pathname.includes("edit") ? moment(props.dataUpdate?.deadLine) : moment(props.createStepsState.request?.deadLine) || moment().add(30, 'days'),
                       rules: [
                         {
                           message: 'Vui lòng chọn ngày hạn nộp',
@@ -263,7 +288,7 @@ function InformationForm(props: IProps) {
               <Form.Item label="Talent pools" className="form-label" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                 <div style={{display: 'flex'}}>
                   {getFieldDecorator('talentPool', {
-                    initialValue:props.createStepsState.request?.talentPool|| undefined,
+                    initialValue:location.pathname.includes("edit")?props.dataUpdate?.talentPoolId:  props.createStepsState.request?.talentPool || undefined,
                     rules: [
                       {
                         message: 'Vui lòng chọn talent pools',
@@ -286,7 +311,7 @@ function InformationForm(props: IProps) {
                 <Col span={12} style={{paddingRight: 10}}>
                   <Form.Item className="form-label" label="Từ" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                     {getFieldDecorator('from', {
-                      initialValue:props.createStepsState.request?.from|| 0,
+                      initialValue:location.pathname.includes("edit")?props.dataUpdate?.from:  props.createStepsState.request?.from || 0,
                       rules: [
                         {
                           message: 'Vui lòng chọn số lượng',
@@ -303,7 +328,7 @@ function InformationForm(props: IProps) {
                 <Col span={12}>
                   <Form.Item className="form-label" label="Đến" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                     {getFieldDecorator('to', {
-                      initialValue:props.createStepsState.request?.to|| 0,
+                      initialValue:location.pathname.includes("edit")?props.dataUpdate?.to:  props.createStepsState.request?.to || 0,
                       rules: [
                         {
                           message: 'Vui lòng chọn số lượng',
@@ -321,7 +346,7 @@ function InformationForm(props: IProps) {
               <Form.Item className="form-label" label="Hiển thị trên tin tuyển dụng" labelCol={{span: 24}}
                          wrapperCol={{span: 24}}>
                 {getFieldDecorator('detailOfSalary', {
-                  initialValue: props.createStepsState.request?.detailOfSalary||'Chi tiết mức lương',
+                  initialValue:location.pathname.includes("edit")?props.dataUpdate?.detailOfSalary:  props.createStepsState.request?.detailOfSalary || 'Chi tiết mức lương',
                   rules: [
                     {
                       message: 'Vui lòng chọn loại hình công việc',
@@ -342,7 +367,7 @@ function InformationForm(props: IProps) {
               <Form.Item className="form-label quill-editor" label="Mô tả chung về công việc" labelCol={{span: 24}}
                          style={formItemHeight} wrapperCol={{span: 24}}>
                 {getFieldDecorator('jobDescription', {
-                  initialValue:  props.createStepsState.request?.jobDescription||'',
+                  initialValue:location.pathname.includes("edit")?props.dataUpdate?.jobDescription:  props.createStepsState.request?.jobDescription || '',
                   rules: [
                     {
                       message: 'Vui lòng nhập mô tả chung',
@@ -369,7 +394,7 @@ function InformationForm(props: IProps) {
               <Form.Item className="form-label quill-editor" label="Yêu cầu công việc" labelCol={{span: 24}}
                          style={formItemHeight} wrapperCol={{span: 24}}>
                 {getFieldDecorator('requirementOfJob', {
-                  initialValue:props.createStepsState.request?.requirementOfJob|| '',
+                  initialValue:location.pathname.includes("edit")?props.dataUpdate?.requirementOfJob:  props.createStepsState.request?.requirementOfJob || '',
                   rules: [
                     {
                       message: 'Vui lòng nhập yêu cầu công việc',
@@ -396,7 +421,7 @@ function InformationForm(props: IProps) {
               <Form.Item className="form-label quill-editor" label="Quyền lợi" labelCol={{span: 24}}
                          style={formItemHeight} wrapperCol={{span: 24}}>
                 {getFieldDecorator('interest', {
-                  initialValue: props.createStepsState.request?.interest||'',
+                  initialValue:location.pathname.includes("edit")?props.dataUpdate?.interest:  props.createStepsState.request?.interest || '',
                   rules: [
                     {
                       message: 'Vui lòng nhập quyển lợi',

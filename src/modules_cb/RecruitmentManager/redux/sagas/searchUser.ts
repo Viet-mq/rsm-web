@@ -2,7 +2,6 @@ import {SearchUserAction, searchUserError, searchUserSuccess} from "../actions";
 import * as apis from '../services/apis'
 import {put} from "redux-saga/effects";
 import {AppError} from "src/models/common";
-import {NotificationError} from "src/components/Notification/Notification";
 
 export function* searchUserAsync(action: SearchUserAction) {
   try {
