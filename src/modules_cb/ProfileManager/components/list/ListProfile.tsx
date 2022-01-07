@@ -34,7 +34,7 @@ const mapStateToProps = (state: RootState) => ({
   listJob: state.jobManager.list,
   listRecruitment: state.recruitmentManager.list,
 
-})
+})//
 const connector = connect(mapStateToProps, {
   getListProfile,
   deleteProfile,
