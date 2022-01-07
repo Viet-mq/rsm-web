@@ -1,7 +1,6 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect} from "react";
-
 import {
   deleteTalentPool,
   getListTalentPool,
@@ -29,7 +28,7 @@ function ListTalentPool(props: IProps) {
   useEffect(() => {
     props.getListTalentPool({page: 1, size: 100});
   }, [])
-  console.log("list:",props.list)
+
   return (
     <>
       <div className="card-container">

@@ -70,7 +70,7 @@ const Routes = (props: PropsFromRedux) => {
         <Route path="/profile-manager" component={ProfileManagerPages} isLogin={props.isLogin}/>
         <Route path="/view-group-manager" component={ViewGroupManagerPage} isLogin={props.isLogin}/>
         <Route path="/group-api-manager" component={GroupAPIManagerPage} isLogin={props.isLogin}/>
-        <Route path="/talent-pool-manager" component={TalentPoolManagerPages} isLogin={props.isLogin}/>
+        <Route path="/talent-pool-manager" exact={true} component={TalentPoolManagerPages} isLogin={props.isLogin}/>
         <Route path="/schedule" component={ScheduleManagerPages} isLogin={props.isLogin}/>
         <Route path="/skill-manager" component={SkillManagerPages} isLogin={props.isLogin}/>
         <Route path="/reason-reject-manager" component={ReasonRejectManagerPages} isLogin={props.isLogin}/>
@@ -81,6 +81,8 @@ const Routes = (props: PropsFromRedux) => {
         <Route path="/recruitment-manager/edit" render={(props: any) => (<CreateLayout path={"edit"}/>)}
                isLogin={props.isLogin}/>
         <Route path={`/recruitment-manager/detail/:idRecruitment`} exact={true} render={(props: any) => (<DetailRecruitment {...props}/>)}
+               isLogin={props.isLogin}/>
+        <Route path={`/talent-pool-manager/:idTalentPool`} exact={true} render={(props: any) => (<ProfileManagerPages {...props}/>)}
                isLogin={props.isLogin}/>
         <Redirect exact from="/*" to={'/home'}/>
       </Switch>
