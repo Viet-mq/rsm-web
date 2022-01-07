@@ -6,7 +6,8 @@ import {Avatar, Badge, Button, Icon, Popconfirm, Select, Table, Tooltip, TreeSel
 import {emptyText} from "src/configs/locales";
 import {
   deleteProfile,
-  getListProfile, resetSearch,
+  getListProfile,
+  resetSearch,
   showFormBooking,
   showFormDetail,
   showFormUpdate,
@@ -17,6 +18,7 @@ import moment from "moment";
 import {GiFemale, GiMale, ImPhoneHangUp} from "react-icons/all";
 import {useHistory, useLocation} from "react-router-dom";
 import Search from "antd/es/input/Search";
+import {getDetailTalentPool} from "../../../TalentPoolManager/redux/actions";
 
 const {Option} = Select;
 
@@ -40,14 +42,17 @@ const connector = connect(mapStateToProps, {
   showFormDetail,
   showFormUploadCV,
   showFormBooking,
-  resetSearch
+  resetSearch,
+  getDetailTalentPool
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface ListProfileProps extends ReduxProps {
   idRecruitment?: any,
-  idProcess?:any,
+  idProcess?: any,
+  idTalentPool?: any,
+
 }
 
 function ListProfile(props: ListProfileProps) {
@@ -357,8 +362,18 @@ function ListProfile(props: ListProfileProps) {
       page: page,
       size: 30
     });
+    else if (pathname.includes("talent-pool-manager")) {
+      props.getListProfile({
+        talentPool: props.idTalentPool,
+        page: page,
+        size: 30
+      });
+      props.getDetailTalentPool({id: props.idTalentPool})
+
+    }
     else props.getListProfile({page: page, size: 30});
-  }, [page])
+  }, [page, pathname])
+
 
   useEffect(() => {
     if (props.elasticSearch.request?.key) {
@@ -441,12 +456,10 @@ function ListProfile(props: ListProfileProps) {
   }
 
   const handleEdit = (event: any, entity: ProfileEntity) => {
-    event.stopPropagation();
     props.showFormUpdate(true, entity);
   }
 
   const handleBooking = (event: any, entity: ProfileEntity) => {
-    event.stopPropagation();
     let req: DataShowBooking = {
       id: entity.id,
       fullName: entity.fullName
@@ -455,25 +468,15 @@ function ListProfile(props: ListProfileProps) {
   }
 
   const handleUploadCV = (e: any, entity: ProfileEntity) => {
-    e.stopPropagation();
-    if (e?.target) {
-      e.target.disabled = true;
-      e.target.disabled = false;
-    }
     props.showFormUploadCV(true, entity.id);
   }
 
   const handleDetail = (e: any, entity: ProfileEntity) => {
-    e.stopPropagation();
-    // setId(entity.id);
-
     let req: DetailCV = {
       show_detail: true,
       general: 12,
       detail: 12,
-
     }
-
     props.showFormDetail(req, entity.id);
   }
 
@@ -486,7 +489,7 @@ function ListProfile(props: ListProfileProps) {
         columnKey: null,
       },
     });
-    props.resetSearch({key:""})
+    props.resetSearch({key: ""})
     setKeySearch("")
     props.getListProfile({page: 1, size: 100});
   }

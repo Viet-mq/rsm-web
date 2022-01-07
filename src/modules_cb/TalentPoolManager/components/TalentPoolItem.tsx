@@ -5,6 +5,7 @@ import {Icon, Popconfirm, Popover} from "antd";
 import {BsThreeDots, FaUserCircle} from "react-icons/all";
 import {DeleteTalentPoolRequest, TalentPoolEntity} from "../types";
 import {deleteTalentPool, showFormUpdate} from "../redux/actions";
+import {Link} from 'react-router-dom';
 
 const mapStateToProps = ({talentPoolManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
@@ -20,7 +21,7 @@ interface IProps extends ReduxProps {
 
 function TalentPoolItem(props: IProps) {
 
-  var {talentPool} = props;
+  const {talentPool} = props;
   const iconUser = [
     <FaUserCircle size="35px" color="#FF7878" className="mr-2"/>,
     <FaUserCircle size="35px" color="#7EB5A6" className="mr-2"/>,
@@ -28,10 +29,10 @@ function TalentPoolItem(props: IProps) {
     <FaUserCircle size="35px" color="#9E7777" className="mr-2"/>
   ]
   const [visiblePopover, setVisiblePopover] = useState<boolean>(false);
-  var icon: any[] = [];
+  const icon: any[] = [];
   const loopIcon = () => {
     if (talentPool.managers.length > 3) {
-      for (var i = 0; i < 3; i++) {
+      for (let i = 0; i < 3; i++) {
         icon.push(<span key={i}>{iconUser[Math.floor(Math.random() * iconUser.length)]}</span>);
       }
       icon.push(<span key="4" className="card-footer__img-radius">+{talentPool.managers.length - 3}</span>
@@ -93,12 +94,18 @@ function TalentPoolItem(props: IProps) {
     setVisiblePopover(visible);
   };
 
+  function handleDetailClicked() {
+    // console.log(talentPool.id)
+  }
+
   return (
     <>
-      <div className='card-grid'>
+
+      <div className='card-grid' onClick={handleDetailClicked}>
         <div className="card-title">
           <div className='card-title__title'>
-            <p>{talentPool.name}</p>
+            <Link to={`/talent-pool-manager/${talentPool.id}`}>
+              <p>{talentPool.name}</p></Link>
             <Popover
               onVisibleChange={handleVisibleChange}
               visible={visiblePopover}
@@ -110,24 +117,31 @@ function TalentPoolItem(props: IProps) {
               <BsThreeDots className="card-title__title--detail-icon" size='20px'/>
             </Popover>
           </div>
-          <p className="card-title__content">{talentPool.description}</p>
+          <Link to={`/talent-pool-manager/${talentPool.id}`}
+                style={{color: "inherit"}}><p className="card-title__content">{talentPool.description}</p></Link>
         </div>
-        <div className="card-content">
+        <Link to={`/talent-pool-manager/${talentPool.id}`}
+              style={{color: "inherit"}}>
           <div>
-            <Icon type="folder-open" theme="filled"/>
-            <span className="card-content__number">{talentPool.numberOfProfile}</span>
-            <span className=""> Total Contacts</span>
-          </div>
+            <div className="card-content">
+              <div>
+                <Icon type="folder-open" theme="filled"/>
+                <span className="card-content__number">{talentPool.numberOfProfile}</span>
+                <span className=""> Total Contacts</span>
+              </div>
 
-          <div>
-            <Icon type="flag" theme="filled"/>
-            <span className="card-content__number">0</span>
-            <span> New contacts in the last 30 days</span>
+              <div>
+                <Icon type="flag" theme="filled"/>
+                <span className="card-content__number">0</span>
+                <span> New contacts in the last 30 days</span>
+              </div>
+            </div>
+            <div className="card-footer">
+              {loopIcon()}
+            </div>
           </div>
-        </div>
-        <div className="card-footer">
-          {loopIcon()}
-        </div>
+        </Link>
+
       </div>
 
     </>

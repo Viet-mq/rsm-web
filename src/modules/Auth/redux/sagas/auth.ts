@@ -73,7 +73,6 @@ export function* loginAsync(action: LoginAction) {
 }
 
 export function loginSuccessAsync(action: LoginSuccessAction) {
-  console.log("in saga: " + JSON.stringify(action));
   setToken(action.payload?.access_token);
   if (window.location.pathname === '/') {
     history.push('/home/');

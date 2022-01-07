@@ -4,6 +4,7 @@ import deleteTalentPool, {DeleteTalentPoolState} from "./deleteTalentPool";
 import create, {CreateTalentPoolState} from "./create";
 import showForm, {TalentPoolFormState} from "./showForm";
 import update, {UpdateTalentPoolState} from "./update";
+import detail, {DetailTalentPoolState} from "./detail";
 
 export interface TalentPoolManagerModuleState {
   list: TalentPoolListState,
@@ -11,6 +12,7 @@ export interface TalentPoolManagerModuleState {
   create: CreateTalentPoolState,
   showForm: TalentPoolFormState,
   update: UpdateTalentPoolState,
+  detail:DetailTalentPoolState
 }
 
 export default combineReducers<TalentPoolManagerModuleState>({
@@ -19,4 +21,5 @@ export default combineReducers<TalentPoolManagerModuleState>({
   create,
   showForm,
   update,
+  detail,
 });

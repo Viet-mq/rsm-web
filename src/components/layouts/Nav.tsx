@@ -25,6 +25,15 @@ import {
   RiMapPin2Line
 } from "react-icons/all";
 
+interface ParentProps {
+  hiddenLabel: boolean;
+}
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+interface IProps extends ParentProps, PropsFromRedux {
+}
+
 const mapStateToProps = (state: RootState) => {
   return {
     isLogin: state.auth.auth.data?.code === 0,
@@ -33,15 +42,7 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-interface ParentProps {
-  hiddenLabel: boolean;
-}
-
 const connector = connect(mapStateToProps, {});
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-interface IProps extends ParentProps, PropsFromRedux {
-}
 
 const Nav = (props: IProps) => {
   const paths = window.location.pathname.split('/');
@@ -62,7 +63,7 @@ const Nav = (props: IProps) => {
 
       <Menu.Item key="recruitment-manager" style={{display: 'flex', alignItems: 'center'}}>
         <Link to={`/recruitment-manager`}>
-          <Icon type="inbox" />
+          <Icon type="inbox"/>
           <span>Tin tuyển dụng </span>
         </Link>
       </Menu.Item>
@@ -207,7 +208,8 @@ const Nav = (props: IProps) => {
       <SubMenu key="sub3" title={!props.hiddenLabel ? <span>TALENT POOLS</span> : <RiFolderUserLine/>}>
         {props.auth?.pools?.map((item: any) => {
           return <Menu.Item key={item.id} style={{display: 'flex'}}>
-            <Link to={`/talent-pool-manager/${item.id}`} className='nav-element'>
+            <Link to={`/talent-pool-manager/${item.id}`}
+                  className='nav-element'>
               <Icon type="contacts"/>
               <span className="nav-element__content">{item.name} </span>
               <Badge style={{backgroundColor: '#818181'}} count={item.count} overflowCount={999}/>
