@@ -6,7 +6,7 @@ import {ProfileListAction} from "../../actions";
 export interface ProfileListState {
   loading: boolean,
   params?: any,
-  rows?: ProfileEntity[],
+  rows?: ProfileEntity[]|any,
   total?: number,
   error?: AppError,
 

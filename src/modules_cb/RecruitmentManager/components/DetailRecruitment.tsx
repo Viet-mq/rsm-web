@@ -42,9 +42,8 @@ interface IProps extends ReduxProps {
 function DetailRecruitment(props: IProps) {
   const {idRecruitment} = useParams()
   const query = new URLSearchParams(props.location.search).get("roundID")
-  const [page, setPage] = useState(1);
+  const page = 1;
   const dateFormat = 'DD/MM/YYYY';
-  const timeFormat = 'HH:mm';
   const [idProcess, setIdProcess] = useState<any>(query);
   const [valueDateRange, setValueDateRange] = useState<any[]>([moment().startOf("week"), moment().endOf('week')])
   const contentMore = (<div className="content-more">
@@ -54,7 +53,7 @@ function DetailRecruitment(props: IProps) {
       <div className=" ml-3">Ngày tạo:<span className="bold-text"> {props.detailRecruitment?.rows[0]?.createAt}</span>
       </div>
     </div>
-    <div className='border-right' style={{width: 200}}>Thời hạn dự kiến: <span className="bold-text"></span>
+    <div className='border-right' style={{width: 200}}>Thời hạn dự kiến: <span className="bold-text"/>
     </div>
   </div>)
   const menu = (<Menu className='detail-action'>

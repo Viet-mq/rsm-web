@@ -62,7 +62,7 @@ const CreateLayout = (props: LayoutProps) => {
         id: props.dataUpdate?.id,
         interest: props.dataUpdate?.interest,
         interviewProcess: props.dataUpdate?.interviewProcess,
-        interviewer: props.dataUpdate?.interviewer.map((item:any)=>item.username),
+        interviewer: props.dataUpdate?.interviewer?.map((item:any)=>item.username),
         job: props.dataUpdate?.jobId,
         jobDescription: props.dataUpdate?.jobDescription,
         quantity: props.dataUpdate?.quantity,
