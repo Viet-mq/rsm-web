@@ -17,37 +17,16 @@ import UploadCVForm from "../components/UploadCVForm";
 import BookingForm from "../components/BookingForm";
 import UpdateDetailProfileForm from "../components/UpdateDetailProfileForm";
 import {exportExcelFile} from "../redux/services/apis";
+import {useLocation, useParams} from "react-router-dom";
 
-const mapStateToProps = ({
-                           profileManager: {
-                             showForm,
-                             list,
-                             create,
-                             deleteProfile,
-                             update,
-                             uploadCV,
-                             showFormUpload,
-                             getBooking,
-                             createBooking,
-                             updateBooking,
-                             updateDetail,
-                             uploadListCV,
 
-                           }
-                         }: RootState) => ({
-  showForm,
-  list,
-  create,
-  deleteProfile,
-  update,
-  uploadCV,
-  showFormUpload,
-  getBooking,
-  createBooking,
-  updateBooking,
-  updateDetail,
-  uploadListCV
-})
+const mapStateToProps = (state: RootState) => {
+  return {
+    profileManager: state.profileManager,
+    talentPools: state.talentPoolManager,
+  };
+};
+
 const connector = connect(mapStateToProps, {
   showFormCreate,
   showFormUpdate,
@@ -56,6 +35,7 @@ const connector = connect(mapStateToProps, {
   showFormUploadListCV
 });
 
+
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends ReduxProps {
@@ -63,9 +43,11 @@ interface IProps extends ReduxProps {
 }
 
 function ProfileManagerPages(props: IProps) {
+  const {idTalentPool} = useParams()
+  const location = useLocation();
 
   useEffect(() => {
-    document.title = "Ứng viên";
+    location.pathname.includes("talent-pool-manager") ? document.title = "Talent pools" : document.title = "Ứng viên";
   }, []);
 
   const handleCreate = (e: any) => {
@@ -88,8 +70,8 @@ function ProfileManagerPages(props: IProps) {
 
   function BtnExportExcel() {
     exportExcelFile(undefined).then((value: any) => {
-      var data = new Blob([value], {type: 'application/json'});
-      var xlsxURL = window.URL.createObjectURL(data);
+      const data = new Blob([value], {type: 'application/json'});
+      const xlsxURL = window.URL.createObjectURL(data);
       const tempLink = document.createElement('a');
       tempLink.href = xlsxURL;
       tempLink.setAttribute('download', 'file.xlsx');
@@ -103,7 +85,9 @@ function ProfileManagerPages(props: IProps) {
       <div className="entryHeader">
         <Row>
           <Col md={16}>
-            <div className="tmp-title-page-size20">Ứng viên ({props.list.total})</div>
+            <div
+              className="tmp-title-page-size20">{location.pathname.includes("talent-pool-manager") ? `${props.talentPools.detail.result?props.talentPools.detail.result?.name:""} ` : "Ứng viên "}({props.profileManager.list.total})
+            </div>
           </Col>
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
@@ -123,23 +107,23 @@ function ProfileManagerPages(props: IProps) {
         </Row>
       </div>
 
-      <ListProfile/>
+      <ListProfile idTalentPool={idTalentPool}/>
       <CreateProfileForm/>
       <UpdateProfileForm/>
       <UploadCVForm/>
       <BookingForm/>
       <UpdateDetailProfileForm/>
 
-      {props.create.loading ||
-      props.list.loading ||
-      props.deleteProfile.loading ||
-      props.uploadCV.loading ||
-      props.uploadListCV.loading ||
-      props.update.loading ||
-      props.updateDetail.loading ||
-      props.getBooking.loading ||
-      props.createBooking.loading ||
-      props.updateBooking.loading ?
+      {props.profileManager.create.loading ||
+      props.profileManager.list.loading ||
+      props.profileManager.deleteProfile.loading ||
+      props.profileManager.uploadCV.loading ||
+      props.profileManager.uploadListCV.loading ||
+      props.profileManager.update.loading ||
+      props.profileManager.updateDetail.loading ||
+      props.profileManager.getBooking.loading ||
+      props.profileManager.createBooking.loading ||
+      props.profileManager.updateBooking.loading ?
         <Loading/> : null}
 
     </div>

@@ -66,7 +66,7 @@ function ProcessForm(props: IProps) {
     'link', 'image', 'video'
   ]
   const [schema, setSchema] = useState<any>([])
-  const [lastElement, setLastElement] = useState<any>(schema?.map((el: any) => el.isDragDisabled).lastIndexOf(false));
+  const [lastElement, setLastElement] = useState<any>();
   useEffect(() => {
     document.title = "Quản lý tin tuyển dụng";
   }, []);
@@ -76,6 +76,11 @@ function ProcessForm(props: IProps) {
 
   }, [props.createStepsState.request, props.dataUpdate])
 
+  useEffect(() => {
+    if (schema?.length) {
+      setLastElement(schema.map((el: any) => el.isDragDisabled).lastIndexOf(false))
+    }
+  }, [schema])
 
   const onDragEnd = (result: any) => {
     // dropped outside the list
@@ -122,8 +127,8 @@ function ProcessForm(props: IProps) {
     // props.checkInformationValidate(true)
   }
 
-  function btnDeleteProcessClicked(values:any,index:any) {
-    schema.splice(index,1)
+  function btnDeleteProcessClicked(values: any, index: any) {
+    schema.splice(index, 1)
     if (location.pathname.includes("edit")) {
       if (props.dataUpdate) {
         let req: RecruitmentEntity = {
@@ -203,7 +208,7 @@ function ProcessForm(props: IProps) {
                                     <div>
                                       <Icon type="edit" style={{fontSize: '130%', marginRight: 15}}/>
                                     </div>
-                                    <div className="icon-delete" onClick={()=>btnDeleteProcessClicked(item,index)}>
+                                    <div className="icon-delete" onClick={() => btnDeleteProcessClicked(item, index)}>
                                       <Icon type="delete" style={{color: 'red', fontSize: '130%'}}/>
                                     </div>
                                   </div>
