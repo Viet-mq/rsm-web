@@ -52,7 +52,7 @@ export default function* root() {
     yield takeLatest(CREATE_BOOKING, createBookingAsync),
     yield takeLatest(UPDATE_BOOKING, updateBookingAsync),
     yield takeLatest(GET_ACTIVITY, getActivityLogsAsync),
-    yield takeEvery(GET_ELASTIC_SEARCH, searchAsync),
+    yield takeLatest(GET_ELASTIC_SEARCH, searchAsync),
     yield takeLatest(GET_LIST_NOTE, getListNoteAsync),
     yield takeLatest(CREATE_NOTE, createNoteAsync),
     yield takeLatest(UPDATE_NOTE, updateNoteAsync),
