@@ -73,7 +73,7 @@ function UpdateTalentPoolForm(props: UpdateTalentPoolFormProps) {
     <Modal
       zIndex={2}
       maskClosable={false}
-      title="Cập nhật Talent Pool hệ thống"
+      title="Cập nhật kho tiềm năng hệ thống"
       visible={props.showFormState.show_update}
       centered={true}
       width="550px"
@@ -88,17 +88,17 @@ function UpdateTalentPoolForm(props: UpdateTalentPoolFormProps) {
 
       <Form {...formItemLayout}>
 
-        <Form.Item label="Tên Talent Pool" className="mb-0" style={{...formItemStyle}}>
+        <Form.Item label="Tên kho tiềm năng" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('name', {
             initialValue: props.showFormState.data_update?.name,
             rules: [
               {
-                message: 'Vui lòng nhập tên Talent Pool',
+                message: 'Vui lòng nhập tên kho tiềm năng',
                 required: true,
               },
             ],
           })(
-            <Input placeholder="Tên Talent Pool" className="bg-white text-black"/>
+            <Input placeholder="Tên kho tiềm năng" className="bg-white text-black"/>
           )}
         </Form.Item>
 
@@ -133,18 +133,6 @@ function UpdateTalentPoolForm(props: UpdateTalentPoolFormProps) {
               },
             ],
           })(<Input placeholder="Nhập miêu tả" className="bg-white text-black"/>)}
-        </Form.Item>
-
-        <Form.Item label="Tống số Profile" className="mb-0" style={{...formItemStyle}}>
-          {getFieldDecorator('numberOfProfile', {
-            initialValue: props.showFormState.data_update?.numberOfProfile,
-            rules: [
-              {
-                message: 'Vui lòng nhập số lượng profile',
-                required: true,
-              },
-            ],
-          })(<InputNumber type="number" min={0} placeholder="Nhập số lượng profile" className="bg-white text-black"/>)}
         </Form.Item>
 
         <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px'}} colon={false}>

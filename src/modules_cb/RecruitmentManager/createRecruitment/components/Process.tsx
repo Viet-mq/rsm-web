@@ -78,7 +78,9 @@ function ProcessForm(props: IProps) {
 
   useEffect(() => {
     if (schema?.length) {
-      setLastElement(schema.map((el: any) => el.isDragDisabled).lastIndexOf(false))
+      const calLastElement = schema.map((el: any) => el.isDragDisabled).lastIndexOf(false)
+      if (calLastElement !== -1) setLastElement(calLastElement)
+      else setLastElement(0)
     }
   }, [schema])
 
@@ -145,9 +147,11 @@ function ProcessForm(props: IProps) {
       })
       props.createSteps(req)
     }
-
+    const calLastElement = schema.map((el: any) => el.isDragDisabled).lastIndexOf(false)
+    if (calLastElement !== -1) setLastElement(calLastElement)
+    else setLastElement(0)
     setSchema(schema)
-    setLastElement(schema.map((el: any) => el.isDragDisabled).lastIndexOf(false))
+
 
   }
 
@@ -170,15 +174,26 @@ function ProcessForm(props: IProps) {
                     {
                       schema?.map((item: any, index: any) => (
                         item.isDragDisabled ?
-                          <div key={item.id} className="process-list process-system flex-items-center">
-                            <MdDragIndicator className={"mr-2"}/>
-                            <div className={"flex-process"}>
-                              {item.name}
+                          (<>
+                            <div key={item.id} className="process-list process-system flex-items-center">
+                              <MdDragIndicator className={"mr-2"}/>
+                              <div className={"flex-process"}>
+                                {item.name}
+                              </div>
+                              <div>
+                                <Icon type="edit" style={{fontSize: '130%'}}/>
+                              </div>
                             </div>
-                            <div>
-                              <Icon type="edit" style={{fontSize: '130%'}}/>
-                            </div>
-                          </div> :
+                            {index === lastElement ?
+                              <>
+                                {provided.placeholder}
+                                <div className="add-process-button" onClick={showFormProcess}>
+                                  <Button type="dashed" size={"large"}> <Icon type="plus"/>Thêm vòng tuyển
+                                    dụng</Button>
+                                </div>
+                              </>
+                              : null}
+                          </>) :
                           (
                             <>
                               <Draggable

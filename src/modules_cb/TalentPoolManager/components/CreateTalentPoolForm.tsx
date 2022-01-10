@@ -1,13 +1,15 @@
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Form, Input, Modal, Select} from "antd";
+import {Avatar, Button, DatePicker, Form, Icon, Input, Modal, Select, TreeSelect} from "antd";
 import React, {FormEvent, useEffect} from "react";
 import {createTalentPool, showFormCreate} from "../redux/actions";
 import {CreateTalentPoolRequest} from "../types";
 import {getListAccount} from "../../AccountManager/redux/actions";
+import moment from "moment";
 
 const {Option} = Select;
+const { TextArea } = Input;
 
 const mapStateToProps = (state: RootState) => ({
   listAccountState: state.accountManager.list,
@@ -28,16 +30,15 @@ interface CreateTalentPoolFormProps extends FormComponentProps, ReduxProps {
 function CreateTalentPoolForm(props: CreateTalentPoolFormProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
-  const formItemStyle = {height: '60px'};
-
+  const fontWeightStyle = {fontWeight: 400};
   const formItemLayout = {
     labelCol: {
       xs: {span: 24},
-      sm: {span: 8},
+      sm: {span: 24},
     },
     wrapperCol: {
       xs: {span: 24},
-      sm: {span: 16},
+      sm: {span: 24},
     },
   };
 
@@ -72,7 +73,7 @@ function CreateTalentPoolForm(props: CreateTalentPoolFormProps) {
     <Modal
       zIndex={2}
       maskClosable={false}
-      title="Tạo mới TalentPool"
+      title="Tạo mới kho tiềm năng"
       visible={props.talentPoolManagerState.showForm.show_create}
       centered={true}
       width="550px"
@@ -87,51 +88,54 @@ function CreateTalentPoolForm(props: CreateTalentPoolFormProps) {
 
       <Form {...formItemLayout}>
 
-        <Form.Item label="Tên TalentPool" className="mb-0" style={{...formItemStyle}}>
+        <Form.Item label="Tên kho tiềm năng" className="form-label"  {...formItemLayout}>
           {getFieldDecorator('name', {
             initialValue: '',
             rules: [
               {
-                message: 'Vui lòng nhập tên TalentPool',
-                required: true,
-              },
-            ],
-          })(<Input placeholder="Nhập tên TalentPool" className="bg-white text-black"/>)}
-        </Form.Item>
-
-        <Form.Item label="Quản lý" className="mb-0" style={{...formItemStyle}}>
-          {getFieldDecorator('managers', {
-            initialValue: undefined,
-            rules: [
-              {
-                message: 'Vui lòng chọn người quản lý',
+                message: 'Vui lòng nhập tên kho tiềm năng',
                 required: true,
               },
             ],
           })(
-            <Select className="bg-white text-black"
-                    mode="multiple"
-                    placeholder="Vui lòng chọn người quản lý"
-            >
-              {props.listAccountState.rows?.map((item: any, index: any) => (
-                <Option key={index} value={item.username}>{item.fullName}</Option>
-              ))}
-            </Select>
+            <Input placeholder="Nhập tên kho tiềm năng" className="bg-white text-black"/>
           )}
         </Form.Item>
 
-        <Form.Item label="Miêu tả" className="mb-0" style={{...formItemStyle}}>
-          {getFieldDecorator('description', {
-            initialValue: '',
+        <Form.Item className="form-label" label="Mô tả kho tiềm năng" labelCol={{span: 24}}
+                   wrapperCol={{span: 24}}>
+          {getFieldDecorator('note', {
+            initialValue: "",
             rules: [
               {
-                message: 'Vui lòng nhập miêu tả',
-                required: true,
+                message: 'Vui lòng nhập mô tả',
+                required: false,
               },
             ],
-          })(<Input placeholder="Nhập miêu tả" className="bg-white text-black"/>)}
+          })(
+            <TextArea placeholder="Nhập nội dung" style={{height: 100}} className="bg-white text-black"/>
+          )}
         </Form.Item>
 
+        <Form.Item label="Thành viên quản lý - có quyền truy cập toàn bộ hồ sơ" className="form-label"  {...formItemLayout}>
+            {getFieldDecorator('managers', {
+              initialValue: undefined,
+              rules: [
+                {
+                  message: 'Vui lòng chọn người quản lý',
+                  required: true,
+                },
+              ],
+            })(
+              <Select mode="multiple" className="bg-white text-black" style={fontWeightStyle} placeholder="Chọn thành viên"
+              >
+                {props.listAccountState.rows?.map((item: any, index: any) => (
+                  <Option key={index} value={item.username}>{item.fullName}</Option>
+                ))}
+              </Select>
+            )}
+
+        </Form.Item>
 
         <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px'}} colon={false}>
           <Button className="mr-3 create-btn" htmlType="submit" onClick={onBtnCreateClicked}>
@@ -143,6 +147,8 @@ function CreateTalentPoolForm(props: CreateTalentPoolFormProps) {
         </Form.Item>
 
       </Form>
+
+
 
     </Modal>
 

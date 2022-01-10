@@ -88,7 +88,7 @@ function ProfileManagerPages(props: IProps) {
         <Row>
           <Col md={16}>
             <div
-              className="tmp-title-page-size20">{location.pathname.includes("talent-pool-manager") ? `${props.talentPools.detail.result ? props.talentPools.detail.result?.name : ""} ` : "Ứng viên "}({props.profileManager.list.total})
+              className="tmp-title-page-size20">{location.pathname.includes("talent-pool-manager") ? `${props.talentPools.detail.result ? props.talentPools.detail.result[0]?.name : ""} ` : "Ứng viên "}({props.profileManager.list.total})
             </div>
           </Col>
           <Col className="d-flex" md={8}>

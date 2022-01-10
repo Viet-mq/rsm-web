@@ -227,8 +227,7 @@ function BookingForm(props: BookingFormProps) {
                           },
                         ],
                       })(
-                        <Select disabled className="bg-white text-black" style={fontWeightStyle}
-                                placeholder="Chọn tin tuyển dụng"
+                        <Select disabled className="bg-white text-black" style={fontWeightStyle} placeholder="Chọn tin tuyển dụng"
                         >
                           {props.listRecruitment.rows?.map((item: any, index: any) => (
                             <Option key={index} value={item.id}>{item.title}</Option>

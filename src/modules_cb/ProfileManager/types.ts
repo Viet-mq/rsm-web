@@ -324,4 +324,10 @@ export interface ChangeProcessRequest {
   statusCVId?: string
 }
 
+export interface AddToTalentPoolRequest {
+  profileId?: string,
+  talentPoolId: string
+
+}
+
 

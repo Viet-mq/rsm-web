@@ -5,6 +5,7 @@ import {getListProfileAsync} from "./profile/list";
 import {updateProfileAsync} from "./profile/update";
 import {getDetailProfileAsync} from "./detail/detail";
 import {
+  ADD_TO_TALENT_POOL,
   CHANGE_PROCESS,
   CREATE_BOOKING, CREATE_NOTE,
   CREATE_PROFILE, CREATE_REJECT_CANDIDATE, DELETE_NOTE,
@@ -35,6 +36,7 @@ import {deleteNoteAsync} from "./note/deleteNote";
 import {uploadAvatarAsync} from "./profile/uploadAvatar";
 import {createRejectCandidateAsync} from "./profile/createRejectCandidate";
 import {changeProcessAsync} from "./profile/changeProcess";
+import {changeTalentPoolAsync} from "./profile/addToTalentPool";
 
 export default function* root() {
   return all([
@@ -58,6 +60,7 @@ export default function* root() {
     yield takeLatest(UPLOAD_AVATAR, uploadAvatarAsync),
     yield takeLatest(CREATE_REJECT_CANDIDATE, createRejectCandidateAsync),
     yield takeLatest(CHANGE_PROCESS, changeProcessAsync),
+    yield takeLatest(ADD_TO_TALENT_POOL, changeTalentPoolAsync),
 
   ]);
 }

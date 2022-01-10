@@ -50,7 +50,7 @@ function DetailRecruitment(props: IProps) {
     <div className="flex-items-center">
       <div className='border-right pr-3'>Người tạo:<span
         className="bold-text"> {props.detailRecruitment?.rows[0]?.createBy}</span></div>
-      <div className=" ml-3">Ngày tạo:<span className="bold-text"> {props.detailRecruitment?.rows[0]?.createAt}</span>
+      <div className=" ml-3">Ngày tạo:<span className="bold-text"> {moment(props.detailRecruitment?.rows[0]?.createAt).format(dateFormat)}</span>
       </div>
     </div>
     <div className='border-right' style={{width: 200}}>Thời hạn dự kiến: <span className="bold-text"/>
