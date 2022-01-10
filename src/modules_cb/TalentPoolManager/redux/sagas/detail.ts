@@ -10,7 +10,8 @@ export function* getDetailTalentPoolAsync(action: DetailTalentPoolAction) {
     if (rs.code !== 0) {
       NotificationError('Lấy chi tiết Talent Pool không thành công', "Lỗi: " + rs.message);
     } else {
-      yield put(getDetailTalentPoolSuccess(rs.result))
+      console.log("rs.result:",rs.rows)
+      yield put(getDetailTalentPoolSuccess(rs.rows))
     }
   } catch (e) {
     yield put(getDetailTalentPoolError(new AppError(e.message)));

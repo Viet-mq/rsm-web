@@ -18,6 +18,7 @@ import BookingForm from "../components/BookingForm";
 import UpdateDetailProfileForm from "../components/UpdateDetailProfileForm";
 import {exportExcelFile} from "../redux/services/apis";
 import {useLocation, useParams} from "react-router-dom";
+import {getDetailTalentPool} from "../../TalentPoolManager/redux/actions";
 
 
 const mapStateToProps = (state: RootState) => {
@@ -32,7 +33,8 @@ const connector = connect(mapStateToProps, {
   showFormUpdate,
   showFormUploadCV,
   showFormBooking,
-  showFormUploadListCV
+  showFormUploadListCV,
+  getDetailTalentPool
 });
 
 
@@ -45,9 +47,9 @@ interface IProps extends ReduxProps {
 function ProfileManagerPages(props: IProps) {
   const {idTalentPool} = useParams()
   const location = useLocation();
-
   useEffect(() => {
     location.pathname.includes("talent-pool-manager") ? document.title = "Talent pools" : document.title = "Ứng viên";
+    props.getDetailTalentPool({id: idTalentPool})
   }, []);
 
   const handleCreate = (e: any) => {
@@ -86,7 +88,7 @@ function ProfileManagerPages(props: IProps) {
         <Row>
           <Col md={16}>
             <div
-              className="tmp-title-page-size20">{location.pathname.includes("talent-pool-manager") ? `${props.talentPools.detail.result?props.talentPools.detail.result?.name:""} ` : "Ứng viên "}({props.profileManager.list.total})
+              className="tmp-title-page-size20">{location.pathname.includes("talent-pool-manager") ? `${props.talentPools.detail.result ? props.talentPools.detail.result?.name : ""} ` : "Ứng viên "}({props.profileManager.list.total})
             </div>
           </Col>
           <Col className="d-flex" md={8}>
