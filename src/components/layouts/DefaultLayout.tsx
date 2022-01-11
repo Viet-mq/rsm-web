@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Nav from './Nav';
-import {AutoComplete, Col, Form, Icon, Input, Layout, Row} from 'antd';
+import {Avatar, Col, Form, Icon, Layout, Row, Select} from 'antd';
 import Header from './Header';
 import commonStyled from './styled/commonStyled';
 import env from 'src/configs/env';
@@ -13,6 +13,7 @@ import {useHistory} from "react-router-dom";
 import Loading from "../Loading";
 
 const {Sider} = Layout;
+const {Option} = Select;
 
 const mapStateToProps = (state: RootState) => ({
   showFormDetail: state.profileManager.showForm,
@@ -32,14 +33,26 @@ interface LayoutProps extends FormComponentProps, ReduxProps {
 }
 
 const DefaultLayout = (props: LayoutProps) => {
-
   const screenWidth = document.documentElement.clientWidth;
   const [collapsed, setCollapsed] = useState(screenWidth <= env.tabletWidth ? true : false)
   const history = useHistory();
-  const [state, setState] = useState<any>({
-    value: '',
+  const [search, setSearch] = useState<any>({
+    value: undefined,
     dataSource: [],
   });
+
+  const getInitials = (name: string) => {
+    if (name) {
+      let initials: any = name.split(' ');
+      if (initials.length > 1) {
+        initials = initials.shift().charAt(0) + initials.pop().charAt(0);
+      } else {
+        initials = name.substring(0, 2);
+      }
+      return initials.toUpperCase();
+    }
+  }
+
   function toggle() {
     setCollapsed(!collapsed)
   }
@@ -57,40 +70,75 @@ const DefaultLayout = (props: LayoutProps) => {
   }, []);
 
   useEffect(() => {
-    if (state.value) {
-      props.getElasticSearch({key: state.value, size: 10})
-    }
-  }, [state.value])
+    if (search.value) {
+      props.getElasticSearch({key: search.value, size: 10})
+    } else setSearch({
+      value: undefined,
+      dataSource: []
+    })
+  }, [search.value])
+
+  // useEffect(() => {
+  //   if (props.elasticSearch.rowsRs && search.value) {
+  //     history.push({
+  //       pathname: "/profile-manager",
+  //     });
+  //   }
+  // }, [props.elasticSearch.triggerSearch])
 
   useEffect(() => {
-    if (props.elasticSearch.rowsRs && state.value) {
-      history.push({
-        pathname: "/profile-manager",
-      });
-    }
-  }, [props.elasticSearch.triggerSearch])
+    const addIdForValue = [
+      {
+        id: search.value,
+        fullName: search.value,
+        email: ''
+      }
+    ]
+    setSearch({
+      ...search,
+      dataSource: search.value ? addIdForValue.concat(props.elasticSearch.rowsSearch) : [],
+    })
+  }, [props.elasticSearch.rowsSearch])
 
-  function onChange(value: any) {
-    setState({
-      ...state,
+  function onSearch(value: any) {
+    console.log("onSearch:", value)
+    setSearch({
+      ...search,
       value
     })
   }
 
-  useEffect(() => {
-    setState({
-      ...state,
-      dataSource: !state.value ? [] : Array.from(new Set([state.value].concat(props.elasticSearch.rowsSearch?.map((item: any) => item.fullName)))),
-    })
-  }, [props.elasticSearch.rowsSearch])
+  console.log("search.value:", search.value)
 
   function onSelect(value: any) {
-    if (value) {
-      props.getElasticSearch({key: value, size: 100})
-      props.triggerSearch();
-    }
-    if (state.value) {
-    }
+    console.log("onSelect:", value)
+    setSearch({
+      value,
+      dataSource: []
+    })
+  }
+
+
+  function onChange(value: any) {
+    const addIdForValue = [
+      {
+        id: search.value,
+        fullName: search.value,
+        email: ''
+      }
+    ]
+    console.log("onChange:", value)
+    setSearch({
+      value: value,
+      dataSource: !search.value ? [] : addIdForValue.concat(props.elasticSearch.rowsSearch),
+
+    })
+    // if (value) {
+    //   props.getElasticSearch({key: value, size: 100})
+    //   props.triggerSearch();
+    // }
+    // if (search.value) {
+    // }
   }
 
   return (
@@ -123,16 +171,53 @@ const DefaultLayout = (props: LayoutProps) => {
                   <Form.Item style={{margin: "-5px 10px 0 5px", width: "40%"}}>
                     <>
                       <div style={{display: "flex"}}>
-                        <AutoComplete
-                          dataSource={state.dataSource}
-                          style={{width: 400}}
-                          onChange={onChange}
-                          onSelect={onSelect}
-                          // onSearch={onSearch}
+                        {/*<AutoComplete*/}
+                        {/*  dataSource={dataOptions}*/}
+                        {/*  style={{width: 400}}*/}
+                        {/*  onChange={onChange}*/}
+                        {/*  onSelect={onSelect}*/}
+                        {/*  // onSearch={onSearch}*/}
+                        {/*  placeholder={"Họ tên, Năm sinh, Quê quán, Trường học, Số điện thoại, Email, Công việc"}*/}
+                        {/*>*/}
+                        {/*  <Input suffix={<Icon type="search" className="certain-category-icon"/>}/>*/}
+                        {/*</AutoComplete>*/}
+
+                        <Select
+                          showSearch
+                          value={search.value}
                           placeholder={"Họ tên, Năm sinh, Quê quán, Trường học, Số điện thoại, Email, Công việc"}
+                          defaultActiveFirstOption={false}
+                          showArrow={false}
+                          filterOption={false}
+                          onSearch={onSearch}
+                          onSelect={onSelect}
+                          notFoundContent={null}
+                          optionLabelProp="label"
                         >
-                          <Input suffix={<Icon type="search" className="certain-category-icon"/>}/>
-                        </AutoComplete>
+                          {search.dataSource?.map((item: any) => {
+                              return <Option key={item.id} value={item.id} label={item.fullName}>
+                                {item.email ?
+                                  <div className="flex-items-center" style={{paddingTop: 5}}>
+                                    <div style={{marginRight: 10}}>
+                                      <Avatar src={item.image ? item.image : "#"}
+                                              style={{backgroundColor: item?.avatarColor, marginRight: 5}}>
+                                        {getInitials(item.fullName)}
+                                      </Avatar>
+                                    </div>
+                                    <div className="c-list-profile" style={{fontWeight: 500}}>
+                                      <div style={{height: 25}}>{item.fullName}</div>
+                                      <div style={{height: 25}} className="more-information">{item.email}</div>
+                                    </div>
+                                  </div>
+
+                                  :
+                                  <div>{item.fullName}</div>
+                                }
+
+                              </Option>
+                            }
+                          )}
+                        </Select>
                       </div>
 
                     </>
@@ -144,7 +229,10 @@ const DefaultLayout = (props: LayoutProps) => {
                 <Row>
                   <Col span={props.showFormDetail?.show_detail?.general}
                        style={{height: "calc(100vh - 60px)", overflow: "auto"}}>
-                    <div style={history.location.pathname==='/statuscv-manager'?{background:"white",height:"100%"}:{height:"100%"}}>
+                    <div style={history.location.pathname === '/statuscv-manager' ? {
+                      background: "white",
+                      height: "100%"
+                    } : {height: "100%"}}>
                       {props.children}
                     </div>
                   </Col>
