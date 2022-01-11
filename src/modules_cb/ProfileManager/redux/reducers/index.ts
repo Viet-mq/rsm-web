@@ -12,14 +12,14 @@ import showBooking, {BookingState} from "./booking/showBooking";
 import getBooking, {GetBookingState} from "./booking/getBooking";
 import createBooking, {CreateBookingState} from "./booking/createBooking";
 import updateBooking, {UpdateBookingState} from "./booking/updateBooking";
-import getActivity,{ActivityLogsState} from "./detail/getActivityLogs";
-import search,{GetElasticSearchState} from "./profile/search";
-import uploadListCV,{UploadListCVState} from "./cv/uploadListCV";
-import createNote,{CreateNoteState} from "./note/createNote";
-import deleteNote,{DeleteNoteState} from "./note/deleteNote";
-import getListNote,{GetListNoteState} from "./note/getListNote";
-import showNote,{ ShowNoteState} from "./note/showNote";
-import updateNote,{UpdateNoteState} from "./note/updateNote";
+import getActivity, {ActivityLogsState} from "./detail/getActivityLogs";
+import search, {GetElasticSearchState} from "./profile/search";
+import uploadListCV, {UploadListCVState} from "./cv/uploadListCV";
+import createNote, {CreateNoteState} from "./note/createNote";
+import deleteNote, {DeleteNoteState} from "./note/deleteNote";
+import getListNote, {GetListNoteState} from "./note/getListNote";
+import showNote, {ShowNoteState} from "./note/showNote";
+import updateNote, {UpdateNoteState} from "./note/updateNote";
 import uploadAvatar, {UploadAvatarState} from "./profile/uploadAvatar";
 import createRejectCandidate, {CreateRejectCandidateState} from "./profile/createRejectCandidate";
 import changeProcess, {ChangeProcessState} from "./profile/changeProcess";
@@ -35,22 +35,22 @@ export interface ProfileManagerModuleState {
   updateDetail: UpdateDetailState,
   detail: DetailProfileState,
   uploadCV: UploadCVState,
-  uploadListCV:UploadListCVState,
+  uploadListCV: UploadListCVState,
   showFormUpload: ShowUploadFormState,
   showBooking: BookingState,
   getBooking: GetBookingState,
   createBooking: CreateBookingState,
   updateBooking: UpdateBookingState,
-  getActivity:ActivityLogsState,
-  search:GetElasticSearchState,
-  createNote:CreateNoteState,
-  deleteNote:DeleteNoteState,
-  getListNote:GetListNoteState,
-  showNote:ShowNoteState,
-  updateNote:UpdateNoteState,
-  uploadAvatar:UploadAvatarState,
-  changeProcess:ChangeProcessState,
-  addToTalentPool:AddToTalentPoolState,
+  getActivity: ActivityLogsState,
+  search: GetElasticSearchState,
+  createNote: CreateNoteState,
+  deleteNote: DeleteNoteState,
+  getListNote: GetListNoteState,
+  showNote: ShowNoteState,
+  updateNote: UpdateNoteState,
+  uploadAvatar: UploadAvatarState,
+  changeProcess: ChangeProcessState,
+  addToTalentPool: AddToTalentPoolState,
 }
 
 export default combineReducers<ProfileManagerModuleState>({

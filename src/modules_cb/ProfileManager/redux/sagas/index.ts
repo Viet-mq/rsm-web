@@ -1,4 +1,4 @@
-import {all, takeLatest, takeEvery} from 'redux-saga/effects';
+import {all, takeLatest} from 'redux-saga/effects';
 import {createProfileAsync} from "./profile/create";
 import {deleteProfileAsync} from "./profile/deleteProfile";
 import {getListProfileAsync} from "./profile/list";
@@ -7,17 +7,24 @@ import {getDetailProfileAsync} from "./detail/detail";
 import {
   ADD_TO_TALENT_POOL,
   CHANGE_PROCESS,
-  CREATE_BOOKING, CREATE_NOTE,
-  CREATE_PROFILE, CREATE_REJECT_CANDIDATE, DELETE_NOTE,
+  CREATE_BOOKING,
+  CREATE_NOTE,
+  CREATE_PROFILE,
+  CREATE_REJECT_CANDIDATE,
+  DELETE_NOTE,
   DELETE_PROFILE,
   GET_ACTIVITY,
   GET_BOOKING,
   GET_DETAIL_PROFILE,
-  GET_ELASTIC_SEARCH, GET_LIST_NOTE,
+  GET_ELASTIC_SEARCH,
+  GET_FULL_ELASTIC_SEARCH,
+  GET_LIST_NOTE,
   GET_LIST_PROFILE,
   UPDATE_BOOKING,
-  UPDATE_DETAIL, UPDATE_NOTE,
-  UPDATE_PROFILE, UPLOAD_AVATAR,
+  UPDATE_DETAIL,
+  UPDATE_NOTE,
+  UPDATE_PROFILE,
+  UPLOAD_AVATAR,
   UPLOAD_LIST_CV,
   UPLOADCV
 } from "../actions";
@@ -37,6 +44,7 @@ import {uploadAvatarAsync} from "./profile/uploadAvatar";
 import {createRejectCandidateAsync} from "./profile/createRejectCandidate";
 import {changeProcessAsync} from "./profile/changeProcess";
 import {changeTalentPoolAsync} from "./profile/addToTalentPool";
+import {searchFullAsync} from "./profile/searchFull";
 
 export default function* root() {
   return all([
@@ -53,6 +61,7 @@ export default function* root() {
     yield takeLatest(UPDATE_BOOKING, updateBookingAsync),
     yield takeLatest(GET_ACTIVITY, getActivityLogsAsync),
     yield takeLatest(GET_ELASTIC_SEARCH, searchAsync),
+    yield takeLatest(GET_FULL_ELASTIC_SEARCH, searchFullAsync),
     yield takeLatest(GET_LIST_NOTE, getListNoteAsync),
     yield takeLatest(CREATE_NOTE, createNoteAsync),
     yield takeLatest(UPDATE_NOTE, updateNoteAsync),
