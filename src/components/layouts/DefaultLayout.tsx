@@ -8,7 +8,7 @@ import DetailProfileForm from "../../modules_cb/ProfileManager/components/Detail
 import {RootState} from "../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {getElasticSearch, triggerSearch} from "../../modules_cb/ProfileManager/redux/actions";
+import {getElasticSearch, getFullElasticSearch} from "../../modules_cb/ProfileManager/redux/actions";
 import {useHistory} from "react-router-dom";
 import Loading from "../Loading";
 
@@ -23,7 +23,7 @@ const mapStateToProps = (state: RootState) => ({
 
 const connector = connect(mapStateToProps, {
   getElasticSearch,
-  triggerSearch
+  getFullElasticSearch
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -78,14 +78,6 @@ const DefaultLayout = (props: LayoutProps) => {
     })
   }, [search.value])
 
-  // useEffect(() => {
-  //   if (props.elasticSearch.rowsRs && search.value) {
-  //     history.push({
-  //       pathname: "/profile-manager",
-  //     });
-  //   }
-  // }, [props.elasticSearch.triggerSearch])
-
   useEffect(() => {
     const addIdForValue = [
       {
@@ -101,49 +93,26 @@ const DefaultLayout = (props: LayoutProps) => {
   }, [props.elasticSearch.rowsSearch])
 
   function onSearch(value: any) {
-    console.log("onSearch:", value)
     setSearch({
       ...search,
       value
     })
   }
 
-  console.log("search.value:", search.value)
-
   function onSelect(value: any) {
-    console.log("onSelect:", value)
+    console.log("select:", value)
     setSearch({
-      value,
-      dataSource: []
+      ...search,
+      value: props.elasticSearch.rowsSearch?.find((item: any) => item.id === value)?.fullName,
     })
-  }
-
-
-  function onChange(value: any) {
-    const addIdForValue = [
-      {
-        id: search.value,
-        fullName: search.value,
-        email: ''
-      }
-    ]
-    console.log("onChange:", value)
-    setSearch({
-      value: value,
-      dataSource: !search.value ? [] : addIdForValue.concat(props.elasticSearch.rowsSearch),
-
-    })
-    // if (value) {
-    //   props.getElasticSearch({key: value, size: 100})
-    //   props.triggerSearch();
-    // }
-    // if (search.value) {
-    // }
+    props.getFullElasticSearch({key: value, size: 100})
+    history.push({
+      pathname: "/profile-manager",
+    });
   }
 
   return (
     <div>
-
       <commonStyled.Container>
         <Layout>
           <Layout>
@@ -171,16 +140,6 @@ const DefaultLayout = (props: LayoutProps) => {
                   <Form.Item style={{margin: "-5px 10px 0 5px", width: "40%"}}>
                     <>
                       <div style={{display: "flex"}}>
-                        {/*<AutoComplete*/}
-                        {/*  dataSource={dataOptions}*/}
-                        {/*  style={{width: 400}}*/}
-                        {/*  onChange={onChange}*/}
-                        {/*  onSelect={onSelect}*/}
-                        {/*  // onSearch={onSearch}*/}
-                        {/*  placeholder={"Họ tên, Năm sinh, Quê quán, Trường học, Số điện thoại, Email, Công việc"}*/}
-                        {/*>*/}
-                        {/*  <Input suffix={<Icon type="search" className="certain-category-icon"/>}/>*/}
-                        {/*</AutoComplete>*/}
 
                         <Select
                           showSearch

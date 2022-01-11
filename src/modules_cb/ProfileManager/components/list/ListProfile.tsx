@@ -34,7 +34,7 @@ const mapStateToProps = (state: RootState) => ({
   listJob: state.jobManager.list,
   listRecruitment: state.recruitmentManager.list,
 
-})//
+})
 const connector = connect(mapStateToProps, {
   getListProfile,
   deleteProfile,
@@ -374,13 +374,12 @@ function ListProfile(props: ListProfileProps) {
     else props.getListProfile({page: page, size: 30});
   }, [page, pathname])
 
-
   useEffect(() => {
     if (props.elasticSearch.request?.key) {
-      setDataSource(props.elasticSearch.rowsRs);
+      setDataSource(props.elasticSearch);
       setKeySearch(props.elasticSearch.request?.key)
     }
-  }, [props.elasticSearch.triggerSearch])
+  }, [props.elasticSearch.rowsSearchFull])
 
   const getInitials = (name: string) => {
     let initials: any = name.split(' ');
@@ -603,7 +602,7 @@ function ListProfile(props: ListProfileProps) {
       <Table
         scroll={{x: "1500px", y: "638px"}}
         className="custom-table -webkit-scrollbar"
-        dataSource={dataSource ? dataSource : props.list.rows}
+        dataSource={dataSource ? dataSource.rowsSearchFull : props.list.rows}
         columns={columns}
         rowKey="id"
         size="small"
@@ -613,7 +612,7 @@ function ListProfile(props: ListProfileProps) {
         pagination={{
           current: page,
           pageSize: size,
-          total: dataSource ? dataSource.length : props.list.total,
+          total: dataSource ? dataSource.totalSearchFull : props.list.total,
           onChange: value => setPage(value),
           showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,
         }}
