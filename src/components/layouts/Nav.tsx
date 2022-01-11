@@ -37,7 +37,7 @@ interface IProps extends ParentProps, PropsFromRedux {
 const mapStateToProps = (state: RootState) => {
   return {
     isLogin: state.auth.auth.data?.code === 0,
-    auth: state.auth.auth.data,
+    listTalentPool: state.talentPoolManager.list,
     count: state.profileManager.createBooking.count
   };
 };
@@ -206,13 +206,13 @@ const Nav = (props: IProps) => {
       </SubMenu>
 
       <SubMenu key="sub3" title={!props.hiddenLabel ? <span>TALENT POOLS</span> : <RiFolderUserLine/>}>
-        {props.auth?.pools?.map((item: any) => {
+        {props.listTalentPool.rows?.map((item: any) => {
           return <Menu.Item key={item.id} style={{display: 'flex'}}>
             <Link to={`/talent-pool-manager/${item.id}`}
                   className='nav-element'>
               <Icon type="contacts"/>
               <span className="nav-element__content">{item.name} </span>
-              <Badge style={{backgroundColor: '#818181'}} count={item.count} overflowCount={999}/>
+              <Badge style={{backgroundColor: '#818181'}} count={item.total} overflowCount={999}/>
               {/*<Avatar style={{ backgroundColor: '#818181' }} shape="square" size={25}>{item.count}</Avatar>*/}
             </Link>
           </Menu.Item>

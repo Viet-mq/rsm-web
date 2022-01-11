@@ -16,6 +16,7 @@ export interface ProfileFormAction {
   id_recruitment?:string,
   show_change_recruitment?:boolean,
   change_process?:ChangeProcessRequest
+  show_add_to_talent_pool?:boolean,
 
 }
 
@@ -27,6 +28,7 @@ export const PROFILE_SHOW_FORM_UPLOAD_AVATAR = "PROFILE_SHOW_FORM_UPLOAD_AVATAR"
 export const REASON_REJECT_SHOW_FORM = "REASON_REJECT_SHOW_FORM";
 export const SHOW_CHANGE_PROCESS_FORM = "SHOW_CHANGE_PROCESS_FORM";
 export const SHOW_CHANGE_RECRUITMENT_FORM = "SHOW_CHANGE_RECRUITMENT_FORM";
+export const SHOW_ADD_TO_TALENT_POOL_FORM = "SHOW_ADD_TO_TALENT_POOL_FORM";
 
 export const showFormCreate = (show: boolean): ProfileFormAction => ({
   type: PROFILE_SHOW_FORM_CREATE,
@@ -75,10 +77,9 @@ export const showChangeRecruitmentForm = (show: boolean,idRecruitment?:string): 
   id_recruitment:idRecruitment
 });
 
-export const showChangeTalentPoolsForm = (show: boolean,idRecruitment?:string): ProfileFormAction => ({
-  type: SHOW_CHANGE_RECRUITMENT_FORM,
-  show_change_recruitment: show,
-  id_recruitment:idRecruitment
+export const showAddToTalentPoolForm = (show: boolean): ProfileFormAction => ({
+  type: SHOW_ADD_TO_TALENT_POOL_FORM,
+  show_add_to_talent_pool: show,
 });
 
 

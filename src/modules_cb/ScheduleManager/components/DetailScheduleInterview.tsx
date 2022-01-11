@@ -45,8 +45,10 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
     event.stopPropagation();
     let req: DataShowBooking = {
       id: dataDetail.idProfile,
-      fullName: dataDetail.fullName
+      fullName: dataDetail.fullName,
+      idRecruitment: dataDetail.recruitmentId
     }
+
     props.showFormBooking(true, req);
     props.handleClosePopupDetail()
   }

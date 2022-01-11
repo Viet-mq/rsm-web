@@ -94,7 +94,7 @@ function ListRecruitment(props: IProps) {
             <div className="detail-flex">
               <div>{props.recruitment?.jobName}</div>
               <div><BsDot size={20}/></div>
-              <div>Mức lương: <span className="p"> {props.recruitment?.detailOfSalary}</span>
+              <div>Mức lương: <span className="p">{props.recruitment?.from} - {props.recruitment?.to}</span>
               </div>
 
               <div className="ml-3">SL cần tuyển: <span className="p">{props.recruitment?.quantity}</span>
