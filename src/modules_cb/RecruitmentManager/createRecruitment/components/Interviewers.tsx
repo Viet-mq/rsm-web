@@ -81,7 +81,7 @@ function InterviewersForm(props: IProps) {
 
   useEffect(() => {
     if(location.pathname.includes("edit")){
-      setDatasource(props.dataUpdate?.interviewer)
+      if(props.dataUpdate?.interviewer?.length) setDatasource(props.dataUpdate?.interviewer)
     }
   }, [props.dataUpdate]);
   useEffect(() => {
@@ -134,7 +134,7 @@ function InterviewersForm(props: IProps) {
         if (props.dataUpdate) {
           let req: RecruitmentEntity = {
             ...props.dataUpdate,
-            interviewer: dataSource.concat(newData),
+            interviewer: dataSource?.concat(newData),
           }
           props.getDataRecruitmentUpdate(req)
         }

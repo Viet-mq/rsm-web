@@ -460,9 +460,10 @@ function ListProfile(props: ListProfileProps) {
   }
 
   const handleBooking = (event: any, entity: ProfileEntity) => {
-    let req: DataShowBooking = {
+      let req: DataShowBooking = {
       id: entity.id,
-      fullName: entity.fullName
+      fullName: entity.fullName,
+      idRecruitment: entity.recruitmentId
     }
     props.showFormBooking(true, req);
   }

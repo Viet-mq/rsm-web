@@ -16,15 +16,15 @@ export function* createTalentPoolAsync(action: CreateTalentPoolAction) {
     const rs = yield apis.createTalentPool(action.request);
     yield put(createTalentPoolSuccess(rs));
     if (rs.code !== 0) {
-      NotificationError('Tạo Talent Pool không thành công', "Lỗi: " + rs.message)
+      NotificationError('Tạo kho tiềm năng không thành công', "Lỗi: " + rs.message)
     } else {
-      NotificationSuccess('Thành công', "Tạo Talent Pool thành công");
+      NotificationSuccess('Thành công', "Tạo kho tiềm năng thành công");
       yield put(showFormCreate(false));
       const params = yield select((state: RootState) => state.talentPoolManager.list.params);
       yield put(getListTalentPool(params))
     }
   } catch (e) {
     yield put(createTalentPoolError(new AppError(e.message)));
-    NotificationError('Tạo Talent Pool không thành công', "Lỗi: " + e.message);
+    NotificationError('Tạo kho tiềm năng không thành công', "Lỗi: " + e.message);
   }
 }

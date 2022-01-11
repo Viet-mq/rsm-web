@@ -6,7 +6,7 @@ import {DetailTalentPoolAction} from "../actions";
 export interface DetailTalentPoolState {
   loading: boolean,
   params?: any,
-  result?: TalentPoolEntity,
+  result?: TalentPoolEntity[]|any,
   error?: AppError
 }
 

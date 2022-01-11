@@ -175,3 +175,7 @@ export const uploadAvatar = async (params?: UploadAvatarRequest) => {
     },
   })
 }
+
+export const addToTalentPool = async (params?: any): Promise<ResponseBase2> => {
+  return (await POST('api-svc/profile/talentpool', params)) as ResponseBase2;
+};

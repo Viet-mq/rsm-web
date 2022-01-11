@@ -23,6 +23,7 @@ import updateNote,{UpdateNoteState} from "./note/updateNote";
 import uploadAvatar, {UploadAvatarState} from "./profile/uploadAvatar";
 import createRejectCandidate, {CreateRejectCandidateState} from "./profile/createRejectCandidate";
 import changeProcess, {ChangeProcessState} from "./profile/changeProcess";
+import addToTalentPool, {AddToTalentPoolState} from "./profile/addToTalentPool";
 
 export interface ProfileManagerModuleState {
   list: ProfileListState,
@@ -49,6 +50,7 @@ export interface ProfileManagerModuleState {
   updateNote:UpdateNoteState,
   uploadAvatar:UploadAvatarState,
   changeProcess:ChangeProcessState,
+  addToTalentPool:AddToTalentPoolState,
 }
 
 export default combineReducers<ProfileManagerModuleState>({
@@ -75,5 +77,6 @@ export default combineReducers<ProfileManagerModuleState>({
   showNote,
   updateNote,
   uploadAvatar,
-  changeProcess
+  changeProcess,
+  addToTalentPool,
 });

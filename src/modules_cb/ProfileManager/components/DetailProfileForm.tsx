@@ -16,7 +16,8 @@ import {
   showFormUpdateDetail,
   showFormUploadAvatar,
   showFormUploadCV,
-  updateNote
+  updateNote,
+  showAddToTalentPoolForm
 } from "../redux/actions";
 import {showFormCreateNote, showFormUpdateNote} from "../redux/actions";
 import {Avatar, Badge, Button, Icon, Pagination, Popconfirm, Popover, Steps, Table, Tag, Timeline, Tooltip} from "antd";
@@ -41,6 +42,7 @@ import CreateReasonRejectForm from "./CreateRejectCandidateForm";
 import {getListRecruitment} from "../../RecruitmentManager/redux/actions";
 import ChangeProcessForm from "./ChangeProcessForm";
 import ChangeRecruitmentForm from "./ChangeRecruitmentForm";
+import AddToTalentPoolForm from "./AddToTalentPoolForm";
 
 const {Step} = Steps;
 
@@ -77,7 +79,8 @@ const connector = connect(mapStateToProps,
     showFormReasonReject,
     getListRecruitment,
     showChangeProcessForm,
-    showChangeRecruitmentForm
+    showChangeRecruitmentForm,
+    showAddToTalentPoolForm
   });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -286,7 +289,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
   function handleShowTalentPools() {
     setPopoverRecruitment(false)
-    // props.showChangeRecruitmentForm(true, props.detail.result?.recruitmentId)
+    props.showAddToTalentPoolForm(true)
   }
 
   function unixTimeToDate(unixTime: number): Date {
@@ -364,12 +367,15 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
   const onBtnUpdateBooking = (event: any) => {
     event.stopPropagation();
-    let req: DataShowBooking = {
-      id: props.detail.result?.id,
-      fullName: props.detail.result?.fullName,
-      idRecruitment: props.detail.result?.recruitmentId
+    if(props.detail.result){
+      let req: DataShowBooking = {
+        id: props.detail.result.id,
+        fullName: props.detail.result.fullName,
+        idRecruitment: props.detail.result.recruitmentId
+      }
+      props.showFormBooking(true, req);
     }
-    props.showFormBooking(true, req);
+
   }
 
   const handleVisibleChange = (visible: any) => {
@@ -732,7 +738,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
                         showTotal={(total, range) => `Đang xem ${range[0]}- ${range[1]} trong tổng số ${total} mục`}
                         onChange={handleChangeActivityLogs}
                         className="pagination"
-            ></Pagination>
+            />
           </div>
         </div>
 
@@ -744,6 +750,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       <CreateReasonRejectForm/>
       <ChangeProcessForm/>
       <ChangeRecruitmentForm/>
+      <AddToTalentPoolForm/>
 
       {props.createNote.loading ||
       props.updateNote.loading ||

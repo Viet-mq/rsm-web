@@ -32,7 +32,7 @@ interface IProps extends ReduxProps {
 
 function TalentPoolManagerPages(props: IProps) {
   useEffect(() => {
-    document.title = "Quản lý Talent Pool";
+    document.title = "Quản lý Kho tiềm năng";
   }, []);
 
   const handleCreate = (e: any) => {
@@ -50,13 +50,13 @@ function TalentPoolManagerPages(props: IProps) {
       <div className="entryHeader">
         <Row>
           <Col md={16}>
-            <div className="tmp-title-page-size20">Quản lý Talent Pool</div>
+            <div className="tmp-title-page-size20">Quản lý Kho tiềm năng</div>
           </Col>
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div>
                 <Button onClick={handleCreate}>
-                  <Icon type="plus"/> Tạo Talent Pool
+                  <Icon type="plus"/> Tạo kho tiềm năng
                 </Button>
               </div>
             </div>

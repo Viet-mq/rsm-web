@@ -211,7 +211,7 @@ export interface UpdateBookingRequest {
 export interface DataShowBooking {
   id: string,
   fullName: string,
-  idRecruitment?:string,
+  idRecruitment:string,
 }
 
 //detail
@@ -322,6 +322,12 @@ export interface ChangeProcessRequest {
   idProfile?: string,
   recruitmentId?: string,
   statusCVId?: string
+}
+
+export interface AddToTalentPoolRequest {
+  profileId?: string,
+  talentPoolId: string
+
 }
 
 
