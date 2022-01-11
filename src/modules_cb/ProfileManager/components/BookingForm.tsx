@@ -207,7 +207,7 @@ function BookingForm(props: BookingFormProps) {
                   <div className="main-1__candidate-name"
                        style={{color: "#666"}}> {props.showBooking.data_booking?.fullName}</div>
                   {props.getBookingState.result?.recruitmentName ? <>
-                    <div className="main-1__green-dot"></div>
+                    <div className="main-1__green-dot"/>
                     <div className="main-1__job-description">{props.getBookingState.result?.recruitmentName}</div>
                   </> : null}
 

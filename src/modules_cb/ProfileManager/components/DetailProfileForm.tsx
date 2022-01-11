@@ -367,12 +367,15 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
   const onBtnUpdateBooking = (event: any) => {
     event.stopPropagation();
-    let req: DataShowBooking = {
-      id: props.detail.result?.id,
-      fullName: props.detail.result?.fullName,
-      idRecruitment: props.detail.result?.recruitmentId
+    if(props.detail.result){
+      let req: DataShowBooking = {
+        id: props.detail.result.id,
+        fullName: props.detail.result.fullName,
+        idRecruitment: props.detail.result.recruitmentId
+      }
+      props.showFormBooking(true, req);
     }
-    props.showFormBooking(true, req);
+
   }
 
   const handleVisibleChange = (visible: any) => {

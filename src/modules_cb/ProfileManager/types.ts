@@ -211,7 +211,7 @@ export interface UpdateBookingRequest {
 export interface DataShowBooking {
   id: string,
   fullName: string,
-  idRecruitment?:string,
+  idRecruitment:string,
 }
 
 //detail
