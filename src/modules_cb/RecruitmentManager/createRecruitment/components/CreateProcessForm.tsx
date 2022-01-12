@@ -110,17 +110,10 @@ function CreateProcessForm(props: CreateJobFormProps) {
       maskClosable={false}
       title="Thêm vòng"
       visible={props.showForm.show_create}
-      // visible={true}
       centered={true}
       width="550px"
-      afterClose={() => {
-        resetFields();
-        props.showFormCreate(false)
-      }}
-      onCancel={() => {
-        resetFields();
-        props.showFormCreate(false)
-      }}
+      afterClose={onBtnCancelClicked}
+      onCancel={onBtnCancelClicked}
       footer={""}>
       <Form {...formItemLayout}>
         <Form.Item label="Tên vòng" className="mb-0" style={{...formItemStyle}}>

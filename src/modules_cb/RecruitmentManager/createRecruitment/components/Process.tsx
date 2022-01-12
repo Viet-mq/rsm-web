@@ -1,7 +1,7 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Form, Icon, Input, Switch} from "antd";
+import {Button, Form, Icon, Input, Popconfirm, Switch, Tooltip} from "antd";
 import React, {useEffect, useState} from "react";
 import 'devextreme/dist/css/dx.light.css';
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
@@ -155,6 +155,10 @@ function ProcessForm(props: IProps) {
 
   }
 
+  function btnEditProcessClicked(item: any, index: any) {
+    props.showFormUpdate(true, item, index)
+  }
+
   return (
     <>
       <div className="main-content main-process">
@@ -181,7 +185,11 @@ function ProcessForm(props: IProps) {
                                 {item.name}
                               </div>
                               <div>
-                                <Icon type="edit" style={{fontSize: '130%'}}/>
+                                <Tooltip placement="top" title="Sửa">
+                                  <Icon className="hover-pointer" type="edit"
+                                        onClick={() => btnEditProcessClicked(item, index)}
+                                        style={{fontSize: '130%', marginRight: 15}}/>
+                                </Tooltip>
                               </div>
                             </div>
                             {index === lastElement ?
@@ -221,10 +229,27 @@ function ProcessForm(props: IProps) {
                                       {item.name}
                                     </div>
                                     <div>
-                                      <Icon type="edit" style={{fontSize: '130%', marginRight: 15}}/>
+                                      <Tooltip placement="top" title="Sửa">
+                                        <Icon className="hover-pointer" type="edit"
+                                              onClick={() => btnEditProcessClicked(item, index)}
+                                              style={{fontSize: '130%', marginRight: 15}}/>
+                                      </Tooltip>
                                     </div>
-                                    <div className="icon-delete" onClick={() => btnDeleteProcessClicked(item, index)}>
-                                      <Icon type="delete" style={{color: 'red', fontSize: '130%'}}/>
+                                    <div className="hover-pointer">
+                                      <Popconfirm
+                                        title="Bạn muốn xóa vòng tuyển dụng này chứ ?"
+                                        okText="Xóa"
+                                        onCancel={event => {
+                                          event?.stopPropagation();
+                                        }}
+                                        onConfirm={() => btnDeleteProcessClicked(item, index)}
+                                      >
+                                        <Tooltip placement="top" title="Xóa">
+                                          <Icon type="delete" style={{color: 'red', fontSize: '130%'}}/>
+
+                                        </Tooltip>
+
+                                      </Popconfirm>
                                     </div>
                                   </div>
 
@@ -273,7 +298,7 @@ function ProcessForm(props: IProps) {
 
       <CreateProcessForm schema={schema} setSchema={setSchema} lastElement={lastElement}
                          setLastElement={setLastElement}/>
-      <UpdateProcessForm/>
+      <UpdateProcessForm schema={schema} setSchema={setSchema}/>
     </>
   );
 }

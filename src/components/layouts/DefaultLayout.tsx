@@ -170,7 +170,7 @@ const DefaultLayout = (props: LayoutProps) => {
                                   </div>
 
                                   :
-                                  <div>{item.fullName}</div>
+                                  <div><Icon type="search" className="mr-1"/> {item.fullName}</div>
                                 }
 
                               </Option>

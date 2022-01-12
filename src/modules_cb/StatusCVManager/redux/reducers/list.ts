@@ -6,7 +6,7 @@ import {StatusCVListAction} from "../actions";
 export interface StatusCVListState {
   loading: boolean,
   params?: any,
-  rows?: StatusCVEntity[],
+  rows?: StatusCVEntity[]|any,
   total?: number,
   error?: AppError
 }

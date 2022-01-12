@@ -155,7 +155,7 @@ function DetailRecruitment(props: IProps) {
             <div className="detail-flex">
               <div>{props.detailRecruitment?.rows[0]?.jobName}</div>
               <div><BsDot size={20}/></div>
-              <div>Mức lương: <span className="p"> {props.detailRecruitment?.rows[0]?.salary}</span>
+              <div>Mức lương: <span className="p"> {props.detailRecruitment?.rows[0]?.salaryDescription}</span>
               </div>
 
               <div className="ml-3">SL cần tuyển: <span className="p">{props.detailRecruitment?.rows[0]?.quantity}</span>
@@ -264,11 +264,7 @@ function DetailRecruitment(props: IProps) {
           </TabPane>
         </Tabs>
       </div>
-      {/*<CreateProfileForm/>*/}
 
-      {/*{*/}
-      {/*  props.createCandidate.loading ? <Loading/> : null*/}
-      {/*}*/}
     </>
   );
 

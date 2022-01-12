@@ -4,7 +4,8 @@ export interface ProcessFormAction {
   type: string,
   show_create?: boolean,
   show_update?: boolean,
-  data_update?: StatusCVEntity
+  data_update?: StatusCVEntity,
+  index?:number
 }
 
 export const SHOW_FORM_PROCESS_CREATE = "SHOW_FORM_PROCESS_CREATE";
@@ -15,9 +16,10 @@ export const showFormCreate = (show: boolean): ProcessFormAction => ({
   show_create: show
 });
 
-export const showFormUpdate = (show: boolean, dataUpdate?: StatusCVEntity): ProcessFormAction => ({
+export const showFormUpdate = (show: boolean, dataUpdate?: StatusCVEntity,index?:number): ProcessFormAction => ({
   type: SHOW_FORM_PROCESS_UPDATE,
   show_update: show,
-  data_update: dataUpdate
+  data_update: dataUpdate,
+  index:index,
 });
 

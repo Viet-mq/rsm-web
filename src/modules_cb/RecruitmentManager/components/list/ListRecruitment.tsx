@@ -94,14 +94,14 @@ function ListRecruitment(props: IProps) {
             <div className="detail-flex">
               <div>{props.recruitment?.jobName}</div>
               <div><BsDot size={20}/></div>
-              <div>Mức lương: <span className="p">{props.recruitment?.from} - {props.recruitment?.to}</span>
+              <div>Mức lương: <span className="p">{props.recruitment?.salaryDescription}</span>
               </div>
 
               <div className="ml-3">SL cần tuyển: <span className="p">{props.recruitment?.quantity}</span>
               </div>
 
-              <div className="ml-3">Hạn nộp hồ sơ: <span
-                className="p">{moment(props.recruitment?.deadLine).format(dateFormat)}</span>
+              <div className="ml-3">Hạn nộp hồ sơ:
+                <span className="p">{moment(props.recruitment?.deadLine).format(dateFormat)}</span>
               </div>
 
               <Popover content={contentMore} trigger="click">
