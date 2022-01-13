@@ -30,10 +30,14 @@ export function* changeProcessAsync(action: ChangeProcessAction) {
       if (action.isChangeRecruitment) {
         yield put(showChangeRecruitmentForm(false));
         yield put(getListProfile(params))
-        yield put(getListRecruitment(paramsRecruitment))
+        yield put(getDetailRecruitment(paramsDetailRecruitment))
+        if (paramsDetail?.idProfile) {
+          yield put(getDetailProfile(paramsDetail))
+        }
+
       } else {
         yield put(showChangeProcessForm(false));
-
+        yield put(getListProfile(params))
         if (paramsDetail?.idProfile) {
           yield put(getDetailProfile(paramsDetail))
         }

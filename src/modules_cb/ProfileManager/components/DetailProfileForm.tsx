@@ -7,19 +7,20 @@ import {
   getBooking,
   getDetailProfile,
   getListNote,
+  showAddToTalentPoolForm,
   showChangeProcessForm,
   showChangeRecruitmentForm,
   showFormBooking,
+  showFormCreateNote,
   showFormDetail,
   showFormReasonReject,
   showFormUpdate,
   showFormUpdateDetail,
+  showFormUpdateNote,
   showFormUploadAvatar,
   showFormUploadCV,
-  updateNote,
-  showAddToTalentPoolForm
+  updateNote
 } from "../redux/actions";
-import {showFormCreateNote, showFormUpdateNote} from "../redux/actions";
 import {Avatar, Badge, Button, Icon, Pagination, Popconfirm, Popover, Steps, Table, Tag, Timeline, Tooltip} from "antd";
 import React, {useEffect, useState} from "react";
 import {ChangeProcessRequest, DataShowBooking, DeleteNoteRequest, DetailCV, NoteEntity} from "../types";
@@ -43,18 +44,13 @@ import {getListRecruitment} from "../../RecruitmentManager/redux/actions";
 import ChangeProcessForm from "./ChangeProcessForm";
 import ChangeRecruitmentForm from "./ChangeRecruitmentForm";
 import AddToTalentPoolForm from "./AddToTalentPoolForm";
+import UpdateDetailProfileForm from "./UpdateDetailProfileForm";
 
 const {Step} = Steps;
 
 const mapStateToProps = (state: RootState) => ({
-  showDetail: state.profileManager.showForm,
-  detail: state.profileManager.detail,
-  activityLogs: state.profileManager.getActivity,
-  booking: state.profileManager.getBooking,
+  profileManager: state.profileManager,
   account: state.accountManager.list,
-  note: state.profileManager.getListNote,
-  createNote: state.profileManager.createNote,
-  updateNote: state.profileManager.updateNote,
   skill: state.skillManager.list,
   recruitment: state.recruitmentManager.list
 })
@@ -91,6 +87,16 @@ interface DetailProfileFormProps extends ReduxProps {
 function DetailProfileForm(props: DetailProfileFormProps) {
   const [page, setPage] = useState(1);
   const size = 10;
+  const {
+    showForm,
+    detail,
+    getActivity,
+    getBooking,
+    getListNote,
+    createNote,
+    updateNote,
+    updateDetail
+  } = props.profileManager;
   const [rate, setRate] = useState(2.4);
   const [isFull, setIsFull] = useState<boolean>(false);
   const [activeLogs, setActiveLogs] = useState({
@@ -247,24 +253,24 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
   useEffect(() => {
     setActiveLogs({
-      params: props.activityLogs.params,
-      data: props.activityLogs.rows,
-      totalPage: props.activityLogs.total,
+      params: getActivity.params,
+      data: getActivity.rows,
+      totalPage: getActivity.total,
       current: page,
       minIndex: 0,
       maxIndex: size
     })
-  }, [props.activityLogs.total])
+  }, [getActivity.total])
 
   useEffect(() => {
-    if (props.showDetail.id_detail) {
-      props.getDetailProfile({idProfile: props.showDetail.id_detail});
-      props.getActivityLogs({idProfile: props.showDetail.id_detail});
-      props.getBooking({idProfile: props.showDetail.id_detail});
-      props.getListNote({idProfile: props.showDetail.id_detail})
-      if (props.detail.result?.recruitmentId) props.getListRecruitment({id: props.detail.result?.recruitmentId})
+    if (showForm.id_detail) {
+      props.getDetailProfile({idProfile: showForm.id_detail});
+      props.getActivityLogs({idProfile: showForm.id_detail});
+      props.getBooking({idProfile: showForm.id_detail});
+      props.getListNote({idProfile: showForm.id_detail})
+      if (detail.result?.recruitmentId) props.getListRecruitment({id: detail.result?.recruitmentId})
     }
-  }, [props.showDetail.id_detail])
+  }, [showForm.id_detail])
 
 
   function handleUploadAvatar(e: any) {
@@ -274,7 +280,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       e.target.disabled = true;
       e.target.disabled = false;
     }
-    props.showFormUploadAvatar(true, props.detail.result?.id);
+    props.showFormUploadAvatar(true, detail.result?.id);
   }
 
   function handleDeleteAvatar(event: any) {
@@ -284,7 +290,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
   function handleShowRecruitment() {
     setPopoverRecruitment(false)
-    props.showChangeRecruitmentForm(true, props.detail.result?.recruitmentId)
+    props.showChangeRecruitmentForm(true, detail.result?.recruitmentId)
   }
 
   function handleShowTalentPools() {
@@ -339,7 +345,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
   function handleCreateNote(event: any) {
     event.stopPropagation();
-    props.showFormCreateNote(true, props.detail.result?.id);
+    props.showFormCreateNote(true, detail.result?.id);
   }
 
   function handleChangeActivityLogs(page: any) {
@@ -353,7 +359,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
   const onBtnUpdateDetail = (event: any) => {
     event.stopPropagation();
-    props.showFormUpdateDetail(true, props.detail.result);
+    props.showFormUpdateDetail(true, detail.result);
   }
 
   const onBtnUploadCV = (e: any) => {
@@ -362,16 +368,16 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       e.target.disabled = true;
       e.target.disabled = false;
     }
-    props.showFormUploadCV(true, props.detail.result?.id);
+    props.showFormUploadCV(true, detail.result?.id);
   }
 
   const onBtnUpdateBooking = (event: any) => {
     event.stopPropagation();
-    if(props.detail.result){
+    if (detail.result) {
       let req: DataShowBooking = {
-        id: props.detail.result.id,
-        fullName: props.detail.result.fullName,
-        idRecruitment: props.detail.result.recruitmentId
+        id: detail.result.id,
+        fullName: detail.result.fullName,
+        idRecruitment: detail.result.recruitmentId
       }
       props.showFormBooking(true, req);
     }
@@ -415,9 +421,9 @@ function DetailProfileForm(props: DetailProfileFormProps) {
   function handleChangeProcess() {
     let req: ChangeProcessRequest = (
       {
-        idProfile: props.detail.result?.id,
-        recruitmentId: props.detail.result?.recruitmentId,
-        statusCVId: props.detail.result?.statusCVId
+        idProfile: detail.result?.id,
+        recruitmentId: detail.result?.recruitmentId,
+        statusCVId: detail.result?.statusCVId
       }
     )
     props.showChangeProcessForm(true, req)
@@ -428,7 +434,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       <div className="detail-container">
         <div className="detail-title">
           <div className="detail-title__left">
-            <h1>{props.detail.result?.fullName}</h1>
+            <h1>{detail.result?.fullName}</h1>
             <span>Java Candidate Profile</span>
           </div>
 
@@ -467,41 +473,41 @@ function DetailProfileForm(props: DetailProfileFormProps) {
             <Avatar
               alt={"Ảnh đại diện"}
               size={100}
-              src={props.detail.result?.image ? props.detail.result?.image : "#"}
-              style={{backgroundColor: props.detail.result?.avatarColor, fontSize: 50, fontWeight: 600}}>
-              {props.detail.result?.image ? null : getInitials(props.detail.result?.fullName)}
+              src={detail.result?.image ? detail.result?.image : "#"}
+              style={{backgroundColor: detail.result?.avatarColor, fontSize: 50, fontWeight: 600}}>
+              {detail.result?.image ? null : getInitials(detail.result?.fullName)}
             </Avatar>
 
           </Popover>
           <div className="detail-paragraph-1__name">
 
             <div style={{display: "flex", justifyContent: "space-between"}}>
-              <h2>{props.detail.result?.fullName}</h2>
+              <h2>{detail.result?.fullName}</h2>
               {
-                props.detail.result?.statusCVName === "APPLY" ?
-                  <Tag color="#cfcfcf" style={{height: 22, fontSize: 17}}>{props.detail.result?.statusCVName}</Tag> :
-                  props.detail.result?.statusCVName === "INTERVIEW" ?
-                    <Tag color="#339cff" style={{height: 22, fontSize: 17}}>{props.detail.result?.statusCVName}</Tag> :
-                    props.detail.result?.statusCVName === "OFFER" ? <Tag color="#fac000" style={{
+                detail.result?.statusCVName === "APPLY" ?
+                  <Tag color="#cfcfcf" style={{height: 22, fontSize: 17}}>{detail.result?.statusCVName}</Tag> :
+                  detail.result?.statusCVName === "INTERVIEW" ?
+                    <Tag color="#339cff" style={{height: 22, fontSize: 17}}>{detail.result?.statusCVName}</Tag> :
+                    detail.result?.statusCVName === "OFFER" ? <Tag color="#fac000" style={{
                         height: 22,
                         fontSize: 17
-                      }}>{props.detail.result?.statusCVName}</Tag> :
-                      props.detail.result?.statusCVName === "HIRED" ? <Tag color="#87d068" style={{
+                      }}>{detail.result?.statusCVName}</Tag> :
+                      detail.result?.statusCVName === "HIRED" ? <Tag color="#87d068" style={{
                           height: 22,
                           fontSize: 17
-                        }}>{props.detail.result?.statusCVName}</Tag> :
-                        props.detail.result?.statusCVName === "REJECT" ? <Tag color="#fa0000" style={{
+                        }}>{detail.result?.statusCVName}</Tag> :
+                        detail.result?.statusCVName === "REJECT" ? <Tag color="#fa0000" style={{
                             height: 22,
                             fontSize: 17
-                          }}>{props.detail.result?.statusCVName}</Tag> :
-                          props.detail.result?.statusCVName === "TEST" ? <Tag color="#8900fa" style={{
+                          }}>{detail.result?.statusCVName}</Tag> :
+                          detail.result?.statusCVName === "TEST" ? <Tag color="#8900fa" style={{
                             height: 22,
                             fontSize: 17
-                          }}>{props.detail.result?.statusCVName}</Tag> : null
+                          }}>{detail.result?.statusCVName}</Tag> : null
               }
 
             </div>
-            <div>{props.detail.result?.skill?.map((item: any, index: any) => {
+            <div>{detail.result?.skill?.map((item: any, index: any) => {
               return item.name
             })}</div>
             <StarRatings
@@ -518,8 +524,8 @@ function DetailProfileForm(props: DetailProfileFormProps) {
             <p>evaluations </p>
             <br/>
             <p>No title</p>
-            <p>{props.detail.result?.phoneNumber}</p>
-            <p>{props.detail.result?.email}</p>
+            <p>{detail.result?.phoneNumber}</p>
+            <p>{detail.result?.email}</p>
           </div>
         </div>
 
@@ -530,11 +536,11 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
           <div className="detail-paragraph-2__content">
             <Icon type="mail" className='mr-1'/>
-            <span>{props.detail.result?.email}</span><br/>
+            <span>{detail.result?.email}</span><br/>
             <Icon type="phone" className='mr-1'/>
-            <span>{props.detail.result?.phoneNumber}</span><br/>
+            <span>{detail.result?.phoneNumber}</span><br/>
             <Icon type="contacts" className='mr-1'/>
-            <span>{props.detail.result?.hometown || "Không có địa chỉ"}</span><br/>
+            <span>{detail.result?.hometown || "Không có địa chỉ"}</span><br/>
             <h1>Social profiles</h1>
           </div>
 
@@ -547,7 +553,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
         <div className="detail-paragraph-3">
           <div className="detail-paragraph-3__title">
             <h1>Lịch phỏng vấn</h1>
-            {props.detail.result?.recruitmentId ? (<div className="detail-paragraph-3__title--button">
+            {detail.result?.recruitmentId ? (<div className="detail-paragraph-3__title--button">
                 <Button size="small" className="ant-btn mr-1 ant-btn-sm"
                         onClick={event => onBtnUpdateBooking(event)}
                 >
@@ -559,14 +565,14 @@ function DetailProfileForm(props: DetailProfileFormProps) {
           <div className="detail-paragraph-3__content">
             <div>
               <Icon type="environment" className="mr-2"/>
-              <span>Địa chỉ phỏng vấn: {props.booking.result?.interviewAddressName}</span>
+              <span>Địa chỉ phỏng vấn: {getBooking.result?.interviewAddressName}</span>
             </div>
 
             <div>
               <Icon type="team" className="mr-2"/>
               <span>Hội đồng tuyển dụng:</span>
               <ul>
-                {props.account.rows?.filter((item: any) => props.booking.result?.interviewers?.map((item: any) => item.username).includes(item.username))
+                {props.account.rows?.filter((item: any) => getBooking.result?.interviewers?.map((item: any) => item.username).includes(item.username))
                   .map((item: any, index: any) => {
                     return <li key={index}>
                       {item.fullName}
@@ -577,19 +583,19 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
             <div>
               <Icon type="calendar" className="mr-2"/>
-              <span>Thời gian phỏng vấn: {props.booking.result ? moment(unixTimeToDate(props.booking.result?.date)).format('HH:mm DD/MM/YYYY') : ''} </span>
+              <span>Thời gian phỏng vấn: {getBooking.result ? moment(unixTimeToDate(getBooking.result?.date)).format('HH:mm DD/MM/YYYY') : ''} </span>
             </div>
 
             <div className='apply-position-box'>
-              {props.detail.result?.recruitmentId ? (
+              {detail.result?.recruitmentId ? (
                 <>
                   <div className="apply-position-title font-15-bold-500"><Badge
-                    color="green"/>{props.detail.result?.recruitmentName}</div>
+                    color="green"/>{detail.result?.recruitmentName}</div>
                   <div className="apply-option flex-items-center">
 
                     <div className="apply-step">
                       <Steps
-                        current={props.recruitment?.rows[0]?.interviewProcess.findIndex((item: any) => item.name === props.detail.result?.statusCVName)}
+                        current={props.recruitment?.rows[0]?.interviewProcess.findIndex((item: any) => item.name === detail.result?.statusCVName)}
                         progressDot className="apply-step">
                         {
                           props.recruitment?.rows[0]?.interviewProcess?.map((item: any, index: any) => {
@@ -598,7 +604,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
                         }
                       </Steps>
                       <div style={{textAlign: "center", width: 225}}>
-                        {props.detail.result?.statusCVName}
+                        {detail.result?.statusCVName}
                       </div>
                     </div>
 
@@ -607,10 +613,14 @@ function DetailProfileForm(props: DetailProfileFormProps) {
                         style={{color: "#64d271", marginRight: 5}}/>
                         Chuyển vòng
                       </Button>
-                      <Button className='mr-2' onClick={handleShowReasonRejectForm}><Icon type="stop" style={{
-                        fontSize: "120%",
-                        marginTop: 5
-                      }}/></Button>
+
+                      <Tooltip placement="top" title="Loại">
+                        <Button className='mr-2' onClick={handleShowReasonRejectForm}><Icon type="stop" style={{
+                          fontSize: "120%",
+                          marginTop: 5
+                        }}/></Button>
+                      </Tooltip>
+
                       <Popover content={contentMore}
                                onVisibleChange={(visible: any) => setPopoverRecruitment(visible)}
                                visible={popoverRecruitment}
@@ -645,7 +655,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
             <Table
               scroll={{x: 1000}}
               className="custom-table -webkit-scrollbar"
-              dataSource={props.note.result?.rows}
+              dataSource={getListNote.result?.rows}
               columns={columns}
               rowKey="id"
               bordered
@@ -653,7 +663,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
               pagination={{
                 current: page,
                 pageSize: size,
-                total: props.note.result?.total,
+                total: getListNote.result?.total,
                 onChange: value => setPage(value),
                 showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,
               }}
@@ -683,8 +693,8 @@ function DetailProfileForm(props: DetailProfileFormProps) {
           </div>
 
           <div className="detail-paragraph-4__content">
-            {props.detail.result?.urlCV ? <iframe
-                src={props.detail.result?.urlCV}
+            {detail.result?.urlCV ? <iframe
+                src={detail.result?.urlCV}
                 title="CV"
                 width="100%"
                 height="700px"
@@ -751,10 +761,12 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       <ChangeProcessForm/>
       <ChangeRecruitmentForm/>
       <AddToTalentPoolForm/>
+      <UpdateDetailProfileForm/>
 
-      {props.createNote.loading ||
-      props.updateNote.loading ||
-      props.detail.loading
+      {createNote.loading ||
+      updateNote.loading ||
+      detail.loading ||
+      updateDetail.loading
 
         ? <Loading/> : null}
 

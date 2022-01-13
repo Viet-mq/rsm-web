@@ -6,7 +6,8 @@ import {StatusCVEntity} from "../../../StatusCVManager/types";
 export interface ProcessFormState {
   show_create?: boolean,
   show_update?: boolean,
-  data_update?: StatusCVEntity|any
+  data_update?: StatusCVEntity|any,
+  index?:any,
 }
 
 const initState: ProcessFormState = {
@@ -18,7 +19,8 @@ export default (state = initState, {
   type,
   show_create,
   show_update,
-  data_update
+  data_update,
+  index
 }: ProcessFormAction): ProcessFormState => {
   switch (type) {
     case Actions.SHOW_FORM_PROCESS_CREATE:
@@ -32,6 +34,7 @@ export default (state = initState, {
         ...state,
         show_update,
         data_update,
+        index,
         show_create: false,
       }
 

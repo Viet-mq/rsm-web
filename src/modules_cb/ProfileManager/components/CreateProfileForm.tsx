@@ -95,10 +95,10 @@ function CreateProfileForm(props: CreateProfileFormProps) {
         let req: CreateProfileRequest = {
           fullName: values.fullName,
           avatarColor: setColor(),
+          email: values.email,
           dateOfBirth: values.dateOfBirth * 1,
           gender: values.gender,
           phoneNumber: values.phoneNumber,
-          email: values.email,
           hometown: values.hometown,
           levelSchool: values.levelSchool,
           school: values.school,
@@ -539,8 +539,11 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                   },
                 ],
               })(
-                <Select className="bg-white text-black select-account-custom" style={fontWeightStyle}
-                        placeholder="Chọn người giới thiệu">
+                <Select
+                  className="bg-white text-black"
+                  style={fontWeightStyle}
+                  optionLabelProp="label"
+                  placeholder="Chọn người giới thiệu">
                   {props.listAccount.rows?.map((item: any, index: any) => (
                     <Option key={index} value={item.username} label={item.fullName}>
                       <div className="flex-items-center" style={{paddingTop: 5}}>

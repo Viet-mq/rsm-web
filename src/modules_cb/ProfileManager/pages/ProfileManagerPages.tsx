@@ -3,19 +3,10 @@ import ListProfile from "../components/list/ListProfile";
 import {Button, Col, Icon, Row} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {
-  showFormBooking,
-  showFormCreate,
-  showFormUpdate,
-  showFormUploadCV,
-  showFormUploadListCV,
-} from "../redux/actions";
+import {showFormCreate, showFormUploadListCV,} from "../redux/actions";
 import CreateProfileForm from "../components/CreateProfileForm";
 import Loading from "../../../components/Loading";
-import UpdateProfileForm from "../components/UpdateProfileForm";
 import UploadCVForm from "../components/UploadCVForm";
-import BookingForm from "../components/BookingForm";
-import UpdateDetailProfileForm from "../components/UpdateDetailProfileForm";
 import {exportExcelFile} from "../redux/services/apis";
 import {useLocation, useParams} from "react-router-dom";
 import {getDetailTalentPool} from "../../TalentPoolManager/redux/actions";
@@ -31,9 +22,6 @@ const mapStateToProps = (state: RootState) => {
 
 const connector = connect(mapStateToProps, {
   showFormCreate,
-  showFormUpdate,
-  showFormUploadCV,
-  showFormBooking,
   showFormUploadListCV,
   getDetailTalentPool
 });
@@ -112,21 +100,10 @@ function ProfileManagerPages(props: IProps) {
 
       <ListProfile idTalentPool={idTalentPool}/>
       <CreateProfileForm/>
-      <UpdateProfileForm/>
       <UploadCVForm/>
-      <BookingForm/>
-      <UpdateDetailProfileForm/>
 
       {props.profileManager.create.loading ||
-      props.profileManager.list.loading ||
-      props.profileManager.deleteProfile.loading ||
-      props.profileManager.uploadCV.loading ||
-      props.profileManager.uploadListCV.loading ||
-      props.profileManager.update.loading ||
-      props.profileManager.updateDetail.loading ||
-      props.profileManager.getBooking.loading ||
-      props.profileManager.createBooking.loading ||
-      props.profileManager.updateBooking.loading ?
+      props.profileManager.uploadListCV.loading ?
         <Loading/> : null}
 
     </div>
