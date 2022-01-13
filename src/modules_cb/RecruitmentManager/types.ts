@@ -20,6 +20,7 @@ export interface RecruitmentEntity {
   detailOfSalary: string,
   from: number,
   to: number,
+  salaryDescription:string,
   status: string,
 
 }
@@ -39,21 +40,22 @@ export interface InterviewProcessResponse {
 }
 
 export interface CreateRecruitmentRequest {
-  address?: string,
-  deadLine?: number,
-  interviewProcess?: InterviewProcess[],
-  interviewer?: [],
-  job?: string,
-  quantity?: number,
-  talentPool?: string,
-  title?: string,
-  typeOfJob?: string
-  detailOfSalary?: string,
-  from?: number,
-  to?: number,
-  requirementOfJob?: string,
-  jobDescription?: string,
-  interest?: string,
+  address: string,
+  deadLine: number,
+  interviewProcess: InterviewProcess[],
+  interviewer: [],
+  job: string,
+  quantity: number,
+  talentPool: string,
+  title: string,
+  typeOfJob: string
+  detailOfSalary: string,
+  from: number,
+  salaryDescription:string,
+  to: number,
+  requirementOfJob: string,
+  jobDescription: string,
+  interest: string,
 
 }
 
@@ -71,9 +73,11 @@ export interface UpdateRecruitmentRequest {
   detailOfSalary?: string,
   from?: number,
   to?: number,
+  salaryDescription?:string
   requirementOfJob?: string,
   jobDescription?: string,
   interest?: string,
+
 }
 
 

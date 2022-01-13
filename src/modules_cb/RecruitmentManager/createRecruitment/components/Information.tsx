@@ -2,7 +2,7 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Col, DatePicker, Form, Icon, Input, InputNumber, Row, Select, Switch} from "antd";
-import React, {useEffect, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import moment from "moment";
 import {showFormCreate as showJobFormCreate} from "../../../JobManager/redux/actions";
 import 'devextreme/dist/css/dx.light.css';
@@ -43,13 +43,6 @@ interface IProps extends FormComponentProps, ReduxProps {
 }
 
 function InformationForm(props: IProps) {
-  const location = useLocation();
-  const {getFieldDecorator} = props.form;
-  const fontWeightStyle = {fontWeight: 400};
-  const dateFormat = 'DD/MM/YYYY';
-  const formItemHeight = {height: 250}
-  const textEditorHeight = {height: 200}
-  const buttonCreate = useRef(null);
   const modules = {
     toolbar: [
       [{'header': '1'}, {'header': '2'}],
@@ -70,16 +63,37 @@ function InformationForm(props: IProps) {
     'list', 'bullet', 'indent',
     'link', 'image', 'video'
   ]
+  const location = useLocation();
+  const {getFieldDecorator} = props.form;
+  const fontWeightStyle = {fontWeight: 400};
+  const dateFormat = 'DD/MM/YYYY';
+  const formItemHeight = {height: 250}
+  const textEditorHeight = {height: 200}
+  const buttonCreate = useRef(null);
+  const [salary, setSalary] = useState<any>({
+    from: 0,
+    to: 0,
+    detailOfSalary: "Chi tiết mức lương",
+    salaryDescription: "Từ 0 VND đến 0 VND"
+  })
 
   useEffect(() => {
     document.title = "Quản lý tin tuyển dụng";
+    if (location.pathname.includes("edit")) {
+      setSalary({
+        from: props.dataUpdate?.from,
+        to: props.dataUpdate?.to,
+        detailOfSalary: props.dataUpdate?.detailOfSalary,
+        salaryDescription: props.dataUpdate?.salaryDescription,
+      })
+    }
   }, []);
 
 
   function onFormChange() {
     setTimeout(() => props.form.validateFields((err, values) => {
       if (!err) {
-        if (location.pathname.includes("edit")){
+        if (location.pathname.includes("edit")) {
           if (props.dataUpdate) {
             let req: RecruitmentEntity = {
               ...props.dataUpdate,
@@ -90,17 +104,17 @@ function InformationForm(props: IProps) {
               talentPoolId: values.talentPool,
               title: values.title,
               typeOfJob: values.typeOfJob,
-              detailOfSalary: values.detailOfSalary,
-              from: values.from,
-              to: values.to,
+              detailOfSalary: salary.detailOfSalary,
+              from: salary.from,
+              to: salary.to,
+              salaryDescription: salary.salaryDescription,
               requirementOfJob: values.requirementOfJob,
               jobDescription: values.jobDescription,
               interest: values.interest,
             }
             props.getDataRecruitmentUpdate(req)
           }
-        }
-        else{
+        } else {
           let req: CreateRecruitmentRequest = ({
             address: values.address,
             deadLine: values.deadLine * 1,
@@ -112,6 +126,7 @@ function InformationForm(props: IProps) {
             detailOfSalary: values.detailOfSalary,
             from: values.from,
             to: values.to,
+            salaryDescription: salary.salaryDescription,
             requirementOfJob: values.requirementOfJob,
             jobDescription: values.jobDescription,
             interest: values.interest,
@@ -143,6 +158,37 @@ function InformationForm(props: IProps) {
       props.checkInformationValidate(true)
 
     } else props.checkInformationValidate(false)
+  }
+
+  function handleSelect(value: any) {
+    const newSalary = salary;
+    newSalary.detailOfSalary = value;
+
+    if (value === "Chi tiết mức lương") {
+      newSalary.salaryDescription = ` Từ ${newSalary.from} VND đến ${newSalary.to} VND`
+    }
+    if (value === "Thỏa thuận") {
+      newSalary.salaryDescription = " Thỏa thuận"
+    }
+    if (value === "Từ ...") {
+      newSalary.salaryDescription = ` Từ ${salary.from} VND`
+    }
+    if (value === "Up to ...") {
+      newSalary.salaryDescription = ` Up to ${salary.to} VND`
+    }
+    setSalary(newSalary)
+  }
+
+  function fromChange(value: any) {
+    const newSalary = salary;
+    newSalary.from = value !== null ? value : 0;
+    setSalary(newSalary)
+  }
+
+  function toChange(value: any) {
+    const newSalary = salary;
+    newSalary.to = value !== null ? value : 0;
+    setSalary(newSalary)
   }
 
   return (
@@ -288,7 +334,7 @@ function InformationForm(props: IProps) {
               <Form.Item label="Talent pools" className="form-label" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                 <div style={{display: 'flex'}}>
                   {getFieldDecorator('talentPool', {
-                    initialValue:location.pathname.includes("edit")?props.dataUpdate?.talentPoolId:  props.createStepsState.request?.talentPool || undefined,
+                    initialValue: location.pathname.includes("edit") ? props.dataUpdate?.talentPoolId : props.createStepsState.request?.talentPool || undefined,
                     rules: [
                       {
                         message: 'Vui lòng chọn talent pools',
@@ -307,19 +353,38 @@ function InformationForm(props: IProps) {
 
               <div className={"font-20-bold-500"}>Mức lương</div>
 
+              <Form.Item className="form-label" label="Hiển thị trên tin tuyển dụng" labelCol={{span: 24}}
+                         wrapperCol={{span: 24}}>
+                {getFieldDecorator('detailOfSalary', {
+                  initialValue: location.pathname.includes("edit") ? props.dataUpdate?.detailOfSalary : props.createStepsState.request?.detailOfSalary || 'Chi tiết mức lương',
+                  rules: [
+                    {
+                      message: 'Vui lòng chọn loại hình công việc',
+                      required: false,
+                    },
+                  ],
+                })(
+                  <Select onSelect={handleSelect} className="bg-white text-black" style={fontWeightStyle}>
+                    <Option key="1" value="Chi tiết mức lương">Chi tiết mức lương</Option>
+                    <Option key="2" value="Thỏa thuận">Thỏa thuận</Option>
+                    <Option key="3" value="Từ ...">Từ ...</Option>
+                    <Option key="4" value="Up to ...">Up to ...</Option>
+                  </Select>)}
+              </Form.Item>
+
               <Row style={{marginTop: 15}}>
                 <Col span={12} style={{paddingRight: 10}}>
                   <Form.Item className="form-label" label="Từ" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                     {getFieldDecorator('from', {
-                      initialValue:location.pathname.includes("edit")?props.dataUpdate?.from:  props.createStepsState.request?.from || 0,
+                      initialValue: location.pathname.includes("edit") ? props.dataUpdate?.from : props.createStepsState.request?.from || 0,
                       rules: [
                         {
-                          message: 'Vui lòng chọn số lượng',
+                          message: 'Vui lòng chọn mức lương từ',
                           required: false,
                         },
                       ],
                     })(
-                      <InputNumber style={{width: "100%"}} type="number" min={0}
+                      <InputNumber onChange={fromChange} style={{width: "100%"}} type="number" min={0}
                                    className="bg-white text-black"/>
                     )}
                   </Form.Item>
@@ -328,46 +393,34 @@ function InformationForm(props: IProps) {
                 <Col span={12}>
                   <Form.Item className="form-label" label="Đến" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                     {getFieldDecorator('to', {
-                      initialValue:location.pathname.includes("edit")?props.dataUpdate?.to:  props.createStepsState.request?.to || 0,
+                      initialValue: location.pathname.includes("edit") ? props.dataUpdate?.to : props.createStepsState.request?.to || 0,
                       rules: [
                         {
-                          message: 'Vui lòng chọn số lượng',
+                          message: 'Vui lòng chọn mức lương đến',
                           required: false,
                         },
                       ],
                     })(
-                      <InputNumber style={{width: "100%"}} type="number" min={0}
+                      <InputNumber onChange={toChange} style={{width: "100%"}} type="number" min={0}
                                    className="bg-white text-black"/>
                     )}
                   </Form.Item>
                 </Col>
               </Row>
 
-              <Form.Item className="form-label" label="Hiển thị trên tin tuyển dụng" labelCol={{span: 24}}
-                         wrapperCol={{span: 24}}>
-                {getFieldDecorator('detailOfSalary', {
-                  initialValue:location.pathname.includes("edit")?props.dataUpdate?.detailOfSalary:  props.createStepsState.request?.detailOfSalary || 'Chi tiết mức lương',
-                  rules: [
-                    {
-                      message: 'Vui lòng chọn loại hình công việc',
-                      required: false,
-                    },
-                  ],
-                })(
-                  <Select className="bg-white text-black" style={fontWeightStyle}>
-                    <Option key="1" value="Chi tiết mức lương">Chi tiết mức lương</Option>
-                    <Option key="2" value="Bán thời gian">Thỏa thuận</Option>
-                    <Option key="3" value="Từ">Từ ...</Option>
-                    <Option key="4" value="Đến">Đến...</Option>
-                  </Select>)}
-              </Form.Item>
+              <div className="pb-3" style={{color: "#6a727d"}}>Nội dung hiển thị:
+                {salary.detailOfSalary === "Chi tiết mức lương" ? ` Từ ${salary.from} VND đến ${salary.to} VND` :
+                  salary.detailOfSalary === "Thỏa thuận" ? " Thỏa thuận" :
+                    salary.detailOfSalary === "Từ ..." ? ` Từ ${salary.from} VND` : ` Up to ${salary.to} VND`
+                }
+              </div>
 
-              <div className="font-20-bold-500 mb-4">Mô tả công việc</div>
+              <div className="font-20-bold-500 ">Mô tả công việc</div>
 
               <Form.Item className="form-label quill-editor" label="Mô tả chung về công việc" labelCol={{span: 24}}
                          style={formItemHeight} wrapperCol={{span: 24}}>
                 {getFieldDecorator('jobDescription', {
-                  initialValue:location.pathname.includes("edit")?props.dataUpdate?.jobDescription:  props.createStepsState.request?.jobDescription || '',
+                  initialValue: location.pathname.includes("edit") ? props.dataUpdate?.jobDescription : props.createStepsState.request?.jobDescription || '',
                   rules: [
                     {
                       message: 'Vui lòng nhập mô tả chung',
@@ -394,7 +447,7 @@ function InformationForm(props: IProps) {
               <Form.Item className="form-label quill-editor" label="Yêu cầu công việc" labelCol={{span: 24}}
                          style={formItemHeight} wrapperCol={{span: 24}}>
                 {getFieldDecorator('requirementOfJob', {
-                  initialValue:location.pathname.includes("edit")?props.dataUpdate?.requirementOfJob:  props.createStepsState.request?.requirementOfJob || '',
+                  initialValue: location.pathname.includes("edit") ? props.dataUpdate?.requirementOfJob : props.createStepsState.request?.requirementOfJob || '',
                   rules: [
                     {
                       message: 'Vui lòng nhập yêu cầu công việc',
@@ -421,7 +474,7 @@ function InformationForm(props: IProps) {
               <Form.Item className="form-label quill-editor" label="Quyền lợi" labelCol={{span: 24}}
                          style={formItemHeight} wrapperCol={{span: 24}}>
                 {getFieldDecorator('interest', {
-                  initialValue:location.pathname.includes("edit")?props.dataUpdate?.interest:  props.createStepsState.request?.interest || '',
+                  initialValue: location.pathname.includes("edit") ? props.dataUpdate?.interest : props.createStepsState.request?.interest || '',
                   rules: [
                     {
                       message: 'Vui lòng nhập quyển lợi',

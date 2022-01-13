@@ -19,11 +19,15 @@ import {GiFemale, GiMale, ImPhoneHangUp} from "react-icons/all";
 import {useHistory, useLocation} from "react-router-dom";
 import Search from "antd/es/input/Search";
 import {getDetailTalentPool} from "../../../TalentPoolManager/redux/actions";
+import BookingForm from "../BookingForm";
+import Loading from "../../../../components/Loading";
+import UpdateProfileForm from "../UpdateProfileForm";
+import UploadCVForm from "../UploadCVForm";
 
 const {Option} = Select;
 
 const mapStateToProps = (state: RootState) => ({
-  list: state.profileManager.list,
+  profileManager: state.profileManager,
   showDetail: state.profileManager.showForm.show_detail?.show_detail,
   detail: state.profileManager.detail,
   elasticSearch: state.profileManager.search,
@@ -186,6 +190,25 @@ function ListProfile(props: ListProfileProps) {
       sorter: (a, b) => a.recruitmentName.length - b.recruitmentName.length,
       sortOrder: state.sortedInfo.columnKey === 'recruitmentName' && state.sortedInfo.order,
       ellipsis: true,
+      render: (text: string, record: ProfileEntity) => {
+        return <div>
+          <div style={{fontWeight: 500}}>{record.recruitmentName}</div>
+          <div style={{color: "#B2B2B2"}}>
+            {
+              record.statusCVName === "APPLY" ? <Badge status="default"/> :
+                record.statusCVName === "INTERVIEW" ? <Badge status="processing"/> :
+                  record.statusCVName === "OFFER" ? <Badge status="warning"/> :
+                    record.statusCVName === "HIRED" ? <Badge status="success"/> :
+                      record.statusCVName === "Loại" ? <Badge status="error"/> :
+                        record.statusCVName === "Test" ? <Badge color="purple"/> : null
+            }
+
+            <span>{record.statusCVName}</span>
+          </div>
+        </div>
+      },
+
+
     },
     {
       title: 'Phòng ban',
@@ -358,7 +381,7 @@ function ListProfile(props: ListProfileProps) {
   useEffect(() => {
     if (pathname.includes("recruitment-manager")) props.getListProfile({
       recruitment: props.idRecruitment,
-      statusCV:props.idProcess,
+      statusCV: props.idProcess,
       page: page,
       size: 30
     });
@@ -370,8 +393,7 @@ function ListProfile(props: ListProfileProps) {
       });
       props.getDetailTalentPool({id: props.idTalentPool})
 
-    }
-    else props.getListProfile({page: page, size: 30});
+    } else props.getListProfile({page: page, size: 30});
   }, [page, pathname])
 
   useEffect(() => {
@@ -459,7 +481,7 @@ function ListProfile(props: ListProfileProps) {
   }
 
   const handleBooking = (event: any, entity: ProfileEntity) => {
-      let req: DataShowBooking = {
+    let req: DataShowBooking = {
       id: entity.id,
       fullName: entity.fullName,
       idRecruitment: entity.recruitmentId
@@ -602,7 +624,7 @@ function ListProfile(props: ListProfileProps) {
       <Table
         scroll={{x: "1500px", y: "638px"}}
         className="custom-table -webkit-scrollbar"
-        dataSource={dataSource ? dataSource.rowsSearchFull : props.list.rows}
+        dataSource={dataSource ? dataSource.rowsSearchFull : props.profileManager.list?.rows}
         columns={columns}
         rowKey="id"
         size="small"
@@ -612,11 +634,24 @@ function ListProfile(props: ListProfileProps) {
         pagination={{
           current: page,
           pageSize: size,
-          total: dataSource ? dataSource.totalSearchFull : props.list.total,
+          total: dataSource ? dataSource.totalSearchFull : props.profileManager.list?.total,
           onChange: value => setPage(value),
           showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,
         }}
       />
+      <BookingForm/>
+      <UpdateProfileForm/>
+      <UploadCVForm/>
+      <UpdateProfileForm/>
+
+      {props.profileManager.getBooking.loading ||
+      props.profileManager.list.loading ||
+      props.profileManager.deleteProfile.loading ||
+      props.profileManager.update.loading ||
+      props.profileManager.uploadCV.loading ||
+      props.profileManager.createBooking.loading ||
+      props.profileManager.updateBooking.loading ?
+      <Loading/> : null}
     </>
   );
 

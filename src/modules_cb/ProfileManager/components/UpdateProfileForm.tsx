@@ -92,9 +92,9 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           id: props.showForm.data_update?.id,
           dateOfApply: values.dateOfApply * 1,
           dateOfBirth: values.dateOfBirth * 1,
-          email: values.email,
           fullName: values.fullName,
           hometown: values.hometown,
+          email: values.email,
           hrRef: values.hrRef,
           job: values.job,
           levelJob: values.levelJob,
@@ -541,13 +541,17 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                 initialValue: props.showForm.data_update?.hrRef,
                 rules: [
                   {
-                    message: 'Vui lòng chọn người giới thiệu',
+                    message: 'Vui lòng chọn giới thiệu',
                     required: false,
                   },
                 ],
               })(
-                <Select className="bg-white text-black select-account-custom" style={fontWeightStyle}
-                        placeholder="Chọn người giới thiệu">
+                <Select
+                  className="bg-white text-black select-account-custom"
+                  style={fontWeightStyle}
+                  optionLabelProp="label"
+
+                  placeholder="Chọn người giới thiệu">
                   {props.listAccount.rows?.map((item: any, index: any) => (
                     <Option key={index} value={item.username} label={item.fullName}>
                       <div className="flex-items-center" style={{paddingTop: 5}}>

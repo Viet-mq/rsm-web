@@ -4,15 +4,21 @@ import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Input, Modal} from "antd";
 import React, {FormEvent} from "react";
-import {updateRecruitment} from "../../redux/actions";
+import {showFormUpdate} from "../../redux/actions";
 
 
-const mapState = ({jobManager: {showForm}}: RootState) => ({showForm})
+const mapStateToProps = (state: RootState) => ({
+  showForm: state.recruitmentManager.showForm,
 
-const connector = connect(mapState, {updateRecruitment});
+})
+const connector = connect(mapStateToProps, {
+  showFormUpdate,
+});
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends FormComponentProps, ReduxProps {
+  schema: any,
+  setSchema: any,
 }
 
 function UpdateProcessForm(props: IProps) {
@@ -36,14 +42,18 @@ function UpdateProcessForm(props: IProps) {
     (e.target as any).disabled = false;
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-
+        const newSchema: any = props.schema;
+        newSchema[props.showForm?.index].name = values.name;
+        props.setSchema(newSchema);
       }
     });
+    props.showFormUpdate(false);
+
   }
 
   function onBtnCancelClicked() {
     resetFields();
-    // props.showFormUpdate(false);
+    props.showFormUpdate(false);
   }
 
   return (
@@ -55,13 +65,8 @@ function UpdateProcessForm(props: IProps) {
       visible={props.showForm.show_update}
       centered={true}
       width="550px"
-      afterClose={() => {
-        resetFields();
-      }}
-      onCancel={() => {
-        resetFields();
-        // props.showFormUpdate(false);
-      }}
+      afterClose={onBtnCancelClicked}
+      onCancel={onBtnCancelClicked}
       footer={""}>
 
       <Form {...formItemLayout}>
