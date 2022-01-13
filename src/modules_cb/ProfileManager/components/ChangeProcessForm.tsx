@@ -4,7 +4,7 @@ import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Modal, Radio} from "antd";
 import React, {useEffect, useState} from "react";
 import 'devextreme/dist/css/dx.light.css';
-import {changeProcess, showChangeProcessForm} from "../../ProfileManager/redux/actions";
+import {changeProcess, showChangeProcessForm} from "../redux/actions";
 import {getListRecruitment} from "../../RecruitmentManager/redux/actions";
 import {ChangeProcessRequest} from "../types";
 
