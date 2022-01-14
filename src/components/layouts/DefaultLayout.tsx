@@ -40,7 +40,7 @@ const DefaultLayout = (props: LayoutProps) => {
     value: undefined,
     dataSource: [],
   });
-
+const arrayUrl=['/statuscv-manager',"/email-manager"]
   const getInitials = (name: string) => {
     if (name) {
       let initials: any = name.split(' ');
@@ -188,7 +188,7 @@ const DefaultLayout = (props: LayoutProps) => {
                 <Row>
                   <Col span={props.showFormDetail?.show_detail?.general}
                        style={{height: "calc(100vh - 60px)", overflow: "auto"}}>
-                    <div style={history.location.pathname === '/statuscv-manager' ? {
+                    <div style={arrayUrl.includes(history.location.pathname)  ? {
                       background: "white",
                       height: "100%"
                     } : {height: "100%"}}>

@@ -28,6 +28,8 @@ import ReasonRejectManagerPages from "./modules_cb/ReasonRejectManager/pages/Rea
 import RecruitmentManagerPages from "./modules_cb/RecruitmentManager/pages/RecruitmentManagerPages";
 import CreateLayout from "./modules_cb/RecruitmentManager/createRecruitment/layout/CreateLayout";
 import DetailRecruitment from "./modules_cb/RecruitmentManager/components/DetailRecruitment";
+import EmailManagerPages from "./modules_cb/EmailManager/pages/EmailManagerPages";
+import UpdateEmailForm from "./modules_cb/EmailManager/components/UpdateEmailForm";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -75,14 +77,18 @@ const Routes = (props: PropsFromRedux) => {
         <Route path="/skill-manager" component={SkillManagerPages} isLogin={props.isLogin}/>
         <Route path="/reason-reject-manager" component={ReasonRejectManagerPages} isLogin={props.isLogin}/>
         <Route path="/address-manager" component={AddressManagerPages} isLogin={props.isLogin}/>
+        <Route path="/email-manager" exact component={EmailManagerPages} isLogin={props.isLogin}/>
+        <Route path="/email-manager/detail"  component={UpdateEmailForm} isLogin={props.isLogin}/>
         <Route path="/recruitment-manager" exact component={RecruitmentManagerPages} isLogin={props.isLogin}/>
         <Route path="/recruitment-manager/create" isLogin={props.isLogin}
                render={(props: any) => (<CreateLayout path={"create"}/>)}/>
         <Route path="/recruitment-manager/edit" render={(props: any) => (<CreateLayout path={"edit"}/>)}
                isLogin={props.isLogin}/>
-        <Route path={`/recruitment-manager/detail/:idRecruitment`} exact={true} render={(props: any) => (<DetailRecruitment {...props}/>)}
+        <Route path={`/recruitment-manager/detail/:idRecruitment`} exact={true}
+               render={(props: any) => (<DetailRecruitment {...props}/>)}
                isLogin={props.isLogin}/>
-        <Route path={`/talent-pool-manager/:idTalentPool`} exact={true} render={(props: any) => (<ProfileManagerPages {...props}/>)}
+        <Route path={`/talent-pool-manager/:idTalentPool`} exact={true}
+               render={(props: any) => (<ProfileManagerPages {...props}/>)}
                isLogin={props.isLogin}/>
         <Redirect exact from="/*" to={'/home'}/>
       </Switch>
