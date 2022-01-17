@@ -133,6 +133,10 @@
   .ant-select-selection .ant-select-selection__placeholder {
     color: $color-place-holder !important;
   }
+
+  .tox-statusbar {
+    display: none !important;
+  }
 }
 
 .c-schedule-content {
