@@ -5,13 +5,11 @@ import {Button, Col, DatePicker, Form, Icon, Input, InputNumber, Row, Select, Sw
 import React, {useEffect, useRef, useState} from "react";
 import moment from "moment";
 import {showFormCreate as showJobFormCreate} from "../../../JobManager/redux/actions";
-import 'devextreme/dist/css/dx.light.css';
 import {checkInformationValidate, createSteps, getDataRecruitmentUpdate} from "../../redux/actions";
 import {CreateRecruitmentRequest, RecruitmentEntity} from "../../types";
 import {useLocation} from "react-router-dom";
 import {Editor} from "@tinymce/tinymce-react";
 
-const {TextArea} = Input;
 const {Option} = Select;
 
 const mapStateToProps = (state: RootState) => ({
@@ -43,33 +41,12 @@ interface IProps extends FormComponentProps, ReduxProps {
 }
 
 function InformationForm(props: IProps) {
-  const modules = {
-    toolbar: [
-      [{'header': '1'}, {'header': '2'}],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [{'list': 'ordered'}, {'list': 'bullet'}],
-      [{'indent': '-1'}, {'indent': '+1'}],
-      ['link', 'image'],
-      ['clean']
-    ],
-
-    clipboard: {
-      matchVisual: false,
-    }
-  }
-  const formats = [
-    'header', 'font', 'size',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent',
-    'link', 'image', 'video'
-  ]
   const location = useLocation();
   const {getFieldDecorator} = props.form;
   const fontWeightStyle = {fontWeight: 400};
   const dateFormat = 'DD/MM/YYYY';
-  const formItemHeight = {height: 250}
-  const textEditorHeight = {height: 200}
   const buttonCreate = useRef(null);
+  const textEditorStyle = {marginBottom: 30}
   const [salary, setSalary] = useState<any>({
     from: 0,
     to: 0,
@@ -142,22 +119,6 @@ function InformationForm(props: IProps) {
 
       }
     }), 10)
-  }
-
-  function validateReactQuill(rule: any, value: any, callback: any) {
-    if (props.form.getFieldValue('jobDescription') == '<p><br></p>') {
-      callback('Vui lòng nhập mô tả chung');
-    } else if (props.form.getFieldValue('requirementOfJob') == '<p><br></p>') {
-      callback('Vui lòng nhập yêu cầu công việc');
-    } else if (props.form.getFieldValue('interest') == '<p><br></p>') {
-      callback('Vui lòng nhập quyển lợi');
-    } else if (props.form.getFieldValue('jobDescription') &&
-      props.form.getFieldValue('requirementOfJob') &&
-      props.form.getFieldValue('interest') != '<p><br></p>'
-    ) {
-      props.checkInformationValidate(true)
-
-    } else props.checkInformationValidate(false)
   }
 
   function handleSelect(value: any) {
@@ -424,7 +385,7 @@ function InformationForm(props: IProps) {
               <div className="font-20-bold-500 ">Mô tả công việc</div>
 
               <Form.Item className="form-label quill-editor" label="Mô tả chung về công việc" labelCol={{span: 24}}
-                         style={formItemHeight} wrapperCol={{span: 24}}>
+                         style={textEditorStyle} wrapperCol={{span: 24}}>
                 {getFieldDecorator('jobDescription', {
                   initialValue: location.pathname.includes("edit") ? props.dataUpdate?.jobDescription : props.createStepsState.request?.jobDescription || '',
                   rules: [
@@ -432,22 +393,10 @@ function InformationForm(props: IProps) {
                       message: 'Vui lòng nhập mô tả chung',
                       required: true,
                     },
-                    // {
-                    //   validator: validateReactQuill,
-                    // },
                   ],
                 })(
-                  // <ReactQuill
-                  //   style={{...fontWeightStyle, ...textEditorHeight}}
-                  //   theme={'snow'}
-                  //   modules={modules}
-                  //   formats={formats}
-                  //   bounds={'.app'}
-                  //   placeholder="Mô tả công việc"
-                  // />
-                  // <TextArea onChange={onFormChange} placeholder="Mô tả công việc" style={{height: 150}}
-                  //           className="bg-white text-black"/>
                   <Editor
+                    onChange={onFormChange}
                     apiKey="b616i94ii3b9vlza43fus93fppxb1yxb8f03gh926u51qhs6"
                     onInit={(evt, editor) => editorRef.current = editor}
                     init={{
@@ -470,7 +419,7 @@ function InformationForm(props: IProps) {
               </Form.Item>
 
               <Form.Item className="form-label quill-editor" label="Yêu cầu công việc" labelCol={{span: 24}}
-                         style={formItemHeight} wrapperCol={{span: 24}}>
+                         style={textEditorStyle} wrapperCol={{span: 24}}>
                 {getFieldDecorator('requirementOfJob', {
                   initialValue: location.pathname.includes("edit") ? props.dataUpdate?.requirementOfJob : props.createStepsState.request?.requirementOfJob || '',
                   rules: [
@@ -478,22 +427,10 @@ function InformationForm(props: IProps) {
                       message: 'Vui lòng nhập yêu cầu công việc',
                       required: true,
                     },
-                    // {
-                    //   validator: validateReactQuill,
-                    // },
                   ],
                 })(
-                  // <ReactQuill
-                  //   style={{...fontWeightStyle, ...textEditorHeight}}
-                  //   theme={'snow'}
-                  //   modules={modules}
-                  //   formats={formats}
-                  //   bounds={'.app'}
-                  //   placeholder="Yêu cầu công việc"
-                  // />
-                  // <TextArea onChange={onFormChange} placeholder="Yêu cầu công việc" style={{height: 150}}
-                  //           className="bg-white text-black"/>
                   <Editor
+                    onChange={onFormChange}
                     apiKey="b616i94ii3b9vlza43fus93fppxb1yxb8f03gh926u51qhs6"
                     onInit={(evt, editor) => editorRef.current = editor}
                     init={{
@@ -516,30 +453,18 @@ function InformationForm(props: IProps) {
               </Form.Item>
 
               <Form.Item className="form-label quill-editor" label="Quyền lợi" labelCol={{span: 24}}
-                         style={formItemHeight} wrapperCol={{span: 24}}>
+                         style={textEditorStyle} wrapperCol={{span: 24}}>
                 {getFieldDecorator('interest', {
-                  initialValue: location.pathname.includes("edit") ? props.dataUpdate?.interest : props.createStepsState.request?.interest || '',
+                  initialValue: location.pathname.includes("edit") ? props.dataUpdate?.interest : props.createStepsState.request?.interest || 'hhgfhjgfhj',
                   rules: [
                     {
                       message: 'Vui lòng nhập quyển lợi',
                       required: true,
                     },
-                    // {
-                    //   validator: validateReactQuill,
-                    // },
                   ],
                 })(
-                  // <ReactQuill
-                  //   style={{...fontWeightStyle, ...textEditorHeight}}
-                  //   theme={'snow'}
-                  //   modules={modules}
-                  //   formats={formats}
-                  //   bounds={'.app'}
-                  //   placeholder="Quyền lợi"
-                  // />
-                  // <TextArea onChange={onFormChange} placeholder="Quyền lợi" style={{height: 150}}
-                  //           className="bg-white text-black"/>
                   <Editor
+                    onChange={onFormChange}
                     apiKey="b616i94ii3b9vlza43fus93fppxb1yxb8f03gh926u51qhs6"
                     onInit={(evt, editor) => editorRef.current = editor}
                     init={{
