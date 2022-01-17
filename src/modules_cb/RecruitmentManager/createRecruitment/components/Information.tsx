@@ -9,9 +9,9 @@ import 'devextreme/dist/css/dx.light.css';
 import {checkInformationValidate, createSteps, getDataRecruitmentUpdate} from "../../redux/actions";
 import {CreateRecruitmentRequest, RecruitmentEntity} from "../../types";
 import {useLocation} from "react-router-dom";
+import {Editor} from "@tinymce/tinymce-react";
 
 const {TextArea} = Input;
-
 const {Option} = Select;
 
 const mapStateToProps = (state: RootState) => ({
@@ -191,6 +191,12 @@ function InformationForm(props: IProps) {
     setSalary(newSalary)
   }
 
+  const editorRef = useRef<any>(null);
+  const log = () => {
+    if (editorRef.current) {
+      console.log(editorRef.current.getContent());
+    }
+  };
   return (
     <>
       <div className="main-content">
@@ -439,8 +445,27 @@ function InformationForm(props: IProps) {
                   //   bounds={'.app'}
                   //   placeholder="Mô tả công việc"
                   // />
-                  <TextArea onChange={onFormChange} placeholder="Mô tả công việc" style={{height: 150}}
-                            className="bg-white text-black"/>
+                  // <TextArea onChange={onFormChange} placeholder="Mô tả công việc" style={{height: 150}}
+                  //           className="bg-white text-black"/>
+                  <Editor
+                    apiKey="b616i94ii3b9vlza43fus93fppxb1yxb8f03gh926u51qhs6"
+                    onInit={(evt, editor) => editorRef.current = editor}
+                    init={{
+                      height: 330,
+                      menubar: true,
+                      branding: false,
+                      plugins: [
+                        'advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table paste code help wordcount'
+                      ],
+                      toolbar: 'undo redo | formatselect | ' +
+                        'bold italic backcolor | alignleft aligncenter ' +
+                        'alignright alignjustify | bullist numlist outdent indent | ' +
+                        'removeformat | help',
+                      content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+                    }}
+                  />
                 )}
               </Form.Item>
 
@@ -466,8 +491,27 @@ function InformationForm(props: IProps) {
                   //   bounds={'.app'}
                   //   placeholder="Yêu cầu công việc"
                   // />
-                  <TextArea onChange={onFormChange} placeholder="Yêu cầu công việc" style={{height: 150}}
-                            className="bg-white text-black"/>
+                  // <TextArea onChange={onFormChange} placeholder="Yêu cầu công việc" style={{height: 150}}
+                  //           className="bg-white text-black"/>
+                  <Editor
+                    apiKey="b616i94ii3b9vlza43fus93fppxb1yxb8f03gh926u51qhs6"
+                    onInit={(evt, editor) => editorRef.current = editor}
+                    init={{
+                      height: 330,
+                      menubar: true,
+                      branding: false,
+                      plugins: [
+                        'advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table paste code help wordcount'
+                      ],
+                      toolbar: 'undo redo | formatselect | ' +
+                        'bold italic backcolor | alignleft aligncenter ' +
+                        'alignright alignjustify | bullist numlist outdent indent | ' +
+                        'removeformat | help',
+                      content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+                    }}
+                  />
                 )}
               </Form.Item>
 
@@ -493,8 +537,27 @@ function InformationForm(props: IProps) {
                   //   bounds={'.app'}
                   //   placeholder="Quyền lợi"
                   // />
-                  <TextArea onChange={onFormChange} placeholder="Quyền lợi" style={{height: 150}}
-                            className="bg-white text-black"/>
+                  // <TextArea onChange={onFormChange} placeholder="Quyền lợi" style={{height: 150}}
+                  //           className="bg-white text-black"/>
+                  <Editor
+                    apiKey="b616i94ii3b9vlza43fus93fppxb1yxb8f03gh926u51qhs6"
+                    onInit={(evt, editor) => editorRef.current = editor}
+                    init={{
+                      height: 330,
+                      menubar: true,
+                      branding: false,
+                      plugins: [
+                        'advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table paste code help wordcount'
+                      ],
+                      toolbar: 'undo redo | formatselect | ' +
+                        'bold italic backcolor | alignleft aligncenter ' +
+                        'alignright alignjustify | bullist numlist outdent indent | ' +
+                        'removeformat | help',
+                      content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+                    }}
+                  />
                 )}
               </Form.Item>
 

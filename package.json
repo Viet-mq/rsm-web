@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.6.4",
+    "@tinymce/tinymce-react": "^3.13.0",
     "@types/node": "^12.12.14",
     "@types/react-beautiful-dnd": "^13.1.2",
     "@types/react-star-ratings": "^2.3.0",
