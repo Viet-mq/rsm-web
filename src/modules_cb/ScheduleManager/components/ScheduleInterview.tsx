@@ -28,6 +28,7 @@ import {ProfileEntity} from "../../ProfileManager/types";
 import {CreateScheduleRequest, ScheduleEntity} from "../types";
 import {ColumnProps} from "antd/lib/table";
 import {searchCandidates} from "../redux/actions";
+import {getDataRecruitmentUpdate, getDetailRecruitment} from "../../RecruitmentManager/redux/actions";
 
 
 const mapStateToProps = (state: RootState) => ({
@@ -36,7 +37,8 @@ const mapStateToProps = (state: RootState) => ({
   listAccount: state.accountManager.list,
   listCandidate: state.scheduleManager.getCandidates,
   searchCandidatesState:state.scheduleManager.searchCandidates,
-  showSchedule: state.scheduleManager.showSchedule
+  showSchedule: state.scheduleManager.showSchedule,
+  detailRecruitment: state.recruitmentManager.detailRecruitment,
 
 })
 
@@ -47,7 +49,9 @@ const connector = connect(mapStateToProps,
     createSchedule,
     resetCandidates,
     showFormSchedule,
-    searchCandidates
+    searchCandidates,
+    getDetailRecruitment
+
   });
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -97,7 +101,7 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
     },
     {
       title: () => {
-        return <div style={{whiteSpace: 'nowrap'}}></div>;
+        return <div style={{whiteSpace: 'nowrap'}}/>;
       },
       dataIndex: 'action',
       width: 30,
@@ -123,6 +127,10 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
   const [listCandidates, setListCandidates] = useState<ProfileEntity[] | any>([]);
   const [visibleCandidate, setVisibleCandidate] = useState(false)
   const [keySearch, setKeySearch] = useState(undefined);
+
+  useEffect(() => {
+    setListCandidates(props.listCandidate.rows);
+  }, [props.listCandidate]);
 
   useEffect(() => {
     setListCandidates(props.listCandidate.rows);
@@ -230,6 +238,8 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
   function handleSelectRecruitment(value: any) {
     setRecruitment(value);
     props.getCandidates({recruitment: value, calendar: "notSet", page: 1, size: 15})
+    props.getDetailRecruitment({id:value})
+
   }
 
   function btnListScheduleClicked(e: FormEvent) {
@@ -241,7 +251,7 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
         let req: CreateScheduleRequest = {
           floor: values.floor,
           interviewAddress: values.interviewAddress,
-          interviewers: values.interviewers,
+          interviewers: props.detailRecruitment.rows[0]?.interviewer?.map((item:any)=>item.username),
           note: values.note,
           recruitmentId: values.recruitmentId,
           times: dataSource,
@@ -383,27 +393,27 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
                     </Form.Item>
                   </Col>
                 </Row>
-
-                <Form.Item label="Hội đồng tuyển dụng" className="form-label" labelCol={{span: 24}} wrapperCol={{span: 24}}>
-                  {getFieldDecorator('interviewers', {
-                    initialValue: undefined,
-                    rules: [
-                      {
-                        message: 'Vui lòng chọn Hội đồng tuyển dụng',
-                        required: true,
-                      },
-                    ],
-                  })(
-                    <Select className="bg-white text-black" style={fontWeightStyle}
-                            mode="multiple"
-                            placeholder="Chọn thành viên"
-                    >
-                      {props.listAccount.rows?.map((item: any, index: any) => (
-                        <Option key={index} value={item.username}>{item.fullName}</Option>
-                      ))}
-                    </Select>
-                  )}
-                </Form.Item>
+                
+                {/*<Form.Item label="Hội đồng tuyển dụng" className="form-label" labelCol={{span: 24}} wrapperCol={{span: 24}}>*/}
+                {/*  {getFieldDecorator('interviewers', {*/}
+                {/*    initialValue: props.detailRecruitment.rows[0]?.interviewer?.map((item:any)=>item.username)||undefined,*/}
+                {/*    rules: [*/}
+                {/*      {*/}
+                {/*        message: 'Vui lòng chọn Hội đồng tuyển dụng',*/}
+                {/*        required: true,*/}
+                {/*      },*/}
+                {/*    ],*/}
+                {/*  })(*/}
+                {/*    <Select className="bg-white text-black" style={fontWeightStyle}*/}
+                {/*            mode="multiple"*/}
+                {/*            placeholder="Chọn thành viên"*/}
+                {/*    >*/}
+                {/*      {props.listAccount.rows?.map((item: any, index: any) => (*/}
+                {/*        <Option key={index} value={item.username}>{item.fullName}</Option>*/}
+                {/*      ))}*/}
+                {/*    </Select>*/}
+                {/*  )}*/}
+                {/*</Form.Item>*/}
 
                 <Form.Item className="form-label" label="Loại lịch" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                   {getFieldDecorator('type', {
