@@ -7,6 +7,7 @@ import {deleteJob, getListJob, showFormCreate, showFormUpdate, updateJob} from "
 import {DeleteJobRequest, JobEntity} from "../types";
 import Search from "antd/es/input/Search";
 import {FormComponentProps} from "antd/lib/form";
+import {Editor} from "@tinymce/tinymce-react";
 
 const {TabPane} = Tabs;
 
@@ -99,7 +100,7 @@ function UpdateEmailForm(props: IProps) {
               </Form.Item>
 
 
-              <Form.Item className="form-label quill-editor" label="Nội dung" labelCol={{span: 24}}
+              <Form.Item className="form-label " label="Nội dung" labelCol={{span: 24}}
                          style={formItemHeight} wrapperCol={{span: 24}}>
                 {getFieldDecorator('context', {
                   initialValue: '',
@@ -113,16 +114,34 @@ function UpdateEmailForm(props: IProps) {
                     // },
                   ],
                 })(
-                  // <ReactQuill
-                  //   style={{...fontWeightStyle, ...textEditorHeight}}
-                  //   theme={'snow'}
-                  //   modules={modules}
-                  //   formats={formats}
-                  //   bounds={'.app'}
-                  //   placeholder="Mô tả công việc"
-                  // />
-                  <TextArea ref={inputEl} placeholder="Nội dụng" style={{height: 150}}
-                            className="bg-white text-black"/>
+                  <Editor
+                    apiKey="b616i94ii3b9vlza43fus93fppxb1yxb8f03gh926u51qhs6"
+                    // onInit={(evt, editor) => editorRef.current = editor}
+                    init={{
+                      menu: {
+                        tc: {
+                          title: 'Comments',
+                          items: 'addcomment showcomments deleteallconversations'
+                        }
+                      },
+                      plugins: [
+                        'advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table paste code help '
+                      ],
+                      height: 330,
+                      menubar: true,
+                      branding: false,
+                      toolbar: 'undo redo | bold italic underline strikethrough |alignleft aligncenter alignright alignjustify | outdent indent |fontselect fontsizeselect formatselect |    numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
+                      autosave_interval: '30s',
+                      autosave_restore_when_empty: false,
+                      autosave_retention: '2m',
+                      image_caption: true,
+                      quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
+                      toolbar_mode: 'sliding',
+                      content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+                    }}
+                  />
                 )}
               </Form.Item>
 

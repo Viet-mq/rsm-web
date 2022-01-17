@@ -385,7 +385,7 @@ function InformationForm(props: IProps) {
 
               <div className="font-20-bold-500 ">Mô tả công việc</div>
 
-              <Form.Item className="form-label quill-editor" label="Mô tả chung về công việc" labelCol={{span: 24}}
+              <Form.Item className="form-label " label="Mô tả chung về công việc" labelCol={{span: 24}}
                          style={textEditorStyle} wrapperCol={{span: 24}}>
                 {getFieldDecorator('jobDescription', {
                   initialValue: location.pathname.includes("edit") ? props.dataUpdate?.jobDescription : props.createStepsState.request?.jobDescription || '',
@@ -407,6 +407,11 @@ function InformationForm(props: IProps) {
                           items: 'addcomment showcomments deleteallconversations'
                         }
                       },
+                      plugins: [
+                        'advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table paste code help '
+                      ],
                       height: 330,
                        menubar: true,
                       branding: false,
@@ -423,7 +428,7 @@ function InformationForm(props: IProps) {
                 )}
               </Form.Item>
 
-              <Form.Item className="form-label quill-editor" label="Yêu cầu công việc" labelCol={{span: 24}}
+              <Form.Item className="form-label " label="Yêu cầu công việc" labelCol={{span: 24}}
                          style={textEditorStyle} wrapperCol={{span: 24}}>
                 {getFieldDecorator('requirementOfJob', {
                   initialValue: location.pathname.includes("edit") ? props.dataUpdate?.requirementOfJob : props.createStepsState.request?.requirementOfJob || '',
@@ -445,6 +450,11 @@ function InformationForm(props: IProps) {
                           items: 'addcomment showcomments deleteallconversations'
                         }
                       },
+                      plugins: [
+                        'advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table paste code help '
+                      ],
                       height: 330,
                        menubar: true,
                       branding: false,
@@ -461,7 +471,7 @@ function InformationForm(props: IProps) {
                 )}
               </Form.Item>
 
-              <Form.Item className="form-label quill-editor" label="Quyền lợi" labelCol={{span: 24}}
+              <Form.Item className="form-label " label="Quyền lợi" labelCol={{span: 24}}
                          style={textEditorStyle} wrapperCol={{span: 24}}>
                 {getFieldDecorator('interest', {
                   initialValue: location.pathname.includes("edit") ? props.dataUpdate?.interest : props.createStepsState.request?.interest || 'hhgfhjgfhj',
@@ -485,6 +495,11 @@ function InformationForm(props: IProps) {
                           items: 'addcomment showcomments deleteallconversations'
                         }
                       },
+                      plugins: [
+                        'advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table paste code help '
+                      ],
                       height: 330,
                        menubar: true,
                       branding: false,

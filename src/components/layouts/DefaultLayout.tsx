@@ -187,7 +187,7 @@ const arrayUrl=['/statuscv-manager',"/email-manager"]
               <div>
                 <Row>
                   <Col span={props.showFormDetail?.show_detail?.general}
-                       style={{height: "calc(100vh - 60px)", overflow: "auto"}}>
+                       className="default-layout">
                     <div style={arrayUrl.includes(history.location.pathname)  ? {
                       background: "white",
                       height: "100%"
