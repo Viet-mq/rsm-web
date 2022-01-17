@@ -158,6 +158,7 @@ function InformationForm(props: IProps) {
       console.log(editorRef.current.getContent());
     }
   };
+
   return (
     <>
       <div className="main-content">
@@ -398,20 +399,24 @@ function InformationForm(props: IProps) {
                   <Editor
                     onChange={onFormChange}
                     apiKey="b616i94ii3b9vlza43fus93fppxb1yxb8f03gh926u51qhs6"
-                    onInit={(evt, editor) => editorRef.current = editor}
+                    // onInit={(evt, editor) => editorRef.current = editor}
                     init={{
+                      menu: {
+                        tc: {
+                          title: 'Comments',
+                          items: 'addcomment showcomments deleteallconversations'
+                        }
+                      },
                       height: 330,
-                      menubar: true,
+                       menubar: true,
                       branding: false,
-                      plugins: [
-                        'advlist autolink lists link image charmap print preview anchor',
-                        'searchreplace visualblocks code fullscreen',
-                        'insertdatetime media table paste code help wordcount'
-                      ],
-                      toolbar: 'undo redo | formatselect | ' +
-                        'bold italic backcolor | alignleft aligncenter ' +
-                        'alignright alignjustify | bullist numlist outdent indent | ' +
-                        'removeformat | help',
+                      toolbar: 'undo redo | bold italic underline strikethrough |alignleft aligncenter alignright alignjustify | outdent indent |fontselect fontsizeselect formatselect |    numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
+                      autosave_interval: '30s',
+                      autosave_restore_when_empty: false,
+                      autosave_retention: '2m',
+                      image_caption: true,
+                      quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
+                      toolbar_mode: 'sliding',
                       content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
                     }}
                   />
@@ -432,20 +437,24 @@ function InformationForm(props: IProps) {
                   <Editor
                     onChange={onFormChange}
                     apiKey="b616i94ii3b9vlza43fus93fppxb1yxb8f03gh926u51qhs6"
-                    onInit={(evt, editor) => editorRef.current = editor}
+                    // onInit={(evt, editor) => editorRef.current = editor}
                     init={{
+                      menu: {
+                        tc: {
+                          title: 'Comments',
+                          items: 'addcomment showcomments deleteallconversations'
+                        }
+                      },
                       height: 330,
-                      menubar: true,
+                       menubar: true,
                       branding: false,
-                      plugins: [
-                        'advlist autolink lists link image charmap print preview anchor',
-                        'searchreplace visualblocks code fullscreen',
-                        'insertdatetime media table paste code help wordcount'
-                      ],
-                      toolbar: 'undo redo | formatselect | ' +
-                        'bold italic backcolor | alignleft aligncenter ' +
-                        'alignright alignjustify | bullist numlist outdent indent | ' +
-                        'removeformat | help',
+                      toolbar: 'undo redo | bold italic underline strikethrough |alignleft aligncenter alignright alignjustify | outdent indent |fontselect fontsizeselect formatselect |    numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
+                      autosave_interval: '30s',
+                      autosave_restore_when_empty: false,
+                      autosave_retention: '2m',
+                      image_caption: true,
+                      quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
+                      toolbar_mode: 'sliding',
                       content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
                     }}
                   />
@@ -456,6 +465,8 @@ function InformationForm(props: IProps) {
                          style={textEditorStyle} wrapperCol={{span: 24}}>
                 {getFieldDecorator('interest', {
                   initialValue: location.pathname.includes("edit") ? props.dataUpdate?.interest : props.createStepsState.request?.interest || 'hhgfhjgfhj',
+                  getValueFromEvent: e => e.target && e.target.getContent()&&console.log(e.target.getContent()),
+
                   rules: [
                     {
                       message: 'Vui lòng nhập quyển lợi',
@@ -466,20 +477,24 @@ function InformationForm(props: IProps) {
                   <Editor
                     onChange={onFormChange}
                     apiKey="b616i94ii3b9vlza43fus93fppxb1yxb8f03gh926u51qhs6"
-                    onInit={(evt, editor) => editorRef.current = editor}
+                    // onInit={(evt, editor) => editorRef.current = editor}
                     init={{
+                      menu: {
+                        tc: {
+                          title: 'Comments',
+                          items: 'addcomment showcomments deleteallconversations'
+                        }
+                      },
                       height: 330,
-                      menubar: true,
+                       menubar: true,
                       branding: false,
-                      plugins: [
-                        'advlist autolink lists link image charmap print preview anchor',
-                        'searchreplace visualblocks code fullscreen',
-                        'insertdatetime media table paste code help wordcount'
-                      ],
-                      toolbar: 'undo redo | formatselect | ' +
-                        'bold italic backcolor | alignleft aligncenter ' +
-                        'alignright alignjustify | bullist numlist outdent indent | ' +
-                        'removeformat | help',
+                      toolbar: 'undo redo | bold italic underline strikethrough |alignleft aligncenter alignright alignjustify | outdent indent |fontselect fontsizeselect formatselect |    numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
+                      autosave_interval: '30s',
+                      autosave_restore_when_empty: false,
+                      autosave_retention: '2m',
+                      image_caption: true,
+                      quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
+                      toolbar_mode: 'sliding',
                       content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
                     }}
                   />
