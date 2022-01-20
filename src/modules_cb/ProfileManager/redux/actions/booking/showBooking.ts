@@ -4,11 +4,13 @@ export interface ShowBookingAction {
   type: string,
   show_booking?: boolean,
   data_booking?:DataShowBooking,
-  show_email?:boolean
+  show_email_create?:boolean
+  show_email_update?:boolean
 }
 
 export const PROFILE_SHOW_FORM_BOOKING = "PROFILE_SHOW_FORM_BOOKING";
-export const SHOW_EMAIL_FORM = "SHOW_EMAIL_FORM";
+export const SHOW_EMAIL_CREATE_FORM = "SHOW_EMAIL_CREATE_FORM";
+export const SHOW_EMAIL_UPDATE_FORM = "SHOW_EMAIL_UPDATE_FORM";
 
 export const showFormBooking = (show: boolean,data?:DataShowBooking): ShowBookingAction => ({
   type:PROFILE_SHOW_FORM_BOOKING,
@@ -16,7 +18,11 @@ export const showFormBooking = (show: boolean,data?:DataShowBooking): ShowBookin
   data_booking:data
 })
 
-export const showEmailForm = (show: boolean): ShowBookingAction => ({
-  type:SHOW_EMAIL_FORM,
-  show_email:show,
+export const showEmailCreateForm = (show: boolean): ShowBookingAction => ({
+  type:SHOW_EMAIL_CREATE_FORM,
+  show_email_create:show,
+})
+export const showEmailUpdateForm = (show: boolean): ShowBookingAction => ({
+  type:SHOW_EMAIL_UPDATE_FORM,
+  show_email_update:show,
 })

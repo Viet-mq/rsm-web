@@ -1,14 +1,22 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {createBooking, getBooking, showEmailForm, showFormBooking, updateBooking} from "../redux/actions";
+import {
+  createBooking,
+  getBooking,
+  showEmailCreateForm,
+  showEmailUpdateForm,
+  showFormBooking,
+  updateBooking
+} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Checkbox, Col, DatePicker, Form, Input, InputNumber, Modal, Row, Select, TimePicker} from "antd";
-import React, {FormEvent, useEffect} from "react";
+import React, {FormEvent, useEffect, useState} from "react";
 import {getListAccount} from "../../AccountManager/redux/actions";
 import {getListStatusCV} from "../../StatusCVManager/redux/actions";
 import moment from "moment";
-import {CreateBookingRequest, UpdateBookingRequest} from "../types";
+import {CreateBookingForm, CreateBookingRequest, MailRequest, UpdateBookingForm, UpdateBookingRequest} from "../types";
 import CreateEmailForm from "./CreateEmailForm";
+import UpdateEmailForm from "./UpdateEmailForm";
 
 const {Option} = Select;
 const {TextArea} = Input;
@@ -32,7 +40,8 @@ const connector = connect(mapStateToProps,
     updateBooking,
     createBooking,
     showFormBooking,
-    showEmailForm
+    showEmailCreateForm,
+    showEmailUpdateForm
   });
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -47,6 +56,8 @@ function BookingForm(props: BookingFormProps) {
   const interviewTime: any = moment(props.getBookingState.result?.interviewTime)
   const date: any = moment(props.getBookingState.result?.date)
   const diffTime = interviewTime.diff(date, "minutes")
+  const [reqCreate, setReqCreate] = useState<CreateBookingRequest | any>()
+  const [reqUpdate, setReqUpdate] = useState<UpdateBookingRequest | any>()
 
   useEffect(() => {
     if (props.showBooking.show_booking) {
@@ -68,7 +79,12 @@ function BookingForm(props: BookingFormProps) {
     props.showFormBooking(false);
   }
 
-  function onBtnUpdateClicked(e: FormEvent) {
+  const setColor = () => {
+    const randomColor: string = Math.floor(Math.random() * 16777215).toString(16);
+    return "#" + randomColor;
+  }
+
+  function onBtnContinueUpdateClicked(e: FormEvent) {
     e.preventDefault();
     (e.target as any).disabled = true;
     (e.target as any).disabled = false;
@@ -84,12 +100,8 @@ function BookingForm(props: BookingFormProps) {
         const minutes = time.getMinutes();
         const dateChanged: any = new Date(yyyy, mm - 1, dd, hh, minutes, 0);
         const interviewTime: any = new Date(yyyy, mm - 1, dd, hh, minutes + values.interviewTime, 0);
-        console.log("UpdateBooking------------")
-        console.log("values.interviewTime:", values.interviewTime)
-        console.log("interviewTime:", interviewTime, yyyy, mm, dd, hh, minutes)
-        console.log("start:", dateChanged, "end:", interviewTime)
-        console.log("-------------------------")
-        let req: UpdateBookingRequest = {
+
+        let req: UpdateBookingForm = {
           id: props.getBookingState.result?.id,
           floor: values.room,
           interviewAddress: values.interviewAddress,
@@ -100,39 +112,19 @@ function BookingForm(props: BookingFormProps) {
           type: values.type,
           date: dateChanged * 1,
 
-          // id: props.getBookingState.result?.id,
-          // idProfile: props.getBookingState.result?.idProfile,
-          // time: values.time * 1,
-          // address: values.address,
-          // form: values.form,
-          // interviewer: values.interviewer,
-          // interviewee: values.interviewee,
-          // content: values.content,
-          // question: values.question,
-          // comments: values.comments,
-          // evaluation: values.evaluation,
-          // status: values.status,
-          // reason: values.reason,
-          // timeStart: values.timeStart * 1,
-          // timeFinish: values.timeFinish * 1,
         }
-        props.updateBooking(req);
+        setReqUpdate(req)
+        props.showEmailUpdateForm(true)
         return;
       }
     });
   }
 
-  const setColor = () => {
-    const randomColor: string = Math.floor(Math.random() * 16777215).toString(16);
-    return "#" + randomColor;
-  }
-
-  function onBtnCreateClicked(e: FormEvent) {
+  function onBtnContinueCreateClicked(e: FormEvent) {
     e.preventDefault();
     (e.target as any).disabled = true;
     (e.target as any).disabled = false;
     props.form.validateFieldsAndScroll((err, values) => {
-
       if (!err) {
         const date = new Date(values.date);
         const time = new Date(values.timeStart);
@@ -143,12 +135,8 @@ function BookingForm(props: BookingFormProps) {
         const minutes = time.getMinutes();
         const dateChanged: any = new Date(yyyy, mm - 1, dd, hh, minutes, 0);
         const interviewTime: any = new Date(yyyy, mm - 1, dd, hh, minutes + values.interviewTime, 0);
-        console.log("CreateBooking------------")
-        console.log("values.interviewTime:", values.interviewTime)
-        console.log("interviewTime:", interviewTime, yyyy, mm, dd, hh, minutes)
-        console.log("start:", dateChanged, "end:", interviewTime)
-        console.log("-------------------------")
-        let req: CreateBookingRequest = {
+
+        let req: CreateBookingForm = {
           idProfile: props.showBooking.data_booking?.id,
           date: dateChanged * 1,
           avatarColor: setColor(),
@@ -159,31 +147,14 @@ function BookingForm(props: BookingFormProps) {
           note: values.note,
           recruitmentId: values.recruitmentId,
           type: values.type,
-
-          // time: values.time * 1,
-          // avatarColor:setColor(),
-          // address: values.address,
-          // form: values.form,
-          // interviewer: values.interviewer,
-          // interviewee: values.interviewee,
-          // content: values.content,
-          // question: values.question,
-          // comments: values.comments,
-          // evaluation: values.evaluation,
-          // status: values.status,
-          // reason: values.reason,
-          // timeStart: values.timeStart * 1,
-          // timeFinish: values.timeFinish * 1,
         }
-        props.createBooking(req);
+
+        setReqCreate(req)
+        props.showEmailCreateForm(true)
+
         return;
       }
     });
-
-  }
-
-  function handleShowEmailForm() {
-    props.showEmailForm(true)
   }
 
   return (
@@ -405,8 +376,7 @@ function BookingForm(props: BookingFormProps) {
                 <div className="footer-right">
                   <Button onClick={onBtnCancelClicked} type={"link"}
                           style={{color: "black", marginRight: 15}}>Hủy</Button>
-                  {/*<Button onClick={onBtnUpdateClicked} type={"primary"}>Cập nhật</Button>*/}
-                  <Button type={"primary"} onClick={handleShowEmailForm}>Tiếp tục</Button>
+                  <Button type={"primary"} onClick={onBtnContinueUpdateClicked}>Tiếp tục</Button>
 
                 </div>
               </Modal>
@@ -627,19 +597,17 @@ function BookingForm(props: BookingFormProps) {
                 <div className="footer-right">
                   <Button onClick={onBtnCancelClicked} type={"link"}
                           style={{color: "black", marginRight: 15}}>Hủy</Button>
-                  {/*<Button type={"primary"} onClick={onBtnCreateClicked}>Tạo mới</Button>*/}
-                  <Button type={"primary"} onClick={handleShowEmailForm}>Tiếp tục</Button>
+                  <Button type={"primary"} onClick={onBtnContinueCreateClicked}>Tiếp tục</Button>
                 </div>
 
               </Modal>
             </div>
-
           </div>
         }
       </div>
-      <CreateEmailForm/>
+      <CreateEmailForm reqCreate={reqCreate}/>
+      <UpdateEmailForm reqUpdate={reqUpdate}/>
     </>
-
 
   );
 }

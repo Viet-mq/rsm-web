@@ -53,6 +53,17 @@ function InformationForm(props: IProps) {
     detailOfSalary: "Chi tiết mức lương",
     salaryDescription: "Từ 0 VND đến 0 VND"
   })
+  const [display,setDisplay]=useState({
+    interest: false,
+    requirementOfJob:false,
+    jobDescription:false
+
+  })
+  const [valueEditor,setValueEditor]=useState({
+    interest:"",
+    requirementOfJob:"",
+    jobDescription:""
+  })
 
   useEffect(() => {
     document.title = "Quản lý tin tuyển dụng";
@@ -69,6 +80,7 @@ function InformationForm(props: IProps) {
 
   function onFormChange() {
     setTimeout(() => props.form.validateFields((err, values) => {
+      console.log(!err&&valueEditor.interest!=='')
       if (!err) {
         if (location.pathname.includes("edit")) {
           if (props.dataUpdate) {
@@ -159,6 +171,37 @@ function InformationForm(props: IProps) {
     }
   };
 
+  function handleChangeInterest(content: any,editor:any) {
+    if(content===""){
+      setDisplay({...display, interest: true})
+      setValueEditor({...valueEditor,interest: ""})
+    }
+    else{
+      setDisplay({...display, interest: false})
+      setValueEditor({...valueEditor,interest: content})
+    }
+  }
+  function handleChangeRequirement(content: any,editor:any) {
+    if(content===""){
+      setDisplay({...display, requirementOfJob: true})
+      setValueEditor({...valueEditor,requirementOfJob: ""})
+    }
+    else{
+      setDisplay({...display, requirementOfJob: false})
+      setValueEditor({...valueEditor,requirementOfJob: content})
+    }
+  }
+  function handleChangeJobDescription(content: any,editor:any) {
+    if(content===""){
+      setDisplay({...display, jobDescription: true})
+      setValueEditor({...valueEditor,jobDescription: ""})
+    }
+    else{
+      setDisplay({...display, jobDescription: false})
+      setValueEditor({...valueEditor,jobDescription: content})
+    }
+  }
+
   return (
     <>
       <div className="main-content">
@@ -167,7 +210,7 @@ function InformationForm(props: IProps) {
         </div>
         <div className="c-schedule-interview-popup">
           <div className='ant-col-14 grid-left'>
-            <Form>
+            <Form >
               <Form.Item className="form-label" label="Tiều đề tin tuyển dụng" labelCol={{span: 24}}
                          wrapperCol={{span: 24}}>
                 {getFieldDecorator('title', {
@@ -384,137 +427,93 @@ function InformationForm(props: IProps) {
               </div>
 
               <div className="font-20-bold-500 ">Mô tả công việc</div>
-
-              <Form.Item className="form-label " label="Mô tả chung về công việc" labelCol={{span: 24}}
-                         style={textEditorStyle} wrapperCol={{span: 24}}>
-                {getFieldDecorator('jobDescription', {
-                  initialValue: location.pathname.includes("edit") ? props.dataUpdate?.jobDescription : props.createStepsState.request?.jobDescription || '',
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập mô tả chung',
-                      required: true,
+              <div className="form-label mb-4">
+                <div className="mb-2">Mô tả công việc <span className="value-required">*</span></div>
+                <Editor
+                  onEditorChange={handleChangeJobDescription}
+                  //apiKey="b616i94ii3b9vlza43fus93fppxb1yxb8f03gh926u51qhs6"
+                  // onInit={(evt, editor) => editorRef.current = editor}
+                  init={{
+                    menu: {
+                      tc: {
+                        title: 'Comments',
+                        items: 'addcomment showcomments deleteallconversations'
+                      }
                     },
-                  ],
-                })(
-                  <Editor
-                    onChange={onFormChange}
-                    apiKey="b616i94ii3b9vlza43fus93fppxb1yxb8f03gh926u51qhs6"
-                    // onInit={(evt, editor) => editorRef.current = editor}
-                    init={{
-                      menu: {
-                        tc: {
-                          title: 'Comments',
-                          items: 'addcomment showcomments deleteallconversations'
-                        }
-                      },
-                      plugins: [
-                        'advlist autolink lists link image charmap print preview anchor',
-                        'searchreplace visualblocks code fullscreen',
-                        'insertdatetime media table paste code help '
-                      ],
-                      height: 330,
-                       menubar: true,
-                      branding: false,
-                      toolbar: 'undo redo | bold italic underline strikethrough |alignleft aligncenter alignright alignjustify | outdent indent |fontselect fontsizeselect formatselect |    numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
-                      autosave_interval: '30s',
-                      autosave_restore_when_empty: false,
-                      autosave_retention: '2m',
-                      image_caption: true,
-                      quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
-                      toolbar_mode: 'sliding',
-                      content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-                    }}
-                  />
-                )}
-              </Form.Item>
+                    plugins: [
+                      'advlist autolink lists link image charmap print preview anchor',
+                      'searchreplace visualblocks code fullscreen',
+                      'insertdatetime media table paste code help '
+                    ],
+                    height: 330,
+                    menubar: true,
+                    toolbar: 'undo redo | bold italic underline strikethrough |alignleft aligncenter alignright alignjustify | outdent indent |fontselect fontsizeselect formatselect |    numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
+                    quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
+                    toolbar_mode: 'sliding',
+                    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+                  }}
+                />
+                <div className={display.jobDescription?"value-required show":"value-required hide"}>Vui lòng nhập mô tả chung</div>
 
-              <Form.Item className="form-label " label="Yêu cầu công việc" labelCol={{span: 24}}
-                         style={textEditorStyle} wrapperCol={{span: 24}}>
-                {getFieldDecorator('requirementOfJob', {
-                  initialValue: location.pathname.includes("edit") ? props.dataUpdate?.requirementOfJob : props.createStepsState.request?.requirementOfJob || '',
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập yêu cầu công việc',
-                      required: true,
+              </div>
+              <div className="form-label mb-4">
+                <div className="mb-2">Yêu cầu công việc <span className="value-required">*</span></div>
+                <Editor
+                  onEditorChange={handleChangeRequirement}
+                  //apiKey="b616i94ii3b9vlza43fus93fppxb1yxb8f03gh926u51qhs6"
+                  // onInit={(evt, editor) => editorRef.current = editor}
+                  init={{
+                    menu: {
+                      tc: {
+                        title: 'Comments',
+                        items: 'addcomment showcomments deleteallconversations'
+                      }
                     },
-                  ],
-                })(
-                  <Editor
-                    onChange={onFormChange}
-                    apiKey="b616i94ii3b9vlza43fus93fppxb1yxb8f03gh926u51qhs6"
-                    // onInit={(evt, editor) => editorRef.current = editor}
-                    init={{
-                      menu: {
-                        tc: {
-                          title: 'Comments',
-                          items: 'addcomment showcomments deleteallconversations'
-                        }
-                      },
-                      plugins: [
-                        'advlist autolink lists link image charmap print preview anchor',
-                        'searchreplace visualblocks code fullscreen',
-                        'insertdatetime media table paste code help '
-                      ],
-                      height: 330,
-                       menubar: true,
-                      branding: false,
-                      toolbar: 'undo redo | bold italic underline strikethrough |alignleft aligncenter alignright alignjustify | outdent indent |fontselect fontsizeselect formatselect |    numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
-                      autosave_interval: '30s',
-                      autosave_restore_when_empty: false,
-                      autosave_retention: '2m',
-                      image_caption: true,
-                      quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
-                      toolbar_mode: 'sliding',
-                      content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-                    }}
-                  />
-                )}
-              </Form.Item>
+                    plugins: [
+                      'advlist autolink lists link image charmap print preview anchor',
+                      'searchreplace visualblocks code fullscreen',
+                      'insertdatetime media table paste code help '
+                    ],
+                    height: 330,
+                    menubar: true,
+                    toolbar: 'undo redo | bold italic underline strikethrough |alignleft aligncenter alignright alignjustify | outdent indent |fontselect fontsizeselect formatselect |    numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
+                    quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
+                    toolbar_mode: 'sliding',
+                    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+                  }}
+                />
+                <div className={display.requirementOfJob?"value-required show":"value-required hide"}>Vui lòng nhập yêu cầu công việc</div>
 
-              <Form.Item className="form-label " label="Quyền lợi" labelCol={{span: 24}}
-                         style={textEditorStyle} wrapperCol={{span: 24}}>
-                {getFieldDecorator('interest', {
-                  initialValue: location.pathname.includes("edit") ? props.dataUpdate?.interest : props.createStepsState.request?.interest || 'hhgfhjgfhj',
-                  getValueFromEvent: e => e.target && e.target.getContent()&&console.log(e.target.getContent()),
-
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập quyển lợi',
-                      required: true,
+              </div>
+              <div className="form-label">
+                <div className="mb-2">Quyền lợi <span className="value-required">*</span></div>
+                <Editor
+                  onEditorChange={handleChangeInterest}
+                  //apiKey="b616i94ii3b9vlza43fus93fppxb1yxb8f03gh926u51qhs6"
+                  // onInit={(evt, editor) => editorRef.current = editor}
+                  init={{
+                    menu: {
+                      tc: {
+                        title: 'Comments',
+                        items: 'addcomment showcomments deleteallconversations'
+                      }
                     },
-                  ],
-                })(
-                  <Editor
-                    onChange={onFormChange}
-                    apiKey="b616i94ii3b9vlza43fus93fppxb1yxb8f03gh926u51qhs6"
-                    // onInit={(evt, editor) => editorRef.current = editor}
-                    init={{
-                      menu: {
-                        tc: {
-                          title: 'Comments',
-                          items: 'addcomment showcomments deleteallconversations'
-                        }
-                      },
-                      plugins: [
-                        'advlist autolink lists link image charmap print preview anchor',
-                        'searchreplace visualblocks code fullscreen',
-                        'insertdatetime media table paste code help '
-                      ],
-                      height: 330,
-                       menubar: true,
-                      branding: false,
-                      toolbar: 'undo redo | bold italic underline strikethrough |alignleft aligncenter alignright alignjustify | outdent indent |fontselect fontsizeselect formatselect |    numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
-                      autosave_interval: '30s',
-                      autosave_restore_when_empty: false,
-                      autosave_retention: '2m',
-                      image_caption: true,
-                      quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
-                      toolbar_mode: 'sliding',
-                      content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-                    }}
-                  />
-                )}
-              </Form.Item>
+                    plugins: [
+                      'advlist autolink lists link image charmap print preview anchor',
+                      'searchreplace visualblocks code fullscreen',
+                      'insertdatetime media table paste code help '
+                    ],
+                    height: 330,
+                    menubar: true,
+                    toolbar: 'undo redo | bold italic underline strikethrough |alignleft aligncenter alignright alignjustify | outdent indent |fontselect fontsizeselect formatselect |    numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
+                    quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
+                    toolbar_mode: 'sliding',
+                    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+                  }}
+                />
+                <div className={display.interest?"value-required show":"value-required hide"}>Vui lòng nhập quyền lợi</div>
+
+              </div>
 
             </Form>
           </div>
