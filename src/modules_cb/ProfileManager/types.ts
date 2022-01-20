@@ -82,11 +82,15 @@ export interface DeleteProfileRequest {
   id: string,
 }
 
-export interface CreateRejectCandidateRequest {
+export interface CreateRejectForm {
   idProfile?: string,
   reason: string,
   recruitmentId?: string,
-  statusCVId?: string
+}
+
+export interface CreateRejectCandidateRequest {
+  createReject: CreateRejectForm,
+  mailRequest: MailRequest,
 }
 
 export interface UploadAvatarRequest {
@@ -132,25 +136,21 @@ export interface BookingEntity {
   fullName: string,
   date: number,
 
-  // time: number,
-  // address: string,
-  // form: string,
-  // interviewer: string[],
-  // interviewee: string,
-  // content: string,
-  // question: string,
-  // comments: string,
-  // evaluation: string,
-  // statusId: string,
-  // statusName: string,
-  // reason: string,
-  // timeStart: number,
-  // timeFinish: number
-
-
 }
 
-export interface CreateBookingRequest {
+export interface MailForm {
+  subject: string,
+  content: string,
+  file?: any,
+}
+
+export interface MailRequest {
+  candidate?: MailForm,
+  presenters?: MailForm,
+  recruitmentCouncils?: MailForm
+}
+
+export interface CreateBookingForm {
   avatarColor: string,
   idProfile: string | any,
   floor: string,
@@ -161,26 +161,19 @@ export interface CreateBookingRequest {
   recruitmentId: string,
   type: string,
   date: number,
+}
 
-
-  // idProfile: string | any,
-  // time: number,
-  // avatarColor:string,
-  // address: string,
-  // form: string,
-  // interviewer: string[],
-  // interviewee: string,
-  // content: string,
-  // question: string[],
-  // comments: string[],
-  // evaluation: string,
-  // status: string,
-  // reason: string,
-  // timeStart: number,
-  // timeFinish: number
+export interface CreateBookingRequest {
+  createBookingForm: CreateBookingForm,
+  mailRequest: MailRequest,
 }
 
 export interface UpdateBookingRequest {
+  updateBookingForm: UpdateBookingForm,
+  mailRequest: MailRequest,
+}
+
+export interface UpdateBookingForm {
   date: number,
   floor: string,
   id: string,
@@ -189,29 +182,14 @@ export interface UpdateBookingRequest {
   interviewers: string[],
   note: string,
   recruitmentId: string,
-  type: string
+  type: string,
 
-  // id: string,
-  // idProfile: string,
-  // time: number,
-  // address: string,
-  // form: string,
-  // interviewer: string[],
-  // interviewee: string,
-  // content: string,
-  // question: string[],
-  // comments: string[],
-  // evaluation: string,
-  // status: string,
-  // reason: string,
-  // timeStart: number,
-  // timeFinish: number
 }
 
 export interface DataShowBooking {
   id: string,
   fullName: string,
-  idRecruitment:string,
+  idRecruitment: string,
 }
 
 //detail

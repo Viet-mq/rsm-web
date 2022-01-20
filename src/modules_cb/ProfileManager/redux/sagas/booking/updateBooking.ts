@@ -1,5 +1,6 @@
 import {
   getBooking,
+  showEmailUpdateForm,
   showFormBooking,
   UpdateBookingAction,
   updateBookingError,
@@ -21,6 +22,7 @@ export function* updateBookingAsync(action: UpdateBookingAction) {
     } else {
       NotificationSuccess('Thành công', "Cập nhật lịch phỏng vấn thành công");
       yield put(showFormBooking(false));
+      yield put(showEmailUpdateForm(false));
       const params = yield select((state: RootState) => state.profileManager.getBooking.params);
       yield put(getBooking(params))
       const paramsSchedule = yield select((state: RootState) => state.scheduleManager.getSchedule.params);

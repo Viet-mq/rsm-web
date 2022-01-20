@@ -3,6 +3,7 @@ import {
   createBookingError,
   createBookingSuccess,
   getBooking,
+  showEmailCreateForm,
   showFormBooking
 } from "../../actions";
 import * as apis from "../../services/apis";
@@ -22,6 +23,7 @@ export function* createBookingAsync(action: CreateBookingAction) {
       yield put(createBookingSuccess(rs));
       NotificationSuccess('Thành công', "Lập lịch phỏng vấn thành công");
       yield put(showFormBooking(false));
+      yield put(showEmailCreateForm(false));
       const params = yield select((state: RootState) => state.profileManager.getBooking.params);
       const paramsSchedule = yield select((state: RootState) => state.scheduleManager.getSchedule.params);
       yield put(getBooking(params))

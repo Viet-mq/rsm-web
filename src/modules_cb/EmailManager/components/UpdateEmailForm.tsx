@@ -115,7 +115,7 @@ function UpdateEmailForm(props: IProps) {
                   ],
                 })(
                   <Editor
-                    apiKey="b616i94ii3b9vlza43fus93fppxb1yxb8f03gh926u51qhs6"
+                    //apiKey="b616i94ii3b9vlza43fus93fppxb1yxb8f03gh926u51qhs6"
                     // onInit={(evt, editor) => editorRef.current = editor}
                     init={{
                       menu: {

@@ -150,29 +150,6 @@ function ListProfile(props: ListProfileProps) {
 
     },
     {
-      title: 'Vòng tuyển dụng',
-      dataIndex: 'statusCVName',
-      width: 150,
-      key: 'statusCVName',
-      render: (text, record) => {
-        return <div>
-          {
-            record.statusCVName === "APPLY" ? <Badge status="default"/> :
-              record.statusCVName === "INTERVIEW" ? <Badge status="processing"/> :
-                record.statusCVName === "OFFER" ? <Badge status="warning"/> :
-                  record.statusCVName === "HIRED" ? <Badge status="success"/> :
-                    record.statusCVName === "REJECT" ? <Badge status="error"/> :
-                      record.statusCVName === "TEST" ? <Badge color="purple"/> : null
-          }
-
-          <span>{record.statusCVName}</span>
-        </div>
-      },
-      sorter: (a, b) => a.statusCVName.length - b.statusCVName.length,
-      sortOrder: state.sortedInfo.columnKey === 'statusCVName' && state.sortedInfo.order,
-      ellipsis: true,
-    },
-    {
       title: 'Vị trí công việc',
       dataIndex: 'jobName',
       width: 150,
