@@ -5,6 +5,7 @@ import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {showFormCreate, showFormUpdate} from "../redux/actions";
 import Loading from "../../../components/Loading";
+import {Link} from "react-router-dom";
 
 const mapStateToProps = ({
                            jobManager: {
@@ -47,17 +48,14 @@ function EmailManagerPages(props: IProps) {
 
       <div className="flex-space-between">
         <div className="font-20-bold-500">Mẫu Email</div>
-        <div>
-          <Button type={"primary"} style={{width:235}} onClick={handleCreate}>
+        <Link to={`/email-manager/create`}>
+          <Button type={"primary"} style={{width:235}}>
             <Icon type="plus"/>THÊM MẪU EMAIL MỚI
           </Button>
-        </div>
+        </Link>
       </div>
 
       <ListEmail/>
-
-      {/*<CreateJobForm/>*/}
-      {/*<UpdateJobForm/>*/}
 
       {props.create.loading ||
       props.list.loading ||

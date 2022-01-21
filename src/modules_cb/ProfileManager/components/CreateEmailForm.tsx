@@ -23,7 +23,8 @@ const connector = connect(mapStateToProps,
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends FormComponentProps, ReduxProps {
-  reqCreate: any
+  reqCreate: any,
+  profile:any,
 }
 
 function CreateEmailForm(props: IProps) {
@@ -46,8 +47,6 @@ function CreateEmailForm(props: IProps) {
   }
 
   function handleSubmitForm(e: FormEvent) {
-
-
     e.preventDefault();
     (e.target as any).disabled = true;
     (e.target as any).disabled = false;
@@ -63,9 +62,15 @@ function CreateEmailForm(props: IProps) {
           content: values.contentRecruitmentCouncil,
         }
 
+        let mailFormPresenter: MailForm = {
+          subject: values.subjectPresenter,
+          content: values.contentPresenter,
+        }
+
         let mailRequest: MailRequest = {
           candidate: mailFormCandidate,
-          recruitmentCouncils: mailFormInterviewers
+          recruitmentCouncils: mailFormInterviewers,
+          presenters:mailFormPresenter
         }
 
         let req: CreateBookingRequest = {
@@ -166,11 +171,9 @@ function CreateEmailForm(props: IProps) {
                     }}
                   />
                   <div className={display ? "value-required show" : "value-required hide"}>Vui lòng nhập nội dung</div>
-
                 </div>
 
                 <div className="font-15-bold-500 mt-5 mb-2">Nội dung email gửi cho Hội đồng tuyển dụng</div>
-
                 <div style={{border: "1px solid #dddde4", padding: 15}}>
                   <Form.Item label="Đến" className="form-label" {...formItemStyle}>
                     {getFieldDecorator('name', {
@@ -215,8 +218,56 @@ function CreateEmailForm(props: IProps) {
                     })(<TextArea placeholder="Nhập nội dung" style={{height: 120}} className="bg-white text-black"/>
                     )}
                   </Form.Item>
-
                 </div>
+
+                <div className="font-15-bold-500 mt-5 mb-2">Nội dung email gửi cho người giới thiệu</div>
+                <div style={{border: "1px solid #dddde4", padding: 15}}>
+                  <Form.Item label="Đến" className="form-label" {...formItemStyle}>
+                    {getFieldDecorator('username', {
+                      initialValue: props.profile?.username || undefined,
+                      rules: [
+                        {
+                          message: 'Vui lòng nhập tên trường',
+                          required: false,
+                        },
+                      ],
+                    })(<Select className="bg-white text-black" style={{...fontWeightStyle, width: "100%"}}
+                               showSearch
+                               disabled
+                               showArrow={false}
+                    >
+                      {props.listAccount.rows?.map((item: any, index: any) => (
+                        <Option key={index} value={item.username}>{item.fullName}</Option>
+                      ))}
+                    </Select>)}
+                  </Form.Item>
+
+                  <Form.Item label="Tiêu đề" className="form-label" {...formItemStyle}>
+                    {getFieldDecorator('subjectPresenter', {
+                      initialValue: 'Lịch phỏng vấn vị trí {job}',
+                      rules: [
+                        {
+                          message: 'Vui lòng nhập tên trường',
+                          required: false,
+                        },
+                      ],
+                    })(<Input placeholder="Nhập tiêu đề" disabled className="bg-white text-black"/>)}
+                  </Form.Item>
+
+                  <Form.Item label="Mô tả" className="form-label" {...formItemStyle}>
+                    {getFieldDecorator('contentPresenter', {
+                      initialValue: '',
+                      rules: [
+                        {
+                          message: 'Vui lòng nhập tên trường',
+                          required: false,
+                        },
+                      ],
+                    })(<TextArea placeholder="Nhập nội dung" style={{height: 120}} className="bg-white text-black"/>
+                    )}
+                  </Form.Item>
+                </div>
+
               </Form>
             </div>
 

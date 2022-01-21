@@ -1,6 +1,7 @@
 import {ListResponseBase2, ResponseBase2} from "src/models/common";
 import {EXPORT, GET, POST, POSTIMAGE} from "src/services";
 import {
+  ChangeProcessRequest,
   CreateBookingRequest,
   CreateRejectCandidateRequest,
   NoteEntity,
@@ -60,8 +61,22 @@ export const deleteProfile = async (params?: any): Promise<ResponseBase2> => {
 };
 
 
-export const changeProcess = async (params?: any): Promise<ResponseBase2> => {
-  return (await POST('api-svc/profile/change', params)) as ResponseBase2;
+export const changeProcess = async (params?: ChangeProcessRequest): Promise<ResponseBase2> => {
+  let formData:any = new FormData();
+  if(params?.mailRequest?.candidate?.content) formData.append('contentCandidate', params?.mailRequest.candidate?.content);
+  if(params?.mailRequest?.presenters?.content) formData.append('contentPresenter',  params?.mailRequest.presenters?.content);
+  if(params?.mailRequest?.candidate?.file) formData.append('fileCandidates',  params?.mailRequest.candidate?.file);
+  if(params?.mailRequest?.presenters?.file) formData.append('filePresenters', params?.mailRequest.presenters?.file);
+  if(params?.changeProcess.idProfile) formData.append('idProfile', params?.changeProcess.idProfile);
+  if( params?.changeProcess.statusCVId) formData.append('statusCVId', params?.changeProcess.statusCVId);
+  if(params?.changeProcess.recruitmentId) formData.append('recruitmentId', params?.changeProcess.recruitmentId);
+  if(params?.mailRequest?.candidate?.subject) formData.append('subjectCandidate',  params?.mailRequest.candidate?.subject);
+  if(params?.mailRequest?.presenters?.subject) formData.append('subjectPresenter', params?.mailRequest.presenters?.subject);
+  return POSTIMAGE('api-svc/profile/change', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
 };
 
 export const updateProfile = async (params?: any): Promise<ResponseBase2> => {

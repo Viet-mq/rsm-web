@@ -30,6 +30,7 @@ import CreateLayout from "./modules_cb/RecruitmentManager/createRecruitment/layo
 import DetailRecruitment from "./modules_cb/RecruitmentManager/components/DetailRecruitment";
 import EmailManagerPages from "./modules_cb/EmailManager/pages/EmailManagerPages";
 import UpdateEmailForm from "./modules_cb/EmailManager/components/UpdateEmailForm";
+import CreateEmailForm from "./modules_cb/EmailManager/components/CreateEmailForm";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -79,6 +80,7 @@ const Routes = (props: PropsFromRedux) => {
         <Route path="/address-manager" component={AddressManagerPages} isLogin={props.isLogin}/>
         <Route path="/email-manager" exact component={EmailManagerPages} isLogin={props.isLogin}/>
         <Route path="/email-manager/detail"  component={UpdateEmailForm} isLogin={props.isLogin}/>
+        <Route path="/email-manager/create"  component={CreateEmailForm} isLogin={props.isLogin}/>
         <Route path="/recruitment-manager" exact component={RecruitmentManagerPages} isLogin={props.isLogin}/>
         <Route path="/recruitment-manager/create" isLogin={props.isLogin}
                render={(props: any) => (<CreateLayout path={"create"}/>)}/>

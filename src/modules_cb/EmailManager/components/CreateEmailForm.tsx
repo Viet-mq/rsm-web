@@ -9,53 +9,31 @@ import Search from "antd/es/input/Search";
 import {FormComponentProps} from "antd/lib/form";
 import {Editor} from "@tinymce/tinymce-react";
 import {Link} from "react-router-dom";
+import {changeProcess, showChangeProcessForm} from "../../ProfileManager/redux/actions";
+import {getListRecruitment} from "../../RecruitmentManager/redux/actions";
 
-const {TabPane} = Tabs;
+const mapStateToProps = (state: RootState) => ({
+  profileManager: state.profileManager,
+  recruitment: state.recruitmentManager.list,
+  listAccount: state.accountManager.list,
 
-const mapStateToProps = ({jobManager: {list}}: RootState) => ({list})
-const connector = connect(mapStateToProps, {
-  getListJob,
-  deleteJob,
-  showFormCreate,
-  showFormUpdate,
-  updateJob
-});
+})
 
+const connector = connect(mapStateToProps,
+  {
+    showChangeProcessForm,
+    changeProcess,
+    getListRecruitment
+  })
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends ReduxProps, FormComponentProps {
 }
 
-function UpdateEmailForm(props: IProps) {
+function CreateEmailForm(props: IProps) {
   const {getFieldDecorator} = props.form;
-  let screenWidth = document.documentElement.clientWidth;
-  const {TextArea} = Input;
   const formItemHeight = {height: 250}
-  const [page, setPage] = useState(1);
-  const scroll = screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false};
-  const size = 10;
-  const operations = <Search
-    placeholder="Tìm kiếm nhanh mẫu email"
-    // onSearch={value => onSearch(value)}
-    style={{width: 235}}
-  />;
 
-  useEffect(() => {
-    props.getListJob({page: 1, size: 100});
-  }, []);
-
-  const handleDelete = (event: any, entity: JobEntity) => {
-    event.stopPropagation();
-    let req: DeleteJobRequest = {
-      id: entity.id
-    }
-    props.deleteJob(req);
-  }
-
-  const handleEdit = (event: any, entity: JobEntity) => {
-    event.stopPropagation();
-    props.showFormUpdate(true, entity);
-  }
 
   const inputEl = useRef<any>(null);
   const onButtonClick = () => {
@@ -174,4 +152,4 @@ function UpdateEmailForm(props: IProps) {
 
 }
 
-export default connector(Form.create<IProps>()(UpdateEmailForm));
+export default connector(Form.create<IProps>()(CreateEmailForm));

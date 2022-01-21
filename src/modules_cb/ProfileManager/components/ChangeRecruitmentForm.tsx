@@ -6,7 +6,7 @@ import React, {useEffect, useState} from "react";
 import 'devextreme/dist/css/dx.light.css';
 import {changeProcess, showChangeProcessForm} from "../redux/actions";
 import {getListRecruitment} from "../../RecruitmentManager/redux/actions";
-import {ChangeProcessRequest} from "../types";
+import {ChangeProcessRequest, ProcessForm} from "../types";
 import {InterviewProcess, RecruitmentEntity} from "../../RecruitmentManager/types";
 
 const {Option} = Select;
@@ -66,10 +66,14 @@ function ChangeRecruitmentForm(props: IProps) {
     if (addRecruitment) {
       const findRecruitment = props.recruitment.rows.find((item: any) => item.id === addRecruitment)
 
+      let recruitmentForm: ProcessForm = ({
+        idProfile: props.profileManager.showForm.change_process?.idProfile,
+        recruitmentId: props.profileManager.showForm.change_process?.recruitmentId,
+        statusCVId: process
+      })
+
       let req: ChangeProcessRequest = {
-        idProfile: props.profileManager.showForm?.id_detail,
-        recruitmentId: addRecruitment,
-        statusCVId: findRecruitment.interviewProcess[0].id,
+        changeProcess: recruitmentForm,
       }
       props.changeProcess(req,true)
     }
@@ -89,10 +93,14 @@ function ChangeRecruitmentForm(props: IProps) {
   }
 
   function btnChangeRecruitmentClicked() {
-    let req: ChangeProcessRequest = {
+    let recruitmentForm: ProcessForm = ({
       idProfile: props.profileManager.showForm?.id_detail,
       recruitmentId: valuesSelect,
       statusCVId: process,
+    })
+
+    let req: ChangeProcessRequest = {
+      changeProcess: recruitmentForm,
     }
     props.changeProcess(req,true)
   }

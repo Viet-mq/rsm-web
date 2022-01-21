@@ -246,3 +246,13 @@ img {
 .width-apply-position {
   width: calc(260px / 6);
 }
+
+.tab-detail-logs{
+  background: $color-bg;
+  span {
+    padding-left: 15px;
+    box-sizing: border-box;
+  }
+  padding: 10px 15px 1px 0;
+
+}

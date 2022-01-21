@@ -21,9 +21,23 @@ import {
   showFormUploadCV,
   updateNote
 } from "../redux/actions";
-import {Avatar, Badge, Button, Icon, Pagination, Popconfirm, Popover, Steps, Table, Tag, Timeline, Tooltip} from "antd";
+import {
+  Avatar,
+  Badge,
+  Button,
+  Icon,
+  Pagination,
+  Popconfirm,
+  Popover,
+  Steps,
+  Table,
+  Tabs,
+  Tag,
+  Timeline,
+  Tooltip
+} from "antd";
 import React, {useEffect, useState} from "react";
-import {ChangeProcessRequest, DataShowBooking, DeleteNoteRequest, DetailCV, NoteEntity} from "../types";
+import {ChangeProcessRequest, DataShowBooking, DeleteNoteRequest, DetailCV, NoteEntity, ProcessForm} from "../types";
 import moment from "moment";
 import {ColumnProps} from "antd/lib/table";
 import {emptyText} from "../../../configs/locales";
@@ -47,6 +61,8 @@ import AddToTalentPoolForm from "./AddToTalentPoolForm";
 import UpdateDetailProfileForm from "./UpdateDetailProfileForm";
 
 const {Step} = Steps;
+const {TabPane} = Tabs;
+
 
 const mapStateToProps = (state: RootState) => ({
   profileManager: state.profileManager,
@@ -86,6 +102,7 @@ interface DetailProfileFormProps extends ReduxProps {
 
 function DetailProfileForm(props: DetailProfileFormProps) {
   const [page, setPage] = useState(1);
+  const [pageEmail, setPageEmail] = useState(1);
   const size = 10;
   const {
     showForm,
@@ -143,18 +160,14 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     </li>
 
   </ul>);
-
-
-  const contentMore = (
-    <ul style={{width: 220}} className="popup-popover">
+  const contentMore = (<ul style={{width: 220}} className="popup-popover">
       <li>
         <a onClick={handleShowRecruitment}><Icon type="inbox" className="mr-1"/>Chuyển sang tin khác</a>
       </li>
       <li>
         <a onClick={handleShowTalentPools}><MdOutlineSource className="mr-1"/>Chuyển đến kho tiềm năng</a>
       </li>
-    </ul>
-  );
+    </ul>);
   const columns: ColumnProps<NoteEntity>[] = [
     {
       title: "Người phỏng vấn",
@@ -256,21 +269,33 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       params: getActivity.params,
       data: getActivity.rows,
       totalPage: getActivity.total,
-      current: page,
+      current: activeLogs.current,
       minIndex: 0,
       maxIndex: size
     })
-  }, [getActivity.total])
+  }, [getActivity])
 
   useEffect(() => {
     if (showForm.id_detail) {
       props.getDetailProfile({idProfile: showForm.id_detail});
-      props.getActivityLogs({idProfile: showForm.id_detail});
       props.getBooking({idProfile: showForm.id_detail});
       props.getListNote({idProfile: showForm.id_detail})
       if (detail.result?.recruitmentId) props.getListRecruitment({id: detail.result?.recruitmentId})
     }
   }, [showForm.id_detail])
+
+  useEffect(() => {
+    if (showForm.id_detail) {
+      console.log("hahah")
+      props.getActivityLogs({idProfile: showForm.id_detail,page:activeLogs.current,size:10});
+    }
+  }, [showForm.id_detail,activeLogs.current])
+
+  // useEffect(() => {
+  //   if (showForm.id_detail) {
+  //     props.getActivityLogs({idProfile: showForm.id_detail,page:page,size:10});
+  //   }
+  // }, [pageEmail])
 
 
   function handleUploadAvatar(e: any) {
@@ -334,7 +359,6 @@ function DetailProfileForm(props: DetailProfileFormProps) {
         general: 0,
         detail: 24
       }
-
     props.showFormDetail(req);
   }
 
@@ -377,17 +401,16 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       let req: DataShowBooking = {
         id: detail.result.id,
         fullName: detail.result.fullName,
-        idRecruitment: detail.result.recruitmentId
+        idRecruitment: detail.result.recruitmentId,
+        username:detail.result.username
       }
       props.showFormBooking(true, req);
     }
-
   }
 
   const handleVisibleChange = (visible: any) => {
     setVisiblePopover(visible);
   };
-
 
   const handleDeleteNote = (event: any, entity: NoteEntity) => {
     event.stopPropagation();
@@ -395,22 +418,18 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       id: entity.id
     }
     props.deleteNote({id: req.id});
-
   }
 
   const getInitials = (name: string) => {
     if (name) {
       let initials: any = name.split(' ');
-
       if (initials.length > 1) {
         initials = initials.shift().charAt(0) + initials.pop().charAt(0);
       } else {
         initials = name.substring(0, 2);
       }
-
       return initials.toUpperCase();
     }
-
   }
 
   function handleShowReasonRejectForm(event: any) {
@@ -419,7 +438,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
   }
 
   function handleChangeProcess() {
-    let req: ChangeProcessRequest = (
+    let req: ProcessForm = (
       {
         idProfile: detail.result?.id,
         recruitmentId: detail.result?.recruitmentId,
@@ -707,49 +726,54 @@ function DetailProfileForm(props: DetailProfileFormProps) {
         </div>
 
         <div className="detail-paragraph-5">
-          <div className="detail-paragraph-5__title">
-            <h1>Activity logs</h1>
-          </div>
+          <Tabs defaultActiveKey="1" className="tab-detail">
+            <TabPane tab="ACTIVITY LOGS" className="tab-candidate-detail" key="1" style={{background: "#e8e8e8"}}>
+              <div className='tab-detail-logs'>
+                <Timeline style={{padding: '15px'}}>
+                  {activeLogs.data?.map((item: any, index: any) => {
+                    let iconType = icon.find((icon: any) => icon.type === item.type);
+                    return index >= activeLogs.minIndex &&
+                      index < activeLogs.maxIndex &&
+                      <Timeline.Item key={index} dot={
+                        <Icon type={iconType?.iconType} theme="twoTone" twoToneColor={iconType?.twoToneColor} style={{
+                          borderRadius: '50%',
+                          backgroundColor: iconType?.twoToneColor,
+                          width: '40px',
+                          height: '40px',
+                          paddingTop: '10px',
+                          fontSize: '20px',
+                          // marginTop:'10px'
+                        }}/>
 
-          <div className='detail-paragraph-5__content'>
-            <Timeline style={{padding: '15px'}}>
-              {activeLogs.data?.map((item: any, index: any) => {
-                let iconType = icon.find((icon: any) => icon.type === item.type);
-                return index >= activeLogs.minIndex &&
-                  index < activeLogs.maxIndex &&
-                  <Timeline.Item key={index} dot={
-                    <Icon type={iconType?.iconType} theme="twoTone" twoToneColor={iconType?.twoToneColor} style={{
-                      borderRadius: '50%',
-                      backgroundColor: iconType?.twoToneColor,
-                      width: '40px',
-                      height: '40px',
-                      paddingTop: '10px',
-                      fontSize: '20px',
-                      // marginTop:'10px'
-                    }}/>
-
-                  }>
+                      }>
                 <span
                   style={{textTransform: 'uppercase'}}>{moment(unixTimeToDate(item.time)).format('MMM DD, YYYY')}
                 </span>
-                    <br/>
-                    <span>
+                        <br/>
+                        <span>
                     {item.fullName} {item.action} at {moment(unixTimeToDate(item.time)).format('HH:mm DD/MM/YYYY')}
                   </span>
-                  </Timeline.Item>
-              })}
+                      </Timeline.Item>
+                  })}
 
-            </Timeline>
+                </Timeline>
+                <Pagination
+                            current={activeLogs.current}
+                            total={activeLogs.totalPage}
+                            pageSize={size}
+                            showTotal={(total, range) => `Đang xem ${range[0]}- ${range[1]} trong tổng số ${total} mục`}
+                            onChange={handleChangeActivityLogs}
+                            className="pagination"
+                />
+              </div>
 
-            <Pagination showQuickJumper
-                        current={activeLogs.current}
-                        total={activeLogs.totalPage}
-                        pageSize={size}
-                        showTotal={(total, range) => `Đang xem ${range[0]}- ${range[1]} trong tổng số ${total} mục`}
-                        onChange={handleChangeActivityLogs}
-                        className="pagination"
-            />
-          </div>
+            </TabPane>
+
+            <TabPane tab="EMAIL LOGS" key="2" style={{background: "#e8e8e8", marginLeft: 40}}>
+
+            </TabPane>
+          </Tabs>
+
         </div>
 
       </div>
