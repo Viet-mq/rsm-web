@@ -1,30 +1,25 @@
-import {
-  CreateJobAction,
-  createJobError,
-  createJobSuccess,
-  getListJob,
-  showFormCreate
-} from "../actions";
+import {CreateEmailAction, createEmailError, createEmailSuccess, getListEmail} from "../actions";
 import * as apis from "../services/apis";
 import {put, select} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
 import {AppError} from "src/models/common";
 import {RootState} from "src/redux/reducers";
+import history from "../../../../history";
 
-export function* createJobAsync(action: CreateJobAction) {
+export function* createEmailAsync(action: CreateEmailAction) {
   try {
-    const rs = yield apis.createJob(action.request);
-    yield put(createJobSuccess(rs));
+    const rs = yield apis.createEmail(action.request);
+    yield put(createEmailSuccess(rs));
     if (rs.code !== 0) {
-      NotificationError('Tạo Job không thành công', "Lỗi: " + rs.message)
+      NotificationError('Tạo Email không thành công', "Lỗi: " + rs.message)
     } else {
-      NotificationSuccess('Thành công', "Tạo Job thành công");
-      yield put(showFormCreate(false));
-      const params = yield select((state: RootState) => state.jobManager.list.params);
-      yield put(getListJob(params))
+      NotificationSuccess('Thành công', "Tạo Email thành công");
+      history.push('/email-manager');
+      const params = yield select((state: RootState) => state.emailManager.list.params);
+      yield put(getListEmail(params))
     }
   } catch (e) {
-    yield put(createJobError(new AppError(e.message)));
-    NotificationError('Tạo Job không thành công', "Lỗi: " + e.message);
+    yield put(createEmailError(new AppError(e.message)));
+    NotificationError('Tạo Email không thành công', "Lỗi: " + e.message);
   }
 }

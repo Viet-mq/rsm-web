@@ -1,28 +1,28 @@
-import {CreateJobRequest} from "../../types";
+import {CreateEmailRequest} from "../../types";
 import {AppError, ResponseBase2} from "src/models/common";
 
-export interface CreateJobAction {
+export interface CreateEmailAction {
   type: string,
-  request?: CreateJobRequest,
+  request?: CreateEmailRequest,
   response?: ResponseBase2,
   error?: AppError
 }
 
-export const CREATE_JOB = "CREATE_JOB";
-export const CREATE_JOB_SUCCESS = "CREATE_JOB_SUCCESS";
-export const CREATE_JOB_ERROR = "CREATE_JOB_ERROR";
+export const CREATE_EMAIL = "CREATE_EMAIL";
+export const CREATE_EMAIL_SUCCESS = "CREATE_EMAIL_SUCCESS";
+export const CREATE_EMAIL_ERROR = "CREATE_EMAIL_ERROR";
 
-export const createJob = (request: CreateJobRequest): CreateJobAction => ({
-  type: CREATE_JOB,
+export const createEmail = (request: CreateEmailRequest): CreateEmailAction => ({
+  type: CREATE_EMAIL,
   request
 });
 
-export const createJobSuccess = (response: ResponseBase2): CreateJobAction => ({
-  type: CREATE_JOB_SUCCESS,
+export const createEmailSuccess = (response: ResponseBase2): CreateEmailAction => ({
+  type: CREATE_EMAIL_SUCCESS,
   response
 });
 
-export const createJobError = (error: AppError): CreateJobAction => ({
-  type: CREATE_JOB_ERROR,
+export const createEmailError = (error: AppError): CreateEmailAction => ({
+  type: CREATE_EMAIL_ERROR,
   error
 });

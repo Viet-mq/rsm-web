@@ -20,6 +20,7 @@ const connector = connect(mapStateToProps,
     createBooking,
     showEmailCreateForm,
   });
+
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends FormComponentProps, ReduxProps {

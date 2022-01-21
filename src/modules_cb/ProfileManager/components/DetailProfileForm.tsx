@@ -751,7 +751,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
                 </span>
                         <br/>
                         <span>
-                    {item.fullName} {item.action} at {moment(unixTimeToDate(item.time)).format('HH:mm DD/MM/YYYY')}
+                    {item.fullName} {item.action} lúc {moment(unixTimeToDate(item.time)).format('HH:mm DD/MM/YYYY')}
                   </span>
                       </Timeline.Item>
                   })}

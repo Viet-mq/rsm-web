@@ -3,26 +3,20 @@ import ListEmail from "../components/list/ListEmail";
 import {Button, Icon} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {showFormCreate, showFormUpdate} from "../redux/actions";
 import Loading from "../../../components/Loading";
 import {Link} from "react-router-dom";
+import {createBooking, showEmailCreateForm} from "../../ProfileManager/redux/actions";
 
-const mapStateToProps = ({
-                           jobManager: {
-                             showForm,
-                             list,
-                             create,
-                             deleteJob,
-                             update,
-                           }
-                         }: RootState) => ({
-  showForm,
-  list,
-  create,
-  deleteJob,
-  update,
+const mapStateToProps = (state: RootState) => ({
+  emailManager: state.emailManager,
+
 })
-const connector = connect(mapStateToProps, {showFormCreate, showFormUpdate});
+
+const connector = connect(mapStateToProps,
+  {
+    createBooking,
+    showEmailCreateForm,
+  });
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -30,26 +24,19 @@ interface IProps extends ReduxProps {
 }
 
 function EmailManagerPages(props: IProps) {
+  let {list,create,update,deleteJob} = props.emailManager
+
   useEffect(() => {
     document.title = "Mẫu email";
   }, []);
 
-  const handleCreate = (e: any) => {
-    e.preventDefault();
-    if (e?.target) {
-      e.target.disabled = true;
-      e.target.disabled = false;
-    }
-    props.showFormCreate(true);
-  }
 
   return (
-    <div className="page-container">
-
+    <div className="page-container" style={{background: "white"}}>
       <div className="flex-space-between">
         <div className="font-20-bold-500">Mẫu Email</div>
         <Link to={`/email-manager/create`}>
-          <Button type={"primary"} style={{width:235}}>
+          <Button type={"primary"} style={{width: 235}}>
             <Icon type="plus"/>THÊM MẪU EMAIL MỚI
           </Button>
         </Link>
@@ -57,10 +44,10 @@ function EmailManagerPages(props: IProps) {
 
       <ListEmail/>
 
-      {props.create.loading ||
-      props.list.loading ||
-      props.deleteJob.loading ||
-      props.update.loading ?
+      {create.loading ||
+      list.loading ||
+      deleteJob.loading ||
+      update.loading ?
         <Loading/> : null}
 
     </div>
