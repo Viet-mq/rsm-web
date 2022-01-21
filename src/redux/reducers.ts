@@ -1,5 +1,6 @@
 import {combineReducers} from 'redux';
 
+
 import auth, {AuthModuleState} from '../modules/Auth/redux/reducers';
 import dashboard, {DashboardModuleState} from '../modules/Dashboard/redux/reducers';
 import accountManager, {AccountManagerModuleState} from "../modules_cb/AccountManager/redux/reducers";
@@ -22,6 +23,7 @@ import addressManager,{AddressManagerModuleState} from "../modules_cb/AddressMan
 import reasonRejectManager,{ReasonRejectManagerModuleState} from "../modules_cb/ReasonRejectManager/redux/reducers";
 import scheduleManager,{ScheduleManagerModuleState} from "../modules_cb/ScheduleManager/redux/reducers";
 import recruitmentManager,{RecruitmentManagerModuleState} from "../modules_cb/RecruitmentManager/redux/reducers";
+import emailManager,{EmailManagerModuleState} from "../modules_cb/EmailManager/redux/reducers";
 
 export interface RootState {
   auth: AuthModuleState;
@@ -45,7 +47,8 @@ export interface RootState {
   addressManager:AddressManagerModuleState,
   reasonRejectManager:ReasonRejectManagerModuleState,
   scheduleManager: ScheduleManagerModuleState,
-  recruitmentManager:RecruitmentManagerModuleState
+  recruitmentManager:RecruitmentManagerModuleState,
+  emailManager:EmailManagerModuleState,
 }
 
 export default combineReducers<RootState>({
@@ -70,6 +73,7 @@ export default combineReducers<RootState>({
   addressManager,
   reasonRejectManager,
   scheduleManager,
-  recruitmentManager
+  recruitmentManager,
+  emailManager,
 
 });

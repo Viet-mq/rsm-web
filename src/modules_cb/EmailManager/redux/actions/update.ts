@@ -1,28 +1,35 @@
-import {UpdateJobRequest} from "../../types";
+import {UpdateEmailRequest} from "../../types";
 import {AppError, ResponseBase2} from "src/models/common";
 
-export interface UpdateJobAction {
+export interface UpdateEmailAction {
   type: string,
-  request?: UpdateJobRequest,
+  request?: UpdateEmailRequest,
   response?: ResponseBase2,
-  error?: AppError
+  error?: AppError,
+  dataUpdate?:UpdateEmailRequest
 }
 
-export const UPDATE_JOB = "UPDATE_JOB";
-export const UPDATE_JOB_SUCCESS = "UPDATE_JOB_SUCCESS";
-export const UPDATE_JOB_ERROR = "UPDATE_JOB_ERROR";
+export const UPDATE_EMAIL = "UPDATE_EMAIL";
+export const UPDATE_EMAIL_SUCCESS = "UPDATE_EMAIL_SUCCESS";
+export const UPDATE_EMAIL_ERROR = "UPDATE_EMAIL_ERROR";
+export const SHOW_UPDATE_EMAIL_FORM = "SHOW_UPDATE_EMAIL_FORM";
 
-export const updateJob = (request: UpdateJobRequest): UpdateJobAction => ({
-  type: UPDATE_JOB,
+export const updateEmail = (request: UpdateEmailRequest): UpdateEmailAction => ({
+  type: UPDATE_EMAIL,
   request
 });
 
-export const updateJobSuccess = (response: ResponseBase2): UpdateJobAction => ({
-  type: UPDATE_JOB_SUCCESS,
+export const showFormUpdate = (dataUpdate: UpdateEmailRequest): UpdateEmailAction => ({
+  type: SHOW_UPDATE_EMAIL_FORM,
+  dataUpdate
+});
+
+export const updateEmailSuccess = (response: ResponseBase2): UpdateEmailAction => ({
+  type: UPDATE_EMAIL_SUCCESS,
   response
 });
 
-export const updateJobError = (error: AppError): UpdateJobAction => ({
-  type: UPDATE_JOB_ERROR,
+export const updateEmailError = (error: AppError): UpdateEmailAction => ({
+  type: UPDATE_EMAIL_ERROR,
   error
 });

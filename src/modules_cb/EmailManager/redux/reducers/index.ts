@@ -1,22 +1,19 @@
 import {combineReducers} from "redux";
-import list, {JobListState} from "./list";
+import list, {ListEmailState} from "./list";
 import deleteJob, {DeleteJobState} from "./deleteJob";
-import create, {CreateJobState} from "./create";
-import showForm, {JobFormState} from "./showForm";
-import update, {UpdateJobState} from "./update";
+import create, {CreateEmailState} from "./create";
+import update, {UpdateEmailState} from "./update";
 
-export interface JobManagerModuleState {
-  list: JobListState,
+export interface EmailManagerModuleState {
+  list: ListEmailState,
   deleteJob: DeleteJobState,
-  create: CreateJobState,
-  showForm: JobFormState,
-  update: UpdateJobState,
+  create: CreateEmailState,
+  update: UpdateEmailState,
 }
 
-export default combineReducers<JobManagerModuleState>({
+export default combineReducers<EmailManagerModuleState>({
   list,
   deleteJob,
   create,
-  showForm,
   update,
 });

@@ -1,42 +1,39 @@
-import {JobEntity} from "../../types";
+import {EmailEntity} from "../../types";
 import {AppError} from "src/models/common";
 import * as Actions from "../actions";
-import {JobListAction} from "../actions";
+import {ListEmailAction} from "../actions";
 
-export interface JobListState {
+export interface ListEmailState {
   loading: boolean,
   params?: any,
-  rows?: JobEntity[]|any,
+  rows?: EmailEntity[]|any,
   total?: number,
   error?: AppError
 }
 
-const initState: JobListState = {
+const initState: ListEmailState = {
   loading: false,
   params: {},
   rows: [],
   total: 0
 }
 
-const saveJob:any=localStorage.getItem('list-job');
-const dataJob:JobListState = JSON.parse(saveJob)?JSON.parse(saveJob):initState
-
-export default (state = dataJob, {type, total, rows, params, error}: JobListAction): JobListState => {
+export default (state = initState, {type, total, rows, params, error}: ListEmailAction): ListEmailState => {
   switch (type) {
-    case Actions.GET_LIST_JOB:
+    case Actions.GET_LIST_EMAIL:
       return {
         ...state,
         params,
         loading: true
       }
-    case Actions.GET_LIST_JOB_SUCCESS:
+    case Actions.GET_LIST_EMAIL_SUCCESS:
       return {
         ...state,
         total,
         rows,
         loading: false
       }
-    case Actions.GET_LIST_JOB_ERROR:
+    case Actions.GET_LIST_EMAIL_ERROR:
       return {
         ...state,
         error,

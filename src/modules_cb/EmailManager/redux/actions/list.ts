@@ -1,30 +1,30 @@
-import {JobEntity} from "../../types";
+import {EmailEntity} from "../../types";
 import {AppError} from "src/models/common";
 
-export interface JobListAction {
+export interface ListEmailAction {
   type: string,
   params?: any,
-  rows?: JobEntity[],
+  rows?: EmailEntity[],
   total?: number,
   error?: AppError
 }
 
-export const GET_LIST_JOB = "GET_LIST_JOB";
-export const GET_LIST_JOB_SUCCESS = "GET_LIST_JOB_SUCCESS";
-export const GET_LIST_JOB_ERROR = "GET_LIST_JOB_ERROR";
+export const GET_LIST_EMAIL = "GET_LIST_EMAIL";
+export const GET_LIST_EMAIL_SUCCESS = "GET_LIST_EMAIL_SUCCESS";
+export const GET_LIST_EMAIL_ERROR = "GET_LIST_EMAIL_ERROR";
 
-export const getListJob = (params: any): JobListAction => ({
-  type: GET_LIST_JOB,
+export const getListEmail = (params: any): ListEmailAction => ({
+  type: GET_LIST_EMAIL,
   params
 });
 
-export const getListJobSuccess = (total: number, rows: JobEntity[]): JobListAction => ({
-  type: GET_LIST_JOB_SUCCESS,
+export const getListEmailSuccess = (total: number, rows: EmailEntity[]): ListEmailAction => ({
+  type: GET_LIST_EMAIL_SUCCESS,
   total,
   rows
 });
 
-export const getListJobError = (error: AppError): JobListAction => ({
-  type: GET_LIST_JOB_ERROR,
+export const getListEmailError = (error: AppError): ListEmailAction => ({
+  type: GET_LIST_EMAIL_ERROR,
   error
 });
