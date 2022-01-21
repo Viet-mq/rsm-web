@@ -12,7 +12,7 @@ import {put, select} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
 import {AppError} from "src/models/common";
 import {RootState} from "src/redux/reducers";
-import {getDetailRecruitment, getListRecruitment} from "../../../../RecruitmentManager/redux/actions";
+import {getDetailRecruitment} from "../../../../RecruitmentManager/redux/actions";
 
 export function* changeProcessAsync(action: ChangeProcessAction) {
   try {
@@ -43,7 +43,6 @@ export function* changeProcessAsync(action: ChangeProcessAction) {
         }
         yield put(getDetailRecruitment(paramsDetailRecruitment))
       }
-
 
     }
   } catch (e) {

@@ -46,7 +46,8 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
     let req: DataShowBooking = {
       id: dataDetail.idProfile,
       fullName: dataDetail.fullName,
-      idRecruitment: dataDetail.recruitmentId
+      idRecruitment: dataDetail.recruitmentId,
+      username:dataDetail.username
     }
 
     props.showFormBooking(true, req);

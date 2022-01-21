@@ -1,6 +1,6 @@
 import * as Actions from "../actions";
 import {ProfileFormAction} from "../actions";
-import {ChangeProcessRequest, DetailCV, DetailProfileEntity, ProfileEntity} from "../../types";
+import {ChangeProcessRequest, DetailCV, DetailProfileEntity, ProcessForm, ProfileEntity} from "../../types";
 
 export interface ProfileFormState {
   show_create?: boolean,
@@ -16,7 +16,7 @@ export interface ProfileFormState {
   show_change_process?:boolean,
   id_recruitment?:string,
   show_change_recruitment?:boolean,
-  change_process?:ChangeProcessRequest
+  change_process?:ProcessForm
   show_add_to_talent_pool?:boolean,
 
 }

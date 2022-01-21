@@ -10,6 +10,7 @@ import {NotificationError} from "src/components/Notification/Notification";
 
 export function* getActivityLogsAsync(action: ActivityLogsAction) {
   try {
+    console.log(action.params)
     const rs = yield apis.getActivityLogs(action.params);
     if (rs.code !== 0) {
       NotificationError('Lấy lịch sử hoạt động không thành công', "Lỗi: " + rs.message);

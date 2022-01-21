@@ -90,7 +90,6 @@ function BookingForm(props: BookingFormProps) {
     (e.target as any).disabled = false;
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-
         const date = new Date(values.date);
         const time = new Date(values.timeStart);
         const dd = date.getDate();
@@ -369,6 +368,7 @@ function BookingForm(props: BookingFormProps) {
 
                       <Checkbox defaultChecked={true}>Email thông báo cho ứng viên</Checkbox>
                       <Checkbox defaultChecked={true}>Email thông báo cho hội đồng</Checkbox>
+                      <Checkbox defaultChecked={true} className="ml-0">Email thông báo cho người giới thiệu</Checkbox>
 
                     </Form>
                   </div>
@@ -590,6 +590,8 @@ function BookingForm(props: BookingFormProps) {
 
                       <Checkbox defaultChecked={true}>Email thông báo cho ứng viên</Checkbox>
                       <Checkbox defaultChecked={true}>Email thông báo cho hội đồng</Checkbox>
+                      <Checkbox defaultChecked={true} className="ml-0">Email thông báo cho người giới thiệu</Checkbox>
+
 
                     </Form>
                   </div>
@@ -605,8 +607,8 @@ function BookingForm(props: BookingFormProps) {
           </div>
         }
       </div>
-      <CreateEmailForm reqCreate={reqCreate}/>
-      <UpdateEmailForm reqUpdate={reqUpdate}/>
+      <CreateEmailForm reqCreate={reqCreate} profile={props.showBooking.data_booking}/>
+      <UpdateEmailForm reqUpdate={reqUpdate} profile={props.showBooking.data_booking}/>
     </>
 
   );

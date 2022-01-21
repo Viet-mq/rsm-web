@@ -4,7 +4,7 @@ import React, {useEffect, useState} from "react";
 import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
 import {Avatar} from "antd";
 import {getDetailRecruitment, getListKanbanCandidate} from "../redux/actions";
-import {ChangeProcessRequest} from "../../ProfileManager/types";
+import {ChangeProcessRequest, ProcessForm} from "../../ProfileManager/types";
 import {changeProcess} from "../../ProfileManager/redux/actions";
 
 const mapStateToProps = (state: RootState) => ({
@@ -124,11 +124,16 @@ function KanbanProcess(props: IProps) {
       newState[dInd].result = result[dInd];
       setFilterCandidate(newState);
 
-      let req: ChangeProcessRequest = ({
+      let processForm: ProcessForm = ({
         idProfile: draggableId,
         recruitmentId: props.idRecruitment,
         statusCVId: newState[dInd].id
       })
+
+      let req: ChangeProcessRequest = ({
+        changeProcess: processForm,
+      })
+
       props.changeProcess(req,false)
     }
   }

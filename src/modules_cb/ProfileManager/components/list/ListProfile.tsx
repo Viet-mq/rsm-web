@@ -461,7 +461,8 @@ function ListProfile(props: ListProfileProps) {
     let req: DataShowBooking = {
       id: entity.id,
       fullName: entity.fullName,
-      idRecruitment: entity.recruitmentId
+      idRecruitment: entity.recruitmentId,
+      username:entity.username,
     }
     props.showFormBooking(true, req);
   }

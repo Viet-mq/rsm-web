@@ -454,6 +454,8 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
 
                 <Checkbox defaultChecked={true}>Email thông báo cho ứng viên</Checkbox>
                 <Checkbox defaultChecked={true}>Email thông báo cho hội đồng</Checkbox>
+                <Checkbox defaultChecked={true} className="ml-0">Email thông báo cho người giới thiệu</Checkbox>
+
 
               </Form>
             </div>

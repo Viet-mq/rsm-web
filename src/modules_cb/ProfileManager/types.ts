@@ -8,7 +8,6 @@ export interface ProfileEntity {
   fullName: string | any,
   gender: string,
   hometown: string,
-  hrRef: string,
   image: string,
   jobId: string,
   jobName: string,
@@ -28,6 +27,8 @@ export interface ProfileEntity {
   departmentId: string,
   departmentName: string,
   levelSchool: string
+  hrRef: string,
+  username: string,
   mailRef: string
   recruitmentId: string
   recruitmentName: string
@@ -190,6 +191,7 @@ export interface DataShowBooking {
   id: string,
   fullName: string,
   idRecruitment: string,
+  username: string,
 }
 
 //detail
@@ -231,7 +233,6 @@ export interface DetailProfileEntity {
   urlCV: string,
   sourceCVId: string,
   sourceCVName: string,
-  hrRef: string,
   dateOfApply: number,
   lastApply: number,
   dateOfCreate: number,
@@ -245,6 +246,8 @@ export interface DetailProfileEntity {
   departmentId: string
   departmentName: string
   levelSchool: string
+  hrRef: string,
+  username: string,
   mailRef: string
   recruitmentId: string
   recruitmentName: string
@@ -261,6 +264,7 @@ export interface ActivityLogsEntity {
   username: string,
   fullName: string
 }
+
 
 //note
 export interface NoteEntity {
@@ -296,10 +300,16 @@ export interface DeleteNoteRequest {
   id: string,
 }
 
-export interface ChangeProcessRequest {
+
+export interface ProcessForm {
   idProfile?: string,
   recruitmentId?: string,
   statusCVId?: string
+}
+
+export interface ChangeProcessRequest {
+  changeProcess: ProcessForm,
+  mailRequest?: MailRequest,
 }
 
 export interface AddToTalentPoolRequest {

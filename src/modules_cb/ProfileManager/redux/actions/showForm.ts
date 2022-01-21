@@ -1,4 +1,4 @@
-import {ChangeProcessRequest, DetailCV, DetailProfileEntity, ProfileEntity} from "../../types";
+import {ChangeProcessRequest, DetailCV, DetailProfileEntity, ProcessForm, ProfileEntity} from "../../types";
 
 export interface ProfileFormAction {
   type: string,
@@ -15,7 +15,7 @@ export interface ProfileFormAction {
   show_change_process?:boolean,
   id_recruitment?:string,
   show_change_recruitment?:boolean,
-  change_process?:ChangeProcessRequest
+  change_process?:ProcessForm
   show_add_to_talent_pool?:boolean,
 
 }
@@ -65,7 +65,7 @@ export const showFormUploadAvatar = (show_upload_avatar: boolean, id_upload_avat
 });
 
 
-export const showChangeProcessForm = (show: boolean,changeProcess?:ChangeProcessRequest): ProfileFormAction => ({
+export const showChangeProcessForm = (show: boolean,changeProcess?:ProcessForm): ProfileFormAction => ({
   type: SHOW_CHANGE_PROCESS_FORM,
   show_change_process: show,
   change_process:changeProcess
