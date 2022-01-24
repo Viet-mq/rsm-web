@@ -132,6 +132,7 @@ function CreateEmailForm(props: IProps) {
   }
 
   console.log("Pvan hang loat:",props.reqCreateSchedule)
+  console.log("Interviewers:",props.reqCreateSchedule?.interviewers)
 
   return (
     <>
