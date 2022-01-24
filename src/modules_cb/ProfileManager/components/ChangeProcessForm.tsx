@@ -35,6 +35,7 @@ function ChangeProcessForm(props: IProps) {
   const fontWeight = {
     fontWeight: 500
   }
+  const {showForm,detail}=props.profileManager
   const [process, setProcess] = useState<any>('')
   const {getFieldDecorator, resetFields} = props.form;
   const [display, setDisplay] = useState(false)
@@ -50,11 +51,11 @@ function ChangeProcessForm(props: IProps) {
     '<p style="text-align: right;">&nbsp;-H&igrave;nh thức phỏng vấn: {interview_type}</p>')
 
   useEffect(() => {
-    if (props.profileManager.showForm.show_change_process) {
-      props.getListRecruitment({id: props.profileManager.showForm.change_process?.recruitmentId})
-      setProcess(props.profileManager.showForm.change_process?.statusCVId)
+    if (showForm.show_change_process) {
+      props.getListRecruitment({id: showForm.change_process?.recruitmentId})
+      setProcess(showForm.change_process?.statusCVId)
     }
-  }, [props.profileManager.showForm.show_change_process])
+  }, [showForm.show_change_process])
   const handleCloseForm = (event: any) => {
     event.stopPropagation();
     props.showChangeProcessForm(false)
@@ -82,8 +83,8 @@ function ChangeProcessForm(props: IProps) {
     }
 
     let processForm: ProcessForm = ({
-        idProfile: props.profileManager.showForm.change_process?.idProfile,
-        recruitmentId: props.profileManager.showForm.change_process?.recruitmentId,
+        idProfile: showForm.change_process?.idProfile,
+        recruitmentId: showForm.change_process?.recruitmentId,
         statusCVId: process
       })
 
@@ -117,7 +118,7 @@ function ChangeProcessForm(props: IProps) {
       <Modal
         zIndex={2}
         maskClosable={false}
-        visible={props.profileManager.showForm.show_change_process}
+        visible={showForm.show_change_process}
         centered={true}
         width="700px"
         className="custom"
@@ -215,7 +216,7 @@ function ChangeProcessForm(props: IProps) {
               <div style={{border: "1px solid #dddde4", padding: 15}}>
                 <Form.Item label="Đến" className="form-label" {...formItemStyle}>
                   {getFieldDecorator('username', {
-                    initialValue: undefined,
+                    initialValue: detail.result?.username||undefined,
                     rules: [
                       {
                         message: 'Vui lòng nhập tên trường',

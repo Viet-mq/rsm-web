@@ -64,11 +64,16 @@ function ChangeRecruitmentForm(props: IProps) {
 
   function btnAddRecruitmentClicked() {
     if (addRecruitment) {
-      const findRecruitment = props.recruitment.rows.find((item: any) => item.id === addRecruitment)
-
+      // const findRecruitment = props.recruitment.rows.find((item: any) => item.id === addRecruitment)
+      //
+      // let recruitmentForm: ProcessForm = ({
+      //   idProfile: props.profileManager.showForm.change_process?.idProfile,
+      //   recruitmentId: props.profileManager.showForm.change_process?.recruitmentId,
+      //   statusCVId: process
+      // })
       let recruitmentForm: ProcessForm = ({
-        idProfile: props.profileManager.showForm.change_process?.idProfile,
-        recruitmentId: props.profileManager.showForm.change_process?.recruitmentId,
+        idProfile: props.profileManager.showForm?.id_detail,
+        recruitmentId: valuesSelect,
         statusCVId: process
       })
 
