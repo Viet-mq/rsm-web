@@ -105,14 +105,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
   const [pageEmail, setPageEmail] = useState(1);
   const size = 10;
   const {
-    showForm,
-    detail,
-    getActivity,
-    getBooking,
-    getListNote,
-    createNote,
-    updateNote,
-    updateDetail
+    showForm, detail, getActivity, getBooking, getListNote, createNote, updateNote, updateDetail, uploadAvatar, changeProcess,addToTalentPool
   } = props.profileManager;
   const [rate, setRate] = useState(2.4);
   const [isFull, setIsFull] = useState<boolean>(false);
@@ -792,8 +785,10 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       {createNote.loading ||
       updateNote.loading ||
       detail.loading ||
-      updateDetail.loading
-
+      updateDetail.loading ||
+      uploadAvatar.loading ||
+      changeProcess.loading||
+        addToTalentPool.loading
         ? <Loading/> : null}
 
     </>

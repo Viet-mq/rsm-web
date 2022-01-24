@@ -30,6 +30,7 @@ const mapStateToProps = (state: RootState) => ({
   showBooking: state.profileManager.showBooking,
   listAddress: state.addressManager.list,
   listRecruitment: state.recruitmentManager.list,
+
 })
 
 const connector = connect(mapStateToProps,
