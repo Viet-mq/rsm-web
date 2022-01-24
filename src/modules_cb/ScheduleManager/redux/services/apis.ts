@@ -1,7 +1,8 @@
 import {ResponseBase2} from "src/models/common";
 import {GET, POST} from "src/services";
+import {CreateScheduleRequest} from "../../types";
 
-export const createSchedule = async (params?: any): Promise<ResponseBase2> => {
+export const createSchedule = async (params?: CreateScheduleRequest): Promise<ResponseBase2> => {
   return (await POST('api-svc/calendars/create', params)) as ResponseBase2;
 };
 

@@ -8,6 +8,8 @@ import {Editor} from "@tinymce/tinymce-react";
 import {CreateBookingRequest, MailForm, MailRequest} from "../types";
 import {EmailEntity} from "../../EmailManager/types";
 import {getListEmail} from "../../EmailManager/redux/actions";
+import {CreateScheduleRequest} from "../../ScheduleManager/types";
+import {createSchedule} from "../../ScheduleManager/redux/actions";
 
 const {Option} = Select;
 const {TextArea} = Input;
@@ -23,14 +25,16 @@ const connector = connect(mapStateToProps,
   {
     createBooking,
     showEmailCreateForm,
-    getListEmail
+    getListEmail,
+    createSchedule
   });
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends FormComponentProps, ReduxProps {
-  reqCreate: any,
-  profile:any,
+  reqCreate?: any,
+  profile?: any,
+  reqCreateSchedule?: any
 }
 
 function CreateEmailForm(props: IProps) {
@@ -89,14 +93,23 @@ function CreateEmailForm(props: IProps) {
         let mailRequest: MailRequest = {
           candidate: mailFormCandidate,
           recruitmentCouncils: mailFormInterviewers,
-          presenters:mailFormPresenter
+          presenters: mailFormPresenter
         }
 
-        let req: CreateBookingRequest = {
-          createBookingForm: props.reqCreate,
-          mailRequest: mailRequest,
+        if(props.reqCreate){
+          let req: CreateBookingRequest = {
+            createBookingForm: props.reqCreate,
+            mailRequest: mailRequest,
+          }
+          props.createBooking(req)
+        }else {
+          let req: CreateScheduleRequest = {
+            createScheduleForm: props.reqCreateSchedule,
+            mailRequest: mailRequest,
+          }
+          props.createSchedule(req);
         }
-        props.createBooking(req)
+
         return;
       }
     });
@@ -113,10 +126,12 @@ function CreateEmailForm(props: IProps) {
   }
 
   function handleSelectMailTemplate(value: any) {
-    const selectEmail= props.emailManager.rows.find((item:any)=>item.id===value)
+    const selectEmail = props.emailManager.rows.find((item: any) => item.id === value)
     setEmailTemp(selectEmail)
     setValueEditor(selectEmail.content)
   }
+
+  console.log("Pvan hang loat:",props.reqCreateSchedule)
 
   return (
     <>
@@ -207,7 +222,7 @@ function CreateEmailForm(props: IProps) {
                 <div style={{border: "1px solid #dddde4", padding: 15}}>
                   <Form.Item label="Đến" className="form-label" {...formItemStyle}>
                     {getFieldDecorator('name', {
-                      initialValue: props.reqCreate?.interviewers || undefined,
+                      initialValue:props.reqCreate?.interviewers || props.reqCreateSchedule?.interviewers,
                       rules: [
                         {
                           message: 'Vui lòng nhập tên trường',
@@ -250,53 +265,58 @@ function CreateEmailForm(props: IProps) {
                   </Form.Item>
                 </div>
 
-                <div className="font-15-bold-500 mt-5 mb-2">Nội dung email gửi cho người giới thiệu</div>
-                <div style={{border: "1px solid #dddde4", padding: 15}}>
-                  <Form.Item label="Đến" className="form-label" {...formItemStyle}>
-                    {getFieldDecorator('username', {
-                      initialValue: props.profile?.username || undefined,
-                      rules: [
-                        {
-                          message: 'Vui lòng nhập tên trường',
-                          required: false,
-                        },
-                      ],
-                    })(<Select className="bg-white text-black" style={{...fontWeightStyle, width: "100%"}}
-                               showSearch
-                               disabled
-                               showArrow={false}
-                    >
-                      {props.listAccount.rows?.map((item: any, index: any) => (
-                        <Option key={index} value={item.username}>{item.fullName}</Option>
-                      ))}
-                    </Select>)}
-                  </Form.Item>
+                {props.reqCreate ? (
+                  <>
+                    <div className="font-15-bold-500 mt-5 mb-2">Nội dung email gửi cho người giới thiệu</div>
+                    <div style={{border: "1px solid #dddde4", padding: 15}}>
+                      <Form.Item label="Đến" className="form-label" {...formItemStyle}>
+                        {getFieldDecorator('username', {
+                          initialValue: props.profile?.username || undefined,
+                          rules: [
+                            {
+                              message: 'Vui lòng nhập tên trường',
+                              required: false,
+                            },
+                          ],
+                        })(<Select className="bg-white text-black" style={{...fontWeightStyle, width: "100%"}}
+                                   showSearch
+                                   disabled
+                                   showArrow={false}
+                        >
+                          {props.listAccount.rows?.map((item: any, index: any) => (
+                            <Option key={index} value={item.username}>{item.fullName}</Option>
+                          ))}
+                        </Select>)}
+                      </Form.Item>
 
-                  <Form.Item label="Tiêu đề" className="form-label" {...formItemStyle}>
-                    {getFieldDecorator('subjectPresenter', {
-                      initialValue: emailTemp?.subject,
-                      rules: [
-                        {
-                          message: 'Vui lòng nhập tên trường',
-                          required: false,
-                        },
-                      ],
-                    })(<Input placeholder="Nhập tiêu đề" disabled className="bg-white text-black"/>)}
-                  </Form.Item>
+                      <Form.Item label="Tiêu đề" className="form-label" {...formItemStyle}>
+                        {getFieldDecorator('subjectPresenter', {
+                          initialValue: emailTemp?.subject,
+                          rules: [
+                            {
+                              message: 'Vui lòng nhập tên trường',
+                              required: false,
+                            },
+                          ],
+                        })(<Input placeholder="Nhập tiêu đề" disabled className="bg-white text-black"/>)}
+                      </Form.Item>
 
-                  <Form.Item label="Mô tả" className="form-label" {...formItemStyle}>
-                    {getFieldDecorator('contentPresenter', {
-                      initialValue: '',
-                      rules: [
-                        {
-                          message: 'Vui lòng nhập tên trường',
-                          required: false,
-                        },
-                      ],
-                    })(<TextArea placeholder="Nhập nội dung" style={{height: 120}} className="bg-white text-black"/>
-                    )}
-                  </Form.Item>
-                </div>
+                      <Form.Item label="Mô tả" className="form-label" {...formItemStyle}>
+                        {getFieldDecorator('contentPresenter', {
+                          initialValue: '',
+                          rules: [
+                            {
+                              message: 'Vui lòng nhập tên trường',
+                              required: false,
+                            },
+                          ],
+                        })(<TextArea placeholder="Nhập nội dung" style={{height: 120}} className="bg-white text-black"/>
+                        )}
+                      </Form.Item>
+                    </div>
+                  </>
+                ) : null}
+
 
               </Form>
             </div>
