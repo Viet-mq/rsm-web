@@ -210,8 +210,8 @@ function UpdateEmailForm(props: IProps) {
                   initialValue: props.reqUpdate?.interviewers || undefined,
                   rules: [
                     {
-                      message: 'Vui lòng nhập tên trường',
-                      required: false,
+                      message: 'Vui lòng chọn nhà tuyển dụng',
+                      required: true,
                     },
                   ],
                 })(<Select className="bg-white text-black" style={{...fontWeightStyle, width: "100%"}}
