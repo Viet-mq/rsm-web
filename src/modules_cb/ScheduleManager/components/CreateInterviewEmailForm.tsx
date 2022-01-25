@@ -1,15 +1,15 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {createBooking, showEmailCreateForm} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Input, Modal, Select} from "antd";
 import React, {FormEvent, useEffect, useState} from "react";
 import {Editor} from "@tinymce/tinymce-react";
-import {CreateBookingRequest, MailForm, MailRequest} from "../types";
+import {MailForm, MailRequest} from "../../ProfileManager/types";
 import {EmailEntity} from "../../EmailManager/types";
 import {getListEmail} from "../../EmailManager/redux/actions";
-import {CreateScheduleRequest} from "../../ScheduleManager/types";
-import {createSchedule} from "../../ScheduleManager/redux/actions";
+import {CreateScheduleRequest} from "../types";
+import {createSchedule} from "../redux/actions";
+import {createBooking, showInterviewEmailCreateForm} from "../../ProfileManager/redux/actions";
 
 const {Option} = Select;
 const {TextArea} = Input;
@@ -24,7 +24,7 @@ const mapStateToProps = (state: RootState) => ({
 const connector = connect(mapStateToProps,
   {
     createBooking,
-    showEmailCreateForm,
+    showInterviewEmailCreateForm,
     getListEmail,
     createSchedule
   });
@@ -32,12 +32,10 @@ const connector = connect(mapStateToProps,
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends FormComponentProps, ReduxProps {
-  reqCreate?: any,
-  profile?: any,
   reqCreateSchedule?: any
 }
 
-function CreateEmailForm(props: IProps) {
+function CreateInterviewEmailForm(props: IProps) {
   const {getFieldDecorator, resetFields} = props.form;
   const fontWeightStyle = {fontWeight: 400};
   const formItemStyle = {
@@ -64,7 +62,7 @@ function CreateEmailForm(props: IProps) {
 
   function onBtnCancelClicked() {
     resetFields();
-    props.showEmailCreateForm(false);
+    props.showInterviewEmailCreateForm(false);
     setValueEditor("")
     setEmailTemp(undefined)
   }
@@ -96,19 +94,11 @@ function CreateEmailForm(props: IProps) {
           presenters: mailFormPresenter
         }
 
-        if(props.reqCreate){
-          let req: CreateBookingRequest = {
-            createBookingForm: props.reqCreate,
-            mailRequest: mailRequest,
-          }
-          props.createBooking(req)
-        }else {
-          let req: CreateScheduleRequest = {
-            createScheduleForm: props.reqCreateSchedule,
-            mailRequest: mailRequest,
-          }
-          props.createSchedule(req);
+        let req: CreateScheduleRequest = {
+          createScheduleForm: props.reqCreateSchedule,
+          mailRequest: mailRequest,
         }
+        props.createSchedule(req);
 
         return;
       }
@@ -131,8 +121,8 @@ function CreateEmailForm(props: IProps) {
     setValueEditor(selectEmail.content)
   }
 
-  console.log("Pvan hang loat:",props.reqCreateSchedule)
-  console.log("Interviewers:",props.reqCreateSchedule?.interviewers)
+  console.log("Pvan hang loat:", props.reqCreateSchedule)
+  console.log("Interviewers:", props.reqCreateSchedule?.interviewers)
 
   return (
     <>
@@ -141,7 +131,7 @@ function CreateEmailForm(props: IProps) {
           <Modal
             zIndex={2}
             maskClosable={false}
-            visible={props.showBooking.show_email_create}
+            visible={props.showBooking.show_interview_email_create}
             centered={true}
             width="700px"
             className="custom"
@@ -223,7 +213,7 @@ function CreateEmailForm(props: IProps) {
                 <div style={{border: "1px solid #dddde4", padding: 15}}>
                   <Form.Item label="Đến" className="form-label" {...formItemStyle}>
                     {getFieldDecorator('name', {
-                      initialValue:props.reqCreate?.interviewers || props.reqCreateSchedule?.interviewers,
+                      initialValue: props.reqCreateSchedule?.interviewers || undefined,
                       rules: [
                         {
                           message: 'Vui lòng chọn nhà tuyển dụng',
@@ -266,59 +256,6 @@ function CreateEmailForm(props: IProps) {
                   </Form.Item>
                 </div>
 
-                {props.reqCreate ? (
-                  <>
-                    <div className="font-15-bold-500 mt-5 mb-2">Nội dung email gửi cho người giới thiệu</div>
-                    <div style={{border: "1px solid #dddde4", padding: 15}}>
-                      <Form.Item label="Đến" className="form-label" {...formItemStyle}>
-                        {getFieldDecorator('username', {
-                          initialValue: props.profile?.username || undefined,
-                          rules: [
-                            {
-                              message: 'Vui lòng nhập tên trường',
-                              required: false,
-                            },
-                          ],
-                        })(<Select className="bg-white text-black" style={{...fontWeightStyle, width: "100%"}}
-                                   showSearch
-                                   disabled
-                                   showArrow={false}
-                        >
-                          {props.listAccount.rows?.map((item: any, index: any) => (
-                            <Option key={index} value={item.username}>{item.fullName}</Option>
-                          ))}
-                        </Select>)}
-                      </Form.Item>
-
-                      <Form.Item label="Tiêu đề" className="form-label" {...formItemStyle}>
-                        {getFieldDecorator('subjectPresenter', {
-                          initialValue: emailTemp?.subject,
-                          rules: [
-                            {
-                              message: 'Vui lòng nhập tên trường',
-                              required: false,
-                            },
-                          ],
-                        })(<Input placeholder="Nhập tiêu đề" disabled className="bg-white text-black"/>)}
-                      </Form.Item>
-
-                      <Form.Item label="Mô tả" className="form-label" {...formItemStyle}>
-                        {getFieldDecorator('contentPresenter', {
-                          initialValue: '',
-                          rules: [
-                            {
-                              message: 'Vui lòng nhập tên trường',
-                              required: false,
-                            },
-                          ],
-                        })(<TextArea placeholder="Nhập nội dung" style={{height: 120}} className="bg-white text-black"/>
-                        )}
-                      </Form.Item>
-                    </div>
-                  </>
-                ) : null}
-
-
               </Form>
             </div>
 
@@ -335,5 +272,5 @@ function CreateEmailForm(props: IProps) {
   );
 }
 
-export default connector(Form.create<IProps>()(CreateEmailForm));
+export default connector(Form.create<IProps>()(CreateInterviewEmailForm));
 

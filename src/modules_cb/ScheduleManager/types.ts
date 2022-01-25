@@ -1,4 +1,7 @@
+
 //schedule
+import {CreateBookingForm, MailRequest} from "../ProfileManager/types";
+
 export interface ScheduleEntity {
   id: string | any,
   avatarColor: string,
@@ -20,6 +23,11 @@ export interface ScheduleEntity {
 }
 
 export interface CreateScheduleRequest {
+  createScheduleForm: CreateScheduleForm,
+  mailRequest: MailRequest,
+}
+
+export interface CreateScheduleForm {
   floor: string,
   interviewAddress: string,
   interviewers: string[],
@@ -48,21 +56,6 @@ export interface UpdateScheduleRequest {
   recruitmentId: string,
   type: string
 
-  // id: string,
-  // idProfile: string,
-  // time: number,
-  // address: string,
-  // form: string,
-  // interviewer: string[],
-  // interviewee: string,
-  // content: string,
-  // question: string[],
-  // comments: string[],
-  // evaluation: string,
-  // status: string,
-  // reason: string,
-  // timeStart: number,
-  // timeFinish: number
 }
 
 export interface DataShowSchedule {

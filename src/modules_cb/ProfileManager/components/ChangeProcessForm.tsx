@@ -8,6 +8,8 @@ import {changeProcess, showChangeProcessForm} from "../redux/actions";
 import {getListRecruitment} from "../../RecruitmentManager/redux/actions";
 import {ChangeProcessRequest, MailForm, MailRequest, ProcessForm} from "../types";
 import {Editor} from "@tinymce/tinymce-react";
+import {getListEmail} from "../../EmailManager/redux/actions";
+import {EmailEntity} from "../../EmailManager/types";
 
 const {Option} = Select;
 const {TextArea} = Input;
@@ -16,25 +18,25 @@ const mapStateToProps = (state: RootState) => ({
   profileManager: state.profileManager,
   recruitment: state.recruitmentManager.list,
   listAccount: state.accountManager.list,
-
-}) 
+  emailManager: state.emailManager.list,
+})
 
 const connector = connect(mapStateToProps,
   {
     showChangeProcessForm,
     changeProcess,
-    getListRecruitment
+    getListRecruitment,
+    getListEmail
   })
 
 type ReduxProps = ConnectedProps<typeof connector>;
-
-interface IProps extends FormComponentProps, ReduxProps {
-}
+interface IProps extends FormComponentProps, ReduxProps {}
 
 function ChangeProcessForm(props: IProps) {
   const fontWeight = {
     fontWeight: 500
   }
+  const {showForm, detail} = props.profileManager
   const [process, setProcess] = useState<any>('')
   const {getFieldDecorator, resetFields} = props.form;
   const [display, setDisplay] = useState(false)
@@ -43,21 +45,32 @@ function ChangeProcessForm(props: IProps) {
     labelCol: {span: 4},
     wrapperCol: {span: 20}
   };
-  const [valueEditor, setValueEditor] = useState('<h1>Dear {name},</h1>\n' +
-    '<p>{company}<em> ch&uacute;c mừng bạn đ&atilde; vượt qua v&ograve;ng thi tuyển vị tr</em>&iacute; {job} .Ph&ograve;ng nh&acirc;n sự xin mời <strong>bạn tham gia phỏng vấn với chi tiết như sau:&nbsp;</strong></p>\n' +
-    '<p style="text-align: right;">&nbsp;-Thời gian: {date} {interview_time}</p>\n' +
-    '<p style="text-align: right;">&nbsp;-Địa chỉ: {floor}, {interview_address}</p>\n' +
-    '<p style="text-align: right;">&nbsp;-H&igrave;nh thức phỏng vấn: {interview_type}</p>')
+  const [emailTemp, setEmailTemp] = useState<EmailEntity>()
+  const [valueEditor, setValueEditor] = useState("")
 
   useEffect(() => {
-    if (props.profileManager.showForm.show_change_process) {
-      props.getListRecruitment({id: props.profileManager.showForm.change_process?.recruitmentId})
-      setProcess(props.profileManager.showForm.change_process?.statusCVId)
+    if (showForm.show_change_process) {
+      props.getListRecruitment({id: showForm.change_process?.recruitmentId})
+      setProcess(showForm.change_process?.statusCVId)
+
+      props.getListEmail({page: 1, size: 100});
     }
-  }, [props.profileManager.showForm.show_change_process])
-  const handleCloseForm = (event: any) => {
-    event.stopPropagation();
+  }, [showForm.show_change_process])
+
+
+  useEffect(() => {
+    if (showForm.show_change_process && props.emailManager) {
+      setEmailTemp(props.emailManager.rows[0])
+      setValueEditor(props.emailManager.rows[0]?.content)
+    }
+  }, [props.emailManager])
+
+
+  const handleCloseForm = () => {
+    resetFields()
     props.showChangeProcessForm(false)
+    setValueEditor("")
+    setEmailTemp(undefined)
   }
 
   function btnChangeProcessClicked(e: FormEvent) {
@@ -66,32 +79,32 @@ function ChangeProcessForm(props: IProps) {
     (e.target as any).disabled = false;
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-    let mailFormCandidate: MailForm = {
-      subject: values.subjectCandidate,
-      content: valueEditor,
-    }
+        let mailFormCandidate: MailForm = {
+          subject: values.subjectCandidate,
+          content: valueEditor,
+        }
 
-    let mailFormPresenter: MailForm = {
-      subject: values.subjectPresenter,
-      content: values.contentPresenter,
-    }
+        let mailFormPresenter: MailForm = {
+          subject: values.subjectPresenter,
+          content: values.contentPresenter,
+        }
 
-    let mailRequest: MailRequest = {
-      candidate: mailFormCandidate,
-      presenters:mailFormPresenter
-    }
+        let mailRequest: MailRequest = {
+          candidate: mailFormCandidate,
+          presenters: mailFormPresenter
+        }
 
-    let processForm: ProcessForm = ({
-        idProfile: props.profileManager.showForm.change_process?.idProfile,
-        recruitmentId: props.profileManager.showForm.change_process?.recruitmentId,
-        statusCVId: process
-      })
+        let processForm: ProcessForm = ({
+          idProfile: showForm.change_process?.idProfile,
+          recruitmentId: showForm.change_process?.recruitmentId,
+          statusCVId: process
+        })
 
-    let req: ChangeProcessRequest = ({
-      changeProcess: processForm,
-      mailRequest: mailRequest,
-      })
-    props.changeProcess(req,false)
+        let req: ChangeProcessRequest = ({
+          changeProcess: processForm,
+          mailRequest: mailRequest,
+        })
+        props.changeProcess(req, false)
         return;
       }
     });
@@ -112,23 +125,26 @@ function ChangeProcessForm(props: IProps) {
     }
   }
 
+  function handleSelectMailTemplate(value: any) {
+    const selectEmail= props.emailManager.rows.find((item:any)=>item.id===value)
+    setEmailTemp(selectEmail)
+    setValueEditor(selectEmail.content)
+  }
+
   return (
     <>
       <Modal
         zIndex={2}
         maskClosable={false}
-        visible={props.profileManager.showForm.show_change_process}
+        visible={showForm.show_change_process}
         centered={true}
         width="700px"
         className="custom"
-        afterClose={() => {
-        }}
-        onCancel={() => {
-          props.showChangeProcessForm(false)
-        }}
+        afterClose={handleCloseForm}
+        onCancel={handleCloseForm}
         footer={""}>
-        <div style={{overflow:"auto",height:700}}>
-          <div className="schedule-detail" style={{paddingBottom:0}}>
+        <div style={{overflow: "auto", height: 700}}>
+          <div className="schedule-detail" style={{paddingBottom: 0}}>
             <div className="schedule-detail-head">
               <div className="schedule-detail-title">Chuyển vòng</div>
             </div>
@@ -146,16 +162,16 @@ function ChangeProcessForm(props: IProps) {
             </div>
           </div>
 
+          {/*email ứng viên*/}
           <div style={{padding: "0 24px 24px 24px"}}>
             <div className="schedule-detail-title">Email thông báo</div>
           </div>
           <div style={{padding: "0 24px 24px"}}>
             <div className="font-15-bold-500">Nội dung email gửi cho ứng viên</div>
             <Form>
-              <Form.Item className="form-label" label="Tên mẫu mail" labelCol={{span: 24}}
-                         wrapperCol={{span: 24}}>
+              <Form.Item className="form-label" label="Tên mẫu mail" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                 {getFieldDecorator('title', {
-                  initialValue: 'Thư xác nhận',
+                  initialValue: emailTemp?.id,
                   rules: [
                     {
                       message: 'Vui lòng nhập tên mẫu',
@@ -163,14 +179,18 @@ function ChangeProcessForm(props: IProps) {
                     },
                   ],
                 })(
-                  <Input placeholder="Nhập tên mẫu" className="bg-white text-black"/>
+                  <Select onSelect={handleSelectMailTemplate} style={fontWeightStyle}
+                          placeholder="Nhập tên mẫu">
+                    {props.emailManager.rows?.map((item: any, index: any) => {
+                      return <Option key={index} value={item.id}>{item.name}</Option>
+                    })}
+                  </Select>
                 )}
               </Form.Item>
 
-              <Form.Item className="form-label" label="Tiêu đề mail" labelCol={{span: 24}}
-                         wrapperCol={{span: 24}}>
+              <Form.Item className="form-label" label="Tiêu đề mail" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                 {getFieldDecorator('subjectCandidate', {
-                  initialValue: "Thư mời phỏng vấn vị trí {job}",
+                  initialValue: emailTemp?.subject,
                   rules: [
                     {
                       message: 'Vui lòng nhập tiêu đề mail',
@@ -181,7 +201,6 @@ function ChangeProcessForm(props: IProps) {
                   <Input placeholder="Nhập tiêu đề" className="bg-white text-black"/>
                 )}
               </Form.Item>
-
 
               <div className="form-label">
                 <div className="mb-2">Nội dung <span className="value-required">*</span></div>
@@ -211,11 +230,12 @@ function ChangeProcessForm(props: IProps) {
                 <div className={display ? "value-required show" : "value-required hide"}>Vui lòng nhập nội dung</div>
               </div>
 
+              {/*email người giới thiệu */}
               <div className="font-15-bold-500 mt-5 mb-2">Nội dung email gửi cho người giới thiệu</div>
               <div style={{border: "1px solid #dddde4", padding: 15}}>
                 <Form.Item label="Đến" className="form-label" {...formItemStyle}>
                   {getFieldDecorator('username', {
-                    initialValue: undefined,
+                    initialValue: detail.result?.username || undefined,
                     rules: [
                       {
                         message: 'Vui lòng nhập tên trường',
@@ -235,7 +255,7 @@ function ChangeProcessForm(props: IProps) {
 
                 <Form.Item label="Tiêu đề" className="form-label" {...formItemStyle}>
                   {getFieldDecorator('subjectPresenter', {
-                    initialValue: 'Lịch phỏng vấn vị trí {job}',
+                    initialValue: emailTemp?.subject,
                     rules: [
                       {
                         message: 'Vui lòng nhập tên trường',
