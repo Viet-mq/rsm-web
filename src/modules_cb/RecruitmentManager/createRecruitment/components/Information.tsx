@@ -446,7 +446,7 @@ function InformationForm(props: IProps) {
                       'insertdatetime media table paste code help '
                     ],
                     height: 330,
-                    menubar: true,
+                    menubar: false,
                     toolbar: 'undo redo | bold italic underline strikethrough |alignleft aligncenter alignright alignjustify | outdent indent |fontselect fontsizeselect formatselect |    numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
                     quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
                     toolbar_mode: 'sliding',
@@ -476,7 +476,7 @@ function InformationForm(props: IProps) {
                       'insertdatetime media table paste code help '
                     ],
                     height: 330,
-                    menubar: true,
+                    menubar: false,
                     toolbar: 'undo redo | bold italic underline strikethrough |alignleft aligncenter alignright alignjustify | outdent indent |fontselect fontsizeselect formatselect |    numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
                     quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
                     toolbar_mode: 'sliding',
@@ -505,7 +505,7 @@ function InformationForm(props: IProps) {
                       'insertdatetime media table paste code help '
                     ],
                     height: 330,
-                    menubar: true,
+                    menubar: false,
                     toolbar: 'undo redo | bold italic underline strikethrough |alignleft aligncenter alignright alignjustify | outdent indent |fontselect fontsizeselect formatselect |    numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
                     quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
                     toolbar_mode: 'sliding',

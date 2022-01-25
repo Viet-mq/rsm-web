@@ -1,18 +1,12 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {FormEvent, useEffect, useRef, useState} from "react";
-import env from "src/configs/env";
-import {Button, Col, Form, Input, Row, Select} from "antd";
-import Search from "antd/es/input/Search";
+import {Button, Col, Form, Input, Row} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 import {Editor} from "@tinymce/tinymce-react";
 import {Link} from "react-router-dom";
-import {createBooking, showEmailCreateForm} from "../../ProfileManager/redux/actions";
-import {CreateEmailRequest, UpdateEmailRequest} from "../types";
+import {UpdateEmailRequest} from "../types";
 import {updateEmail} from "../redux/actions";
-
-const {Option} = Select;
-const {TextArea} = Input;
 
 const mapStateToProps = (state: RootState) => ({
   emailManager: state.emailManager,
@@ -36,9 +30,8 @@ function UpdateEmailForm(props: IProps) {
   const [valueEditor, setValueEditor] = useState('')
 
 
-
   useEffect(() => {
-    if(update.dataUpdate) setValueEditor(update.dataUpdate.content)
+    if (update.dataUpdate) setValueEditor(update.dataUpdate.content)
   }, []);
 
   const inputEl = useRef<any>(null);
@@ -87,7 +80,7 @@ function UpdateEmailForm(props: IProps) {
               <Form.Item className="form-label" label="Loại email" labelCol={{span: 24}}
                          wrapperCol={{span: 24}}>
                 {getFieldDecorator('type', {
-                  initialValue: update.dataUpdate?.type||'',
+                  initialValue: update.dataUpdate?.type || '',
                   rules: [
                     {
                       message: 'Vui lòng chọn loại email',
@@ -102,7 +95,7 @@ function UpdateEmailForm(props: IProps) {
               <Form.Item className="form-label" label="Tên mẫu mail" labelCol={{span: 24}}
                          wrapperCol={{span: 24}}>
                 {getFieldDecorator('name', {
-                  initialValue: update.dataUpdate?.name||'',
+                  initialValue: update.dataUpdate?.name || '',
                   rules: [
                     {
                       message: 'Vui lòng nhập tên mẫu',
@@ -118,7 +111,7 @@ function UpdateEmailForm(props: IProps) {
               <Form.Item className="form-label" label="Tiêu đề mail" labelCol={{span: 24}}
                          wrapperCol={{span: 24}}>
                 {getFieldDecorator('subject', {
-                  initialValue: update.dataUpdate?.subject||'',
+                  initialValue: update.dataUpdate?.subject || '',
                   rules: [
                     {
                       message: 'Vui lòng nhập tiêu đề mail',
@@ -148,7 +141,7 @@ function UpdateEmailForm(props: IProps) {
                       'insertdatetime media table paste code help '
                     ],
                     height: 330,
-                    menubar: true,
+                    menubar: false,
                     toolbar: 'undo redo | bold italic underline strikethrough |alignleft aligncenter alignright alignjustify | outdent indent |fontselect fontsizeselect formatselect |    numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
                     quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
                     toolbar_mode: 'sliding',

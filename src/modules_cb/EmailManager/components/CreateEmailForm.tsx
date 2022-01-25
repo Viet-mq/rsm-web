@@ -22,11 +22,7 @@ interface IProps extends ReduxProps, FormComponentProps {
 function CreateEmailForm(props: IProps) {
   const {getFieldDecorator} = props.form;
   const [display, setDisplay] = useState(false)
-  const [valueEditor, setValueEditor] = useState('<h1>Dear {name},</h1>\n' +
-    '<p>{company}<em> ch&uacute;c mừng bạn đ&atilde; vượt qua v&ograve;ng thi tuyển vị tr</em>&iacute; {job} .Ph&ograve;ng nh&acirc;n sự xin mời <strong>bạn tham gia phỏng vấn với chi tiết như sau:&nbsp;</strong></p>\n' +
-    '<p style="text-align: right;">&nbsp;-Thời gian: {date} {interview_time}</p>\n' +
-    '<p style="text-align: right;">&nbsp;-Địa chỉ: {floor}, {interview_address}</p>\n' +
-    '<p style="text-align: right;">&nbsp;-H&igrave;nh thức phỏng vấn: {interview_type}</p>')
+  const [valueEditor, setValueEditor] = useState('')
 
 
   const inputEl = useRef<any>(null);
@@ -88,7 +84,7 @@ function CreateEmailForm(props: IProps) {
               <Form.Item className="form-label" label="Tên mẫu mail" labelCol={{span: 24}}
                          wrapperCol={{span: 24}}>
                 {getFieldDecorator('name', {
-                  initialValue: 'Thư xác nhận',
+                  initialValue: '',
                   rules: [
                     {
                       message: 'Vui lòng nhập tên mẫu',
@@ -103,7 +99,7 @@ function CreateEmailForm(props: IProps) {
               <Form.Item className="form-label" label="Tiêu đề mail" labelCol={{span: 24}}
                          wrapperCol={{span: 24}}>
                 {getFieldDecorator('subject', {
-                  initialValue: "Bạn vừa ứng tuyển vào  [ Tên công ty ]",
+                  initialValue: "",
                   rules: [
                     {
                       message: 'Vui lòng nhập tiêu đề mail',
@@ -133,7 +129,7 @@ function CreateEmailForm(props: IProps) {
                       'insertdatetime media table paste code help '
                     ],
                     height: 330,
-                    menubar: true,
+                    menubar: false,
                     toolbar: 'undo redo | bold italic underline strikethrough |alignleft aligncenter alignright alignjustify | outdent indent |fontselect fontsizeselect formatselect |    numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
                     quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
                     toolbar_mode: 'sliding',
