@@ -121,9 +121,6 @@ function CreateInterviewEmailForm(props: IProps) {
     setValueEditor(selectEmail.content)
   }
 
-  console.log("Pvan hang loat:", props.reqCreateSchedule)
-  console.log("Interviewers:", props.reqCreateSchedule?.interviewers)
-
   return (
     <>
       <div>
@@ -146,8 +143,7 @@ function CreateInterviewEmailForm(props: IProps) {
             <div style={{height: 700, padding: "0 24px 24px", overflow: "auto"}}>
               <div className="font-15-bold-500">Nội dung email gửi cho ứng viên</div>
               <Form>
-                <Form.Item className="form-label" label="Tên mẫu mail" labelCol={{span: 24}}
-                           wrapperCol={{span: 24}}>
+                <Form.Item className="form-label" label="Tên mẫu mail" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                   {getFieldDecorator('title', {
                     initialValue: emailTemp?.id,
                     rules: [
@@ -166,8 +162,7 @@ function CreateInterviewEmailForm(props: IProps) {
                   )}
                 </Form.Item>
 
-                <Form.Item className="form-label" label="Tiêu đề mail" labelCol={{span: 24}}
-                           wrapperCol={{span: 24}}>
+                <Form.Item className="form-label" label="Tiêu đề mail" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                   {getFieldDecorator('subjectCandidate', {
                     initialValue: emailTemp?.subject,
                     rules: [
@@ -255,6 +250,54 @@ function CreateInterviewEmailForm(props: IProps) {
                     )}
                   </Form.Item>
                 </div>
+
+                <div className="font-15-bold-500 mt-5 mb-2">Nội dung email gửi cho người giới thiệu</div>
+                <div style={{border: "1px solid #dddde4", padding: 15}}>
+                  <Form.Item label="Đến" className="form-label" {...formItemStyle}>
+                    {getFieldDecorator('username', {
+                      initialValue: props.reqCreateSchedule?.times.filter((item:any)=>item.username!=='').map((el:any)=>el.username),
+                      rules: [
+                        {
+                          message: 'Vui lòng nhập tên trường',
+                          required: false,
+                        },
+                      ],
+                    })(<Select className="bg-white text-black" style={{...fontWeightStyle, width: "100%"}}
+                               mode="multiple"
+
+                    >
+                      {props.listAccount.rows?.map((item: any, index: any) => (
+                        <Option key={index} value={item.username}>{item.fullName}</Option>
+                      ))}
+                    </Select>)}
+                  </Form.Item>
+
+                  <Form.Item label="Tiêu đề" className="form-label" {...formItemStyle}>
+                    {getFieldDecorator('subjectPresenter', {
+                      initialValue: emailTemp?.subject,
+                      rules: [
+                        {
+                          message: 'Vui lòng nhập tên trường',
+                          required: false,
+                        },
+                      ],
+                    })(<Input placeholder="Nhập tiêu đề" className="bg-white text-black"/>)}
+                  </Form.Item>
+
+                  <Form.Item label="Mô tả" className="form-label" {...formItemStyle}>
+                    {getFieldDecorator('contentPresenter', {
+                      initialValue: '',
+                      rules: [
+                        {
+                          message: 'Vui lòng nhập tên trường',
+                          required: false,
+                        },
+                      ],
+                    })(<TextArea placeholder="Nhập nội dung" style={{height: 120}} className="bg-white text-black"/>
+                    )}
+                  </Form.Item>
+                </div>
+
 
               </Form>
             </div>

@@ -24,10 +24,7 @@ const {TextArea} = Input;
 const mapStateToProps = (state: RootState) => ({
   listAccount: state.accountManager.list,
   listStatus: state.statuscvManager.list,
-  getBookingState: state.profileManager.getBooking,
-  updateBooking: state.profileManager.updateBooking,
-  createBooking: state.profileManager.createBooking,
-  showBooking: state.profileManager.showBooking,
+  profileManager: state.profileManager,
   listAddress: state.addressManager.list,
   listRecruitment: state.recruitmentManager.list,
 
@@ -38,8 +35,6 @@ const connector = connect(mapStateToProps,
     getBooking,
     getListAccount,
     getListStatusCV,
-    updateBooking,
-    createBooking,
     showFormBooking,
     showEmailCreateForm,
     showEmailUpdateForm
@@ -50,29 +45,30 @@ interface BookingFormProps extends FormComponentProps, ReduxProps {
 }
 
 function BookingForm(props: BookingFormProps) {
+  const {getBooking,showBooking}= props.profileManager
   const {getFieldDecorator, resetFields} = props.form;
   const fontWeightStyle = {fontWeight: 400};
   const dateFormat = 'DD/MM/YYYY';
   const timeFormat = 'HH:mm';
-  const interviewTime: any = moment(props.getBookingState.result?.interviewTime)
-  const date: any = moment(props.getBookingState.result?.date)
+  const interviewTime: any = moment(getBooking.result?.interviewTime)
+  const date: any = moment(getBooking.result?.date)
   const diffTime = interviewTime.diff(date, "minutes")
   const [reqCreate, setReqCreate] = useState<CreateBookingRequest | any>()
   const [reqUpdate, setReqUpdate] = useState<UpdateBookingRequest | any>()
 
   useEffect(() => {
-    if (props.showBooking.show_booking) {
+    if (showBooking.show_booking) {
       props.getListAccount({page: 1, size: 100});
       props.getListStatusCV({page: 1, size: 100});
     }
-  }, [props.showBooking.show_booking])
+  }, [showBooking.show_booking])
 
   useEffect(() => {
-    if (props.showBooking.data_booking?.id) {
-      props.getBooking({idProfile: props.showBooking.data_booking?.id});
+    if (showBooking.data_booking?.id) {
+      props.getBooking({idProfile: showBooking.data_booking?.id});
     }
 
-  }, [props.showBooking.data_booking?.id])
+  }, [showBooking.data_booking?.id])
 
 
   function onBtnCancelClicked() {
@@ -102,7 +98,7 @@ function BookingForm(props: BookingFormProps) {
         const interviewTime: any = new Date(yyyy, mm - 1, dd, hh, minutes + values.interviewTime, 0);
 
         let req: UpdateBookingForm = {
-          id: props.getBookingState.result?.id,
+          id: getBooking.result?.id,
           floor: values.room,
           interviewAddress: values.interviewAddress,
           interviewTime: interviewTime * 1,
@@ -137,7 +133,7 @@ function BookingForm(props: BookingFormProps) {
         const interviewTime: any = new Date(yyyy, mm - 1, dd, hh, minutes + values.interviewTime, 0);
 
         let req: CreateBookingForm = {
-          idProfile: props.showBooking.data_booking?.id,
+          idProfile: showBooking.data_booking?.id,
           date: dateChanged * 1,
           avatarColor: setColor(),
           floor: values.room,
@@ -160,13 +156,13 @@ function BookingForm(props: BookingFormProps) {
   return (
     <>
       <div>
-        {props.getBookingState?.result !== undefined ?
+        {getBooking?.result !== undefined ?
           <div>
             <div>
               <Modal
                 zIndex={2}
                 maskClosable={false}
-                visible={props.showBooking.show_booking}
+                visible={showBooking.show_booking}
                 centered={true}
                 width="580px"
                 className="custom"
@@ -182,10 +178,10 @@ function BookingForm(props: BookingFormProps) {
                   <div className="schedule-detail-title">Sửa lịch</div>
                   <div className="main-1">
                     <div className="main-1__candidate-name"
-                         style={{color: "#666"}}> {props.showBooking.data_booking?.fullName}</div>
-                    {props.getBookingState.result?.recruitmentName ? <>
+                         style={{color: "#666"}}> {showBooking.data_booking?.fullName}</div>
+                    {getBooking.result?.recruitmentName ? <>
                       <div className="main-1__green-dot"/>
-                      <div className="main-1__job-description">{props.getBookingState.result?.recruitmentName}</div>
+                      <div className="main-1__job-description">{getBooking.result?.recruitmentName}</div>
                     </> : null}
 
                   </div>
@@ -196,7 +192,7 @@ function BookingForm(props: BookingFormProps) {
                       <Form.Item className="form-label" label="Tin tuyển dụng" labelCol={{span: 24}}
                                  wrapperCol={{span: 24}}>
                         {getFieldDecorator('recruitmentId', {
-                          initialValue: props.getBookingState.result?.recruitmentId || '',
+                          initialValue: getBooking.result?.recruitmentId || '',
                           rules: [
                             {
                               message: 'Vui lòng chọn tin tuyển dụng',
@@ -218,7 +214,7 @@ function BookingForm(props: BookingFormProps) {
                         <div className="mr-2">
                           <Form.Item className="form-label" label="Ngày" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                             {getFieldDecorator('date', {
-                              initialValue: moment(props.getBookingState.result?.date) || null,
+                              initialValue: moment(getBooking.result?.date) || null,
                               rules: [
                                 {
                                   message: 'Vui lòng chọn ngày bắt đầu',
@@ -235,7 +231,7 @@ function BookingForm(props: BookingFormProps) {
                           <Form.Item className="form-label" label="Giờ bắt đầu" labelCol={{span: 24}}
                                      wrapperCol={{span: 24}}>
                             {getFieldDecorator('timeStart', {
-                              initialValue: moment(props.getBookingState.result?.date),
+                              initialValue: moment(getBooking.result?.date),
                               rules: [
                                 {
                                   message: 'Vui lòng chọn giờ bắt đầu',
@@ -272,7 +268,7 @@ function BookingForm(props: BookingFormProps) {
                           <Form.Item className="form-label" label="Địa điểm" labelCol={{span: 24}}
                                      wrapperCol={{span: 24}}>
                             {getFieldDecorator('interviewAddress', {
-                              initialValue: props.getBookingState.result?.interviewAddressId,
+                              initialValue: getBooking.result?.interviewAddressId,
                               rules: [
                                 {
                                   message: 'Vui lòng nhập địa điểm',
@@ -293,7 +289,7 @@ function BookingForm(props: BookingFormProps) {
                         <Col span={10}>
                           <Form.Item className="form-label" label="Phòng" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                             {getFieldDecorator('floor', {
-                              initialValue: props.getBookingState.result?.floor || '',
+                              initialValue: getBooking.result?.floor || '',
                               rules: [
                                 {
                                   message: 'Vui lòng nhập phòng',
@@ -310,7 +306,7 @@ function BookingForm(props: BookingFormProps) {
                       <Form.Item label="Hội đồng tuyển dụng" className="form-label" labelCol={{span: 24}}
                                  wrapperCol={{span: 24}}>
                         {getFieldDecorator('interviewers', {
-                          initialValue: props.getBookingState.result?.interviewers?.map((item: any) => item.username) || undefined,
+                          initialValue: getBooking.result?.interviewers?.map((item: any) => item.username) || undefined,
                           rules: [
                             {
                               message: 'Vui lòng chọn Hội đồng tuyển dụng',
@@ -331,7 +327,7 @@ function BookingForm(props: BookingFormProps) {
 
                       <Form.Item className="form-label" label="Loại lịch" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                         {getFieldDecorator('type', {
-                          initialValue: props.getBookingState.result?.type || "Phỏng vấn trực tiếp",
+                          initialValue: getBooking.result?.type || "Phỏng vấn trực tiếp",
                           rules: [
                             {
                               message: 'Vui lòng chọn hình thức phỏng vấn',
@@ -355,7 +351,7 @@ function BookingForm(props: BookingFormProps) {
                       <Form.Item className="form-label" label="Ghi chép nội bộ" labelCol={{span: 24}}
                                  wrapperCol={{span: 24}}>
                         {getFieldDecorator('note', {
-                          initialValue: props.getBookingState.result?.note || "",
+                          initialValue: getBooking.result?.note || "",
                           rules: [
                             {
                               message: 'Vui lòng nhập lưu ý cho ứng viên',
@@ -390,7 +386,7 @@ function BookingForm(props: BookingFormProps) {
                 zIndex={2}
                 maskClosable={false}
 
-                visible={props.showBooking.show_booking}
+                visible={showBooking.show_booking}
                 centered={true}
                 width="580px"
                 className="custom"
@@ -406,7 +402,7 @@ function BookingForm(props: BookingFormProps) {
                   <div className="schedule-detail-title">Đặt lịch</div>
                   <div className="main-1">
                     <div className="main-1__candidate-name"
-                         style={{color: "#666"}}>{props.showBooking.data_booking?.fullName}</div>
+                         style={{color: "#666"}}>{showBooking.data_booking?.fullName}</div>
                     {/*<div className="main-1__green-dot"></div>*/}
                     {/*<div className="main-1__job-description">Business Analysis</div>*/}
                   </div>
@@ -418,7 +414,7 @@ function BookingForm(props: BookingFormProps) {
                       <Form.Item className="form-label" label="Tin tuyển dụng" labelCol={{span: 24}}
                                  wrapperCol={{span: 24}}>
                         {getFieldDecorator('recruitmentId', {
-                          initialValue: props.showBooking.data_booking?.idRecruitment,
+                          initialValue: showBooking.data_booking?.idRecruitment,
                           rules: [
                             {
                               message: 'Vui lòng chọn tin tuyển dụng',
@@ -608,8 +604,8 @@ function BookingForm(props: BookingFormProps) {
           </div>
         }
       </div>
-      <CreateEmailForm reqCreate={reqCreate} profile={props.showBooking.data_booking}/>
-      <UpdateEmailForm reqUpdate={reqUpdate} profile={props.showBooking.data_booking}/>
+      <CreateEmailForm reqCreate={reqCreate} profile={showBooking.data_booking}/>
+      <UpdateEmailForm reqUpdate={reqUpdate} profile={showBooking.data_booking}/>
     </>
 
   );

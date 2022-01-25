@@ -96,20 +96,19 @@ function CreateEmailForm(props: IProps) {
           presenters: mailFormPresenter
         }
 
-        if(props.reqCreate){
+        if (props.reqCreate) {
           let req: CreateBookingRequest = {
             createBookingForm: props.reqCreate,
             mailRequest: mailRequest,
           }
           props.createBooking(req)
-        }else {
+        } else {
           let req: CreateScheduleRequest = {
             createScheduleForm: props.reqCreateSchedule,
             mailRequest: mailRequest,
           }
           props.createSchedule(req);
         }
-
         return;
       }
     });
@@ -130,9 +129,6 @@ function CreateEmailForm(props: IProps) {
     setEmailTemp(selectEmail)
     setValueEditor(selectEmail.content)
   }
-
-  console.log("Pvan hang loat:",props.reqCreateSchedule)
-  console.log("Interviewers:",props.reqCreateSchedule?.interviewers)
 
   return (
     <>
@@ -223,7 +219,7 @@ function CreateEmailForm(props: IProps) {
                 <div style={{border: "1px solid #dddde4", padding: 15}}>
                   <Form.Item label="Đến" className="form-label" {...formItemStyle}>
                     {getFieldDecorator('name', {
-                      initialValue:props.reqCreate?.interviewers || props.reqCreateSchedule?.interviewers,
+                      initialValue: props.reqCreate?.interviewers || props.reqCreateSchedule?.interviewers,
                       rules: [
                         {
                           message: 'Vui lòng chọn nhà tuyển dụng',
@@ -266,57 +262,53 @@ function CreateEmailForm(props: IProps) {
                   </Form.Item>
                 </div>
 
-                {props.reqCreate ? (
-                  <>
-                    <div className="font-15-bold-500 mt-5 mb-2">Nội dung email gửi cho người giới thiệu</div>
-                    <div style={{border: "1px solid #dddde4", padding: 15}}>
-                      <Form.Item label="Đến" className="form-label" {...formItemStyle}>
-                        {getFieldDecorator('username', {
-                          initialValue: props.profile?.username || undefined,
-                          rules: [
-                            {
-                              message: 'Vui lòng nhập tên trường',
-                              required: false,
-                            },
-                          ],
-                        })(<Select className="bg-white text-black" style={{...fontWeightStyle, width: "100%"}}
-                                   showSearch
-                                   disabled
-                                   showArrow={false}
-                        >
-                          {props.listAccount.rows?.map((item: any, index: any) => (
-                            <Option key={index} value={item.username}>{item.fullName}</Option>
-                          ))}
-                        </Select>)}
-                      </Form.Item>
 
-                      <Form.Item label="Tiêu đề" className="form-label" {...formItemStyle}>
-                        {getFieldDecorator('subjectPresenter', {
-                          initialValue: emailTemp?.subject,
-                          rules: [
-                            {
-                              message: 'Vui lòng nhập tên trường',
-                              required: false,
-                            },
-                          ],
-                        })(<Input placeholder="Nhập tiêu đề" className="bg-white text-black"/>)}
-                      </Form.Item>
+                <div className="font-15-bold-500 mt-5 mb-2">Nội dung email gửi cho người giới thiệu</div>
+                <div style={{border: "1px solid #dddde4", padding: 15}}>
+                  <Form.Item label="Đến" className="form-label" {...formItemStyle}>
+                    {getFieldDecorator('username', {
+                      initialValue: props.profile?.username || undefined,
+                      rules: [
+                        {
+                          message: 'Vui lòng nhập tên trường',
+                          required: false,
+                        },
+                      ],
+                    })(<Select className="bg-white text-black" style={{...fontWeightStyle, width: "100%"}}
+                               showSearch
+                               showArrow={false}
+                    >
+                      {props.listAccount.rows?.map((item: any, index: any) => (
+                        <Option key={index} value={item.username}>{item.fullName}</Option>
+                      ))}
+                    </Select>)}
+                  </Form.Item>
 
-                      <Form.Item label="Mô tả" className="form-label" {...formItemStyle}>
-                        {getFieldDecorator('contentPresenter', {
-                          initialValue: '',
-                          rules: [
-                            {
-                              message: 'Vui lòng nhập tên trường',
-                              required: false,
-                            },
-                          ],
-                        })(<TextArea placeholder="Nhập nội dung" style={{height: 120}} className="bg-white text-black"/>
-                        )}
-                      </Form.Item>
-                    </div>
-                  </>
-                ) : null}
+                  <Form.Item label="Tiêu đề" className="form-label" {...formItemStyle}>
+                    {getFieldDecorator('subjectPresenter', {
+                      initialValue: emailTemp?.subject,
+                      rules: [
+                        {
+                          message: 'Vui lòng nhập tên trường',
+                          required: false,
+                        },
+                      ],
+                    })(<Input placeholder="Nhập tiêu đề" className="bg-white text-black"/>)}
+                  </Form.Item>
+
+                  <Form.Item label="Mô tả" className="form-label" {...formItemStyle}>
+                    {getFieldDecorator('contentPresenter', {
+                      initialValue: '',
+                      rules: [
+                        {
+                          message: 'Vui lòng nhập tên trường',
+                          required: false,
+                        },
+                      ],
+                    })(<TextArea placeholder="Nhập nội dung" style={{height: 120}} className="bg-white text-black"/>
+                    )}
+                  </Form.Item>
+                </div>
 
 
               </Form>

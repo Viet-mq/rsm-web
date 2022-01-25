@@ -196,7 +196,7 @@ function CreateScheduleInterview(props: IProps) {
     setListCandidates(filterCandidate.concat(listCandidates))
   }
 
-  function handleAdd(e: FormEvent, value: any) {
+  function handleAdd(e: FormEvent, candidate: any) {
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         const date = new Date(values.date);
@@ -208,13 +208,14 @@ function CreateScheduleInterview(props: IProps) {
         const minutes = time.getMinutes();
         const dateChanged: any = new Date(yyyy, mm - 1, dd, hh, minutes, 0);
         const interviewTime: any = new Date(yyyy, mm - 1, dd, hh, minutes + values.interviewTime, 0);
-        setListCandidates(listCandidates.filter((item: ProfileEntity) => item.id !== value.id));
+        setListCandidates(listCandidates.filter((item: ProfileEntity) => item.id !== candidate.id));
         const newData = {
-          idProfile: value.id,
-          fullName: value.fullName,
+          idProfile: candidate.id,
+          fullName: candidate.fullName,
           date: dateChanged * 1,
           interviewTime: interviewTime * 1,
-          avatarColor: value.avatarColor
+          avatarColor: candidate.avatarColor,
+          username:candidate.username
         };
         setDatasource([...dataSource, newData]);
 
