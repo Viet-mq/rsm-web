@@ -233,7 +233,7 @@ function UpdateEmailForm(props: IProps) {
                       required: false,
                     },
                   ],
-                })(<Input placeholder="Nhập tiêu đề" disabled className="bg-white text-black"/>)}
+                })(<Input placeholder="Nhập tiêu đề" className="bg-white text-black"/>)}
               </Form.Item>
 
               <Form.Item label="Mô tả" className="form-label" {...formItemStyle}>
@@ -283,7 +283,7 @@ function UpdateEmailForm(props: IProps) {
                       required: false,
                     },
                   ],
-                })(<Input placeholder="Nhập tiêu đề" disabled className="bg-white text-black"/>)}
+                })(<Input placeholder="Nhập tiêu đề" className="bg-white text-black"/>)}
               </Form.Item>
 
               <Form.Item label="Mô tả" className="form-label" {...formItemStyle}>
