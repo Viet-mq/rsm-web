@@ -37,7 +37,7 @@ import {
   Tooltip
 } from "antd";
 import React, {useEffect, useState} from "react";
-import {ChangeProcessRequest, DataShowBooking, DeleteNoteRequest, DetailCV, NoteEntity, ProcessForm} from "../types";
+import {DataShowBooking, DeleteNoteRequest, DetailCV, NoteEntity, ProcessForm} from "../types";
 import moment from "moment";
 import {ColumnProps} from "antd/lib/table";
 import {emptyText} from "../../../configs/locales";
@@ -105,14 +105,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
   const [pageEmail, setPageEmail] = useState(1);
   const size = 10;
   const {
-    showForm,
-    detail,
-    getActivity,
-    getBooking,
-    getListNote,
-    createNote,
-    updateNote,
-    updateDetail
+    showForm, detail, getActivity, getBooking, getListNote, createNote, updateNote, updateDetail, uploadAvatar, changeProcess,addToTalentPool
   } = props.profileManager;
   const [rate, setRate] = useState(2.4);
   const [isFull, setIsFull] = useState<boolean>(false);
@@ -161,13 +154,13 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
   </ul>);
   const contentMore = (<ul style={{width: 220}} className="popup-popover">
-      <li>
-        <a onClick={handleShowRecruitment}><Icon type="inbox" className="mr-1"/>Chuyển sang tin khác</a>
-      </li>
-      <li>
-        <a onClick={handleShowTalentPools}><MdOutlineSource className="mr-1"/>Chuyển đến kho tiềm năng</a>
-      </li>
-    </ul>);
+    <li>
+      <a onClick={handleShowRecruitment}><Icon type="inbox" className="mr-1"/>Chuyển sang tin khác</a>
+    </li>
+    <li>
+      <a onClick={handleShowTalentPools}><MdOutlineSource className="mr-1"/>Chuyển đến kho tiềm năng</a>
+    </li>
+  </ul>);
   const columns: ColumnProps<NoteEntity>[] = [
     {
       title: "Người phỏng vấn",
@@ -286,17 +279,9 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
   useEffect(() => {
     if (showForm.id_detail) {
-      console.log("hahah")
-      props.getActivityLogs({idProfile: showForm.id_detail,page:activeLogs.current,size:10});
+      props.getActivityLogs({idProfile: showForm.id_detail, page: activeLogs.current, size: 10});
     }
-  }, [showForm.id_detail,activeLogs.current])
-
-  // useEffect(() => {
-  //   if (showForm.id_detail) {
-  //     props.getActivityLogs({idProfile: showForm.id_detail,page:page,size:10});
-  //   }
-  // }, [pageEmail])
-
+  }, [showForm.id_detail, activeLogs.current])
 
   function handleUploadAvatar(e: any) {
     e.preventDefault();
@@ -402,7 +387,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
         id: detail.result.id,
         fullName: detail.result.fullName,
         idRecruitment: detail.result.recruitmentId,
-        username:detail.result.username
+        username: detail.result.username
       }
       props.showFormBooking(true, req);
     }
@@ -654,8 +639,11 @@ function DetailProfileForm(props: DetailProfileFormProps) {
                 <>
                   <div className="p-2">
                     <div className="pb-2">Ứng viên chưa thuộc tin tuyển dụng nào</div>
-                    <div><Button onClick={handleShowRecruitment} type={"primary"} size={"large"}><Icon type="inbox"/>Chuyển
-                      ứng viên vào tin</Button></div>
+                    <div>
+                      <Button onClick={handleShowRecruitment} type={"primary"} size={"large"}><Icon type="inbox"/>
+                        Chuyển ứng viên vào tin
+                      </Button>
+                    </div>
                   </div>
                 </>
               )}
@@ -758,12 +746,12 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
                 </Timeline>
                 <Pagination
-                            current={activeLogs.current}
-                            total={activeLogs.totalPage}
-                            pageSize={size}
-                            showTotal={(total, range) => `Đang xem ${range[0]}- ${range[1]} trong tổng số ${total} mục`}
-                            onChange={handleChangeActivityLogs}
-                            className="pagination"
+                  current={activeLogs.current}
+                  total={activeLogs.totalPage}
+                  pageSize={size}
+                  showTotal={(total, range) => `Đang xem ${range[0]}- ${range[1]} trong tổng số ${total} mục`}
+                  onChange={handleChangeActivityLogs}
+                  className="pagination"
                 />
               </div>
 
@@ -790,8 +778,10 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       {createNote.loading ||
       updateNote.loading ||
       detail.loading ||
-      updateDetail.loading
-
+      updateDetail.loading ||
+      uploadAvatar.loading ||
+      changeProcess.loading||
+        addToTalentPool.loading
         ? <Loading/> : null}
 
     </>

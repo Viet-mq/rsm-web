@@ -24,11 +24,15 @@ import {emptyText} from "../../../configs/locales";
 import {getListAccount} from "../../AccountManager/redux/actions";
 import {createSchedule, getCandidates, resetCandidates, showFormSchedule} from "../redux/actions";
 import Loading from "../../../components/Loading";
-import {ProfileEntity} from "../../ProfileManager/types";
-import {CreateScheduleRequest, ScheduleEntity} from "../types";
+import {CreateBookingRequest, ProfileEntity} from "../../ProfileManager/types";
+import {CreateScheduleForm, CreateScheduleRequest, ScheduleEntity} from "../types";
 import {ColumnProps} from "antd/lib/table";
 import {searchCandidates} from "../redux/actions";
 import {getDataRecruitmentUpdate, getDetailRecruitment} from "../../RecruitmentManager/redux/actions";
+import CreateEmailForm from "../../ProfileManager/components/CreateEmailForm";
+import UpdateEmailForm from "../../ProfileManager/components/UpdateEmailForm";
+import {showEmailCreateForm, showInterviewEmailCreateForm} from "../../ProfileManager/redux/actions";
+import CreateInterviewEmailForm from "./CreateInterviewEmailForm";
 
 
 const mapStateToProps = (state: RootState) => ({
@@ -39,34 +43,33 @@ const mapStateToProps = (state: RootState) => ({
   searchCandidatesState:state.scheduleManager.searchCandidates,
   showSchedule: state.scheduleManager.showSchedule,
   detailRecruitment: state.recruitmentManager.detailRecruitment,
-
 })
 
 const connector = connect(mapStateToProps,
   {
     getListAccount,
     getCandidates,
-    createSchedule,
     resetCandidates,
     showFormSchedule,
     searchCandidates,
-    getDetailRecruitment
-
+    getDetailRecruitment,
+    showEmailCreateForm,
+    showInterviewEmailCreateForm
   });
 type ReduxProps = ConnectedProps<typeof connector>;
 
 const {Option} = Select;
 
-interface ScheduleInterviewProps extends FormComponentProps, ReduxProps {
-}
+interface IProps extends FormComponentProps, ReduxProps {}
 
-function ScheduleInterview(props: ScheduleInterviewProps) {
+function CreateScheduleInterview(props: IProps) {
   const dateFormat = 'DD/MM/YYYY';
   const timeFormat = 'HH:mm';
   const fontWeightStyle = {fontWeight: 400};
   const wrapperRef = useRef<any>(null);
   const {getFieldDecorator, resetFields} = props.form;
   const [recruitment, setRecruitment] = useState(null)
+  const [reqCreate, setReqCreate] = useState<CreateScheduleForm>()
   const columns: ColumnProps<ScheduleEntity>[] = [
     {
       title: 'Họ và tên',
@@ -127,10 +130,6 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
   const [listCandidates, setListCandidates] = useState<ProfileEntity[] | any>([]);
   const [visibleCandidate, setVisibleCandidate] = useState(false)
   const [keySearch, setKeySearch] = useState(undefined);
-
-  useEffect(() => {
-    setListCandidates(props.listCandidate.rows);
-  }, [props.listCandidate]);
 
   useEffect(() => {
     setListCandidates(props.listCandidate.rows);
@@ -242,13 +241,13 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
 
   }
 
-  function btnListScheduleClicked(e: FormEvent) {
+  function onBtnContinueCreateClicked(e: FormEvent) {
     e.preventDefault();
     (e.target as any).disabled = true;
     (e.target as any).disabled = false;
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        let req: CreateScheduleRequest = {
+        let req: CreateScheduleForm = {
           floor: values.floor,
           interviewAddress: values.interviewAddress,
           interviewers: props.detailRecruitment.rows[0]?.interviewer?.map((item:any)=>item.username),
@@ -257,7 +256,10 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
           times: dataSource,
           type: values.type,
         }
-        props.createSchedule(req);
+        setReqCreate(req)
+        props.showInterviewEmailCreateForm(true)
+
+        // props.createSchedule(req);
         return;
       }
     });
@@ -519,15 +521,17 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
           <div className="footer-right">
             <Button onClick={onBtnCancelClicked} type={"link"}
                     style={{color: "black", marginRight: 15}}>Hủy</Button>
-            <Button onClick={btnListScheduleClicked} type={"primary"}>Tạo mới</Button>
+            <Button onClick={onBtnContinueCreateClicked} type={"primary"}>Tiếp tục</Button>
+            {/*<Button onClick={btnListScheduleClicked} type={"primary"}>Tạo mới</Button>*/}
           </div>
 
         </Modal>
       </div>
+      <CreateInterviewEmailForm reqCreateSchedule={reqCreate} />
       {props.listCandidate.loading ?
         <Loading/> : null}
     </>);
 
 }
 
-export default connector(Form.create<ScheduleInterviewProps>()(ScheduleInterview));
+export default connector(Form.create<IProps>()(CreateScheduleInterview));

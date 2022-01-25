@@ -3,9 +3,11 @@ import {connect, ConnectedProps} from "react-redux";
 import {showEmailUpdateForm, updateBooking} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Input, Modal, Select} from "antd";
-import React, {FormEvent, useState} from "react";
+import React, {FormEvent, useEffect, useState} from "react";
 import {Editor} from "@tinymce/tinymce-react";
 import {MailForm, MailRequest, UpdateBookingRequest} from "../types";
+import {EmailEntity} from "../../EmailManager/types";
+import {getListEmail} from "../../EmailManager/redux/actions";
 
 const {Option} = Select;
 const {TextArea} = Input;
@@ -13,12 +15,15 @@ const {TextArea} = Input;
 const mapStateToProps = (state: RootState) => ({
   listAccount: state.accountManager.list,
   showBooking: state.profileManager.showBooking,
+  emailManager: state.emailManager.list,
+
 })
 
 const connector = connect(mapStateToProps,
   {
     updateBooking,
     showEmailUpdateForm,
+    getListEmail
   });
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -36,20 +41,31 @@ function UpdateEmailForm(props: IProps) {
     wrapperCol: {span: 20}
   };
   const [display, setDisplay] = useState(false)
-  const [valueEditor, setValueEditor] = useState('<h1>Dear {name},</h1>\n' +
-    '<p>{company}<em> ch&uacute;c mừng bạn đ&atilde; vượt qua v&ograve;ng thi tuyển vị tr</em>&iacute; {job} .Ph&ograve;ng nh&acirc;n sự xin mời <strong>bạn tham gia phỏng vấn với chi tiết như sau:&nbsp;</strong></p>\n' +
-    '<p style="text-align: right;">&nbsp;-Thời gian: {date} {interview_time}</p>\n' +
-    '<p style="text-align: right;">&nbsp;-Địa chỉ: {floor}, {interview_address}</p>\n' +
-    '<p style="text-align: right;">&nbsp;-H&igrave;nh thức phỏng vấn: {interview_type}</p>')
+  const [emailTemp, setEmailTemp] = useState<EmailEntity>()
+  const [valueEditor, setValueEditor] = useState("")
+
+  useEffect(() => {
+    if (props.showBooking) {
+      props.getListEmail({page: 1, size: 100});
+    }
+  }, [props.showBooking])
+
+
+  useEffect(() => {
+    if (props.showBooking && props.emailManager) {
+      setEmailTemp(props.emailManager.rows[0])
+      setValueEditor(props.emailManager.rows[0]?.content)
+    }
+  }, [props.emailManager])
 
   function onBtnCancelClicked() {
     resetFields();
     props.showEmailUpdateForm(false);
+    setValueEditor("")
+    setEmailTemp(undefined)
   }
 
   function handleSubmitForm(e: FormEvent) {
-
-
     e.preventDefault();
     (e.target as any).disabled = true;
     (e.target as any).disabled = false;
@@ -96,6 +112,12 @@ function UpdateEmailForm(props: IProps) {
     }
   }
 
+  function handleSelectMailTemplate(value: any) {
+    const selectEmail= props.emailManager.rows.find((item:any)=>item.id===value)
+    setEmailTemp(selectEmail)
+    setValueEditor(selectEmail.content)
+  }
+
   return (
     <>
       <Modal
@@ -109,6 +131,7 @@ function UpdateEmailForm(props: IProps) {
         onCancel={onBtnCancelClicked}
         footer={""}>
 
+        {/*email ứng viên*/}
         <div style={{padding: "24px"}}>
           <div className="schedule-detail-title">Email thông báo</div>
         </div>
@@ -118,7 +141,7 @@ function UpdateEmailForm(props: IProps) {
             <Form.Item className="form-label" label="Tên mẫu mail" labelCol={{span: 24}}
                        wrapperCol={{span: 24}}>
               {getFieldDecorator('title', {
-                initialValue: 'Thư xác nhận',
+                initialValue: emailTemp?.id,
                 rules: [
                   {
                     message: 'Vui lòng nhập tên mẫu',
@@ -126,14 +149,19 @@ function UpdateEmailForm(props: IProps) {
                   },
                 ],
               })(
-                <Input placeholder="Nhập tên mẫu" className="bg-white text-black"/>
+                <Select onSelect={handleSelectMailTemplate} style={fontWeightStyle}
+                        placeholder="Nhập tên mẫu">
+                  {props.emailManager.rows?.map((item: any, index: any) => {
+                    return <Option key={index} value={item.id}>{item.name}</Option>
+                  })}
+                </Select>
               )}
             </Form.Item>
 
             <Form.Item className="form-label" label="Tiêu đề mail" labelCol={{span: 24}}
                        wrapperCol={{span: 24}}>
               {getFieldDecorator('subjectCandidate', {
-                initialValue: "Thư mời phỏng vấn vị trí1 {job}",
+                initialValue: emailTemp?.subject,
                 rules: [
                   {
                     message: 'Vui lòng nhập tiêu đề mail',
@@ -182,8 +210,8 @@ function UpdateEmailForm(props: IProps) {
                   initialValue: props.reqUpdate?.interviewers || undefined,
                   rules: [
                     {
-                      message: 'Vui lòng nhập tên trường',
-                      required: false,
+                      message: 'Vui lòng chọn nhà tuyển dụng',
+                      required: true,
                     },
                   ],
                 })(<Select className="bg-white text-black" style={{...fontWeightStyle, width: "100%"}}
@@ -198,7 +226,7 @@ function UpdateEmailForm(props: IProps) {
 
               <Form.Item label="Tiêu đề" className="form-label" {...formItemStyle}>
                 {getFieldDecorator('subjectRecruitmentCouncil', {
-                  initialValue: 'Lịch phỏng vấn vị trí {job}',
+                  initialValue: emailTemp?.subject,
                   rules: [
                     {
                       message: 'Vui lòng nhập tên trường',
@@ -248,7 +276,7 @@ function UpdateEmailForm(props: IProps) {
 
               <Form.Item label="Tiêu đề" className="form-label" {...formItemStyle}>
                 {getFieldDecorator('subjectPresenter', {
-                  initialValue: 'Lịch phỏng vấn vị trí {job}',
+                  initialValue: emailTemp?.subject,
                   rules: [
                     {
                       message: 'Vui lòng nhập tên trường',

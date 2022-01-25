@@ -28,14 +28,14 @@ const connector = connect(mapStateToProps,
   });
 type ReduxProps = ConnectedProps<typeof connector>;
 
-interface ScheduleInterviewProps extends FormComponentProps, ReduxProps {
+interface IProps extends FormComponentProps, ReduxProps {
   handleClosePopupDetail: () => void;
   visible: boolean,
   dataDetail: ScheduleEntity[] | any,
   idDetail: string
 }
 
-function ScheduleInterview(props: ScheduleInterviewProps) {
+function DetailScheduleInterview(props: IProps) {
   const [visible, setVisible] = useState(false);
   const dateFormat = 'DD/MM/YYYY';
   const timeFormat = 'HH:mm';
@@ -139,4 +139,4 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
 
 }
 
-export default connector(Form.create<ScheduleInterviewProps>()(ScheduleInterview));
+export default connector(Form.create<IProps>()(DetailScheduleInterview));

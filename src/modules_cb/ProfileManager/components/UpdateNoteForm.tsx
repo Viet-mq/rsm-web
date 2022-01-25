@@ -161,7 +161,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           </Form.Item>
 
           <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px'}} colon={false}>
-            <Button className="mr-3 Update-btn" htmlType="submit" onClick={onBtnUpdateClicked}>
+            <Button className="mr-3 Update-btn" type="primary" htmlType="submit" onClick={onBtnUpdateClicked}>
               Cập nhật
             </Button>
             <Button type="default" className="pl-5 pr-5" onClick={onBtnCancelClicked}>
