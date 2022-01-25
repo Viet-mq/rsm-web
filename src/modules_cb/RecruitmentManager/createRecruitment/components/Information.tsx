@@ -432,7 +432,7 @@ function InformationForm(props: IProps) {
                 <Editor
                   onEditorChange={handleChangeJobDescription}
                   //apiKey="b616i94ii3b9vlza43fus93fppxb1yxb8f03gh926u51qhs6"
-                  // onInit={(evt, editor) => editorRef.current = editor}
+                  onInit={(evt, editor) => editorRef.current = editor}
                   init={{
                     menu: {
                       tc: {
@@ -451,6 +451,7 @@ function InformationForm(props: IProps) {
                     quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
                     toolbar_mode: 'sliding',
                     content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+
                   }}
                 />
                 <div className={display.jobDescription?"value-required show":"value-required hide"}>Vui lòng nhập mô tả chung</div>

@@ -41,6 +41,7 @@ function CreateAccountForm(props: CreateAccountFormProps) {
           username: values.username,
           password: values.password,
           role: values.role,
+          email:values.email,
           fullName: values.full_name,
           dateOfBirth: values.date_of_birth,
         }
@@ -75,20 +76,6 @@ function CreateAccountForm(props: CreateAccountFormProps) {
 
       <Form {...formItemLayout}>
 
-        <Form.Item label="Tên đăng nhập" className="mb-0" style={{...formItemStyle}}>
-          {getFieldDecorator('username', {
-            initialValue: '',
-            rules: [
-              {
-                message: 'Vui lòng nhập tên đăng nhập',
-                required: true,
-              },
-            ],
-          })(
-            <Input placeholder="Tên đăng nhập" className="bg-white text-black"/>
-          )}
-        </Form.Item>
-
         <Form.Item label="Họ tên" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('full_name', {
             initialValue: '',
@@ -100,6 +87,34 @@ function CreateAccountForm(props: CreateAccountFormProps) {
             ],
           })(
             <Input placeholder="Họ tên" className="bg-white text-black"/>
+          )}
+        </Form.Item>
+
+        <Form.Item label="Email" className="mb-0" style={{...formItemStyle}}>
+          {getFieldDecorator('email', {
+            initialValue: '',
+            rules: [
+              {
+                message: 'Vui lòng nhập email',
+                required: true,
+              },
+            ],
+          })(
+            <Input placeholder="Email" className="bg-white text-black"/>
+          )}
+        </Form.Item>
+
+        <Form.Item label="Tên đăng nhập" className="mb-0" style={{...formItemStyle}}>
+          {getFieldDecorator('username', {
+            initialValue: '',
+            rules: [
+              {
+                message: 'Vui lòng nhập tên đăng nhập',
+                required: true,
+              },
+            ],
+          })(
+            <Input placeholder="Tên đăng nhập" className="bg-white text-black"/>
           )}
         </Form.Item>
 
