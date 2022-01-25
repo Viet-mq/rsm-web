@@ -283,13 +283,6 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     }
   }, [showForm.id_detail, activeLogs.current])
 
-  // useEffect(() => {
-  //   if (showForm.id_detail) {
-  //     props.getActivityLogs({idProfile: showForm.id_detail,page:page,size:10});
-  //   }
-  // }, [pageEmail])
-
-
   function handleUploadAvatar(e: any) {
     e.preventDefault();
     setVisiblePopover(false)

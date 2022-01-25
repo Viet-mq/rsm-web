@@ -6,7 +6,7 @@ import {countBookingNumber,} from "../../ProfileManager/redux/actions";
 import {AiOutlineCalendar, GrNext, GrPrevious} from "react-icons/all";
 import moment from 'moment';
 import 'moment/locale/vi';
-import ScheduleInterview from "../components/ScheduleInterview";
+import CreateScheduleInterview from "../components/CreateScheduleInterview";
 import DetailScheduleInterview from "../components/DetailScheduleInterview";
 import {getAllSchedule, showFormSchedule} from "../redux/actions";
 import {DataShowSchedule, ScheduleEntity} from "../types";
@@ -345,7 +345,7 @@ function ScheduleManagerPages(props: IProps) {
 
       </div>
 
-      <ScheduleInterview/>
+      <CreateScheduleInterview/>
       <DetailScheduleInterview idDetail={idDetail} dataDetail={props.schedule.result} visible={visibleDetail}
                                handleClosePopupDetail={handleClosePopupDetail}/>
     </>

@@ -31,7 +31,8 @@ import {searchCandidates} from "../redux/actions";
 import {getDataRecruitmentUpdate, getDetailRecruitment} from "../../RecruitmentManager/redux/actions";
 import CreateEmailForm from "../../ProfileManager/components/CreateEmailForm";
 import UpdateEmailForm from "../../ProfileManager/components/UpdateEmailForm";
-import {showEmailCreateForm} from "../../ProfileManager/redux/actions";
+import {showEmailCreateForm, showInterviewEmailCreateForm} from "../../ProfileManager/redux/actions";
+import CreateInterviewEmailForm from "./CreateInterviewEmailForm";
 
 
 const mapStateToProps = (state: RootState) => ({
@@ -52,15 +53,16 @@ const connector = connect(mapStateToProps,
     showFormSchedule,
     searchCandidates,
     getDetailRecruitment,
-    showEmailCreateForm
+    showEmailCreateForm,
+    showInterviewEmailCreateForm
   });
 type ReduxProps = ConnectedProps<typeof connector>;
 
 const {Option} = Select;
 
-interface ScheduleInterviewProps extends FormComponentProps, ReduxProps {}
+interface IProps extends FormComponentProps, ReduxProps {}
 
-function ScheduleInterview(props: ScheduleInterviewProps) {
+function CreateScheduleInterview(props: IProps) {
   const dateFormat = 'DD/MM/YYYY';
   const timeFormat = 'HH:mm';
   const fontWeightStyle = {fontWeight: 400};
@@ -255,7 +257,7 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
           type: values.type,
         }
         setReqCreate(req)
-        props.showEmailCreateForm(true)
+        props.showInterviewEmailCreateForm(true)
 
         // props.createSchedule(req);
         return;
@@ -525,11 +527,11 @@ function ScheduleInterview(props: ScheduleInterviewProps) {
 
         </Modal>
       </div>
-      <CreateEmailForm reqCreateSchedule={reqCreate} />
+      <CreateInterviewEmailForm reqCreateSchedule={reqCreate} />
       {props.listCandidate.loading ?
         <Loading/> : null}
     </>);
 
 }
 
-export default connector(Form.create<ScheduleInterviewProps>()(ScheduleInterview));
+export default connector(Form.create<IProps>()(CreateScheduleInterview));
