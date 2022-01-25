@@ -19,7 +19,7 @@ export const createSchedule = async (params?: CreateScheduleRequest): Promise<Re
   if(params?.mailRequest.presenters?.subject) formData.append('subjectPresenter', params?.mailRequest.presenters?.subject);
   if(params?.mailRequest.recruitmentCouncils?.subject) formData.append('subjectRecruitmentCouncil', params?.mailRequest.recruitmentCouncils?.subject);
   if(params?.createScheduleForm.type) formData.append('type', params?.createScheduleForm.type);
-  if(params?.createScheduleForm.times) formData.append('times', params?.createScheduleForm.times);
+  if(params?.createScheduleForm.times) formData.append('times',JSON.stringify(params?.createScheduleForm.times));
   return POSTIMAGE('api-svc/calendars/create', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
