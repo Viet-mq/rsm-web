@@ -39,6 +39,7 @@ function UpdateAccountForm(props: UpdateAccountFormProps) {
           username: values.username,
           fullName: values.full_name,
           dateOfBirth: values.date_of_birth,
+          email:values.email,
         }
         props.updateAccount(req);
         return;
@@ -96,6 +97,20 @@ function UpdateAccountForm(props: UpdateAccountFormProps) {
             ],
           })(
             <Input placeholder="Họ tên" className="bg-white text-black"/>
+          )}
+        </Form.Item>
+
+        <Form.Item label="Email" className="mb-0" style={{...formItemStyle}}>
+          {getFieldDecorator('email', {
+            initialValue: props.showForm.data_update?.email,
+            rules: [
+              {
+                message: 'Vui lòng nhập email',
+                required: true,
+              },
+            ],
+          })(
+            <Input placeholder="Email" className="bg-white text-black"/>
           )}
         </Form.Item>
 

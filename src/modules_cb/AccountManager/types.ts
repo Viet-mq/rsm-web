@@ -17,6 +17,7 @@ export interface CreateAccountRequest {
   password: string,
   fullName: string,
   role: number,
+  email:string,
   dateOfBirth: string,
 }
 
@@ -24,6 +25,8 @@ export interface UpdateAccountRequest {
   username: string,
   fullName: string,
   dateOfBirth: string,
+  email:string,
+
 }
 
 export interface DeleteAccountRequest {
