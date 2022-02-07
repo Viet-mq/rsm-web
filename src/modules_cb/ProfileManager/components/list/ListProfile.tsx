@@ -54,7 +54,8 @@ interface ListProfileProps extends ReduxProps {
   idRecruitment?: any,
   idProcess?: any,
   idTalentPool?: any,
-
+  dataID?: any,
+  setDataID?: any,
 }
 
 function ListProfile(props: ListProfileProps) {
@@ -81,6 +82,7 @@ function ListProfile(props: ListProfileProps) {
     talentPool: null,
     recruitment: null
   })
+  const [dataID, setDataID] = useState<any>({});
   const columns: ColumnProps<ProfileEntity>[] = [
     {
       title: 'STT',
@@ -355,6 +357,10 @@ function ListProfile(props: ListProfileProps) {
   }, [props.listDepartment.rows])
 
   useEffect(() => {
+    props.setDataID(selected)
+  },[selected])
+
+  useEffect(() => {
     if (pathname.includes("recruitment-manager")) props.getListProfile({
       recruitment: props.idRecruitment,
       statusCV: props.idProcess,
@@ -433,7 +439,14 @@ function ListProfile(props: ListProfileProps) {
       department: null,
       talentPool: null,
       recruitment: null
-    })
+    });
+    // props.setDataID({
+    //   job: null,
+    //   jobLevel: null,
+    //   department: null,
+    //   talentPool: null,
+    //   recruitment: null
+    // })
     props.getListProfile({page: 1, size: 30});
   };
 
@@ -494,6 +507,7 @@ function ListProfile(props: ListProfileProps) {
   }
 
   function btnSearchClicked() {
+    setDataID(selected);
     props.getListProfile({
       fullName: selected.name,
       job: selected.job,
@@ -529,7 +543,10 @@ function ListProfile(props: ListProfileProps) {
 
               <Search style={{display: "inline"}}
                       value={selected.name}
-                      onChange={e => setSelected({...selected, name: e.target.value})}
+                      onChange={e => {
+                        setSelected({...selected, name: e.target.value});
+                        // props.setDataID({...selected, name: e.target.value})
+                      }}
                       onSearch={btnSearchClicked}
                       placeholder="Họ tên"/>
 

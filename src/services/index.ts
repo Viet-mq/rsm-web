@@ -173,6 +173,11 @@ export const DELETE_2 = (path: string, params?: any) => {
 };
 
 export const EXPORT = <T extends {}>(path: string, params: any = {}): Promise<T> => {
+  for (var propName in params) {
+    if (params[propName] === null || params[propName] === undefined) {
+      delete params[propName];
+    }
+  }
   const _params = Object.keys(params)
     .map(key => `${key}=${params[key]}`)
     .join('&');

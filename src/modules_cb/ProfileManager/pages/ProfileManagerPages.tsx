@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import ListProfile from "../components/list/ListProfile";
 import {Button, Col, Icon, Row} from "antd";
 import {RootState} from "../../../redux/reducers";
@@ -36,6 +36,7 @@ function ProfileManagerPages(props: IProps) {
   const {search,create,uploadListCV,list}=props.profileManager
   const {idTalentPool} = useParams()
   const location = useLocation();
+  const [dataID, setDataID] = useState<any>({})
   useEffect(() => {
     location.pathname.includes("talent-pool-manager") ? document.title = "Talent pools" : document.title = "Ứng viên";
     props.getDetailTalentPool({id: idTalentPool})
@@ -60,7 +61,7 @@ function ProfileManagerPages(props: IProps) {
   }
 
   function BtnExportExcel() {
-    exportExcelFile(undefined).then((value: any) => {
+    exportExcelFile(dataID).then((value: any) => {
       const data = new Blob([value], {type: 'application/json'});
       const xlsxURL = window.URL.createObjectURL(data);
       const tempLink = document.createElement('a');
@@ -98,7 +99,7 @@ function ProfileManagerPages(props: IProps) {
         </Row>
       </div>
 
-      <ListProfile idTalentPool={idTalentPool}/>
+      <ListProfile idTalentPool={idTalentPool} dataID={dataID} setDataID={setDataID}/>
       <CreateProfileForm/>
       <UploadCVForm/>
 
