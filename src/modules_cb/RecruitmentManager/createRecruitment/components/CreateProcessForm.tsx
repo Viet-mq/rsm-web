@@ -9,11 +9,7 @@ import {CreateRecruitmentRequest, RecruitmentEntity} from "../../types";
 import {useLocation} from "react-router-dom";
 
 const mapStateToProps = (state: RootState) => ({
-  showForm: state.recruitmentManager.showForm,
-  createInterviewProcessState: state.recruitmentManager.createInterviewProcess,
-  createStepsState: state.recruitmentManager.createSteps,
-  dataUpdate: state.recruitmentManager.update.dataUpdate
-
+  recruitmentManager: state.recruitmentManager,
 })
 
 const connector = connect(mapStateToProps, {
@@ -33,6 +29,7 @@ interface CreateJobFormProps extends FormComponentProps, ReduxProps {
 }
 
 function CreateProcessForm(props: CreateJobFormProps) {
+  const {showForm,createInterviewProcess,createSteps,update}=props.recruitmentManager
   const location = useLocation();
   const {getFieldDecorator, resetFields} = props.form;
   const formItemStyle = {height: '60px'};
@@ -48,38 +45,41 @@ function CreateProcessForm(props: CreateJobFormProps) {
   };
 
   useEffect(() => {
-    if (props.createInterviewProcessState?.response?.code === 0) {
-      const schemaCopy: any = props.schema?.slice();
-      let dataAdd: StatusCVEntity = ({
-        id: props.createInterviewProcessState?.response.id,
-        name: props.createInterviewProcessState?.response.name,
-        isDragDisabled: props.createInterviewProcessState?.response.isDragDisabled
-      })
-      schemaCopy?.splice(props.lastElement + 1, 0, dataAdd);
+    if(showForm.show_create){
+      if (createInterviewProcess?.response?.code === 0) {
+        const schemaCopy: any = props.schema?.slice();
+        let dataAdd: StatusCVEntity = ({
+          id: createInterviewProcess?.response.id,
+          name: createInterviewProcess?.response.name,
+          isDragDisabled: createInterviewProcess?.response.isDragDisabled,
+          isNew:createInterviewProcess.response?.isNew,
+        })
+        schemaCopy?.splice(props.lastElement + 1, 0, dataAdd);
 
-      props.setLastElement(schemaCopy.map((el: any) => el.isDragDisabled).lastIndexOf(false))
+        props.setLastElement(schemaCopy.map((el: any) => el.isDragDisabled).lastIndexOf(false))
 
-      if (location.pathname.includes("edit")) {
-        if (props.dataUpdate) {
-          let req: RecruitmentEntity = {
-            ...props.dataUpdate,
-            interviewProcess: schemaCopy
+        if (location.pathname.includes("edit")) {
+          if (update.dataUpdate) {
+            let req: RecruitmentEntity = {
+              ...update.dataUpdate,
+              interviewProcess: schemaCopy
+            }
+            props.getDataRecruitmentUpdate(req)
           }
-          props.getDataRecruitmentUpdate(req)
+
+        } else {
+          let req: CreateRecruitmentRequest = ({
+            ...createSteps.request,
+            interviewProcess: schemaCopy
+          })
+          props.createSteps(req)
         }
 
-      } else {
-        let req: CreateRecruitmentRequest = ({
-          ...props.createStepsState.request,
-          interviewProcess: schemaCopy
-        })
-        props.createSteps(req)
+        // props.setSchema(schemaCopy);
+        // props.showFormCreate(false)
       }
-
-      // props.setSchema(schemaCopy);
-      props.showFormCreate(false)
     }
-  }, [props.createInterviewProcessState?.response])
+  }, [createInterviewProcess?.response])
 
   function onBtnCreateClicked(e: FormEvent) {
     e.preventDefault();
@@ -95,7 +95,6 @@ function CreateProcessForm(props: CreateJobFormProps) {
         return;
       }
     });
-
   }
 
   function onBtnCancelClicked() {
@@ -109,7 +108,7 @@ function CreateProcessForm(props: CreateJobFormProps) {
       zIndex={2}
       maskClosable={false}
       title="Thêm vòng"
-      visible={props.showForm.show_create}
+      visible={showForm.show_create}
       centered={true}
       width="550px"
       afterClose={onBtnCancelClicked}

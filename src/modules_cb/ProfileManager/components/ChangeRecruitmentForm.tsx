@@ -29,6 +29,7 @@ interface IProps extends FormComponentProps, ReduxProps {
 }
 
 function ChangeRecruitmentForm(props: IProps) {
+  const {showForm}=props.profileManager
   const fontWeight = {fontWeight: 500}
   const [addRecruitment, setAddRecruitment] = useState('')
   const [filterRecruitment, setFilterRecruitment] = useState<RecruitmentEntity[]>([])
@@ -37,14 +38,14 @@ function ChangeRecruitmentForm(props: IProps) {
   const [valuesSelect, setValueSelect] = useState('')
 
   useEffect(() => {
-    if (props.profileManager.showForm.show_change_recruitment) {
+    if (showForm.show_change_recruitment) {
       props.getListRecruitment();
     }
-  }, [props.profileManager.showForm.show_change_recruitment])
+  }, [showForm.show_change_recruitment])
 
   useEffect(() => {
-    if (props.profileManager.showForm.show_change_recruitment) {
-      setFilterRecruitment(props.recruitment.rows.filter((item: any) => item.id !== props.profileManager.showForm?.id_recruitment))
+    if (showForm.show_change_recruitment) {
+      setFilterRecruitment(props.recruitment.rows.filter((item: any) => item.id !== showForm?.id_recruitment))
     }
   }, [props.recruitment])
 
@@ -67,12 +68,12 @@ function ChangeRecruitmentForm(props: IProps) {
       // const findRecruitment = props.recruitment.rows.find((item: any) => item.id === addRecruitment)
       //
       // let recruitmentForm: ProcessForm = ({
-      //   idProfile: props.profileManager.showForm.change_process?.idProfile,
-      //   recruitmentId: props.profileManager.showForm.change_process?.recruitmentId,
+      //   idProfile: showForm.change_process?.idProfile,
+      //   recruitmentId: showForm.change_process?.recruitmentId,
       //   statusCVId: process
       // })
       let recruitmentForm: ProcessForm = ({
-        idProfile: props.profileManager.showForm?.id_detail,
+        idProfile: showForm?.id_detail,
         recruitmentId: valuesSelect,
         statusCVId: process
       })
@@ -99,7 +100,7 @@ function ChangeRecruitmentForm(props: IProps) {
 
   function btnChangeRecruitmentClicked() {
     let recruitmentForm: ProcessForm = ({
-      idProfile: props.profileManager.showForm?.id_detail,
+      idProfile: showForm?.id_detail,
       recruitmentId: valuesSelect,
       statusCVId: process,
     })
@@ -112,11 +113,11 @@ function ChangeRecruitmentForm(props: IProps) {
 
   return (
     <>
-      {props.profileManager.showForm.id_recruitment ?
+      {showForm.id_recruitment ?
         (<Modal
           zIndex={2}
           maskClosable={false}
-          visible={props.profileManager.showForm.show_change_recruitment}
+          visible={showForm.show_change_recruitment}
           centered={true}
           width="530px"
           className="custom"
@@ -165,7 +166,7 @@ function ChangeRecruitmentForm(props: IProps) {
         (<Modal
           zIndex={2}
           maskClosable={false}
-          visible={props.profileManager.showForm.show_change_recruitment}
+          visible={showForm.show_change_recruitment}
           centered={true}
           width="530px"
           className="custom"

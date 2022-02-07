@@ -22,7 +22,6 @@ interface IProps extends ReduxProps {
 function MenuFrontendDetailForm(props: IProps) {
 
   const [checkedKeys, setCheckedKeys] = useState<any>([])
-  console.log("checkedKeys",checkedKeys)
   const getChildrenRecursive = (childens: any) => {
     let actions: any = [];
     for (let i = 0; i < childens.length; i++) {

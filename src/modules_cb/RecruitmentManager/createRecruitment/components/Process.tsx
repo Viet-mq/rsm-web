@@ -8,24 +8,29 @@ import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import {MdDragIndicator} from "react-icons/all";
 import CreateProcessForm from "./CreateProcessForm";
 import UpdateProcessForm from "./UpdateProcessForm";
-import {createSteps, getDataRecruitmentUpdate, showFormCreate, showFormUpdate} from "../../redux/actions";
-import {CreateRecruitmentRequest, RecruitmentEntity} from "../../types";
+import {
+  createSteps,
+  deleteProcess,
+  getDataRecruitmentUpdate,
+  showFormCreate,
+  showFormUpdate
+} from "../../redux/actions";
+import {CreateRecruitmentRequest, DeleteProcessRequest, RecruitmentEntity} from "../../types";
 import {useLocation} from "react-router-dom";
+import ReactQuill from "react-quill";
 
 const {TextArea} = Input;
 
 const mapStateToProps = (state: RootState) => ({
-  showForm: state.recruitmentManager.showForm,
-  createStepsState: state.recruitmentManager.createSteps,
-  dataUpdate: state.recruitmentManager.update.dataUpdate
-
+  recruitmentManager: state.recruitmentManager,
 })
 
 const connector = connect(mapStateToProps, {
   showFormCreate,
   showFormUpdate,
   createSteps,
-  getDataRecruitmentUpdate
+  getDataRecruitmentUpdate,
+  deleteProcess
 
 });
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -34,8 +39,10 @@ interface IProps extends FormComponentProps, ReduxProps {
 }
 
 function ProcessForm(props: IProps) {
+  const {createSteps, update, deleteProcess} = props.recruitmentManager
   const location = useLocation();
-  const fontWeightStyle = {fontWeight: 400, height: 215};
+  const isEdit = location.pathname.includes("edit");
+  const fontWeightStyle = {fontWeight: 400};
   /*
    * Quill modules to attach to editor
    * See https://quilljs.com/docs/modules/ for complete options
@@ -43,11 +50,18 @@ function ProcessForm(props: IProps) {
   const modules = {
     toolbar: [
       [{'header': '1'}, {'header': '2'}],
+      ['blockquote', 'code-block'],
       ['bold', 'italic', 'underline', 'strike', 'blockquote'],
       [{'list': 'ordered'}, {'list': 'bullet'}],
       [{'indent': '-1'}, {'indent': '+1'}],
       ['link', 'image'],
-      ['clean']
+      [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+      [{ 'direction': 'rtl' }],                         // text direction
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+      [{ 'font': [] }],
+      [{ 'align': [] }],
+      ['clean'],
     ],
 
     clipboard: {
@@ -65,16 +79,22 @@ function ProcessForm(props: IProps) {
     'list', 'bullet', 'indent',
     'link', 'image', 'video'
   ]
+
   const [schema, setSchema] = useState<any>([])
   const [lastElement, setLastElement] = useState<any>();
+  const [valueEditor, setValueEditor] = useState(
+     isEdit ? update.dataUpdate?.interest : createSteps.request?.interest || ""
+  )
+
+  const [display, setDisplay] = useState(false)
+
   useEffect(() => {
     document.title = "Quản lý tin tuyển dụng";
   }, []);
 
   useEffect(() => {
-    location.pathname.includes("edit") ? setSchema(props.dataUpdate?.interviewProcess) : setSchema(props.createStepsState.request?.interviewProcess)
-
-  }, [props.createStepsState.request, props.dataUpdate])
+    isEdit ? setSchema(update.dataUpdate?.interviewProcess) : setSchema(createSteps.request?.interviewProcess)
+  }, [createSteps.request, update.dataUpdate])
 
   useEffect(() => {
     if (schema?.length) {
@@ -83,6 +103,14 @@ function ProcessForm(props: IProps) {
       else setLastElement(0)
     }
   }, [schema])
+
+  useEffect(() => {
+    if (deleteProcess.response?.code === 0) {
+      schema.splice(deleteProcess?.index, 1)
+      checkIsNewProcess();
+    }
+
+  }, [deleteProcess.response])
 
   const onDragEnd = (result: any) => {
     // dropped outside the list
@@ -95,20 +123,17 @@ function ProcessForm(props: IProps) {
     // put the removed one into destination.
     schemaCopy.splice(result.destination.index, 0, removed);
     setLastElement(schemaCopy.map((el: any) => el.isDragDisabled).lastIndexOf(false))
-
-
-    if (location.pathname.includes("edit")) {
-      if (props.dataUpdate) {
+    if (isEdit) {
+      if (update.dataUpdate) {
         let req: RecruitmentEntity = {
-          ...props.dataUpdate,
+          ...update.dataUpdate,
           interviewProcess: schemaCopy
         }
         props.getDataRecruitmentUpdate(req)
       }
-
     } else {
       let req: CreateRecruitmentRequest = ({
-        ...props.createStepsState.request,
+        ...createSteps.request,
         interviewProcess: schemaCopy
       })
       props.createSteps(req)
@@ -129,20 +154,18 @@ function ProcessForm(props: IProps) {
     // props.checkInformationValidate(true)
   }
 
-  function btnDeleteProcessClicked(values: any, index: any) {
-    schema.splice(index, 1)
-    if (location.pathname.includes("edit")) {
-      if (props.dataUpdate) {
+  function checkIsNewProcess() {
+    if (isEdit) {
+      if (update.dataUpdate) {
         let req: RecruitmentEntity = {
-          ...props.dataUpdate,
+          ...update.dataUpdate,
           interviewProcess: schema
         }
         props.getDataRecruitmentUpdate(req)
       }
-
     } else {
       let req: CreateRecruitmentRequest = ({
-        ...props.createStepsState.request,
+        ...createSteps.request,
         interviewProcess: schema
       })
       props.createSteps(req)
@@ -151,12 +174,37 @@ function ProcessForm(props: IProps) {
     if (calLastElement !== -1) setLastElement(calLastElement)
     else setLastElement(0)
     setSchema(schema)
+  }
 
-
+  function btnDeleteProcessClicked(values: any, index: any) {
+    if (values.isNew === true) {
+      schema.splice(index, 1)
+      checkIsNewProcess()
+    } else {
+      let req: DeleteProcessRequest = {
+        recruitmentId: update.dataUpdate?.id,
+        statusCVId: values.id,
+      }
+      props.deleteProcess(req, index)
+    }
   }
 
   function btnEditProcessClicked(item: any, index: any) {
     props.showFormUpdate(true, item, index)
+  }
+
+  function handleChangeTextEditor(value:any) {
+    console.log(value)
+    if (value === "<p><br></p>") {
+      setDisplay( true)
+      setValueEditor( "")
+    } else {
+      setDisplay( false)
+      // const newValueEditor = valueEditor
+      // newValueEditor.interest = value
+      // onFormChange(salary, newValueEditor)
+      setValueEditor(value)
+    }
   }
 
   return (
@@ -280,18 +328,20 @@ function ProcessForm(props: IProps) {
             <div>Khi ứng viên ứng tuyển vào tin tuyển dụng này, hệ thống sẽ tự động gửi email cho ứng viên</div>
 
             <div className="schedule-detail-title mb-4">Nội dung email</div>
-            {/*<ReactQuill*/}
-            {/*  style={fontWeightStyle}*/}
-            {/*  theme={'snow'}*/}
-            {/*  modules={modules}*/}
-            {/*  formats={formats}*/}
-            {/*  bounds={'.app'}*/}
-            {/*  placeholder="Nội dung email"*/}
-            {/*/>*/}
-
-            <TextArea onChange={onFormChange} placeholder="Quyền lợi" style={{height: 150}}
-                      className="bg-white text-black"/>
-
+            <ReactQuill
+              style={fontWeightStyle}
+              className="ql-custom"
+              onChange={handleChangeTextEditor}
+              defaultValue={valueEditor}
+              
+              theme={'snow'}
+              modules={modules}
+              formats={formats}
+              bounds={'.app'}
+              placeholder="Nội dung email"
+            />
+            <div className={display ? "value-required show" : "value-required hide"}>Vui lòng nhập email
+            </div>
           </div>
         </div>
       </div>

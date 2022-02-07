@@ -17,7 +17,7 @@ import {SourceCVEntity, DeleteSourceCVRequest} from "../../types";
 const mapStateToProps = ({sourcecvManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
   getListSourceCV,
-  deleteSourceCV: deleteSourceCV,
+   deleteSourceCV,
   showFormCreate,
   showFormUpdate,
   updateSourceCV

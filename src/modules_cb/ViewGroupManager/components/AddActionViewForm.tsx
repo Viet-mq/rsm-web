@@ -128,9 +128,7 @@ function AddActionViewForm(props: AddActionViewFormProps) {
       setAction(selectedRow as FrontendViewEntity);
     }
   }
-  console.log("props.listView.rows:", props.listView.rows);
-  console.log("Action:", action)
-  console.log("viewGroupManager:", props.viewGroupManager.showForm?.view?.views)
+
   return (
 
     <Modal

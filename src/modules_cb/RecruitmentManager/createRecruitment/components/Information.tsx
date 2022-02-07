@@ -8,24 +8,16 @@ import {showFormCreate as showJobFormCreate} from "../../../JobManager/redux/act
 import {checkInformationValidate, createSteps, getDataRecruitmentUpdate} from "../../redux/actions";
 import {CreateRecruitmentRequest, RecruitmentEntity} from "../../types";
 import {useLocation} from "react-router-dom";
-import {Editor} from "@tinymce/tinymce-react";
+import ReactQuill from "react-quill";
 
 const {Option} = Select;
 
 const mapStateToProps = (state: RootState) => ({
-  listAccount: state.accountManager.list,
-  getBookingState: state.profileManager.getBooking,
-  updateBooking: state.profileManager.updateBooking,
-  createBooking: state.profileManager.createBooking,
-  showBooking: state.profileManager.showBooking,
   listAddress: state.addressManager.list,
-  listRecruitment: state.recruitmentManager.list,
+  recruitmentManager: state.recruitmentManager,
   listTalentPool: state.talentPoolManager.list,
   listJob: state.jobManager.list,
-  createJob: state.jobManager.create,
   listProcess: state.statuscvManager.list,
-  createStepsState: state.recruitmentManager.createSteps,
-  dataUpdate: state.recruitmentManager.update.dataUpdate
 })
 
 const connector = connect(mapStateToProps,
@@ -42,50 +34,99 @@ interface IProps extends FormComponentProps, ReduxProps {
 
 function InformationForm(props: IProps) {
   const location = useLocation();
+  const {createSteps, update} = props.recruitmentManager
   const {getFieldDecorator} = props.form;
   const fontWeightStyle = {fontWeight: 400};
   const dateFormat = 'DD/MM/YYYY';
   const buttonCreate = useRef(null);
   const textEditorStyle = {marginBottom: 30}
+  const isEdit = location.pathname.includes("edit");
   const [salary, setSalary] = useState<any>({
     from: 0,
     to: 0,
     detailOfSalary: "Chi tiết mức lương",
-    salaryDescription: "Từ 0 VND đến 0 VND"
+    // salaryDescription: "Từ 0 VND đến 0 VND"
   })
-  const [display,setDisplay]=useState({
+  const [display, setDisplay] = useState({
     interest: false,
-    requirementOfJob:false,
-    jobDescription:false
+    requirementOfJob: false,
+    jobDescription: false
 
   })
-  const [valueEditor,setValueEditor]=useState({
-    interest:"",
-    requirementOfJob:"",
-    jobDescription:""
+  const [valueEditor, setValueEditor] = useState({
+    interest: isEdit ? update.dataUpdate?.interest : createSteps.request?.interest || "",
+    requirementOfJob: isEdit ? update.dataUpdate?.requirementOfJob : createSteps.request?.requirementOfJob || "",
+    jobDescription: isEdit ? update.dataUpdate?.jobDescription : createSteps.request?.jobDescription || ""
   })
+
+  const modules = {
+    toolbar: [
+      [{'header': '1'}, {'header': '2'}],
+      ['blockquote', 'code-block'],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [{'list': 'ordered'}, {'list': 'bullet'}],
+      [{'indent': '-1'}, {'indent': '+1'}],
+      ['link', 'image'],
+      [{'script': 'sub'}, {'script': 'super'}],      // superscript/subscript
+      [{'direction': 'rtl'}],                         // text direction
+      [{'header': [1, 2, 3, 4, 5, 6, false]}],
+      [{'color': []}, {'background': []}],          // dropdown with defaults from theme
+      [{'font': []}],
+      [{'align': []}],
+      ['clean'],
+    ],
+
+    clipboard: {
+      // toggle to add extra line breaks when pasting HTML:
+      matchVisual: false,
+    }
+  }
+  /*
+   * Quill editor formats
+   * See https://quilljs.com/docs/formats/
+   */
+  const formats = [
+    'header', 'font', 'size',
+    'bold', 'italic', 'underline', 'strike', 'blockquote',
+    'list', 'bullet', 'indent',
+    'link', 'image', 'video'
+  ]
+
 
   useEffect(() => {
     document.title = "Quản lý tin tuyển dụng";
-    if (location.pathname.includes("edit")) {
+    if (isEdit) {
       setSalary({
-        from: props.dataUpdate?.from,
-        to: props.dataUpdate?.to,
-        detailOfSalary: props.dataUpdate?.detailOfSalary,
-        salaryDescription: props.dataUpdate?.salaryDescription,
+        from: update.dataUpdate?.from,
+        to: update.dataUpdate?.to,
+        detailOfSalary: update.dataUpdate?.detailOfSalary,
       })
     }
   }, []);
 
-
-  function onFormChange() {
+  function onFormChange(salaryChange?: any, valueEditorChange?: any) {
     setTimeout(() => props.form.validateFields((err, values) => {
-      console.log(!err&&valueEditor.interest!=='')
+      let salaryDescription: any = '';
+      switch (salaryChange.detailOfSalary) {
+        case "Chi tiết mức lương":
+          salaryDescription = ` Từ ${salaryChange.from} VND đến ${salaryChange.to} VND`;
+          break
+        case "Thỏa thuận":
+          salaryDescription = " Thỏa thuận";
+          break
+        case "Từ ...":
+          salaryDescription = ` Từ ${salaryChange.from} VND`;
+          break
+        case "Up to ...":
+          salaryDescription = ` Up to ${salaryChange.to} VND`;
+          break
+      }
+
       if (!err) {
-        if (location.pathname.includes("edit")) {
-          if (props.dataUpdate) {
+        if (isEdit) {
+          if (update.dataUpdate) {
             let req: RecruitmentEntity = {
-              ...props.dataUpdate,
+              ...update.dataUpdate,
               addressId: values.address,
               deadLine: values.deadLine * 1,
               jobId: values.job,
@@ -93,13 +134,13 @@ function InformationForm(props: IProps) {
               talentPoolId: values.talentPool,
               title: values.title,
               typeOfJob: values.typeOfJob,
-              detailOfSalary: salary.detailOfSalary,
-              from: salary.from,
-              to: salary.to,
-              salaryDescription: salary.salaryDescription,
-              requirementOfJob: values.requirementOfJob,
-              jobDescription: values.jobDescription,
-              interest: values.interest,
+              detailOfSalary: salaryChange.detailOfSalary,
+              from: salaryChange.from,
+              to: salaryChange.to,
+              salaryDescription: salaryDescription,
+              requirementOfJob: valueEditorChange.requirementOfJob,
+              jobDescription: valueEditorChange.jobDescription,
+              interest: valueEditorChange.interest,
             }
             props.getDataRecruitmentUpdate(req)
           }
@@ -112,13 +153,13 @@ function InformationForm(props: IProps) {
             talentPool: values.talentPool,
             title: values.title,
             typeOfJob: values.typeOfJob,
-            detailOfSalary: values.detailOfSalary,
-            from: values.from,
-            to: values.to,
-            salaryDescription: salary.salaryDescription,
-            requirementOfJob: values.requirementOfJob,
-            jobDescription: values.jobDescription,
-            interest: values.interest,
+            detailOfSalary: salaryChange.detailOfSalary,
+            from: salaryChange.from,
+            to: salaryChange.to,
+            salaryDescription: salaryDescription,
+            requirementOfJob: valueEditorChange.requirementOfJob,
+            jobDescription: valueEditorChange.jobDescription,
+            interest: valueEditorChange.interest,
             interviewProcess: props.listProcess.rows,
             interviewer: []
           })
@@ -136,31 +177,21 @@ function InformationForm(props: IProps) {
   function handleSelect(value: any) {
     const newSalary = salary;
     newSalary.detailOfSalary = value;
-
-    if (value === "Chi tiết mức lương") {
-      newSalary.salaryDescription = ` Từ ${newSalary.from} VND đến ${newSalary.to} VND`
-    }
-    if (value === "Thỏa thuận") {
-      newSalary.salaryDescription = " Thỏa thuận"
-    }
-    if (value === "Từ ...") {
-      newSalary.salaryDescription = ` Từ ${salary.from} VND`
-    }
-    if (value === "Up to ...") {
-      newSalary.salaryDescription = ` Up to ${salary.to} VND`
-    }
+    onFormChange(newSalary, valueEditor)
     setSalary(newSalary)
   }
 
   function fromChange(value: any) {
     const newSalary = salary;
     newSalary.from = value !== null ? value : 0;
+    onFormChange(newSalary, valueEditor)
     setSalary(newSalary)
   }
 
   function toChange(value: any) {
     const newSalary = salary;
     newSalary.to = value !== null ? value : 0;
+    onFormChange(newSalary, valueEditor)
     setSalary(newSalary)
   }
 
@@ -171,34 +202,42 @@ function InformationForm(props: IProps) {
     }
   };
 
-  function handleChangeInterest(content: any,editor:any) {
-    if(content===""){
+  function handleChangeInterest(content: any) {
+    if (content === "<p><br></p>") {
       setDisplay({...display, interest: true})
-      setValueEditor({...valueEditor,interest: ""})
-    }
-    else{
+      setValueEditor({...valueEditor, interest: ""})
+    } else {
       setDisplay({...display, interest: false})
-      setValueEditor({...valueEditor,interest: content})
+      const newValueEditor = valueEditor
+      newValueEditor.interest = content
+      onFormChange(salary, newValueEditor)
+      setValueEditor(newValueEditor)
     }
   }
-  function handleChangeRequirement(content: any,editor:any) {
-    if(content===""){
+
+  function handleChangeRequirement(content: any) {
+    if (content === "<p><br></p>") {
       setDisplay({...display, requirementOfJob: true})
-      setValueEditor({...valueEditor,requirementOfJob: ""})
-    }
-    else{
+      setValueEditor({...valueEditor, requirementOfJob: ""})
+    } else {
       setDisplay({...display, requirementOfJob: false})
-      setValueEditor({...valueEditor,requirementOfJob: content})
+      const newValueEditor = valueEditor
+      newValueEditor.requirementOfJob = content
+      onFormChange(salary, newValueEditor)
+      setValueEditor(newValueEditor)
     }
   }
-  function handleChangeJobDescription(content: any,editor:any) {
-    if(content===""){
+
+  function handleChangeJobDescription(content: any) {
+    if (content === "<p><br></p>") {
       setDisplay({...display, jobDescription: true})
-      setValueEditor({...valueEditor,jobDescription: ""})
-    }
-    else{
+      setValueEditor({...valueEditor, jobDescription: ""})
+    } else {
       setDisplay({...display, jobDescription: false})
-      setValueEditor({...valueEditor,jobDescription: content})
+      const newValueEditor = valueEditor
+      newValueEditor.jobDescription = content
+      onFormChange(salary, newValueEditor)
+      setValueEditor(newValueEditor)
     }
   }
 
@@ -210,11 +249,11 @@ function InformationForm(props: IProps) {
         </div>
         <div className="c-schedule-interview-popup">
           <div className='ant-col-14 grid-left'>
-            <Form >
+            <Form>
               <Form.Item className="form-label" label="Tiều đề tin tuyển dụng" labelCol={{span: 24}}
                          wrapperCol={{span: 24}}>
                 {getFieldDecorator('title', {
-                  initialValue: location.pathname.includes("edit") ? props.dataUpdate?.title : props.createStepsState.request?.title || '',
+                  initialValue: isEdit ? update.dataUpdate?.title : createSteps.request?.title || '',
                   rules: [
                     {
                       message: 'Vui lòng nhập tin tuyển dụng',
@@ -229,7 +268,7 @@ function InformationForm(props: IProps) {
               <Form.Item className="form-label" label="Vị trí tuyển dụng" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                 <div style={{display: 'flex'}}>
                   {getFieldDecorator('job', {
-                    initialValue: location.pathname.includes("edit") ? props.dataUpdate?.jobId : props.createStepsState.request?.job || undefined,
+                    initialValue: isEdit ? update.dataUpdate?.jobId : createSteps.request?.job || undefined,
                     rules: [
                       {
                         message: 'Vui lòng nhập vị trí tuyển dụng',
@@ -241,7 +280,7 @@ function InformationForm(props: IProps) {
                             placeholder="Chọn vị trí công việc"
                     >
                       {props.listJob.rows?.map((item: any, index: any) => (
-                        <Option key={index} value={item.id}>{item.officeName} - {item.name}</Option>
+                        <Option key={index} value={item.id}>{item.name}</Option>
                       ))}
                     </Select>)}
                   <Button
@@ -259,7 +298,7 @@ function InformationForm(props: IProps) {
                   <Form.Item className="form-label" label="Địa điểm làm việc" labelCol={{span: 24}}
                              wrapperCol={{span: 24}}>
                     {getFieldDecorator('address', {
-                      initialValue: location.pathname.includes("edit") ? props.dataUpdate?.addressId : props.createStepsState.request?.address || undefined,
+                      initialValue: isEdit ? update.dataUpdate?.addressId : createSteps.request?.address || undefined,
                       rules: [
                         {
                           message: 'Vui lòng nhập địa điểm',
@@ -282,7 +321,7 @@ function InformationForm(props: IProps) {
                   <Form.Item className="form-label" label="Loại hình công việc" labelCol={{span: 24}}
                              wrapperCol={{span: 24}}>
                     {getFieldDecorator('typeOfJob', {
-                      initialValue: location.pathname.includes("edit") ? props.dataUpdate?.typeOfJob : props.createStepsState.request?.typeOfJob || 'Toàn thời gian',
+                      initialValue: isEdit ? update.dataUpdate?.typeOfJob : createSteps.request?.typeOfJob || 'Toàn thời gian',
                       rules: [
                         {
                           message: 'Vui lòng chọn loại hình công việc',
@@ -290,7 +329,7 @@ function InformationForm(props: IProps) {
                         },
                       ],
                     })(
-                      <Select className="bg-white text-black" style={fontWeightStyle}>
+                      <Select onChange={onFormChange} className="bg-white text-black" style={fontWeightStyle}>
                         <Option key="1" value="Toàn thời gian">Toàn thời gian</Option>
                         <Option key="2" value="Bán thời gian">Bán thời gian</Option>
                         <Option key="3" value="Hợp đồng thời vụ">Hợp đồng thời vụ</Option>
@@ -307,7 +346,7 @@ function InformationForm(props: IProps) {
                   <Form.Item className="form-label" label="Số lượng tuyển dụng" labelCol={{span: 24}}
                              wrapperCol={{span: 24}}>
                     {getFieldDecorator('quantity', {
-                      initialValue: location.pathname.includes("edit") ? props.dataUpdate?.quantity : props.createStepsState.request?.quantity || 1,
+                      initialValue: isEdit ? update.dataUpdate?.quantity : createSteps.request?.quantity || 1,
                       rules: [
                         {
                           message: 'Vui lòng chọn số lượng',
@@ -324,7 +363,7 @@ function InformationForm(props: IProps) {
                 <Col span={12}>
                   <Form.Item className="form-label" label="Hạn nộp hồ sơ" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                     {getFieldDecorator('deadLine', {
-                      initialValue: location.pathname.includes("edit") ? moment(props.dataUpdate?.deadLine) : moment(props.createStepsState.request?.deadLine) || moment().add(30, 'days'),
+                      initialValue: isEdit ? moment(update.dataUpdate?.deadLine) : moment(createSteps.request?.deadLine) || moment().add(30, 'days'),
                       rules: [
                         {
                           message: 'Vui lòng chọn ngày hạn nộp',
@@ -345,7 +384,7 @@ function InformationForm(props: IProps) {
               <Form.Item label="Talent pools" className="form-label" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                 <div style={{display: 'flex'}}>
                   {getFieldDecorator('talentPool', {
-                    initialValue: location.pathname.includes("edit") ? props.dataUpdate?.talentPoolId : props.createStepsState.request?.talentPool || undefined,
+                    initialValue: isEdit ? update.dataUpdate?.talentPoolId : createSteps.request?.talentPool || undefined,
                     rules: [
                       {
                         message: 'Vui lòng chọn talent pools',
@@ -353,7 +392,8 @@ function InformationForm(props: IProps) {
                       },
                     ],
                   })(
-                    <Select className="bg-white text-black" style={fontWeightStyle} placeholder={"Chọn talent pool"}>
+                    <Select onChange={onFormChange} className="bg-white text-black" style={fontWeightStyle}
+                            placeholder={"Chọn talent pool"}>
                       {props.listTalentPool.rows?.map((item: any, index: any) => (
                         <Option key={index} value={item.id}>{item.name}</Option>
                       ))}
@@ -367,7 +407,7 @@ function InformationForm(props: IProps) {
               <Form.Item className="form-label" label="Hiển thị trên tin tuyển dụng" labelCol={{span: 24}}
                          wrapperCol={{span: 24}}>
                 {getFieldDecorator('detailOfSalary', {
-                  initialValue: location.pathname.includes("edit") ? props.dataUpdate?.detailOfSalary : props.createStepsState.request?.detailOfSalary || 'Chi tiết mức lương',
+                  initialValue: isEdit ? update.dataUpdate?.detailOfSalary : createSteps.request?.detailOfSalary || 'Chi tiết mức lương',
                   rules: [
                     {
                       message: 'Vui lòng chọn loại hình công việc',
@@ -375,7 +415,8 @@ function InformationForm(props: IProps) {
                     },
                   ],
                 })(
-                  <Select onSelect={handleSelect} className="bg-white text-black" style={fontWeightStyle}>
+                  <Select onSelect={handleSelect} className="bg-white text-black"
+                          style={fontWeightStyle}>
                     <Option key="1" value="Chi tiết mức lương">Chi tiết mức lương</Option>
                     <Option key="2" value="Thỏa thuận">Thỏa thuận</Option>
                     <Option key="3" value="Từ ...">Từ ...</Option>
@@ -387,7 +428,7 @@ function InformationForm(props: IProps) {
                 <Col span={12} style={{paddingRight: 10}}>
                   <Form.Item className="form-label" label="Từ" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                     {getFieldDecorator('from', {
-                      initialValue: location.pathname.includes("edit") ? props.dataUpdate?.from : props.createStepsState.request?.from || 0,
+                      initialValue: isEdit ? update.dataUpdate?.from : createSteps.request?.from || 0,
                       rules: [
                         {
                           message: 'Vui lòng chọn mức lương từ',
@@ -404,7 +445,7 @@ function InformationForm(props: IProps) {
                 <Col span={12}>
                   <Form.Item className="form-label" label="Đến" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                     {getFieldDecorator('to', {
-                      initialValue: location.pathname.includes("edit") ? props.dataUpdate?.to : props.createStepsState.request?.to || 0,
+                      initialValue: isEdit ? update.dataUpdate?.to : createSteps.request?.to || 0,
                       rules: [
                         {
                           message: 'Vui lòng chọn mức lương đến',
@@ -420,99 +461,66 @@ function InformationForm(props: IProps) {
               </Row>
 
               <div className="pb-3" style={{color: "#6a727d"}}>Nội dung hiển thị:
-                {salary.detailOfSalary === "Chi tiết mức lương" ? ` Từ ${salary.from} VND đến ${salary.to} VND` :
-                  salary.detailOfSalary === "Thỏa thuận" ? " Thỏa thuận" :
-                    salary.detailOfSalary === "Từ ..." ? ` Từ ${salary.from} VND` : ` Up to ${salary.to} VND`
-                }
+                {isEdit ? update.dataUpdate?.salaryDescription : createSteps.request?.salaryDescription}
               </div>
 
               <div className="font-20-bold-500 ">Mô tả công việc</div>
               <div className="form-label mb-4">
                 <div className="mb-2">Mô tả công việc <span className="value-required">*</span></div>
-                <Editor
-                  onEditorChange={handleChangeJobDescription}
-                  //apiKey="b616i94ii3b9vlza43fus93fppxb1yxb8f03gh926u51qhs6"
-                  onInit={(evt, editor) => editorRef.current = editor}
-                  init={{
-                    menu: {
-                      tc: {
-                        title: 'Comments',
-                        items: 'addcomment showcomments deleteallconversations'
-                      }
-                    },
-                    plugins: [
-                      'advlist autolink lists link image charmap print preview anchor',
-                      'searchreplace visualblocks code fullscreen',
-                      'insertdatetime media table paste code help '
-                    ],
-                    height: 330,
-                    menubar: false,
-                    toolbar: 'undo redo | bold italic underline strikethrough |alignleft aligncenter alignright alignjustify | outdent indent |fontselect fontsizeselect formatselect |    numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
-                    quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
-                    toolbar_mode: 'sliding',
-                    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+                <ReactQuill
+                  style={fontWeightStyle}
+                  className="ql-custom"
+                  onChange={handleChangeJobDescription}
+                  defaultValue={valueEditor.jobDescription}
 
-                  }}
+                  theme={'snow'}
+                  modules={modules}
+                  formats={formats}
+                  bounds={'.app'}
+                  placeholder="Mô tả công việc"
                 />
-                <div className={display.jobDescription?"value-required show":"value-required hide"}>Vui lòng nhập mô tả chung</div>
+                <div className={display.jobDescription ? "value-required show" : "value-required hide"}>Vui lòng nhập mô
+                  tả chung
+                </div>
 
               </div>
               <div className="form-label mb-4">
                 <div className="mb-2">Yêu cầu công việc <span className="value-required">*</span></div>
-                <Editor
-                  onEditorChange={handleChangeRequirement}
-                  //apiKey="b616i94ii3b9vlza43fus93fppxb1yxb8f03gh926u51qhs6"
-                  // onInit={(evt, editor) => editorRef.current = editor}
-                  init={{
-                    menu: {
-                      tc: {
-                        title: 'Comments',
-                        items: 'addcomment showcomments deleteallconversations'
-                      }
-                    },
-                    plugins: [
-                      'advlist autolink lists link image charmap print preview anchor',
-                      'searchreplace visualblocks code fullscreen',
-                      'insertdatetime media table paste code help '
-                    ],
-                    height: 330,
-                    menubar: false,
-                    toolbar: 'undo redo | bold italic underline strikethrough |alignleft aligncenter alignright alignjustify | outdent indent |fontselect fontsizeselect formatselect |    numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
-                    quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
-                    toolbar_mode: 'sliding',
-                    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-                  }}
-                />
-                <div className={display.requirementOfJob?"value-required show":"value-required hide"}>Vui lòng nhập yêu cầu công việc</div>
+                <ReactQuill
+                  style={fontWeightStyle}
+                  className="ql-custom"
+                  onChange={handleChangeRequirement}
+                  defaultValue={valueEditor.requirementOfJob}
 
+                  theme={'snow'}
+                  modules={modules}
+                  formats={formats}
+                  bounds={'.app'}
+                  placeholder="Yêu cầu công việc"
+                />
+                <div className={display.requirementOfJob ? "value-required show" : "value-required hide"}>Vui lòng nhập
+                  yêu cầu công việc
+                </div>
               </div>
+
               <div className="form-label">
                 <div className="mb-2">Quyền lợi <span className="value-required">*</span></div>
-                <Editor
-                  onEditorChange={handleChangeInterest}
-                  //apiKey="b616i94ii3b9vlza43fus93fppxb1yxb8f03gh926u51qhs6"
-                  // onInit={(evt, editor) => editorRef.current = editor}
-                  init={{
-                    menu: {
-                      tc: {
-                        title: 'Comments',
-                        items: 'addcomment showcomments deleteallconversations'
-                      }
-                    },
-                    plugins: [
-                      'advlist autolink lists link image charmap print preview anchor',
-                      'searchreplace visualblocks code fullscreen',
-                      'insertdatetime media table paste code help '
-                    ],
-                    height: 330,
-                    menubar: false,
-                    toolbar: 'undo redo | bold italic underline strikethrough |alignleft aligncenter alignright alignjustify | outdent indent |fontselect fontsizeselect formatselect |    numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
-                    quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
-                    toolbar_mode: 'sliding',
-                    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-                  }}
+                <ReactQuill
+                  style={fontWeightStyle}
+                  className="ql-custom"
+                  onChange={handleChangeInterest}
+                  defaultValue={valueEditor.interest}
+
+                  theme={'snow'}
+                  modules={modules}
+                  formats={formats}
+                  bounds={'.app'}
+                  placeholder="Quyền lợi"
                 />
-                <div className={display.interest?"value-required show":"value-required hide"}>Vui lòng nhập quyền lợi</div>
+
+                <div className={display.interest ? "value-required show" : "value-required hide"}>Vui lòng nhập quyền
+                  lợi
+                </div>
 
               </div>
 

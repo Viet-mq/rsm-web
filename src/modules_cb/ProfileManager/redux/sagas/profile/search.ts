@@ -6,7 +6,6 @@ import {GetElasticSearchAction, getElasticSearchError, getElasticSearchSuccess} 
 export function* searchAsync(action: GetElasticSearchAction) {
   try {
     const rs = yield apis.getElasticSearch(action.request);
-    console.log(action.request?.size, rs.rows)
     yield put(getElasticSearchSuccess(rs.total, rs.rows));
   } catch (e) {
     yield put(getElasticSearchError(new AppError(e.message)));

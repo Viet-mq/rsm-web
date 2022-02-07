@@ -39,6 +39,7 @@ function InterviewersForm(props: IProps) {
   const timeFormat = 'HH:mm';
   const formItemHeight = {height: 250}
   const textEditorHeight = {height: 150}
+  const isEdit=location.pathname.includes("edit");
   const [visibleCandidate, setVisibleCandidate] = useState(false)
   const wrapperRef = useRef<any>(null);
   const [keySearch, setKeySearch] = useState(undefined);
@@ -80,10 +81,11 @@ function InterviewersForm(props: IProps) {
   }, []);
 
   useEffect(() => {
-    if(location.pathname.includes("edit")){
-      if(props.dataUpdate?.interviewer?.length) setDatasource(props.dataUpdate?.interviewer)
+    if (isEdit) {
+      if (props.dataUpdate?.interviewer?.length) setDatasource(props.dataUpdate?.interviewer)
     }
   }, [props.dataUpdate]);
+  //Xử lý hiển thị popup custom
   useEffect(() => {
     function handleClickOutside(event: any) {
       if (wrapperRef.current && !wrapperRef.current?.contains(event.target)) {
@@ -121,7 +123,6 @@ function InterviewersForm(props: IProps) {
   }
 
   function handleAdd(e: FormEvent, value: any) {
-    console.log(value)
     setListUser(listUser.filter((item: UserAccount) => item.username !== value.username));
     const newData = ({
       username: value.username,
@@ -130,7 +131,7 @@ function InterviewersForm(props: IProps) {
     });
     const found = dataSource?.some((el: any) => el.username === newData.username);
     if (!found) {
-      if(location.pathname.includes("edit")){
+      if (isEdit) {
         if (props.dataUpdate) {
           let req: RecruitmentEntity = {
             ...props.dataUpdate,
@@ -139,7 +140,7 @@ function InterviewersForm(props: IProps) {
           props.getDataRecruitmentUpdate(req)
         }
 
-      }else{
+      } else {
         let req: CreateRecruitmentRequest = ({
           ...props.createStepsState,
           interviewer: dataSource?.map((item: any) => item.username).concat(newData.username),
@@ -158,12 +159,23 @@ function InterviewersForm(props: IProps) {
   }
 
   function handleDelete(values: any) {
-    const filterListUser: UserAccount | any = props.searchUserState.rows?.filter((item: any) => item.username === values)
-    let req: CreateRecruitmentRequest = ({
-      ...props.createStepsState,
-      interviewer: dataSource?.filter((item: any) => item.username !== values).map((item: any) => item.username),
-    })
-    props.createSteps(req)
+    const filterListUser: any = props.searchUserState.rows?.filter((item: any) => item.username === values)
+    if (isEdit) {
+      if (props.dataUpdate) {
+        let req: RecruitmentEntity = {
+          ...props.dataUpdate,
+          interviewer: dataSource?.filter((item: any) => item.username !== values),
+        }
+        props.getDataRecruitmentUpdate(req)
+      }
+    } else {
+      let req: CreateRecruitmentRequest = ({
+        ...props.createStepsState,
+        interviewer: dataSource?.filter((item: any) => item.username !== values).map((item: any) => item.username),
+      })
+      props.createSteps(req)
+    }
+
     setDatasource(dataSource?.filter((item: any) => item.username !== values))
     setListUser(filterListUser.concat(listUser))
   }
@@ -176,8 +188,7 @@ function InterviewersForm(props: IProps) {
       </div>
       <div className="c-schedule-interview-popup">
         <div className='ant-col-14 grid-left'>
-          {dataSource?.map((item: any,index:any) => {
-            console.log(dataSource)
+          {dataSource?.map((item: any, index: any) => {
             return <div key={index} className="border-bottom flex-space-between-item-center"
                         style={{padding: " 15px 0"}}>
               <div className="flex-items-flex-start">
@@ -215,7 +226,7 @@ function InterviewersForm(props: IProps) {
                 <Input onChange={event => handleSearchCandidate(event)} value={keySearch}
                        placeholder="Tìm kiếm ứng viên"/>
                 <div className="scroll-label-content">
-                  {listUser?.length !== 0 ? listUser?.map((item: any, index: any) => {
+                  {listUser?.length !== 0 ? listUser?.map((item: any) => {
                     return (<div key={item.username} onClick={event => handleAdd(event, item)}>
                       <a className="label-content">
                         <div style={{marginRight: 10}}>

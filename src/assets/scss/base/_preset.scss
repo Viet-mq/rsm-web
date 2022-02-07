@@ -104,6 +104,12 @@
   }
 }
 
+.cursor-default{
+  &:hover{
+    cursor: default;
+  }
+}
+
 .page-container{
   padding: 15px 30px !important;
 }

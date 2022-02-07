@@ -23,7 +23,6 @@ class CollectionsPage extends Component<any, any> {
         return;
       }
 
-      console.log('Received values of form: ', values);
       form.resetFields();
       this.setState({visible: false});
     });

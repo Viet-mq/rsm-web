@@ -100,7 +100,6 @@ const arrayUrl=['/statuscv-manager',"/email-manager"]
   }
 
   function onSelect(value: any) {
-    console.log("select:", value)
     setSearch({
       ...search,
       value: props.elasticSearch.rowsSearch?.find((item: any) => item.id === value)?.fullName,

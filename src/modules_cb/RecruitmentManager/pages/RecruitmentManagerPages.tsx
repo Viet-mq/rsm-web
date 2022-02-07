@@ -46,7 +46,6 @@ function RecruitmentManagerPages(props: IProps) {
   }
 
   function handleCreateBySelected(value:any) {
-    console.log(`selected ${value}`);
     if (value !== "all") {
       props.getListRecruitment({key: value})
     } else{

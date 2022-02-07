@@ -153,14 +153,12 @@ function ScheduleManagerPages(props: IProps) {
   }
 
   function handleFilterClicked(value: any) {
-    console.log(`selected ${value}`);
     if (value !== "all") {
       props.getAllSchedule({key: value})
     } else props.getAllSchedule();
   }
 
   function onSearch(value: string) {
-    console.log(value)
     setKeySearch(value.trim())
     props.getAllSchedule({keySearch: value.trim()})
   }

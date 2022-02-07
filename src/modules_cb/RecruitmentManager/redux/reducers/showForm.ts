@@ -6,7 +6,7 @@ import {StatusCVEntity} from "../../../StatusCVManager/types";
 export interface ProcessFormState {
   show_create?: boolean,
   show_update?: boolean,
-  data_update?: StatusCVEntity|any,
+  data_update?: StatusCVEntity,
   index?:any,
 }
 

@@ -153,7 +153,6 @@ const data = [
 ];
 const rowSelection = {
   onChange: (selectedRowKeys: any, selectedRows: any) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
   },
   onSelect: (record: any, selected: any, selectedRows: any) => {
     console.log(record, selected, selectedRows);
@@ -321,7 +320,6 @@ export default class EditableTable extends React.Component<{}, State> {
       if (err) {
         return;
       }
-      console.log('Received values of form: ', values);
       form.resetFields();
       this.setState({editVisible: false});
     });

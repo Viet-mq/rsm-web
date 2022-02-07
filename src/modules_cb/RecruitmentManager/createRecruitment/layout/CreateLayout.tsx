@@ -16,9 +16,7 @@ import {UpdateRecruitmentRequest} from "../../types";
 const {Sider} = Layout;
 
 const mapStateToProps = (state: RootState) => ({
-  checkValidate: state.recruitmentManager.createSteps,
-  createSteps: state.recruitmentManager.createSteps,
-  dataUpdate: state.recruitmentManager.update.dataUpdate
+  recruitmentManager: state.recruitmentManager
 
 })
 
@@ -35,9 +33,9 @@ interface LayoutProps extends FormComponentProps, ReduxProps {
 }
 
 const CreateLayout = (props: LayoutProps) => {
+  const {createSteps,update}=props.recruitmentManager
   const location = useLocation();
-  const menu = (
-    <Menu className='detail-action'>
+  const menu = (<Menu className='detail-action'>
       <Menu.Item key="1">
         <div>
           <Badge color={"#87d068"}/>
@@ -50,33 +48,32 @@ const CreateLayout = (props: LayoutProps) => {
           Nội bộ
         </div>
       </Menu.Item>
-    </Menu>
-  );
+    </Menu>);
 
   function btnCreateClicked() {
-    // console.log("props.createSteps.request:", props.createSteps.request)
     if (location.pathname.includes("edit")) {
       let req: UpdateRecruitmentRequest = {
-        address: props.dataUpdate?.addressId,
-        deadLine: props.dataUpdate?.deadLine,
-        id: props.dataUpdate?.id,
-        interest: props.dataUpdate?.interest,
-        interviewProcess: props.dataUpdate?.interviewProcess,
-        interviewer: props.dataUpdate?.interviewer?.map((item:any)=>item.username),
-        job: props.dataUpdate?.jobId,
-        jobDescription: props.dataUpdate?.jobDescription,
-        quantity: props.dataUpdate?.quantity,
-        requirementOfJob: props.dataUpdate?.requirementOfJob,
-        talentPool: props.dataUpdate?.talentPoolId,
-        title: props.dataUpdate?.title,
-        typeOfJob: props.dataUpdate?.typeOfJob,
-        detailOfSalary: props.dataUpdate?.detailOfSalary,
-        from: props.dataUpdate?.from,
-        to: props.dataUpdate?.to,
+        address: update.dataUpdate?.addressId,
+        deadLine: update.dataUpdate?.deadLine,
+        id: update.dataUpdate?.id,
+        interest: update.dataUpdate?.interest,
+        interviewProcess: update.dataUpdate?.interviewProcess,
+        interviewer: update.dataUpdate?.interviewer?.map((item:any)=>item.username),
+        job: update.dataUpdate?.jobId,
+        jobDescription: update.dataUpdate?.jobDescription,
+        quantity: update.dataUpdate?.quantity,
+        requirementOfJob: update.dataUpdate?.requirementOfJob,
+        talentPool: update.dataUpdate?.talentPoolId,
+        title: update.dataUpdate?.title,
+        typeOfJob: update.dataUpdate?.typeOfJob,
+        detailOfSalary: update.dataUpdate?.detailOfSalary,
+        from: update.dataUpdate?.from,
+        to: update.dataUpdate?.to,
+        salaryDescription:update.dataUpdate?.salaryDescription
       }
       props.updateRecruitment(req)
     } else {
-      props.createRecruitment(props.createSteps.request)
+      props.createRecruitment(createSteps.request)
     }
   }
 
@@ -114,7 +111,7 @@ const CreateLayout = (props: LayoutProps) => {
                 </Switch>
                 <div className="region-action ">
                   <Dropdown.Button onClick={btnCreateClicked} overlay={menu} style={{marginBottom: 15}} size='large'
-                                   type={"primary"} className={props.checkValidate.isValidate ? "" : "button-color"}>
+                                   type={"primary"} className={createSteps.isValidate ? "" : "button-color"}>
                     Lưu và đăng tin
                   </Dropdown.Button>
                   <Button className="btn-save" size='large'>Lưu nháp</Button>

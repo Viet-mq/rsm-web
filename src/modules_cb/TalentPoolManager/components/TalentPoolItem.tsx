@@ -95,7 +95,6 @@ function TalentPoolItem(props: IProps) {
   };
 
   function handleDetailClicked() {
-    // console.log(talentPool.id)
   }
 
   return (

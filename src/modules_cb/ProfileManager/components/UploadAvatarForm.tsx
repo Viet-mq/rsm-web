@@ -46,7 +46,6 @@ function UploadAvatarForm(props: CreateUploadFormProps) {
 
     props.uploadAvatar(req);
     if(!props.showUploadAvatar.show_upload_avatar){
-      console.log(!props.showUploadAvatar.show_upload_avatar)
       setImageUpload(null);
       if (document.querySelector("#upload")) {
         (document.querySelector("#upload") as any).value = ''

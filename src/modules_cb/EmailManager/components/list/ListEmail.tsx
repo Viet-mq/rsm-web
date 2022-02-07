@@ -42,7 +42,7 @@ function ListEmail(props: IProps) {
   />;
 
   useEffect(() => {
-    props.getListEmail({page: 1, size: 100});
+    props.getListEmail({page: 1, size: 90});
   }, []);
 
   function unixTimeToDate(unixTime: number): Date {

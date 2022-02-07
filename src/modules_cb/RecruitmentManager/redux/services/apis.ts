@@ -30,6 +30,9 @@ export const createRecruitment = async (params?: any): Promise<ResponseBase2> =>
 export const deleteRecruitment = async (params?: any): Promise<ResponseBase2> => {
   return (await POST('api-svc/recruitment/delete', params)) as ResponseBase2;
 };
+export const deleteProcess = async (params?: any): Promise<ResponseBase2> => {
+  return (await POST('api-svc/recruitment/delete-status', params)) as ResponseBase2;
+};
 
 export const updateRecruitment = async (params?: any): Promise<ResponseBase2> => {
   return (await POST('api-svc/recruitment/update', params)) as ResponseBase2;

@@ -5,7 +5,7 @@ import {getListRecruitmentAsync} from "./list";
 import {updateRecruitmentAsync} from "./update";
 import {
   CREATE_INTERVIEW_PROCESS,
-  CREATE_RECRUITMENT,
+  CREATE_RECRUITMENT, DELETE_PROCESS,
   DELETE_RECRUITMENT,
   GET_DETAIL_RECRUITMENT,
   GET_LIST_KANBAN_CANDIDATE,
@@ -17,11 +17,13 @@ import {getDetailRecruitmentAsync} from "./detail";
 import {getListKanbanCandidateAsync} from "./listKanbanCandidate";
 import {searchUserAsync} from "./searchUser";
 import {createInterviewProcessAsync} from "./createInterviewProcess";
+import {deleteProcessAsync} from "./deleteProcess";
 
 export default function* root() {
   return all([
     yield takeLatest(CREATE_RECRUITMENT, createRecruitmentAsync),
     yield takeLatest(DELETE_RECRUITMENT, deleteRecruitmentAsync),
+    yield takeLatest(DELETE_PROCESS, deleteProcessAsync),
     yield takeLatest(GET_LIST_RECRUITMENT, getListRecruitmentAsync),
     yield takeLatest(GET_DETAIL_RECRUITMENT, getDetailRecruitmentAsync),
     yield takeLatest(UPDATE_RECRUITMENT, updateRecruitmentAsync),

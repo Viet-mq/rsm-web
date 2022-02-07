@@ -15,7 +15,6 @@ import {DetailCV} from "../../../types";
 
 export function* uploadCVAsync(action: UploadCVAction) {
   try {
-    console.log("ActionUploadCV:", action)
     const rs = yield apis.updateCV(action.request?.file, action.request?.profileId);
     yield put(uploadCVSuccess(rs));
     if (rs.code !== 0) {

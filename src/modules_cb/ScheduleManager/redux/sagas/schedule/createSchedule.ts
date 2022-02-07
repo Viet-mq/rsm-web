@@ -10,6 +10,7 @@ import {put, select} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
 import {AppError} from "src/models/common";
 import {RootState} from "src/redux/reducers";
+import {showInterviewEmailCreateForm} from "../../../../ProfileManager/redux/actions";
 
 export function* createScheduleAsync(action: CreateScheduleAction) {
   try {
@@ -21,6 +22,7 @@ export function* createScheduleAsync(action: CreateScheduleAction) {
       yield put(createScheduleSuccess(rs));
       NotificationSuccess('Thành công', "Lập lịch phỏng vấn thành công");
       yield put(showFormSchedule(false));
+      yield put(showInterviewEmailCreateForm(false));
       const params = yield select((state: RootState) => state.scheduleManager.getSchedule.params);
       yield put(getAllSchedule(params))
     }

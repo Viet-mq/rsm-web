@@ -50,6 +50,7 @@ function ListRecruitment(props: IProps) {
         placement="bottom"
         onCancel={event => {
           event?.stopPropagation();
+          setVisiblePopover(false);
         }}
         onConfirm={handleDelete}
       >
@@ -69,8 +70,9 @@ function ListRecruitment(props: IProps) {
   </div>)
 
   function handleDelete() {
-    console.log(props.recruitment?.id)
     props.deleteRecruitment({id: props.recruitment?.id})
+    setVisiblePopover(false);
+
   }
 
   function btnEditClicked() {
