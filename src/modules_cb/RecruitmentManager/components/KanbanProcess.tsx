@@ -5,17 +5,18 @@ import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
 import {Avatar} from "antd";
 import {getDetailRecruitment, getListKanbanCandidate} from "../redux/actions";
 import {ChangeProcessRequest, ProcessForm} from "../../ProfileManager/types";
-import {changeProcess} from "../../ProfileManager/redux/actions";
+import {changeProcess, showChangeProcessForm} from "../../ProfileManager/redux/actions";
 
 const mapStateToProps = (state: RootState) => ({
-  listKanbanCandidate: state.recruitmentManager.listKanbanCandidate,
-  detailRecruitment: state.recruitmentManager.detailRecruitment,
+  recruitmentManager: state.recruitmentManager,
 
 })
 const connector = connect(mapStateToProps, {
   getListKanbanCandidate,
   getDetailRecruitment,
-  changeProcess
+  changeProcess,
+  showChangeProcessForm,
+
 
 });
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -26,6 +27,7 @@ interface IProps extends ReduxProps {
 }
 
 function KanbanProcess(props: IProps) {
+  const {listKanbanCandidate,detailRecruitment}=props.recruitmentManager
   const [filterCandidate, setFilterCandidate] = useState<any>([])
 
   useEffect(() => {
@@ -38,10 +40,10 @@ function KanbanProcess(props: IProps) {
   }, [props.visibleType])
 
   useEffect(() => {
-    if (props.listKanbanCandidate.rows) {
-      handleFilterCandidate(props.listKanbanCandidate.rows);
+    if (listKanbanCandidate.rows) {
+      handleFilterCandidate(listKanbanCandidate.rows);
     }
-  }, [props.listKanbanCandidate.rows])
+  }, [listKanbanCandidate.rows])
 
   function handleFilterCandidate(values:any) {
       const queryFilter = values.reduce((curr: any, next: any) => {
@@ -62,7 +64,7 @@ function KanbanProcess(props: IProps) {
       }, [])
 
       const result: any = [];
-      props.detailRecruitment?.rows[0]?.interviewProcess.forEach((element: any) => {
+      detailRecruitment?.rows[0]?.interviewProcess.forEach((element: any) => {
         const findInQueryFilter = queryFilter.find((item: any) => {
           return item.statusCVId === element.id
         })
@@ -73,6 +75,7 @@ function KanbanProcess(props: IProps) {
           result: findInQueryFilter?findInQueryFilter.result:[]
         })
       })
+    console.log("hihi:",result)
       setFilterCandidate(result)
       return result
   }
@@ -88,7 +91,7 @@ function KanbanProcess(props: IProps) {
 
     destClone.splice(droppableDestination.index, 0, removed);
 
-    const result: any = {};
+     const result: any = {};
     result[droppableSource.droppableId] = sourceClone;
     result[droppableDestination.droppableId] = destClone;
 
@@ -110,7 +113,7 @@ function KanbanProcess(props: IProps) {
     }
     const sInd = +source.droppableId;
     const dInd = +destination.droppableId;
-
+    const username= filterCandidate[sInd].result.find((item:any)=>item.id===draggableId).username
     if (sInd === dInd) {
       const items = reorder(filterCandidate[sInd]?.result, source.index, destination.index);
       const newState = [...filterCandidate];
@@ -126,14 +129,16 @@ function KanbanProcess(props: IProps) {
       let processForm: ProcessForm = ({
         idProfile: draggableId,
         recruitmentId: props.idRecruitment,
-        statusCVId: newState[dInd].id
+        statusCVId: newState[dInd].id,
+        username:username,
       })
-
-      let req: ChangeProcessRequest = ({
-        changeProcess: processForm,
-      })
-
-      props.changeProcess(req,false)
+      console.log("huhu:",processForm)
+      // let req: ChangeProcessRequest = ({
+      //   changeProcess: processForm,
+      // })
+      //
+      // props.changeProcess(req,false)
+      props.showChangeProcessForm(true,processForm)
     }
   }
 

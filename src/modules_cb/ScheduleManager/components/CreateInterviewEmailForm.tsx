@@ -236,7 +236,7 @@ function CreateInterviewEmailForm(props: IProps) {
                     style={fontWeightStyle}
                     className="ql-custom"
                     onChange={handleChangeMailContent}
-                    defaultValue={valueEditor}
+                    value={valueEditor||""}
                     
                     theme={'snow'}
                     modules={modules}

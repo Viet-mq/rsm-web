@@ -7,7 +7,7 @@ import 'devextreme/dist/css/dx.light.css';
 import {changeProcess, showChangeProcessForm} from "../redux/actions";
 import {getListRecruitment} from "../../RecruitmentManager/redux/actions";
 import {ChangeProcessRequest, MailForm, MailRequest, ProcessForm} from "../types";
-
+import 'react-quill/dist/quill.snow.css';
 import {getListEmail} from "../../EmailManager/redux/actions";
 import {EmailEntity} from "../../EmailManager/types";
 import ReactQuill from "react-quill";
@@ -37,7 +37,7 @@ function ChangeProcessForm(props: IProps) {
   const fontWeight = {
     fontWeight: 500
   }
-  const {showForm, detail} = props.profileManager
+  const {showForm} = props.profileManager
   const [process, setProcess] = useState<any>('')
   const {getFieldDecorator, resetFields} = props.form;
   const [display, setDisplay] = useState(false)
@@ -151,10 +151,10 @@ function ChangeProcessForm(props: IProps) {
     setProcess(event.target.value)
   }
 
-  function handleChangeMailContent(content: any) {
+  function handleChangeMailContent(content: string) {
     if (content === "<p><br></p>") {
       setDisplay(true)
-      setValueEditor("")
+      // setValueEditor("")
     } else {
       setDisplay(false)
       setValueEditor(content)
@@ -261,7 +261,7 @@ function ChangeProcessForm(props: IProps) {
                   style={fontWeightStyle}
                   className="ql-custom"
                   onChange={handleChangeMailContent}
-                  value={valueEditor}
+                  value={valueEditor||""}
                   theme={'snow'}
                   modules={modules}
                   formats={formats}
@@ -289,7 +289,7 @@ function ChangeProcessForm(props: IProps) {
               <div style={{border: "1px solid #dddde4", padding: 15}}>
                 <Form.Item label="Đến" className="form-label" {...formItemStyle}>
                   {getFieldDecorator('username', {
-                    initialValue: detail.result?.username || undefined,
+                    initialValue: showForm.change_process?.username || undefined,
                     rules: [
                       {
                         message: 'Vui lòng nhập tên trường',

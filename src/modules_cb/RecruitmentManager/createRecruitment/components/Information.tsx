@@ -471,7 +471,8 @@ function InformationForm(props: IProps) {
                   style={fontWeightStyle}
                   className="ql-custom"
                   onChange={handleChangeJobDescription}
-                  defaultValue={valueEditor.jobDescription}
+                  value={valueEditor.jobDescription||""}
+
                   theme={'snow'}
                   modules={modules}
                   formats={formats}
@@ -489,7 +490,8 @@ function InformationForm(props: IProps) {
                   style={fontWeightStyle}
                   className="ql-custom"
                   onChange={handleChangeRequirement}
-                  defaultValue={valueEditor.requirementOfJob}
+                  value={valueEditor.requirementOfJob||""}
+
                   theme={'snow'}
                   modules={modules}
                   formats={formats}
@@ -507,7 +509,8 @@ function InformationForm(props: IProps) {
                   style={fontWeightStyle}
                   className="ql-custom"
                   onChange={handleChangeInterest}
-                  defaultValue={valueEditor.interest}
+                  value={valueEditor.interest||""}
+
                   theme={'snow'}
                   modules={modules}
                   formats={formats}

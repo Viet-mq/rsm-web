@@ -427,7 +427,8 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       {
         idProfile: detail.result?.id,
         recruitmentId: detail.result?.recruitmentId,
-        statusCVId: detail.result?.statusCVId
+        statusCVId: detail.result?.statusCVId,
+        username:detail.result?.username
       }
     )
     props.showChangeProcessForm(true, req)
