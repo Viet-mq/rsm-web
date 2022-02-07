@@ -5,7 +5,8 @@ import {Button, Form, Input, Modal, Select} from "antd";
 import React, {FormEvent, useState} from "react";
 import {createRejectCandidate, showFormReasonReject} from "../redux/actions";
 import {CreateRejectCandidateRequest, CreateRejectForm, MailForm, MailRequest} from "../types";
-import {Editor} from "@tinymce/tinymce-react";
+
+import ReactQuill from "react-quill";
 
 const {Option} = Select;
 
@@ -25,7 +26,7 @@ interface IProps extends FormComponentProps, ReduxProps {
 }
 
 function CreateRejectCandidateForm(props: IProps) {
-
+  const {detail,showForm}=props.profileManager
   const {getFieldDecorator, resetFields} = props.form;
   const fontWeightStyle = {fontWeight: 400};
   const [display, setDisplay] = useState(false)
@@ -34,7 +35,40 @@ function CreateRejectCandidateForm(props: IProps) {
     '<p style="text-align: right;">&nbsp;-Thời gian: {date} {interview_time}</p>\n' +
     '<p style="text-align: right;">&nbsp;-Địa chỉ: {floor}, {interview_address}</p>\n' +
     '<p style="text-align: right;">&nbsp;-H&igrave;nh thức phỏng vấn: {interview_type}</p>')
+  const modules = {
+    toolbar: [
+      [{'header': '1'}, {'header': '2'}],
+      ['blockquote', 'code-block'],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [{'list': 'ordered'}, {'list': 'bullet'}],
+      [{'indent': '-1'}, {'indent': '+1'}],
+      ['link', 'image'],
+      [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+      [{ 'direction': 'rtl' }],                         // text direction
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+      [{ 'font': [] }],
+      [{ 'align': [] }],
+      ['clean'],
+    ],
 
+    clipboard: {
+      // toggle to add extra line breaks when pasting HTML:
+      matchVisual: false,
+    }
+  }
+  /*
+   * Quill editor formats
+   * See https://quilljs.com/docs/formats/
+   */
+  const formats = [
+    'header', 'font', 'size',
+    'bold', 'italic', 'underline', 'strike', 'blockquote',
+    'list', 'bullet', 'indent',
+    'link', 'image', 'video'
+  ]
+
+  
   const formItemLayout = {
     labelCol: {
       xs: {span: 24},
@@ -53,9 +87,9 @@ function CreateRejectCandidateForm(props: IProps) {
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         let rejectForm: CreateRejectForm = {
-          idProfile: props.profileManager.detail?.params.idProfile,
+          idProfile: detail?.params.idProfile,
           reason: values.reason,
-          recruitmentId: props.profileManager.detail?.result?.recruitmentId,
+          recruitmentId: detail?.result?.recruitmentId,
         }
 
         let mailFormCandidate: MailForm = {
@@ -82,8 +116,8 @@ function CreateRejectCandidateForm(props: IProps) {
     props.showFormReasonReject(false);
   }
 
-  function handleChangeMailContent(content: any, editor: any) {
-    if (content === "") {
+  function handleChangeMailContent(content: any) {
+    if (content === "<p><br></p>") {
       setDisplay(true)
       setValueEditor("")
     } else {
@@ -98,7 +132,7 @@ function CreateRejectCandidateForm(props: IProps) {
       zIndex={2}
       maskClosable={false}
       title="Lý do loại ứng viên"
-      visible={props.profileManager.showForm.show_reason_reject}
+      visible={showForm.show_reason_reject}
       centered={true}
       width="700px"
       afterClose={onBtnCancelClicked}
@@ -164,29 +198,19 @@ function CreateRejectCandidateForm(props: IProps) {
 
           <div className="form-label">
             <div className="mb-2">Nội dung <span className="value-required">*</span></div>
-            <Editor
-              onEditorChange={handleChangeMailContent}
-              value={valueEditor}
-              init={{
-                menu: {
-                  tc: {
-                    title: 'Comments',
-                    items: 'addcomment showcomments deleteallconversations'
-                  }
-                },
-                plugins: [
-                  'advlist autolink lists link image charmap print preview anchor',
-                  'searchreplace visualblocks code fullscreen',
-                  'insertdatetime media table paste code help '
-                ],
-                height: 330,
-                menubar: false,
-                toolbar: 'undo redo | bold italic underline strikethrough |alignleft aligncenter alignright alignjustify | outdent indent |fontselect fontsizeselect formatselect |    numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
-                quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
-                toolbar_mode: 'sliding',
-                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-              }}
+            <ReactQuill
+              style={fontWeightStyle}
+              className="ql-custom"
+              onChange={handleChangeMailContent}
+              defaultValue={valueEditor}
+
+              theme={'snow'}
+              modules={modules}
+              formats={formats}
+              bounds={'.app'}
+              placeholder="Mô tả công việc"
             />
+         
             <div className={display ? "value-required show" : "value-required hide"}>Vui lòng nhập nội dung</div>
           </div>
         </div>

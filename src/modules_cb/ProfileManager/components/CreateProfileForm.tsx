@@ -60,7 +60,7 @@ interface CreateProfileFormProps extends FormComponentProps, ReduxProps {
 }
 
 function CreateProfileForm(props: CreateProfileFormProps) {
-
+  const {showForm}=props.profileManager
   const {getFieldDecorator, resetFields} = props.form;
   const fontWeightStyle = {fontWeight: 400};
   const formItemLayout = {
@@ -214,7 +214,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
         zIndex={2}
         maskClosable={false}
         title="Tạo mới thông tin ứng viên"
-        visible={props.profileManager.showForm.show_create}
+        visible={showForm.show_create}
         centered={true}
         width="550px"
         afterClose={() => {

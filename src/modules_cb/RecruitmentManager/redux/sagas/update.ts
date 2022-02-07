@@ -1,4 +1,9 @@
-import {getListRecruitment, UpdateRecruitmentAction, updateRecruitmentError, updateRecruitmentSuccess} from "../actions";
+import {
+  getListRecruitment, resetDeleteProcessResponse,
+  UpdateRecruitmentAction,
+  updateRecruitmentError,
+  updateRecruitmentSuccess
+} from "../actions";
 import * as apis from "../services/apis";
 import {put, select} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
@@ -14,9 +19,8 @@ export function* updateRecruitmentAsync(action: UpdateRecruitmentAction) {
       NotificationError('Cập nhật tin tuyển dụng không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Cập nhật tin tuyển dụng thành công");
-      // yield put(showFormUpdate(false));
       history.push('/recruitment-manager');
-
+     yield put(resetDeleteProcessResponse())
       const params = yield select((state: RootState) => state.recruitmentManager.list.params);
       yield put(getListRecruitment(params))
     }

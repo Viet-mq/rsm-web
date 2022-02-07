@@ -4,7 +4,8 @@ export interface StatusCVFormAction {
   type: string,
   show_create?: boolean,
   show_update?: boolean,
-  data_update?: StatusCVEntity
+  data_update?: StatusCVEntity,
+  index?:number
 }
 
 export const STATUSCV_SHOW_FORM_CREATE = "STATUSCV_SHOW_FORM_CREATE";
@@ -15,9 +16,10 @@ export const showFormCreate = (show: boolean): StatusCVFormAction => ({
   show_create: show
 });
 
-export const showFormUpdate = (show: boolean, dataUpdate?: StatusCVEntity): StatusCVFormAction => ({
+export const showFormUpdate = (show: boolean, dataUpdate?: StatusCVEntity,index?:number): StatusCVFormAction => ({
   type: STATUSCV_SHOW_FORM_UPDATE,
   show_update: show,
-  data_update: dataUpdate
+  data_update: dataUpdate,
+  index,
 });
 

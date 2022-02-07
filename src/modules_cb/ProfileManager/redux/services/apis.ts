@@ -13,7 +13,6 @@ import {
 export const getListProfile = async (params: any): Promise<ListResponseBase2<ProfileEntity>> => {
   let url = "api-svc/profile/list?"
   if (params.fullName !== null && params.fullName !== undefined) {
-    console.log(params.fullName)
     url += "fullName=" + params.fullName + "&"
   }
   if (params.calendar !== null && params.calendar !== undefined) {
@@ -65,8 +64,11 @@ export const changeProcess = async (params?: ChangeProcessRequest): Promise<Resp
   let formData:any = new FormData();
   if(params?.mailRequest?.candidate?.content) formData.append('contentCandidate', params?.mailRequest.candidate?.content);
   if(params?.mailRequest?.presenters?.content) formData.append('contentPresenter',  params?.mailRequest.presenters?.content);
-  if(params?.mailRequest?.candidate?.file) formData.append('fileCandidates',  params?.mailRequest.candidate?.file);
-  if(params?.mailRequest?.presenters?.file) formData.append('filePresenters', params?.mailRequest.presenters?.file);
+  if (params?.mailRequest?.candidate?.file) {
+    for(let i=0;i<params?.mailRequest.candidate?.file.length;i++){
+      formData.append('fileCandidates', params?.mailRequest.candidate?.file[i]);
+    }
+  }  if(params?.mailRequest?.presenters?.file) formData.append('filePresenters', params?.mailRequest.presenters?.file);
   if(params?.changeProcess.idProfile) formData.append('idProfile', params?.changeProcess.idProfile);
   if( params?.changeProcess.statusCVId) formData.append('statusCVId', params?.changeProcess.statusCVId);
   if(params?.changeProcess.recruitmentId) formData.append('recruitmentId', params?.changeProcess.recruitmentId);
@@ -120,8 +122,11 @@ export const createBooking = async (params?: CreateBookingRequest): Promise<Resp
   if(params?.mailRequest.presenters?.content) formData.append('contentPresenter',  params?.mailRequest.presenters?.content);
   if(params?.mailRequest.recruitmentCouncils?.content) formData.append('contentRecruitmentCouncil', params?.mailRequest.recruitmentCouncils?.content);
   if(params?.createBookingForm.date) formData.append('date', params?.createBookingForm.date);
-  if(params?.mailRequest.candidate?.file) formData.append('fileCandidates',  params?.mailRequest.candidate?.file);
-  if(params?.mailRequest.presenters?.file) formData.append('filePresenters', params?.mailRequest.presenters?.file);
+  if (params?.mailRequest.candidate?.file) {
+    for(let i=0;i<params?.mailRequest.candidate?.file.length;i++){
+      formData.append('fileCandidates', params?.mailRequest.candidate?.file[i]);
+    }
+  }  if(params?.mailRequest.presenters?.file) formData.append('filePresenters', params?.mailRequest.presenters?.file);
   if(params?.mailRequest.recruitmentCouncils?.file) formData.append('fileRecruitmentCouncils', params?.mailRequest.recruitmentCouncils?.file);
   if(params?.createBookingForm.floor) formData.append('floor', params?.createBookingForm.floor);
   if(params?.createBookingForm.idProfile) formData.append('idProfile', params?.createBookingForm.idProfile);
@@ -148,8 +153,11 @@ export const updateBooking = async (params?: UpdateBookingRequest): Promise<Resp
   if(params?.mailRequest.presenters?.content) formData.append('contentPresenter',  params?.mailRequest.presenters?.content);
   if(params?.mailRequest.recruitmentCouncils?.content) formData.append('contentRecruitmentCouncil', params?.mailRequest.recruitmentCouncils?.content);
   if(params?.updateBookingForm.date) formData.append('date', params?.updateBookingForm.date);
-  if(params?.mailRequest.candidate?.file) formData.append('fileCandidates',  params?.mailRequest.candidate?.file);
-  if(params?.mailRequest.presenters?.file) formData.append('filePresenters', params?.mailRequest.presenters?.file);
+  if (params?.mailRequest.candidate?.file) {
+    for(let i=0;i<params?.mailRequest.candidate?.file.length;i++){
+      formData.append('fileCandidates', params?.mailRequest.candidate?.file[i]);
+    }
+  }  if(params?.mailRequest.presenters?.file) formData.append('filePresenters', params?.mailRequest.presenters?.file);
   if(params?.mailRequest.recruitmentCouncils?.file) formData.append('fileRecruitmentCouncils', params?.mailRequest.recruitmentCouncils?.file);
   if(params?.updateBookingForm.floor) formData.append('floor', params?.updateBookingForm.floor);
   if( params?.updateBookingForm.interviewAddress) formData.append('interviewAddress', params?.updateBookingForm.interviewAddress);
@@ -175,8 +183,11 @@ export const createRejectCandidate = async (params?: CreateRejectCandidateReques
   if(params?.createReject.recruitmentId) formData.append('recruitmentId',params?.createReject.recruitmentId);
   if(params?.mailRequest.candidate?.content) formData.append('contentCandidate',params?.mailRequest.candidate.content);
   if(params?.mailRequest.candidate?.subject) formData.append('subjectCandidate',params?.mailRequest.candidate.subject);
-  if(params?.mailRequest.candidate?.file) formData.append('fileCandidates',params?.mailRequest.candidate.file);
-  if(params?.mailRequest.presenters?.content) formData.append('contentPresenter',params?.mailRequest.presenters.content);
+  if (params?.mailRequest.candidate?.file) {
+    for(let i=0;i<params?.mailRequest.candidate?.file.length;i++){
+      formData.append('fileCandidates', params?.mailRequest.candidate?.file[i]);
+    }
+  }  if(params?.mailRequest.presenters?.content) formData.append('contentPresenter',params?.mailRequest.presenters.content);
   if(params?.mailRequest.presenters?.subject) formData.append('subjectPresenter',params?.mailRequest.presenters.subject);
   if(params?.mailRequest.presenters?.file) formData.append('filePresenters',params?.mailRequest.presenters.file);
 
@@ -245,7 +256,6 @@ export const updateNote = async (params?: any) => {
 };
 
 export const downloadCVNote = async (params?: any): Promise<ResponseBase2> => {
-  console.log(`api-svc/note/export/file/${params}`)
   return (await GET(`api-svc/note/export/file/${params}`)) as ResponseBase2;
 };
 export const exportExcelFile = async (params?: any): Promise<ResponseBase2> => {

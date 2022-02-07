@@ -3,10 +3,11 @@ import {connect, ConnectedProps} from "react-redux";
 import React, {FormEvent, useEffect, useRef, useState} from "react";
 import {Button, Col, Form, Input, Row} from "antd";
 import {FormComponentProps} from "antd/lib/form";
-import {Editor} from "@tinymce/tinymce-react";
+
 import {Link} from "react-router-dom";
 import {UpdateEmailRequest} from "../types";
 import {updateEmail} from "../redux/actions";
+import ReactQuill from "react-quill";
 
 const mapStateToProps = (state: RootState) => ({
   emailManager: state.emailManager,
@@ -28,6 +29,39 @@ function UpdateEmailForm(props: IProps) {
   let {update} = props.emailManager
   const [display, setDisplay] = useState(false)
   const [valueEditor, setValueEditor] = useState('')
+  const modules = {
+    toolbar: [
+      [{'header': '1'}, {'header': '2'}],
+      ['blockquote', 'code-block'],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [{'list': 'ordered'}, {'list': 'bullet'}],
+      [{'indent': '-1'}, {'indent': '+1'}],
+      ['link', 'image'],
+      [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+      [{ 'direction': 'rtl' }],                         // text direction
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+      [{ 'font': [] }],
+      [{ 'align': [] }],
+      ['clean'],
+    ],
+
+    clipboard: {
+      // toggle to add extra line breaks when pasting HTML:
+      matchVisual: false,
+    }
+  }
+  /*
+   * Quill editor formats
+   * See https://quilljs.com/docs/formats/
+   */
+  const formats = [
+    'header', 'font', 'size',
+    'bold', 'italic', 'underline', 'strike', 'blockquote',
+    'list', 'bullet', 'indent',
+    'link', 'image', 'video'
+  ]
+  const fontWeightStyle = {fontWeight: 400};
 
 
   useEffect(() => {
@@ -61,8 +95,8 @@ function UpdateEmailForm(props: IProps) {
     });
   }
 
-  function handleChangeMailContent(content: any, editor: any) {
-    if (content === "") {
+  function handleChangeMailContent(content: any) {
+    if (content === "<p><br></p>") {
       setDisplay(true)
       setValueEditor("")
     } else {
@@ -125,29 +159,20 @@ function UpdateEmailForm(props: IProps) {
 
               <div className="form-label">
                 <div className="mb-2">Nội dung <span className="value-required">*</span></div>
-                <Editor
-                  onEditorChange={handleChangeMailContent}
-                  value={valueEditor}
-                  init={{
-                    menu: {
-                      tc: {
-                        title: 'Comments',
-                        items: 'addcomment showcomments deleteallconversations'
-                      }
-                    },
-                    plugins: [
-                      'advlist autolink lists link image charmap print preview anchor',
-                      'searchreplace visualblocks code fullscreen',
-                      'insertdatetime media table paste code help '
-                    ],
-                    height: 330,
-                    menubar: false,
-                    toolbar: 'undo redo | bold italic underline strikethrough |alignleft aligncenter alignright alignjustify | outdent indent |fontselect fontsizeselect formatselect |    numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
-                    quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
-                    toolbar_mode: 'sliding',
-                    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-                  }}
+
+                <ReactQuill
+                  style={fontWeightStyle}
+                  className="ql-custom"
+                  onChange={handleChangeMailContent}
+                  defaultValue={valueEditor}
+
+                  theme={'snow'}
+                  modules={modules}
+                  formats={formats}
+                  bounds={'.app'}
+                  placeholder="Mô tả công việc"
                 />
+               
                 <div className={display ? "value-required show" : "value-required hide"}>Vui lòng nhập nội dung</div>
               </div>
 

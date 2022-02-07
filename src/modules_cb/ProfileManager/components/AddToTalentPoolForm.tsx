@@ -6,7 +6,7 @@ import React, {useEffect, useState} from "react";
 import 'devextreme/dist/css/dx.light.css';
 import {showAddToTalentPoolForm} from "../redux/actions";
 import {AddToTalentPoolRequest} from "../types";
-import {addToTalentPool} from "../redux/actions/profile/addToTalentPool";
+import {addToTalentPool} from "../redux/actions";
 
 const mapStateToProps = (state: RootState) => ({
   profileManager: state.profileManager,
@@ -25,16 +25,8 @@ interface IProps extends FormComponentProps, ReduxProps {
 }
 
 function AddToTalentPoolForm(props: IProps) {
-
+  const {showForm}=props.profileManager
   const [talentPool, setTalentPool] = useState<any>('')
-  //
-  // useEffect(() => {
-  //   if (props.profileManager.showForm.show_add_to_talent_pool) {
-  //     // props.getListRecruitment({id: props.profileManager.showForm.change_process?.recruitmentId})
-  //     setTalentPool(props.profileManager.showForm.change_process?.statusCVId)
-  //   }
-  // }, [props.profileManager.showForm.show_add_to_talent_pool])
-
   const handleCloseForm = (event: any) => {
     event.stopPropagation();
     props.showAddToTalentPoolForm(false)
@@ -42,7 +34,7 @@ function AddToTalentPoolForm(props: IProps) {
 
   function btnAddToTalentPoolClicked() {
     let req: AddToTalentPoolRequest = ({
-      profileId: props.profileManager.showForm.id_detail,
+      profileId: showForm.id_detail,
       talentPoolId: talentPool
     })
     props.addToTalentPool(req)
@@ -57,7 +49,7 @@ function AddToTalentPoolForm(props: IProps) {
       <Modal
         zIndex={2}
         maskClosable={false}
-        visible={props.profileManager.showForm.show_add_to_talent_pool}
+        visible={showForm.show_add_to_talent_pool}
         centered={true}
         width="530px"
         className="custom"

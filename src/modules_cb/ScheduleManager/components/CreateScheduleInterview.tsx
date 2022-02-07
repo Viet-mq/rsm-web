@@ -226,7 +226,6 @@ function CreateScheduleInterview(props: IProps) {
   };
 
   function handleSearchCandidate(e?: any) {
-    console.log(e?.target.value)
     setKeySearch(e?.target.value)
     props.searchCandidates({fullName: e?.target.value, recruitment: recruitment, calendar: "notSet", page: 1, size: 15})
   }
@@ -291,7 +290,7 @@ function CreateScheduleInterview(props: IProps) {
                     rules: [
                       {
                         message: 'Vui lòng chọn tin tuyển dụng',
-                        required: false,
+                        required: true,
                       },
                     ],
                   })(

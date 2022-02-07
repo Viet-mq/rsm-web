@@ -92,7 +92,6 @@ const AddUserForm = (props: IProps) => {
         data.push(row.id);
       });
       setCheckList(data);
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
     },
     getCheckboxProps: (record: any) => {
       return {

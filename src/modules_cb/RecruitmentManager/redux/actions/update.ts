@@ -33,3 +33,4 @@ export const updateRecruitmentError = (error: AppError): UpdateRecruitmentAction
   type: UPDATE_RECRUITMENT_ERROR,
   error
 });
+

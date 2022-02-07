@@ -1,4 +1,9 @@
-import {CreateInterviewProcessAction, createInterviewProcessError, createInterviewProcessSuccess} from "../actions";
+import {
+  CreateInterviewProcessAction,
+  createInterviewProcessError,
+  createInterviewProcessSuccess,
+  showFormCreate
+} from "../actions";
 import * as apis from "../services/apis";
 import {put} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
@@ -12,6 +17,7 @@ export function* createInterviewProcessAsync(action: CreateInterviewProcessActio
       NotificationError('Thêm vòng tuyển dụng không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Thêm vòng tuyển dụng thành công");
+      yield put(showFormCreate(false));
     }
   } catch (e) {
     yield put(createInterviewProcessError(new AppError(e.message)));

@@ -51,7 +51,6 @@ function UpdateGroupAPIForm(props: UpdateGroupAPIFormProps) {
   };
 
   const onChange = (value: any) => {
-    console.log("onChangeonChange", value)
     const findApi = props.listApiState.rows?.filter((item: any) => value.includes(item.name));
 
     setListApi({
@@ -88,14 +87,11 @@ function UpdateGroupAPIForm(props: UpdateGroupAPIFormProps) {
           roles: listApi.api?.map((item: any) => item.id),
         }
 
-        console.log("props.createGroupAPI(req):", req)
         // props.updateGroupAPI(req);
         return;
       }
     });
   }
-  console.log("value:", listApi.checkedList)
-  console.log("list:", props.listApiState?.rows?.map((item: any) => item.name))
   const onBtnCancelClicked = () => {
     resetFields();
     setListApi({

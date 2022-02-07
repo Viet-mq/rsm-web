@@ -1,7 +1,8 @@
 export interface StatusCVEntity {
   id: string,
   name: string,
-  isDragDisabled: boolean
+  isDragDisabled: boolean,
+  isNew?:boolean,
 }
 
 export interface CreateStatusCVRequest {
@@ -10,7 +11,7 @@ export interface CreateStatusCVRequest {
 }
 
 export interface UpdateStatusCVRequest {
-  id: string,
+  id?: string,
   name: string,
 }
 

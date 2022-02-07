@@ -1,4 +1,4 @@
-export interface RecruitmentEntity {
+ export interface RecruitmentEntity {
   id: string,
   title: string,
   jobId: string,
@@ -29,14 +29,17 @@ export interface InterviewProcess {
   id: string,
   name: string,
   total?: string,
-  isDragDisabled?:boolean
+  isDragDisabled?:boolean,
+  isNew:boolean,
 }
 export interface InterviewProcessResponse {
   code: number,
   id: string,
   isDragDisabled: boolean,
   message: string,
-  name: string
+  name: string,
+  isNew:boolean,
+
 }
 
 export interface CreateRecruitmentRequest {
@@ -78,10 +81,16 @@ export interface UpdateRecruitmentRequest {
   jobDescription?: string,
   interest?: string,
 
+
 }
 
 
 export interface DeleteRecruitmentRequest {
   id: string,
+}
+
+export interface DeleteProcessRequest {
+  recruitmentId?: string,
+  statusCVId: string
 }
 

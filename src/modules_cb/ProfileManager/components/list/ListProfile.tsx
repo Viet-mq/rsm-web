@@ -29,8 +29,6 @@ const {Option} = Select;
 const mapStateToProps = (state: RootState) => ({
   profileManager: state.profileManager,
   showDetail: state.profileManager.showForm.show_detail?.show_detail,
-  detail: state.profileManager.detail,
-  elasticSearch: state.profileManager.search,
   listSourceCV: state.sourcecvManager.list,
   listJobLevel: state.joblevelManager.list,
   listDepartment: state.departmentManager.list,
@@ -60,6 +58,7 @@ interface ListProfileProps extends ReduxProps {
 }
 
 function ListProfile(props: ListProfileProps) {
+  const {search,list,getBooking, deleteProfile, update, uploadCV, createBooking, updateBooking}=props.profileManager
   const history = useHistory();
   const {pathname} = useLocation();
   const [page, setPage] = useState(1);
@@ -374,11 +373,11 @@ function ListProfile(props: ListProfileProps) {
   }, [page, pathname])
 
   useEffect(() => {
-    if (props.elasticSearch.request?.key) {
-      setDataSource(props.elasticSearch);
-      setKeySearch(props.elasticSearch.request?.key)
+    if (search.request?.key) {
+      setDataSource(search);
+      setKeySearch(search.request?.key)
     }
-  }, [props.elasticSearch.rowsSearchFull])
+  }, [search.rowsSearchFull])
 
   const getInitials = (name: string) => {
     let initials: any = name.split(' ');
@@ -602,7 +601,7 @@ function ListProfile(props: ListProfileProps) {
       <Table
         scroll={{x: "1500px", y: "638px"}}
         className="custom-table -webkit-scrollbar"
-        dataSource={dataSource ? dataSource.rowsSearchFull : props.profileManager.list?.rows}
+        dataSource={dataSource ? dataSource.rowsSearchFull : list?.rows}
         columns={columns}
         rowKey="id"
         size="small"
@@ -612,7 +611,7 @@ function ListProfile(props: ListProfileProps) {
         pagination={{
           current: page,
           pageSize: size,
-          total: dataSource ? dataSource.totalSearchFull : props.profileManager.list?.total,
+          total: dataSource ? dataSource.totalSearchFull : list?.total,
           onChange: value => setPage(value),
           showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,
         }}
@@ -622,13 +621,13 @@ function ListProfile(props: ListProfileProps) {
       <UploadCVForm/>
       <UpdateProfileForm/>
 
-      {props.profileManager.getBooking.loading ||
-      props.profileManager.list.loading ||
-      props.profileManager.deleteProfile.loading ||
-      props.profileManager.update.loading ||
-      props.profileManager.uploadCV.loading ||
-      props.profileManager.createBooking.loading ||
-      props.profileManager.updateBooking.loading ?
+      {getBooking.loading ||
+      list.loading ||
+      deleteProfile.loading ||
+      update.loading ||
+      uploadCV.loading ||
+      createBooking.loading ||
+      updateBooking.loading ?
       <Loading/> : null}
     </>
   );

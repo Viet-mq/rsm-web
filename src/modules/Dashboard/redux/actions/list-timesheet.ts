@@ -18,7 +18,6 @@ export const getListTimesheetByMonth = (params: { date?: any, type?: any, employ
 }
 
 export const listTimesheetByMonthError = (error: TimekeepingAction['error']): TimekeepingAction => {
-  console.log("listTimesheetByMonthError");
   return ({
     type: LIST_TIMESHEET_BY_MONTH_ERROR,
     error
@@ -26,7 +25,6 @@ export const listTimesheetByMonthError = (error: TimekeepingAction['error']): Ti
 }
 
 export const listTimesheetByMonthSuccess = (payload: TimekeepingAction['payload']): TimekeepingAction => {
-  console.log("listTimesheetByMonthSuccess - 2");
   return ({
     type: LIST_TIMESHEET_BY_MONTH_SUCCESS,
     payload: payload,

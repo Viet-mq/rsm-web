@@ -38,7 +38,6 @@ function KanbanProcess(props: IProps) {
   }, [props.visibleType])
 
   useEffect(() => {
-    console.log("props.listKanbanCandidate:",props.listKanbanCandidate)
     if (props.listKanbanCandidate.rows) {
       handleFilterCandidate(props.listKanbanCandidate.rows);
     }
@@ -164,8 +163,6 @@ function KanbanProcess(props: IProps) {
     }
   }
 
-  console.log(filterCandidate)
-  console.log(filterCandidate[0])
   return (
     <>
       <div style={{display: "flex"}}>

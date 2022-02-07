@@ -51,6 +51,7 @@ export default (state = initState, {
         dataUpdate,
         loading: false
       }
+
     default:
       return state;
   }

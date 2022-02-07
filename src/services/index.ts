@@ -135,7 +135,6 @@ export const POSTEXCEL = <T = any>(path: string, params: any) => {
         }
       })
       .catch(err => {
-        console.log('err => ', err);
         return Promise.reject(err);
       });
   }

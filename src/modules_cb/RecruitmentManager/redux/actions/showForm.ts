@@ -20,6 +20,6 @@ export const showFormUpdate = (show: boolean, dataUpdate?: StatusCVEntity,index?
   type: SHOW_FORM_PROCESS_UPDATE,
   show_update: show,
   data_update: dataUpdate,
-  index:index,
+  index,
 });
 

@@ -51,7 +51,6 @@ interface TimeInterface {
 const Actions = (props: any) => {
   if (props.isFuture)
     return null;
-  console.log('props => ', props);
   return (
     <ActionWrapper>
       {props.is_late === 1 && (

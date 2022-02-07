@@ -2,12 +2,13 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {showEmailUpdateForm, updateBooking} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Form, Input, Modal, Select} from "antd";
-import React, {FormEvent, useEffect, useState} from "react";
-import {Editor} from "@tinymce/tinymce-react";
+import {Button, Form, Icon, Input, Modal, Select} from "antd";
+import React, {FormEvent, useEffect, useRef, useState} from "react";
+
 import {MailForm, MailRequest, UpdateBookingRequest} from "../types";
 import {EmailEntity} from "../../EmailManager/types";
 import {getListEmail} from "../../EmailManager/redux/actions";
+import ReactQuill from "react-quill";
 
 const {Option} = Select;
 const {TextArea} = Input;
@@ -43,10 +44,44 @@ function UpdateEmailForm(props: IProps) {
   const [display, setDisplay] = useState(false)
   const [emailTemp, setEmailTemp] = useState<EmailEntity>()
   const [valueEditor, setValueEditor] = useState("")
+  const inputFile = useRef<any>(null)
+  const [fileAttach, setFileAttach] = useState<any>([]);
+  const modules = {
+    toolbar: [
+      [{'header': '1'}, {'header': '2'}],
+      ['blockquote', 'code-block'],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+      [{'list': 'ordered'}, {'list': 'bullet'}],
+      [{'indent': '-1'}, {'indent': '+1'}],
+      ['link', 'image'],
+      [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+      [{ 'direction': 'rtl' }],                         // text direction
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+      [{ 'font': [] }],
+      [{ 'align': [] }],
+      ['clean'],
+    ],
 
+    clipboard: {
+      // toggle to add extra line breaks when pasting HTML:
+      matchVisual: false,
+    }
+  }
+  /*
+   * Quill editor formats
+   * See https://quilljs.com/docs/formats/
+   */
+  const formats = [
+    'header', 'font', 'size',
+    'bold', 'italic', 'underline', 'strike', 'blockquote',
+    'list', 'bullet', 'indent',
+    'link', 'image', 'video'
+  ]
+  
   useEffect(() => {
-    if (props.showBooking) {
-      props.getListEmail({page: 1, size: 100});
+    if (props.showBooking.show_email_update) {
+      props.getListEmail({page: 1, size: 93});
     }
   }, [props.showBooking])
 
@@ -74,6 +109,8 @@ function UpdateEmailForm(props: IProps) {
         let mailFormCandidate: MailForm = {
           subject: values.subjectCandidate,
           content: valueEditor,
+          file:fileAttach
+
         }
 
         let mailFormInterviewers: MailForm = {
@@ -102,8 +139,8 @@ function UpdateEmailForm(props: IProps) {
     });
   }
 
-  function handleChangeMailContent(content: any, editor: any) {
-    if (content === "") {
+  function handleChangeMailContent(content: any) {
+    if (content === "<p><br></p>") {
       setDisplay(true)
       setValueEditor("")
     } else {
@@ -117,6 +154,23 @@ function UpdateEmailForm(props: IProps) {
     setEmailTemp(selectEmail)
     setValueEditor(selectEmail.content)
   }
+
+  const onOpenFileClick = () => {
+    // `current` points to the mounted file input element
+    inputFile.current.click();
+  };
+
+  function onFileChange(e: any) {
+    const newFile = fileAttach.concat(e.target.files[0])
+    setFileAttach(newFile);
+  }
+
+  function handleDeleteFile(item:any,index:any) {
+    const newFile = Array.from(fileAttach);
+    newFile.splice(index,1)
+    setFileAttach(newFile)
+  }
+
 
   return (
     <>
@@ -176,31 +230,34 @@ function UpdateEmailForm(props: IProps) {
 
             <div className="form-label">
               <div className="mb-2">Nội dung <span className="value-required">*</span></div>
-              <Editor
-                onEditorChange={handleChangeMailContent}
-                value={valueEditor}
-                init={{
-                  menu: {
-                    tc: {
-                      title: 'Comments',
-                      items: 'addcomment showcomments deleteallconversations'
-                    }
-                  },
-                  plugins: [
-                    'advlist autolink lists link image charmap print preview anchor',
-                    'searchreplace visualblocks code fullscreen',
-                    'insertdatetime media table paste code help '
-                  ],
-                  height: 330,
-                  menubar: false,
-                  toolbar: 'undo redo | bold italic underline strikethrough |alignleft aligncenter alignright alignjustify | outdent indent |fontselect fontsizeselect formatselect |    numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment',
-                  quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
-                  toolbar_mode: 'sliding',
-                  content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-                }}
+              <ReactQuill
+                style={fontWeightStyle}
+                className="ql-custom"
+                onChange={handleChangeMailContent}
+                defaultValue={valueEditor}
+
+                theme={'snow'}
+                modules={modules}
+                formats={formats}
+                bounds={'.app'}
+                placeholder="Mô tả công việc"
               />
+              
               <div className={display ? "value-required show" : "value-required hide"}>Vui lòng nhập nội dung</div>
 
+            </div>
+
+            {/*File attachment*/}
+            <div className="mt-2">
+              <input type="file" ref={inputFile} onChange={onFileChange} id={"tags"} style={{display: "none"}}/>
+              <div className="font-14-bold-500">Attachment file</div>
+              {fileAttach ? fileAttach?.map((item: any,index:any) => {
+                return <div key={index} className="flex-space-between">
+                  <div className='pl-2' style={{color: "#1890ff",fontStyle:"italic"}}> {item?.name}</div>
+                  <div className="cursor-default" onClick={()=>handleDeleteFile(item,index)}><Icon type="delete" style={{color: "#f5222d"}}/></div>
+                </div>
+              }) : null}
+              <div className="cursor-default" style={{color: "#969C9D"}} onClick={onOpenFileClick}><Icon type="tag"/> Click to add file</div>
             </div>
 
             <div className="font-15-bold-500 mt-5 mb-2">Nội dung email gửi cho Hội đồng tuyển dụng</div>
@@ -264,9 +321,7 @@ function UpdateEmailForm(props: IProps) {
                     },
                   ],
                 })(<Select className="bg-white text-black" style={{...fontWeightStyle, width: "100%"}}
-                           showSearch
-                           disabled
-                           showArrow={false}
+                           mode="multiple"
                 >
                   {props.listAccount.rows?.map((item: any, index: any) => (
                     <Option key={index} value={item.username}>{item.fullName}</Option>

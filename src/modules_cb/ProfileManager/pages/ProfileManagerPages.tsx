@@ -16,7 +16,6 @@ const mapStateToProps = (state: RootState) => {
   return {
     profileManager: state.profileManager,
     talentPools: state.talentPoolManager,
-    elasticSearch: state.profileManager.search,
   };
 };
 
@@ -34,6 +33,7 @@ interface IProps extends ReduxProps {
 }
 
 function ProfileManagerPages(props: IProps) {
+  const {search,create,uploadListCV,list}=props.profileManager
   const {idTalentPool} = useParams()
   const location = useLocation();
   useEffect(() => {
@@ -77,7 +77,7 @@ function ProfileManagerPages(props: IProps) {
         <Row>
           <Col md={16}>
             <div
-              className="tmp-title-page-size20">{location.pathname.includes("talent-pool-manager") ? `${props.talentPools.detail.result ? props.talentPools.detail.result[0]?.name : ""} ` : "Ứng viên "}({props.elasticSearch.rowsSearchFull ? props.elasticSearch.rowsSearchFull.length : props.profileManager.list.total})
+              className="tmp-title-page-size20">{location.pathname.includes("talent-pool-manager") ? `${props.talentPools.detail.result ? props.talentPools.detail.result[0]?.name : ""} ` : "Ứng viên "}({search.rowsSearchFull ? search.rowsSearchFull.length : list.total})
             </div>
           </Col>
           <Col className="d-flex" md={8}>
@@ -102,8 +102,8 @@ function ProfileManagerPages(props: IProps) {
       <CreateProfileForm/>
       <UploadCVForm/>
 
-      {props.profileManager.create.loading ||
-      props.profileManager.uploadListCV.loading ?
+      {create.loading ||
+      uploadListCV.loading ?
         <Loading/> : null}
 
     </div>
