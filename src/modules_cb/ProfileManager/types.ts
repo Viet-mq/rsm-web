@@ -304,7 +304,8 @@ export interface DeleteNoteRequest {
 export interface ProcessForm {
   idProfile?: string,
   recruitmentId?: string,
-  statusCVId?: string
+  statusCVId?: string,
+  username?:string,
 }
 
 export interface ChangeProcessRequest {

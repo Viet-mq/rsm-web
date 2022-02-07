@@ -91,7 +91,7 @@ function ProfileManagerPages(props: IProps) {
                   <Icon type="upload"/> Upload DS ứng viên
                 </Button>
                 <Button>
-                  <a onClick={BtnExportExcel}><Icon type="export"/> Xuất Excel</a>
+                  <a onClick={BtnExportExcel}><Icon type="export"/>  Xuất Excel</a>
                 </Button>
               </div>
             </div>

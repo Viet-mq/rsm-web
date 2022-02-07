@@ -332,7 +332,7 @@ function ProcessForm(props: IProps) {
               style={fontWeightStyle}
               className="ql-custom"
               onChange={handleChangeTextEditor}
-              defaultValue={valueEditor}
+              value={valueEditor||""}
               
               theme={'snow'}
               modules={modules}
