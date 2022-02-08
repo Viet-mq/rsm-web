@@ -132,7 +132,6 @@ function KanbanProcess(props: IProps) {
         statusCVId: newState[dInd].id,
         username:username,
       })
-      console.log("huhu:",processForm)
       // let req: ChangeProcessRequest = ({
       //   changeProcess: processForm,
       // })

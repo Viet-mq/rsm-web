@@ -346,7 +346,7 @@ function ProcessForm(props: IProps) {
         </div>
       </div>
 
-      <CreateProcessForm schema={schema} setSchema={setSchema} lastElement={lastElement}
+      <CreateProcessForm schema={schema} lastElement={lastElement}
                          setLastElement={setLastElement}/>
       <UpdateProcessForm schema={schema} setSchema={setSchema}/>
     </>

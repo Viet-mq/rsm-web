@@ -49,7 +49,7 @@ function DetailRecruitment(props: IProps) {
   const contentMore = (<div className="content-more">
     <div className="flex-items-center">
       <div className='border-right pr-3'>Người tạo:<span
-        className="bold-text"> {props.detailRecruitment?.rows[0]?.createBy}</span></div>
+        className="bold-text"> {props.detailRecruitment?.rows[0]?.fullName}</span></div>
       <div className=" ml-3">Ngày tạo:<span className="bold-text"> {moment(props.detailRecruitment?.rows[0]?.createAt).format(dateFormat)}</span>
       </div>
     </div>
@@ -170,10 +170,6 @@ function DetailRecruitment(props: IProps) {
               </Popover>
             </div>
           </div>
-          {/*<div>*/}
-          {/*  <Dropdown.Button overlay={menu} style={{marginBottom: 15}}  type="primary">Thêm ứng viên</Dropdown.Button>*/}
-
-          {/*</div>*/}
         </div>
 
         <Tabs defaultActiveKey="1" className="tab-detail" onChange={callback} tabBarExtraContent={operations}>

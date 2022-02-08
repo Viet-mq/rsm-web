@@ -17,6 +17,7 @@
   interest: string,
   createAt: string,
   createBy: string,
+   fullName:string,
   detailOfSalary: string,
   from: number,
   to: number,

@@ -36,7 +36,7 @@ function ProfileManagerPages(props: IProps) {
   const {search,create,uploadListCV,list}=props.profileManager
   const {idTalentPool} = useParams()
   const location = useLocation();
-  const [dataID, setDataID] = useState<any>({})
+  const [dataID, setDataID] = useState<any>()
   useEffect(() => {
     location.pathname.includes("talent-pool-manager") ? document.title = "Talent pools" : document.title = "Ứng viên";
     props.getDetailTalentPool({id: idTalentPool})
