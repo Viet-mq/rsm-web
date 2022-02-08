@@ -61,6 +61,7 @@ interface ListProfileProps extends ReduxProps {
 function ListProfile(props: ListProfileProps) {
   const {search,list,getBooking, deleteProfile, update, uploadCV, createBooking, updateBooking}=props.profileManager
   const history = useHistory();
+  const location = useLocation();
   const {pathname} = useLocation();
   const [page, setPage] = useState(1);
   const size = 30;
@@ -82,7 +83,6 @@ function ListProfile(props: ListProfileProps) {
     talentPool: null,
     recruitment: null
   })
-  const [dataID, setDataID] = useState<any>({});
   const columns: ColumnProps<ProfileEntity>[] = [
     {
       title: 'STT',
@@ -357,7 +357,9 @@ function ListProfile(props: ListProfileProps) {
   }, [props.listDepartment.rows])
 
   useEffect(() => {
-    props.setDataID(selected)
+    if(location.pathname.includes("profile-manager")){
+      props.setDataID(selected)
+    }
   },[selected])
 
   useEffect(() => {
@@ -440,13 +442,7 @@ function ListProfile(props: ListProfileProps) {
       talentPool: null,
       recruitment: null
     });
-    // props.setDataID({
-    //   job: null,
-    //   jobLevel: null,
-    //   department: null,
-    //   talentPool: null,
-    //   recruitment: null
-    // })
+
     props.getListProfile({page: 1, size: 30});
   };
 
@@ -507,7 +503,6 @@ function ListProfile(props: ListProfileProps) {
   }
 
   function btnSearchClicked() {
-    setDataID(selected);
     props.getListProfile({
       fullName: selected.name,
       job: selected.job,
@@ -545,7 +540,6 @@ function ListProfile(props: ListProfileProps) {
                       value={selected.name}
                       onChange={e => {
                         setSelected({...selected, name: e.target.value});
-                        // props.setDataID({...selected, name: e.target.value})
                       }}
                       onSearch={btnSearchClicked}
                       placeholder="Họ tên"/>

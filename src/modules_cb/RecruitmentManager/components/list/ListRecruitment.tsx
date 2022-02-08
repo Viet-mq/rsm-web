@@ -61,7 +61,7 @@ function ListRecruitment(props: IProps) {
 
   const contentMore = (<div className="content-more">
     <div className="flex-items-center">
-      <div className='border-right pr-3'>Người tạo: <span className="bold-text"> {props.recruitment.createBy}</span>
+      <div className='border-right pr-3'>Người tạo: <span className="bold-text"> {props.recruitment.fullName}</span>
       </div>
       <div className=" ml-3">Ngày tạo: <span
         className="bold-text">{moment(props.recruitment.createAt).format(dateFormat)}</span></div>

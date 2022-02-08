@@ -23,7 +23,6 @@ type ReduxProps = ConnectedProps<typeof connector>;
 
 interface CreateJobFormProps extends FormComponentProps, ReduxProps {
   schema: any,
-  setSchema: any,
   lastElement: any,
   setLastElement: any,
 }
@@ -75,8 +74,6 @@ function CreateProcessForm(props: CreateJobFormProps) {
           props.createSteps(req)
         }
 
-        // props.setSchema(schemaCopy);
-        // props.showFormCreate(false)
       }
     }
   }, [createInterviewProcess?.response])
