@@ -75,7 +75,7 @@ function KanbanProcess(props: IProps) {
           result: findInQueryFilter?findInQueryFilter.result:[]
         })
       })
-    console.log("hihi:",result)
+
       setFilterCandidate(result)
       return result
   }

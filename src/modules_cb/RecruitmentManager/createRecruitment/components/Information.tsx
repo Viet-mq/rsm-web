@@ -9,6 +9,8 @@ import {checkInformationValidate, createSteps, getDataRecruitmentUpdate} from ".
 import {CreateRecruitmentRequest, RecruitmentEntity} from "../../types";
 import {useLocation} from "react-router-dom";
 import ReactQuill from "react-quill";
+import CreateJobForm from "../../../JobManager/components/CreateJobForm";
+import Loading from "../../../../components/Loading";
 
 const {Option} = Select;
 
@@ -17,6 +19,7 @@ const mapStateToProps = (state: RootState) => ({
   recruitmentManager: state.recruitmentManager,
   listTalentPool: state.talentPoolManager.list,
   listJob: state.jobManager.list,
+  createJob: state.jobManager.create,
   listProcess: state.statuscvManager.list,
 })
 
@@ -25,7 +28,8 @@ const connector = connect(mapStateToProps,
     showJobFormCreate,
     checkInformationValidate,
     createSteps,
-    getDataRecruitmentUpdate
+    getDataRecruitmentUpdate,
+
   });
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -109,16 +113,16 @@ function InformationForm(props: IProps) {
       let salaryDescription: any = '';
       switch (salaryChange.detailOfSalary) {
         case "Chi tiết mức lương":
-          salaryDescription = ` Từ ${salaryChange.from} VND đến ${salaryChange.to} VND`;
+          salaryDescription = ` Từ ${salaryChange.from.toLocaleString()} VND đến ${salaryChange.to.toLocaleString()} VND`;
           break
         case "Thỏa thuận":
           salaryDescription = " Thỏa thuận";
           break
         case "Từ ...":
-          salaryDescription = ` Từ ${salaryChange.from} VND`;
+          salaryDescription = ` Từ ${salaryChange.from.toLocaleString()} VND`;
           break
         case "Up to ...":
-          salaryDescription = ` Up to ${salaryChange.to} VND`;
+          salaryDescription = ` Up to ${salaryChange.to.toLocaleString()} VND`;
           break
       }
 
@@ -207,7 +211,9 @@ function InformationForm(props: IProps) {
       setDisplay({...display, interest: true})
       setValueEditor({...valueEditor, interest: ""})
     } else {
-      setDisplay({...display, interest: false})
+      const newDisplay=display
+      display.interest=false
+      setDisplay(newDisplay)
       const newValueEditor = valueEditor
       newValueEditor.interest = content
       onFormChange(salary, newValueEditor)
@@ -220,7 +226,9 @@ function InformationForm(props: IProps) {
       setDisplay({...display, requirementOfJob: true})
       setValueEditor({...valueEditor, requirementOfJob: ""})
     } else {
-      setDisplay({...display, requirementOfJob: false})
+      const newDisplay=display
+      display.requirementOfJob=false
+      setDisplay(newDisplay)
       const newValueEditor = valueEditor
       newValueEditor.requirementOfJob = content
       onFormChange(salary, newValueEditor)
@@ -233,12 +241,23 @@ function InformationForm(props: IProps) {
       setDisplay({...display, jobDescription: true})
       setValueEditor({...valueEditor, jobDescription: ""})
     } else {
-      setDisplay({...display, jobDescription: false})
+      const newDisplay=display
+      display.jobDescription=false
+      setDisplay(newDisplay)
       const newValueEditor = valueEditor
       newValueEditor.jobDescription = content
       onFormChange(salary, newValueEditor)
       setValueEditor(newValueEditor)
     }
+  }
+
+  const handleCreateJob = (e: any) => {
+    e.preventDefault();
+    if (e?.target) {
+      e.target.disabled = true;
+      e.target.disabled = false;
+    }
+    props.showJobFormCreate(true);
   }
 
   return (
@@ -287,6 +306,8 @@ function InformationForm(props: IProps) {
                     size="small"
                     className="ant-btn ml-1 mr-1 ant-btn-sm"
                     style={{height: '32px'}}
+                    onClick={handleCreateJob}
+
                   >
                     <Icon type="plus"/>
                   </Button>
@@ -528,6 +549,9 @@ function InformationForm(props: IProps) {
           </div>
         </div>
       </div>
+      <CreateJobForm/>
+      {props.createJob.loading  ?
+        <Loading/> : null}
     </>
 
   );

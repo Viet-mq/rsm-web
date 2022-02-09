@@ -304,7 +304,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                     rules: [
                       {
                         message: 'Vui lòng nhập Email',
-                        required: true,
+                        required: false,
                       },
                     ],
                   })(
