@@ -154,7 +154,7 @@ function ChangeProcessForm(props: IProps) {
   function handleChangeMailContent(content: string) {
     if (content === "<p><br></p>") {
       setDisplay(true)
-      // setValueEditor("")
+      setValueEditor("")
     } else {
       setDisplay(false)
       setValueEditor(content)

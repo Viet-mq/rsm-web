@@ -32,12 +32,12 @@ function CreateEmailForm(props: IProps) {
       [{'list': 'ordered'}, {'list': 'bullet'}],
       [{'indent': '-1'}, {'indent': '+1'}],
       ['link', 'image'],
-      [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-      [{ 'direction': 'rtl' }],                         // text direction
-      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-      [{ 'font': [] }],
-      [{ 'align': [] }],
+      [{'script': 'sub'}, {'script': 'super'}],      // superscript/subscript
+      [{'direction': 'rtl'}],                         // text direction
+      [{'header': [1, 2, 3, 4, 5, 6, false]}],
+      [{'color': []}, {'background': []}],          // dropdown with defaults from theme
+      [{'font': []}],
+      [{'align': []}],
       ['clean'],
     ],
 
@@ -57,10 +57,14 @@ function CreateEmailForm(props: IProps) {
     'link', 'image', 'video'
   ]
   const fontWeightStyle = {fontWeight: 400};
-  const inputEl = useRef<any>(null);
-  const onButtonClick = () => {
-    // `current` points to the mounted text input element
-    inputEl.current.focus();
+  let reactQuillRef = useRef<any>()
+
+  let quillRef: ReactQuill ;
+
+  function onButtonClick(){
+    const range = quillRef?.getEditor()?.getSelection();
+    let position = range ? range.index : 0;
+    quillRef?.getEditor()?.insertText(position, 'hello my friend')
   };
 
   function onBtnCreateClicked(e: FormEvent) {
@@ -145,10 +149,13 @@ function CreateEmailForm(props: IProps) {
               <div className="form-label">
                 <div className="mb-2">Nội dung <span className="value-required">*</span></div>
                 <ReactQuill
+                  ref={(el: any) => {
+                    reactQuillRef = el
+                  }}
                   style={fontWeightStyle}
                   className="ql-custom"
                   onChange={handleChangeMailContent}
-                  value={valueEditor||""}
+                  value={valueEditor || ""}
                   theme={'snow'}
                   modules={modules}
                   formats={formats}
@@ -171,7 +178,7 @@ function CreateEmailForm(props: IProps) {
               <span style={{color: "red"}}>[ </span><span>Vị trí tuyển dụng</span><span style={{color: "red"}}> ]</span>
             </div>
           </div>
-          <Button onClick={onButtonClick}>Haaha</Button>
+          <Button onClick={onButtonClick}>InsertText</Button>
         </Col>
       </Row>
       <div className="footer-right">

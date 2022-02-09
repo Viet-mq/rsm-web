@@ -351,15 +351,14 @@ function ListProfile(props: ListProfileProps) {
     },
   ];
   const [treeData, setTreeData] = useState([])
+  const location = useLocation();
 
   useEffect(() => {
     setTreeData(convertArrayToTree(props.listDepartment.rows))
   }, [props.listDepartment.rows])
 
   useEffect(() => {
-    if(location.pathname.includes("profile-manager")){
-      props.setDataID(selected)
-    }
+    if(location.pathname.includes("profile-manager")) props.setDataID(selected)
   },[selected])
 
   useEffect(() => {

@@ -311,7 +311,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                     rules: [
                       {
                         message: 'Vui lòng nhập Email',
-                        required: true,
+                        required: false,
                       },
                     ],
                   })(
