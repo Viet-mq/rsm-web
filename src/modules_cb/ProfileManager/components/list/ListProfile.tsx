@@ -23,6 +23,7 @@ import BookingForm from "../BookingForm";
 import Loading from "../../../../components/Loading";
 import UpdateProfileForm from "../UpdateProfileForm";
 import UploadCVForm from "../UploadCVForm";
+import env from 'src/configs/env';
 
 const {Option} = Select;
 
@@ -351,7 +352,7 @@ function ListProfile(props: ListProfileProps) {
     },
   ];
   const [treeData, setTreeData] = useState([])
-  const location = useLocation();
+  const screenHeight = document.documentElement.clientHeight;
 
   useEffect(() => {
     setTreeData(convertArrayToTree(props.listDepartment.rows))
@@ -595,7 +596,7 @@ function ListProfile(props: ListProfileProps) {
                 ))}
               </Select>
 
-              <Button type="primary" style={width}
+              <Button type="primary" style={{width:"16%"}}
                       onClick={btnSearchClicked}
               >Tìm kiếm</Button>
 
@@ -609,7 +610,7 @@ function ListProfile(props: ListProfileProps) {
       ) : null}
 
       <Table
-        scroll={{x: "1500px", y: "638px"}}
+        scroll={{x: "1500px", y: screenHeight<env.desktopHeight?"450px":"638px"}}
         className="custom-table -webkit-scrollbar"
         dataSource={dataSource ? dataSource.rowsSearchFull : list?.rows}
         columns={columns}

@@ -6,5 +6,6 @@ export default {
   // apiUri: "http://192.168.50.33:35300",
   desktopWidth: 1366,
   tabletWidth: 1024,
+  desktopHeight:900,
   localApIUri : "http://localhost:45100"
 };

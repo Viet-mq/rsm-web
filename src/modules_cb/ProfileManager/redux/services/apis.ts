@@ -276,3 +276,21 @@ export const uploadAvatar = async (params?: UploadAvatarRequest) => {
 export const addToTalentPool = async (params?: any): Promise<ResponseBase2> => {
   return (await POST('api-svc/profile/talentpool', params)) as ResponseBase2;
 };
+
+export const getListComment = async (params?: any): Promise<ResponseBase2> => {
+  return (await GET('api-svc/comment/list', params)) as ResponseBase2;
+};
+
+export const createComment = async (params?: any): Promise<ResponseBase2> => {
+  return (await POST('api-svc/comment/create', params)) as ResponseBase2;
+};
+
+export const deleteComment = async (params?: any): Promise<ResponseBase2> => {
+  return (await POST('api-svc/comment/delete', params)) as ResponseBase2;
+};
+
+export const updateComment = async (params?: any): Promise<ResponseBase2> => {
+  return (await POST('api-svc/comment/update', params)) as ResponseBase2;
+};
+
+

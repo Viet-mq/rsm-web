@@ -20,6 +20,11 @@ import deleteNote, {DeleteNoteState} from "./note/deleteNote";
 import getListNote, {GetListNoteState} from "./note/getListNote";
 import showNote, {ShowNoteState} from "./note/showNote";
 import updateNote, {UpdateNoteState} from "./note/updateNote";
+import createComment, {CreateCommentState} from "./comment/createComment";
+import deleteComment, {DeleteCommentState} from "./comment/deleteComment";
+import getListComment, {GetListCommentState} from "./comment/getListComment";
+import showComment, {ShowCommentState} from "./comment/showComment";
+import updateComment, {UpdateCommentState} from "./comment/updateComment";
 import uploadAvatar, {UploadAvatarState} from "./profile/uploadAvatar";
 import createRejectCandidate, {CreateRejectCandidateState} from "./profile/createRejectCandidate";
 import changeProcess, {ChangeProcessState} from "./profile/changeProcess";
@@ -48,6 +53,11 @@ export interface ProfileManagerModuleState {
   getListNote: GetListNoteState,
   showNote: ShowNoteState,
   updateNote: UpdateNoteState,
+  createComment: CreateCommentState,
+  deleteComment: DeleteCommentState,
+  getListComment: GetListCommentState,
+  showComment: ShowCommentState,
+  updateComment: UpdateCommentState,
   uploadAvatar: UploadAvatarState,
   changeProcess: ChangeProcessState,
   addToTalentPool: AddToTalentPoolState,
@@ -76,6 +86,11 @@ export default combineReducers<ProfileManagerModuleState>({
   getListNote,
   showNote,
   updateNote,
+  createComment,
+  deleteComment,
+  getListComment,
+  showComment,
+  updateComment,
   uploadAvatar,
   changeProcess,
   addToTalentPool,
