@@ -1,24 +1,30 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {
+  createComment,
   createNote,
+  deleteComment,
   deleteNote,
   getActivityLogs,
   getBooking,
   getDetailProfile,
+  getListComment,
   getListNote,
   showAddToTalentPoolForm,
   showChangeProcessForm,
   showChangeRecruitmentForm,
   showFormBooking,
+  showFormCreateComment,
   showFormCreateNote,
   showFormDetail,
   showFormReasonReject,
   showFormUpdate,
+  showFormUpdateComment,
   showFormUpdateDetail,
   showFormUpdateNote,
   showFormUploadAvatar,
   showFormUploadCV,
+  updateComment,
   updateNote
 } from "../redux/actions";
 import {
@@ -37,7 +43,15 @@ import {
   Tooltip
 } from "antd";
 import React, {useEffect, useState} from "react";
-import {DataShowBooking, DeleteNoteRequest, DetailCV, NoteEntity, ProcessForm} from "../types";
+import {
+  CommentEntity,
+  DataShowBooking,
+  DeleteCommentRequest,
+  DeleteNoteRequest,
+  DetailCV,
+  NoteEntity,
+  ProcessForm
+} from "../types";
 import moment from "moment";
 import {ColumnProps} from "antd/lib/table";
 import {emptyText} from "../../../configs/locales";
@@ -59,6 +73,8 @@ import ChangeProcessForm from "./ChangeProcessForm";
 import ChangeRecruitmentForm from "./ChangeRecruitmentForm";
 import AddToTalentPoolForm from "./AddToTalentPoolForm";
 import UpdateDetailProfileForm from "./UpdateDetailProfileForm";
+import CreateCommentForm from "./CreateCommentForm";
+import UpdateCommentForm from "./UpdateCommentForm";
 
 const {Step} = Steps;
 const {TabPane} = Tabs;
@@ -79,14 +95,20 @@ const connector = connect(mapStateToProps,
     showFormUpdateDetail,
     showFormUploadCV,
     showFormBooking,
+    getListNote,
     deleteNote,
     updateNote,
     createNote,
     showFormCreateNote,
     showFormUpdateNote,
+    getListComment,
+    deleteComment,
+    updateComment,
+    createComment,
+    showFormCreateComment,
+    showFormUpdateComment,
     getDetailProfile,
     getBooking,
-    getListNote,
     showFormUploadAvatar,
     showFormReasonReject,
     getListRecruitment,
@@ -105,7 +127,20 @@ function DetailProfileForm(props: DetailProfileFormProps) {
   const [pageEmail, setPageEmail] = useState(1);
   const size = 10;
   const {
-    showForm, detail, getActivity, getBooking, getListNote, createNote, updateNote, updateDetail, uploadAvatar, changeProcess,addToTalentPool
+    showForm,
+    detail,
+    getActivity,
+    getBooking,
+    getListNote,
+    createNote,
+    updateNote,
+    getListComment,
+    createComment,
+    updateComment,
+    updateDetail,
+    uploadAvatar,
+    changeProcess,
+    addToTalentPool
   } = props.profileManager;
   const [rate, setRate] = useState(2.4);
   const [isFull, setIsFull] = useState<boolean>(false);
@@ -256,6 +291,79 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     },
 
   ]
+  const columnComment: ColumnProps<CommentEntity>[] = [
+    {
+      title: "Người tạo",
+      dataIndex: "fullName",
+      width: 150,
+      key: 'fullName',
+      render: (text: string, record: CommentEntity) => {
+        return <div>
+          <div>
+          <span style={{color: "#B2B2B2"}}>
+                {moment(unixTimeToDate(parseInt(record.createAt, 10))).format('DD/MM/YYYY HH:mm')}</span>
+          </div>
+
+          <span style={{fontWeight: 500,}}>
+                        {record.fullName}
+          </span>
+        </div>
+      }
+    },
+    {
+      title: "Ghi chú",
+      dataIndex: "content",
+      width: 280,
+      key: 2,
+    },
+    {
+      title: () => {
+        return <div style={{whiteSpace: 'nowrap'}}>Thao tác</div>;
+      },
+      dataIndex: 'action',
+      width: 30,
+      align: "center",
+      // fixed: 'right',
+      render: (_text: string, record: CommentEntity) => {
+        return (
+          <div style={{whiteSpace: 'nowrap'}}>
+            <Popconfirm
+              title="Bạn muốn xóa ghi chú này chứ ?"
+              okText="Xóa"
+              onCancel={event => {
+                event?.stopPropagation();
+              }}
+              onConfirm={event => handleDeleteComment(event, record)}
+            >
+              <Tooltip placement="top" title="Xóa">
+                <Button
+                  size="small"
+                  className="ant-btn ml-1 mr-1 ant-btn-sm"
+                  onClick={event => {
+                    event.stopPropagation();
+                  }}
+                >
+                  <Icon type="delete" theme="filled"/>
+                </Button>
+              </Tooltip>
+
+            </Popconfirm>
+
+            <Tooltip placement="top" title="Sửa">
+
+              <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
+                      onClick={event => handleEditComment(event, record)}
+              >
+                <Icon type="edit"/>
+              </Button>
+            </Tooltip>
+
+          </div>
+        );
+      },
+    },
+
+  ]
 
   useEffect(() => {
     setActiveLogs({
@@ -273,6 +381,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       props.getDetailProfile({idProfile: showForm.id_detail});
       props.getBooking({idProfile: showForm.id_detail});
       props.getListNote({idProfile: showForm.id_detail})
+      props.getListComment({idProfile: showForm.id_detail})
       if (detail.result?.recruitmentId) props.getListRecruitment({id: detail.result?.recruitmentId})
     }
   }, [showForm.id_detail])
@@ -352,9 +461,19 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     props.showFormUpdateNote(true, entity);
   }
 
+  const handleEditComment = (event: any, entity: CommentEntity) => {
+    event.stopPropagation();
+    props.showFormUpdateComment(true, entity);
+  }
+
   function handleCreateNote(event: any) {
     event.stopPropagation();
     props.showFormCreateNote(true, detail.result?.id);
+  }
+
+  function handleCreateComment(event: any) {
+    event.stopPropagation();
+    props.showFormCreateComment(true, detail.result?.id);
   }
 
   function handleChangeActivityLogs(page: any) {
@@ -405,6 +524,14 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     props.deleteNote({id: req.id});
   }
 
+  const handleDeleteComment = (event: any, entity: CommentEntity) => {
+    event.stopPropagation();
+    let req: DeleteCommentRequest = {
+      id: entity.id
+    }
+    props.deleteComment({id: req.id});
+  }
+
   const getInitials = (name: string) => {
     if (name) {
       let initials: any = name.split(' ');
@@ -428,7 +555,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
         idProfile: detail.result?.id,
         recruitmentId: detail.result?.recruitmentId,
         statusCVId: detail.result?.statusCVId,
-        username:detail.result?.username
+        username: detail.result?.username
       }
     )
     props.showChangeProcessForm(true, req)
@@ -591,6 +718,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
               <span>Thời gian phỏng vấn: {getBooking.result ? moment(unixTimeToDate(getBooking.result?.date)).format('HH:mm DD/MM/YYYY') : ''} </span>
             </div>
 
+
             <div className='apply-position-box'>
               {detail.result?.recruitmentId ? (
                 <>
@@ -652,6 +780,33 @@ function DetailProfileForm(props: DetailProfileFormProps) {
             </div>
 
             <div style={{display: "flex", justifyContent: "space-between"}}>
+              <h1>Ghi chú</h1>
+              <Button size="small" className="ant-btn mr-1 ant-btn-sm"
+                      style={{margin: "auto"}}
+                      onClick={event => handleCreateComment(event)}>
+                <Icon type="plus"/> Thêm ghi chú
+              </Button>
+            </div>
+
+            <Table
+              className="custom-table -webkit-scrollbar"
+              dataSource={getListComment.result?.rows}
+              columns={columnComment}
+              style={{ whiteSpace: 'pre'}}
+              rowKey="id"
+              bordered
+              locale={{emptyText: emptyText}}
+              pagination={{
+                current: page,
+                pageSize: size,
+                total: getListComment.result?.total,
+                onChange: value => setPage(value),
+                showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,
+              }}
+
+            />
+
+            <div style={{display: "flex", justifyContent: "space-between"}}>
               <h1>Đánh giá</h1>
               <Button size="small" className="ant-btn mr-1 ant-btn-sm"
                       style={{margin: "auto"}}
@@ -664,6 +819,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
               scroll={{x: 1000}}
               className="custom-table -webkit-scrollbar"
               dataSource={getListNote.result?.rows}
+              style={{ whiteSpace: 'pre'}}
               columns={columns}
               rowKey="id"
               bordered
@@ -769,6 +925,8 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
       <CreateNoteForm/>
       <UpdateNoteForm/>
+      <CreateCommentForm/>
+      <UpdateCommentForm/>
       <UploadAvatarForm/>
       <CreateReasonRejectForm/>
       <ChangeProcessForm/>
@@ -778,11 +936,13 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
       {createNote.loading ||
       updateNote.loading ||
+      createComment.loading ||
+      updateComment.loading ||
       detail.loading ||
       updateDetail.loading ||
       uploadAvatar.loading ||
-      changeProcess.loading||
-        addToTalentPool.loading
+      changeProcess.loading ||
+      addToTalentPool.loading
         ? <Loading/> : null}
 
     </>

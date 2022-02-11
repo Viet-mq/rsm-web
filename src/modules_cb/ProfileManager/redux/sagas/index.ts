@@ -7,20 +7,20 @@ import {getDetailProfileAsync} from "./detail/detail";
 import {
   ADD_TO_TALENT_POOL,
   CHANGE_PROCESS,
-  CREATE_BOOKING,
+  CREATE_BOOKING, CREATE_COMMENT,
   CREATE_NOTE,
   CREATE_PROFILE,
-  CREATE_REJECT_CANDIDATE,
+  CREATE_REJECT_CANDIDATE, DELETE_COMMENT,
   DELETE_NOTE,
   DELETE_PROFILE,
   GET_ACTIVITY,
   GET_BOOKING,
   GET_DETAIL_PROFILE,
   GET_ELASTIC_SEARCH,
-  GET_FULL_ELASTIC_SEARCH,
+  GET_FULL_ELASTIC_SEARCH, GET_LIST_COMMENT,
   GET_LIST_NOTE,
   GET_LIST_PROFILE,
-  UPDATE_BOOKING,
+  UPDATE_BOOKING, UPDATE_COMMENT,
   UPDATE_DETAIL,
   UPDATE_NOTE,
   UPDATE_PROFILE,
@@ -40,6 +40,10 @@ import {getListNoteAsync} from "./note/getNote";
 import {createNoteAsync} from "./note/createNote";
 import {updateNoteAsync} from "./note/updateNote";
 import {deleteNoteAsync} from "./note/deleteNote";
+import {getListCommentAsync} from "./comment/getComment";
+import {createCommentAsync} from "./comment/createComment";
+import {updateCommentAsync} from "./comment/updateComment";
+import {deleteCommentAsync} from "./comment/deleteComment";
 import {uploadAvatarAsync} from "./profile/uploadAvatar";
 import {createRejectCandidateAsync} from "./profile/createRejectCandidate";
 import {changeProcessAsync} from "./profile/changeProcess";
@@ -66,6 +70,10 @@ export default function* root() {
     yield takeLatest(CREATE_NOTE, createNoteAsync),
     yield takeLatest(UPDATE_NOTE, updateNoteAsync),
     yield takeLatest(DELETE_NOTE, deleteNoteAsync),
+    yield takeLatest(GET_LIST_COMMENT, getListCommentAsync),
+    yield takeLatest(CREATE_COMMENT, createCommentAsync),
+    yield takeLatest(UPDATE_COMMENT, updateCommentAsync),
+    yield takeLatest(DELETE_COMMENT, deleteCommentAsync),
     yield takeLatest(UPLOAD_AVATAR, uploadAvatarAsync),
     yield takeLatest(CREATE_REJECT_CANDIDATE, createRejectCandidateAsync),
     yield takeLatest(CHANGE_PROCESS, changeProcessAsync),

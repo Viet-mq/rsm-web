@@ -300,6 +300,30 @@ export interface DeleteNoteRequest {
   id: string,
 }
 
+//comment
+export interface CommentEntity {
+  id: string | any,
+  idProfile: string,
+  content: string,
+  createAt: string,
+  createBy: string,
+  fullName:string,
+}
+
+export interface UpdateCommentRequest {
+  id: string,
+  content: string,
+
+}
+
+export interface CreateCommentRequest {
+  idProfile: string,
+  content: string,
+}
+
+export interface DeleteCommentRequest {
+  id: string,
+}
 
 export interface ProcessForm {
   idProfile?: string,
