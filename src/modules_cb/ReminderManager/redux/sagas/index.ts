@@ -1,27 +1,16 @@
-import {all, takeEvery, takeLatest} from 'redux-saga/effects';
-import {
-  CREATE_LIST_SCHEDULE,
-  DELETE_SCHEDULE,
-  GET_CANDIDATES,
-  GET_SCHEDULE,
-  SEARCH_CANDIDATES,
-  UPDATE_SCHEDULE,
-} from "../actions";
-import {getAllScheduleAsync} from "./schedule/getAllSchedule";
-import {updateScheduleAsync} from "./schedule/updateSchedule";
-import {createScheduleAsync} from "./schedule/createSchedule";
-import {deleteScheduleAsync} from "./schedule/deleteSchedule";
-import {getCandidatesAsync} from "./schedule/getCandidates";
-import {searchCandidatesAsync} from "./schedule/searchCandidates";
+import {all, takeLatest} from 'redux-saga/effects';
+import {getListReminderAsync} from "./reminder/getReminder";
+import {createReminderAsync} from "./reminder/createReminder";
+import {updateReminderAsync} from "./reminder/updateReminder";
+import {deleteReminderAsync} from "./reminder/deleteReminder";
+import {CREATE_REMINDER, DELETE_REMINDER, GET_LIST_REMINDER, UPDATE_REMINDER} from "../actions";
 
 export default function* root() {
   return all([
-    yield takeLatest(GET_SCHEDULE, getAllScheduleAsync),
-    yield takeLatest(CREATE_LIST_SCHEDULE, createScheduleAsync),
-    yield takeLatest(UPDATE_SCHEDULE, updateScheduleAsync),
-    yield takeLatest(DELETE_SCHEDULE, deleteScheduleAsync),
-    yield takeLatest(GET_CANDIDATES, getCandidatesAsync),
-    yield takeEvery(SEARCH_CANDIDATES, searchCandidatesAsync),
+    yield takeLatest(GET_LIST_REMINDER, getListReminderAsync),
+    yield takeLatest(CREATE_REMINDER, createReminderAsync),
+    yield takeLatest(UPDATE_REMINDER, updateReminderAsync),
+    yield takeLatest(DELETE_REMINDER, deleteReminderAsync),
 
   ]);
 }

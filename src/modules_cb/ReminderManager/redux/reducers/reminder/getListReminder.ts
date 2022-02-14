@@ -1,17 +1,17 @@
-import {ScheduleEntity} from "../../../types";
+import {ReminderEntity} from "../../../types";
 import {AppError} from "../../../../../models/baseResponse";
 import * as Actions from "../../actions";
-import {GetScheduleAction} from "../../actions";
+import {GetListReminderAction} from "../../actions";
 
 
-export interface GetScheduleState {
+export interface GetListReminderState {
   loading: boolean,
   params?: any,
-  result?: ScheduleEntity[]|any,
+  rows?: ReminderEntity|any,
   error?: AppError
 }
 
-const initState: GetScheduleState = {
+const initState: GetListReminderState = {
   loading: false,
   params: {},
 }
@@ -20,22 +20,22 @@ export default (state = initState, {
   type,
   params,
   error,
-  result
-}: GetScheduleAction): GetScheduleState => {
+  rows
+}: GetListReminderAction): GetListReminderState => {
   switch (type) {
-    case Actions.GET_SCHEDULE:
+    case Actions.GET_LIST_REMINDER:
       return {
         ...state,
         params,
         loading: false,
       }
-    case Actions.GET_SCHEDULE_SUCCESS:
+    case Actions.GET_LIST_REMINDER_SUCCESS:
       return {
         ...state,
-        result,
+        rows,
         loading: false
       }
-    case Actions.GET_SCHEDULE_ERROR:
+    case Actions.GET_LIST_REMINDER_ERROR:
       return {
         ...state,
         error,

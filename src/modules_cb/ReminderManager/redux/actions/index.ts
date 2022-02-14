@@ -1,8 +1,7 @@
-export * from './schedule/createSchedule'
-export * from './schedule/updateSchedule'
-export * from './schedule/getAllSchedule'
-export * from './schedule/showSchedule'
-export * from './schedule/deleteSchedule'
-export * from './schedule/getCandidates'
-export * from './schedule/searchCandidates'
+
+export * from './reminder/createReminder'
+export * from './reminder/updateReminder'
+export * from './reminder/getListReminder'
+export * from './reminder/showReminder'
+export * from './reminder/deleteReminder'
 

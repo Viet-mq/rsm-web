@@ -1,34 +1,34 @@
-import {UpdateScheduleRequest} from "../../../types";
+import {DeleteReminderRequest} from "../../../types";
 import {AppError, ResponseBase2} from "../../../../../models/common";
 import * as Actions from "../../actions";
-import {UpdateScheduleAction} from "../../actions";
+import {DeleteReminderAction} from "../../actions";
 
-export interface UpdateScheduleState {
+export interface DeleteReminderState {
   loading: boolean,
-  request?: UpdateScheduleRequest,
+  request?: DeleteReminderRequest,
   response?: ResponseBase2,
   error?: AppError
 }
 
-const initState: UpdateScheduleState = {
-  loading: false
+const initState: DeleteReminderState = {
+  loading: false,
 }
 
-export default (state = initState, {type, request, response, error}: UpdateScheduleAction): UpdateScheduleState => {
+export default (state = initState, {type, request, response, error}: DeleteReminderAction): DeleteReminderState => {
   switch (type) {
-    case Actions.UPDATE_SCHEDULE:
+    case Actions.DELETE_REMINDER:
       return {
         ...state,
         request,
         loading: true
       }
-    case Actions.UPDATE_SCHEDULE_SUCCESS:
+    case Actions.DELETE_REMINDER_SUCCESS:
       return {
         ...state,
         response,
         loading: false
       }
-    case Actions.UPDATE_SCHEDULE_ERROR:
+    case Actions.DELETE_REMINDER_ERROR:
       return {
         ...state,
         error,

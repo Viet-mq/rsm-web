@@ -1,20 +1,13 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {
-  createBooking,
-  getBooking,
-  showEmailCreateForm,
-  showEmailUpdateForm,
-  showFormBooking,
-  updateBooking
-} from "../redux/actions";
+import {getBooking, showEmailCreateForm, showEmailUpdateForm, showFormBooking} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Checkbox, Col, DatePicker, Form, Input, InputNumber, Modal, Row, Select, TimePicker} from "antd";
 import React, {FormEvent, useEffect, useState} from "react";
 import {getListAccount} from "../../AccountManager/redux/actions";
 import {getListStatusCV} from "../../StatusCVManager/redux/actions";
 import moment from "moment";
-import {CreateBookingForm, CreateBookingRequest, MailRequest, UpdateBookingForm, UpdateBookingRequest} from "../types";
+import {CreateBookingForm, CreateBookingRequest, UpdateBookingForm, UpdateBookingRequest} from "../types";
 import CreateEmailForm from "./CreateEmailForm";
 import UpdateEmailForm from "./UpdateEmailForm";
 
@@ -45,7 +38,7 @@ interface BookingFormProps extends FormComponentProps, ReduxProps {
 }
 
 function BookingForm(props: BookingFormProps) {
-  const {getBooking,showBooking}= props.profileManager
+  const {getBooking, showBooking} = props.profileManager
   const {getFieldDecorator, resetFields} = props.form;
   const fontWeightStyle = {fontWeight: 400};
   const dateFormat = 'DD/MM/YYYY';
