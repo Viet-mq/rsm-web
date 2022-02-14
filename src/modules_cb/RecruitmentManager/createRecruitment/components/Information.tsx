@@ -126,7 +126,7 @@ function InformationForm(props: IProps) {
           break
       }
 
-      if (!err) {
+      if (!err &&valueEditorChange.interest&&valueEditorChange.jobDescription&& valueEditorChange.requirementOfJob) {
         if (isEdit) {
           if (update.dataUpdate) {
             let req: RecruitmentEntity = {
@@ -237,6 +237,7 @@ function InformationForm(props: IProps) {
   }
 
   function handleChangeJobDescription(content: any) {
+    console.log(content)
     if (content === "<p><br></p>") {
       setDisplay({...display, jobDescription: true})
       setValueEditor({...valueEditor, jobDescription: ""})
@@ -487,7 +488,7 @@ function InformationForm(props: IProps) {
 
               <div className="font-20-bold-500 ">Mô tả công việc</div>
               <div className="form-label mb-4">
-                <div className="mb-2">Mô tả công việc <span className="value-required">*</span></div>
+                <div className="mb-2">Mô tả công việc chi tiết<span className="value-required">*</span></div>
                 <ReactQuill
                   style={fontWeightStyle}
                   className="ql-custom"
@@ -498,7 +499,7 @@ function InformationForm(props: IProps) {
                   modules={modules}
                   formats={formats}
                   bounds={'.app'}
-                  placeholder="Mô tả công việc"
+                  placeholder="Mô tả công việc chi tiết"
                 />
                 <div className={display.jobDescription ? "value-required show" : "value-required hide"}>Vui lòng nhập mô
                   tả chung
