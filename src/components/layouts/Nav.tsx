@@ -85,6 +85,15 @@ const Nav = (props: IProps) => {
         </Link>
       </Menu.Item>
 
+      <Menu.Item key="reminder" style={{display: 'flex', alignItems: 'center'}}>
+        <Link to={`/reminder`} style={{display: "flex", justifyContent: "space-between", width: "100%"}}>
+          <div>
+            <Icon type="bell" />
+            <span>Nhắc nhở</span>
+          </div>
+        </Link>
+      </Menu.Item>
+
       <SubMenu key="sub1" title={!props.hiddenLabel ? <span>CÀI ĐẶT</span> : <Icon type="setting"/>}>
 
         <Menu.Item key="account-manager" style={{display: 'flex', alignItems: 'center'}}>

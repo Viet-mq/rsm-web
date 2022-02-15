@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import styled from 'styled-components';
 import {Col, Row} from 'antd';
 import moment from 'moment';
-
 import Header from './Header';
 import Employee from './Employee';
 import Statistic from './Statistic';

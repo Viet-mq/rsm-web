@@ -5,7 +5,7 @@ import {Button, Form, Input, Modal, Select} from "antd";
 import React, {FormEvent, useEffect, useState} from "react";
 import {updateNote} from "../redux/actions";
 import {UpdateNoteRequest} from "../types";
-import {showFormUpdateNote} from "../../ProfileManager/redux/actions/note/showNote";
+import {showFormUpdateNote} from "../redux/actions";
 import {getListAccount} from "../../AccountManager/redux/actions";
 
 const {Option} = Select;

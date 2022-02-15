@@ -31,6 +31,7 @@ import DetailRecruitment from "./modules_cb/RecruitmentManager/components/Detail
 import EmailManagerPages from "./modules_cb/EmailManager/pages/EmailManagerPages";
 import UpdateEmailForm from "./modules_cb/EmailManager/components/UpdateEmailForm";
 import CreateEmailForm from "./modules_cb/EmailManager/components/CreateEmailForm";
+import ReminderManagerPages from "./modules_cb/ReminderManager/pages/ReminderManagerPages";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -92,6 +93,8 @@ const Routes = (props: PropsFromRedux) => {
         <Route path={`/talent-pool-manager/:idTalentPool`} exact={true}
                render={(props: any) => (<ProfileManagerPages {...props}/>)}
                isLogin={props.isLogin}/>
+        <Route path="/reminder" component={ReminderManagerPages} isLogin={props.isLogin}/>
+
         <Redirect exact from="/*" to={'/home'}/>
       </Switch>
     </div>
