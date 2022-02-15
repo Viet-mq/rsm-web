@@ -220,12 +220,16 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       dataIndex: "comment",
       width: 200,
       key: 2,
+      render: (text: string, record: NoteEntity) => {
+        return <div style={{maxWidth:"100%",whiteSpace:"normal"}}>{record.comment}</div>
+      }
     },
     {
       title: "Đánh giá",
       dataIndex: "evaluation",
       width: 70,
       key: "evaluation",
+
     },
     {
       title: "Đính kèm",
@@ -295,7 +299,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     {
       title: "Người tạo",
       dataIndex: "fullName",
-      width: 150,
+      width: "20%",
       key: 'fullName',
       render: (text: string, record: CommentEntity) => {
         return <div>
@@ -313,15 +317,18 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     {
       title: "Ghi chú",
       dataIndex: "content",
-      width: 280,
+      width: "70%",
       key: 2,
+      render: (text: string, record: CommentEntity) => {
+        return <div style={{maxWidth:"100%",whiteSpace:"normal"}}>{record.content}</div>
+      }
     },
     {
       title: () => {
         return <div style={{whiteSpace: 'nowrap'}}>Thao tác</div>;
       },
       dataIndex: 'action',
-      width: 30,
+      width: "10%",
       align: "center",
       // fixed: 'right',
       render: (_text: string, record: CommentEntity) => {
@@ -673,11 +680,21 @@ function DetailProfileForm(props: DetailProfileFormProps) {
             <span>{detail.result?.phoneNumber}</span><br/>
             <Icon type="contacts" className='mr-1'/>
             <span>{detail.result?.hometown || "Không có địa chỉ"}</span><br/>
+            <Icon type="skype" className='mr-1'/>
+            <span>{detail.result?.skype }</span><br/>
+            <Icon type="linkedin" className='mr-1'/>
+            <span>{detail.result?.linkedin }</span><br/>
+            <Icon type="github" className='mr-1'/>
+            <span>{detail.result?.github }</span><br/>
+            <Icon type="global" className='mr-1'/>
+            <span>{detail.result?.web }</span><br/>
+            <Icon type="deployment-unit" className='mr-1'/>
+            <span>{detail.result?.otherTech }</span><br/>
             <h1>Social profiles</h1>
           </div>
 
           <div className="detail-paragraph-2__footer">
-            <a>Tìm ứng viên trên facebook</a>
+            <a href={detail.result?.facebook} target="_blank">Tìm ứng viên trên facebook</a>
             <a>Tìm theo email</a>
           </div>
         </div>

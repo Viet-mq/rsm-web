@@ -207,6 +207,8 @@ function InformationForm(props: IProps) {
   };
 
   function handleChangeInterest(content: any) {
+    console.log("Interest",content)
+
     if (content === "<p><br></p>") {
       setDisplay({...display, interest: true})
       setValueEditor({...valueEditor, interest: ""})
@@ -222,6 +224,7 @@ function InformationForm(props: IProps) {
   }
 
   function handleChangeRequirement(content: any) {
+    console.log("Requirement",content)
     if (content === "<p><br></p>") {
       setDisplay({...display, requirementOfJob: true})
       setValueEditor({...valueEditor, requirementOfJob: ""})
@@ -237,7 +240,7 @@ function InformationForm(props: IProps) {
   }
 
   function handleChangeJobDescription(content: any) {
-    console.log(content)
+    console.log("Description",content)
     if (content === "<p><br></p>") {
       setDisplay({...display, jobDescription: true})
       setValueEditor({...valueEditor, jobDescription: ""})

@@ -69,7 +69,7 @@ interface UpdateProfileFormProps extends FormComponentProps, ReduxProps {
 function UpdateProfileForm(props: UpdateProfileFormProps) {
   const {getFieldDecorator, resetFields} = props.form;
   const fontWeightStyle = {fontWeight: 400};
-
+  const [treeData, setTreeData] = useState([])
   const formItemLayout = {
     labelCol: {
       xs: {span: 24},
@@ -80,6 +80,11 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
       sm: {span: 24},
     },
   };
+  const dateFormat = 'DD/MM/YYYY';
+
+  useEffect(() => {
+    setTreeData(convertArrayToTree(props.listDepartment.rows))
+  }, [props.listDepartment.rows])
 
   function onBtnUpdateClicked(e: FormEvent) {
     e.preventDefault();
@@ -108,6 +113,17 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           mailRef: values.mailRef,
           recruitment: values.recruitmentId,
           skill: values.skill,
+
+          company: values.company,
+          facebook: values.facebook,
+          github: values.github,
+          linkedin: values.linkedin,
+          otherTech: values.otherTech,
+          pic: values.pic,
+          skype: values.skype,
+          status: values.status,
+          time: 0,
+          web: values.web,
         }
         props.updateProfile(req);
         return;
@@ -120,10 +136,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     props.showFormUpdate(false);
   }
 
-
-  const dateFormat = 'DD/MM/YYYY';
-
-  const handleCreateSchool = (e: any) => {
+  function handleCreateSchool (e: any){
     e.preventDefault();
     if (e?.target) {
       e.target.disabled = true;
@@ -132,7 +145,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     props.showSchoolFormCreate(true);
   }
 
-  const handleCreateJob = (e: any) => {
+  function handleCreateJob(e: any)  {
     e.preventDefault();
     if (e?.target) {
       e.target.disabled = true;
@@ -141,7 +154,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     props.showJobFormCreate(true);
   }
 
-  const handleCreateJobLevel = (e: any) => {
+  function handleCreateJobLevel (e: any) {
     e.preventDefault();
     if (e?.target) {
       e.target.disabled = true;
@@ -149,7 +162,8 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     }
     props.showJobLevelFormCreate(true);
   }
-  const handleCreateSourceCV = (e: any) => {
+
+  function handleCreateSourceCV (e: any){
     e.preventDefault();
     if (e?.target) {
       e.target.disabled = true;
@@ -158,7 +172,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     props.showSourceCVFormCreate(true);
   }
 
-  const handleCreateDepartment = (e: any) => {
+  function handleCreateDepartment (e: any) {
     e.preventDefault();
     if (e?.target) {
       e.target.disabled = true;
@@ -167,7 +181,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     props.showDepartmentFormCreate(true);
   }
 
-  const convertArrayToTree = (arrays: any) => {
+  function convertArrayToTree (arrays: any) {
     let dataFetch: any = [];
     for (let i = 0; i < arrays.length; i++) {
       if (arrays[i]?.children) {
@@ -188,12 +202,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     return dataFetch;
   }
 
-  const [treeData, setTreeData] = useState([])
-  useEffect(() => {
-    setTreeData(convertArrayToTree(props.listDepartment.rows))
-  }, [props.listDepartment.rows])
-
-  const handleCreateSkill = (e: any) => {
+  function handleCreateSkill(e: any){
     e.preventDefault();
     if (e?.target) {
       e.target.disabled = true;
@@ -202,7 +211,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     props.showSkillFormCreate(true);
   }
 
-  const getInitials = (name: string) => {
+  function getInitials (name: string){
     if (name) {
       let initials: any = name.split(' ');
       if (initials.length > 1) {
@@ -216,7 +225,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
 
   return (
     <div>
-
       <Modal
         zIndex={2}
         maskClosable={false}
@@ -316,6 +324,108 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                     ],
                   })(
                     <Input placeholder="Email" className="bg-white text-black"/>
+                  )}
+                </Form.Item>
+              </div>
+            </div>
+
+            <div className="flex-space-between">
+              <div className="mr-2" style={{width: 230}}>
+                <Form.Item label="Facebook" className="form-label"  {...formItemLayout}>
+                  {getFieldDecorator('facebook', {
+                    initialValue: props.showForm.data_update?.facebook,
+                    rules: [
+                      {
+                        message: 'Vui lòng nhập Facebook',
+                        required: false,
+                      },
+                    ],
+                  })(
+                    <Input placeholder="Nhập Facebook" className="bg-white text-black"/>
+                  )}
+                </Form.Item>
+              </div>
+
+              <div className="flex-process">
+                <Form.Item label="Skype" className="form-label"  {...formItemLayout}>
+                  {getFieldDecorator('skype', {
+                    initialValue: props.showForm.data_update?.skype,
+                    rules: [
+                      {
+                        message: 'Vui lòng nhập skype',
+                        required: false,
+                      },
+                    ],
+                  })(
+                    <Input placeholder="Skype" className="bg-white text-black"/>
+                  )}
+                </Form.Item>
+              </div>
+            </div>
+
+            <div className="flex-space-between">
+              <div className="mr-2" style={{width: 230}}>
+                <Form.Item label="LinkedIn" className="form-label"  {...formItemLayout}>
+                  {getFieldDecorator('linkedin', {
+                    initialValue: props.showForm.data_update?.linkedin,
+                    rules: [
+                      {
+                        message: 'Vui lòng nhập LinkedIn',
+                        required: false,
+                      },
+                    ],
+                  })(
+                    <Input placeholder="Nhập LinkedIn" className="bg-white text-black"/>
+                  )}
+                </Form.Item>
+              </div>
+
+              <div className="flex-process">
+                <Form.Item label="Github" className="form-label"  {...formItemLayout}>
+                  {getFieldDecorator('github', {
+                    initialValue: props.showForm.data_update?.github,
+                    rules: [
+                      {
+                        message: 'Vui lòng nhập github',
+                        required: false,
+                      },
+                    ],
+                  })(
+                    <Input placeholder="Github" className="bg-white text-black"/>
+                  )}
+                </Form.Item>
+              </div>
+            </div>
+
+            <div className="flex-space-between">
+              <div className="mr-2" style={{width: 230}}>
+                <Form.Item label="Other Tech" className="form-label"  {...formItemLayout}>
+                  {getFieldDecorator('otherTech', {
+                    initialValue: props.showForm.data_update?.otherTech,
+                    rules: [
+                      {
+                        message: 'Vui lòng nhập Other Tech',
+                        required: false,
+                      },
+                    ],
+                  })(
+                    <Input placeholder="Nhập Other Tech" className="bg-white text-black"/>
+                  )}
+                </Form.Item>
+              </div>
+
+              <div className="flex-process">
+                <Form.Item label="Web" className="form-label"  {...formItemLayout}>
+                  {getFieldDecorator('web', {
+                    initialValue: props.showForm.data_update?.web,
+                    rules: [
+                      {
+                        message: 'Vui lòng nhập web',
+                        required: false,
+                      },
+                    ],
+                  })(
+                    <Input placeholder="Web" className="bg-white text-black"/>
                   )}
                 </Form.Item>
               </div>
@@ -538,7 +648,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
 
             <Form.Item label="Người giới thiệu" className="form-label"  {...formItemLayout}>
               {getFieldDecorator('hrRef', {
-                initialValue: props.showForm.data_update?.hrRef,
+                initialValue: props.showForm.data_update?.username,
                 rules: [
                   {
                     message: 'Vui lòng chọn giới thiệu',
@@ -552,6 +662,41 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                   optionLabelProp="label"
 
                   placeholder="Chọn người giới thiệu">
+                  {props.listAccount.rows?.map((item: any, index: any) => (
+                    <Option key={index} value={item.username} label={item.fullName}>
+                      <div className="flex-items-center" style={{paddingTop: 5}}>
+                        <div style={{marginRight: 10}}>
+                          <Avatar src={item.image ? item.image : "#"}
+                                  style={{backgroundColor: item?.avatarColor, marginRight: 5}}>
+                            {getInitials(item.fullName)}
+                          </Avatar>
+                        </div>
+                        <div className="c-list-profile" style={{fontWeight: 500}}>
+                          <div style={{height: 25}}>{item.fullName}</div>
+                          <div style={{height: 25}} className="more-information">{item.email}</div>
+                        </div>
+                      </div>
+                    </Option>
+                  ))}
+                </Select>
+              )}
+            </Form.Item>
+
+            <Form.Item label="HR phụ trách" className="form-label"  {...formItemLayout}>
+              {getFieldDecorator('pic', {
+                initialValue: props.showForm.data_update?.picId,
+                rules: [
+                  {
+                    message: 'Vui lòng chọn HR phụ trách',
+                    required: false,
+                  },
+                ],
+              })(
+                <Select
+                  className="bg-white text-black"
+                  style={fontWeightStyle}
+                  optionLabelProp="label"
+                  placeholder="Chọn HR phụ trách">
                   {props.listAccount.rows?.map((item: any, index: any) => (
                     <Option key={index} value={item.username} label={item.fullName}>
                       <div className="flex-items-center" style={{paddingTop: 5}}>
