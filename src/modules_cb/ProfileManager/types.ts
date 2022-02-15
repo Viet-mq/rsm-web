@@ -33,6 +33,22 @@ export interface ProfileEntity {
   recruitmentId: string
   recruitmentName: string
   skill: string[]
+  isNew: boolean,
+  followers: null,
+  tags: null,
+  time: number,
+  linkedin: string,
+  facebook: string,
+  skype: string,
+  github: string,
+  otherTech: string,
+  web: string,
+  picId: string,
+  picName: string,
+  picMail: string,
+  status: string,
+  companyId: string,
+  companyName: string
 }
 
 export interface CreateProfileRequest {
@@ -55,6 +71,17 @@ export interface CreateProfileRequest {
   department: string,
   dateOfApply: number,
 
+  company: string,
+  facebook: string,
+  github: string,
+  linkedin: string,
+  otherTech: string,
+  pic: string,
+  skype: string,
+  status: string,
+  time: number,
+  web: string
+
 }
 
 export interface UpdateProfileRequest {
@@ -76,7 +103,18 @@ export interface UpdateProfileRequest {
   levelSchool: string,
   mailRef: string,
   recruitment: string,
-  skill: string[]
+  skill: string[],
+  
+  company: string,
+  facebook: string,
+  github: string,
+  linkedin: string,
+  otherTech: string,
+  pic: string,
+  skype: string,
+  status: string,
+  time: number,
+  web: string
 }
 
 export interface DeleteProfileRequest {
@@ -196,23 +234,34 @@ export interface DataShowBooking {
 
 //detail
 export interface UpdateDetailRequest {
-  id: string,
+  company: string,
   dateOfApply: number,
   dateOfBirth: number,
+  department: string,
   email: string,
   evaluation: string,
+  facebook: string,
   fullName: string,
   gender: string,
+  github: string,
   hometown: string,
   hrRef: string,
+  id: string,
   job: string,
   lastApply: number,
   levelJob: string,
+  levelSchool: string,
+  linkedin: string,
+  otherTech: string,
   phoneNumber: string,
+  pic: string,
   school: string,
+  skill: string[],
+  skype: string,
   sourceCV: string,
-  talentPool: string
-
+  status: string,
+  time: number,
+  web: string
 }
 
 export interface DetailProfileEntity {
@@ -251,7 +300,24 @@ export interface DetailProfileEntity {
   mailRef: string
   recruitmentId: string
   recruitmentName: string
-  skill: string[]
+  skill: string[],
+  followers: null,
+  tags: null,
+  time: number,
+  linkedin: string,
+  facebook: string,
+  skype: string,
+  github: string,
+  otherTech: string,
+  web: string,
+  picId: string,
+  picName: string,
+  status: string,
+  companyId: string,
+  companyName: string,
+
+
+ 
 
 }
 
