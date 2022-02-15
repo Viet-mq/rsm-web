@@ -266,7 +266,7 @@ export interface ActivityLogsEntity {
 }
 
 
-//note
+//reminder
 export interface NoteEntity {
   id: string | any,
   idProfile: string,

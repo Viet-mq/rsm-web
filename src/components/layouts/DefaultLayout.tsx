@@ -40,7 +40,7 @@ const DefaultLayout = (props: LayoutProps) => {
     value: undefined,
     dataSource: [],
   });
-const arrayUrl=['/statuscv-manager',"/email-manager"]
+const arrayUrl=['/statuscv-manager',"/email-manager","/reminder"]
   const getInitials = (name: string) => {
     if (name) {
       let initials: any = name.split(' ');

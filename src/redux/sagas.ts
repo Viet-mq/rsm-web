@@ -22,6 +22,7 @@ import reasonRejectManagerSaga from '../modules_cb/ReasonRejectManager/redux/sag
 import scheduleManagerSaga from '../modules_cb/ScheduleManager/redux/sagas';
 import recruitmentManagerSaga from '../modules_cb/RecruitmentManager/redux/sagas';
 import emailManagerSaga from '../modules_cb/EmailManager/redux/sagas';
+import reminderManagerSaga from '../modules_cb/ReminderManager/redux/sagas';
 import * as commonSaga from './common-saga';
 
 export default function* rootSaga() {
@@ -49,6 +50,7 @@ export default function* rootSaga() {
     scheduleManagerSaga(),
     recruitmentManagerSaga(),
     emailManagerSaga(),
+    reminderManagerSaga(),
     commonSaga.checkErrorAsync(),
   ]);
 }

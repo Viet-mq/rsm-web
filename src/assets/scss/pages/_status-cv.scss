@@ -1,4 +1,9 @@
 .status-cv-container{
   background: $color-bg;
   padding: 15px 30px !important;
+  .rbc-month-row{
+    overflow: inherit;
+    height: inherit;
+    min-height: 100px;
+  }
 }
