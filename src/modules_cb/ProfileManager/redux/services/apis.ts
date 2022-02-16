@@ -212,7 +212,7 @@ export const getElasticSearch = async (params?: any): Promise<ResponseBase2> => 
 };
 
 export const getListNote = async (params: any): Promise<ListResponseBase2<NoteEntity>> => {
-  const response = (await GET('api-svc/reminder/list', params)) as any;
+  const response = (await GET('api-svc/note/list', params)) as any;
   return {
     total: response.total,
     rows: response.rows || [],
@@ -229,7 +229,7 @@ export const createNote = async (params?: any) => {
   formData.append('username', params.username);
   formData.append('comment', params.comment);
   formData.append('evaluation', params.evaluation);
-  return POSTIMAGE('api-svc/reminder/create', formData, {
+  return POSTIMAGE('api-svc/note/create', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -237,7 +237,7 @@ export const createNote = async (params?: any) => {
 };
 
 export const deleteNote = async (params?: any): Promise<ResponseBase2> => {
-  return (await POST('api-svc/reminder/delete', params)) as ResponseBase2;
+  return (await POST('api-svc/note/delete', params)) as ResponseBase2;
 };
 
 export const updateNote = async (params?: any) => {
@@ -248,7 +248,7 @@ export const updateNote = async (params?: any) => {
   formData.append('username', params.username);
   formData.append('comment', params.comment);
   formData.append('evaluation', params.evaluation);
-  return POSTIMAGE('api-svc/reminder/update', formData, {
+  return POSTIMAGE('api-svc/note/update', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
