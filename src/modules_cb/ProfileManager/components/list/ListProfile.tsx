@@ -253,6 +253,23 @@ function ListProfile(props: ListProfileProps) {
         </div>
       }
     },
+
+    {
+      title: 'PIC',
+      dataIndex: 'picName',
+      width: 160,
+      key: 'picName',
+      render: (text: string, record: ProfileEntity) => {
+        return <div>
+          <div style={{display: 'flex', alignItems: 'center'}}>
+            <span style={{fontWeight: 500}}>{record.picName}</span>
+          </div>
+          <div>
+            <span style={{color: "#B2B2B2"}}>{record.picMail}</span>
+          </div>
+        </div>
+      }
+    },
     {
       title: 'Thời gian nộp',
       dataIndex: 'dateOfApply',

@@ -111,6 +111,17 @@ function CreateProfileForm(props: CreateProfileFormProps) {
           mailRef: values.mailRef,
           department: values.department,
           dateOfApply: values.dateOfApply * 1,
+
+          company: values.company,
+          facebook: values.facebook,
+          github: values.github,
+          linkedin: values.linkedin,
+          otherTech: values.otherTech,
+          pic: values.pic,
+          skype: values.skype,
+          status: values.status,
+          time: 0,
+          web: values.web,
         }
         props.createProfile(req);
         return;
@@ -309,6 +320,108 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                     ],
                   })(
                     <Input placeholder="Email" className="bg-white text-black"/>
+                  )}
+                </Form.Item>
+              </div>
+            </div>
+
+            <div className="flex-space-between">
+              <div className="mr-2" style={{width: 230}}>
+                <Form.Item label="Facebook" className="form-label"  {...formItemLayout}>
+                  {getFieldDecorator('facebook', {
+                    initialValue: "",
+                    rules: [
+                      {
+                        message: 'Vui lòng nhập Facebook',
+                        required: false,
+                      },
+                    ],
+                  })(
+                    <Input placeholder="Nhập Facebook" className="bg-white text-black"/>
+                  )}
+                </Form.Item>
+              </div>
+
+              <div className="flex-process">
+                <Form.Item label="Skype" className="form-label"  {...formItemLayout}>
+                  {getFieldDecorator('skype', {
+                    initialValue: "",
+                    rules: [
+                      {
+                        message: 'Vui lòng nhập skype',
+                        required: false,
+                      },
+                    ],
+                  })(
+                    <Input placeholder="Skype" className="bg-white text-black"/>
+                  )}
+                </Form.Item>
+              </div>
+            </div>
+
+            <div className="flex-space-between">
+              <div className="mr-2" style={{width: 230}}>
+                <Form.Item label="LinkedIn" className="form-label"  {...formItemLayout}>
+                  {getFieldDecorator('linkedin', {
+                    initialValue: "",
+                    rules: [
+                      {
+                        message: 'Vui lòng nhập LinkedIn',
+                        required: false,
+                      },
+                    ],
+                  })(
+                    <Input placeholder="Nhập LinkedIn" className="bg-white text-black"/>
+                  )}
+                </Form.Item>
+              </div>
+
+              <div className="flex-process">
+                <Form.Item label="Github" className="form-label"  {...formItemLayout}>
+                  {getFieldDecorator('github', {
+                    initialValue: "",
+                    rules: [
+                      {
+                        message: 'Vui lòng nhập github',
+                        required: false,
+                      },
+                    ],
+                  })(
+                    <Input placeholder="Github" className="bg-white text-black"/>
+                  )}
+                </Form.Item>
+              </div>
+            </div>
+
+            <div className="flex-space-between">
+              <div className="mr-2" style={{width: 230}}>
+                <Form.Item label="Other Tech" className="form-label"  {...formItemLayout}>
+                  {getFieldDecorator('otherTech', {
+                    initialValue: "",
+                    rules: [
+                      {
+                        message: 'Vui lòng nhập Other Tech',
+                        required: false,
+                      },
+                    ],
+                  })(
+                    <Input placeholder="Nhập Other Tech" className="bg-white text-black"/>
+                  )}
+                </Form.Item>
+              </div>
+
+              <div className="flex-process">
+                <Form.Item label="Web" className="form-label"  {...formItemLayout}>
+                  {getFieldDecorator('web', {
+                    initialValue: "",
+                    rules: [
+                      {
+                        message: 'Vui lòng nhập web',
+                        required: false,
+                      },
+                    ],
+                  })(
+                    <Input placeholder="Web" className="bg-white text-black"/>
                   )}
                 </Form.Item>
               </div>
@@ -544,6 +657,41 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                   style={fontWeightStyle}
                   optionLabelProp="label"
                   placeholder="Chọn người giới thiệu">
+                  {props.listAccount.rows?.map((item: any, index: any) => (
+                    <Option key={index} value={item.username} label={item.fullName}>
+                      <div className="flex-items-center" style={{paddingTop: 5}}>
+                        <div style={{marginRight: 10}}>
+                          <Avatar src={item.image ? item.image : "#"}
+                                  style={{backgroundColor: item?.avatarColor, marginRight: 5}}>
+                            {getInitials(item.fullName)}
+                          </Avatar>
+                        </div>
+                        <div className="c-list-profile" style={{fontWeight: 500}}>
+                          <div style={{height: 25}}>{item.fullName}</div>
+                          <div style={{height: 25}} className="more-information">{item.email}</div>
+                        </div>
+                      </div>
+                    </Option>
+                  ))}
+                </Select>
+              )}
+            </Form.Item>
+
+            <Form.Item label="HR phụ trách" className="form-label"  {...formItemLayout}>
+              {getFieldDecorator('pic', {
+                initialValue: undefined,
+                rules: [
+                  {
+                    message: 'Vui lòng chọn HR phụ trách',
+                    required: false,
+                  },
+                ],
+              })(
+                <Select
+                  className="bg-white text-black"
+                  style={fontWeightStyle}
+                  optionLabelProp="label"
+                  placeholder="Chọn HR phụ trách">
                   {props.listAccount.rows?.map((item: any, index: any) => (
                     <Option key={index} value={item.username} label={item.fullName}>
                       <div className="flex-items-center" style={{paddingTop: 5}}>

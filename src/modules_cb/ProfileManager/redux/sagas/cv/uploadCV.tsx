@@ -1,4 +1,5 @@
 import {
+  getDetailProfile,
   getListProfile,
   showFormDetail,
   showFormUploadCV,
@@ -23,14 +24,11 @@ export function* uploadCVAsync(action: UploadCVAction) {
       NotificationSuccess('Thành công', "Tải CV thành công");
       yield put(showFormUploadCV(false));
       const params = yield select((state: RootState) => state.profileManager.list.params);
-      let req: DetailCV = {
-        show_detail: false,
-        general: 24,
-        detail: 0
-      }
-      yield put(showFormDetail(req));
       yield put(getListProfile(params));
-
+      const paramsDetail = yield select((state: RootState) => state.profileManager.detail.params)
+      if (paramsDetail?.idProfile) {
+        yield put(getDetailProfile(paramsDetail))
+      }
     }
   } catch (e) {
     yield put(uploadCVError(new AppError(e.message)));
