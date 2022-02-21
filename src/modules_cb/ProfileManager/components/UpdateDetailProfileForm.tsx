@@ -119,14 +119,14 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           school: values.school,
           sourceCV: values.sourceCV,
           lastApply: values.lastApply * 1,
-          company: "string",
+          company: values.company,
           facebook: values.facebook,
           github: values.github,
           linkedin: values.linkedin,
           otherTech: values.otherTech,
           pic: values.pic,
           skype: values.skype,
-          status: "string",
+          status: values.status,
           time: 0,
           web: values.web,
           department: values.department,
@@ -666,7 +666,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
 
               <Form.Item label="Người giới thiệu" className="form-label"  {...formItemLayout}>
                 {getFieldDecorator('hrRef', {
-                  initialValue: props.showForm.data_update_detail?.hrRef,
+                  initialValue: props.showForm.data_update_detail?.username,
                   rules: [
                     {
                       message: 'Vui lòng chọn giới thiệu',
