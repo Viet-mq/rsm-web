@@ -574,7 +574,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
         <div className="detail-title">
           <div className="detail-title__left">
             <h1>{detail.result?.fullName}</h1>
-            <span>Java Candidate Profile</span>
+            <span>{detail.result?.recruitmentName}</span>
           </div>
 
           <div className="detail-title__right">

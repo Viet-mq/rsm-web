@@ -1,6 +1,6 @@
 import * as Actions from "../actions";
 import {ProfileFormAction} from "../actions";
-import {ChangeProcessRequest, DetailCV, DetailProfileEntity, ProcessForm, ProfileEntity} from "../../types";
+import {DetailCV, DetailProfileEntity, ProcessForm, ProfileEntity, RecruitmentTalentPool} from "../../types";
 
 export interface ProfileFormState {
   show_create?: boolean,
@@ -12,29 +12,30 @@ export interface ProfileFormState {
   id_detail?: string,
   show_upload_avatar?: boolean,
   id_upload_avatar?: string,
-  show_reason_reject?:boolean
-  show_change_process?:boolean,
-  id_recruitment?:string,
-  show_change_recruitment?:boolean,
-  change_process?:ProcessForm
-  show_add_to_talent_pool?:boolean,
-
+  show_reason_reject?: boolean
+  show_change_process?: boolean,
+  id_recruitment?: string,
+  show_change_recruitment?: boolean,
+  change_process?: ProcessForm
+  show_add_to_talent_pool?: boolean,
+  recruitment_talentpool?: RecruitmentTalentPool,
 }
 
 const initState: ProfileFormState = {
   show_create: false,
   show_update: false,
-  show_reason_reject:false,
+  show_reason_reject: false,
   show_update_detail: false,
   show_upload_avatar: false,
   show_change_process: false,
-  show_change_recruitment:false,
+  show_change_recruitment: false,
   show_detail: {
     show_detail: false,
     general: 24,
     detail: 0,
   },
-  show_add_to_talent_pool:false,
+  show_add_to_talent_pool: false,
+
 }
 
 export default (state = initState, {
@@ -53,7 +54,8 @@ export default (state = initState, {
   id_recruitment,
   show_change_recruitment,
   change_process,
-  show_add_to_talent_pool
+  show_add_to_talent_pool,
+  recruitment_talentpool
 }: ProfileFormAction): ProfileFormState => {
   switch (type) {
     case Actions.PROFILE_SHOW_FORM_CREATE:
@@ -62,15 +64,16 @@ export default (state = initState, {
         show_create,
         show_update: false,
         show_update_detail: false,
-        show_upload_avatar: false
+        show_upload_avatar: false,
+        recruitment_talentpool
       }
-      case Actions.REASON_REJECT_SHOW_FORM:
+    case Actions.REASON_REJECT_SHOW_FORM:
       return {
         ...state,
         show_reason_reject,
-        show_create:false,
+        show_create: false,
         show_update: false,
-        show_change_process:false,
+        show_change_process: false,
         show_update_detail: false,
         show_upload_avatar: false
       }
@@ -83,7 +86,7 @@ export default (state = initState, {
         show_create: false,
         show_update_detail: false,
         show_upload_avatar: false,
-        show_change_process:false,
+        show_change_process: false,
 
       }
 
@@ -95,7 +98,7 @@ export default (state = initState, {
         show_create: false,
         show_update: false,
         show_upload_avatar: false,
-        show_change_process:false,
+        show_change_process: false,
 
       }
     case Actions.PROFILE_SHOW_FORM_DETAIL:
@@ -105,7 +108,7 @@ export default (state = initState, {
         id_detail,
         show_create: false,
         show_update: false,
-        show_change_process:false,
+        show_change_process: false,
         show_update_detail: false,
         show_upload_avatar: false
       }
@@ -116,7 +119,7 @@ export default (state = initState, {
         id_upload_avatar,
         show_update: false,
         show_create: false,
-        show_change_process:false,
+        show_change_process: false,
         show_update_detail: false,
       }
 
@@ -125,35 +128,35 @@ export default (state = initState, {
         ...state,
         show_change_process,
         change_process,
-        show_create:false,
+        show_create: false,
         show_update: false,
-        show_reason_reject:false,
+        show_reason_reject: false,
         show_update_detail: false,
         show_upload_avatar: false,
-        show_change_recruitment:false
+        show_change_recruitment: false
       }
     case Actions.SHOW_CHANGE_RECRUITMENT_FORM:
       return {
         ...state,
         show_change_recruitment,
         id_recruitment,
-        show_change_process:false,
-        show_create:false,
+        show_change_process: false,
+        show_create: false,
         show_update: false,
-        show_reason_reject:false,
+        show_reason_reject: false,
         show_update_detail: false,
         show_upload_avatar: false
       }
 
-      case Actions.SHOW_ADD_TO_TALENT_POOL_FORM:
+    case Actions.SHOW_ADD_TO_TALENT_POOL_FORM:
       return {
         ...state,
         show_add_to_talent_pool,
-        show_change_process:false,
-        show_create:false,
+        show_change_process: false,
+        show_create: false,
         show_update: false,
-        show_change_recruitment:false,
-        show_reason_reject:false,
+        show_change_recruitment: false,
+        show_reason_reject: false,
         show_update_detail: false,
         show_upload_avatar: false
       }

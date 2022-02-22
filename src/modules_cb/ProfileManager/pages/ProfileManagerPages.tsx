@@ -10,6 +10,7 @@ import UploadCVForm from "../components/UploadCVForm";
 import {exportExcelFile} from "../redux/services/apis";
 import {useLocation, useParams} from "react-router-dom";
 import {getDetailTalentPool} from "../../TalentPoolManager/redux/actions";
+import {RecruitmentTalentPool} from "../types";
 
 
 const mapStateToProps = (state: RootState) => {
@@ -48,7 +49,12 @@ function ProfileManagerPages(props: IProps) {
       e.target.disabled = true;
       e.target.disabled = false;
     }
-    props.showFormCreate(true);
+
+    let req:RecruitmentTalentPool=({
+      talentPool:idTalentPool,
+
+    })
+    props.showFormCreate(true,req);
   }
 
   const handleUploadListCV = (e: any) => {

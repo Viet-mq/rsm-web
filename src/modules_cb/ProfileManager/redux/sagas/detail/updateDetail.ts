@@ -18,9 +18,9 @@ export function* updateDetailAsync(action: UpdateDetailAction) {
     const rs = yield apis.updateDetail(action.request);
     yield put(updateDetailSuccess(rs));
     if (rs.code !== 0) {
-      NotificationError('Cập nhật chi tiết Profile không thành công', "Lỗi: " + rs.message)
+      NotificationError('Cập nhật chi tiết ứng viên không thành công', "Lỗi: " + rs.message)
     } else {
-      NotificationSuccess('Thành công', "Cập nhật chi tiết Profile thành công");
+      NotificationSuccess('Thành công', "Cập nhật chi tiết ứng viên thành công");
       yield put(showFormUpdateDetail(false));
       const params = yield select((state: RootState) => state.profileManager.list.params);
       yield put(getListProfile(params));
@@ -28,6 +28,6 @@ export function* updateDetailAsync(action: UpdateDetailAction) {
     }
   } catch (e) {
     yield put(updateDetailError(new AppError(e.message)));
-    NotificationError('Cập nhật chi tiết Profile không thành công', "Lỗi: " + e.message);
+    NotificationError('Cập nhật chi tiết ứng viên không thành công', "Lỗi: " + e.message);
   }
 }
