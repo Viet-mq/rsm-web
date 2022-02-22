@@ -246,7 +246,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
         <Modal
           zIndex={2}
           maskClosable={false}
-          title="Cập nhật chi tiết thông tin ứng viên"
+          title="Cập nhật chi tiết ứng viên"
           visible={props.showForm.show_update_detail}
           centered={true}
           width="550px"

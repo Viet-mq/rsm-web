@@ -106,7 +106,6 @@ function CreateProfileForm(props: CreateProfileFormProps) {
           job: values.job,
           levelJob: values.levelJob,
           skill: values.skill,
-          talentPool: values.talentPool,
           hrRef: values.hrRef,
           mailRef: values.mailRef,
           department: values.department,
@@ -122,7 +121,10 @@ function CreateProfileForm(props: CreateProfileFormProps) {
           status: values.status,
           time: 0,
           web: values.web,
+          talentPool:showForm.recruitment_talentpool?.talentPool,
+          recruitment:showForm.recruitment_talentpool?.recruitment,
         }
+        // console.log(req)
         props.createProfile(req);
         return;
       }
@@ -224,7 +226,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
       <Modal
         zIndex={2}
         maskClosable={false}
-        title="Tạo mới thông tin ứng viên"
+        title="Tạo mới ứng viên"
         visible={showForm.show_create}
         centered={true}
         width="550px"

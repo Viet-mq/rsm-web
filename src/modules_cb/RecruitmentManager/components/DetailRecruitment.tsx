@@ -12,7 +12,9 @@ import ListProfile from "../../ProfileManager/components/list/ListProfile";
 import moment from "moment";
 import 'moment/locale/vi';
 import {checkInformationValidate, getDataRecruitmentUpdate, getDetailRecruitment} from "../redux/actions";
-import {DetailCV} from "../../ProfileManager/types";
+import {DetailCV, RecruitmentTalentPool} from "../../ProfileManager/types";
+import CreateProfileForm from "../../ProfileManager/components/CreateProfileForm";
+import Loading from "../../../components/Loading";
 
 const {Option} = Select;
 const {TabPane} = Tabs;
@@ -20,9 +22,9 @@ const {RangePicker} = DatePicker;
 const {Header, Content} = Layout;
 
 const mapStateToProps = (state: RootState) => ({
-  listCandidate: state.profileManager.list,
   detailRecruitment: state.recruitmentManager.detailRecruitment,
-  createCandidate: state.profileManager.create,
+  profileManager: state.profileManager,
+
 })
 const connector = connect(mapStateToProps, {
   getDetailRecruitment,
@@ -40,6 +42,7 @@ interface IProps extends ReduxProps {
 }
 
 function DetailRecruitment(props: IProps) {
+  const {create}=props.profileManager
   const {idRecruitment} = useParams()
   const query = new URLSearchParams(props.location.search).get("roundID")
   const page = 1;
@@ -140,6 +143,20 @@ function DetailRecruitment(props: IProps) {
     props.checkInformationValidate(true)
   }
 
+  const handleCreate = (e: any) => {
+    e.preventDefault();
+    if (e?.target) {
+      e.target.disabled = true;
+      e.target.disabled = false;
+    }
+
+    let req:RecruitmentTalentPool=({
+      recruitment:props.detailRecruitment?.rows[0]?.id,
+
+    })
+    props.showFormCreate(true,req);
+  }
+
   return (
     <>
       <div>
@@ -169,6 +186,11 @@ function DetailRecruitment(props: IProps) {
                 <a className="ml-3">Xem thêm</a>
               </Popover>
             </div>
+          </div>
+          <div>
+            <Button onClick={handleCreate} type={"primary"}>
+              <Icon type="plus"/> Thêm ứng viên
+            </Button>
           </div>
         </div>
 
@@ -260,6 +282,9 @@ function DetailRecruitment(props: IProps) {
           </TabPane>
         </Tabs>
       </div>
+      <CreateProfileForm/>
+      {create.loading ?
+        <Loading/> : null}
 
     </>
   );

@@ -14,9 +14,9 @@ export function* deleteProfileAsync(action: DeleteProfileAction) {
     const rs = yield apis.deleteProfile(action.request);
     yield put(deleteProfileSuccess(rs));
     if (rs.code !== 0) {
-      NotificationError('Xóa Profile không thành công', "Lỗi: " + rs.message)
+      NotificationError('Xóa ứng viên không thành công', "Lỗi: " + rs.message)
     } else {
-      NotificationSuccess('Thành công', "Xóa Profile thành công");
+      NotificationSuccess('Thành công', "Xóa ứng viên thành công ");
       const params = yield select((state: RootState) => state.profileManager.list.params);
       yield put(getListProfile(params))
       // if (location.pathname.includes("recruitment-manager")) {
@@ -26,6 +26,6 @@ export function* deleteProfileAsync(action: DeleteProfileAction) {
     }
   } catch (e) {
     yield put(deleteProfileError(new AppError(e.message)));
-    NotificationError('Xóa Profile không thành công', "Lỗi: " + e.message);
+    NotificationError('Xóa ứng viên không thành công', "Lỗi: " + e.message);
   }
 }
