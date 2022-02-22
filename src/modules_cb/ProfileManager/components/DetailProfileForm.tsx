@@ -221,7 +221,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       width: 200,
       key: 2,
       render: (text: string, record: NoteEntity) => {
-        return <div style={{maxWidth:"100%",whiteSpace:"normal"}}>{record.comment}</div>
+        return <div style={{maxWidth:"100%",whiteSpace:"break-spaces"}}>{record.comment}</div>
       }
     },
     {
@@ -320,7 +320,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       width: "70%",
       key: 2,
       render: (text: string, record: CommentEntity) => {
-        return <div style={{maxWidth:"100%",whiteSpace:"normal"}}>{record.content}</div>
+        return <div style={{maxWidth:"100%",whiteSpace:"break-spaces"}}>{record.content}</div>
       }
     },
     {
