@@ -29,7 +29,7 @@ interface IProps extends FormComponentProps, ReduxProps {
 }
 
 function ChangeRecruitmentForm(props: IProps) {
-  const {showForm}=props.profileManager
+  const {showForm} = props.profileManager
   const fontWeight = {fontWeight: 500}
   const [addRecruitment, setAddRecruitment] = useState('')
   const [filterRecruitment, setFilterRecruitment] = useState<RecruitmentEntity[]>([])
@@ -74,13 +74,14 @@ function ChangeRecruitmentForm(props: IProps) {
       // })
       let recruitmentForm: ProcessForm = ({
         idProfile: showForm?.id_detail,
-        recruitmentId: valuesSelect,
+        recruitmentId: addRecruitment,
         statusCVId: process
       })
 
       let req: ChangeProcessRequest = {
         changeProcess: recruitmentForm,
       }
+
       props.changeProcess(req,true)
     }
   }
@@ -108,7 +109,7 @@ function ChangeRecruitmentForm(props: IProps) {
     let req: ChangeProcessRequest = {
       changeProcess: recruitmentForm,
     }
-    props.changeProcess(req,true)
+    props.changeProcess(req, true)
   }
 
   return (
@@ -172,9 +173,7 @@ function ChangeRecruitmentForm(props: IProps) {
           className="custom"
           afterClose={() => {
           }}
-          onCancel={() => {
-            props.showChangeProcessForm(false)
-          }}
+          onCancel={handleCloseForm}
           footer={""}>
           <div className="schedule-detail">
             <div className="schedule-detail-head">
