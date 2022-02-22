@@ -1,4 +1,4 @@
-import {ChangeProcessRequest, DetailCV, DetailProfileEntity, ProcessForm, ProfileEntity} from "../../types";
+import {DetailCV, DetailProfileEntity, ProcessForm, ProfileEntity, RecruitmentTalentPool} from "../../types";
 
 export interface ProfileFormAction {
   type: string,
@@ -11,12 +11,13 @@ export interface ProfileFormAction {
   id_detail?: string,
   show_upload_avatar?: boolean,
   id_upload_avatar?: string,
-  show_reason_reject?:boolean,
-  show_change_process?:boolean,
-  id_recruitment?:string,
-  show_change_recruitment?:boolean,
-  change_process?:ProcessForm
-  show_add_to_talent_pool?:boolean,
+  show_reason_reject?: boolean,
+  show_change_process?: boolean,
+  id_recruitment?: string,
+  show_change_recruitment?: boolean,
+  change_process?: ProcessForm
+  show_add_to_talent_pool?: boolean,
+  recruitment_talentpool?:RecruitmentTalentPool,
 
 }
 
@@ -30,9 +31,10 @@ export const SHOW_CHANGE_PROCESS_FORM = "SHOW_CHANGE_PROCESS_FORM";
 export const SHOW_CHANGE_RECRUITMENT_FORM = "SHOW_CHANGE_RECRUITMENT_FORM";
 export const SHOW_ADD_TO_TALENT_POOL_FORM = "SHOW_ADD_TO_TALENT_POOL_FORM";
 
-export const showFormCreate = (show: boolean): ProfileFormAction => ({
+export const showFormCreate = (show: boolean,recruitment_talentpool?:RecruitmentTalentPool): ProfileFormAction => ({
   type: PROFILE_SHOW_FORM_CREATE,
-  show_create: show
+  show_create: show,
+  recruitment_talentpool,
 });
 
 export const showFormReasonReject = (show: boolean): ProfileFormAction => ({
@@ -65,16 +67,16 @@ export const showFormUploadAvatar = (show_upload_avatar: boolean, id_upload_avat
 });
 
 
-export const showChangeProcessForm = (show: boolean,changeProcess?:ProcessForm): ProfileFormAction => ({
+export const showChangeProcessForm = (show: boolean, changeProcess?: ProcessForm): ProfileFormAction => ({
   type: SHOW_CHANGE_PROCESS_FORM,
   show_change_process: show,
-  change_process:changeProcess
+  change_process: changeProcess
 });
 
-export const showChangeRecruitmentForm = (show: boolean,idRecruitment?:string): ProfileFormAction => ({
+export const showChangeRecruitmentForm = (show: boolean, idRecruitment?: string): ProfileFormAction => ({
   type: SHOW_CHANGE_RECRUITMENT_FORM,
   show_change_recruitment: show,
-  id_recruitment:idRecruitment
+  id_recruitment: idRecruitment
 });
 
 export const showAddToTalentPoolForm = (show: boolean): ProfileFormAction => ({

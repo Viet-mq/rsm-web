@@ -67,7 +67,6 @@ export interface CreateProfileRequest {
   levelSchool: string,
   mailRef: string,
   skill: string[],
-  talentPool: string,
   department: string,
   dateOfApply: number,
 
@@ -80,7 +79,10 @@ export interface CreateProfileRequest {
   skype: string,
   status: string,
   time: number,
-  web: string
+  web: string,
+  talentPool?:string,
+  recruitment?:string,
+
 
 }
 
@@ -141,6 +143,12 @@ export interface SearchRequest {
   key: string,
   size?: number,
 }
+
+export interface RecruitmentTalentPool{
+  recruitment?:string,
+  talentPool?:string,
+}
+
 
 //cv
 export interface UploadCVRequest {
