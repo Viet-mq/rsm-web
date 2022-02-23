@@ -133,7 +133,6 @@ function DetailRecruitment(props: IProps) {
       recruitment:props.detailRecruitment?.rows[0]?.id,
 
     })
-    console.log("req:",req)
     props.showFormCreate(true,req);
   }
 
