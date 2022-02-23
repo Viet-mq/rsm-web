@@ -21,11 +21,11 @@ export function* createProfileAsync(action: CreateProfileAction) {
       NotificationError('Tạo ứng viên không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tạo ứng viên thành công");
-      yield put(showFormCreate(false));
       const params = yield select((state: RootState) => state.profileManager);
-
+      yield put(showFormCreate(false,params.showForm.recruitment_talentpool));
       yield put(getListProfile(params.list.params));
       if(params.showForm.recruitment_talentpool?.recruitment){
+
         yield put(getDetailRecruitment(params.showForm.recruitment_talentpool.recruitment))
       }
       if(params.showForm.recruitment_talentpool?.talentPool){
