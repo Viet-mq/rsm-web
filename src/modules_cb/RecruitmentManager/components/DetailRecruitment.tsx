@@ -87,27 +87,6 @@ function DetailRecruitment(props: IProps) {
     props.getDetailRecruitment({id: idRecruitment})
   }, []);
 
-  const convertArrayToTree = (arrays: any) => {
-    let dataFetch: any = [];
-    for (let i = 0; i < arrays.length; i++) {
-      if (arrays[i]?.children) {
-        dataFetch.push({
-          title: arrays[i].name,
-          key: arrays[i].id,
-          value: arrays[i].id,
-          children: convertArrayToTree(arrays[i].children)
-        })
-      } else {
-        dataFetch.push({
-          title: arrays[i].name,
-          key: arrays[i].id,
-          value: arrays[i].id,
-        })
-      }
-    }
-    return dataFetch;
-  }
-
   function callback(key: any) {
     console.log(key);
   }
@@ -143,7 +122,7 @@ function DetailRecruitment(props: IProps) {
     props.checkInformationValidate(true)
   }
 
-  const handleCreate = (e: any) => {
+  const  handleCreate = (e: any) => {
     e.preventDefault();
     if (e?.target) {
       e.target.disabled = true;
