@@ -1,6 +1,5 @@
 import {all} from 'redux-saga/effects';
 import authSaga from '../modules/Auth/redux/sagas';
-import dashboardSaga from '../modules/Dashboard/redux/sagas';
 import accountManagerSaga from '../modules_cb/AccountManager/redux/sagas';
 import viewManagerSaga from '../modules_cb/ViewManager/redux/sagas';
 import apiManagerSaga from '../modules_cb/APIManager/redux/sagas';
@@ -23,12 +22,12 @@ import scheduleManagerSaga from '../modules_cb/ScheduleManager/redux/sagas';
 import recruitmentManagerSaga from '../modules_cb/RecruitmentManager/redux/sagas';
 import emailManagerSaga from '../modules_cb/EmailManager/redux/sagas';
 import reminderManagerSaga from '../modules_cb/ReminderManager/redux/sagas';
+import dashboardManagerSaga from '../modules_cb/DashboardManager/redux/sagas';
 import * as commonSaga from './common-saga';
 
 export default function* rootSaga() {
   yield all([
     authSaga(),
-    dashboardSaga(),
     accountManagerSaga(),
     viewManagerSaga(),
     apiManagerSaga(),
@@ -51,6 +50,7 @@ export default function* rootSaga() {
     recruitmentManagerSaga(),
     emailManagerSaga(),
     reminderManagerSaga(),
+    dashboardManagerSaga(),
     commonSaga.checkErrorAsync(),
   ]);
 }

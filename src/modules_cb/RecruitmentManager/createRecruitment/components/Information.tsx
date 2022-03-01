@@ -126,7 +126,7 @@ function InformationForm(props: IProps) {
           break
       }
 
-      if (!err &&valueEditorChange.interest&&valueEditorChange.jobDescription&& valueEditorChange.requirementOfJob) {
+      if (!err) {
         if (isEdit) {
           if (update.dataUpdate) {
             let req: RecruitmentEntity = {
@@ -142,32 +142,36 @@ function InformationForm(props: IProps) {
               from: salaryChange.from,
               to: salaryChange.to,
               salaryDescription: salaryDescription,
-              requirementOfJob: valueEditorChange.requirementOfJob,
-              jobDescription: valueEditorChange.jobDescription,
-              interest: valueEditorChange.interest,
+              requirementOfJob: valueEditor.requirementOfJob,
+              jobDescription: valueEditor.jobDescription,
+              interest: valueEditor.interest,
+
             }
             props.getDataRecruitmentUpdate(req)
           }
         } else {
-          let req: CreateRecruitmentRequest = ({
-            address: values.address,
-            deadLine: values.deadLine * 1,
-            job: values.job,
-            quantity: values.quantity,
-            talentPool: values.talentPool,
-            title: values.title,
-            typeOfJob: values.typeOfJob,
-            detailOfSalary: salaryChange.detailOfSalary,
-            from: salaryChange.from,
-            to: salaryChange.to,
-            salaryDescription: salaryDescription,
-            requirementOfJob: valueEditorChange.requirementOfJob,
-            jobDescription: valueEditorChange.jobDescription,
-            interest: valueEditorChange.interest,
-            interviewProcess: props.listProcess.rows,
-            interviewer: []
-          })
-          props.createSteps(req)
+          if (valueEditorChange.interest && valueEditorChange.jobDescription && valueEditorChange.requirementOfJob) {
+            let req: CreateRecruitmentRequest = ({
+              address: values.address,
+              deadLine: values.deadLine * 1,
+              job: values.job,
+              quantity: values.quantity,
+              talentPool: values.talentPool,
+              title: values.title,
+              typeOfJob: values.typeOfJob,
+              detailOfSalary: salaryChange.detailOfSalary,
+              from: salaryChange.from,
+              to: salaryChange.to,
+              salaryDescription: salaryDescription,
+              requirementOfJob: valueEditorChange.requirementOfJob,
+              jobDescription: valueEditorChange.jobDescription,
+              interest: valueEditorChange.interest,
+
+              interviewProcess: props.listProcess.rows,
+              interviewer: []
+            })
+            props.createSteps(req)
+          }
         }
 
         props.checkInformationValidate(true)
@@ -175,7 +179,8 @@ function InformationForm(props: IProps) {
         props.checkInformationValidate(false)
 
       }
-    }), 10)
+    })
+         , 10)
   }
 
   function handleSelect(value: any) {
@@ -207,14 +212,13 @@ function InformationForm(props: IProps) {
   };
 
   function handleChangeInterest(content: any) {
-    console.log("Interest",content)
 
     if (content === "<p><br></p>") {
       setDisplay({...display, interest: true})
       setValueEditor({...valueEditor, interest: ""})
     } else {
-      const newDisplay=display
-      display.interest=false
+      const newDisplay = display
+      display.interest = false
       setDisplay(newDisplay)
       const newValueEditor = valueEditor
       newValueEditor.interest = content
@@ -224,13 +228,12 @@ function InformationForm(props: IProps) {
   }
 
   function handleChangeRequirement(content: any) {
-    console.log("Requirement",content)
     if (content === "<p><br></p>") {
       setDisplay({...display, requirementOfJob: true})
       setValueEditor({...valueEditor, requirementOfJob: ""})
     } else {
-      const newDisplay=display
-      display.requirementOfJob=false
+      const newDisplay = display
+      display.requirementOfJob = false
       setDisplay(newDisplay)
       const newValueEditor = valueEditor
       newValueEditor.requirementOfJob = content
@@ -240,13 +243,12 @@ function InformationForm(props: IProps) {
   }
 
   function handleChangeJobDescription(content: any) {
-    console.log("Description",content)
     if (content === "<p><br></p>") {
       setDisplay({...display, jobDescription: true})
       setValueEditor({...valueEditor, jobDescription: ""})
     } else {
-      const newDisplay=display
-      display.jobDescription=false
+      const newDisplay = display
+      display.jobDescription = false
       setDisplay(newDisplay)
       const newValueEditor = valueEditor
       newValueEditor.jobDescription = content
@@ -496,7 +498,7 @@ function InformationForm(props: IProps) {
                   style={fontWeightStyle}
                   className="ql-custom"
                   onChange={handleChangeJobDescription}
-                  value={valueEditor.jobDescription||""}
+                  value={valueEditor.jobDescription || ""}
 
                   theme={'snow'}
                   modules={modules}
@@ -515,7 +517,7 @@ function InformationForm(props: IProps) {
                   style={fontWeightStyle}
                   className="ql-custom"
                   onChange={handleChangeRequirement}
-                  value={valueEditor.requirementOfJob||""}
+                  value={valueEditor.requirementOfJob || ""}
 
                   theme={'snow'}
                   modules={modules}
@@ -534,7 +536,7 @@ function InformationForm(props: IProps) {
                   style={fontWeightStyle}
                   className="ql-custom"
                   onChange={handleChangeInterest}
-                  value={valueEditor.interest||""}
+                  value={valueEditor.interest || ""}
 
                   theme={'snow'}
                   modules={modules}
@@ -554,7 +556,7 @@ function InformationForm(props: IProps) {
         </div>
       </div>
       <CreateJobForm/>
-      {props.createJob.loading  ?
+      {props.createJob.loading ?
         <Loading/> : null}
     </>
 
