@@ -1,41 +1,39 @@
 import {SchoolEntity} from "../../types";
 import {AppError} from "src/models/common";
 import * as Actions from "../actions";
-import {SchoolListAction} from "../actions";
+import {SearchSchoolAction} from "../actions";
 
-export interface SchoolListState {
+export interface SearchSchoolState {
   loading: boolean,
   params?: any,
-  rows?: SchoolEntity[]|any,
+  rows?: SchoolEntity[],
   total?: number,
   error?: AppError
 }
 
-const initState: SchoolListState = {
+const initState: SearchSchoolState = {
   loading: false,
   params: {},
   rows: [],
   total: 0
 }
-const saveSchool:any=localStorage.getItem('list-school');
-const dataSchool:SchoolListState = JSON.parse(saveSchool)?JSON.parse(saveSchool):initState
 
-export default (state = dataSchool, {type, total, rows, params, error}: SchoolListAction): SchoolListState => {
+export default (state = initState, {type, total, rows, params, error}: SearchSchoolAction): SearchSchoolState => {
   switch (type) {
-    case Actions.GET_LIST_SCHOOL:
+    case Actions.GET_SEARCH_SCHOOL:
       return {
         ...state,
         params,
         loading: true
       }
-    case Actions.GET_LIST_SCHOOL_SUCCESS:
+    case Actions.GET_SEARCH_SCHOOL_SUCCESS:
       return {
         ...state,
         total,
         rows,
         loading: false
       }
-    case Actions.GET_LIST_SCHOOL_ERROR:
+    case Actions.GET_SEARCH_SCHOOL_ERROR:
       return {
         ...state,
         error,

@@ -8,21 +8,21 @@ export interface UpdateSourceCVAction {
   error?: AppError
 }
 
-export const UPDATE_SOURCECV = "UPDATE_SOURCECV";
-export const UPDATE_SOURCECV_SUCCESS = "UPDATE_SOURCECV_SUCCESS";
-export const UPDATE_SOURCECV_ERROR = "UPDATE_SOURCECV_ERROR";
+export const UPDATE_SOURCE_CV = "UPDATE_SOURCE_CV";
+export const UPDATE_SOURCE_CV_SUCCESS = "UPDATE_SOURCE_CV_SUCCESS";
+export const UPDATE_SOURCE_CV_ERROR = "UPDATE_SOURCE_CV_ERROR";
 
 export const updateSourceCV = (request: UpdateSourceCVRequest): UpdateSourceCVAction => ({
-  type: UPDATE_SOURCECV,
+  type: UPDATE_SOURCE_CV,
   request
 });
 
 export const updateSourceCVSuccess = (response: ResponseBase2): UpdateSourceCVAction => ({
-  type: UPDATE_SOURCECV_SUCCESS,
+  type: UPDATE_SOURCE_CV_SUCCESS,
   response
 });
 
 export const updateSourceCVError = (error: AppError): UpdateSourceCVAction => ({
-  type: UPDATE_SOURCECV_ERROR,
+  type: UPDATE_SOURCE_CV_ERROR,
   error
 });

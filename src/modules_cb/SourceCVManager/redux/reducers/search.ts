@@ -1,41 +1,39 @@
 import {SourceCVEntity} from "../../types";
 import {AppError} from "src/models/common";
 import * as Actions from "../actions";
-import {SourceCVListAction} from "../actions";
+import {SearchSourceCVAction} from "../actions";
 
-export interface SourceCVListState {
+export interface SearchSourceCVState {
   loading: boolean,
   params?: any,
-  rows?: SourceCVEntity[]|any,
+  rows?: SourceCVEntity[] | any,
   total?: number,
   error?: AppError
 }
 
-const initState: SourceCVListState = {
+const initState: SearchSourceCVState = {
   loading: false,
   params: {},
   rows: [],
   total: 0
 }
-const saveSourceCV:any=localStorage.getItem('list-source-cv');
-const dataSourceCV:SourceCVListState = JSON.parse(saveSourceCV)?JSON.parse(saveSourceCV):initState
 
-export default (state = dataSourceCV, {type, total, rows, params, error}: SourceCVListAction): SourceCVListState => {
+export default (state = initState, {type, total, rows, params, error}: SearchSourceCVAction): SearchSourceCVState => {
   switch (type) {
-    case Actions.GET_LIST_SOURCE_CV:
+    case Actions.GET_SEARCH_SOURCE_CV:
       return {
         ...state,
         params,
         loading: true
       }
-    case Actions.GET_LIST_SOURCE_CV_SUCCESS:
+    case Actions.GET_SEARCH_SOURCE_CV_SUCCESS:
       return {
         ...state,
         total,
         rows,
         loading: false
       }
-    case Actions.GET_LIST_SOURCE_CV_ERROR:
+    case Actions.GET_SEARCH_SOURCE_CV_ERROR:
       return {
         ...state,
         error,

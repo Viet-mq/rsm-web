@@ -3,41 +3,37 @@ import {AppError} from "src/models/common";
 import * as Actions from "../actions";
 import {JobLevelListAction} from "../actions";
 
-export interface JobLevelListState {
+export interface SearchJobLevelState {
   loading: boolean,
   params?: any,
-  rows?: JobLevelEntity[]|any,
+  rows?: JobLevelEntity[] | any,
   total?: number,
   error?: AppError
 }
 
-const initState: JobLevelListState = {
+const initState: SearchJobLevelState = {
   loading: false,
   params: {},
   rows: [],
   total: 0
 }
 
-const saveJobLevel:any=localStorage.getItem('list-job-level');
-const dataJobLevel:JobLevelListState = JSON.parse(saveJobLevel)?JSON.parse(saveJobLevel):initState
-
-
-export default (state = dataJobLevel, {type, total, rows, params, error}: JobLevelListAction): JobLevelListState => {
+export default (state = initState, {type, total, rows, params, error}: JobLevelListAction): SearchJobLevelState => {
   switch (type) {
-    case Actions.GET_LIST_JOB_LEVEL:
+    case Actions.GET_SEARCH_JOB_LEVEL:
       return {
         ...state,
         params,
         loading: true
       }
-    case Actions.GET_LIST_JOB_LEVEL_SUCCESS:
+    case Actions.GET_SEARCH_JOB_LEVEL_SUCCESS:
       return {
         ...state,
         total,
         rows,
         loading: false
       }
-    case Actions.GET_LIST_JOB_LEVEL_ERROR:
+    case Actions.GET_SEARCH_JOB_LEVEL_ERROR:
       return {
         ...state,
         error,

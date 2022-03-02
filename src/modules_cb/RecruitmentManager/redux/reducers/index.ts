@@ -10,9 +10,11 @@ import createSteps, {CreateStepsState} from "./createSteps";
 import showForm, {ProcessFormState} from "./showForm";
 import createInterviewProcess, {CreateInterviewProcessState} from "./createInterviewProcess";
 import deleteProcess, {DeleteProcessState} from "./deleteProcess";
+import search, {SearchRecruitmentState} from "./search";
 
 export interface RecruitmentManagerModuleState {
   list: RecruitmentListState,
+  search: SearchRecruitmentState,
   deleteRecruitment: DeleteRecruitmentState,
   deleteProcess: DeleteProcessState,
   create: CreateRecruitmentState,
@@ -37,4 +39,5 @@ export default combineReducers<RecruitmentManagerModuleState>({
   createInterviewProcess,
   searchUser,
   deleteProcess,
+  search,
 });

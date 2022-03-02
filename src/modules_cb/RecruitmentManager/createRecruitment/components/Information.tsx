@@ -104,8 +104,10 @@ function InformationForm(props: IProps) {
     }
   };
   const [job, setJob] = useState<JobEntity[]>([]);
+
   const [trigger, setTrigger] = useState({
     job: false,
+
   })
 
   useEffect(() => {
@@ -283,12 +285,8 @@ function InformationForm(props: IProps) {
     setTrigger({...trigger, job: true})
   }
 
-  function onBlurJob(e: any) {
-  }
-
   function onFocusJob() {
     setJob(props.listJob.rows)
-
   }
 
   return (
@@ -329,12 +327,11 @@ function InformationForm(props: IProps) {
                     <Select showSearch
                             onChange={onFormChange}
                             onSearch={onSearchJob}
-                            onBlur={onBlurJob}
                             onFocus={onFocusJob}
                             className="bg-white text-black"
                             style={fontWeightStyle}
                             placeholder="Chọn vị trí công việc"
-                            filterOption={(input, option:any) =>
+                            filterOption={(input, option: any) =>
                               option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                             }
                             optionFilterProp="children"

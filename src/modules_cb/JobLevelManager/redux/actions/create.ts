@@ -8,21 +8,21 @@ export interface CreateJobLevelAction {
   error?: AppError
 }
 
-export const CREATE_JOBLEVEL = "CREATE_JOBLEVEL";
-export const CREATE_JOBLEVEL_SUCCESS = "CREATE_JOBLEVEL_SUCCESS";
-export const CREATE_JOBLEVEL_ERROR = "CREATE_JOBLEVEL_ERROR";
+export const CREATE_JOB_LEVEL = "CREATE_JOB_LEVEL";
+export const CREATE_JOB_LEVEL_SUCCESS = "CREATE_JOB_LEVEL_SUCCESS";
+export const CREATE_JOB_LEVEL_ERROR = "CREATE_JOB_LEVEL_ERROR";
 
 export const createJobLevel = (request: CreateJobLevelRequest): CreateJobLevelAction => ({
-  type: CREATE_JOBLEVEL,
+  type: CREATE_JOB_LEVEL,
   request
 });
 
 export const createJobLevelSuccess = (response: ResponseBase2): CreateJobLevelAction => ({
-  type: CREATE_JOBLEVEL_SUCCESS,
+  type: CREATE_JOB_LEVEL_SUCCESS,
   response
 });
 
 export const createJobLevelError = (error: AppError): CreateJobLevelAction => ({
-  type: CREATE_JOBLEVEL_ERROR,
+  type: CREATE_JOB_LEVEL_ERROR,
   error
 });

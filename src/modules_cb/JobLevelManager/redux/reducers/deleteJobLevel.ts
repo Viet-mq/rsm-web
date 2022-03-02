@@ -16,19 +16,19 @@ const initState: DeleteJobLevelState = {
 
 export default (state = initState, {type, request, response, error}: DeleteJobLevelAction): DeleteJobLevelState => {
   switch (type) {
-    case Actions.DELETE_JOBLEVEL:
+    case Actions.DELETE_JOB_LEVEL:
       return {
         ...state,
         request,
         loading: true
       }
-    case Actions.DELETE_JOBLEVEL_SUCCESS:
+    case Actions.DELETE_JOB_LEVEL_SUCCESS:
       return {
         ...state,
         response,
         loading: false
       }
-    case Actions.DELETE_JOBLEVEL_ERROR:
+    case Actions.DELETE_JOB_LEVEL_ERROR:
       return {
         ...state,
         error,

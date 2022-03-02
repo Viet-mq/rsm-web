@@ -4,6 +4,7 @@ import deleteJobLevel, {DeleteJobLevelState} from "./deleteJobLevel";
 import create, {CreateJobLevelState} from "./create";
 import showForm, {JobLevelFormState} from "./showForm";
 import update, {UpdateJobLevelState} from "./update";
+import search, {SearchJobLevelState} from "./search";
 
 export interface JobLevelManagerModuleState {
   list: JobLevelListState,
@@ -11,6 +12,7 @@ export interface JobLevelManagerModuleState {
   create: CreateJobLevelState,
   showForm: JobLevelFormState,
   update: UpdateJobLevelState,
+  search:SearchJobLevelState,
 }
 
 export default combineReducers<JobLevelManagerModuleState>({
@@ -19,4 +21,5 @@ export default combineReducers<JobLevelManagerModuleState>({
   create,
   showForm,
   update,
+  search,
 });
