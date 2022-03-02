@@ -510,7 +510,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
               <div className="mr-2" style={{width: 230}}>
                 <Form.Item label="Ngày ứng tuyển" className="form-label"  {...formItemLayout}>
                   {getFieldDecorator('dateOfApply', {
-                    initialValue: moment(),
+                    // initialValue: undefined,
                     rules: [
                       {
                         message: 'Vui lòng nhập ngày ứng tuyển',
