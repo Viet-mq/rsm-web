@@ -103,7 +103,7 @@ function InformationForm(props: IProps) {
       console.log(editorRef.current.getContent());
     }
   };
-  const [job, setJob] = useState<JobEntity[]>();
+  const [job, setJob] = useState<JobEntity[]>([]);
   const [trigger, setTrigger] = useState({
     job: false,
   })
@@ -120,15 +120,11 @@ function InformationForm(props: IProps) {
     }
   }, []);
 
-  useEffect(()=>{
-    console.log("prop",props.searchJob.rows)
-
-    // if(trigger.job) {
-    //   debugger
-    //   setJob(props.searchJob.rows)
-    // }
-  },[trigger.job])
-  console.log("prop2§",props.searchJob.rows)
+  useEffect(() => {
+    if (trigger.job) {
+      setJob(props.searchJob.rows)
+    }
+  }, [props.searchJob.rows])
 
   function onFormChange(salaryChange?: any, valueEditorChange?: any) {
     setTimeout(() => props.form.validateFields((err, values) => {
@@ -283,11 +279,16 @@ function InformationForm(props: IProps) {
   }
 
   function onSearchJob(value: any) {
-    setTrigger({...trigger, job: true})
     props.getSearchJob({name: value})
+    setTrigger({...trigger, job: true})
   }
 
-  function onBlurJob(e:any) {
+  function onBlurJob(e: any) {
+  }
+
+  function onFocusJob() {
+    setJob(props.listJob.rows)
+
   }
 
   return (
@@ -329,11 +330,16 @@ function InformationForm(props: IProps) {
                             onChange={onFormChange}
                             onSearch={onSearchJob}
                             onBlur={onBlurJob}
+                            onFocus={onFocusJob}
                             className="bg-white text-black"
                             style={fontWeightStyle}
                             placeholder="Chọn vị trí công việc"
+                            filterOption={(input, option:any) =>
+                              option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
+                            optionFilterProp="children"
                     >
-                      {job?.map((item: any, index: any) => (
+                      {job.map((item: any, index: any) => (
                         <Option key={index} value={item.id}>{item.name}</Option>
                       ))}
                     </Select>)}
@@ -348,7 +354,6 @@ function InformationForm(props: IProps) {
                   </Button>
                 </div>
               </Form.Item>
-
               <Row style={{marginTop: 15}}>
                 <Col span={12} style={{paddingRight: 10}}>
                   <Form.Item className="form-label" label="Địa điểm làm việc" labelCol={{span: 24}}
