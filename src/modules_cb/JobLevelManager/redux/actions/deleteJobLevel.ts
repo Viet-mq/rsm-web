@@ -8,21 +8,21 @@ export interface DeleteJobLevelAction {
   error?: AppError
 }
 
-export const DELETE_JOBLEVEL = "DELETE_JOBLEVEL";
-export const DELETE_JOBLEVEL_SUCCESS = "DELETE_JOBLEVEL_SUCCESS";
-export const DELETE_JOBLEVEL_ERROR = "DELETE_JOBLEVEL_ERROR";
+export const DELETE_JOB_LEVEL = "DELETE_JOB_LEVEL";
+export const DELETE_JOB_LEVEL_SUCCESS = "DELETE_JOB_LEVEL_SUCCESS";
+export const DELETE_JOB_LEVEL_ERROR = "DELETE_JOB_LEVEL_ERROR";
 
 export const deleteJobLevel = (request: DeleteJobLevelRequest): DeleteJobLevelAction => ({
-  type: DELETE_JOBLEVEL,
+  type: DELETE_JOB_LEVEL,
   request
 });
 
 export const deleteJobLevelSuccess = (response: ResponseBase2): DeleteJobLevelAction => ({
-  type: DELETE_JOBLEVEL_SUCCESS,
+  type: DELETE_JOB_LEVEL_SUCCESS,
   response
 });
 
 export const deleteJobLevelError = (error: AppError): DeleteJobLevelAction => ({
-  type: DELETE_JOBLEVEL_ERROR,
+  type: DELETE_JOB_LEVEL_ERROR,
   error
 });

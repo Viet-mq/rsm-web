@@ -20,13 +20,13 @@ export default (state = initState, {
   data_update
 }: SourceCVFormAction): SourceCVFormState => {
   switch (type) {
-    case Actions.SOURCECV_SHOW_FORM_CREATE:
+    case Actions.SOURCE_CV_SHOW_FORM_CREATE:
       return {
         ...state,
         show_create,
         show_update: false,
       }
-    case Actions.SOURCECV_SHOW_FORM_UPDATE:
+    case Actions.SOURCE_CV_SHOW_FORM_UPDATE:
       return {
         ...state,
         show_update,

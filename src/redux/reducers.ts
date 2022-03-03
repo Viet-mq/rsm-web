@@ -1,7 +1,6 @@
 import {combineReducers} from 'redux';
 
 import auth, {AuthModuleState} from '../modules/Auth/redux/reducers';
-import dashboard, {DashboardModuleState} from '../modules/Dashboard/redux/reducers';
 import accountManager, {AccountManagerModuleState} from "../modules_cb/AccountManager/redux/reducers";
 import viewManager, {ViewManagerModuleState} from "../modules_cb/ViewManager/redux/reducers";
 import apiManager, {APIManagerModuleState} from "../modules_cb/APIManager/redux/reducers";
@@ -24,10 +23,10 @@ import scheduleManager,{ScheduleManagerModuleState} from "../modules_cb/Schedule
 import recruitmentManager,{RecruitmentManagerModuleState} from "../modules_cb/RecruitmentManager/redux/reducers";
 import emailManager,{EmailManagerModuleState} from "../modules_cb/EmailManager/redux/reducers";
 import reminderManager,{ReminderManagerModuleState} from "../modules_cb/ReminderManager/redux/reducers";
+import dashboardManager,{DashBoardModuleState} from "../modules_cb/DashboardManager/redux/reducers";
 
 export interface RootState {
   auth: AuthModuleState;
-  dashboard: DashboardModuleState;
   accountManager: AccountManagerModuleState,
   viewManager: ViewManagerModuleState,
   apiManager: APIManagerModuleState,
@@ -50,11 +49,12 @@ export interface RootState {
   recruitmentManager:RecruitmentManagerModuleState,
   emailManager:EmailManagerModuleState,
   reminderManager:ReminderManagerModuleState,
+  dashboardManager:DashBoardModuleState,
 }
 
 export default combineReducers<RootState>({
   auth,
-  dashboard,
+
   accountManager,
   viewManager,
   apiManager,
@@ -77,5 +77,6 @@ export default combineReducers<RootState>({
   recruitmentManager,
   emailManager,
   reminderManager,
+  dashboardManager,
 
 });

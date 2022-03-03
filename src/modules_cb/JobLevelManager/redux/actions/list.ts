@@ -9,22 +9,22 @@ export interface JobLevelListAction {
   error?: AppError
 }
 
-export const GET_LIST_JOBLEVEL = "GET_LIST_JOBLEVEL";
-export const GET_LIST_JOBLEVEL_SUCCESS = "GET_LIST_JOBLEVEL_SUCCESS";
-export const GET_LIST_JOBLEVEL_ERROR = "GET_LIST_JOBLEVEL_ERROR";
+export const GET_LIST_JOB_LEVEL = "GET_LIST_JOB_LEVEL";
+export const GET_LIST_JOB_LEVEL_SUCCESS = "GET_LIST_JOB_LEVEL_SUCCESS";
+export const GET_LIST_JOB_LEVEL_ERROR = "GET_LIST_JOB_LEVEL_ERROR";
 
 export const getListJobLevel = (params: any): JobLevelListAction => ({
-  type: GET_LIST_JOBLEVEL,
+  type: GET_LIST_JOB_LEVEL,
   params
 });
 
 export const getListJobLevelSuccess = (total: number, rows: JobLevelEntity[]): JobLevelListAction => ({
-  type: GET_LIST_JOBLEVEL_SUCCESS,
+  type: GET_LIST_JOB_LEVEL_SUCCESS,
   total,
   rows
 });
 
 export const getListJobLevelError = (error: AppError): JobLevelListAction => ({
-  type: GET_LIST_JOBLEVEL_ERROR,
+  type: GET_LIST_JOB_LEVEL_ERROR,
   error
 });

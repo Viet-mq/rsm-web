@@ -5,6 +5,7 @@ import create, {CreateAccountState} from "./create";
 import showForm, {AccountFormState} from "./showForm";
 import update, {UpdateAccountState} from "./update";
 import changePassword, {ChangePasswordState} from "./changePassword";
+import search, {SearchAccountState} from "./search";
 
 export interface AccountManagerModuleState {
   list: AccountListState,
@@ -13,6 +14,7 @@ export interface AccountManagerModuleState {
   showForm: AccountFormState,
   update: UpdateAccountState,
   changePassword: ChangePasswordState
+  search: SearchAccountState
 }
 
 export default combineReducers<AccountManagerModuleState>({
@@ -21,5 +23,6 @@ export default combineReducers<AccountManagerModuleState>({
   create,
   showForm,
   update,
-  changePassword
+  changePassword,
+  search
 });

@@ -4,6 +4,7 @@ import deleteSchool, {DeleteSchoolState} from "./deleteSchool";
 import create, {CreateSchoolState} from "./create";
 import showForm, {SchoolFormState} from "./showForm";
 import update, {UpdateSchoolState} from "./update";
+import search, {SearchSchoolState} from "./search";
 
 export interface SchoolManagerModuleState {
   list: SchoolListState,
@@ -11,6 +12,7 @@ export interface SchoolManagerModuleState {
   create: CreateSchoolState,
   showForm: SchoolFormState,
   update: UpdateSchoolState,
+  search:SearchSchoolState
 }
 
 export default combineReducers<SchoolManagerModuleState>({
@@ -19,4 +21,5 @@ export default combineReducers<SchoolManagerModuleState>({
   create,
   showForm,
   update,
+  search,
 });

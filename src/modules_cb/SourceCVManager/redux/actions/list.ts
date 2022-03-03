@@ -9,22 +9,22 @@ export interface SourceCVListAction {
   error?: AppError
 }
 
-export const GET_LIST_SOURCECV = "GET_LIST_SOURCECV";
-export const GET_LIST_SOURCECV_SUCCESS = "GET_LIST_SOURCECV_SUCCESS";
-export const GET_LIST_SOURCECV_ERROR = "GET_LIST_SOURCECV_ERROR";
+export const GET_LIST_SOURCE_CV = "GET_LIST_SOURCE_CV";
+export const GET_LIST_SOURCE_CV_SUCCESS = "GET_LIST_SOURCE_CV_SUCCESS";
+export const GET_LIST_SOURCE_CV_ERROR = "GET_LIST_SOURCE_CV_ERROR";
 
 export const getListSourceCV = (params: any): SourceCVListAction => ({
-  type: GET_LIST_SOURCECV,
+  type: GET_LIST_SOURCE_CV,
   params
 });
 
 export const getListSourceCVSuccess = (total: number, rows: SourceCVEntity[]): SourceCVListAction => ({
-  type: GET_LIST_SOURCECV_SUCCESS,
+  type: GET_LIST_SOURCE_CV_SUCCESS,
   total,
   rows
 });
 
 export const getListSourceCVError = (error: AppError): SourceCVListAction => ({
-  type: GET_LIST_SOURCECV_ERROR,
+  type: GET_LIST_SOURCE_CV_ERROR,
   error
 });

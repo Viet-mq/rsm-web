@@ -16,19 +16,19 @@ const initState: CreateSourceCVState = {
 
 export default (state = initState, {type, request, response, error}: CreateSourceCVAction): CreateSourceCVState => {
   switch (type) {
-    case Actions.CREATE_SOURCECV:
+    case Actions.CREATE_SOURCE_CV:
       return {
         ...state,
         request,
         loading: true
       }
-    case Actions.CREATE_SOURCECV_SUCCESS:
+    case Actions.CREATE_SOURCE_CV_SUCCESS:
       return {
         ...state,
         response,
         loading: false
       }
-    case Actions.CREATE_SOURCECV_ERROR:
+    case Actions.CREATE_SOURCE_CV_ERROR:
       return {
         ...state,
         error,

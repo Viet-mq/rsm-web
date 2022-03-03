@@ -4,9 +4,11 @@ import deleteJob, {DeleteJobState} from "./deleteJob";
 import create, {CreateJobState} from "./create";
 import showForm, {JobFormState} from "./showForm";
 import update, {UpdateJobState} from "./update";
+import search, {SearchJobState} from "./search";
 
 export interface JobManagerModuleState {
   list: JobListState,
+  search: SearchJobState,
   deleteJob: DeleteJobState,
   create: CreateJobState,
   showForm: JobFormState,
@@ -19,4 +21,5 @@ export default combineReducers<JobManagerModuleState>({
   create,
   showForm,
   update,
+  search,
 });

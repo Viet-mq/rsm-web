@@ -5,10 +5,10 @@ import {Avatar, Button, DatePicker, Form, Icon, Input, Modal, Select, TreeSelect
 import React, {FormEvent, useEffect, useState} from "react";
 import {createProfile, showFormCreate} from "../redux/actions";
 import {CreateProfileRequest} from "../types";
-import {showFormCreate as showJobFormCreate} from "../../JobManager/redux/actions";
-import {showFormCreate as showJobLevelFormCreate} from "../../JobLevelManager/redux/actions";
-import {showFormCreate as showSchoolFormCreate} from "../../SchoolManager/redux/actions";
-import {showFormCreate as showSourceCVFormCreate} from "../../SourceCVManager/redux/actions";
+import {getSearchJob, showFormCreate as showJobFormCreate} from "../../JobManager/redux/actions";
+import {getSearchJobLevel, showFormCreate as showJobLevelFormCreate} from "../../JobLevelManager/redux/actions";
+import {getSearchSchool, showFormCreate as showSchoolFormCreate} from "../../SchoolManager/redux/actions";
+import {getSearchSourceCV, showFormCreate as showSourceCVFormCreate} from "../../SourceCVManager/redux/actions";
 import {showFormCreate as showSkillFormCreate} from "../../SkillManager/redux/actions";
 import CreateJobForm from "../../JobManager/components/CreateJobForm";
 import CreateJobLevelForm from "../../JobLevelManager/components/CreateJobLevelForm";
@@ -19,7 +19,15 @@ import CreateSkillForm from "../../SkillManager/components/CreateSkillForm";
 import {showFormCreate as showDepartmentFormCreate} from "../../DepartmentManager/redux/actions";
 import Loading from "../../../components/Loading";
 import CreateDepartmentForm from "../../DepartmentManager/components/CreateDepartmentForm";
-import moment from 'moment';
+import {JobEntity} from "../../JobManager/types";
+import {JobLevelEntity} from "../../JobLevelManager/types";
+import {DepartmentEntity} from "../../DepartmentManager/types";
+import {getSearchRecruitment} from "../../RecruitmentManager/redux/actions";
+import {getSearchTalentPool} from "../../TalentPoolManager/redux/actions";
+import {SourceCVEntity} from "../../SourceCVManager/types";
+import {SchoolEntity} from "../../SchoolManager/types";
+import {getSearchAccount} from "../../AccountManager/redux/actions";
+import {UserAccount} from "../../AccountManager/types";
 
 const {Option} = Select;
 
@@ -50,7 +58,13 @@ const connector = connect(mapStateToProps,
     showSchoolFormCreate,
     showSourceCVFormCreate,
     showSkillFormCreate,
-    showDepartmentFormCreate
+    showDepartmentFormCreate,
+    getSearchJob,
+    getSearchJobLevel,
+    getSearchRecruitment,
+    getSearchSourceCV,
+    getSearchSchool,
+    getSearchAccount
   });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -60,7 +74,7 @@ interface CreateProfileFormProps extends FormComponentProps, ReduxProps {
 }
 
 function CreateProfileForm(props: CreateProfileFormProps) {
-  const {showForm}=props.profileManager
+  const {showForm} = props.profileManager
   const {getFieldDecorator, resetFields} = props.form;
   const fontWeightStyle = {fontWeight: 400};
   const formItemLayout = {
@@ -75,6 +89,27 @@ function CreateProfileForm(props: CreateProfileFormProps) {
   };
   const dateFormat = 'DD/MM/YYYY';
   const [treeData, setTreeData] = useState([])
+  const [job, setJob] = useState<JobEntity[]>([]);
+  const [jobLevel, setJobLevel] = useState<JobLevelEntity[]>([]);
+  const [department, setDepartment] = useState<DepartmentEntity[]>([]);
+  const [sourceCV, setSourceCV] = useState<SourceCVEntity[]>([]);
+  const [school, setSchool] = useState<SchoolEntity[]>([]);
+  const [account, setAccount] = useState<UserAccount[] | any>([]);
+  const [trigger, setTrigger] = useState({
+    job: false,
+    jobLevel: false,
+    department: false,
+    sourceCV: false,
+    school: false,
+    account: false,
+  })
+
+  useEffect(() => {
+    setJob(props.listJob.rows)
+    setJobLevel(props.listJobLevel.rows)
+    setDepartment(props.listDepartment.rows)
+    setSchool(props.listSchool.rows)
+  }, [])
 
   useEffect(() => {
     setTreeData(convertArrayToTree(props.listDepartment.rows))
@@ -121,8 +156,8 @@ function CreateProfileForm(props: CreateProfileFormProps) {
           status: values.status,
           time: 0,
           web: values.web,
-          talentPool:showForm.recruitment_talentpool?.talentPool,
-          recruitment:showForm.recruitment_talentpool?.recruitment,
+          talentPool: showForm.recruitment_talentpool?.talentPool,
+          recruitment: showForm.recruitment_talentpool?.recruitment,
         }
         // console.log(req)
         props.createProfile(req);
@@ -220,6 +255,53 @@ function CreateProfileForm(props: CreateProfileFormProps) {
       return initials.toUpperCase();
     }
   }
+
+
+  function onSearchJob(value: any) {
+    props.getSearchJob({name: value})
+    setTrigger({...trigger, job: true})
+  }
+
+  function onFocusJob() {
+    setJob(props.listJob.rows)
+  }
+
+  function onSearchJobLevel(value: any) {
+    props.getSearchJobLevel({name: value})
+    setTrigger({...trigger, jobLevel: true})
+  }
+
+  function onFocusJobLevel() {
+    setJobLevel(props.listJobLevel.rows)
+  }
+
+  function onSearchSourceCV(value: any) {
+    props.getSearchSourceCV({name: value})
+    setTrigger({...trigger, sourceCV: true})
+  }
+
+  function onFocusSourceCV() {
+    setSourceCV(props.listSourceCV.rows)
+  }
+
+  function onSearchSchool(value: any) {
+    props.getSearchSchool({name: value})
+    setTrigger({...trigger, school: true})
+  }
+
+  function onFocusSchool() {
+    setSchool(props.listSchool.rows)
+  }
+
+  function onSearchAccount(value: any) {
+    props.getSearchAccount({name: value})
+    setTrigger({...trigger, account: true})
+  }
+
+  function onFocusAccount() {
+    setAccount(props.listAccount.rows)
+  }
+
 
   return (
     <div>
@@ -487,9 +569,19 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                     },
                   ],
                 })(
-                  <Select className="bg-white text-black" style={fontWeightStyle} placeholder="Chọn nơi đào tạo"
+                  <Select
+                    onSearch={onSearchSchool}
+                    onFocus={onFocusSchool}
+                    filterOption={(input, option: any) =>
+                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                    optionFilterProp="children"
+                    showSearch
+                    className="bg-white text-black"
+                    style={fontWeightStyle}
+                    placeholder="Chọn nơi đào tạo"
                   >
-                    {props.listSchool.rows?.map((item: any, index: any) => (
+                    {school.map((item: any, index: any) => (
                       <Option key={index} value={item.id}>{item.name}</Option>
                     ))}
                   </Select>
@@ -510,7 +602,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
               <div className="mr-2" style={{width: 230}}>
                 <Form.Item label="Ngày ứng tuyển" className="form-label"  {...formItemLayout}>
                   {getFieldDecorator('dateOfApply', {
-                    initialValue: moment(),
+                    // initialValue: undefined,
                     rules: [
                       {
                         message: 'Vui lòng nhập ngày ứng tuyển',
@@ -535,9 +627,18 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                         },
                       ],
                     })(
-                      <Select className="bg-white text-black" style={fontWeightStyle}
+                      <Select
+                        onSearch={onSearchSourceCV}
+                        onFocus={onFocusSourceCV}
+                        filterOption={(input, option: any) =>
+                          option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
+                        optionFilterProp="children"
+                        showSearch
+                        className="bg-white text-black"
+                        style={fontWeightStyle}
                       >
-                        {props.listSourceCV.rows?.map((item: any, index: any) => (
+                        {sourceCV.map((item: any, index: any) => (
                           <Option key={index} value={item.id}>{item.name}</Option>
                         ))}
                       </Select>
@@ -566,9 +667,19 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                     },
                   ],
                 })(
-                  <Select className="bg-white text-black" placeholder="Chọn vị trí công việc" style={fontWeightStyle}
+                  <Select
+                    onSearch={onSearchJob}
+                    onFocus={onFocusJob}
+                    filterOption={(input, option: any) =>
+                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                    optionFilterProp="children"
+                    showSearch
+                    className="bg-white text-black"
+                    placeholder="Chọn vị trí công việc"
+                    style={fontWeightStyle}
                   >
-                    {props.listJob.rows?.map((item: any, index: any) => (
+                    {job.map((item: any, index: any) => (
                       <Option key={index} value={item.id}>{item.name}</Option>
                     ))}
                   </Select>
@@ -596,9 +707,19 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                     },
                   ],
                 })(
-                  <Select className="bg-white text-black" placeholder="Câp bậc công việc" style={fontWeightStyle}
+                  <Select
+                    onSearch={onSearchJobLevel}
+                    onFocus={onFocusJobLevel}
+                    filterOption={(input, option: any) =>
+                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                    optionFilterProp="children"
+                    showSearch
+                    className="bg-white text-black"
+                    placeholder="Câp bậc công việc"
+                    style={fontWeightStyle}
                   >
-                    {props.listJobLevel.rows?.map((item: any, index: any) => (
+                    {jobLevel.map((item: any, index: any) => (
                       <Option key={index} value={item.id}>{item.name}</Option>
                     ))}
                   </Select>
@@ -655,11 +776,18 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                 ],
               })(
                 <Select
+                  onSearch={onSearchAccount}
+                  onFocus={onFocusAccount}
+                  // filterOption={(input, option: any) =>
+                  //   option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  // }
+                  // optionFilterProp="children"
+                  showSearch
                   className="bg-white text-black"
                   style={fontWeightStyle}
                   optionLabelProp="label"
                   placeholder="Chọn người giới thiệu">
-                  {props.listAccount.rows?.map((item: any, index: any) => (
+                  {account.map((item: any, index: any) => (
                     <Option key={index} value={item.username} label={item.fullName}>
                       <div className="flex-items-center" style={{paddingTop: 5}}>
                         <div style={{marginRight: 10}}>
@@ -690,11 +818,18 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                 ],
               })(
                 <Select
+                  onSearch={onSearchAccount}
+                  onFocus={onFocusAccount}
+                  // filterOption={(input, option: any) =>
+                  //   option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  // }
+                  // optionFilterProp="children"
+                  showSearch
                   className="bg-white text-black"
                   style={fontWeightStyle}
                   optionLabelProp="label"
                   placeholder="Chọn HR phụ trách">
-                  {props.listAccount.rows?.map((item: any, index: any) => (
+                  {account.map((item: any, index: any) => (
                     <Option key={index} value={item.username} label={item.fullName}>
                       <div className="flex-items-center" style={{paddingTop: 5}}>
                         <div style={{marginRight: 10}}>

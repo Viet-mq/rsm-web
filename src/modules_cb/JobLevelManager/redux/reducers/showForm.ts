@@ -20,13 +20,13 @@ export default (state = initState, {
   data_update
 }: JobLevelFormAction): JobLevelFormState => {
   switch (type) {
-    case Actions.JOBLEVEL_SHOW_FORM_CREATE:
+    case Actions.JOB_LEVEL_SHOW_FORM_CREATE:
       return {
         ...state,
         show_create,
         show_update: false,
       }
-    case Actions.JOBLEVEL_SHOW_FORM_UPDATE:
+    case Actions.JOB_LEVEL_SHOW_FORM_UPDATE:
       return {
         ...state,
         show_update,

@@ -24,20 +24,20 @@ const dataJobLevel:JobLevelListState = JSON.parse(saveJobLevel)?JSON.parse(saveJ
 
 export default (state = dataJobLevel, {type, total, rows, params, error}: JobLevelListAction): JobLevelListState => {
   switch (type) {
-    case Actions.GET_LIST_JOBLEVEL:
+    case Actions.GET_LIST_JOB_LEVEL:
       return {
         ...state,
         params,
         loading: true
       }
-    case Actions.GET_LIST_JOBLEVEL_SUCCESS:
+    case Actions.GET_LIST_JOB_LEVEL_SUCCESS:
       return {
         ...state,
         total,
         rows,
         loading: false
       }
-    case Actions.GET_LIST_JOBLEVEL_ERROR:
+    case Actions.GET_LIST_JOB_LEVEL_ERROR:
       return {
         ...state,
         error,
