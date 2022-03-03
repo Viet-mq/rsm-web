@@ -6,7 +6,7 @@ import {SchoolListAction} from "../actions";
 export interface SchoolListState {
   loading: boolean,
   params?: any,
-  rows?: SchoolEntity[],
+  rows?: SchoolEntity[]|any,
   total?: number,
   error?: AppError
 }

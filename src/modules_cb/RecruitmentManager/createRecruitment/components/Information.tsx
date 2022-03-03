@@ -4,13 +4,14 @@ import {FormComponentProps} from "antd/lib/form";
 import {Button, Col, DatePicker, Form, Icon, Input, InputNumber, Row, Select, Switch} from "antd";
 import React, {useEffect, useRef, useState} from "react";
 import moment from "moment";
-import {showFormCreate as showJobFormCreate} from "../../../JobManager/redux/actions";
+import {getSearchJob, showFormCreate as showJobFormCreate} from "../../../JobManager/redux/actions";
 import {checkInformationValidate, createSteps, getDataRecruitmentUpdate} from "../../redux/actions";
 import {CreateRecruitmentRequest, RecruitmentEntity} from "../../types";
 import {useLocation} from "react-router-dom";
 import ReactQuill from "react-quill";
 import CreateJobForm from "../../../JobManager/components/CreateJobForm";
 import Loading from "../../../../components/Loading";
+import {JobEntity} from "../../../JobManager/types";
 
 const {Option} = Select;
 
@@ -19,6 +20,7 @@ const mapStateToProps = (state: RootState) => ({
   recruitmentManager: state.recruitmentManager,
   listTalentPool: state.talentPoolManager.list,
   listJob: state.jobManager.list,
+  searchJob: state.jobManager.search,
   createJob: state.jobManager.create,
   listProcess: state.statuscvManager.list,
 })
@@ -29,7 +31,7 @@ const connector = connect(mapStateToProps,
     checkInformationValidate,
     createSteps,
     getDataRecruitmentUpdate,
-
+    getSearchJob,
   });
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -95,10 +97,22 @@ function InformationForm(props: IProps) {
     'list', 'bullet', 'indent',
     'link', 'image', 'video'
   ]
+  const editorRef = useRef<any>(null);
+  const log = () => {
+    if (editorRef.current) {
+      console.log(editorRef.current.getContent());
+    }
+  };
+  const [job, setJob] = useState<JobEntity[]>([]);
 
+  const [trigger, setTrigger] = useState({
+    job: false,
+
+  })
 
   useEffect(() => {
     document.title = "Quản lý tin tuyển dụng";
+    setJob(props.listJob.rows)
     if (isEdit) {
       setSalary({
         from: update.dataUpdate?.from,
@@ -108,74 +122,85 @@ function InformationForm(props: IProps) {
     }
   }, []);
 
+  useEffect(() => {
+    if (trigger.job) {
+      setJob(props.searchJob.rows)
+    }
+  }, [props.searchJob.rows])
+
   function onFormChange(salaryChange?: any, valueEditorChange?: any) {
     setTimeout(() => props.form.validateFields((err, values) => {
-      let salaryDescription: any = '';
-      switch (salaryChange.detailOfSalary) {
-        case "Chi tiết mức lương":
-          salaryDescription = ` Từ ${salaryChange.from.toLocaleString()} VND đến ${salaryChange.to.toLocaleString()} VND`;
-          break
-        case "Thỏa thuận":
-          salaryDescription = " Thỏa thuận";
-          break
-        case "Từ ...":
-          salaryDescription = ` Từ ${salaryChange.from.toLocaleString()} VND`;
-          break
-        case "Up to ...":
-          salaryDescription = ` Up to ${salaryChange.to.toLocaleString()} VND`;
-          break
-      }
-
-      if (!err &&valueEditorChange.interest&&valueEditorChange.jobDescription&& valueEditorChange.requirementOfJob) {
-        if (isEdit) {
-          if (update.dataUpdate) {
-            let req: RecruitmentEntity = {
-              ...update.dataUpdate,
-              addressId: values.address,
-              deadLine: values.deadLine * 1,
-              jobId: values.job,
-              quantity: values.quantity,
-              talentPoolId: values.talentPool,
-              title: values.title,
-              typeOfJob: values.typeOfJob,
-              detailOfSalary: salaryChange.detailOfSalary,
-              from: salaryChange.from,
-              to: salaryChange.to,
-              salaryDescription: salaryDescription,
-              requirementOfJob: valueEditorChange.requirementOfJob,
-              jobDescription: valueEditorChange.jobDescription,
-              interest: valueEditorChange.interest,
-            }
-            props.getDataRecruitmentUpdate(req)
-          }
-        } else {
-          let req: CreateRecruitmentRequest = ({
-            address: values.address,
-            deadLine: values.deadLine * 1,
-            job: values.job,
-            quantity: values.quantity,
-            talentPool: values.talentPool,
-            title: values.title,
-            typeOfJob: values.typeOfJob,
-            detailOfSalary: salaryChange.detailOfSalary,
-            from: salaryChange.from,
-            to: salaryChange.to,
-            salaryDescription: salaryDescription,
-            requirementOfJob: valueEditorChange.requirementOfJob,
-            jobDescription: valueEditorChange.jobDescription,
-            interest: valueEditorChange.interest,
-            interviewProcess: props.listProcess.rows,
-            interviewer: []
-          })
-          props.createSteps(req)
+        let salaryDescription: any = '';
+        switch (salaryChange.detailOfSalary) {
+          case "Chi tiết mức lương":
+            salaryDescription = ` Từ ${salaryChange.from.toLocaleString()} VND đến ${salaryChange.to.toLocaleString()} VND`;
+            break
+          case "Thỏa thuận":
+            salaryDescription = " Thỏa thuận";
+            break
+          case "Từ ...":
+            salaryDescription = ` Từ ${salaryChange.from.toLocaleString()} VND`;
+            break
+          case "Up to ...":
+            salaryDescription = ` Up to ${salaryChange.to.toLocaleString()} VND`;
+            break
         }
 
-        props.checkInformationValidate(true)
-      } else {
-        props.checkInformationValidate(false)
+        if (!err) {
+          if (isEdit) {
+            if (update.dataUpdate) {
+              let req: RecruitmentEntity = {
+                ...update.dataUpdate,
+                addressId: values.address,
+                deadLine: values.deadLine * 1,
+                jobId: values.job,
+                quantity: values.quantity,
+                talentPoolId: values.talentPool,
+                title: values.title,
+                typeOfJob: values.typeOfJob,
+                detailOfSalary: salaryChange.detailOfSalary,
+                from: salaryChange.from,
+                to: salaryChange.to,
+                salaryDescription: salaryDescription,
+                requirementOfJob: valueEditor.requirementOfJob,
+                jobDescription: valueEditor.jobDescription,
+                interest: valueEditor.interest,
 
-      }
-    }), 10)
+              }
+              props.getDataRecruitmentUpdate(req)
+            }
+          } else {
+            if (valueEditorChange.interest && valueEditorChange.jobDescription && valueEditorChange.requirementOfJob) {
+              let req: CreateRecruitmentRequest = ({
+                address: values.address,
+                deadLine: values.deadLine * 1,
+                job: values.job,
+                quantity: values.quantity,
+                talentPool: values.talentPool,
+                title: values.title,
+                typeOfJob: values.typeOfJob,
+                detailOfSalary: salaryChange.detailOfSalary,
+                from: salaryChange.from,
+                to: salaryChange.to,
+                salaryDescription: salaryDescription,
+                requirementOfJob: valueEditorChange.requirementOfJob,
+                jobDescription: valueEditorChange.jobDescription,
+                interest: valueEditorChange.interest,
+
+                interviewProcess: props.listProcess.rows,
+                interviewer: []
+              })
+              props.createSteps(req)
+            }
+          }
+
+          props.checkInformationValidate(true)
+        } else {
+          props.checkInformationValidate(false)
+
+        }
+      })
+      , 10)
   }
 
   function handleSelect(value: any) {
@@ -199,22 +224,15 @@ function InformationForm(props: IProps) {
     setSalary(newSalary)
   }
 
-  const editorRef = useRef<any>(null);
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
-    }
-  };
 
   function handleChangeInterest(content: any) {
-    console.log("Interest",content)
 
     if (content === "<p><br></p>") {
       setDisplay({...display, interest: true})
       setValueEditor({...valueEditor, interest: ""})
     } else {
-      const newDisplay=display
-      display.interest=false
+      const newDisplay = display
+      display.interest = false
       setDisplay(newDisplay)
       const newValueEditor = valueEditor
       newValueEditor.interest = content
@@ -224,13 +242,12 @@ function InformationForm(props: IProps) {
   }
 
   function handleChangeRequirement(content: any) {
-    console.log("Requirement",content)
     if (content === "<p><br></p>") {
       setDisplay({...display, requirementOfJob: true})
       setValueEditor({...valueEditor, requirementOfJob: ""})
     } else {
-      const newDisplay=display
-      display.requirementOfJob=false
+      const newDisplay = display
+      display.requirementOfJob = false
       setDisplay(newDisplay)
       const newValueEditor = valueEditor
       newValueEditor.requirementOfJob = content
@@ -240,13 +257,12 @@ function InformationForm(props: IProps) {
   }
 
   function handleChangeJobDescription(content: any) {
-    console.log("Description",content)
     if (content === "<p><br></p>") {
       setDisplay({...display, jobDescription: true})
       setValueEditor({...valueEditor, jobDescription: ""})
     } else {
-      const newDisplay=display
-      display.jobDescription=false
+      const newDisplay = display
+      display.jobDescription = false
       setDisplay(newDisplay)
       const newValueEditor = valueEditor
       newValueEditor.jobDescription = content
@@ -262,6 +278,15 @@ function InformationForm(props: IProps) {
       e.target.disabled = false;
     }
     props.showJobFormCreate(true);
+  }
+
+  function onSearchJob(value: any) {
+    props.getSearchJob({name: value})
+    setTrigger({...trigger, job: true})
+  }
+
+  function onFocusJob() {
+    setJob(props.listJob.rows)
   }
 
   return (
@@ -299,10 +324,19 @@ function InformationForm(props: IProps) {
                       },
                     ],
                   })(
-                    <Select onChange={onFormChange} className="bg-white text-black" style={fontWeightStyle}
+                    <Select showSearch
+                            onChange={onFormChange}
+                            onSearch={onSearchJob}
+                            onFocus={onFocusJob}
+                            className="bg-white text-black"
+                            style={fontWeightStyle}
                             placeholder="Chọn vị trí công việc"
+                            filterOption={(input, option: any) =>
+                              option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
+                            optionFilterProp="children"
                     >
-                      {props.listJob.rows?.map((item: any, index: any) => (
+                      {job.map((item: any, index: any) => (
                         <Option key={index} value={item.id}>{item.name}</Option>
                       ))}
                     </Select>)}
@@ -317,7 +351,6 @@ function InformationForm(props: IProps) {
                   </Button>
                 </div>
               </Form.Item>
-
               <Row style={{marginTop: 15}}>
                 <Col span={12} style={{paddingRight: 10}}>
                   <Form.Item className="form-label" label="Địa điểm làm việc" labelCol={{span: 24}}
@@ -496,7 +529,7 @@ function InformationForm(props: IProps) {
                   style={fontWeightStyle}
                   className="ql-custom"
                   onChange={handleChangeJobDescription}
-                  value={valueEditor.jobDescription||""}
+                  value={valueEditor.jobDescription || ""}
 
                   theme={'snow'}
                   modules={modules}
@@ -515,7 +548,7 @@ function InformationForm(props: IProps) {
                   style={fontWeightStyle}
                   className="ql-custom"
                   onChange={handleChangeRequirement}
-                  value={valueEditor.requirementOfJob||""}
+                  value={valueEditor.requirementOfJob || ""}
 
                   theme={'snow'}
                   modules={modules}
@@ -534,7 +567,7 @@ function InformationForm(props: IProps) {
                   style={fontWeightStyle}
                   className="ql-custom"
                   onChange={handleChangeInterest}
-                  value={valueEditor.interest||""}
+                  value={valueEditor.interest || ""}
 
                   theme={'snow'}
                   modules={modules}
@@ -554,7 +587,7 @@ function InformationForm(props: IProps) {
         </div>
       </div>
       <CreateJobForm/>
-      {props.createJob.loading  ?
+      {props.createJob.loading ?
         <Loading/> : null}
     </>
 

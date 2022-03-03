@@ -22,20 +22,20 @@ const dataSourceCV:SourceCVListState = JSON.parse(saveSourceCV)?JSON.parse(saveS
 
 export default (state = dataSourceCV, {type, total, rows, params, error}: SourceCVListAction): SourceCVListState => {
   switch (type) {
-    case Actions.GET_LIST_SOURCECV:
+    case Actions.GET_LIST_SOURCE_CV:
       return {
         ...state,
         params,
         loading: true
       }
-    case Actions.GET_LIST_SOURCECV_SUCCESS:
+    case Actions.GET_LIST_SOURCE_CV_SUCCESS:
       return {
         ...state,
         total,
         rows,
         loading: false
       }
-    case Actions.GET_LIST_SOURCECV_ERROR:
+    case Actions.GET_LIST_SOURCE_CV_ERROR:
       return {
         ...state,
         error,

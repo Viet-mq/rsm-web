@@ -4,7 +4,15 @@ import {deleteAccountAsync} from "./deleteAccount";
 import {getListAccountAsync} from "./list";
 import {updateAccountAsync} from "./update";
 import {changePasswordAsync} from "./changePassword";
-import {CHANGE_PASSWORD_ACCOUNT, CREATE_ACCOUNT, DELETE_ACCOUNT, GET_LIST_ACCOUNT, UPDATE_ACCOUNT} from "../actions";
+import {
+  CHANGE_PASSWORD_ACCOUNT,
+  CREATE_ACCOUNT,
+  DELETE_ACCOUNT,
+  GET_LIST_ACCOUNT,
+  GET_SEARCH_ACCOUNT,
+  UPDATE_ACCOUNT
+} from "../actions";
+import {getSearchAccountAsync} from "./search";
 
 export default function* root() {
   return all([
@@ -13,5 +21,6 @@ export default function* root() {
     yield takeLatest(GET_LIST_ACCOUNT, getListAccountAsync),
     yield takeLatest(UPDATE_ACCOUNT, updateAccountAsync),
     yield takeLatest(CHANGE_PASSWORD_ACCOUNT, changePasswordAsync),
+    yield takeLatest(GET_SEARCH_ACCOUNT, getSearchAccountAsync),
   ]);
 }

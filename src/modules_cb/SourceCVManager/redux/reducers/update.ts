@@ -16,19 +16,19 @@ const initState: UpdateSourceCVState = {
 
 export default (state = initState, {type, request, response, error}: UpdateSourceCVAction): UpdateSourceCVState => {
   switch (type) {
-    case Actions.UPDATE_SOURCECV:
+    case Actions.UPDATE_SOURCE_CV:
       return {
         ...state,
         request,
         loading: true
       }
-    case Actions.UPDATE_SOURCECV_SUCCESS:
+    case Actions.UPDATE_SOURCE_CV_SUCCESS:
       return {
         ...state,
         response,
         loading: false
       }
-    case Actions.UPDATE_SOURCECV_ERROR:
+    case Actions.UPDATE_SOURCE_CV_ERROR:
       return {
         ...state,
         error,

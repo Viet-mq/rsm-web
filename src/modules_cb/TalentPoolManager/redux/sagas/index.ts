@@ -7,10 +7,11 @@ import {
   CREATE_TALENT_POOL,
   DELETE_TALENT_POOL,
   GET_DETAIL_TALENT_POOL,
-  GET_LIST_TALENT_POOL,
+  GET_LIST_TALENT_POOL, GET_SEARCH_TALENT_POOL,
   UPDATE_TALENT_POOL
 } from "../actions";
 import {getDetailTalentPoolAsync} from "./detail";
+import {getSearchTalentPoolAsync} from "./search";
 
 export default function* root() {
   return all([
@@ -19,5 +20,6 @@ export default function* root() {
     yield takeLatest(GET_LIST_TALENT_POOL, getListTalentPoolAsync),
     yield takeLatest(UPDATE_TALENT_POOL, updateTalentPoolAsync),
     yield takeLatest(GET_DETAIL_TALENT_POOL, getDetailTalentPoolAsync),
+    yield takeLatest(GET_SEARCH_TALENT_POOL, getSearchTalentPoolAsync),
   ]);
 }

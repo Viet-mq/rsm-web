@@ -8,21 +8,21 @@ export interface CreateSourceCVAction {
   error?: AppError
 }
 
-export const CREATE_SOURCECV = "CREATE_SOURCECV";
-export const CREATE_SOURCECV_SUCCESS = "CREATE_SOURCECV_SUCCESS";
-export const CREATE_SOURCECV_ERROR = "CREATE_SOURCECV_ERROR";
+export const CREATE_SOURCE_CV = "CREATE_SOURCE_CV";
+export const CREATE_SOURCE_CV_SUCCESS = "CREATE_SOURCE_CV_SUCCESS";
+export const CREATE_SOURCE_CV_ERROR = "CREATE_SOURCE_CV_ERROR";
 
 export const createSourceCV = (request: CreateSourceCVRequest): CreateSourceCVAction => ({
-  type: CREATE_SOURCECV,
+  type: CREATE_SOURCE_CV,
   request
 });
 
 export const createSourceCVSuccess = (response: ResponseBase2): CreateSourceCVAction => ({
-  type: CREATE_SOURCECV_SUCCESS,
+  type: CREATE_SOURCE_CV_SUCCESS,
   response
 });
 
 export const createSourceCVError = (error: AppError): CreateSourceCVAction => ({
-  type: CREATE_SOURCECV_ERROR,
+  type: CREATE_SOURCE_CV_ERROR,
   error
 });

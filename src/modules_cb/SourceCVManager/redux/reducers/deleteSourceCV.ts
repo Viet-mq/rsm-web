@@ -16,19 +16,19 @@ const initState: DeleteSourceCVState = {
 
 export default (state = initState, {type, request, response, error}: DeleteSourceCVAction): DeleteSourceCVState => {
   switch (type) {
-    case Actions.DELETE_SOURCECV:
+    case Actions.DELETE_SOURCE_CV:
       return {
         ...state,
         request,
         loading: true
       }
-    case Actions.DELETE_SOURCECV_SUCCESS:
+    case Actions.DELETE_SOURCE_CV_SUCCESS:
       return {
         ...state,
         response,
         loading: false
       }
-    case Actions.DELETE_SOURCECV_ERROR:
+    case Actions.DELETE_SOURCE_CV_ERROR:
       return {
         ...state,
         error,

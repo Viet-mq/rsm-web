@@ -16,19 +16,19 @@ const initState: UpdateJobLevelState = {
 
 export default (state = initState, {type, request, response, error}: UpdateJobLevelAction): UpdateJobLevelState => {
   switch (type) {
-    case Actions.UPDATE_JOBLEVEL:
+    case Actions.UPDATE_JOB_LEVEL:
       return {
         ...state,
         request,
         loading: true
       }
-    case Actions.UPDATE_JOBLEVEL_SUCCESS:
+    case Actions.UPDATE_JOB_LEVEL_SUCCESS:
       return {
         ...state,
         response,
         loading: false
       }
-    case Actions.UPDATE_JOBLEVEL_ERROR:
+    case Actions.UPDATE_JOB_LEVEL_ERROR:
       return {
         ...state,
         error,

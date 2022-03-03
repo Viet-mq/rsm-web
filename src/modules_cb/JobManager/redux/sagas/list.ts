@@ -8,7 +8,7 @@ export function* getListJobAsync(action: JobListAction) {
   try {
     const rs = yield apis.getListJob(action.params);
     if (rs.code !== 0) {
-      NotificationError('Lấy danh sách Job không thành công', "Lỗi: " + rs.message);
+      NotificationError('Lấy danh sách vị trí tuyển dụng không thành công', "Lỗi: " + rs.message);
 
     }
     else {
@@ -17,6 +17,6 @@ export function* getListJobAsync(action: JobListAction) {
     }
   } catch (e) {
     yield put(getListJobError(new AppError(e.message)));
-    NotificationError('Lấy danh sách Job không thành công', "Lỗi: " + e.message);
+    NotificationError('Lấy danh sách vị trí tuyển dụng không thành công', "Lỗi: " + e.message);
   }
 }

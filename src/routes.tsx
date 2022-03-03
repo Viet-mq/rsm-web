@@ -1,10 +1,8 @@
 import React, {useEffect} from 'react';
 import {Redirect, Route, Switch, useLocation} from 'react-router-dom';
 import {connect, ConnectedProps} from 'react-redux';
-import Dashboard from './modules/Dashboard/index';
 
 import {RootState} from './redux/reducers';
-
 import AccountManagerPages from "./modules_cb/AccountManager/pages/AccountManagerPages";
 import ViewManagerPage from "./modules_cb/ViewManager/pages/ViewManagerPage";
 import APIManagerPage from "./modules_cb/APIManager/pages/APIManagerPage";
@@ -32,6 +30,7 @@ import EmailManagerPages from "./modules_cb/EmailManager/pages/EmailManagerPages
 import UpdateEmailForm from "./modules_cb/EmailManager/components/UpdateEmailForm";
 import CreateEmailForm from "./modules_cb/EmailManager/components/CreateEmailForm";
 import ReminderManagerPages from "./modules_cb/ReminderManager/pages/ReminderManagerPages";
+import DashboardManagerPages from "./modules_cb/DashboardManager/pages/DashboardManagerPages";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -60,7 +59,7 @@ const Routes = (props: PropsFromRedux) => {
   return (
     <div>
       <Switch>
-        <Route path="/home/:selectedTime/:employeeId?" component={Dashboard} isLogin={props.isLogin}/>
+        <Route path="/home" component={DashboardManagerPages} isLogin={props.isLogin}/>
         <Route path="/account-manager" component={AccountManagerPages} isLogin={props.isLogin}/>
         <Route path="/view-manager" component={ViewManagerPage} isLogin={props.isLogin}/>
         <Route path="/api-manager" component={APIManagerPage} isLogin={props.isLogin}/>

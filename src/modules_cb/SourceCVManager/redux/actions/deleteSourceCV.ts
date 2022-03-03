@@ -8,21 +8,21 @@ export interface DeleteSourceCVAction {
   error?: AppError
 }
 
-export const DELETE_SOURCECV = "DELETE_SOURCECV";
-export const DELETE_SOURCECV_SUCCESS = "DELETE_SOURCECV_SUCCESS";
-export const DELETE_SOURCECV_ERROR = "DELETE_SOURCECV_ERROR";
+export const DELETE_SOURCE_CV = "DELETE_SOURCE_CV";
+export const DELETE_SOURCE_CV_SUCCESS = "DELETE_SOURCE_CV_SUCCESS";
+export const DELETE_SOURCE_CV_ERROR = "DELETE_SOURCE_CV_ERROR";
 
 export const deleteSourceCV = (request: DeleteSourceCVRequest): DeleteSourceCVAction => ({
-  type: DELETE_SOURCECV,
+  type: DELETE_SOURCE_CV,
   request
 });
 
 export const deleteSourceCVSuccess = (response: ResponseBase2): DeleteSourceCVAction => ({
-  type: DELETE_SOURCECV_SUCCESS,
+  type: DELETE_SOURCE_CV_SUCCESS,
   response
 });
 
 export const deleteSourceCVError = (error: AppError): DeleteSourceCVAction => ({
-  type: DELETE_SOURCECV_ERROR,
+  type: DELETE_SOURCE_CV_ERROR,
   error
 });

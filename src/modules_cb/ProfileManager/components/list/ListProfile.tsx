@@ -18,12 +18,20 @@ import moment from "moment";
 import {GiFemale, GiMale, ImPhoneHangUp} from "react-icons/all";
 import {useHistory, useLocation} from "react-router-dom";
 import Search from "antd/es/input/Search";
-import {getDetailTalentPool} from "../../../TalentPoolManager/redux/actions";
+import {getDetailTalentPool, getSearchTalentPool} from "../../../TalentPoolManager/redux/actions";
 import BookingForm from "../BookingForm";
 import Loading from "../../../../components/Loading";
 import UpdateProfileForm from "../UpdateProfileForm";
 import UploadCVForm from "../UploadCVForm";
 import env from 'src/configs/env';
+import {getSearchJob} from "../../../JobManager/redux/actions";
+import {JobEntity} from "../../../JobManager/types";
+import {JobLevelEntity} from "../../../JobLevelManager/types";
+import {DepartmentEntity} from "../../../DepartmentManager/types";
+import {RecruitmentEntity} from "../../../RecruitmentManager/types";
+import {getSearchJobLevel} from "../../../JobLevelManager/redux/actions";
+import {getSearchRecruitment} from "../../../RecruitmentManager/redux/actions";
+import {getSearchSourceCV} from "../../../SourceCVManager/redux/actions";
 
 const {Option} = Select;
 
@@ -33,9 +41,10 @@ const mapStateToProps = (state: RootState) => ({
   listSourceCV: state.sourcecvManager.list,
   listJobLevel: state.joblevelManager.list,
   listDepartment: state.departmentManager.list,
+  listRecruitment: state.recruitmentManager.list,
   listTalentPool: state.talentPoolManager.list,
   listJob: state.jobManager.list,
-  listRecruitment: state.recruitmentManager.list,
+  searchJob: state.jobManager.search,
 
 })
 const connector = connect(mapStateToProps, {
@@ -46,7 +55,12 @@ const connector = connect(mapStateToProps, {
   showFormUploadCV,
   showFormBooking,
   resetSearch,
-  getDetailTalentPool
+  getDetailTalentPool,
+  getSearchJob,
+  getSearchJobLevel,
+  getSearchRecruitment,
+  getSearchTalentPool,
+  getSearchSourceCV
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -60,7 +74,7 @@ interface ListProfileProps extends ReduxProps {
 }
 
 function ListProfile(props: ListProfileProps) {
-  const {search,list,getBooking, deleteProfile, update, uploadCV, createBooking, updateBooking}=props.profileManager
+  const {search, list, getBooking, deleteProfile, update, uploadCV, createBooking, updateBooking} = props.profileManager
   const history = useHistory();
   const location = useLocation();
   const {pathname} = useLocation();
@@ -82,7 +96,7 @@ function ListProfile(props: ListProfileProps) {
     jobLevel: null,
     department: null,
     talentPool: null,
-    recruitment: null
+    recruitment: null,
   })
   const columns: ColumnProps<ProfileEntity>[] = [
     {
@@ -370,14 +384,27 @@ function ListProfile(props: ListProfileProps) {
   ];
   const [treeData, setTreeData] = useState([])
   const screenHeight = document.documentElement.clientHeight;
+  const [job, setJob] = useState<JobEntity[]>([]);
+  const [jobLevel, setJobLevel] = useState<JobLevelEntity[]>([]);
+  const [department, setDepartment] = useState<DepartmentEntity[]>([]);
+  const [recruitment, setRecruitment] = useState<RecruitmentEntity[]>([]);
+  const [talentPool, setTalentPool] = useState<JobEntity[]>([]);
+
+  const [trigger, setTrigger] = useState({
+    job: false,
+    jobLevel: false,
+    department: false,
+    recruitment: false,
+    talentPool: false,
+  })
 
   useEffect(() => {
     setTreeData(convertArrayToTree(props.listDepartment.rows))
   }, [props.listDepartment.rows])
 
   useEffect(() => {
-    if(location.pathname.includes("profile-manager")) props.setDataID(selected)
-  },[selected])
+    if (location.pathname.includes("profile-manager")) props.setDataID(selected)
+  }, [selected])
 
   useEffect(() => {
     if (pathname.includes("recruitment-manager")) props.getListProfile({
@@ -403,6 +430,20 @@ function ListProfile(props: ListProfileProps) {
       setKeySearch(search.request?.key)
     }
   }, [search.rowsSearchFull])
+
+  useEffect(() => {
+    if (trigger.job) {
+      setJob(props.searchJob.rows)
+    }
+  }, [props.searchJob.rows])
+
+  useEffect(() => {
+    setJob(props.listJob.rows)
+    setJobLevel(props.listJobLevel.rows)
+    setDepartment(props.listDepartment.rows)
+    setRecruitment(props.listRecruitment.rows)
+    setTalentPool(props.listTalentPool.rows)
+  }, [])
 
   const getInitials = (name: string) => {
     let initials: any = name.split(' ');
@@ -487,7 +528,7 @@ function ListProfile(props: ListProfileProps) {
       id: entity.id,
       fullName: entity.fullName,
       idRecruitment: entity.recruitmentId,
-      username:entity.username,
+      username: entity.username,
     }
     props.showFormBooking(true, req);
   }
@@ -523,7 +564,7 @@ function ListProfile(props: ListProfileProps) {
     props.getListProfile({
       fullName: selected.name,
       job: selected.job,
-      levelJob: selected.jobLevel,
+      jobLevel: selected.jobLevel,
       department: selected.department,
       talentPool: selected.talentPool,
       recruitment: selected.recruitment,
@@ -531,6 +572,43 @@ function ListProfile(props: ListProfileProps) {
       size: 30,
     })
   }
+
+  function onSearchJob(value: any) {
+    props.getSearchJob({name: value})
+    setTrigger({...trigger, job: true})
+  }
+
+  function onFocusJob() {
+    setJob(props.listJob.rows)
+  }
+
+  function onSearchJobLevel(value: any) {
+    props.getSearchJobLevel({name: value})
+    setTrigger({...trigger, jobLevel: true})
+  }
+
+  function onFocusJobLevel() {
+    setJobLevel(props.listJobLevel.rows)
+  }
+
+  function onSearchRecruitment(value: any) {
+    props.getSearchRecruitment({name: value})
+    setTrigger({...trigger, recruitment: true})
+  }
+
+  function onFocusRecruitment() {
+    setRecruitment(props.listRecruitment.rows)
+  }
+
+  function onSearchTalentPool(value: any) {
+    props.getSearchJob({name: value})
+    setTrigger({...trigger, talentPool: true})
+  }
+
+  function onFocusTalentPool() {
+    setJob(props.listTalentPool.rows)
+  }
+
 
   return (
     <>
@@ -565,8 +643,15 @@ function ListProfile(props: ListProfileProps) {
                       placeholder="Vị trí công việc"
                       value={selected.job ? selected.job : undefined}
                       onChange={(value: any) => setSelected({...selected, job: value})}
+                      onSearch={onSearchJob}
+                      onFocus={onFocusJob}
+                      filterOption={(input, option: any) =>
+                        option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                      optionFilterProp="children"
+                      showSearch
               >
-                {props.listJob.rows?.map((item: any, index: any) => (
+                {job.map((item: any, index: any) => (
                   <Option key={index} value={item.id}>{item.name}</Option>
                 ))}
               </Select>
@@ -575,8 +660,15 @@ function ListProfile(props: ListProfileProps) {
                       value={selected.jobLevel ? selected.jobLevel : undefined}
                       onChange={(value: any) => setSelected({...selected, jobLevel: value})}
                       placeholder="Cấp bậc công việc"
+                      onSearch={onSearchJobLevel}
+                      onFocus={onFocusJobLevel}
+                      filterOption={(input, option: any) =>
+                        option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                      optionFilterProp="children"
+                      showSearch
               >
-                {props.listJobLevel.rows?.map((item: any, index: any) => (
+                {jobLevel.map((item: any, index: any) => (
                   <Option key={index} value={item.id}>{item.name}</Option>
                 ))}
               </Select>
@@ -596,8 +688,15 @@ function ListProfile(props: ListProfileProps) {
                 value={selected.recruitment ? selected.recruitment : undefined}
                 onChange={(value: any) => setSelected({...selected, recruitment: value})}
                 placeholder="Tin tuyển dụng"
+                onSearch={onSearchRecruitment}
+                onFocus={onFocusRecruitment}
+                filterOption={(input, option: any) =>
+                  option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+                optionFilterProp="children"
+                showSearch
               >
-                {props.listRecruitment.rows?.map((item: any, index: any) => (
+                {recruitment.map((item: any, index: any) => (
                   <Option key={index} value={item.id}>{item.title}</Option>
                 ))}
               </Select>
@@ -607,13 +706,20 @@ function ListProfile(props: ListProfileProps) {
                 value={selected.talentPool ? selected.talentPool : undefined}
                 onChange={(value: any) => setSelected({...selected, talentPool: value})}
                 placeholder="Talent Pools"
+                onSearch={onSearchTalentPool}
+                onFocus={onFocusTalentPool}
+                filterOption={(input, option: any) =>
+                  option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+                optionFilterProp="children"
+                showSearch
               >
-                {props.listTalentPool.rows?.map((item: any, index: any) => (
+                {talentPool.map((item: any, index: any) => (
                   <Option key={index} value={item.id}>{item.name}</Option>
                 ))}
               </Select>
 
-              <Button type="primary" style={{width:"16%"}}
+              <Button type="primary" style={{width: "16%"}}
                       onClick={btnSearchClicked}
               >Tìm kiếm</Button>
 
@@ -627,7 +733,7 @@ function ListProfile(props: ListProfileProps) {
       ) : null}
 
       <Table
-        scroll={{x: "1500px", y: screenHeight<env.desktopHeight?"450px":"638px"}}
+        scroll={{x: "1500px", y: screenHeight < env.desktopHeight ? "450px" : "638px"}}
         className="custom-table -webkit-scrollbar"
         dataSource={dataSource ? dataSource.rowsSearchFull : list?.rows}
         columns={columns}
@@ -656,7 +762,7 @@ function ListProfile(props: ListProfileProps) {
       uploadCV.loading ||
       createBooking.loading ||
       updateBooking.loading ?
-      <Loading/> : null}
+        <Loading/> : null}
     </>
   );
 
