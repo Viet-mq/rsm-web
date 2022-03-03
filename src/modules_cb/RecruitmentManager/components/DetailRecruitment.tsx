@@ -136,6 +136,7 @@ function DetailRecruitment(props: IProps) {
     props.showFormCreate(true,req);
   }
 
+
   return (
     <>
       <div>

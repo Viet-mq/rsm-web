@@ -877,7 +877,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                   size="small"
                   className="ant-btn ml-1 mr-1 ant-btn-sm"
                   style={{height: '32px'}}
-                  onClick={handleCreateDepartment}
+                   onClick={handleCreateDepartment}
                 >
                   <Icon type="plus"/>
                 </Button>

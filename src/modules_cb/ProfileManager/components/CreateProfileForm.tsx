@@ -619,7 +619,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                 <Form.Item label="Nguồn ứng tuyển" className="form-label"  {...formItemLayout}>
                   <div style={{display: 'flex', padding: "4px 0"}}>
                     {getFieldDecorator('sourceCV', {
-                      initialValue: props.listSourceCV.rows[0]?.id,
+                      initialValue: undefined,
                       rules: [
                         {
                           message: 'Vui lòng nhập nguồn ứng tuyển',
@@ -635,6 +635,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                         }
                         optionFilterProp="children"
                         showSearch
+                        placeholder={"Nguồn ứng tuyển"}
                         className="bg-white text-black"
                         style={fontWeightStyle}
                       >
