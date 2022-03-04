@@ -2,7 +2,7 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import env from "src/configs/env";
-import {Button, Icon, Popconfirm, Table} from "antd";
+import {Table} from "antd";
 import {emptyText} from "src/configs/locales";
 import {
   getDepartmentReport,
@@ -12,8 +12,8 @@ import {
   getRejectReport
 } from "../../redux/actions";
 import {ColumnProps} from "antd/lib/table";
-import {BlacklistEntity} from "../../../BlacklistManager/types";
-import {RecruitmentEfficiencyReportEntity, RejectReportEntity} from "../../types";
+import {DepartmentReportEntity} from "../../types";
+
 
 const mapStateToProps = (state: RootState) => ({
   dashboardManager: state.dashboardManager,
@@ -36,20 +36,20 @@ interface IProps extends ReduxProps {
 function ListDashboard(props: IProps) {
   const {reject, recruitmentActivities, recruitmentEfficiency, recruitmentResult, department} = props.dashboardManager
   let screenWidth = document.documentElement.clientWidth;
-  const [page, setPage] = useState({
-    pageReject:1,
-    pageRecruitmentActivities:1,
-    pageRecruitmentEfficiency:1,
-    pageRecruitmentResult:1,
-    pageDepartment:1,
+  const [page, setPage] = useState<any>({
+    pageReject: 1,
+    pageRecruitmentActivities: 1,
+    pageRecruitmentEfficiency: 1,
+    pageRecruitmentResult: 1,
+    pageDepartment: 1,
   });
   const scroll = screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false};
   const size = {
-    pageReject:10,
-    pageRecruitmentActivities:10,
-    pageRecruitmentEfficiency:10,
-    pageRecruitmentResult:10,
-    pageDepartment:10,
+    pageReject: 10,
+    pageRecruitmentActivities: 10,
+    pageRecruitmentEfficiency: 10,
+    pageRecruitmentResult: 10,
+    pageDepartment: 10,
   };
   const [state, setState] = useState<any>({
     filteredInfo: null,
@@ -149,125 +149,56 @@ function ListDashboard(props: IProps) {
   //   },
   // ];
 
-  // const columnsRecruitmentEfficiency: ColumnProps<RecruitmentEfficiencyReportEntity>[] = [
-  //   {
-  //     title: 'STT',
-  //     key: 'index',
-  //     width: 40,
-  //     align:"center",
-  //     render: (text, record, index) =>  {return (page.pageRecruitmentEfficiency - 1) * 10 + index + 1}
-  //   },
-  //   {
-  //     title: 'Tin tuyển dụng',
-  //     dataIndex: 'recruitmentName',
-  //     key: 'recruitmentName',
-  //     width: 100,
-  //     fixed: 'left',
-  //     sorter: (a, b) => a.recruitmentName.length - b.recruitmentName.length,
-  //     sortOrder: state.sortedInfo.columnKey === 'fullName' && state.sortedInfo.order,
-  //   },
-  //
-  //   // {
-  //   //   title: 'Tin tuyển dụng',
-  //   //   dataIndex: 'recruitmentName',
-  //   //   key: 'recruitmentName',
-  //   //   width: 100,
-  //   //   fixed: 'left',
-  //   //   sorter: (a, b) => a.recruitmentName.length - b.recruitmentName.length,
-  //   //   sortOrder: state.sortedInfo.columnKey === 'fullName' && state.sortedInfo.order,
-  //   // },
-  //
-  //   {
-  //     title: 'Người đăng',
-  //     dataIndex: 'createBy',
-  //     key: 'createBy',
-  //     width: 100,
-  //     fixed: 'left',
-  //     sorter: (a, b) => a.createBy.length - b.createBy.length,
-  //     sortOrder: state.sortedInfo.columnKey === 'createBy' && state.sortedInfo.order,
-  //   },
-  //
-  //   recruitmentEfficiency.rows.status.map((item:any,index:any)=>{
-  //
-  //   }),
-  //   {
-  //     title: 'Người đăng',
-  //     dataIndex: 'createBy',
-  //     key: 'createBy',
-  //     width: 100,
-  //     fixed: 'left',
-  //     sorter: (a, b) => a.createBy.length - b.createBy.length,
-  //     sortOrder: state.sortedInfo.columnKey === 'createBy' && state.sortedInfo.order,
-  //   },
-  //
-  //   // {
-  //   //   title: 'Other',
-  //   //   children: [
-  //   //     {
-  //   //       title: 'Age',
-  //   //       dataIndex: 'age',
-  //   //       key: 'age',
-  //   //       width: 150,
-  //   //       sorter: (a, b) => a.age - b.age,
-  //   //     },
-  //   //     {
-  //   //       title: 'Address',
-  //   //       children: [
-  //   //         {
-  //   //           title: 'Street',
-  //   //           dataIndex: 'street',
-  //   //           key: 'street',
-  //   //           width: 150,
-  //   //         },
-  //   //         {
-  //   //           title: 'Block',
-  //   //           children: [
-  //   //             {
-  //   //               title: 'Building',
-  //   //               dataIndex: 'building',
-  //   //               key: 'building',
-  //   //               width: 100,
-  //   //             },
-  //   //             {
-  //   //               title: 'Door No.',
-  //   //               dataIndex: 'number',
-  //   //               key: 'number',
-  //   //               width: 100,
-  //   //             },
-  //   //           ],
-  //   //         },
-  //   //       ],
-  //   //     },
-  //   //   ],
-  //   // },
-  //   {
-  //     title: 'Company',
-  //     children: [
-  //       {
-  //         title: 'Company Address',
-  //         dataIndex: 'companyAddress',
-  //         key: 'companyAddress',
-  //         width: 200,
-  //       },
-  //       {
-  //         title: 'Company Name',
-  //         dataIndex: 'companyName',
-  //         key: 'companyName',
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     title: 'Gender',
-  //     dataIndex: 'gender',
-  //     key: 'gender',
-  //     width: 80,
-  //     fixed: 'right',
-  //   },
-  // ];
+  const columnsDepartment: ColumnProps<DepartmentReportEntity>[] = [
+    {
+      title: 'STT',
+      key: 'index',
+      width: 40,
+      align: "center",
+      render: (text, record, index) => {
+        return (page.pageDepartment - 1) * 10 + index + 1
+      }
+    },
+    {
+      title: 'Tin tuyển dụng',
+      align: "center",
+      dataIndex: 'recruitmentName',
+      key: 'recruitmentName',
+      width: 150,
+    },
+
+    {
+      title: 'Nguồn ứng viên',
+      children: columnChildrens(),
+    },
+    {
+      title: 'Tổng',
+      align: "center",
+      // dataIndex: 'recruitmentName',
+      key: 'sum',
+      width: 50,
+    },
+  ];
+
+  function columnChildrens() {
+    let column = [];
+    column = department.rows[0]?.sources?.reduce((curr: any, next: any) => {
+      const treeObject = {
+        title: next.sourceCVName,
+        key: next.sourceCVName,
+        dataIndex: next.sourceCVName,
+        width: 100,
+        // children: getChildrenRecursive(next.actions)
+      }
+      curr.push(treeObject);
+      return curr;
+    }, [])
+    return column;
+  }
 
 
   useEffect(() => {
-    // props.getDepartmentReport();
+    props.getDepartmentReport();
     // props.getRecruitmentActivitiesReport();
     // props.getRecruitmentEfficiencyReport();
     // props.getRecruitmentResultReport();
@@ -280,7 +211,23 @@ function ListDashboard(props: IProps) {
   return (
     <>
       <div>Báo cáo tổng hợp nguồn ứng viên</div>
-      {/*>*/}
+      <Table
+        // scroll={{x: "1000px"}}
+        scroll={scroll}
+        className="custom-table"
+        dataSource={department.rows}
+        columns={columnsDepartment}
+        rowKey="recruitmentName"
+        bordered
+        locale={{emptyText: emptyText}}
+        pagination={{
+          current: page.department,
+          pageSize: size.pageDepartment,
+          total: department.total,
+          onChange: value => setPage({...page, pageDepartment: value}),
+          showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,
+        }}
+      />
       <br/>
       <br/>
       <br/>
