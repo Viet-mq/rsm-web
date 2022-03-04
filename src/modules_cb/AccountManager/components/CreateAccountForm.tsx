@@ -142,7 +142,7 @@ function CreateAccountForm(props: CreateAccountFormProps) {
               },
             ],
           })(
-            <Select
+          <Select getPopupContainer={(trigger:any) => trigger.parentNode}
               placeholder="Chọn role"
             >
               <Option value="0">Admin</Option>

@@ -180,7 +180,7 @@ function DetailRecruitment(props: IProps) {
               <Header className='header-candidate-detail'>
                 <div className='header-align recruitment-option'>
                   <div className='recruitment-option__pop-over'>
-                    <Select defaultValue="join" className="select-custom" style={{
+                  <Select getPopupContainer={(trigger:any) => trigger.parentNode} defaultValue="join" className="select-custom" style={{
                       fontWeight: 600,
                       width: 145,
                       marginRight: 15

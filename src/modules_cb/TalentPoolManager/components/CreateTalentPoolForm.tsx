@@ -127,7 +127,7 @@ function CreateTalentPoolForm(props: CreateTalentPoolFormProps) {
                 },
               ],
             })(
-              <Select mode="multiple" className="bg-white text-black" style={fontWeightStyle} placeholder="Chọn thành viên"
+            <Select getPopupContainer={(trigger:any) => trigger.parentNode} mode="multiple" className="bg-white text-black" style={fontWeightStyle} placeholder="Chọn thành viên"
               >
                 {props.listAccountState.rows?.map((item: any, index: any) => (
                   <Option key={index} value={item.username}>{item.fullName}</Option>

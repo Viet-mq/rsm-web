@@ -68,7 +68,7 @@ function RecruitmentManagerPages(props: IProps) {
       </div>
       <div className='header-align recruitment-option'>
         <div className='recruitment-option__pop-over'>
-          <Select defaultValue="join" className="select-custom"
+        <Select getPopupContainer={(trigger:any) => trigger.parentNode} defaultValue="join" className="select-custom"
 
                   style={{
                     fontWeight: 600,
@@ -86,7 +86,7 @@ function RecruitmentManagerPages(props: IProps) {
 
           <div style={{display: "flex", alignItems: "center"}}>
             <span id='sort'>Lọc theo</span>
-            <Select defaultValue="all" className="select-custom"
+          <Select getPopupContainer={(trigger:any) => trigger.parentNode} defaultValue="all" className="select-custom"
                     onSelect={handleCreateBySelected}
                     style={{
                       fontWeight: 600,

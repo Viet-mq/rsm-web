@@ -140,7 +140,7 @@ const arrayUrl=['/statuscv-manager',"/email-manager","/reminder"]
                     <>
                       <div style={{display: "flex"}}>
 
-                        <Select
+                      <Select getPopupContainer={(trigger:any) => trigger.parentNode}
                           showSearch
                           value={search.value}
                           placeholder={"Họ tên, Năm sinh, Quê quán, Trường học, Số điện thoại, Email, Công việc"}

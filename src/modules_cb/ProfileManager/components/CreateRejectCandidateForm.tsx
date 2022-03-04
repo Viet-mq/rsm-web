@@ -165,7 +165,7 @@ function CreateRejectCandidateForm(props: IProps) {
                   },
                 ],
               })(
-                <Select className="bg-white text-black" style={fontWeightStyle}
+              <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle}
                         placeholder="Chọn lý do loại"
                 >
                   {props.reasonReject.rows?.map((item: any, index: any) => (

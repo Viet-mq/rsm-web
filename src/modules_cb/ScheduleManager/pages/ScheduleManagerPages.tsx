@@ -230,7 +230,7 @@ function ScheduleManagerPages(props: IProps) {
               />
             </div>
 
-            <Select defaultValue="all" className="select-custom"
+          <Select getPopupContainer={(trigger:any) => trigger.parentNode} defaultValue="all" className="select-custom"
 
                     style={{
                       fontWeight: 600,

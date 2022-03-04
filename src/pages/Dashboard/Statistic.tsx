@@ -40,7 +40,7 @@ const Statistic = (props: any) => {
         </FilterItem>
 
         <FilterItem>
-          <Select defaultValue={group} style={{width: '470px'}}
+        <Select getPopupContainer={(trigger:any) => trigger.parentNode} defaultValue={group} style={{width: '470px'}}
                   onChange={(value: any) => onChangeFilter(value, 'group')}>
             <Option value="tht">Xưởng Led - Điện tử & TBCSTBCS - Ngành điện tử tụ động - Tổ THT</Option>
             <Option value="smt">Xưởng Led - Điện tử & TBCSTBCS - Ngành điện tử tụ động - Tổ SMT</Option>

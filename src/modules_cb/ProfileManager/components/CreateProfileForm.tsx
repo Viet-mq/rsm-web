@@ -365,7 +365,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                       },
                     ],
                   })(
-                    <Select className="bg-white text-black" style={fontWeightStyle}
+                  <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle}
                     >
                       <Option value="Nam">Nam</Option>
                       <Option value="Nữ">Nữ</Option>
@@ -536,7 +536,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                     },
                   ],
                 })(
-                  <Select className="bg-white text-black" style={fontWeightStyle} placeholder="Chọn trình độ đào tạo"
+                <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle} placeholder="Chọn trình độ đào tạo"
                   >
                     <Option key="1" value="Trung cấp">Trung cấp</Option>
                     <Option key="2" value="Đại học">Đại học</Option>
@@ -569,7 +569,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                     },
                   ],
                 })(
-                  <Select
+                <Select getPopupContainer={(trigger:any) => trigger.parentNode}
                     onSearch={onSearchSchool}
                     onFocus={onFocusSchool}
                     filterOption={(input, option: any) =>
@@ -627,7 +627,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                         },
                       ],
                     })(
-                      <Select
+                    <Select getPopupContainer={(trigger:any) => trigger.parentNode}
                         onSearch={onSearchSourceCV}
                         onFocus={onFocusSourceCV}
                         filterOption={(input, option: any) =>
@@ -668,7 +668,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                     },
                   ],
                 })(
-                  <Select
+                <Select getPopupContainer={(trigger:any) => trigger.parentNode}
                     onSearch={onSearchJob}
                     onFocus={onFocusJob}
                     filterOption={(input, option: any) =>
@@ -708,7 +708,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                     },
                   ],
                 })(
-                  <Select
+                <Select getPopupContainer={(trigger:any) => trigger.parentNode}
                     onSearch={onSearchJobLevel}
                     onFocus={onFocusJobLevel}
                     filterOption={(input, option: any) =>
@@ -747,7 +747,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                     },
                   ],
                 })(
-                  <Select className="bg-white text-black" placeholder="Chọn kỹ năng công việc"
+                <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" placeholder="Chọn kỹ năng công việc"
                           mode="multiple" style={fontWeightStyle}
                   >
                     {props.listSkill.rows?.map((item: any, index: any) => (
@@ -776,7 +776,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                   },
                 ],
               })(
-                <Select
+              <Select getPopupContainer={(trigger:any) => trigger.parentNode}
                   onSearch={onSearchAccount}
                   onFocus={onFocusAccount}
                   // filterOption={(input, option: any) =>
@@ -818,7 +818,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                   },
                 ],
               })(
-                <Select
+              <Select getPopupContainer={(trigger:any) => trigger.parentNode}
                   onSearch={onSearchAccount}
                   onFocus={onFocusAccount}
                   // filterOption={(input, option: any) =>
@@ -861,7 +861,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                     },
                   ],
                 })(
-                  <TreeSelect
+                  <TreeSelect getPopupContainer={(trigger:any) => trigger.parentNode}
                     className="bg-white text-black"
                     dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
                     treeData={treeData}
