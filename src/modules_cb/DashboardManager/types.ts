@@ -1,6 +1,6 @@
 export interface DepartmentReportEntity {
   recruitmentName: string,
-  sources: Source[]
+  sources: any
 }
 
 export interface Source{

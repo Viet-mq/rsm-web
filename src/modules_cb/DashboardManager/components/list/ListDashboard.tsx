@@ -2,8 +2,6 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import env from "src/configs/env";
-import {Table} from "antd";
-import {emptyText} from "src/configs/locales";
 import {
   getDepartmentReport,
   getRecruitmentActivitiesReport,
@@ -12,8 +10,9 @@ import {
   getRejectReport
 } from "../../redux/actions";
 import {ColumnProps} from "antd/lib/table";
-import {DepartmentReportEntity} from "../../types";
-
+import {DepartmentReportEntity, RecruitmentEfficiencyReportEntity} from "../../types";
+import {Table} from "antd";
+import {emptyText} from "src/configs/locales";
 
 const mapStateToProps = (state: RootState) => ({
   dashboardManager: state.dashboardManager,
@@ -58,96 +57,6 @@ function ListDashboard(props: IProps) {
       columnKey: null,
     },
   });
-  // const columnsReject1: ColumnProps<RejectReportEntity>[] = [
-  //   {
-  //     title: 'STT',
-  //     key: 'index',
-  //     width: 40,
-  //     align:"center",
-  //     render: (text, record, index) =>  {return (page - 1) * 10 + index + 1}
-  //   },
-  //   {
-  //     title: 'Tin tuyển dụng',
-  //     dataIndex: 'recruitmentName',
-  //     key: 'recruitmentName',
-  //     width: 100,
-  //     fixed: 'left',
-  //     sorter: (a, b) => a.recruitmentName.length - b.recruitmentName.length,
-  //     sortOrder: state.sortedInfo.columnKey === 'fullName' && state.sortedInfo.order,
-  //   },
-  //   {
-  //     title: 'Tin tuyển dụng',
-  //     dataIndex: 'recruitmentName',
-  //     key: 'recruitmentName',
-  //     width: 100,
-  //     fixed: 'left',
-  //     sorter: (a, b) => a.recruitmentName.length - b.recruitmentName.length,
-  //     sortOrder: state.sortedInfo.columnKey === 'fullName' && state.sortedInfo.order,
-  //   },
-  //   {
-  //     title: 'Other',
-  //     children: [
-  //       {
-  //         title: 'Age',
-  //         dataIndex: 'age',
-  //         key: 'age',
-  //         width: 150,
-  //         sorter: (a, b) => a.age - b.age,
-  //       },
-  //       {
-  //         title: 'Address',
-  //         children: [
-  //           {
-  //             title: 'Street',
-  //             dataIndex: 'street',
-  //             key: 'street',
-  //             width: 150,
-  //           },
-  //           {
-  //             title: 'Block',
-  //             children: [
-  //               {
-  //                 title: 'Building',
-  //                 dataIndex: 'building',
-  //                 key: 'building',
-  //                 width: 100,
-  //               },
-  //               {
-  //                 title: 'Door No.',
-  //                 dataIndex: 'number',
-  //                 key: 'number',
-  //                 width: 100,
-  //               },
-  //             ],
-  //           },
-  //         ],
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     title: 'Company',
-  //     children: [
-  //       {
-  //         title: 'Company Address',
-  //         dataIndex: 'companyAddress',
-  //         key: 'companyAddress',
-  //         width: 200,
-  //       },
-  //       {
-  //         title: 'Company Name',
-  //         dataIndex: 'companyName',
-  //         key: 'companyName',
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     title: 'Gender',
-  //     dataIndex: 'gender',
-  //     key: 'gender',
-  //     width: 80,
-  //     fixed: 'right',
-  //   },
-  // ];
 
   const columnsDepartment: ColumnProps<DepartmentReportEntity>[] = [
     {
@@ -169,50 +78,54 @@ function ListDashboard(props: IProps) {
 
     {
       title: 'Nguồn ứng viên',
-      children: columnChildrens(),
+      children: columnChildren(department.rows[0]?.sources),
     },
     {
       title: 'Tổng',
       align: "center",
-      // dataIndex: 'recruitmentName',
       key: 'sum',
       width: 50,
+      render: (text, record) => {
+        const a:any =Object.values(record.sources)?.reduce((a:any, b:any) => a + b)
+        return <span style={{fontWeight: 500}}>{a}</span>;
+      }
     },
   ];
-
-  function columnChildrens() {
-    let column = [];
-    column = department.rows[0]?.sources?.reduce((curr: any, next: any) => {
-      const treeObject = {
-        title: next.sourceCVName,
-        key: next.sourceCVName,
-        dataIndex: next.sourceCVName,
-        width: 100,
-        // children: getChildrenRecursive(next.actions)
-      }
-      curr.push(treeObject);
-      return curr;
-    }, [])
-    return column;
-  }
-
-
+  
   useEffect(() => {
-    props.getDepartmentReport();
+    props.getDepartmentReport({page: page.pageDepartment, size: size.pageDepartment});
+    props.getRecruitmentEfficiencyReport({page: page.pageRecruitmentEfficiency, size: size.pageRecruitmentEfficiency});
     // props.getRecruitmentActivitiesReport();
-    // props.getRecruitmentEfficiencyReport();
     // props.getRecruitmentResultReport();
     // props.getRejectReport();
     document.title = "Báo cáo thống kê";
 
   }, [])
 
+  function columnChildren(data: any) {
+    let column: any;
+    if (data) {
+      column = Object.keys(data)?.reduce((curr: any, next: any) => {
+        const treeObject = {
+          title: next,
+          key: next,
+          dataIndex: next,
+          width: 100,
+          render: (text: string, record: DepartmentReportEntity) => {
+            return record.sources[next];
+          }
+        }
+        curr.push(treeObject);
+        return curr;
+      }, [])
+      return column;
+    }
+  }
 
   return (
     <>
-      <div>Báo cáo tổng hợp nguồn ứng viên</div>
+      <div className="font-15-bold-500">Báo cáo tổng hợp nguồn ứng viên</div>
       <Table
-        // scroll={{x: "1000px"}}
         scroll={scroll}
         className="custom-table"
         dataSource={department.rows}
@@ -221,7 +134,7 @@ function ListDashboard(props: IProps) {
         bordered
         locale={{emptyText: emptyText}}
         pagination={{
-          current: page.department,
+          current: page.pageDepartment,
           pageSize: size.pageDepartment,
           total: department.total,
           onChange: value => setPage({...page, pageDepartment: value}),
@@ -230,25 +143,24 @@ function ListDashboard(props: IProps) {
       />
       <br/>
       <br/>
-      <br/>
 
-      <div>Báo cáo kết quả tin tuyển dụng và hiệu quả nhân sự</div>
+      <div className="font-15-bold-500">Báo cáo kết quả tin tuyển dụng và hiệu quả nhân sự</div>
       {/*<Table*/}
       {/*  scroll={scroll}*/}
       {/*  className="custom-table"*/}
       {/*  dataSource={recruitmentEfficiency.rows}*/}
-      {/*  columns={columns}*/}
-      {/*  rowKey="id"*/}
+      {/*  columns={columnsRecruitmentEfficiency}*/}
+      {/*  rowKey="recruitmentName"*/}
+      {/*  bordered*/}
       {/*  locale={{emptyText: emptyText}}*/}
       {/*  pagination={{*/}
-      {/*    current: page,*/}
-      {/*    pageSize: size,*/}
-      {/*    total: props.list.total,*/}
-      {/*    onChange: value => setPage(value),*/}
+      {/*    current: page.pageDepartment,*/}
+      {/*    pageSize: size.pageDepartment,*/}
+      {/*    total: department.total,*/}
+      {/*    onChange: value => setPage({...page, pageDepartment: value}),*/}
       {/*    showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,*/}
       {/*  }}*/}
-      {/*>*/}
-      {/*</Table>*/}
+      {/*/>*/}
 
 
       <div>Báo cáo tổng hợp hoạt động tuyển dụng</div>
