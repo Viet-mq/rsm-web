@@ -18,6 +18,7 @@ import {getListSkill} from "../../../../modules_cb/SkillManager/redux/actions";
 import {getListAddress} from "../../../../modules_cb/AddressManager/redux/actions";
 import {getListReasonReject} from "../../../../modules_cb/ReasonRejectManager/redux/actions";
 import {getListRecruitment} from "../../../../modules_cb/RecruitmentManager/redux/actions";
+import {getKeyPoint} from "../../../../modules_cb/EmailManager/redux/actions";
 
 const TOKEN_KEY = 'auth-n-token';
 const SCHOOL ="list-school";
@@ -32,6 +33,7 @@ const SKILL ="list-skill";
 const RECRUITMENT ="list-recruitment";
 const ACCOUNT ="list-account";
 const ADDRESS ="list-address";
+const KEY_POINT ="list-key-point";
 
 export function* loginAsync(action: LoginAction) {
   try {
@@ -61,6 +63,7 @@ export function* loginAsync(action: LoginAction) {
       yield put(getListAddress({page: 1, size: 100}))
       yield put(getListReasonReject({page: 1, size: 100}))
       yield put(getListRecruitment({page: 1, size: 100}))
+      yield put(getKeyPoint())
 
 
     } else {
@@ -100,6 +103,7 @@ export function* loginCheckerAsync() {
     localStorage.removeItem(RECRUITMENT);
     localStorage.removeItem(ACCOUNT);
     localStorage.removeItem(ADDRESS);
+    localStorage.removeItem(KEY_POINT);
 
   }
 }
