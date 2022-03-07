@@ -24,7 +24,7 @@ export interface StatusCV{
 export interface RecruitmentEfficiencyReportEntity {
   recruitmentName: string,
   createBy: string,
-  status: StatusCV[]
+  status: number
 }
 
 export interface RecruitmentResultReportEntity {

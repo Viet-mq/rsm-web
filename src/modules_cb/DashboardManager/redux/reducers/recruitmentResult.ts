@@ -20,20 +20,20 @@ const initState: RecruitmentResultReportState = {
 
 export default (state = initState, {type, total, rows, params, error}: RecruitmentResultReportAction): RecruitmentResultReportState => {
   switch (type) {
-    case Actions.REJECT_REPORT:
+    case Actions.RECRUITMENT_RESULT_REPORT:
       return {
         ...state,
         params,
         loading: true
       }
-    case Actions.REJECT_REPORT_SUCCESS:
+    case Actions.RECRUITMENT_RESULT_REPORT_SUCCESS:
       return {
         ...state,
         total,
         rows,
         loading: false
       }
-    case Actions.REJECT_REPORT_ERROR:
+    case Actions.RECRUITMENT_RESULT_REPORT_ERROR:
       return {
         ...state,
         error,
