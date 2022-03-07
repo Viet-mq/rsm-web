@@ -3,6 +3,7 @@ import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import env from "src/configs/env";
 import {
+  getDepartmentDownload,
   getDepartmentReport,
   getRecruitmentActivitiesReport,
   getRecruitmentEfficiencyReport,
@@ -10,9 +11,11 @@ import {
   getRejectReport
 } from "../../redux/actions";
 import {ColumnProps} from "antd/lib/table";
-import {DepartmentReportEntity, RecruitmentEfficiencyReportEntity} from "../../types";
-import {Table} from "antd";
+import {DepartmentReportEntity} from "../../types";
+import {Button, Icon, Table} from "antd";
 import {emptyText} from "src/configs/locales";
+import {exportExcelFile} from "../../../ProfileManager/redux/services/apis";
+import {exportDepartmentExcelFile} from "../../redux/services/apis";
 
 const mapStateToProps = (state: RootState) => ({
   dashboardManager: state.dashboardManager,
@@ -24,7 +27,8 @@ const connector = connect(mapStateToProps,
     getRecruitmentActivitiesReport,
     getRecruitmentEfficiencyReport,
     getRecruitmentResultReport,
-    getRejectReport
+    getRejectReport,
+    getDepartmentDownload,
   });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -86,12 +90,12 @@ function ListDashboard(props: IProps) {
       key: 'sum',
       width: 50,
       render: (text, record) => {
-        const a:any =Object.values(record.sources)?.reduce((a:any, b:any) => a + b)
+        const a: any = Object.values(record.sources)?.reduce((a: any, b: any) => a + b)
         return <span style={{fontWeight: 500}}>{a}</span>;
       }
     },
   ];
-  
+
   useEffect(() => {
     props.getDepartmentReport({page: page.pageDepartment, size: size.pageDepartment});
     props.getRecruitmentEfficiencyReport({page: page.pageRecruitmentEfficiency, size: size.pageRecruitmentEfficiency});
@@ -122,9 +126,25 @@ function ListDashboard(props: IProps) {
     }
   }
 
+  function btnDepartmentDownload() {
+
+    exportDepartmentExcelFile().then((value: any) => {
+      const data = new Blob([value], {type: 'application/json'});
+      const xlsxURL = window.URL.createObjectURL(data);
+      const tempLink = document.createElement('a');
+      tempLink.href = xlsxURL;
+      tempLink.setAttribute('download', 'Tong-hop-ung-vien-theo-vi-tri-tuyen-dung.xlsx');
+      tempLink.click();
+    });
+  }
+
   return (
     <>
-      <div className="font-15-bold-500">Báo cáo tổng hợp nguồn ứng viên</div>
+      <div className='flex-space-between-item-center'>
+        <div className="font-15-bold-500">Báo cáo tổng hợp nguồn ứng viên</div>
+        <Button onClick={btnDepartmentDownload}><Icon type={"download"}/></Button>
+      </div>
+
       <Table
         scroll={scroll}
         className="custom-table"
