@@ -112,7 +112,7 @@ function ListRecruitment(props: IProps) {
             </div>
           </div>
           <div>
-            <Select defaultValue="all"
+          <Select getPopupContainer={(trigger:any) => trigger.parentNode} defaultValue="all"
 
                     style={{
                       fontWeight: 600,

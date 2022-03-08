@@ -139,7 +139,7 @@ const CollectionCreateForm = Form.create<Props>({name: 'form_in_modal'})(
                       },
                     ],
                   })(
-                    <Select placeholder="Chọn loại nghỉ phép">
+                  <Select getPopupContainer={(trigger:any) => trigger.parentNode} placeholder="Chọn loại nghỉ phép">
                       {leaveDataProps.map((item: OptionProps, index: number) => {
                         return (
                           <Option key={index} value={item.value}>

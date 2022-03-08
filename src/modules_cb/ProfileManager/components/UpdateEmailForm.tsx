@@ -203,7 +203,7 @@ function UpdateEmailForm(props: IProps) {
                   },
                 ],
               })(
-                <Select onSelect={handleSelectMailTemplate} style={fontWeightStyle}
+              <Select getPopupContainer={(trigger:any) => trigger.parentNode} onSelect={handleSelectMailTemplate} style={fontWeightStyle}
                         placeholder="Nhập tên mẫu">
                   {props.emailManager.rows?.map((item: any, index: any) => {
                     return <Option key={index} value={item.id}>{item.name}</Option>

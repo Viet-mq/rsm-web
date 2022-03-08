@@ -1,5 +1,5 @@
-import {ListResponseBase2} from "src/models/common";
-import {GET} from "src/services";
+import {ListResponseBase2, ResponseBase2} from "src/models/common";
+import {EXPORT, GET} from "src/services";
 import {
   DepartmentReportEntity,
   RecruitmentActivitiesReportEntity,
@@ -56,4 +56,24 @@ export const getRejectReport = async (params: any): Promise<ListResponseBase2<Re
     code: response.code,
     message: response.message
   }
+};
+
+export const exportDepartmentExcelFile = async (params?: any): Promise<ResponseBase2> => {
+  return (await EXPORT('api-svc/reportbydepartment/export', params)) as ResponseBase2;
+};
+
+export const exportRecruitmentEfficiencyExcelFile = async (params?: any): Promise<ResponseBase2> => {
+  return (await EXPORT('api-svc/reportrecruitmentefficiency/export', params)) as ResponseBase2;
+};
+
+export const exportRecruitmentActivitiesExcelFile = async (params?: any): Promise<ResponseBase2> => {
+  return (await EXPORT('api-svc/reportrecruitmentactivities/export', params)) as ResponseBase2;
+};
+
+export const exportRecruitmentResultExcelFile = async (params?: any): Promise<ResponseBase2> => {
+  return (await EXPORT('api-svc/reportrecruitmentresult/export', params)) as ResponseBase2;
+};
+
+export const exportRejectExcelFile = async (params?: any): Promise<ResponseBase2> => {
+  return (await EXPORT('api-svc/reportrejectprofile/export', params)) as ResponseBase2;
 };

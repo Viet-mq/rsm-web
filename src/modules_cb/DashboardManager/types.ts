@@ -1,6 +1,6 @@
 export interface DepartmentReportEntity {
   recruitmentName: string,
-  sources: Source[]
+  sources: any
 }
 
 export interface Source{
@@ -24,7 +24,7 @@ export interface StatusCV{
 export interface RecruitmentEfficiencyReportEntity {
   recruitmentName: string,
   createBy: string,
-  status: StatusCV[]
+  status: number
 }
 
 export interface RecruitmentResultReportEntity {

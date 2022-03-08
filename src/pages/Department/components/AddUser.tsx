@@ -117,7 +117,7 @@ const AddUserForm = (props: IProps) => {
                     'position',
                     {},
                   )(
-                    <Select placeholder="Vị trí">
+                  <Select getPopupContainer={(trigger:any) => trigger.parentNode} placeholder="Vị trí">
                       <Option value="">Tất cả</Option>
                     </Select>,
                   )}
@@ -129,7 +129,7 @@ const AddUserForm = (props: IProps) => {
                     'job',
                     {},
                   )(
-                    <Select placeholder="Chúc danh">
+                  <Select getPopupContainer={(trigger:any) => trigger.parentNode} placeholder="Chúc danh">
                       <Option value="">Tất cả</Option>
                     </Select>,
                   )}
@@ -141,7 +141,7 @@ const AddUserForm = (props: IProps) => {
                     'status',
                     {},
                   )(
-                    <Select placeholder="Select a option and change input text above">
+                  <Select getPopupContainer={(trigger:any) => trigger.parentNode} placeholder="Select a option and change input text above">
                       <Option value="">Tất cả</Option>
                       <Option value="working">Đang Làm việc</Option>
                       <Option value="0">Đã nghỉ</Option>

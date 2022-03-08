@@ -112,7 +112,7 @@ function UpdateTalentPoolForm(props: UpdateTalentPoolFormProps) {
               },
             ],
           })(
-            <Select className="bg-white text-black"
+          <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black"
                     mode="multiple"
                     placeholder="Vui lòng chọn người quản lý"
             >

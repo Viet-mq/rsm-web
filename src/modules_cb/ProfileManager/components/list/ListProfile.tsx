@@ -639,12 +639,13 @@ function ListProfile(props: ListProfileProps) {
                       onSearch={btnSearchClicked}
                       placeholder="Họ tên"/>
 
-              <Select style={width}
+            <Select getPopupContainer={(trigger:any) => trigger.parentNode} style={width}
                       placeholder="Vị trí công việc"
                       value={selected.job ? selected.job : undefined}
                       onChange={(value: any) => setSelected({...selected, job: value})}
                       onSearch={onSearchJob}
                       onFocus={onFocusJob}
+
                       filterOption={(input, option: any) =>
                         option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                       }
@@ -656,7 +657,7 @@ function ListProfile(props: ListProfileProps) {
                 ))}
               </Select>
 
-              <Select style={width}
+            <Select getPopupContainer={(trigger:any) => trigger.parentNode} style={width}
                       value={selected.jobLevel ? selected.jobLevel : undefined}
                       onChange={(value: any) => setSelected({...selected, jobLevel: value})}
                       placeholder="Cấp bậc công việc"
@@ -673,7 +674,7 @@ function ListProfile(props: ListProfileProps) {
                 ))}
               </Select>
 
-              <TreeSelect
+              <TreeSelect getPopupContainer={(trigger:any) => trigger.parentNode}
                 style={width}
                 value={selected.department ? selected.department : undefined}
                 dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
@@ -683,7 +684,7 @@ function ListProfile(props: ListProfileProps) {
                 onChange={(value: any) => setSelected({...selected, department: value})}
               />
 
-              <Select
+            <Select getPopupContainer={(trigger:any) => trigger.parentNode}
                 style={width}
                 value={selected.recruitment ? selected.recruitment : undefined}
                 onChange={(value: any) => setSelected({...selected, recruitment: value})}
@@ -701,7 +702,7 @@ function ListProfile(props: ListProfileProps) {
                 ))}
               </Select>
 
-              <Select
+            <Select getPopupContainer={(trigger:any) => trigger.parentNode}
                 style={width}
                 value={selected.talentPool ? selected.talentPool : undefined}
                 onChange={(value: any) => setSelected({...selected, talentPool: value})}

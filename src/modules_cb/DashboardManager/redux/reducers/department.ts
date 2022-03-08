@@ -1,7 +1,7 @@
 import {DepartmentReportEntity} from "../../types";
 import {AppError} from "src/models/common";
 import * as Actions from "../actions";
-import {DepartmentReportAction} from "../actions";
+import {DEPARTMENT_DOWNLOAD, DepartmentReportAction} from "../actions";
 
 export interface DepartmentReportState {
   loading: boolean,
@@ -37,6 +37,11 @@ export default (state = initState, {type, total, rows, params, error}: Departmen
       return {
         ...state,
         error,
+        loading: false
+      }
+      case Actions.DEPARTMENT_DOWNLOAD:
+      return {
+        ...state,
         loading: false
       }
     default:

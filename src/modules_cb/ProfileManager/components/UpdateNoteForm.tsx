@@ -110,7 +110,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                 },
               ],
             })(
-              <Select className="bg-white text-black"
+            <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black"
               >
                 {props.listAccount.rows?.map((item: any) => (
                   <Option key={item.username} value={item.username}>{item.fullName}</Option>

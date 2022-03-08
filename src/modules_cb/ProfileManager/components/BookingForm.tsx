@@ -193,7 +193,7 @@ function BookingForm(props: BookingFormProps) {
                             },
                           ],
                         })(
-                          <Select disabled className="bg-white text-black" style={fontWeightStyle}
+                        <Select getPopupContainer={(trigger:any) => trigger.parentNode} disabled className="bg-white text-black" style={fontWeightStyle}
                                   placeholder="Chọn tin tuyển dụng"
                           >
                             {props.listRecruitment.rows?.map((item: any, index: any) => (
@@ -269,7 +269,7 @@ function BookingForm(props: BookingFormProps) {
                                 },
                               ],
                             })(
-                              <Select className="bg-white text-black" style={fontWeightStyle} placeholder="Nhập địa chỉ"
+                            <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle} placeholder="Nhập địa chỉ"
                               >
                                 {props.listAddress.rows?.map((item: any, index: any) => (
                                   <Option key={index} value={item.id}>{item.officeName} - {item.name}</Option>
@@ -307,7 +307,7 @@ function BookingForm(props: BookingFormProps) {
                             },
                           ],
                         })(
-                          <Select className="bg-white text-black" style={fontWeightStyle}
+                        <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle}
                                   mode="multiple"
                                   placeholder="Chọn thành viên"
                           >
@@ -328,7 +328,7 @@ function BookingForm(props: BookingFormProps) {
                             },
                           ],
                         })(
-                          <Select className="bg-white text-black" style={fontWeightStyle}
+                        <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle}
                           >
                             <Option key="1" value="Phỏng vấn trực tiếp">Phỏng vấn trực tiếp</Option>
                             <Option key="2" value="Phỏng vấn online">Phỏng vấn online</Option>
@@ -415,7 +415,7 @@ function BookingForm(props: BookingFormProps) {
                             },
                           ],
                         })(
-                          <Select disabled className="bg-white text-black" style={fontWeightStyle}
+                        <Select getPopupContainer={(trigger:any) => trigger.parentNode} disabled className="bg-white text-black" style={fontWeightStyle}
                                   placeholder="Chọn tin tuyển dụng"
                           >
                             {props.listRecruitment.rows?.map((item: any, index: any) => (
@@ -491,7 +491,7 @@ function BookingForm(props: BookingFormProps) {
                                 },
                               ],
                             })(
-                              <Select className="bg-white text-black" style={fontWeightStyle} placeholder="Nhập địa chỉ"
+                            <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle} placeholder="Nhập địa chỉ"
                               >
                                 {props.listAddress.rows?.map((item: any, index: any) => (
                                   <Option key={index} value={item.id}>{item.officeName} - {item.name}</Option>
@@ -529,7 +529,7 @@ function BookingForm(props: BookingFormProps) {
                             },
                           ],
                         })(
-                          <Select className="bg-white text-black" style={fontWeightStyle}
+                        <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle}
                                   mode="multiple"
                                   placeholder="Chọn thành viên"
                           >
@@ -550,7 +550,7 @@ function BookingForm(props: BookingFormProps) {
                             },
                           ],
                         })(
-                          <Select className="bg-white text-black" style={fontWeightStyle}
+                        <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle}
                           >
                             <Option key="1" value="Phỏng vấn trực tiếp">Phỏng vấn trực tiếp</Option>
                             <Option key="2" value="Phỏng vấn online">Phỏng vấn online</Option>

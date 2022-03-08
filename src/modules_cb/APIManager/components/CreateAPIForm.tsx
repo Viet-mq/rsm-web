@@ -97,7 +97,7 @@ function CreateApiForm(props: CreateApiFormProps) {
               },
             ],
           })(
-            <Select
+          <Select getPopupContainer={(trigger:any) => trigger.parentNode}
               placeholder="Chọn phương thức"
             >
               <Option value="GET">GET</Option>

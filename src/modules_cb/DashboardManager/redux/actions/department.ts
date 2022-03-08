@@ -12,6 +12,7 @@ export interface DepartmentReportAction {
 export const DEPARTMENT_REPORT = "DEPARTMENT_REPORT";
 export const DEPARTMENT_REPORT_SUCCESS = "DEPARTMENT_REPORT_SUCCESS";
 export const DEPARTMENT_REPORT_ERROR = "DEPARTMENT_REPORT_ERROR";
+export const DEPARTMENT_DOWNLOAD = "DEPARTMENT_DOWNLOAD";
 
 export const getDepartmentReport = (params?: any): DepartmentReportAction => ({
   type: DEPARTMENT_REPORT,
@@ -27,4 +28,8 @@ export const getDepartmentReportSuccess = (total: number, rows: DepartmentReport
 export const getDepartmentReportError = (error: AppError): DepartmentReportAction => ({
   type: DEPARTMENT_REPORT_ERROR,
   error
+});
+
+export const getDepartmentDownload = (): DepartmentReportAction => ({
+  type: DEPARTMENT_DOWNLOAD,
 });
