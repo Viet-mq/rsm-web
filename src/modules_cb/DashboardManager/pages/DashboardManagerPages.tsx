@@ -32,7 +32,7 @@ function DashboardManagerPages(props: IProps) {
       <div className="entryHeader">
         <Row>
           <Col md={16}>
-            <div className="tmp-title-page-size20">Kết quả tuyển dụng</div>
+            <div className="tmp-title-page-size20" style={{margin: 0}}>Kết quả tuyển dụng</div>
           </Col>
           {/*<Col className="d-flex" md={8}>*/}
           {/*  <div className="tmp-btn">*/}

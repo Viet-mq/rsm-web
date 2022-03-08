@@ -1,7 +1,7 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {FormEvent, useEffect, useRef, useState} from "react";
-import {Button, Col, Form, Input, Row} from "antd";
+import {Button, Col, Form, Input, Row, Tooltip} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 
 import {Link} from "react-router-dom";
@@ -26,7 +26,7 @@ interface IProps extends ReduxProps, FormComponentProps {
 
 function UpdateEmailForm(props: IProps) {
   const {getFieldDecorator} = props.form;
-  let {update} = props.emailManager
+  let {update,keyPoint} = props.emailManager
   const [display, setDisplay] = useState(false)
   const [valueEditor, setValueEditor] = useState('')
   const modules = {
@@ -62,18 +62,21 @@ function UpdateEmailForm(props: IProps) {
     'link', 'image', 'video'
   ]
   const fontWeightStyle = {fontWeight: 400};
-
+  let reactQuillRef = useRef<any>()
 
   useEffect(() => {
     if (update.dataUpdate) setValueEditor(update.dataUpdate.content)
   }, []);
 
-  const inputEl = useRef<any>(null);
-  const onButtonClick = () => {
-    // `current` points to the mounted text input element
-    inputEl.current.focus();
+  function onButtonClick(val:any){
+    if(val){
+      const range = reactQuillRef.current.getEditor()?.getSelection();
+      let position = range ? range.index : 0;
+      reactQuillRef.current?.getEditor()?.insertText(position, val)
+    }
 
   };
+
 
 
   function onBtnUpdateClicked(e: FormEvent) {
@@ -165,7 +168,7 @@ function UpdateEmailForm(props: IProps) {
                   className="ql-custom"
                   onChange={handleChangeMailContent}
                   value={valueEditor||""}
-
+                  ref={reactQuillRef}
                   theme={'snow'}
                   modules={modules}
                   formats={formats}
@@ -182,14 +185,17 @@ function UpdateEmailForm(props: IProps) {
         <Col span={6} className="email-option-variable grid-left">
           <div>
             <div className="form-label mb-3">Biến mẫu</div>
-            <div className="mb-2">
-              <span style={{color: "red"}}>[ </span><span>Vị trí tuyển dụng</span><span style={{color: "red"}}> ]</span>
-            </div>
-            <div>
-              <span style={{color: "red"}}>[ </span><span>Vị trí tuyển dụng</span><span style={{color: "red"}}> ]</span>
-            </div>
           </div>
-          <Button onClick={onButtonClick}>Haaha</Button>
+            <div style={{overflow: "auto", height: 610}}>
+              {keyPoint.rows.map((item:any)=>{
+                return <>
+                  <Tooltip placement="top" title={item.description}>
+                    <div style={{marginBottom:5}}><Button style={{width:"100%"}} key={item.id} onClick={()=>onButtonClick(item.id)}>{item.id}</Button></div>
+                  </Tooltip>
+                </>
+
+              })}
+            </div>
         </Col>
       </Row>
       <div className="footer-right">

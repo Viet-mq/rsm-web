@@ -96,7 +96,7 @@ function UpdateApiForm(props: UpdateApiFormProps) {
               },
             ],
           })(
-            <Select disabled={true}
+          <Select getPopupContainer={(trigger:any) => trigger.parentNode} disabled={true}
                     placeholder="Chọn phương thức"
             >
               <Option value="GET">GET</Option>

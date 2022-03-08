@@ -25,8 +25,7 @@ export function* createProfileAsync(action: CreateProfileAction) {
       yield put(showFormCreate(false,params.showForm.recruitment_talentpool));
       yield put(getListProfile(params.list.params));
       if(params.showForm.recruitment_talentpool?.recruitment){
-
-        yield put(getDetailRecruitment(params.showForm.recruitment_talentpool.recruitment))
+        yield put(getDetailRecruitment({id:params.showForm.recruitment_talentpool.recruitment}))
       }
       if(params.showForm.recruitment_talentpool?.talentPool){
         yield put(getListTalentPool(params.showForm.recruitment_talentpool.talentPool))      }

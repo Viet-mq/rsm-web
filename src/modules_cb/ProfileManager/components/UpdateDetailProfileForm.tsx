@@ -303,7 +303,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                         },
                       ],
                     })(
-                      <Select className="bg-white text-black" style={fontWeightStyle}
+                    <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle}
                       >
                         <Option value="Nam">Nam</Option>
                         <Option value="Nữ">Nữ</Option>
@@ -474,7 +474,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                       },
                     ],
                   })(
-                    <Select className="bg-white text-black" style={fontWeightStyle} placeholder="Chọn trình độ đào tạo"
+                  <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle} placeholder="Chọn trình độ đào tạo"
                     >
                       <Option key="1" value="Trung cấp">Trung cấp</Option>
                       <Option key="2" value="Đại học">Đại học</Option>
@@ -507,7 +507,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                       },
                     ],
                   })(
-                    <Select className="bg-white text-black" style={fontWeightStyle} placeholder="Chọn nơi đào tạo"
+                  <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle} placeholder="Chọn nơi đào tạo"
                     >
                       {props.listSchool.rows?.map((item: any, index: any) => (
                         <Option key={index} value={item.id}>{item.name}</Option>
@@ -555,7 +555,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                           },
                         ],
                       })(
-                        <Select className="bg-white text-black" style={fontWeightStyle}
+                      <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle}
                         >
                           {props.listSourceCV.rows?.map((item: any, index: any) => (
                             <Option key={index} value={item.id}>{item.name}</Option>
@@ -586,7 +586,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                       },
                     ],
                   })(
-                    <Select className="bg-white text-black" placeholder="Chọn vị trí công việc" style={fontWeightStyle}
+                  <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" placeholder="Chọn vị trí công việc" style={fontWeightStyle}
                     >
                       {props.listJob.rows?.map((item: any, index: any) => (
                         <Option key={index} value={item.id}>{item.name}</Option>
@@ -616,7 +616,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                       },
                     ],
                   })(
-                    <Select className="bg-white text-black" placeholder="Câp bậc công việc" style={fontWeightStyle}
+                  <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" placeholder="Câp bậc công việc" style={fontWeightStyle}
                     >
                       {props.listJobLevel.rows?.map((item: any, index: any) => (
                         <Option key={index} value={item.id}>{item.name}</Option>
@@ -645,7 +645,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                       },
                     ],
                   })(
-                    <Select className="bg-white text-black" placeholder="Chọn kỹ năng công việc"
+                  <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" placeholder="Chọn kỹ năng công việc"
                             mode="multiple" style={fontWeightStyle}
                     >
                       {props.listSkill.rows?.map((item: any, index: any) => (
@@ -674,7 +674,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                     },
                   ],
                 })(
-                  <Select
+                <Select getPopupContainer={(trigger:any) => trigger.parentNode}
                     className="bg-white text-black select-account-custom"
                     style={fontWeightStyle}
                     optionLabelProp="label"
@@ -710,7 +710,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                     },
                   ],
                 })(
-                  <Select
+                <Select getPopupContainer={(trigger:any) => trigger.parentNode}
                     className="bg-white text-black select-account-custom"
                     style={fontWeightStyle}
                     optionLabelProp="label"
@@ -747,7 +747,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                       },
                     ],
                   })(
-                    <TreeSelect
+                    <TreeSelect getPopupContainer={(trigger:any) => trigger.parentNode}
                       className="bg-white text-black"
                       dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
                       treeData={treeData}

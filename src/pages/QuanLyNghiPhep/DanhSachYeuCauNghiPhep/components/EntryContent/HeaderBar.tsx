@@ -96,7 +96,7 @@ class HeaderBarCustomer extends Component<FormComponentProps, any> {
                       'room',
                       {},
                     )(
-                      <Select placeholder="Đơn vị">
+                    <Select getPopupContainer={(trigger:any) => trigger.parentNode} placeholder="Đơn vị">
                         {roomDataProps.map((item: OptionProps, index: number) => {
                           return (
                             <Option key={index} value={item.value}>
@@ -114,7 +114,7 @@ class HeaderBarCustomer extends Component<FormComponentProps, any> {
                       'position',
                       {},
                     )(
-                      <Select placeholder="Chức vụ">
+                    <Select getPopupContainer={(trigger:any) => trigger.parentNode} placeholder="Chức vụ">
                         {positionDataProps.map((item: OptionProps, index: number) => {
                           return (
                             <Option key={index} value={item.value}>
@@ -132,7 +132,7 @@ class HeaderBarCustomer extends Component<FormComponentProps, any> {
                       'status',
                       {},
                     )(
-                      <Select placeholder="Đang làm việc">
+                    <Select getPopupContainer={(trigger:any) => trigger.parentNode} placeholder="Đang làm việc">
                         {statusDataProps.map((item: OptionProps, index: number) => {
                           return (
                             <Option key={index} value={item.value}>
@@ -164,7 +164,7 @@ class HeaderBarCustomer extends Component<FormComponentProps, any> {
             </Form>
           </Col>
           <Col md={3}>
-            <Select placeholder="Tuỳ chọn hiển thị" showSearch style={{width: '100%'}}>
+          <Select getPopupContainer={(trigger:any) => trigger.parentNode} placeholder="Tuỳ chọn hiển thị" showSearch style={{width: '100%'}}>
               {optionDataProps.map((item: OptionProps, index: number) => {
                 return (
                   <Option key={index} value={item.value}>

@@ -291,7 +291,7 @@ function CreateScheduleInterview(props: IProps) {
                       },
                     ],
                   })(
-                    <Select className="bg-white text-black" style={fontWeightStyle}
+                  <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle}
                             onSelect={handleSelectRecruitment} placeholder="Chọn tin tuyển dụng"
                     >
                       {props.listRecruitment.rows?.map((item: any, index: any) => (
@@ -366,7 +366,7 @@ function CreateScheduleInterview(props: IProps) {
                           },
                         ],
                       })(
-                        <Select className="bg-white text-black" style={fontWeightStyle} placeholder="Nhập địa chỉ"
+                      <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle} placeholder="Nhập địa chỉ"
                         >
                           {props.listAddress.rows?.map((item: any, index: any) => (
                             <Option key={index} value={item.id}>{item.officeName} - {item.name}</Option>
@@ -403,7 +403,7 @@ function CreateScheduleInterview(props: IProps) {
                 {/*      },*/}
                 {/*    ],*/}
                 {/*  })(*/}
-                {/*    <Select className="bg-white text-black" style={fontWeightStyle}*/}
+                {/*  <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle}*/}
                 {/*            mode="multiple"*/}
                 {/*            placeholder="Chọn thành viên"*/}
                 {/*    >*/}
@@ -424,7 +424,7 @@ function CreateScheduleInterview(props: IProps) {
                       },
                     ],
                   })(
-                    <Select className="bg-white text-black" style={fontWeightStyle}
+                  <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle}
                     >
                       <Option key="1" value="Phỏng vấn trực tiếp">Phỏng vấn trực tiếp</Option>
                       <Option key="2" value="Phỏng vấn online">Phỏng vấn online</Option>

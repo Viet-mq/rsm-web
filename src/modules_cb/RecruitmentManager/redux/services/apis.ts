@@ -23,6 +23,16 @@ export const searchUserRecruitment= async (params: any): Promise<ListResponseBas
   };
 };
 
+export const getDetailRecruitment= async (params: any): Promise<ListResponseBase2<RecruitmentEntity>> => {
+  const response = (await GET('acc-svc/account/detail', params)) as any;
+  return {
+    total: response.total,
+    rows: response.rows || [],
+    code: response.code,
+    message: response.message
+  };
+};
+
 export const createRecruitment = async (params?: any): Promise<ResponseBase2> => {
   return (await POST('api-svc/recruitment/create', params)) as ResponseBase2;
 };

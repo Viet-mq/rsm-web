@@ -324,7 +324,7 @@ function InformationForm(props: IProps) {
                       },
                     ],
                   })(
-                    <Select showSearch
+                  <Select getPopupContainer={(trigger:any) => trigger.parentNode} showSearch
                             onChange={onFormChange}
                             onSearch={onSearchJob}
                             onFocus={onFocusJob}
@@ -364,7 +364,7 @@ function InformationForm(props: IProps) {
                         },
                       ],
                     })(
-                      <Select onChange={onFormChange} className="bg-white text-black" style={fontWeightStyle}
+                    <Select getPopupContainer={(trigger:any) => trigger.parentNode} onChange={onFormChange} className="bg-white text-black" style={fontWeightStyle}
                               placeholder="Chọn địa điểm"
                       >
                         {props.listAddress.rows?.map((item: any, index: any) => (
@@ -387,7 +387,7 @@ function InformationForm(props: IProps) {
                         },
                       ],
                     })(
-                      <Select onChange={onFormChange} className="bg-white text-black" style={fontWeightStyle}>
+                    <Select getPopupContainer={(trigger:any) => trigger.parentNode} onChange={onFormChange} className="bg-white text-black" style={fontWeightStyle}>
                         <Option key="1" value="Toàn thời gian">Toàn thời gian</Option>
                         <Option key="2" value="Bán thời gian">Bán thời gian</Option>
                         <Option key="3" value="Hợp đồng thời vụ">Hợp đồng thời vụ</Option>
@@ -450,7 +450,7 @@ function InformationForm(props: IProps) {
                       },
                     ],
                   })(
-                    <Select onChange={onFormChange} className="bg-white text-black" style={fontWeightStyle}
+                  <Select getPopupContainer={(trigger:any) => trigger.parentNode} onChange={onFormChange} className="bg-white text-black" style={fontWeightStyle}
                             placeholder={"Chọn talent pool"}>
                       {props.listTalentPool.rows?.map((item: any, index: any) => (
                         <Option key={index} value={item.id}>{item.name}</Option>
@@ -473,7 +473,7 @@ function InformationForm(props: IProps) {
                     },
                   ],
                 })(
-                  <Select onSelect={handleSelect} className="bg-white text-black"
+                <Select getPopupContainer={(trigger:any) => trigger.parentNode} onSelect={handleSelect} className="bg-white text-black"
                           style={fontWeightStyle}>
                     <Option key="1" value="Chi tiết mức lương">Chi tiết mức lương</Option>
                     <Option key="2" value="Thỏa thuận">Thỏa thuận</Option>

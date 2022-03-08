@@ -1,10 +1,20 @@
 import {ListResponseBase2, ResponseBase2} from "src/models/common";
 import {GET, POST} from "src/services";
-import {EmailEntity} from "../../types";
+import {EmailEntity, KeyPointEntity} from "../../types";
 
 
 export const getListEmail = async (params: any): Promise<ListResponseBase2<EmailEntity>> => {
   const response = (await GET('upload-svc/template/list', params)) as any;
+  return {
+    total: response.total,
+    rows: response.rows || [],
+    code: response.code,
+    message: response.message
+  }
+};
+
+export const getKeyPoint = async (params: any): Promise<ListResponseBase2<KeyPointEntity>> => {
+  const response = (await GET('upload-svc/keypoint/list', params)) as any;
   return {
     total: response.total,
     rows: response.rows || [],

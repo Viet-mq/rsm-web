@@ -47,5 +47,12 @@ export interface JobEntity {
   size:number,
 }
 
+export interface KeyPointEntity {
+  id: string,
+  description: string
+}
+
+
+
 
 

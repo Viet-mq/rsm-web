@@ -132,7 +132,7 @@ function ChangeRecruitmentForm(props: IProps) {
             </div>
 
             <div className="select-option">
-              <Select style={{width: "100%", paddingTop: 15}}
+            <Select getPopupContainer={(trigger:any) => trigger.parentNode} style={{width: "100%", paddingTop: 15}}
                       value={valuesSelect}
                       onSelect={handleChangeRecruitment}
                       placeholder={"Chọn tin tuyển dụng"}>
@@ -181,7 +181,7 @@ function ChangeRecruitmentForm(props: IProps) {
             </div>
 
             <div className="select-option">
-              <Select style={{width: "100%", paddingTop: 15}} onSelect={handleSelectRecruitment}
+            <Select getPopupContainer={(trigger:any) => trigger.parentNode} style={{width: "100%", paddingTop: 15}} onSelect={handleSelectRecruitment}
                       placeholder={"Chọn tin tuyển dụng"}>
                 {props.recruitment.rows?.map((item: any, index: any) => {
                   return <Option key={index} value={item.id}>{item.title}</Option>

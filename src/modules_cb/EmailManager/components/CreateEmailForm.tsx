@@ -1,7 +1,7 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {FormEvent, useRef, useState} from "react";
-import {Button, Col, Form, Input, Row} from "antd";
+import {Button, Col, Form, Icon, Input, Row, Tooltip} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 
 import {Link} from "react-router-dom";
@@ -9,7 +9,9 @@ import {CreateEmailRequest} from "../types";
 import {createEmail} from "../redux/actions";
 import ReactQuill from "react-quill";
 
-const mapStateToProps = (state: RootState) => ({})
+const mapStateToProps = (state: RootState) => ({
+  emailManager:state.emailManager
+})
 
 const connector = connect(mapStateToProps,
   {
@@ -21,6 +23,7 @@ interface IProps extends ReduxProps, FormComponentProps {
 }
 
 function CreateEmailForm(props: IProps) {
+  const {keyPoint}=props.emailManager
   const {getFieldDecorator} = props.form;
   const [display, setDisplay] = useState(false)
   const [valueEditor, setValueEditor] = useState('')
@@ -59,12 +62,14 @@ function CreateEmailForm(props: IProps) {
   const fontWeightStyle = {fontWeight: 400};
   let reactQuillRef = useRef<any>()
 
-  let quillRef: ReactQuill ;
 
-  function onButtonClick(){
-    const range = quillRef?.getEditor()?.getSelection();
-    let position = range ? range.index : 0;
-    quillRef?.getEditor()?.insertText(position, 'hello my friend')
+  function onButtonClick(val:any){
+    if(val){
+      const range = reactQuillRef.current.getEditor()?.getSelection();
+      let position = range ? range.index : 0;
+      reactQuillRef.current?.getEditor()?.insertText(position, val)
+    }
+
   };
 
   function onBtnCreateClicked(e: FormEvent) {
@@ -149,9 +154,7 @@ function CreateEmailForm(props: IProps) {
               <div className="form-label">
                 <div className="mb-2">Nội dung <span className="value-required">*</span></div>
                 <ReactQuill
-                  ref={(el: any) => {
-                    reactQuillRef = el
-                  }}
+                  ref={reactQuillRef}
                   style={fontWeightStyle}
                   className="ql-custom"
                   onChange={handleChangeMailContent}
@@ -171,14 +174,18 @@ function CreateEmailForm(props: IProps) {
         <Col span={6} className="email-option-variable grid-left">
           <div>
             <div className="form-label mb-3">Biến mẫu</div>
-            <div className="mb-2">
-              <span style={{color: "red"}}>[ </span><span>Vị trí tuyển dụng</span><span style={{color: "red"}}> ]</span>
-            </div>
-            <div>
-              <span style={{color: "red"}}>[ </span><span>Vị trí tuyển dụng</span><span style={{color: "red"}}> ]</span>
-            </div>
           </div>
-          <Button onClick={onButtonClick}>InsertText</Button>
+          <div style={{overflow: "auto", height: 610}}>
+            {keyPoint.rows.map((item:any)=>{
+              return <>
+                <Tooltip placement="top" title={item.description}>
+                  <div style={{marginBottom:5}}><Button style={{width:"100%"}} key={item.id} onClick={()=>onButtonClick(item.id)}>{item.id}</Button></div>
+                </Tooltip>
+              </>
+
+            })}
+          </div>
+
         </Col>
       </Row>
       <div className="footer-right">
