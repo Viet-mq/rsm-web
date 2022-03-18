@@ -132,12 +132,16 @@ function KanbanProcess(props: IProps) {
         statusCVId: newState[dInd].id,
         username:username,
       })
-      // let req: ChangeProcessRequest = ({
-      //   changeProcess: processForm,
-      // })
-      //
-      // props.changeProcess(req,false)
-      props.showChangeProcessForm(true,processForm)
+
+      //--------------Chuyển luôn không bật popup show email--------------
+      let req: ChangeProcessRequest = ({
+        changeProcess: processForm,
+      })
+
+      props.changeProcess(req,false)
+
+      //--------------Xử lý việc show form email----------
+      // props.showChangeProcessForm(true,processForm)
     }
   }
 
