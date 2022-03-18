@@ -23,7 +23,6 @@ import {JobEntity} from "../../JobManager/types";
 import {JobLevelEntity} from "../../JobLevelManager/types";
 import {DepartmentEntity} from "../../DepartmentManager/types";
 import {getSearchRecruitment} from "../../RecruitmentManager/redux/actions";
-import {getSearchTalentPool} from "../../TalentPoolManager/redux/actions";
 import {SourceCVEntity} from "../../SourceCVManager/types";
 import {SchoolEntity} from "../../SchoolManager/types";
 import {getSearchAccount} from "../../AccountManager/redux/actions";
@@ -150,7 +149,6 @@ function CreateProfileForm(props: CreateProfileFormProps) {
           facebook: values.facebook,
           github: values.github,
           linkedin: values.linkedin,
-          otherTech: values.otherTech,
           pic: values.pic,
           skype: values.skype,
           status: values.status,
@@ -365,7 +363,8 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                       },
                     ],
                   })(
-                  <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle}
+                    <Select getPopupContainer={(trigger: any) => trigger.parentNode} className="bg-white text-black"
+                            style={fontWeightStyle}
                     >
                       <Option value="Nam">Nam</Option>
                       <Option value="Nữ">Nữ</Option>
@@ -478,22 +477,6 @@ function CreateProfileForm(props: CreateProfileFormProps) {
             </div>
 
             <div className="flex-space-between">
-              <div className="mr-2" style={{width: 230}}>
-                <Form.Item label="Other Tech" className="form-label"  {...formItemLayout}>
-                  {getFieldDecorator('otherTech', {
-                    initialValue: "",
-                    rules: [
-                      {
-                        message: 'Vui lòng nhập Other Tech',
-                        required: false,
-                      },
-                    ],
-                  })(
-                    <Input placeholder="Nhập Other Tech" className="bg-white text-black"/>
-                  )}
-                </Form.Item>
-              </div>
-
               <div className="flex-process">
                 <Form.Item label="Web" className="form-label"  {...formItemLayout}>
                   {getFieldDecorator('web', {
@@ -536,7 +519,8 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                     },
                   ],
                 })(
-                <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle} placeholder="Chọn trình độ đào tạo"
+                  <Select getPopupContainer={(trigger: any) => trigger.parentNode} className="bg-white text-black"
+                          style={fontWeightStyle} placeholder="Chọn trình độ đào tạo"
                   >
                     <Option key="1" value="Trung cấp">Trung cấp</Option>
                     <Option key="2" value="Đại học">Đại học</Option>
@@ -569,17 +553,17 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                     },
                   ],
                 })(
-                <Select getPopupContainer={(trigger:any) => trigger.parentNode}
-                    onSearch={onSearchSchool}
-                    onFocus={onFocusSchool}
-                    filterOption={(input, option: any) =>
-                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    }
-                    optionFilterProp="children"
-                    showSearch
-                    className="bg-white text-black"
-                    style={fontWeightStyle}
-                    placeholder="Chọn nơi đào tạo"
+                  <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                          onSearch={onSearchSchool}
+                          onFocus={onFocusSchool}
+                          filterOption={(input, option: any) =>
+                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                          }
+                          optionFilterProp="children"
+                          showSearch
+                          className="bg-white text-black"
+                          style={fontWeightStyle}
+                          placeholder="Chọn nơi đào tạo"
                   >
                     {school.map((item: any, index: any) => (
                       <Option key={index} value={item.id}>{item.name}</Option>
@@ -627,17 +611,17 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                         },
                       ],
                     })(
-                    <Select getPopupContainer={(trigger:any) => trigger.parentNode}
-                        onSearch={onSearchSourceCV}
-                        onFocus={onFocusSourceCV}
-                        filterOption={(input, option: any) =>
-                          option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }
-                        optionFilterProp="children"
-                        showSearch
-                        placeholder={"Nguồn ứng tuyển"}
-                        className="bg-white text-black"
-                        style={fontWeightStyle}
+                      <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                              onSearch={onSearchSourceCV}
+                              onFocus={onFocusSourceCV}
+                              filterOption={(input, option: any) =>
+                                option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                              }
+                              optionFilterProp="children"
+                              showSearch
+                              placeholder={"Nguồn ứng tuyển"}
+                              className="bg-white text-black"
+                              style={fontWeightStyle}
                       >
                         {sourceCV.map((item: any, index: any) => (
                           <Option key={index} value={item.id}>{item.name}</Option>
@@ -668,17 +652,17 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                     },
                   ],
                 })(
-                <Select getPopupContainer={(trigger:any) => trigger.parentNode}
-                    onSearch={onSearchJob}
-                    onFocus={onFocusJob}
-                    filterOption={(input, option: any) =>
-                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    }
-                    optionFilterProp="children"
-                    showSearch
-                    className="bg-white text-black"
-                    placeholder="Chọn vị trí công việc"
-                    style={fontWeightStyle}
+                  <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                          onSearch={onSearchJob}
+                          onFocus={onFocusJob}
+                          filterOption={(input, option: any) =>
+                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                          }
+                          optionFilterProp="children"
+                          showSearch
+                          className="bg-white text-black"
+                          placeholder="Chọn vị trí công việc"
+                          style={fontWeightStyle}
                   >
                     {job.map((item: any, index: any) => (
                       <Option key={index} value={item.id}>{item.name}</Option>
@@ -708,17 +692,17 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                     },
                   ],
                 })(
-                <Select getPopupContainer={(trigger:any) => trigger.parentNode}
-                    onSearch={onSearchJobLevel}
-                    onFocus={onFocusJobLevel}
-                    filterOption={(input, option: any) =>
-                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    }
-                    optionFilterProp="children"
-                    showSearch
-                    className="bg-white text-black"
-                    placeholder="Câp bậc công việc"
-                    style={fontWeightStyle}
+                  <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                          onSearch={onSearchJobLevel}
+                          onFocus={onFocusJobLevel}
+                          filterOption={(input, option: any) =>
+                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                          }
+                          optionFilterProp="children"
+                          showSearch
+                          className="bg-white text-black"
+                          placeholder="Câp bậc công việc"
+                          style={fontWeightStyle}
                   >
                     {jobLevel.map((item: any, index: any) => (
                       <Option key={index} value={item.id}>{item.name}</Option>
@@ -747,8 +731,15 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                     },
                   ],
                 })(
-                <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" placeholder="Chọn kỹ năng công việc"
-                          mode="multiple" style={fontWeightStyle}
+                  <Select
+                    getPopupContainer={(trigger: any) => trigger.parentNode}
+                    className="bg-white text-black"
+                    placeholder="Chọn kỹ năng công việc"
+                    mode="multiple" style={fontWeightStyle}
+                    filterOption={(input, option: any) =>
+                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                    optionLabelProp="children"
                   >
                     {props.listSkill.rows?.map((item: any, index: any) => (
                       <Option key={index} value={item.id}>{item.name}</Option>
@@ -776,18 +767,23 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                   },
                 ],
               })(
-              <Select getPopupContainer={(trigger:any) => trigger.parentNode}
+                <Select
+                  getPopupContainer={(trigger: any) => trigger.parentNode}
                   onSearch={onSearchAccount}
                   onFocus={onFocusAccount}
-                  // filterOption={(input, option: any) =>
-                  //   option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                  // }
-                  // optionFilterProp="children"
+                  filterOption={(input, option: any) =>
+                    option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    || option.props.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
                   showSearch
                   className="bg-white text-black"
                   style={fontWeightStyle}
                   optionLabelProp="label"
                   placeholder="Chọn người giới thiệu">
+
+                  <Option key={"none"} value={""} label={"<None>"}>
+                    <div>&lt;None&gt;</div>
+                  </Option>
                   {account.map((item: any, index: any) => (
                     <Option key={index} value={item.username} label={item.fullName}>
                       <div className="flex-items-center" style={{paddingTop: 5}}>
@@ -804,6 +800,8 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                       </div>
                     </Option>
                   ))}
+
+
                 </Select>
               )}
             </Form.Item>
@@ -818,18 +816,22 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                   },
                 ],
               })(
-              <Select getPopupContainer={(trigger:any) => trigger.parentNode}
-                  onSearch={onSearchAccount}
-                  onFocus={onFocusAccount}
-                  // filterOption={(input, option: any) =>
-                  //   option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                  // }
-                  // optionFilterProp="children"
-                  showSearch
-                  className="bg-white text-black"
-                  style={fontWeightStyle}
-                  optionLabelProp="label"
-                  placeholder="Chọn HR phụ trách">
+                <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                        onSearch={onSearchAccount}
+                        onFocus={onFocusAccount}
+                        filterOption={(input, option: any) =>
+                          option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                          || option.props.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
+                        optionFilterProp="children"
+                        showSearch
+                        className="bg-white text-black"
+                        style={fontWeightStyle}
+                        optionLabelProp="label"
+                        placeholder="Chọn HR phụ trách">
+                  <Option key={"none"} value={""} label={"<None>"}>
+                    <div>&lt;None&gt;</div>
+                  </Option>
                   {account.map((item: any, index: any) => (
                     <Option key={index} value={item.username} label={item.fullName}>
                       <div className="flex-items-center" style={{paddingTop: 5}}>
@@ -861,13 +863,13 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                     },
                   ],
                 })(
-                  <TreeSelect getPopupContainer={(trigger:any) => trigger.parentNode}
-                    className="bg-white text-black"
-                    dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
-                    treeData={treeData}
-                    style={fontWeightStyle}
-                    placeholder="Chọn bộ phận, phòng ban"
-                    treeDefaultExpandAll
+                  <TreeSelect getPopupContainer={(trigger: any) => trigger.parentNode}
+                              className="bg-white text-black"
+                              dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
+                              treeData={treeData}
+                              style={fontWeightStyle}
+                              placeholder="Chọn bộ phận, phòng ban"
+                              treeDefaultExpandAll
                   />
                 )}
                 <Button

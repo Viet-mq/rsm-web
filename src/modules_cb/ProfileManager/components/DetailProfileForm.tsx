@@ -682,14 +682,15 @@ function DetailProfileForm(props: DetailProfileFormProps) {
             <span>{detail.result?.hometown || "Không có địa chỉ"}</span><br/>
             <Icon type="skype" className='mr-1'/>
             <span>{detail.result?.skype }</span><br/>
+            <Icon type="facebook" className='mr-1'/>
+            <a href={detail.result?.facebook} target={"_blank"}>{detail.result?.facebook }</a><br/>
             <Icon type="linkedin" className='mr-1'/>
             <span>{detail.result?.linkedin }</span><br/>
             <Icon type="github" className='mr-1'/>
             <span>{detail.result?.github }</span><br/>
             <Icon type="global" className='mr-1'/>
             <span>{detail.result?.web }</span><br/>
-            <Icon type="deployment-unit" className='mr-1'/>
-            <span>{detail.result?.otherTech }</span><br/>
+
             <h1>Social profiles</h1>
           </div>
 

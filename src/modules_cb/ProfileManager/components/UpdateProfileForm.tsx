@@ -165,7 +165,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           facebook: values.facebook,
           github: values.github,
           linkedin: values.linkedin,
-          otherTech: values.otherTech,
           pic: values.pic,
           skype: values.skype,
           status: values.status,
@@ -491,22 +490,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
             </div>
 
             <div className="flex-space-between">
-              <div className="mr-2" style={{width: 230}}>
-                <Form.Item label="Other Tech" className="form-label"  {...formItemLayout}>
-                  {getFieldDecorator('otherTech', {
-                    initialValue: props.showForm.data_update?.otherTech,
-                    rules: [
-                      {
-                        message: 'Vui lòng nhập Other Tech',
-                        required: false,
-                      },
-                    ],
-                  })(
-                    <Input placeholder="Nhập Other Tech" className="bg-white text-black"/>
-                  )}
-                </Form.Item>
-              </div>
-
               <div className="flex-process">
                 <Form.Item label="Web" className="form-label"  {...formItemLayout}>
                   {getFieldDecorator('web', {
@@ -758,8 +741,17 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                     },
                   ],
                 })(
-                <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" placeholder="Chọn kỹ năng công việc"
-                          mode="multiple" style={fontWeightStyle}
+                <Select
+                  getPopupContainer={(trigger:any) => trigger.parentNode}
+                  className="bg-white text-black"
+                  placeholder="Chọn kỹ năng công việc"
+                  mode="multiple"
+                  style={fontWeightStyle}
+
+                  filterOption={(input, option: any) =>
+                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
+                  optionLabelProp="children"
                   >
                     {props.listSkill.rows?.map((item: any, index: any) => (
                       <Option key={index} value={item.id}>{item.name}</Option>
@@ -795,6 +787,9 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                   style={fontWeightStyle}
                   optionLabelProp="label"
                   placeholder="Chọn người giới thiệu">
+                <Option key={"none"} value={""} label={"<None>"}>
+                  <div>&lt;None&gt;</div>
+                </Option>
                   {account.map((item: any, index: any) => (
                     <Option key={index} value={item.username} label={item.fullName}>
                       <div className="flex-items-center" style={{paddingTop: 5}}>
@@ -833,6 +828,9 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                   style={fontWeightStyle}
                   optionLabelProp="label"
                   placeholder="Chọn HR phụ trách">
+                <Option key={"none"} value={""} label={"<None>"}>
+                  <div>&lt;None&gt;</div>
+                </Option>
                   {account.map((item: any, index: any) => (
                     <Option key={index} value={item.username} label={item.fullName}>
                       <div className="flex-items-center" style={{paddingTop: 5}}>
