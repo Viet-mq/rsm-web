@@ -123,7 +123,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           facebook: values.facebook,
           github: values.github,
           linkedin: values.linkedin,
-          otherTech: values.otherTech,
           pic: values.pic,
           skype: values.skype,
           status: values.status,
@@ -416,22 +415,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
               </div>
 
               <div className="flex-space-between">
-                <div className="mr-2" style={{width: 230}}>
-                  <Form.Item label="Other Tech" className="form-label"  {...formItemLayout}>
-                    {getFieldDecorator('otherTech', {
-                      initialValue: props.showForm.data_update_detail?.otherTech,
-                      rules: [
-                        {
-                          message: 'Vui lòng nhập Other Tech',
-                          required: false,
-                        },
-                      ],
-                    })(
-                      <Input placeholder="Nhập Other Tech" className="bg-white text-black"/>
-                    )}
-                  </Form.Item>
-                </div>
-
                 <div className="flex-process">
                   <Form.Item label="Web" className="form-label"  {...formItemLayout}>
                     {getFieldDecorator('web', {

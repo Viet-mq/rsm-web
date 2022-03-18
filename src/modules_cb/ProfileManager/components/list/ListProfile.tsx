@@ -2,7 +2,7 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import {ColumnProps} from "antd/lib/table";
-import {Avatar, Badge, Button, Icon, Popconfirm, Select, Table, Tooltip, TreeSelect} from "antd";
+import {Avatar, Badge, Button, DatePicker, Icon, Popconfirm, Select, Table, Tooltip, TreeSelect} from "antd";
 import {emptyText} from "src/configs/locales";
 import {
   deleteProfile,
@@ -14,7 +14,8 @@ import {
   showFormUploadCV
 } from "../../redux/actions";
 import {DataShowBooking, DeleteProfileRequest, DetailCV, ProfileEntity} from "../../types";
-import moment from "moment";
+import moment from 'moment';
+import 'moment/locale/vi';
 import {GiFemale, GiMale, ImPhoneHangUp} from "react-icons/all";
 import {useHistory, useLocation} from "react-router-dom";
 import Search from "antd/es/input/Search";
@@ -32,8 +33,11 @@ import {RecruitmentEntity} from "../../../RecruitmentManager/types";
 import {getSearchJobLevel} from "../../../JobLevelManager/redux/actions";
 import {getSearchRecruitment} from "../../../RecruitmentManager/redux/actions";
 import {getSearchSourceCV} from "../../../SourceCVManager/redux/actions";
+import {UserAccount} from "../../../AccountManager/types";
+import {getSearchAccount} from "../../../AccountManager/redux/actions";
 
 const {Option} = Select;
+const {RangePicker} = DatePicker;
 
 const mapStateToProps = (state: RootState) => ({
   profileManager: state.profileManager,
@@ -45,6 +49,8 @@ const mapStateToProps = (state: RootState) => ({
   listTalentPool: state.talentPoolManager.list,
   listJob: state.jobManager.list,
   searchJob: state.jobManager.search,
+  listAccount: state.accountManager.list
+
 
 })
 const connector = connect(mapStateToProps, {
@@ -60,7 +66,8 @@ const connector = connect(mapStateToProps, {
   getSearchJobLevel,
   getSearchRecruitment,
   getSearchTalentPool,
-  getSearchSourceCV
+  getSearchSourceCV,
+  getSearchAccount
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -80,7 +87,7 @@ function ListProfile(props: ListProfileProps) {
   const {pathname} = useLocation();
   const [page, setPage] = useState(1);
   const size = 30;
-  const width = {width: "11%"};
+  const width = {width: 200};
   const [state, setState] = useState<any>({
     filteredInfo: null,
     sortedInfo: {
@@ -88,6 +95,7 @@ function ListProfile(props: ListProfileProps) {
       columnKey: null,
     },
   });
+  const fontWeightStyle = {fontWeight: 400};
   const [keySearch, setKeySearch] = useState<string>('')
   const [dataSource, setDataSource] = useState<ProfileEntity[] | any>(undefined)
   const [selected, setSelected] = useState<any>({
@@ -97,7 +105,12 @@ function ListProfile(props: ListProfileProps) {
     department: null,
     talentPool: null,
     recruitment: null,
+    hRef: null,
+    pic: null,
+    startDateRange: undefined,
+    endDateRange: undefined,
   })
+  const dateFormat = 'DD/MM/YYYY';
   const columns: ColumnProps<ProfileEntity>[] = [
     {
       title: 'STT',
@@ -389,6 +402,7 @@ function ListProfile(props: ListProfileProps) {
   const [department, setDepartment] = useState<DepartmentEntity[]>([]);
   const [recruitment, setRecruitment] = useState<RecruitmentEntity[]>([]);
   const [talentPool, setTalentPool] = useState<JobEntity[]>([]);
+  const [account, setAccount] = useState<UserAccount[] | any>([]);
 
   const [trigger, setTrigger] = useState({
     job: false,
@@ -396,6 +410,7 @@ function ListProfile(props: ListProfileProps) {
     department: false,
     recruitment: false,
     talentPool: false,
+    account: false,
   })
 
   useEffect(() => {
@@ -421,7 +436,33 @@ function ListProfile(props: ListProfileProps) {
       });
       props.getDetailTalentPool({id: props.idTalentPool})
 
-    } else props.getListProfile({page: page, size: 30});
+    } else if (
+      selected.fullName||
+        selected.job||
+        selected.jobLevel||
+        selected.department||
+        selected.talentPool||
+        selected.recruitment||
+        selected.hrRef||
+        selected.pic||
+        selected.from||
+        selected.to) {
+      props.getListProfile({
+        fullName: selected.name,
+        job: selected.job,
+        jobLevel: selected.jobLevel,
+        department: selected.department,
+        talentPool: selected.talentPool,
+        recruitment: selected.recruitment,
+        hrRef: selected.hrRef,
+        pic: selected.pic,
+        from: selected.startDateRange ? selected.startDateRange * 1 : undefined,
+        to: selected.endDateRange ? selected.endDateRange * 1 : undefined,
+        page: page,
+        size: 30,
+      })
+    }
+    else props.getListProfile({page: page, size: 30});
   }, [page, pathname])
 
   useEffect(() => {
@@ -498,7 +539,12 @@ function ListProfile(props: ListProfileProps) {
       jobLevel: null,
       department: null,
       talentPool: null,
-      recruitment: null
+      recruitment: null,
+      hRef: null,
+      pic: null,
+
+      startDateRange: undefined,
+      endDateRange: undefined,
     });
 
     props.getListProfile({page: 1, size: 30});
@@ -568,6 +614,10 @@ function ListProfile(props: ListProfileProps) {
       department: selected.department,
       talentPool: selected.talentPool,
       recruitment: selected.recruitment,
+      hrRef: selected.hrRef,
+      pic: selected.pic,
+      from: selected.startDateRange ? selected.startDateRange * 1 : undefined,
+      to: selected.endDateRange ? selected.endDateRange * 1 : undefined,
       page: 1,
       size: 30,
     })
@@ -609,6 +659,26 @@ function ListProfile(props: ListProfileProps) {
     setJob(props.listTalentPool.rows)
   }
 
+  function onChangeDateRange(dates: any) {
+    if (dates) {
+      dates[0]?.set({hour: 0, minute: 0, second: 0})
+      dates[1]?.set({hour: 23, minute: 59, second: 59})
+      let [start, end] = [dates[0], dates[1]];
+      // setValueDateRange([start, end])
+
+      setSelected({...selected, startDateRange: start, endDateRange: end})
+
+    }
+  }
+
+  function onSearchAccount(value: any) {
+    props.getSearchAccount({name: value})
+    setTrigger({...trigger, account: true})
+  }
+
+  function onFocusAccount() {
+    setAccount(props.listAccount.rows)
+  }
 
   return (
     <>
@@ -630,34 +700,40 @@ function ListProfile(props: ListProfileProps) {
             <br/>
 
             <div className="c-filter-profile">
+              <div style={{width: 200, display: "inline-block"}}>
+                <Search
+                  // style={{display: "inline",width:200}}
+                  value={selected.name}
 
-              <Search style={{display: "inline"}}
-                      value={selected.name}
-                      onChange={e => {
-                        setSelected({...selected, name: e.target.value});
-                      }}
-                      onSearch={btnSearchClicked}
-                      placeholder="Họ tên"/>
+                  onChange={e => {
+                    setSelected({...selected, name: e.target.value});
+                  }}
+                  onSearch={btnSearchClicked}
+                  placeholder="Họ tên"/>
+              </div>
 
-            <Select getPopupContainer={(trigger:any) => trigger.parentNode} style={width}
+              <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                      className="bg-white text-black form-label"
+                      style={{...width, ...fontWeightStyle}}
                       placeholder="Vị trí công việc"
                       value={selected.job ? selected.job : undefined}
                       onChange={(value: any) => setSelected({...selected, job: value})}
                       onSearch={onSearchJob}
                       onFocus={onFocusJob}
-
                       filterOption={(input, option: any) =>
                         option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                       }
                       optionFilterProp="children"
                       showSearch
               >
-                {job.map((item: any, index: any) => (
+                {job?.map((item: any, index: any) => (
                   <Option key={index} value={item.id}>{item.name}</Option>
                 ))}
               </Select>
 
-            <Select getPopupContainer={(trigger:any) => trigger.parentNode} style={width}
+              <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                      className="bg-white text-black form-label"
+                      style={{...width, ...fontWeightStyle}}
                       value={selected.jobLevel ? selected.jobLevel : undefined}
                       onChange={(value: any) => setSelected({...selected, jobLevel: value})}
                       placeholder="Cấp bậc công việc"
@@ -674,53 +750,144 @@ function ListProfile(props: ListProfileProps) {
                 ))}
               </Select>
 
-              <TreeSelect getPopupContainer={(trigger:any) => trigger.parentNode}
-                style={width}
-                value={selected.department ? selected.department : undefined}
-                dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
-                treeData={treeData}
-                placeholder="Phòng ban"
-                treeDefaultExpandAll
-                onChange={(value: any) => setSelected({...selected, department: value})}
+              <TreeSelect getPopupContainer={(trigger: any) => trigger.parentNode}
+                          className="bg-white text-black form-label"
+                          style={{...width, ...fontWeightStyle}}
+                          value={selected.department ? selected.department : undefined}
+                          dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
+                          treeData={treeData}
+                          placeholder="Phòng ban"
+                          treeDefaultExpandAll
+                          onChange={(value: any) => setSelected({...selected, department: value})}
               />
 
-            <Select getPopupContainer={(trigger:any) => trigger.parentNode}
-                style={width}
-                value={selected.recruitment ? selected.recruitment : undefined}
-                onChange={(value: any) => setSelected({...selected, recruitment: value})}
-                placeholder="Tin tuyển dụng"
-                onSearch={onSearchRecruitment}
-                onFocus={onFocusRecruitment}
-                filterOption={(input, option: any) =>
-                  option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                }
-                optionFilterProp="children"
-                showSearch
+              <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                      className="bg-white text-black form-label"
+                      style={{...width, ...fontWeightStyle}}
+                      value={selected.recruitment ? selected.recruitment : undefined}
+                      onChange={(value: any) => setSelected({...selected, recruitment: value})}
+                      placeholder="Tin tuyển dụng"
+                      onSearch={onSearchRecruitment}
+                      onFocus={onFocusRecruitment}
+                      filterOption={(input, option: any) =>
+                        option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                      optionFilterProp="children"
+                      showSearch
               >
                 {recruitment.map((item: any, index: any) => (
                   <Option key={index} value={item.id}>{item.title}</Option>
                 ))}
               </Select>
 
-            <Select getPopupContainer={(trigger:any) => trigger.parentNode}
-                style={width}
-                value={selected.talentPool ? selected.talentPool : undefined}
-                onChange={(value: any) => setSelected({...selected, talentPool: value})}
-                placeholder="Talent Pools"
-                onSearch={onSearchTalentPool}
-                onFocus={onFocusTalentPool}
-                filterOption={(input, option: any) =>
-                  option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                }
-                optionFilterProp="children"
-                showSearch
+              <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                      value={selected.talentPool ? selected.talentPool : undefined}
+                      onChange={(value: any) => setSelected({...selected, talentPool: value})}
+                      placeholder="Talent Pools"
+                      onSearch={onSearchTalentPool}
+                      onFocus={onFocusTalentPool}
+                      className="bg-white text-black form-label"
+                      style={{...width, ...fontWeightStyle}}
+                      filterOption={(input, option: any) =>
+                        option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                      optionFilterProp="children"
+                      showSearch
               >
                 {talentPool.map((item: any, index: any) => (
                   <Option key={index} value={item.id}>{item.name}</Option>
                 ))}
               </Select>
 
-              <Button type="primary" style={{width: "16%"}}
+              <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                      onSearch={onSearchAccount}
+                      onFocus={onFocusAccount}
+
+                      filterOption={(input, option: any) =>
+                        option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        || option.props.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                      showSearch
+                      className="bg-white text-black form-label"
+                      style={{width: "200px", ...fontWeightStyle}}
+                      optionLabelProp="label"
+                      onChange={e => {
+                        setSelected({...selected, hrRef: e});
+                      }}
+                      placeholder="Chọn người giới thiệu">
+
+                <Option key={"none"} value={""} label={"<None>"}>
+                  <div>&lt;None&gt;</div>
+                </Option>
+                {account.map((item: any, index: any) => (
+                  <Option key={index} value={item.username} label={item.fullName}>
+                    <div className="flex-items-center" style={{paddingTop: 5}}>
+                      <div style={{marginRight: 10}}>
+                        <Avatar src={item.image ? item.image : "#"}
+                                style={{backgroundColor: item?.avatarColor, marginRight: 5}}>
+                          {getInitials(item.fullName)}
+                        </Avatar>
+                      </div>
+                      <div className="c-list-profile" style={{fontWeight: 500}}>
+                        <div style={{height: 25}}>{item.fullName}</div>
+                        <div style={{height: 25}} className="more-information">{item.email}</div>
+                      </div>
+                    </div>
+                  </Option>
+                ))}
+              </Select>
+
+              <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                      onSearch={onSearchAccount}
+                      onFocus={onFocusAccount}
+
+                      filterOption={(input, option: any) =>
+                        option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        || option.props.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                      optionFilterProp="children"
+                      showSearch
+                      onChange={e => {
+                        setSelected({...selected, pic: e});
+                      }}
+                      className="bg-white text-black form-label"
+                      style={{width: "200px", ...fontWeightStyle}}
+                      optionLabelProp="label"
+                      placeholder="Chọn HR phụ trách">
+                <Option key={"none"} value={""} label={"<None>"}>
+                  <div>&lt;None&gt;</div>
+                </Option>
+                {account.map((item: any, index: any) => (
+                  <Option key={index} value={item.username} label={item.fullName}>
+                    <div className="flex-items-center" style={{paddingTop: 5}}>
+                      <div style={{marginRight: 10}}>
+                        <Avatar src={item.image ? item.image : "#"}
+                                style={{backgroundColor: item?.avatarColor, marginRight: 5}}>
+                          {getInitials(item.fullName)}
+                        </Avatar>
+                      </div>
+                      <div className="c-list-profile" style={{fontWeight: 500}}>
+                        <div style={{height: 25}}>{item.fullName}</div>
+                        <div style={{height: 25}} className="more-information">{item.email}</div>
+                      </div>
+                    </div>
+                  </Option>
+                ))}
+              </Select>
+
+              <RangePicker
+                style={{width: 250}}
+                format={dateFormat}
+                value={[selected.startDateRange, selected.endDateRange]}
+                // allowClear={false}
+                ranges={{
+                  'Hôm nay': [moment(), moment()],
+                  'Tháng này': [moment().startOf('month'), moment().endOf('month')],
+                }}
+                onChange={onChangeDateRange}
+              />
+
+              <Button type="primary" style={width}
                       onClick={btnSearchClicked}
               >Tìm kiếm</Button>
 

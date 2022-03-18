@@ -36,12 +36,25 @@ export const getListProfile = async (params: any): Promise<ListResponseBase2<Pro
   if (params.statusCV !== null && params.statusCV !== undefined) {
     url += "statusCV=" + params.statusCV + "&"
   }
+  if (params.hrRef !== null && params.hrRef !== undefined) {
+    url += "hrRef=" + params.hrRef + "&"
+  }
+  if (params.pic !== null && params.pic !== undefined) {
+    url += "pic=" + params.pic + "&"
+  }
+  if (params.from !== null && params.from !== undefined) {
+    url += "from=" + params.from + "&"
+  }
+  if (params.to !== null && params.to !== undefined) {
+    url += "to=" + params.to + "&"
+  }
   if (params.page !== null && params.page !== undefined) {
     url += "page=" + params.page + "&"
   }
   if (params.size !== null && params.size !== undefined) {
     url += "size=" + params.size
   }
+
   const response = (await GET(url,)) as any;
   return {
     total: response.total,
