@@ -4,6 +4,7 @@ import deleteDepartment, {DeleteDepartmentState} from "./deleteDepartment";
 import create, {CreateDepartmentState} from "./create";
 import showForm, {DepartmentFormState} from "./showForm";
 import update, {UpdateDepartmentState} from "./update";
+import search, {SearchListDepartmentState} from "./search";
 
 export interface DepartmentManagerModuleState {
   list: DepartmentListState,
@@ -11,6 +12,7 @@ export interface DepartmentManagerModuleState {
   create: CreateDepartmentState,
   showForm: DepartmentFormState,
   update: UpdateDepartmentState,
+  search:SearchListDepartmentState
 }
 
 export default combineReducers<DepartmentManagerModuleState>({
@@ -19,4 +21,5 @@ export default combineReducers<DepartmentManagerModuleState>({
   create,
   showForm,
   update,
+  search,
 });

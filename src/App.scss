@@ -2227,6 +2227,15 @@ div.tox.tox-silver-sink.tox-tinymce-aux{
 .ql-custom{
   .ql-container{
     height: 300px !important;
-
   }
+}
+
+.ql-required{
+  .ql-toolbar.ql-snow{
+    border: 1px solid red;
+  }
+  .ql-container.ql-snow{
+    border: 1px solid red;
+  }
+
 }

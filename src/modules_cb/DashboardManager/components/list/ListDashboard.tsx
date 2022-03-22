@@ -277,8 +277,6 @@ function ListDashboard(props: IProps) {
     document.title = "Báo cáo thống kê";
   }, [])
 
-  console.log(recruitmentResult.rows)
-
   function columnChildren(data: any) {
     let column: any;
     if (data) {
@@ -412,7 +410,7 @@ function ListDashboard(props: IProps) {
         className="custom-table"
         dataSource={recruitmentActivities.rows}
         columns={columnsRecruitmentActivities}
-        rowKey="createBy"
+        rowKey="index"
         bordered
         locale={{emptyText: emptyText}}
         pagination={{
@@ -437,7 +435,7 @@ function ListDashboard(props: IProps) {
         className="custom-table"
         dataSource={recruitmentResult.rows}
         columns={columnsRecruitmentResult}
-        rowKey="recruitmentName"
+        rowKey="index"
         bordered
         locale={{emptyText: emptyText}}
         pagination={{
@@ -462,7 +460,7 @@ function ListDashboard(props: IProps) {
         className="custom-table"
         dataSource={reject.rows}
         columns={columnsReject}
-        rowKey="reason"
+        rowKey="index"
         bordered
         locale={{emptyText: emptyText}}
         pagination={{

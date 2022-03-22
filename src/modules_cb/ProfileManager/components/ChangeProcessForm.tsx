@@ -8,9 +8,10 @@ import {changeProcess, showChangeProcessForm} from "../redux/actions";
 import {getListRecruitment} from "../../RecruitmentManager/redux/actions";
 import {ChangeProcessRequest, MailForm, MailRequest, ProcessForm} from "../types";
 import 'react-quill/dist/quill.snow.css';
-import {getListEmail} from "../../EmailManager/redux/actions";
+import {getListEmail, searchListEmail} from "../../EmailManager/redux/actions";
 import {EmailEntity} from "../../EmailManager/types";
 import ReactQuill from "react-quill";
+import {SchoolEntity} from "../../SchoolManager/types";
 
 const {Option} = Select;
 const {TextArea} = Input;
@@ -19,7 +20,7 @@ const mapStateToProps = (state: RootState) => ({
   profileManager: state.profileManager,
   recruitment: state.recruitmentManager.list,
   listAccount: state.accountManager.list,
-  emailManager: state.emailManager.list,
+  listEmail: state.emailManager.list,
 })
 
 const connector = connect(mapStateToProps,
@@ -27,7 +28,8 @@ const connector = connect(mapStateToProps,
     showChangeProcessForm,
     changeProcess,
     getListRecruitment,
-    getListEmail
+    getListEmail,
+    searchListEmail
   })
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -50,6 +52,11 @@ function ChangeProcessForm(props: IProps) {
   const [valueEditor, setValueEditor] = useState("")
   const inputFile = useRef<any>(null)
   const [fileAttach, setFileAttach] = useState<any>([]);
+  const [email, setEmail] = useState<EmailEntity[]>([]);
+  const [trigger, setTrigger] = useState({
+    email: false,
+  
+  })
   const modules = {
     toolbar: [
       [{'header': '1'}, {'header': '2'}],
@@ -82,6 +89,7 @@ function ChangeProcessForm(props: IProps) {
     'list', 'bullet', 'indent',
     'link', 'image', 'video'
   ]
+  
 
   useEffect(() => {
     if (showForm.show_change_process) {
@@ -94,11 +102,11 @@ function ChangeProcessForm(props: IProps) {
 
 
   useEffect(() => {
-    if (showForm.show_change_process && props.emailManager) {
-      setEmailTemp(props.emailManager.rows[0])
-      setValueEditor(props.emailManager.rows[0]?.content)
+    if (showForm.show_change_process && props.listEmail) {
+      setEmailTemp(props.listEmail.rows[0])
+      setValueEditor(props.listEmail.rows[0]?.content)
     }
-  }, [props.emailManager])
+  }, [props.listEmail])
 
 
   const handleCloseForm = () => {
@@ -162,7 +170,7 @@ function ChangeProcessForm(props: IProps) {
   }
 
   function handleSelectMailTemplate(value: any) {
-    const selectEmail= props.emailManager.rows.find((item:any)=>item.id===value)
+    const selectEmail= props.listEmail.rows.find((item:any)=>item.id===value)
     setEmailTemp(selectEmail)
     setValueEditor(selectEmail.content)
   }
@@ -182,6 +190,15 @@ function ChangeProcessForm(props: IProps) {
     // `current` points to the mounted file input element
     inputFile.current.click();
   };
+
+  function onSearchEmail(value: any) {
+    props.searchListEmail({name: value})
+    setTrigger({...trigger, email: true})
+  }
+
+  function onFocusEmail() {
+    setEmail(props.listEmail.rows)
+  }
 
   return (
     <>
@@ -231,9 +248,23 @@ function ChangeProcessForm(props: IProps) {
                     },
                   ],
                 })(
-                <Select getPopupContainer={(trigger:any) => trigger.parentNode} onSelect={handleSelectMailTemplate} style={fontWeightStyle}
-                          placeholder="Nhập tên mẫu">
-                    {props.emailManager.rows?.map((item: any, index: any) => {
+                <Select 
+                  getPopupContainer={(trigger:any) => trigger.parentNode} 
+                  onSelect={handleSelectMailTemplate} 
+                  style={fontWeightStyle}
+                  placeholder="Nhập tên mẫu"
+
+                  onSearch={onSearchEmail}
+                  onFocus={onFocusEmail}
+                  filterOption={(input, option: any) =>
+                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  }
+                  optionFilterProp="children"
+                  showSearch
+                  className="bg-white text-black form-label"
+
+                >
+                    {props.listEmail.rows?.map((item: any, index: any) => {
                       return <Option key={index} value={item.id}>{item.name}</Option>
                     })}
                   </Select>

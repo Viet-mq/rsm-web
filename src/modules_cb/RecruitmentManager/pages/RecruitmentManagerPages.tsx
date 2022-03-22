@@ -30,7 +30,8 @@ function RecruitmentManagerPages(props: IProps) {
 
   const dateFormat = 'DD/MM/YYYY';
   const timeFormat = 'HH:mm';
-  const [valueDateRange, setValueDateRange] = useState<any[]>([moment(props.listRecruitment.rows[props.listRecruitment?.rows.length - 1]?.deadLine), moment(props.listRecruitment.rows[0]?.deadLine)])
+  // const [valueDateRange, setValueDateRange] = useState<any[]>([moment(props.listRecruitment.rows[props.listRecruitment?.rows.length - 1]?.deadLine), moment(props.listRecruitment.rows[0]?.deadLine)])
+  const [valueDateRange, setValueDateRange] = useState<any[]>([])
 
   useEffect(() => {
     document.title = "Quản lý tin tuyển dụng";
@@ -103,9 +104,10 @@ function RecruitmentManagerPages(props: IProps) {
             <RangePicker
               format={dateFormat}
               value={valueDateRange}
+              placeholder={["Ngày tạo","Ngày tạo"]}
               allowClear={false}
               ranges={{
-                // 'Hôm nay': [moment(), moment()],
+                'Hôm nay': [moment(), moment()],
                 'Tháng này': [moment().startOf('month'), moment().endOf('month')],
               }}
               onChange={onChangeDateRange}

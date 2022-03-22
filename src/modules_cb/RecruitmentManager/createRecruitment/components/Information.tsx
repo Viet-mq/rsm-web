@@ -12,6 +12,8 @@ import ReactQuill from "react-quill";
 import CreateJobForm from "../../../JobManager/components/CreateJobForm";
 import Loading from "../../../../components/Loading";
 import {JobEntity} from "../../../JobManager/types";
+import {DepartmentEntity} from "../../../DepartmentManager/types";
+import {searchListDepartment} from "../../../DepartmentManager/redux/actions";
 
 const {Option} = Select;
 
@@ -23,6 +25,7 @@ const mapStateToProps = (state: RootState) => ({
   searchJob: state.jobManager.search,
   createJob: state.jobManager.create,
   listProcess: state.statuscvManager.list,
+  listDepartment: state.departmentManager.list
 })
 
 const connector = connect(mapStateToProps,
@@ -32,6 +35,7 @@ const connector = connect(mapStateToProps,
     createSteps,
     getDataRecruitmentUpdate,
     getSearchJob,
+    searchListDepartment
   });
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -53,18 +57,19 @@ function InformationForm(props: IProps) {
     detailOfSalary: "Chi tiết mức lương",
     // salaryDescription: "Từ 0 VND đến 0 VND"
   })
-  const [display, setDisplay] = useState({
-    interest: false,
-    requirementOfJob: false,
-    jobDescription: false
-
-  })
+  const [displayInterest, setDisplayInterest] = useState(false)
+  const [displayRequirementOfJob, setDisplayRequirementOfJob] = useState(false)
+  const [displayJobDescription, setDisplayJobDescription] = useState(false)
   const [valueEditor, setValueEditor] = useState({
     interest: isEdit ? update.dataUpdate?.interest : createSteps.request?.interest || "",
     requirementOfJob: isEdit ? update.dataUpdate?.requirementOfJob : createSteps.request?.requirementOfJob || "",
     jobDescription: isEdit ? update.dataUpdate?.jobDescription : createSteps.request?.jobDescription || ""
   })
-
+  //
+  // const [inputForm, setInputForm] = useState({
+  //   title: isEdit ? update.dataUpdate?.title : createSteps.request?.title || "",
+  //   quantity: isEdit ? update.dataUpdate?.quantity : createSteps.request?.quantity || "",
+  // })
   const modules = {
     toolbar: [
       [{'header': '1'}, {'header': '2'}],
@@ -104,15 +109,16 @@ function InformationForm(props: IProps) {
     }
   };
   const [job, setJob] = useState<JobEntity[]>([]);
-
+  const [department, setDepartment] = useState<DepartmentEntity[]>([]);
   const [trigger, setTrigger] = useState({
     job: false,
-
+    department: false,
   })
-
+  const [salaryDescription, setSalaryDescription] = useState("")
   useEffect(() => {
     document.title = "Quản lý tin tuyển dụng";
     setJob(props.listJob.rows)
+    setDepartment(props.listDepartment.rows)
     if (isEdit) {
       setSalary({
         from: update.dataUpdate?.from,
@@ -122,31 +128,48 @@ function InformationForm(props: IProps) {
     }
   }, []);
 
-  useEffect(() => {
-    if (trigger.job) {
-      setJob(props.searchJob.rows)
-    }
-  }, [props.searchJob.rows])
+
+  // useEffect(() => {
+  //   if (trigger.job) {
+  //     setJob(props.searchJob.rows)
+  //   }
+  // }, [props.searchJob.rows])
 
   function onFormChange(salaryChange?: any, valueEditorChange?: any) {
     setTimeout(() => props.form.validateFields((err, values) => {
-        let salaryDescription: any = '';
+
         switch (salaryChange.detailOfSalary) {
           case "Chi tiết mức lương":
-            salaryDescription = ` Từ ${salaryChange.from.toLocaleString()} VND đến ${salaryChange.to.toLocaleString()} VND`;
+            setSalaryDescription(` Từ ${salaryChange.from.toLocaleString()} VND đến ${salaryChange.to.toLocaleString()} VND`);
             break
           case "Thỏa thuận":
-            salaryDescription = " Thỏa thuận";
+            setSalaryDescription(" Thỏa thuận");
             break
           case "Từ ...":
-            salaryDescription = ` Từ ${salaryChange.from.toLocaleString()} VND`;
+            setSalaryDescription(` Từ ${salaryChange.from.toLocaleString()} VND`);
             break
           case "Up to ...":
-            salaryDescription = ` Up to ${salaryChange.to.toLocaleString()} VND`;
+            setSalaryDescription(` Up to ${salaryChange.to.toLocaleString()} VND`);
             break
         }
 
-        if (!err) {
+        if (!valueEditor.interest) {
+          setDisplayInterest(true)
+        }
+
+        if (!valueEditor.requirementOfJob) {
+          setDisplayRequirementOfJob(true)
+        }
+
+        if (!valueEditor.jobDescription) {
+          setDisplayJobDescription(true)
+        }
+
+        if (!err &&
+          valueEditor.interest &&
+          valueEditor.requirementOfJob &&
+          valueEditor.jobDescription) {
+
           if (isEdit) {
             if (update.dataUpdate) {
               let req: RecruitmentEntity = {
@@ -154,6 +177,7 @@ function InformationForm(props: IProps) {
                 addressId: values.address,
                 deadLine: values.deadLine * 1,
                 jobId: values.job,
+                departmentId: values.department,
                 quantity: values.quantity,
                 talentPoolId: values.talentPool,
                 title: values.title,
@@ -165,16 +189,16 @@ function InformationForm(props: IProps) {
                 requirementOfJob: valueEditor.requirementOfJob,
                 jobDescription: valueEditor.jobDescription,
                 interest: valueEditor.interest,
-
               }
               props.getDataRecruitmentUpdate(req)
             }
           } else {
-            if (valueEditorChange.interest && valueEditorChange.jobDescription && valueEditorChange.requirementOfJob) {
+            // if (valueEditorChange.interest && valueEditorChange.jobDescription && valueEditorChange.requirementOfJob) {
               let req: CreateRecruitmentRequest = ({
                 address: values.address,
                 deadLine: values.deadLine * 1,
                 job: values.job,
+                department: values.department,
                 quantity: values.quantity,
                 talentPool: values.talentPool,
                 title: values.title,
@@ -190,10 +214,10 @@ function InformationForm(props: IProps) {
                 interviewProcess: props.listProcess.rows,
                 interviewer: []
               })
+              console.log(req)
               props.createSteps(req)
-            }
+            // }
           }
-
           props.checkInformationValidate(true)
         } else {
           props.checkInformationValidate(false)
@@ -228,12 +252,10 @@ function InformationForm(props: IProps) {
   function handleChangeInterest(content: any) {
 
     if (content === "<p><br></p>") {
-      setDisplay({...display, interest: true})
+      setDisplayInterest(true)
       setValueEditor({...valueEditor, interest: ""})
     } else {
-      const newDisplay = display
-      display.interest = false
-      setDisplay(newDisplay)
+      setDisplayInterest(false)
       const newValueEditor = valueEditor
       newValueEditor.interest = content
       onFormChange(salary, newValueEditor)
@@ -243,12 +265,10 @@ function InformationForm(props: IProps) {
 
   function handleChangeRequirement(content: any) {
     if (content === "<p><br></p>") {
-      setDisplay({...display, requirementOfJob: true})
+      setDisplayRequirementOfJob(true)
       setValueEditor({...valueEditor, requirementOfJob: ""})
     } else {
-      const newDisplay = display
-      display.requirementOfJob = false
-      setDisplay(newDisplay)
+      setDisplayRequirementOfJob(false)
       const newValueEditor = valueEditor
       newValueEditor.requirementOfJob = content
       onFormChange(salary, newValueEditor)
@@ -258,12 +278,10 @@ function InformationForm(props: IProps) {
 
   function handleChangeJobDescription(content: any) {
     if (content === "<p><br></p>") {
-      setDisplay({...display, jobDescription: true})
+      setDisplayJobDescription(true)
       setValueEditor({...valueEditor, jobDescription: ""})
     } else {
-      const newDisplay = display
-      display.jobDescription = false
-      setDisplay(newDisplay)
+      setDisplayJobDescription(false)
       const newValueEditor = valueEditor
       newValueEditor.jobDescription = content
       onFormChange(salary, newValueEditor)
@@ -289,6 +307,15 @@ function InformationForm(props: IProps) {
     setJob(props.listJob.rows)
   }
 
+  function onSearchDepartment(value: any) {
+    props.searchListDepartment({name: value})
+    setTrigger({...trigger, department: true})
+  }
+
+  function onFocusDepartment() {
+    setDepartment(props.listDepartment.rows)
+  }
+
   return (
     <>
       <div className="main-content">
@@ -309,7 +336,9 @@ function InformationForm(props: IProps) {
                     },
                   ],
                 })(
-                  <Input placeholder="Nhập tiêu đề" onChange={onFormChange} className="bg-white text-black"/>
+                  <Input placeholder="Nhập tiêu đề"
+                         onChange={onFormChange}
+                         className="bg-white text-black"/>
                 )}
               </Form.Item>
 
@@ -319,12 +348,12 @@ function InformationForm(props: IProps) {
                     initialValue: isEdit ? update.dataUpdate?.jobId : createSteps.request?.job || undefined,
                     rules: [
                       {
-                        message: 'Vui lòng nhập vị trí tuyển dụng',
+                        message: 'Vui lòng chọn vị trí tuyển dụng',
                         required: true,
                       },
                     ],
                   })(
-                  <Select getPopupContainer={(trigger:any) => trigger.parentNode} showSearch
+                    <Select getPopupContainer={(trigger: any) => trigger.parentNode} showSearch
                             onChange={onFormChange}
                             onSearch={onSearchJob}
                             onFocus={onFocusJob}
@@ -351,6 +380,46 @@ function InformationForm(props: IProps) {
                   </Button>
                 </div>
               </Form.Item>
+
+              <Form.Item className="form-label" label="Phòng ban" labelCol={{span: 24}} wrapperCol={{span: 24}}>
+                <div style={{display: 'flex'}}>
+                  {getFieldDecorator('department', {
+                    initialValue: isEdit ? update.dataUpdate?.departmentId : createSteps.request?.department || undefined,
+                    rules: [
+                      {
+                        message: 'Vui lòng chọn phòng ban',
+                        required: true,
+                      },
+                    ],
+                  })(
+                    <Select getPopupContainer={(trigger: any) => trigger.parentNode} showSearch
+                            onChange={onFormChange}
+                            onSearch={onSearchDepartment}
+                            onFocus={onFocusDepartment}
+                            className="bg-white text-black"
+                            style={fontWeightStyle}
+                            placeholder="Chọn phòng ban"
+                            filterOption={(input, option: any) =>
+                              option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
+                            optionFilterProp="children"
+                    >
+                      {department.map((item: any, index: any) => (
+                        <Option key={index} value={item.id}>{item.name}</Option>
+                      ))}
+                    </Select>)}
+                  <Button
+                    size="small"
+                    className="ant-btn ml-1 mr-1 ant-btn-sm"
+                    style={{height: '32px'}}
+                    onClick={handleCreateJob}
+
+                  >
+                    <Icon type="plus"/>
+                  </Button>
+                </div>
+              </Form.Item>
+
               <Row style={{marginTop: 15}}>
                 <Col span={12} style={{paddingRight: 10}}>
                   <Form.Item className="form-label" label="Địa điểm làm việc" labelCol={{span: 24}}
@@ -364,7 +433,10 @@ function InformationForm(props: IProps) {
                         },
                       ],
                     })(
-                    <Select getPopupContainer={(trigger:any) => trigger.parentNode} onChange={onFormChange} className="bg-white text-black" style={fontWeightStyle}
+                      <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                              onChange={onFormChange}
+                              className="bg-white text-black"
+                              style={fontWeightStyle}
                               placeholder="Chọn địa điểm"
                       >
                         {props.listAddress.rows?.map((item: any, index: any) => (
@@ -387,7 +459,11 @@ function InformationForm(props: IProps) {
                         },
                       ],
                     })(
-                    <Select getPopupContainer={(trigger:any) => trigger.parentNode} onChange={onFormChange} className="bg-white text-black" style={fontWeightStyle}>
+                      <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                              onChange={onFormChange}
+                              className="bg-white text-black"
+                              style={fontWeightStyle}
+                      >
                         <Option key="1" value="Toàn thời gian">Toàn thời gian</Option>
                         <Option key="2" value="Bán thời gian">Bán thời gian</Option>
                         <Option key="3" value="Hợp đồng thời vụ">Hợp đồng thời vụ</Option>
@@ -412,8 +488,11 @@ function InformationForm(props: IProps) {
                         },
                       ],
                     })(
-                      <InputNumber onChange={onFormChange} style={{width: "100%"}} type="number" min={0}
-                                   className="bg-white text-black"/>
+                      <InputNumber
+                        onChange={onFormChange}
+                        style={{width: "100%"}}
+                        type="number" min={0}
+                        className="bg-white text-black"/>
                     )}
                   </Form.Item>
                 </Col>
@@ -429,7 +508,10 @@ function InformationForm(props: IProps) {
                         },
                       ],
                     })(
-                      <DatePicker onChange={onFormChange} format={dateFormat} style={{width: "100%"}}/>
+                      <DatePicker
+                        onChange={onFormChange}
+                        format={dateFormat}
+                        style={{width: "100%"}}/>
                     )}
                   </Form.Item>
                 </Col>
@@ -450,8 +532,11 @@ function InformationForm(props: IProps) {
                       },
                     ],
                   })(
-                  <Select getPopupContainer={(trigger:any) => trigger.parentNode} onChange={onFormChange} className="bg-white text-black" style={fontWeightStyle}
-                            placeholder={"Chọn talent pool"}>
+                    <Select
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
+                      onChange={onFormChange}
+                      className="bg-white text-black" style={fontWeightStyle}
+                      placeholder={"Chọn talent pool"}>
                       {props.listTalentPool.rows?.map((item: any, index: any) => (
                         <Option key={index} value={item.id}>{item.name}</Option>
                       ))}
@@ -473,7 +558,9 @@ function InformationForm(props: IProps) {
                     },
                   ],
                 })(
-                <Select getPopupContainer={(trigger:any) => trigger.parentNode} onSelect={handleSelect} className="bg-white text-black"
+                  <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                          onSelect={handleSelect}
+                          className="bg-white text-black"
                           style={fontWeightStyle}>
                     <Option key="1" value="Chi tiết mức lương">Chi tiết mức lương</Option>
                     <Option key="2" value="Thỏa thuận">Thỏa thuận</Option>
@@ -494,8 +581,11 @@ function InformationForm(props: IProps) {
                         },
                       ],
                     })(
-                      <InputNumber onChange={fromChange} style={{width: "100%"}} type="number" min={0}
-                                   className="bg-white text-black"/>
+                      <InputNumber
+                        onChange={fromChange}
+                        style={{width: "100%"}}
+                        type="number" min={0}
+                        className="bg-white text-black"/>
                     )}
                   </Form.Item>
                 </Col>
@@ -511,15 +601,18 @@ function InformationForm(props: IProps) {
                         },
                       ],
                     })(
-                      <InputNumber onChange={toChange} style={{width: "100%"}} type="number" min={0}
-                                   className="bg-white text-black"/>
+                      <InputNumber
+                        onChange={toChange}
+                        style={{width: "100%"}}
+                        type="number" min={0}
+                        className="bg-white text-black"/>
                     )}
                   </Form.Item>
                 </Col>
               </Row>
 
               <div className="pb-3" style={{color: "#6a727d"}}>Nội dung hiển thị:
-                {isEdit ? update.dataUpdate?.salaryDescription : createSteps.request?.salaryDescription}
+                {isEdit ? update.dataUpdate?.salaryDescription : createSteps.request?.salaryDescription ? createSteps.request?.salaryDescription : salaryDescription}
               </div>
 
               <div className="font-20-bold-500 ">Mô tả công việc</div>
@@ -527,7 +620,7 @@ function InformationForm(props: IProps) {
                 <div className="mb-2">Mô tả công việc chi tiết<span className="value-required">*</span></div>
                 <ReactQuill
                   style={fontWeightStyle}
-                  className="ql-custom"
+                  className={displayJobDescription ? "ql-custom ql-required" : "ql-custom "}
                   onChange={handleChangeJobDescription}
                   value={valueEditor.jobDescription || ""}
 
@@ -537,8 +630,8 @@ function InformationForm(props: IProps) {
                   bounds={'.app'}
                   placeholder="Mô tả công việc chi tiết"
                 />
-                <div className={display.jobDescription ? "value-required show" : "value-required hide"}>Vui lòng nhập mô
-                  tả chung
+                <div className={displayJobDescription ? "value-required show" : "value-required hide"}>
+                  Vui lòng nhập mô tả chung
                 </div>
 
               </div>
@@ -546,7 +639,7 @@ function InformationForm(props: IProps) {
                 <div className="mb-2">Yêu cầu công việc <span className="value-required">*</span></div>
                 <ReactQuill
                   style={fontWeightStyle}
-                  className="ql-custom"
+                  className={displayRequirementOfJob ? "ql-custom ql-required" : "ql-custom "}
                   onChange={handleChangeRequirement}
                   value={valueEditor.requirementOfJob || ""}
 
@@ -556,8 +649,8 @@ function InformationForm(props: IProps) {
                   bounds={'.app'}
                   placeholder="Yêu cầu công việc"
                 />
-                <div className={display.requirementOfJob ? "value-required show" : "value-required hide"}>Vui lòng nhập
-                  yêu cầu công việc
+                <div className={displayRequirementOfJob ? "value-required show" : "value-required hide"}>
+                  Vui lòng nhập yêu cầu công việc
                 </div>
               </div>
 
@@ -565,7 +658,7 @@ function InformationForm(props: IProps) {
                 <div className="mb-2">Quyền lợi <span className="value-required">*</span></div>
                 <ReactQuill
                   style={fontWeightStyle}
-                  className="ql-custom"
+                  className={displayInterest ? "ql-custom ql-required" : "ql-custom "}
                   onChange={handleChangeInterest}
                   value={valueEditor.interest || ""}
 
@@ -576,8 +669,8 @@ function InformationForm(props: IProps) {
                   placeholder="Quyền lợi"
                 />
 
-                <div className={display.interest ? "value-required show" : "value-required hide"}>Vui lòng nhập quyền
-                  lợi
+                <div className={displayInterest ? "value-required show" : "value-required hide"}>
+                  Vui lòng nhập quyền lợi
                 </div>
 
               </div>

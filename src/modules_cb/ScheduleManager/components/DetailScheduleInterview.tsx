@@ -107,7 +107,7 @@ function DetailScheduleInterview(props: IProps) {
             <div style={{...fontWeight, paddingTop: 20}}>Hội đồng</div>
             <div>
               <ul>
-                {dataDetail?.interviewers.map((item: any, index: any) => {
+                {dataDetail?.interviewers?.map((item: any, index: any) => {
                   return <li key={index}>{item.full_name}</li>
                   //
                   // <Avatar key={index} style={{backgroundColor: dataDetail?.avatarColor, marginRight: 5}}>
