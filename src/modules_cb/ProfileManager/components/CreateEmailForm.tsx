@@ -9,6 +9,8 @@ import {EmailEntity} from "../../EmailManager/types";
 import {getListEmail} from "../../EmailManager/redux/actions";
 import {createSchedule} from "../../ScheduleManager/redux/actions";
 import ReactQuill from "react-quill";
+import {getSearchAccount} from "../../AccountManager/redux/actions";
+import {UserAccount} from "../../AccountManager/types";
 
 const {Option} = Select;
 const {TextArea} = Input;
@@ -25,7 +27,8 @@ const connector = connect(mapStateToProps,
     createBooking,
     showEmailCreateForm,
     getListEmail,
-    createSchedule
+    createSchedule,
+    getSearchAccount
   });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -42,6 +45,12 @@ function CreateEmailForm(props: IProps) {
     labelCol: {span: 4},
     wrapperCol: {span: 20}
   };
+  const [trigger, setTrigger] = useState({
+    account: false,
+
+  })
+  const [account, setAccount] = useState<UserAccount[] | any>([]);
+
   const [display, setDisplay] = useState(false)
   const [emailTemp, setEmailTemp] = useState<EmailEntity>()
   const [valueEditor, setValueEditor] = useState("")
@@ -172,6 +181,15 @@ function CreateEmailForm(props: IProps) {
     setFileAttach(newFile)
   }
 
+  function onSearchAccount(value: any) {
+    props.getSearchAccount({name: value})
+    setTrigger({...trigger, account: true})
+  }
+
+  function onFocusAccount() {
+    setAccount(props.listAccount.rows)
+  }
+
 
   return (
     <>
@@ -206,8 +224,14 @@ function CreateEmailForm(props: IProps) {
                       },
                     ],
                   })(
-                  <Select getPopupContainer={(trigger:any) => trigger.parentNode} onSelect={handleSelectMailTemplate} style={fontWeightStyle}
-                            placeholder="Nhập tên mẫu">
+                  <Select 
+                    getPopupContainer={(trigger:any) => trigger.parentNode} 
+                    onSelect={handleSelectMailTemplate} 
+                    style={fontWeightStyle}
+                    placeholder="Nhập tên mẫu"
+
+
+                  >
                       {props.emailManager.rows?.map((item: any, index: any) => {
                         return <Option key={index} value={item.id}>{item.name}</Option>
                       })}
@@ -322,8 +346,11 @@ function CreateEmailForm(props: IProps) {
                           required: false,
                         },
                       ],
-                    })(<Select className="bg-white text-black" style={{...fontWeightStyle, width: "100%"}}
-                               mode="multiple"
+                    })(<Select 
+                      className="bg-white text-black" 
+                      style={{...fontWeightStyle, width: "100%"}}
+                      mode="multiple"
+
                     >
                       {props.listAccount.rows?.map((item: any, index: any) => (
                         <Option key={index} value={item.username}>{item.fullName}</Option>

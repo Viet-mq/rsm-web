@@ -472,11 +472,11 @@ function ListProfile(props: ListProfileProps) {
     }
   }, [search.rowsSearchFull])
 
-  useEffect(() => {
-    if (trigger.job) {
-      setJob(props.searchJob.rows)
-    }
-  }, [props.searchJob.rows])
+  // useEffect(() => {
+  //   if (trigger.job) {
+  //     setJob(props.searchJob.rows)
+  //   }
+  // }, [props.searchJob.rows])
 
   useEffect(() => {
     setJob(props.listJob.rows)

@@ -75,7 +75,7 @@ function ListEmail(props: IProps) {
 
                   <div className="font-14-bold-500">{item.subject}</div>
                   <div style={{color: "#B2B2B2"}}>Tạo bởi <span
-                    className="font-14-bold-500">{item.create_by}</span> lúc {moment(unixTimeToDate(item.time)).format('HH:mm DD/MM/YYYY')}
+                    className="font-14-bold-500">{item.create_by}</span> lúc {moment(item.time).format('HH:mm DD/MM/YYYY')}
                   </div>
                 </div>
               </div>

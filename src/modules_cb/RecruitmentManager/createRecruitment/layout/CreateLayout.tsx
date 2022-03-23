@@ -60,6 +60,7 @@ const CreateLayout = (props: LayoutProps) => {
         interviewProcess: update.dataUpdate?.interviewProcess,
         interviewer: update.dataUpdate?.interviewer?.map((item:any)=>item.username),
         job: update.dataUpdate?.jobId,
+        department: update.dataUpdate?.departmentId,
         jobDescription: update.dataUpdate?.jobDescription,
         quantity: update.dataUpdate?.quantity,
         requirementOfJob: update.dataUpdate?.requirementOfJob,

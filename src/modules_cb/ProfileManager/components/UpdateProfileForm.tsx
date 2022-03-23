@@ -565,7 +565,8 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                     },
                   ],
                 })(
-                <Select getPopupContainer={(trigger:any) => trigger.parentNode}
+                <Select
+                  getPopupContainer={(trigger:any) => trigger.parentNode}
                     onSearch={onSearchSchool}
                     onFocus={onFocusSchool}
                     filterOption={(input, option: any) =>

@@ -4,13 +4,15 @@ import deleteJob, {DeleteJobState} from "./deleteJob";
 import create, {CreateEmailState} from "./create";
 import update, {UpdateEmailState} from "./update";
 import keyPoint, {KeyPointState} from "./keyPoint";
+import search, {SearchEmailState} from "./search";
 
 export interface EmailManagerModuleState {
   list: ListEmailState,
   deleteJob: DeleteJobState,
   create: CreateEmailState,
   update: UpdateEmailState,
-  keyPoint:KeyPointState
+  keyPoint:KeyPointState,
+  search:SearchEmailState
 }
 
 export default combineReducers<EmailManagerModuleState>({
@@ -19,4 +21,5 @@ export default combineReducers<EmailManagerModuleState>({
   create,
   update,
   keyPoint,
+  search,
 });

@@ -69,7 +69,6 @@ function ReminderManagerPages(props: IProps) {
   }
 
   function handleSelectEvent(event: any) {
-    console.log(event)
     let req: UpdateReminderRequest = ({
       start: event.start * 1,
       end: event.end * 1,
@@ -80,7 +79,6 @@ function ReminderManagerPages(props: IProps) {
     props.showFormUpdateReminder(true, req)
   }
 
-  console.log(eventReminder)
   return (
     <>
       <div className=" status-cv-container">

@@ -1,8 +1,11 @@
- export interface RecruitmentEntity {
+export interface RecruitmentEntity {
   id: string,
   title: string,
   jobId: string,
+
   jobName: string,
+  departmentId: string,
+  departmentName: string,
   addressId: string,
   addressName: string,
   typeOfJob: string,
@@ -17,11 +20,11 @@
   interest: string,
   createAt: string,
   createBy: string,
-   fullName:string,
+  fullName: string,
   detailOfSalary: string,
   from: number,
   to: number,
-  salaryDescription:string,
+  salaryDescription: string,
   status: string,
 
 }
@@ -30,16 +33,17 @@ export interface InterviewProcess {
   id: string,
   name: string,
   total?: string,
-  isDragDisabled?:boolean,
-  isNew:boolean,
+  isDragDisabled?: boolean,
+  isNew: boolean,
 }
+
 export interface InterviewProcessResponse {
   code: number,
   id: string,
   isDragDisabled: boolean,
   message: string,
   name: string,
-  isNew:boolean,
+  isNew: boolean,
 
 }
 
@@ -49,13 +53,14 @@ export interface CreateRecruitmentRequest {
   interviewProcess: InterviewProcess[],
   interviewer: [],
   job: string,
+  department: string,
   quantity: number,
   talentPool: string,
   title: string,
   typeOfJob: string
   detailOfSalary: string,
   from: number,
-  salaryDescription:string,
+  salaryDescription: string,
   to: number,
   requirementOfJob: string,
   jobDescription: string,
@@ -68,8 +73,9 @@ export interface UpdateRecruitmentRequest {
   address?: string,
   deadLine?: number,
   interviewProcess?: InterviewProcess[],
-  interviewer?: []|any,
+  interviewer?: [] | any,
   job?: string,
+  department?: string,
   quantity?: number,
   talentPool?: string,
   title?: string,
@@ -77,7 +83,7 @@ export interface UpdateRecruitmentRequest {
   detailOfSalary?: string,
   from?: number,
   to?: number,
-  salaryDescription?:string
+  salaryDescription?: string
   requirementOfJob?: string,
   jobDescription?: string,
   interest?: string,

@@ -92,7 +92,7 @@ function ListRecruitment(props: IProps) {
           <div className="header-box-main">
             <Link
               to={`/recruitment-manager/detail/${props.recruitment?.id}?roundID=${props.recruitment.interviewProcess[0].id}`}
-              className="p">{props.recruitment.title}</Link>
+              className="p">[{props.recruitment?.departmentName}] {props.recruitment.title}</Link>
             <div className="detail-flex">
               <div>{props.recruitment?.jobName}</div>
               <div><BsDot size={20}/></div>
@@ -112,15 +112,13 @@ function ListRecruitment(props: IProps) {
             </div>
           </div>
           <div>
-          <Select getPopupContainer={(trigger:any) => trigger.parentNode} defaultValue="all"
+          <Select getPopupContainer={(trigger:any) => trigger.parentNode} defaultValue="create"
 
                     style={{
                       fontWeight: 600,
                       width: 150,
                     }}>
-              <Option value="join">
-                Công khai
-              </Option>
+              <Option value="join">Công khai</Option>
               <Option value="create">Nội bộ</Option>
               <Option value="all">Ngưng nhận hồ sơ</Option>
               <Option value="close">Đóng</Option>
