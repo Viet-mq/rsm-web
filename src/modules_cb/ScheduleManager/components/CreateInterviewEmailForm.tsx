@@ -6,7 +6,7 @@ import React, {FormEvent, useEffect, useRef, useState} from "react";
 
 import {MailForm, MailRequest} from "../../ProfileManager/types";
 import {EmailEntity} from "../../EmailManager/types";
-import {getListEmail} from "../../EmailManager/redux/actions";
+import {getListEmail, searchListEmail} from "../../EmailManager/redux/actions";
 import {CreateScheduleRequest} from "../types";
 import {createSchedule} from "../redux/actions";
 import {createBooking, showInterviewEmailCreateForm} from "../../ProfileManager/redux/actions";
@@ -18,7 +18,7 @@ const {TextArea} = Input;
 const mapStateToProps = (state: RootState) => ({
   listAccount: state.accountManager.list,
   showBooking: state.profileManager.showBooking,
-  emailManager: state.emailManager.list,
+  listEmail: state.emailManager.list,
 
 })
 
@@ -27,7 +27,9 @@ const connector = connect(mapStateToProps,
     createBooking,
     showInterviewEmailCreateForm,
     getListEmail,
-    createSchedule
+    createSchedule,
+    searchListEmail
+
   });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -44,7 +46,7 @@ function CreateInterviewEmailForm(props: IProps) {
     wrapperCol: {span: 20}
   };
   const [display, setDisplay] = useState(false)
-  const [emailTemp, setEmailTemp] = useState<EmailEntity>()
+  const [emailTemp, setEmailTemp] = useState<EmailEntity[]>([])
   const [valueEditor, setValueEditor] = useState("")
   const inputFile = useRef<any>(null)
   const [fileAttach, setFileAttach] = useState<any>([]);
@@ -56,12 +58,12 @@ function CreateInterviewEmailForm(props: IProps) {
       [{'list': 'ordered'}, {'list': 'bullet'}],
       [{'indent': '-1'}, {'indent': '+1'}],
       ['link', 'image'],
-      [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-      [{ 'direction': 'rtl' }],                         // text direction
-      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-      [{ 'font': [] }],
-      [{ 'align': [] }],
+      [{'script': 'sub'}, {'script': 'super'}],      // superscript/subscript
+      [{'direction': 'rtl'}],                         // text direction
+      [{'header': [1, 2, 3, 4, 5, 6, false]}],
+      [{'color': []}, {'background': []}],          // dropdown with defaults from theme
+      [{'font': []}],
+      [{'align': []}],
       ['clean'],
     ],
 
@@ -81,6 +83,10 @@ function CreateInterviewEmailForm(props: IProps) {
     'link', 'image', 'video'
   ]
 
+  const [trigger, setTrigger] = useState({
+    email: false,
+  })
+
   useEffect(() => {
     if (props.showBooking) {
       props.getListEmail({page: 1, size: 100});
@@ -89,17 +95,17 @@ function CreateInterviewEmailForm(props: IProps) {
 
 
   useEffect(() => {
-    if (props.showBooking && props.emailManager) {
-      setEmailTemp(props.emailManager.rows[0])
-      setValueEditor(props.emailManager.rows[0]?.content)
+    if (props.showBooking && props.listEmail) {
+      setEmailTemp(props.listEmail.rows)
+      setValueEditor(props.listEmail.rows[0]?.content)
     }
-  }, [props.emailManager])
+  }, [props.listEmail])
 
   function onBtnCancelClicked() {
     resetFields();
     props.showInterviewEmailCreateForm(false);
     setValueEditor("")
-    setEmailTemp(undefined)
+    setEmailTemp([])
   }
 
   function handleSubmitForm(e: FormEvent) {
@@ -111,7 +117,7 @@ function CreateInterviewEmailForm(props: IProps) {
         let mailFormCandidate: MailForm = {
           subject: values.subjectCandidate,
           content: valueEditor,
-          file:fileAttach
+          file: fileAttach
         }
 
         let mailFormInterviewers: MailForm = {
@@ -152,9 +158,18 @@ function CreateInterviewEmailForm(props: IProps) {
   }
 
   function handleSelectMailTemplate(value: any) {
-    const selectEmail = props.emailManager.rows.find((item: any) => item.id === value)
-    setEmailTemp(selectEmail)
+    const selectEmail = props.listEmail.rows.find((item: any) => item.id === value)
+    setEmailTemp([selectEmail])
     setValueEditor(selectEmail.content)
+  }
+
+  function onSearchEmail(value: any) {
+    props.searchListEmail({name: value})
+    setTrigger({...trigger, email: true})
+  }
+
+  function onFocusEmail() {
+    setEmailTemp(props.listEmail.rows)
   }
 
   const onOpenFileClick = () => {
@@ -167,9 +182,9 @@ function CreateInterviewEmailForm(props: IProps) {
     setFileAttach(newFile);
   }
 
-  function handleDeleteFile(item:any,index:any) {
+  function handleDeleteFile(item: any, index: any) {
     const newFile = Array.from(fileAttach);
-    newFile.splice(index,1)
+    newFile.splice(index, 1)
     setFileAttach(newFile)
   }
 
@@ -195,10 +210,10 @@ function CreateInterviewEmailForm(props: IProps) {
             <div style={{height: 700, padding: "0 24px 24px", overflow: "auto"}}>
               <div className="font-15-bold-500">Nội dung email gửi cho ứng viên</div>
               <Form>
-                <Form.Item className="form-label" label="Tên mẫu mail" labelCol={{span: 24}}
+                <Form.Item className="form-label" label="Tên mẫu email" labelCol={{span: 24}}
                            wrapperCol={{span: 24}}>
                   {getFieldDecorator('title', {
-                    initialValue: emailTemp?.id,
+                    initialValue: emailTemp[0]?.id,
                     rules: [
                       {
                         message: 'Vui lòng nhập tên mẫu',
@@ -206,9 +221,21 @@ function CreateInterviewEmailForm(props: IProps) {
                       },
                     ],
                   })(
-                  <Select getPopupContainer={(trigger:any) => trigger.parentNode} onSelect={handleSelectMailTemplate} style={fontWeightStyle}
-                            placeholder="Nhập tên mẫu">
-                      {props.emailManager.rows?.map((item: any, index: any) => {
+                    <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                            onSelect={handleSelectMailTemplate}
+                            style={fontWeightStyle}
+                            placeholder="Nhập tên mẫu"
+
+                            onSearch={onSearchEmail}
+                            onFocus={onFocusEmail}
+                            filterOption={(input, option: any) =>
+                              option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
+                            optionFilterProp="children"
+                            showSearch
+                            className="bg-white text-black form-label"
+                    >
+                      {emailTemp?.map((item: any, index: any) => {
                         return <Option key={index} value={item.id}>{item.name}</Option>
                       })}
                     </Select>
@@ -218,7 +245,7 @@ function CreateInterviewEmailForm(props: IProps) {
                 <Form.Item className="form-label" label="Tiêu đề mail" labelCol={{span: 24}}
                            wrapperCol={{span: 24}}>
                   {getFieldDecorator('subjectCandidate', {
-                    initialValue: emailTemp?.subject,
+                    initialValue: emailTemp[0]?.subject,
                     rules: [
                       {
                         message: 'Vui lòng nhập tiêu đề mail',
@@ -236,8 +263,8 @@ function CreateInterviewEmailForm(props: IProps) {
                     style={fontWeightStyle}
                     className="ql-custom"
                     onChange={handleChangeMailContent}
-                    value={valueEditor||""}
-                    
+                    value={valueEditor || ""}
+
                     theme={'snow'}
                     modules={modules}
                     formats={formats}
@@ -251,13 +278,17 @@ function CreateInterviewEmailForm(props: IProps) {
                 <div className="mt-2">
                   <input type="file" ref={inputFile} onChange={onFileChange} id={"tags"} style={{display: "none"}}/>
                   <div className="font-14-bold-500">Attachment file</div>
-                  {fileAttach ? fileAttach?.map((item: any,index:any) => {
+                  {fileAttach ? fileAttach?.map((item: any, index: any) => {
                     return <div key={index} className="flex-space-between">
-                      <div className='pl-2' style={{color: "#1890ff",fontStyle:"italic"}}> {item?.name}</div>
-                      <div className="cursor-default" onClick={()=>handleDeleteFile(item,index)}><Icon type="delete" style={{color: "#f5222d"}}/></div>
+                      <div className='pl-2' style={{color: "#1890ff", fontStyle: "italic"}}> {item?.name}</div>
+                      <div className="cursor-default" onClick={() => handleDeleteFile(item, index)}><Icon type="delete"
+                                                                                                          style={{color: "#f5222d"}}/>
+                      </div>
                     </div>
                   }) : null}
-                  <div className="cursor-default" style={{color: "#969C9D"}} onClick={onOpenFileClick}><Icon type="tag"/> Click to add file</div>
+                  <div className="cursor-default" style={{color: "#969C9D"}} onClick={onOpenFileClick}><Icon
+                    type="tag"/> Click to add file
+                  </div>
                 </div>
 
                 <div className="font-15-bold-500 mt-5 mb-2">Nội dung email gửi cho Hội đồng tuyển dụng</div>
@@ -271,9 +302,11 @@ function CreateInterviewEmailForm(props: IProps) {
                           required: true,
                         },
                       ],
-                    })(<Select className="bg-white text-black" style={{...fontWeightStyle, width: "100%"}}
-                               mode="multiple"
-                               placeholder="Chọn thành viên"
+                    })(<Select
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
+                      className="bg-white text-black" style={{...fontWeightStyle, width: "100%"}}
+                      mode="multiple"
+                      placeholder="Chọn thành viên"
                     >
                       {props.listAccount.rows?.map((item: any, index: any) => (
                         <Option key={index} value={item.username}>{item.fullName}</Option>
@@ -283,14 +316,14 @@ function CreateInterviewEmailForm(props: IProps) {
 
                   <Form.Item label="Tiêu đề" className="form-label" {...formItemStyle}>
                     {getFieldDecorator('subjectRecruitmentCouncil', {
-                      initialValue: emailTemp?.subject,
+                      initialValue: emailTemp[0]?.subject,
                       rules: [
                         {
                           message: 'Vui lòng nhập tên trường',
                           required: false,
                         },
                       ],
-                    })(<Input placeholder="Nhập tiêu đề" disabled className="bg-white text-black"/>)}
+                    })(<Input placeholder="Nhập tiêu đề" className="bg-white text-black"/>)}
                   </Form.Item>
 
                   <Form.Item label="Mô tả" className="form-label" {...formItemStyle}>

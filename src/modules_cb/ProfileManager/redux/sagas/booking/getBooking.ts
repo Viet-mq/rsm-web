@@ -10,7 +10,7 @@ export function* getBookingAsync(action: GetBookingAction) {
     if (rs.code !== 0) {
       NotificationError('Lập lịch phỏng vấn không thành công', "Lỗi: " + rs.message);
     }
-    yield put(getBookingSuccess(rs.calendars[0]))
+    yield put(getBookingSuccess(rs.calendars))
   } catch (e) {
     yield put(getBookingError(new AppError(e.message)));
     NotificationError('Lập lịch phỏng vấn không thành công', "Lỗi: " + e.message);

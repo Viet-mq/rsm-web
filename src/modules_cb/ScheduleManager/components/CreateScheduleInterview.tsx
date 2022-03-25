@@ -25,11 +25,13 @@ import {getListAccount} from "../../AccountManager/redux/actions";
 import {getCandidates, resetCandidates, searchCandidates, showFormSchedule} from "../redux/actions";
 import Loading from "../../../components/Loading";
 import {ProfileEntity} from "../../ProfileManager/types";
-import {CreateScheduleForm, ScheduleEntity} from "../types";
+import {CreateScheduleForm, ScheduleEntity, ScheduleTime} from "../types";
 import {ColumnProps} from "antd/lib/table";
-import {getDetailRecruitment} from "../../RecruitmentManager/redux/actions";
+import {getDetailRecruitment, getSearchRecruitment} from "../../RecruitmentManager/redux/actions";
 import {showEmailCreateForm, showInterviewEmailCreateForm} from "../../ProfileManager/redux/actions";
 import CreateInterviewEmailForm from "./CreateInterviewEmailForm";
+import {RecruitmentEntity} from "../../RecruitmentManager/types";
+import {time} from "html2canvas/dist/types/css/types/time";
 
 
 const mapStateToProps = (state: RootState) => ({
@@ -37,7 +39,7 @@ const mapStateToProps = (state: RootState) => ({
   listAddress: state.addressManager.list,
   listAccount: state.accountManager.list,
   listCandidate: state.scheduleManager.getCandidates,
-  searchCandidatesState:state.scheduleManager.searchCandidates,
+  searchCandidatesState: state.scheduleManager.searchCandidates,
   showSchedule: state.scheduleManager.showSchedule,
   detailRecruitment: state.recruitmentManager.detailRecruitment,
 })
@@ -51,13 +53,15 @@ const connector = connect(mapStateToProps,
     searchCandidates,
     getDetailRecruitment,
     showEmailCreateForm,
-    showInterviewEmailCreateForm
+    showInterviewEmailCreateForm,
+    getSearchRecruitment
   });
 type ReduxProps = ConnectedProps<typeof connector>;
 
 const {Option} = Select;
 
-interface IProps extends FormComponentProps, ReduxProps {}
+interface IProps extends FormComponentProps, ReduxProps {
+}
 
 function CreateScheduleInterview(props: IProps) {
   const dateFormat = 'DD/MM/YYYY';
@@ -65,7 +69,7 @@ function CreateScheduleInterview(props: IProps) {
   const fontWeightStyle = {fontWeight: 400};
   const wrapperRef = useRef<any>(null);
   const {getFieldDecorator, resetFields} = props.form;
-  const [recruitment, setRecruitment] = useState(null)
+  const [recruitmentSelect, setRecruitmentSelect] = useState(null)
   const [reqCreate, setReqCreate] = useState<CreateScheduleForm>()
   const columns: ColumnProps<ScheduleEntity>[] = [
     {
@@ -127,6 +131,11 @@ function CreateScheduleInterview(props: IProps) {
   const [listCandidates, setListCandidates] = useState<ProfileEntity[] | any>([]);
   const [visibleCandidate, setVisibleCandidate] = useState(false)
   const [keySearch, setKeySearch] = useState(undefined);
+  const [recruitment, setRecruitment] = useState<RecruitmentEntity[]>([]);
+
+  const [trigger, setTrigger] = useState({
+    recruitment: false,
+  })
 
   useEffect(() => {
     setListCandidates(props.listCandidate.rows);
@@ -138,7 +147,7 @@ function CreateScheduleInterview(props: IProps) {
 
   useEffect(() => {
     setDatasource([])
-  }, [recruitment])
+  }, [recruitmentSelect])
 
   useEffect(() => {
     if (props.showSchedule.show_schedule === false) {
@@ -212,7 +221,7 @@ function CreateScheduleInterview(props: IProps) {
           date: dateChanged * 1,
           interviewTime: interviewTime * 1,
           avatarColor: candidate.avatarColor,
-          username:candidate.username
+          username: candidate.username
         };
         setDatasource([...dataSource, newData]);
 
@@ -232,9 +241,9 @@ function CreateScheduleInterview(props: IProps) {
   }
 
   function handleSelectRecruitment(value: any) {
-    setRecruitment(value);
+    setRecruitmentSelect(value);
     props.getCandidates({recruitment: value, calendar: "notSet", page: 1, size: 15})
-    props.getDetailRecruitment({id:value})
+    props.getDetailRecruitment({id: value})
 
   }
 
@@ -244,22 +253,61 @@ function CreateScheduleInterview(props: IProps) {
     (e.target as any).disabled = false;
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
+
+        const date = new Date(values.date);
+        const time = new Date(values.timeStart);
+        const dd = date.getDate();
+        const mm = date.getMonth() + 1;
+        const yyyy = date.getFullYear();
+        const hh = time.getHours();
+        const minutes = time.getMinutes();
+        const dateChanged: any = new Date(yyyy, mm - 1, dd, hh, minutes, 0);
+        const interviewTime: any = new Date(yyyy, mm - 1, dd, hh, minutes + values.interviewTime, 0);
+
+
+        let times:ScheduleTime[]=dataSource?.reduce((curr:any,next:any)=>{
+          const newTimes:ScheduleTime={
+            // avatarColor: next.avatarColor,
+            // date: next.date,
+            // idProfile: next.idProfile,
+            // interviewTime: next.interviewTime
+
+            avatarColor: next.avatarColor,
+            date: dateChanged*1,
+            idProfile: next.idProfile,
+            interviewTime: interviewTime*1
+          }
+          curr.push(newTimes)
+          return curr;
+        },[])
+
         let req: CreateScheduleForm = {
           floor: values.floor,
           interviewAddress: values.interviewAddress,
-          interviewers: props.detailRecruitment.rows[0]?.interviewer?.map((item:any)=>item.username),
+          interviewers: props.detailRecruitment.rows[0]?.interviewer?.map((item: any) => item.username),
           note: values.note,
           recruitmentId: values.recruitmentId,
-          times: dataSource,
+          times: times,
           type: values.type,
         }
         setReqCreate(req)
+        console.log(" req.time:",times)
+        console.log(" dataSource:",dataSource)
         props.showInterviewEmailCreateForm(true)
 
         // props.createSchedule(req);
         return;
       }
     });
+  }
+
+  function onSearchRecruitment(value: any) {
+    props.getSearchRecruitment({name: value})
+    setTrigger({...trigger, recruitment: true})
+  }
+
+  function onFocusRecruitment() {
+    setRecruitment(props.listRecruitment.rows)
   }
 
   return (
@@ -291,11 +339,22 @@ function CreateScheduleInterview(props: IProps) {
                       },
                     ],
                   })(
-                  <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle}
-                            onSelect={handleSelectRecruitment} placeholder="Chọn tin tuyển dụng"
+                    <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                            className="bg-white text-black"
+                            style={fontWeightStyle}
+                            onSelect={handleSelectRecruitment}
+                            placeholder="Chọn tin tuyển dụng"
+
+                            onSearch={onSearchRecruitment}
+                            onFocus={onFocusRecruitment}
+                            filterOption={(input, option: any) =>
+                              option.props.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
+                            optionFilterProp="label"
+                            showSearch
                     >
                       {props.listRecruitment.rows?.map((item: any, index: any) => (
-                        <Option key={index} value={item.id}>{item.title}</Option>
+                        <Option key={index} value={item.id}label={item.title}>[{item.departmentName}] {item.title}</Option>
                       ))}
                     </Select>
                   )}
@@ -366,7 +425,8 @@ function CreateScheduleInterview(props: IProps) {
                           },
                         ],
                       })(
-                      <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle} placeholder="Nhập địa chỉ"
+                        <Select getPopupContainer={(trigger: any) => trigger.parentNode} className="bg-white text-black"
+                                style={fontWeightStyle} placeholder="Nhập địa chỉ"
                         >
                           {props.listAddress.rows?.map((item: any, index: any) => (
                             <Option key={index} value={item.id}>{item.officeName} - {item.name}</Option>
@@ -392,7 +452,7 @@ function CreateScheduleInterview(props: IProps) {
                     </Form.Item>
                   </Col>
                 </Row>
-                
+
                 {/*<Form.Item label="Hội đồng tuyển dụng" className="form-label" labelCol={{span: 24}} wrapperCol={{span: 24}}>*/}
                 {/*  {getFieldDecorator('interviewers', {*/}
                 {/*    initialValue: props.detailRecruitment.rows[0]?.interviewer?.map((item:any)=>item.username)||undefined,*/}
@@ -424,7 +484,8 @@ function CreateScheduleInterview(props: IProps) {
                       },
                     ],
                   })(
-                  <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle}
+                    <Select getPopupContainer={(trigger: any) => trigger.parentNode} className="bg-white text-black"
+                            style={fontWeightStyle}
                     >
                       <Option key="1" value="Phỏng vấn trực tiếp">Phỏng vấn trực tiếp</Option>
                       <Option key="2" value="Phỏng vấn online">Phỏng vấn online</Option>
@@ -482,7 +543,8 @@ function CreateScheduleInterview(props: IProps) {
                     </Button>
                     {visibleCandidate ?
                       <div ref={wrapperRef} className="dropdown-container">
-                        <Input onChange={event => handleSearchCandidate(event)} value={keySearch} placeholder="Tìm kiếm thành viên"/>
+                        <Input onChange={event => handleSearchCandidate(event)} value={keySearch}
+                               placeholder="Tìm kiếm thành viên"/>
                         <div className="scroll-label-content">
                           {listCandidates.length !== 0 ? listCandidates.map((item: any, index: any) => {
                             return (<div key={item.id} onClick={event => handleAdd(event, item)}>
@@ -524,7 +586,7 @@ function CreateScheduleInterview(props: IProps) {
 
         </Modal>
       </div>
-      <CreateInterviewEmailForm reqCreateSchedule={reqCreate} />
+      <CreateInterviewEmailForm reqCreateSchedule={reqCreate}/>
       {props.listCandidate.loading ?
         <Loading/> : null}
     </>);

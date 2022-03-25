@@ -4,6 +4,7 @@ import deleteReasonReject, {DeleteReasonRejectState} from "./deleteReasonReject"
 import create, {CreateReasonRejectState} from "./create";
 import showForm, {ReasonRejectFormState} from "./showForm";
 import update, {UpdateReasonRejectState} from "./update";
+import search, {SearchListReasonRejectState} from "./search";
 
 export interface ReasonRejectManagerModuleState {
   list: ReasonRejectListState,
@@ -11,6 +12,7 @@ export interface ReasonRejectManagerModuleState {
   create: CreateReasonRejectState,
   showForm: ReasonRejectFormState,
   update: UpdateReasonRejectState,
+  search: SearchListReasonRejectState,
 }
 
 export default combineReducers<ReasonRejectManagerModuleState>({
@@ -19,4 +21,5 @@ export default combineReducers<ReasonRejectManagerModuleState>({
   create,
   showForm,
   update,
+  search,
 });

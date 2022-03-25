@@ -2,22 +2,25 @@ import React, {useEffect, useState} from "react";
 import {Button, DatePicker, Icon, Select} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {getListRecruitment} from "../redux/actions";
+import {getListRecruitment, getSearchRecruitment} from "../redux/actions";
 import Search from "antd/es/input/Search";
 import ListRecruitment from "../components/list/ListRecruitment";
 import {Link} from "react-router-dom";
 import moment from "moment";
 import 'moment/locale/vi';
+import {RecruitmentEntity} from "../types";
 
 const {Option} = Select;
 const {RangePicker} = DatePicker;
 
 const mapStateToProps = (state: RootState) => ({
-  listRecruitment: state.recruitmentManager.list
+  listRecruitment: state.recruitmentManager.list,
+  searchListRecruitment: state.recruitmentManager.search,
 })
 
 const connector = connect(mapStateToProps, {
   getListRecruitment,
+  getSearchRecruitment
 });
 
 
@@ -30,13 +33,27 @@ function RecruitmentManagerPages(props: IProps) {
 
   const dateFormat = 'DD/MM/YYYY';
   const timeFormat = 'HH:mm';
-  // const [valueDateRange, setValueDateRange] = useState<any[]>([moment(props.listRecruitment.rows[props.listRecruitment?.rows.length - 1]?.deadLine), moment(props.listRecruitment.rows[0]?.deadLine)])
   const [valueDateRange, setValueDateRange] = useState<any[]>([])
+  const [recruitment, setRecruitment] = useState<RecruitmentEntity[]>([])
+  const [trigger, setTrigger] = useState({
+    recruitment: false,
+  })
 
   useEffect(() => {
     document.title = "Quản lý tin tuyển dụng";
     props.getListRecruitment({page: 1, size: 91});
   }, []);
+
+  useEffect(() => {
+    setRecruitment(props.listRecruitment.rows)
+  }, [props.listRecruitment]);
+
+
+  useEffect(() => {
+    if(trigger.recruitment){
+      setRecruitment(props.searchListRecruitment.rows)
+    }
+  }, [props.searchListRecruitment.rows])
 
   function onChangeDateRange(dates: any) {
     dates[0].set({hour: 0, minute: 0, second: 0})
@@ -52,6 +69,11 @@ function RecruitmentManagerPages(props: IProps) {
     } else{
       props.getListRecruitment({page: 1, size: 93});
     }
+  }
+
+  function handleSearchRecruitment(value:any) {
+    props.getSearchRecruitment({keySearch:value,page: 1, size: 100})
+    setTrigger({...trigger,recruitment:true})
   }
 
   return (
@@ -118,7 +140,7 @@ function RecruitmentManagerPages(props: IProps) {
         <div className="c-schedule-header__align-right align">
           <Search
             placeholder="Tìm kiếm nhanh trong danh sách"
-            onSearch={value => props.getListRecruitment({keySearch:value,page: 1, size: 94})}
+            onSearch={handleSearchRecruitment}
             style={{width: 340}}
           />
           <Button
@@ -131,7 +153,7 @@ function RecruitmentManagerPages(props: IProps) {
       </div>
 
       <div>
-        {props.listRecruitment.rows.length > 0 ? props.listRecruitment.rows.map((item: any, index: any) => {
+        {recruitment.length > 0 ? recruitment?.map((item: any, index: any) => {
           return <div key={index}><ListRecruitment recruitment={item}/></div>
 
         }) : null}

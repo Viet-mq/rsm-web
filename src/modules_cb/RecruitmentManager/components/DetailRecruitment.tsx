@@ -145,7 +145,7 @@ function DetailRecruitment(props: IProps) {
             <ImArrowLeft2 size={20}/>
           </Link>
           <div className="header-box-main">
-            <span className="p">{props.detailRecruitment?.rows[0]?.title}</span>
+            <span className="p">[{props.detailRecruitment?.rows[0]?.departmentName}] {props.detailRecruitment?.rows[0]?.title}</span>
             <Link to={`/recruitment-manager/edit`} onClick={btnEditClicked}>
               <Icon type={"edit"} style={{fontSize: "150%", marginLeft: 15}}/>
             </Link>

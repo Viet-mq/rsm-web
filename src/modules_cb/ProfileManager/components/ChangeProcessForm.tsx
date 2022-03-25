@@ -52,7 +52,6 @@ function ChangeProcessForm(props: IProps) {
   const [valueEditor, setValueEditor] = useState("")
   const inputFile = useRef<any>(null)
   const [fileAttach, setFileAttach] = useState<any>([]);
-  const [email, setEmail] = useState<EmailEntity[]>([]);
   const [trigger, setTrigger] = useState({
     email: false,
   
@@ -197,7 +196,7 @@ function ChangeProcessForm(props: IProps) {
   }
 
   function onFocusEmail() {
-    setEmail(props.listEmail.rows)
+    setEmailTemp(props.listEmail.rows)
   }
 
   return (
@@ -327,14 +326,18 @@ function ChangeProcessForm(props: IProps) {
                         required: false,
                       },
                     ],
-                  })(<Select className="bg-white text-black" style={{...fontWeightStyle, width: "100%"}}
-                             mode="multiple"
+                  })(<Select getPopupContainer={(trigger:any) => trigger.parentNode}
+                    className="bg-white text-black"
+                    style={{...fontWeightStyle, width: "100%"}}
+                    mode="multiple"
                   >
                     {props.listAccount.rows?.map((item: any, index: any) => (
                       <Option key={index} value={item.username}>{item.fullName}</Option>
                     ))}
                   </Select>)}
                 </Form.Item>
+
+
 
                 <Form.Item label="Tiêu đề" className="form-label" {...formItemStyle}>
                   {getFieldDecorator('subjectPresenter', {

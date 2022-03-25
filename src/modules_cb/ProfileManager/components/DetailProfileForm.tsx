@@ -25,7 +25,8 @@ import {
   showFormUploadAvatar,
   showFormUploadCV,
   updateComment,
-  updateNote
+  updateNote,
+
 } from "../redux/actions";
 import {
   Avatar,
@@ -44,6 +45,7 @@ import {
 } from "antd";
 import React, {useEffect, useState} from "react";
 import {
+  BookingEntity,
   CommentEntity,
   DataShowBooking,
   DeleteCommentRequest,
@@ -75,6 +77,7 @@ import AddToTalentPoolForm from "./AddToTalentPoolForm";
 import UpdateDetailProfileForm from "./UpdateDetailProfileForm";
 import CreateCommentForm from "./CreateCommentForm";
 import UpdateCommentForm from "./UpdateCommentForm";
+import {deleteSchedule} from "../../ScheduleManager/redux/actions";
 
 const {Step} = Steps;
 const {TabPane} = Tabs;
@@ -114,7 +117,8 @@ const connector = connect(mapStateToProps,
     getListRecruitment,
     showChangeProcessForm,
     showChangeRecruitmentForm,
-    showAddToTalentPoolForm
+    showAddToTalentPoolForm,
+    deleteSchedule
   });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -152,30 +156,6 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     minIndex: 0,
     maxIndex: 0
   })
-  const icon = [
-    {
-      type: "select",
-      iconType: 'eye',
-      twoToneColor: '#D7D704'
-    },
-    {
-      type: "create",
-      iconType: 'plus-circle',
-      twoToneColor: '#00d62b'
-    },
-    {
-      type: "update",
-      iconType: 'edit',
-      twoToneColor: '#0d89fc'
-
-    },
-    {
-      type: "delete",
-      iconType: 'delete',
-      twoToneColor: '#ff3b3b'
-
-    },
-  ]
   const [visiblePopover, setVisiblePopover] = useState<boolean>(false);
   const [popoverRecruitment, setPopoverRecruitment] = useState<boolean>(false);
   const content = (<ul style={{width: 165}} className="popup-popover">
@@ -221,7 +201,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       width: 200,
       key: 2,
       render: (text: string, record: NoteEntity) => {
-        return <div style={{maxWidth:"100%",whiteSpace:"break-spaces"}}>{record.comment}</div>
+        return <div style={{maxWidth: "100%", whiteSpace: "break-spaces"}}>{record.comment}</div>
       }
     },
     {
@@ -320,7 +300,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       width: "70%",
       key: 2,
       render: (text: string, record: CommentEntity) => {
-        return <div style={{maxWidth:"100%",whiteSpace:"break-spaces"}}>{record.content}</div>
+        return <div style={{maxWidth: "100%", whiteSpace: "break-spaces"}}>{record.content}</div>
       }
     },
     {
@@ -371,6 +351,30 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     },
 
   ]
+  const icon = [
+    {
+      type: "select",
+      iconType: 'eye',
+      twoToneColor: '#D7D704'
+    },
+    {
+      type: "create",
+      iconType: 'plus-circle',
+      twoToneColor: '#00d62b'
+    },
+    {
+      type: "update",
+      iconType: 'edit',
+      twoToneColor: '#0d89fc'
+
+    },
+    {
+      type: "delete",
+      iconType: 'delete',
+      twoToneColor: '#ff3b3b'
+
+    },
+  ]
 
   useEffect(() => {
     setActiveLogs({
@@ -398,6 +402,8 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       props.getActivityLogs({idProfile: showForm.id_detail, page: activeLogs.current, size: 10});
     }
   }, [showForm.id_detail, activeLogs.current])
+
+  console.log("getBooking:", getBooking)
 
   function handleUploadAvatar(e: any) {
     e.preventDefault();
@@ -506,7 +512,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     props.showFormUploadCV(true, detail.result?.id);
   }
 
-  const onBtnUpdateBooking = (event: any) => {
+  const onBtnUpdateBooking = (event: any,value:any) => {
     event.stopPropagation();
     if (detail.result) {
       let req: DataShowBooking = {
@@ -515,7 +521,21 @@ function DetailProfileForm(props: DetailProfileFormProps) {
         idRecruitment: detail.result.recruitmentId,
         username: detail.result.username
       }
-      props.showFormBooking(true, req);
+      props.showFormBooking(true, req,value, true);
+    }
+  }
+
+  const onBtnCreateBooking = (event: any) => {
+    event.stopPropagation();
+    if (detail.result) {
+      let req: DataShowBooking = {
+        id: detail.result.id,
+        fullName: detail.result.fullName,
+        idRecruitment: detail.result.recruitmentId,
+        username: detail.result.username
+      }
+      let reqBooking=null;
+      props.showFormBooking(true, req,reqBooking, false);
     }
   }
 
@@ -566,6 +586,10 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       }
     )
     props.showChangeProcessForm(true, req)
+  }
+
+  function btnDeleteScheduleClicked(event:any,val:any) {
+    props.deleteSchedule({id: val})
   }
 
   return (
@@ -681,15 +705,15 @@ function DetailProfileForm(props: DetailProfileFormProps) {
             <Icon type="contacts" className='mr-1'/>
             <span>{detail.result?.hometown || "Không có địa chỉ"}</span><br/>
             <Icon type="skype" className='mr-1'/>
-            <span>{detail.result?.skype }</span><br/>
+            <span>{detail.result?.skype}</span><br/>
             <Icon type="facebook" className='mr-1'/>
-            <a href={detail.result?.facebook} target={"_blank"}>{detail.result?.facebook }</a><br/>
+            <a href={detail.result?.facebook} target={"_blank"}>{detail.result?.facebook}</a><br/>
             <Icon type="linkedin" className='mr-1'/>
-            <span>{detail.result?.linkedin }</span><br/>
+            <span>{detail.result?.linkedin}</span><br/>
             <Icon type="github" className='mr-1'/>
-            <span>{detail.result?.github }</span><br/>
+            <span>{detail.result?.github}</span><br/>
             <Icon type="global" className='mr-1'/>
-            <span>{detail.result?.web }</span><br/>
+            <span>{detail.result?.web}</span><br/>
 
             <h1>Social profiles</h1>
           </div>
@@ -705,37 +729,95 @@ function DetailProfileForm(props: DetailProfileFormProps) {
             <h1>Lịch phỏng vấn</h1>
             {detail.result?.recruitmentId ? (<div className="detail-paragraph-3__title--button">
                 <Button size="small" className="ant-btn mr-1 ant-btn-sm"
-                        onClick={event => onBtnUpdateBooking(event)}
+                        onClick={event => onBtnCreateBooking(event)}
                 >
-                  <Icon type="calendar"/> Đặt/Sửa lịch
+                  <Icon type="calendar"/> Đặt lịch
                 </Button>
               </div>
             ) : null}
           </div>
           <div className="detail-paragraph-3__content">
-            <div>
-              <Icon type="environment" className="mr-2"/>
-              <span>Địa chỉ phỏng vấn: {getBooking.result?.interviewAddressName}</span>
-            </div>
 
-            <div>
-              <Icon type="team" className="mr-2"/>
-              <span>Hội đồng tuyển dụng:</span>
-              <ul>
-                {props.account.rows?.filter((item: any) => getBooking.result?.interviewers?.map((item: any) => item.username).includes(item.username))
-                  .map((item: any, index: any) => {
-                    return <li key={index}>
-                      {item.fullName}
-                    </li>
-                  })}
-              </ul>
-            </div>
+            <div className='apply-position-box'>
+              <h1 style={{padding: "0"}}>Danh sách lịch</h1>
+              <div style={{maxHeight: 245, overflow: "auto", paddingRight: 5}}>
+                {getBooking.result?.map((item: any, index: any) => {
+                  return <div key={index} className='apply-position-box'>
+                    <div>
+                      {item.date > +moment() ?
+                        <div className="flex-space-between" style={{paddingBottom: 5}}>
+                          <div>
+                            <span style={{fontWeight: 500}}>Lịch {index+1}:</span>
+                            <span style={{color: "#1890ff"}}> Sắp diễn ra</span>
+                          </div>
+                          <div>
+                            <Popconfirm
+                              title="Bạn muốn xóa lịch này chứ ?"
+                              okText="Xóa"
+                              onConfirm={event=>btnDeleteScheduleClicked(event,item.id)}
+                            >
+                              <Tooltip placement="top" title="Xóa">
+                                <Button
+                                  size="small"
+                                  className="ant-btn ml-1 mr-1 ant-btn-sm"
 
-            <div>
-              <Icon type="calendar" className="mr-2"/>
-              <span>Thời gian phỏng vấn: {getBooking.result ? moment(unixTimeToDate(getBooking.result?.date)).format('HH:mm DD/MM/YYYY') : ''} </span>
-            </div>
+                                >
+                                  <Icon style={{color: "red"}} type="delete" theme="filled"/>
+                                </Button>
+                              </Tooltip>
 
+                            </Popconfirm>
+
+                            <Tooltip placement="top" title="Sửa">
+
+                              <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
+                                onClick={event => onBtnUpdateBooking(event, item)}
+                              >
+                                <Icon type="edit"/>
+                              </Button>
+                            </Tooltip>
+
+                          </div>
+                        </div>
+                        :
+                        item.interviewTime < +moment() ?
+                          <>
+                            <span style={{fontWeight: 500}}>Lịch {index + 1}:</span>
+                            <span style={{color: "red"}}>Đã kết thức</span>
+                          </>
+                          :
+                          <>
+                            <span style={{fontWeight: 500}}>Lịch {index + 1}:</span>
+                            <span style={{color: "#ffbd24"}}>Đang diễn ra</span>
+                          </>}
+                    </div>
+
+                    <div>
+                      <Icon type="environment" className="mr-2"/>
+                      <span>Địa chỉ phỏng vấn: {item.interviewAddressName}</span>
+                    </div>
+
+                    <div>
+                      <Icon type="team" className="mr-2"/>
+                      <span>Hội đồng tuyển dụng:</span>
+                      <ul>
+                        {props.account.rows?.filter((item: any) => item.interviewers?.map((item: any) => item.username).includes(item.username))
+                          .map((item: any, index: any) => {
+                            return <li key={index}>
+                              {item.fullName}
+                            </li>
+                          })}
+                      </ul>
+                    </div>
+
+                    <div style={{marginTop: -15}}>
+                      <Icon type="calendar" className="mr-2"/>
+                      <span>Thời gian phỏng vấn: {item ? moment(unixTimeToDate(item?.date)).format('HH:mm DD/MM/YYYY') : ''} </span>
+                    </div>
+                  </div>
+                })}
+              </div>
+            </div>
 
             <div className='apply-position-box'>
               {detail.result?.recruitmentId ? (
@@ -810,7 +892,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
               className="custom-table -webkit-scrollbar"
               dataSource={getListComment.result?.rows}
               columns={columnComment}
-              style={{ whiteSpace: 'pre'}}
+              style={{whiteSpace: 'pre'}}
               rowKey="id"
               bordered
               locale={{emptyText: emptyText}}
@@ -837,7 +919,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
               scroll={{x: 1000}}
               className="custom-table -webkit-scrollbar"
               dataSource={getListNote.result?.rows}
-              style={{ whiteSpace: 'pre'}}
+              style={{whiteSpace: 'pre'}}
               columns={columns}
               rowKey="id"
               bordered

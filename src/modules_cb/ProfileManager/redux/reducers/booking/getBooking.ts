@@ -7,7 +7,7 @@ import {GetBookingAction} from "../../actions";
 export interface GetBookingState {
   loading: boolean,
   params?: any,
-  result?: BookingEntity,
+  result?: BookingEntity[]|any,
   error?: AppError
 }
 
