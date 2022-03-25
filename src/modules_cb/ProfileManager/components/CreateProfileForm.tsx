@@ -22,7 +22,6 @@ import CreateDepartmentForm from "../../DepartmentManager/components/CreateDepar
 import {JobEntity} from "../../JobManager/types";
 import {JobLevelEntity} from "../../JobLevelManager/types";
 import {DepartmentEntity} from "../../DepartmentManager/types";
-import {getSearchRecruitment} from "../../RecruitmentManager/redux/actions";
 import {SourceCVEntity} from "../../SourceCVManager/types";
 import {SchoolEntity} from "../../SchoolManager/types";
 import {getSearchAccount} from "../../AccountManager/redux/actions";
@@ -60,7 +59,6 @@ const connector = connect(mapStateToProps,
     showDepartmentFormCreate,
     getSearchJob,
     getSearchJobLevel,
-    getSearchRecruitment,
     getSearchSourceCV,
     getSearchSchool,
     getSearchAccount
@@ -142,6 +140,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
           skill: values.skill,
           hrRef: values.hrRef,
           mailRef: values.mailRef,
+          mailRef2: values.mailRef2,
           department: values.department,
           dateOfApply: values.dateOfApply * 1,
 
@@ -757,6 +756,37 @@ function CreateProfileForm(props: CreateProfileFormProps) {
               </div>
             </Form.Item>
 
+            <Form.Item label="Phòng ban" className="form-label"  {...formItemLayout}>
+              <div style={{display: 'flex'}}>
+                {getFieldDecorator('department', {
+                  initialValue: undefined,
+                  rules: [
+                    {
+                      message: 'Vui lòng nhập phòng ban',
+                      required: false,
+                    },
+                  ],
+                })(
+                  <TreeSelect getPopupContainer={(trigger: any) => trigger.parentNode}
+                              className="bg-white text-black"
+                              dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
+                              treeData={treeData}
+                              style={fontWeightStyle}
+                              placeholder="Chọn bộ phận, phòng ban"
+                              treeDefaultExpandAll
+                  />
+                )}
+                <Button
+                  size="small"
+                  className="ant-btn ml-1 mr-1 ant-btn-sm"
+                  style={{height: '32px'}}
+                  onClick={handleCreateDepartment}
+                >
+                  <Icon type="plus"/>
+                </Button>
+              </div>
+            </Form.Item>
+
             <Form.Item label="Người giới thiệu" className="form-label"  {...formItemLayout}>
               {getFieldDecorator('hrRef', {
                 initialValue: undefined,
@@ -806,6 +836,20 @@ function CreateProfileForm(props: CreateProfileFormProps) {
               )}
             </Form.Item>
 
+            <Form.Item label="Email người giới thiệu(Ngoài hệ thống)" className="form-label"  {...formItemLayout}>
+              {getFieldDecorator('mailRef2', {
+                initialValue: "",
+                rules: [
+                  {
+                    message: 'Vui lòng nhập email người giới thiệu',
+                    required: false,
+                  },
+                ],
+              })(
+                <Input placeholder="Email người giới thiệu" className="bg-white text-black"/>
+              )}
+            </Form.Item>
+
             <Form.Item label="HR phụ trách" className="form-label"  {...formItemLayout}>
               {getFieldDecorator('pic', {
                 initialValue: undefined,
@@ -852,36 +896,6 @@ function CreateProfileForm(props: CreateProfileFormProps) {
               )}
             </Form.Item>
 
-            <Form.Item label="Phòng ban" className="form-label"  {...formItemLayout}>
-              <div style={{display: 'flex'}}>
-                {getFieldDecorator('department', {
-                  initialValue: undefined,
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập phòng ban',
-                      required: false,
-                    },
-                  ],
-                })(
-                  <TreeSelect getPopupContainer={(trigger: any) => trigger.parentNode}
-                              className="bg-white text-black"
-                              dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
-                              treeData={treeData}
-                              style={fontWeightStyle}
-                              placeholder="Chọn bộ phận, phòng ban"
-                              treeDefaultExpandAll
-                  />
-                )}
-                <Button
-                  size="small"
-                  className="ant-btn ml-1 mr-1 ant-btn-sm"
-                  style={{height: '32px'}}
-                  onClick={handleCreateDepartment}
-                >
-                  <Icon type="plus"/>
-                </Button>
-              </div>
-            </Form.Item>
           </div>
           <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px', textAlign: "right"}} colon={false}>
             <Button className="mr-3 create-btn" htmlType="submit" onClick={onBtnCreateClicked}>

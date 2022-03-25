@@ -33,7 +33,6 @@ import {getListTalentPool} from "../../TalentPoolManager/redux/actions";
 import {getListDepartment, showFormCreate as showDepartmentFormCreate} from "../../DepartmentManager/redux/actions";
 import CreateDepartmentForm from "../../DepartmentManager/components/CreateDepartmentForm";
 import {showFormCreate as showSkillFormCreate} from "../../SkillManager/redux/actions";
-import {getSearchRecruitment} from "../../RecruitmentManager/redux/actions";
 import {getSearchAccount} from "../../AccountManager/redux/actions";
 import {JobEntity} from "../../JobManager/types";
 import {JobLevelEntity} from "../../JobLevelManager/types";
@@ -82,7 +81,6 @@ const connector = connect(mapStateToProps,
     showDepartmentFormCreate,
     getSearchJob,
     getSearchJobLevel,
-    getSearchRecruitment,
     getSearchSourceCV,
     getSearchSchool,
     getSearchAccount
@@ -158,6 +156,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           department: values.department,
           levelSchool: values.levelSchool,
           mailRef: values.mailRef,
+          mailRef2: values.mailRef2,
           recruitment: values.recruitmentId,
           skill: values.skill,
 
@@ -377,7 +376,8 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                       },
                     ],
                   })(
-                  <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle}
+                    <Select getPopupContainer={(trigger: any) => trigger.parentNode} className="bg-white text-black"
+                            style={fontWeightStyle}
                     >
                       <Option value="Nam">Nam</Option>
                       <Option value="Nữ">Nữ</Option>
@@ -532,7 +532,8 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                     },
                   ],
                 })(
-                <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle} placeholder="Chọn trình độ đào tạo"
+                  <Select getPopupContainer={(trigger: any) => trigger.parentNode} className="bg-white text-black"
+                          style={fontWeightStyle} placeholder="Chọn trình độ đào tạo"
                   >
                     <Option key="1" value="Trung cấp">Trung cấp</Option>
                     <Option key="2" value="Đại học">Đại học</Option>
@@ -551,7 +552,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                   <Icon type="plus"/>
                 </Button>
               </div>
-
             </Form.Item>
 
             <Form.Item label="Nơi đào tạo" className="form-label"  {...formItemLayout}>
@@ -565,8 +565,8 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                     },
                   ],
                 })(
-                <Select
-                  getPopupContainer={(trigger:any) => trigger.parentNode}
+                  <Select
+                    getPopupContainer={(trigger: any) => trigger.parentNode}
                     onSearch={onSearchSchool}
                     onFocus={onFocusSchool}
                     filterOption={(input, option: any) =>
@@ -624,15 +624,15 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                         },
                       ],
                     })(
-                    <Select getPopupContainer={(trigger:any) => trigger.parentNode}
-                        onSearch={onSearchSourceCV}
-                        onFocus={onFocusSourceCV}
-                        filterOption={(input, option: any) =>
-                          option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }
-                        optionFilterProp="children"
-                        showSearch
-                        className="bg-white text-black" style={fontWeightStyle}
+                      <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                              onSearch={onSearchSourceCV}
+                              onFocus={onFocusSourceCV}
+                              filterOption={(input, option: any) =>
+                                option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                              }
+                              optionFilterProp="children"
+                              showSearch
+                              className="bg-white text-black" style={fontWeightStyle}
                       >
                         {sourceCV.map((item: any, index: any) => (
                           <Option key={index} value={item.id}>{item.name}</Option>
@@ -663,17 +663,17 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                     },
                   ],
                 })(
-                <Select getPopupContainer={(trigger:any) => trigger.parentNode}
-                    onSearch={onSearchJob}
-                    onFocus={onFocusJob}
-                    filterOption={(input, option: any) =>
-                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    }
-                    optionFilterProp="children"
-                    showSearch
-                    className="bg-white text-black"
-                    placeholder="Chọn vị trí công việc"
-                    style={fontWeightStyle}
+                  <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                          onSearch={onSearchJob}
+                          onFocus={onFocusJob}
+                          filterOption={(input, option: any) =>
+                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                          }
+                          optionFilterProp="children"
+                          showSearch
+                          className="bg-white text-black"
+                          placeholder="Chọn vị trí công việc"
+                          style={fontWeightStyle}
                   >
                     {job.map((item: any, index: any) => (
                       <Option key={index} value={item.id}>{item.name}</Option>
@@ -703,17 +703,17 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                     },
                   ],
                 })(
-                <Select getPopupContainer={(trigger:any) => trigger.parentNode}
-                    onSearch={onSearchJobLevel}
-                    onFocus={onFocusJobLevel}
-                    filterOption={(input, option: any) =>
-                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    }
-                    optionFilterProp="children"
-                    showSearch
-                    className="bg-white text-black"
-                    placeholder="Câp bậc công việc"
-                    style={fontWeightStyle}
+                  <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                          onSearch={onSearchJobLevel}
+                          onFocus={onFocusJobLevel}
+                          filterOption={(input, option: any) =>
+                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                          }
+                          optionFilterProp="children"
+                          showSearch
+                          className="bg-white text-black"
+                          placeholder="Câp bậc công việc"
+                          style={fontWeightStyle}
                   >
                     {jobLevel.map((item: any, index: any) => (
                       <Option key={index} value={item.id}>{item.name}</Option>
@@ -742,17 +742,17 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                     },
                   ],
                 })(
-                <Select
-                  getPopupContainer={(trigger:any) => trigger.parentNode}
-                  className="bg-white text-black"
-                  placeholder="Chọn kỹ năng công việc"
-                  mode="multiple"
-                  style={fontWeightStyle}
+                  <Select
+                    getPopupContainer={(trigger: any) => trigger.parentNode}
+                    className="bg-white text-black"
+                    placeholder="Chọn kỹ năng công việc"
+                    mode="multiple"
+                    style={fontWeightStyle}
 
-                  filterOption={(input, option: any) =>
-                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                  }
-                  optionLabelProp="children"
+                    filterOption={(input, option: any) =>
+                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                    optionLabelProp="children"
                   >
                     {props.listSkill.rows?.map((item: any, index: any) => (
                       <Option key={index} value={item.id}>{item.name}</Option>
@@ -770,6 +770,37 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
               </div>
             </Form.Item>
 
+            <Form.Item label="Phòng ban" className="form-label"  {...formItemLayout}>
+              <div style={{display: 'flex'}}>
+                {getFieldDecorator('department', {
+                  initialValue: props.showForm.data_update?.department,
+                  rules: [
+                    {
+                      message: 'Vui lòng nhập phòng ban',
+                      required: false,
+                    },
+                  ],
+                })(
+                  <TreeSelect getPopupContainer={(trigger: any) => trigger.parentNode}
+                              className="bg-white text-black"
+                              dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
+                              treeData={treeData}
+                              style={fontWeightStyle}
+                              placeholder="Chọn bộ phận, phòng ban"
+                              treeDefaultExpandAll
+                  />
+                )}
+                <Button
+                  size="small"
+                  className="ant-btn ml-1 mr-1 ant-btn-sm"
+                  style={{height: '32px'}}
+                  onClick={handleCreateDepartment}
+                >
+                  <Icon type="plus"/>
+                </Button>
+              </div>
+            </Form.Item>
+
             <Form.Item label="Người giới thiệu" className="form-label"  {...formItemLayout}>
               {getFieldDecorator('hrRef', {
                 initialValue: props.showForm.data_update?.username,
@@ -780,17 +811,17 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                   },
                 ],
               })(
-              <Select getPopupContainer={(trigger:any) => trigger.parentNode}
-                  onSearch={onSearchAccount}
-                  onFocus={onFocusAccount}
-                  showSearch
-                  className="bg-white text-black select-account-custom"
-                  style={fontWeightStyle}
-                  optionLabelProp="label"
-                  placeholder="Chọn người giới thiệu">
-                <Option key={"none"} value={""} label={"<None>"}>
-                  <div>&lt;None&gt;</div>
-                </Option>
+                <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                        onSearch={onSearchAccount}
+                        onFocus={onFocusAccount}
+                        showSearch
+                        className="bg-white text-black select-account-custom"
+                        style={fontWeightStyle}
+                        optionLabelProp="label"
+                        placeholder="Chọn người giới thiệu">
+                  <Option key={"none"} value={""} label={"<None>"}>
+                    <div>&lt;None&gt;</div>
+                  </Option>
                   {account.map((item: any, index: any) => (
                     <Option key={index} value={item.username} label={item.fullName}>
                       <div className="flex-items-center" style={{paddingTop: 5}}>
@@ -808,6 +839,20 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                     </Option>
                   ))}
                 </Select>
+              )}
+            </Form.Item>
+
+            <Form.Item label="Email người giới thiệu(Ngoài hệ thống)" className="form-label"  {...formItemLayout}>
+              {getFieldDecorator('mailRef2', {
+                initialValue: props.showForm.data_update?.mailRef2,
+                rules: [
+                  {
+                    message: 'Vui lòng nhập email người giới thiệu',
+                    required: false,
+                  },
+                ],
+              })(
+                <Input placeholder="Email người giới thiệu" className="bg-white text-black"/>
               )}
             </Form.Item>
 
@@ -821,17 +866,17 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                   },
                 ],
               })(
-              <Select getPopupContainer={(trigger:any) => trigger.parentNode}
-                  onSearch={onSearchAccount}
-                  onFocus={onFocusAccount}
-                  showSearch
-                  className="bg-white text-black"
-                  style={fontWeightStyle}
-                  optionLabelProp="label"
-                  placeholder="Chọn HR phụ trách">
-                <Option key={"none"} value={""} label={"<None>"}>
-                  <div>&lt;None&gt;</div>
-                </Option>
+                <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                        onSearch={onSearchAccount}
+                        onFocus={onFocusAccount}
+                        showSearch
+                        className="bg-white text-black"
+                        style={fontWeightStyle}
+                        optionLabelProp="label"
+                        placeholder="Chọn HR phụ trách">
+                  <Option key={"none"} value={""} label={"<None>"}>
+                    <div>&lt;None&gt;</div>
+                  </Option>
                   {account.map((item: any, index: any) => (
                     <Option key={index} value={item.username} label={item.fullName}>
                       <div className="flex-items-center" style={{paddingTop: 5}}>
@@ -852,36 +897,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
               )}
             </Form.Item>
 
-            <Form.Item label="Phòng ban" className="form-label"  {...formItemLayout}>
-              <div style={{display: 'flex'}}>
-                {getFieldDecorator('department', {
-                  initialValue: props.showForm.data_update?.department,
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập phòng ban',
-                      required: false,
-                    },
-                  ],
-                })(
-                  <TreeSelect getPopupContainer={(trigger:any) => trigger.parentNode}
-                    className="bg-white text-black"
-                    dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
-                    treeData={treeData}
-                    style={fontWeightStyle}
-                    placeholder="Chọn bộ phận, phòng ban"
-                    treeDefaultExpandAll
-                  />
-                )}
-                <Button
-                  size="small"
-                  className="ant-btn ml-1 mr-1 ant-btn-sm"
-                  style={{height: '32px'}}
-                   onClick={handleCreateDepartment}
-                >
-                  <Icon type="plus"/>
-                </Button>
-              </div>
-            </Form.Item>
           </div>
           <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px', textAlign: "right"}} colon={false}>
             <Button className="mr-3 create-btn" htmlType="submit" onClick={onBtnUpdateClicked}>

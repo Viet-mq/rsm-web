@@ -6,7 +6,7 @@ import {Button, Form, Icon, Input, Modal, Select} from "antd";
 import React, {FormEvent, useEffect, useRef, useState} from "react";
 import {CreateBookingRequest, MailForm, MailRequest} from "../types";
 import {EmailEntity} from "../../EmailManager/types";
-import {getListEmail} from "../../EmailManager/redux/actions";
+import {getListEmail, searchListEmail} from "../../EmailManager/redux/actions";
 import {createSchedule} from "../../ScheduleManager/redux/actions";
 import ReactQuill from "react-quill";
 import {getSearchAccount} from "../../AccountManager/redux/actions";
@@ -18,7 +18,7 @@ const {TextArea} = Input;
 const mapStateToProps = (state: RootState) => ({
   listAccount: state.accountManager.list,
   showBooking: state.profileManager.showBooking,
-  emailManager: state.emailManager.list,
+  listEmail: state.emailManager.list,
 
 })
 
@@ -28,7 +28,8 @@ const connector = connect(mapStateToProps,
     showEmailCreateForm,
     getListEmail,
     createSchedule,
-    getSearchAccount
+    getSearchAccount,
+    searchListEmail
   });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -45,14 +46,9 @@ function CreateEmailForm(props: IProps) {
     labelCol: {span: 4},
     wrapperCol: {span: 20}
   };
-  const [trigger, setTrigger] = useState({
-    account: false,
-
-  })
   const [account, setAccount] = useState<UserAccount[] | any>([]);
-
   const [display, setDisplay] = useState(false)
-  const [emailTemp, setEmailTemp] = useState<EmailEntity>()
+  const [emailTemp, setEmailTemp] = useState<EmailEntity[]>([])
   const [valueEditor, setValueEditor] = useState("")
   const inputFile = useRef<any>(null)
   const [fileAttach, setFileAttach] = useState<any>([]);
@@ -88,6 +84,10 @@ function CreateEmailForm(props: IProps) {
     'list', 'bullet', 'indent',
     'link', 'image', 'video'
   ]
+  const [trigger, setTrigger] = useState({
+    email: false,
+    account: false,
+  })
 
   useEffect(() => {
     if (props.showBooking.show_email_create) {
@@ -97,17 +97,17 @@ function CreateEmailForm(props: IProps) {
 
 
   useEffect(() => {
-    if (props.showBooking && props.emailManager) {
-      setEmailTemp(props.emailManager.rows[0])
-      setValueEditor(props.emailManager.rows[0]?.content)
+    if (props.showBooking && props.listEmail) {
+      setEmailTemp(props.listEmail.rows)
+      setValueEditor(props.listEmail.rows[0]?.content)
     }
-  }, [props.emailManager])
+  }, [props.listEmail])
 
   function onBtnCancelClicked() {
     resetFields();
     props.showEmailCreateForm(false);
     setValueEditor("")
-    setEmailTemp(undefined)
+    setEmailTemp([])
   }
 
   function handleSubmitForm(e: FormEvent) {
@@ -160,8 +160,8 @@ function CreateEmailForm(props: IProps) {
   }
 
   function handleSelectMailTemplate(value: any) {
-    const selectEmail = props.emailManager.rows.find((item: any) => item.id === value)
-    setEmailTemp(selectEmail)
+    const selectEmail = props.listEmail.rows.find((item: any) => item.id === value)
+    setEmailTemp([selectEmail])
     setValueEditor(selectEmail.content)
   }
 
@@ -190,6 +190,15 @@ function CreateEmailForm(props: IProps) {
     setAccount(props.listAccount.rows)
   }
 
+  function onSearchEmail(value: any) {
+    props.searchListEmail({name: value})
+    setTrigger({...trigger, email: true})
+  }
+
+  function onFocusEmail() {
+    setEmailTemp(props.listEmail.rows)
+  }
+
 
   return (
     <>
@@ -216,7 +225,7 @@ function CreateEmailForm(props: IProps) {
                 <Form.Item className="form-label" label="Tên mẫu mail" labelCol={{span: 24}}
                            wrapperCol={{span: 24}}>
                   {getFieldDecorator('title', {
-                    initialValue: emailTemp?.id,
+                    initialValue: emailTemp[0]?.id,
                     rules: [
                       {
                         message: 'Vui lòng nhập tên mẫu',
@@ -224,15 +233,22 @@ function CreateEmailForm(props: IProps) {
                       },
                     ],
                   })(
-                  <Select 
-                    getPopupContainer={(trigger:any) => trigger.parentNode} 
-                    onSelect={handleSelectMailTemplate} 
-                    style={fontWeightStyle}
-                    placeholder="Nhập tên mẫu"
+                    <Select
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
+                      onSelect={handleSelectMailTemplate}
+                      style={fontWeightStyle}
+                      placeholder="Nhập tên mẫu"
 
-
-                  >
-                      {props.emailManager.rows?.map((item: any, index: any) => {
+                      onSearch={onSearchEmail}
+                      onFocus={onFocusEmail}
+                      filterOption={(input, option: any) =>
+                        option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                      optionFilterProp="children"
+                      showSearch
+                      className="bg-white text-black form-label"
+                    >
+                      {emailTemp?.map((item: any, index: any) => {
                         return <Option key={index} value={item.id}>{item.name}</Option>
                       })}
                     </Select>
@@ -242,7 +258,7 @@ function CreateEmailForm(props: IProps) {
                 <Form.Item className="form-label" label="Tiêu đề mail" labelCol={{span: 24}}
                            wrapperCol={{span: 24}}>
                   {getFieldDecorator('subjectCandidate', {
-                    initialValue: emailTemp?.subject,
+                    initialValue: emailTemp[0]?.subject,
                     rules: [
                       {
                         message: 'Vui lòng nhập tiêu đề mail',
@@ -260,7 +276,7 @@ function CreateEmailForm(props: IProps) {
                     style={fontWeightStyle}
                     className="ql-custom"
                     onChange={handleChangeMailContent}
-                    value={valueEditor||""}
+                    value={valueEditor || ""}
 
                     theme={'snow'}
                     modules={modules}
@@ -299,9 +315,12 @@ function CreateEmailForm(props: IProps) {
                           required: true,
                         },
                       ],
-                    })(<Select className="bg-white text-black" style={{...fontWeightStyle, width: "100%"}}
-                               mode="multiple"
-                               placeholder="Chọn thành viên"
+                    })(<Select
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
+                      className="bg-white text-black"
+                      style={{...fontWeightStyle, width: "100%"}}
+                      mode="multiple"
+                      placeholder="Chọn thành viên"
                     >
                       {props.listAccount.rows?.map((item: any, index: any) => (
                         <Option key={index} value={item.username}>{item.fullName}</Option>
@@ -311,7 +330,7 @@ function CreateEmailForm(props: IProps) {
 
                   <Form.Item label="Tiêu đề" className="form-label" {...formItemStyle}>
                     {getFieldDecorator('subjectRecruitmentCouncil', {
-                      initialValue: emailTemp?.subject,
+                      initialValue: emailTemp[0]?.subject,
                       rules: [
                         {
                           message: 'Vui lòng nhập tên trường',
@@ -346,8 +365,9 @@ function CreateEmailForm(props: IProps) {
                           required: false,
                         },
                       ],
-                    })(<Select 
-                      className="bg-white text-black" 
+                    })(<Select
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
+                      className="bg-white text-black"
                       style={{...fontWeightStyle, width: "100%"}}
                       mode="multiple"
 
@@ -360,7 +380,7 @@ function CreateEmailForm(props: IProps) {
 
                   <Form.Item label="Tiêu đề" className="form-label" {...formItemStyle}>
                     {getFieldDecorator('subjectPresenter', {
-                      initialValue: emailTemp?.subject,
+                      initialValue: emailTemp[0]?.subject,
                       rules: [
                         {
                           message: 'Vui lòng nhập tên trường',

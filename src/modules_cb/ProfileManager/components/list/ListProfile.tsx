@@ -13,7 +13,7 @@ import {
   showFormUpdate,
   showFormUploadCV
 } from "../../redux/actions";
-import {DataShowBooking, DeleteProfileRequest, DetailCV, ProfileEntity} from "../../types";
+import {DeleteProfileRequest, DetailCV, ProfileEntity} from "../../types";
 import moment from 'moment';
 import 'moment/locale/vi';
 import {GiFemale, GiMale, ImPhoneHangUp} from "react-icons/all";
@@ -161,7 +161,7 @@ function ListProfile(props: ListProfileProps) {
     },
     {
       title: 'Thông tin liên hệ',
-      width: 230,
+      width: 240,
       fixed: props.showDetail ? undefined : "left",
       key: 'contact',
       render: (text: string, record: ProfileEntity) => {
@@ -267,7 +267,7 @@ function ListProfile(props: ListProfileProps) {
     {
       title: 'Người giới thiệu',
       dataIndex: 'hrRef',
-      width: 160,
+      width: 180,
       key: 'hrRef',
       render: (text: string, record: ProfileEntity) => {
         return <div>
@@ -282,9 +282,16 @@ function ListProfile(props: ListProfileProps) {
     },
 
     {
+      title: 'Email người giới thiệu(Ngoài hệ thống)',
+      dataIndex: 'mailRef2',
+      width: 180,
+      key: 'mailRef2',
+    },
+
+    {
       title: 'PIC',
       dataIndex: 'picName',
-      width: 160,
+      width: 180,
       key: 'picName',
       render: (text: string, record: ProfileEntity) => {
         return <div>
@@ -339,7 +346,7 @@ function ListProfile(props: ListProfileProps) {
         return <div style={{whiteSpace: 'nowrap'}}>Thao tác</div>;
       },
       dataIndex: 'action',
-      width: 170,
+      width: 130,
       // fixed: 'right',
       render: (_text: string, record: ProfileEntity) => {
         return (
@@ -383,13 +390,13 @@ function ListProfile(props: ListProfileProps) {
             </Tooltip>
 
 
-            <Tooltip placement="top" title="Lịch phỏng vấn">
-              <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
-                      onClick={event => handleBooking(event, record)}
-              >
-                <Icon type="calendar"/>
-              </Button>
-            </Tooltip>
+            {/*<Tooltip placement="top" title="Lịch phỏng vấn">*/}
+            {/*  <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"*/}
+            {/*          onClick={event => handleBooking(event, record)}*/}
+            {/*  >*/}
+            {/*    <Icon type="calendar"/>*/}
+            {/*  </Button>*/}
+            {/*</Tooltip>*/}
           </div>
         );
       },
@@ -437,16 +444,16 @@ function ListProfile(props: ListProfileProps) {
       props.getDetailTalentPool({id: props.idTalentPool})
 
     } else if (
-      selected.fullName||
-        selected.job||
-        selected.jobLevel||
-        selected.department||
-        selected.talentPool||
-        selected.recruitment||
-        selected.hrRef||
-        selected.pic||
-        selected.from||
-        selected.to) {
+      selected.fullName ||
+      selected.job ||
+      selected.jobLevel ||
+      selected.department ||
+      selected.talentPool ||
+      selected.recruitment ||
+      selected.hrRef ||
+      selected.pic ||
+      selected.from ||
+      selected.to) {
       props.getListProfile({
         fullName: selected.name,
         job: selected.job,
@@ -461,8 +468,7 @@ function ListProfile(props: ListProfileProps) {
         page: page,
         size: 30,
       })
-    }
-    else props.getListProfile({page: page, size: 30});
+    } else props.getListProfile({page: page, size: 30});
   }, [page, pathname])
 
   useEffect(() => {
@@ -568,16 +574,16 @@ function ListProfile(props: ListProfileProps) {
   const handleEdit = (event: any, entity: ProfileEntity) => {
     props.showFormUpdate(true, entity);
   }
-
-  const handleBooking = (event: any, entity: ProfileEntity) => {
-    let req: DataShowBooking = {
-      id: entity.id,
-      fullName: entity.fullName,
-      idRecruitment: entity.recruitmentId,
-      username: entity.username,
-    }
-    props.showFormBooking(true, req);
-  }
+  //
+  // const handleBooking = (event: any, entity: ProfileEntity) => {
+  //   let req: DataShowBooking = {
+  //     id: entity.id,
+  //     fullName: entity.fullName,
+  //     idRecruitment: entity.recruitmentId,
+  //     username: entity.username,
+  //   }
+  //   props.showFormBooking(true, req);
+  // }
 
   const handleUploadCV = (e: any, entity: ProfileEntity) => {
     props.showFormUploadCV(true, entity.id);
@@ -608,7 +614,7 @@ function ListProfile(props: ListProfileProps) {
 
   function btnSearchClicked() {
     props.getListProfile({
-      fullName: selected.name,
+      fullName: encodeURI(selected.name),
       job: selected.job,
       jobLevel: selected.jobLevel,
       department: selected.department,
@@ -770,13 +776,13 @@ function ListProfile(props: ListProfileProps) {
                       onSearch={onSearchRecruitment}
                       onFocus={onFocusRecruitment}
                       filterOption={(input, option: any) =>
-                        option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        option.props.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
                       }
-                      optionFilterProp="children"
+                      optionFilterProp="label"
                       showSearch
               >
                 {recruitment.map((item: any, index: any) => (
-                  <Option key={index} value={item.id}>{item.title}</Option>
+                  <Option key={index} value={item.id} label={item.title}>[{item.departmentName}] {item.title}</Option>
                 ))}
               </Select>
 

@@ -128,7 +128,7 @@ function CreateAccountForm(props: CreateAccountFormProps) {
               },
             ],
           })(
-            <Input placeholder="Mật khẩu" type={'password'} className="bg-white text-black"/>
+            <Input.Password placeholder="Mật khẩu" type={'password'} className="bg-white text-black"/>
           )}
         </Form.Item>
 

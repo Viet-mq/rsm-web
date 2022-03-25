@@ -5,7 +5,7 @@ import {Button, Form, Modal, Radio, Select} from "antd";
 import React, {useEffect, useState} from "react";
 import 'devextreme/dist/css/dx.light.css';
 import {changeProcess, showChangeProcessForm} from "../redux/actions";
-import {getListRecruitment} from "../../RecruitmentManager/redux/actions";
+import {getListRecruitment, getSearchRecruitment} from "../../RecruitmentManager/redux/actions";
 import {ChangeProcessRequest, ProcessForm} from "../types";
 import {InterviewProcess, RecruitmentEntity} from "../../RecruitmentManager/types";
 
@@ -13,14 +13,18 @@ const {Option} = Select;
 
 const mapStateToProps = (state: RootState) => ({
   profileManager: state.profileManager,
-  recruitment: state.recruitmentManager.list
+  recruitment: state.recruitmentManager.list,
+  listRecruitment: state.recruitmentManager.list,
+
 })
 
 const connector = connect(mapStateToProps,
   {
     showChangeProcessForm,
     changeProcess,
-    getListRecruitment
+    getListRecruitment,
+    getSearchRecruitment,
+
   })
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -36,7 +40,11 @@ function ChangeRecruitmentForm(props: IProps) {
   const [process, setProcess] = useState<any>('')
   const [filterProcess, setFilterProcess] = useState<InterviewProcess[] | any>([])
   const [valuesSelect, setValueSelect] = useState('')
+  const [recruitment, setRecruitment] = useState<RecruitmentEntity[]>([]);
 
+  const [trigger, setTrigger] = useState({
+    recruitment: false,
+  })
   useEffect(() => {
     if (showForm.show_change_recruitment) {
       props.getListRecruitment();
@@ -46,6 +54,8 @@ function ChangeRecruitmentForm(props: IProps) {
   useEffect(() => {
     if (showForm.show_change_recruitment) {
       setFilterRecruitment(props.recruitment.rows.filter((item: any) => item.id !== showForm?.id_recruitment))
+      setRecruitment(props.listRecruitment.rows)
+
     }
   }, [props.recruitment])
 
@@ -82,7 +92,7 @@ function ChangeRecruitmentForm(props: IProps) {
         changeProcess: recruitmentForm,
       }
 
-      props.changeProcess(req,true)
+      props.changeProcess(req, true)
     }
   }
 
@@ -112,6 +122,16 @@ function ChangeRecruitmentForm(props: IProps) {
     props.changeProcess(req, true)
   }
 
+  function onSearchRecruitment(value: any) {
+    props.getSearchRecruitment({name: value})
+    setTrigger({...trigger, recruitment: true})
+  }
+
+  function onFocusRecruitment() {
+    setRecruitment(props.listRecruitment.rows)
+  }
+
+
   return (
     <>
       {showForm.id_recruitment ?
@@ -132,12 +152,24 @@ function ChangeRecruitmentForm(props: IProps) {
             </div>
 
             <div className="select-option">
-            <Select getPopupContainer={(trigger:any) => trigger.parentNode} style={{width: "100%", paddingTop: 15}}
+              <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                      style={{width: "100%", paddingTop: 15}}
                       value={valuesSelect}
                       onSelect={handleChangeRecruitment}
-                      placeholder={"Chọn tin tuyển dụng"}>
-                {filterRecruitment?.map((item: any, index: any) => {
-                  return <Option key={index} value={item.id}>{item.title}</Option>
+                      placeholder={"Chọn tin tuyển dụng"}
+
+                      className="bg-white text-black "
+                      onSearch={onSearchRecruitment}
+                      onFocus={onFocusRecruitment}
+                      filterOption={(input, option: any) =>
+                        option.props.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                      optionFilterProp="label"
+                      showSearch
+              >
+                {recruitment?.map((item: any, index: any) => {
+                  return <Option key={index} value={item.id}
+                                 label={item.title}>[{item.departmentName}] {item.title}</Option>
                 })
                 }
               </Select>
@@ -181,10 +213,23 @@ function ChangeRecruitmentForm(props: IProps) {
             </div>
 
             <div className="select-option">
-            <Select getPopupContainer={(trigger:any) => trigger.parentNode} style={{width: "100%", paddingTop: 15}} onSelect={handleSelectRecruitment}
-                      placeholder={"Chọn tin tuyển dụng"}>
-                {props.recruitment.rows?.map((item: any, index: any) => {
-                  return <Option key={index} value={item.id}>{item.title}</Option>
+              <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                      style={{width: "100%", paddingTop: 15}}
+                      onSelect={handleSelectRecruitment}
+                      placeholder={"Chọn tin tuyển dụng"}
+
+                      className="bg-white text-black "
+                      onSearch={onSearchRecruitment}
+                      onFocus={onFocusRecruitment}
+                      filterOption={(input, option: any) =>
+                        option.props.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                      optionFilterProp="label"
+                      showSearch
+              >
+                {recruitment.map((item: any, index: any) => {
+                  return <Option key={index} value={item.id}
+                                 label={item.title}>[{item.departmentName}] {item.title}</Option>
                 })}
               </Select>
             </div>

@@ -41,7 +41,6 @@ export interface ScheduleTime{
   avatarColor: string,
   date: number,
   idProfile: string,
-  fullName:string,
   interviewTime: number
 }
 

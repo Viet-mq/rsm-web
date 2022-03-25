@@ -30,7 +30,7 @@ type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends FormComponentProps, ReduxProps {
   reqUpdate: any,
-  profile:any,
+  profile: any,
 
 }
 
@@ -54,12 +54,12 @@ function UpdateEmailForm(props: IProps) {
       [{'list': 'ordered'}, {'list': 'bullet'}],
       [{'indent': '-1'}, {'indent': '+1'}],
       ['link', 'image'],
-      [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-      [{ 'direction': 'rtl' }],                         // text direction
-      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-      [{ 'font': [] }],
-      [{ 'align': [] }],
+      [{'script': 'sub'}, {'script': 'super'}],      // superscript/subscript
+      [{'direction': 'rtl'}],                         // text direction
+      [{'header': [1, 2, 3, 4, 5, 6, false]}],
+      [{'color': []}, {'background': []}],          // dropdown with defaults from theme
+      [{'font': []}],
+      [{'align': []}],
       ['clean'],
     ],
 
@@ -78,7 +78,7 @@ function UpdateEmailForm(props: IProps) {
     'list', 'bullet', 'indent',
     'link', 'image', 'video'
   ]
-  
+
   useEffect(() => {
     if (props.showBooking.show_email_update) {
       props.getListEmail({page: 1, size: 93});
@@ -109,7 +109,7 @@ function UpdateEmailForm(props: IProps) {
         let mailFormCandidate: MailForm = {
           subject: values.subjectCandidate,
           content: valueEditor,
-          file:fileAttach
+          file: fileAttach
 
         }
 
@@ -126,7 +126,7 @@ function UpdateEmailForm(props: IProps) {
         let mailRequest: MailRequest = {
           candidate: mailFormCandidate,
           recruitmentCouncils: mailFormInterviewers,
-          presenters:mailFormPresenter
+          presenters: mailFormPresenter
         }
 
         let req: UpdateBookingRequest = {
@@ -150,7 +150,7 @@ function UpdateEmailForm(props: IProps) {
   }
 
   function handleSelectMailTemplate(value: any) {
-    const selectEmail= props.emailManager.rows.find((item:any)=>item.id===value)
+    const selectEmail = props.emailManager.rows.find((item: any) => item.id === value)
     setEmailTemp(selectEmail)
     setValueEditor(selectEmail.content)
   }
@@ -165,9 +165,9 @@ function UpdateEmailForm(props: IProps) {
     setFileAttach(newFile);
   }
 
-  function handleDeleteFile(item:any,index:any) {
+  function handleDeleteFile(item: any, index: any) {
     const newFile = Array.from(fileAttach);
-    newFile.splice(index,1)
+    newFile.splice(index, 1)
     setFileAttach(newFile)
   }
 
@@ -203,7 +203,8 @@ function UpdateEmailForm(props: IProps) {
                   },
                 ],
               })(
-              <Select getPopupContainer={(trigger:any) => trigger.parentNode} onSelect={handleSelectMailTemplate} style={fontWeightStyle}
+                <Select getPopupContainer={(trigger: any) => trigger.parentNode} onSelect={handleSelectMailTemplate}
+                        style={fontWeightStyle}
                         placeholder="Nhập tên mẫu">
                   {props.emailManager.rows?.map((item: any, index: any) => {
                     return <Option key={index} value={item.id}>{item.name}</Option>
@@ -234,7 +235,7 @@ function UpdateEmailForm(props: IProps) {
                 style={fontWeightStyle}
                 className="ql-custom"
                 onChange={handleChangeMailContent}
-                value={valueEditor||""}
+                value={valueEditor || ""}
 
                 theme={'snow'}
                 modules={modules}
@@ -242,7 +243,7 @@ function UpdateEmailForm(props: IProps) {
                 bounds={'.app'}
                 placeholder="Mô tả công việc"
               />
-              
+
               <div className={display ? "value-required show" : "value-required hide"}>Vui lòng nhập nội dung</div>
 
             </div>
@@ -251,13 +252,17 @@ function UpdateEmailForm(props: IProps) {
             <div className="mt-2">
               <input type="file" ref={inputFile} onChange={onFileChange} id={"tags"} style={{display: "none"}}/>
               <div className="font-14-bold-500">Attachment file</div>
-              {fileAttach ? fileAttach?.map((item: any,index:any) => {
+              {fileAttach ? fileAttach?.map((item: any, index: any) => {
                 return <div key={index} className="flex-space-between">
-                  <div className='pl-2' style={{color: "#1890ff",fontStyle:"italic"}}> {item?.name}</div>
-                  <div className="cursor-default" onClick={()=>handleDeleteFile(item,index)}><Icon type="delete" style={{color: "#f5222d"}}/></div>
+                  <div className='pl-2' style={{color: "#1890ff", fontStyle: "italic"}}> {item?.name}</div>
+                  <div className="cursor-default" onClick={() => handleDeleteFile(item, index)}><Icon type="delete"
+                                                                                                      style={{color: "#f5222d"}}/>
+                  </div>
                 </div>
               }) : null}
-              <div className="cursor-default" style={{color: "#969C9D"}} onClick={onOpenFileClick}><Icon type="tag"/> Click to add file</div>
+              <div className="cursor-default" style={{color: "#969C9D"}} onClick={onOpenFileClick}><Icon
+                type="tag"/> Click to add file
+              </div>
             </div>
 
             <div className="font-15-bold-500 mt-5 mb-2">Nội dung email gửi cho Hội đồng tuyển dụng</div>
@@ -271,9 +276,12 @@ function UpdateEmailForm(props: IProps) {
                       required: true,
                     },
                   ],
-                })(<Select className="bg-white text-black" style={{...fontWeightStyle, width: "100%"}}
-                           mode="multiple"
-                           placeholder="Chọn thành viên"
+                })(<Select
+                  getPopupContainer={(trigger: any) => trigger.parentNode}
+                  className="bg-white text-black"
+                  style={{...fontWeightStyle, width: "100%"}}
+                  mode="multiple"
+                  placeholder="Chọn thành viên"
                 >
                   {props.listAccount.rows?.map((item: any, index: any) => (
                     <Option key={index} value={item.username}>{item.fullName}</Option>

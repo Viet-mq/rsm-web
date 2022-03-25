@@ -29,7 +29,8 @@ export interface ProfileEntity {
   levelSchool: string
   hrRef: string,
   username: string,
-  mailRef: string
+  mailRef: string,
+  mailRef2: string,
   recruitmentId: string
   recruitmentName: string
   skill: string[]
@@ -47,7 +48,8 @@ export interface ProfileEntity {
   picMail: string,
   status: string,
   companyId: string,
-  companyName: string
+  companyName: string,
+
 }
 
 export interface CreateProfileRequest {
@@ -65,6 +67,7 @@ export interface CreateProfileRequest {
   sourceCV: string,
   levelSchool: string,
   mailRef: string,
+  mailRef2: string,
   skill: string[],
   department: string,
   dateOfApply: number,
@@ -80,7 +83,6 @@ export interface CreateProfileRequest {
   web: string,
   talentPool?:string,
   recruitment?:string,
-
 
 }
 
@@ -102,6 +104,7 @@ export interface UpdateProfileRequest {
   department: string,
   levelSchool: string,
   mailRef: string,
+  mailRef2: string,
   recruitment: string,
   skill: string[],
   
@@ -114,6 +117,7 @@ export interface UpdateProfileRequest {
   status: string,
   time: number,
   web: string
+
 }
 
 export interface DeleteProfileRequest {
@@ -232,6 +236,7 @@ export interface UpdateBookingForm {
 
 export interface DataShowBooking {
   id: string,
+  idBooking?: string,
   fullName: string,
   idRecruitment: string,
   username: string,
@@ -251,6 +256,7 @@ export interface UpdateDetailRequest {
   github: string,
   hometown: string,
   hrRef: string,
+  mailRef2: string,
   id: string,
   job: string,
   lastApply: number,

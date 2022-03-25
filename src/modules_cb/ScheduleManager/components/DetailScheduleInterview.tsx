@@ -47,7 +47,7 @@ function DetailScheduleInterview(props: IProps) {
       id: dataDetail.idProfile,
       fullName: dataDetail.fullName,
       idRecruitment: dataDetail.recruitmentId,
-      username:dataDetail.username
+      username: dataDetail.username
     }
 
     props.showFormBooking(true, req);
@@ -124,9 +124,12 @@ function DetailScheduleInterview(props: IProps) {
           </div>
         </div>
         <div className="footer-left">
-          <Button onClick={btnDeleteScheduleClicked} style={{color: "red", marginRight: 10}}><Icon type="delete"
-                                                                                                   className="mr-1"/>Xóa</Button>
-          <Button onClick={event => handleBooking(event)}><Icon type="edit" className="mr-1"/>Chỉnh sửa</Button>
+          {dataDetail?.date > +moment() ? <>
+            <Button onClick={btnDeleteScheduleClicked} style={{color: "red", marginRight: 10}}><Icon type="delete"
+                                                                                                     className="mr-1"/>Xóa</Button>
+            <Button onClick={event => handleBooking(event)}><Icon type="edit" className="mr-1"/>Chỉnh sửa</Button>
+
+          </> : null}
 
         </div>
 
