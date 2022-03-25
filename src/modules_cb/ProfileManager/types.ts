@@ -213,12 +213,12 @@ export interface CreateBookingForm {
 
 export interface CreateBookingRequest {
   createBookingForm: CreateBookingForm,
-  mailRequest: MailRequest,
+  mailRequest?: MailRequest,
 }
 
 export interface UpdateBookingRequest {
   updateBookingForm: UpdateBookingForm,
-  mailRequest: MailRequest,
+  mailRequest?: MailRequest,
 }
 
 export interface UpdateBookingForm {

@@ -7,6 +7,7 @@ export interface BookingState {
   data_booking?: DataShowBooking
   data_update_booking?:any,
   show_email_create?: boolean
+  show_email_change_process?: boolean
   show_interview_email_create?: boolean
   show_email_update?: boolean
   is_update?: boolean
@@ -17,6 +18,7 @@ const initState: BookingState = {
   show_email_create: false,
   show_interview_email_create: false,
   show_email_update: false,
+  show_email_change_process: false,
   is_update: false
 }
 
@@ -26,6 +28,7 @@ export default (state = initState, {
   data_booking,
   data_update_booking,
   show_email_create,
+  show_email_change_process,
   show_email_update,
   show_interview_email_create,
   is_update
@@ -44,6 +47,12 @@ export default (state = initState, {
       return {
         ...state,
         show_email_create
+      }
+
+      case Actions.SHOW_EMAIL_CHANGE_PROCESS_FORM:
+      return {
+        ...state,
+        show_email_change_process
       }
 
     case Actions.SHOW_INTERVIEW_EMAIL_CREATE_FORM:

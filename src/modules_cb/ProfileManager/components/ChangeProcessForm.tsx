@@ -1,20 +1,21 @@
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Form, Icon, Input, Modal, Radio, Select} from "antd";
+import {Button, Checkbox, Form, Icon, Input, Modal, Radio, Select} from "antd";
 import React, {FormEvent, useEffect, useRef, useState} from "react";
 import 'devextreme/dist/css/dx.light.css';
-import {changeProcess, showChangeProcessForm} from "../redux/actions";
+import {changeProcess, showChangeProcessForm, showEmailChangeProcessForm} from "../redux/actions";
 import {getListRecruitment} from "../../RecruitmentManager/redux/actions";
-import {ChangeProcessRequest, MailForm, MailRequest, ProcessForm} from "../types";
+import {ChangeProcessRequest, CreateBookingRequest, MailForm, MailRequest, ProcessForm} from "../types";
 import 'react-quill/dist/quill.snow.css';
 import {getListEmail, searchListEmail} from "../../EmailManager/redux/actions";
 import {EmailEntity} from "../../EmailManager/types";
 import ReactQuill from "react-quill";
-import {SchoolEntity} from "../../SchoolManager/types";
+import CreateEmailChangeProcessForm from "./CreateEmailChangeProcessForm";
 
 const {Option} = Select;
 const {TextArea} = Input;
+const CheckboxGroup = Checkbox.Group;
 
 const mapStateToProps = (state: RootState) => ({
   profileManager: state.profileManager,
@@ -29,11 +30,14 @@ const connector = connect(mapStateToProps,
     changeProcess,
     getListRecruitment,
     getListEmail,
-    searchListEmail
+    searchListEmail,
+    showEmailChangeProcessForm
   })
 
 type ReduxProps = ConnectedProps<typeof connector>;
-interface IProps extends FormComponentProps, ReduxProps {}
+
+interface IProps extends FormComponentProps, ReduxProps {
+}
 
 function ChangeProcessForm(props: IProps) {
   const fontWeight = {
@@ -54,7 +58,7 @@ function ChangeProcessForm(props: IProps) {
   const [fileAttach, setFileAttach] = useState<any>([]);
   const [trigger, setTrigger] = useState({
     email: false,
-  
+
   })
   const modules = {
     toolbar: [
@@ -64,12 +68,12 @@ function ChangeProcessForm(props: IProps) {
       [{'list': 'ordered'}, {'list': 'bullet'}],
       [{'indent': '-1'}, {'indent': '+1'}],
       ['link', 'image'],
-      [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-      [{ 'direction': 'rtl' }],                         // text direction
-      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-      [{ 'font': [] }],
-      [{ 'align': [] }],
+      [{'script': 'sub'}, {'script': 'super'}],      // superscript/subscript
+      [{'direction': 'rtl'}],                         // text direction
+      [{'header': [1, 2, 3, 4, 5, 6, false]}],
+      [{'color': []}, {'background': []}],          // dropdown with defaults from theme
+      [{'font': []}],
+      [{'align': []}],
       ['clean'],
     ],
 
@@ -88,7 +92,55 @@ function ChangeProcessForm(props: IProps) {
     'list', 'bullet', 'indent',
     'link', 'image', 'video'
   ]
-  
+  const plainOptions = {
+    candidate: [{
+      id: "yes",
+      name: "Có",
+    }, {
+      id: "no",
+      name: "Không",
+    }],
+    interviewers: [{
+      id: "system",
+      name: "Hệ thống",
+    }, {
+      id: "outSide",
+      name: "Ngoài hệ thống",
+    }],
+    members: [{
+      id: "yes",
+      name: "Có",
+    }, {
+      id: "no",
+      name: "Không",
+    }],
+    presenter: [{
+      id: "system",
+      name: "Hệ thống",
+    }, {
+      id: "outSide",
+      name: "Ngoài hệ thống",
+    }]
+  };
+  const [checked, setChecked] = useState<any>({
+    candidate: {
+      checkedList: 'no',
+    },
+    members: {
+      checkedList: 'no',
+    },
+    interviewers: {
+      checkedList: [],
+      indeterminate: false,
+      checkAll: false
+    },
+    presenter: {
+      checkedList: [],
+      indeterminate: false,
+      checkAll: false
+    }
+  })
+  const [reqCreate, setReqCreate] = useState<ChangeProcessRequest | any>()
 
   useEffect(() => {
     if (showForm.show_change_process) {
@@ -121,21 +173,6 @@ function ChangeProcessForm(props: IProps) {
     (e.target as any).disabled = false;
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        let mailFormCandidate: MailForm = {
-          subject: values.subjectCandidate,
-          content: valueEditor,
-          file:fileAttach
-        }
-
-        let mailFormPresenter: MailForm = {
-          subject: values.subjectPresenter,
-          content: values.contentPresenter,
-        }
-
-        let mailRequest: MailRequest = {
-          candidate: mailFormCandidate,
-          presenters: mailFormPresenter
-        }
 
         let processForm: ProcessForm = ({
           idProfile: showForm.change_process?.idProfile,
@@ -145,9 +182,29 @@ function ChangeProcessForm(props: IProps) {
 
         let req: ChangeProcessRequest = ({
           changeProcess: processForm,
-          mailRequest: mailRequest,
+
         })
         props.changeProcess(req, false)
+        return;
+      }
+    });
+
+  }
+
+  function onBtnContinueCreateClicked(e: FormEvent) {
+    e.preventDefault();
+    (e.target as any).disabled = true;
+    (e.target as any).disabled = false;
+    props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+
+        let processForm: ProcessForm = ({
+          idProfile: showForm.change_process?.idProfile,
+          recruitmentId: showForm.change_process?.recruitmentId,
+          statusCVId: process
+        })
+        setReqCreate(processForm)
+        props.showEmailChangeProcessForm(true)
         return;
       }
     });
@@ -169,7 +226,7 @@ function ChangeProcessForm(props: IProps) {
   }
 
   function handleSelectMailTemplate(value: any) {
-    const selectEmail= props.listEmail.rows.find((item:any)=>item.id===value)
+    const selectEmail = props.listEmail.rows.find((item: any) => item.id === value)
     setEmailTemp(selectEmail)
     setValueEditor(selectEmail.content)
   }
@@ -179,9 +236,9 @@ function ChangeProcessForm(props: IProps) {
     setFileAttach(newFile);
   }
 
-  function handleDeleteFile(item:any,index:any) {
+  function handleDeleteFile(item: any, index: any) {
     const newFile = Array.from(fileAttach);
-    newFile.splice(index,1)
+    newFile.splice(index, 1)
     setFileAttach(newFile)
   }
 
@@ -199,6 +256,73 @@ function ChangeProcessForm(props: IProps) {
     setEmailTemp(props.listEmail.rows)
   }
 
+
+  function onCheckInterviewersChange(checkedList: any) {
+    setChecked({
+        ...checked,
+        interviewers: {
+          checkedList: checkedList,
+          indeterminate: !!checkedList.length && checkedList.length < plainOptions.interviewers.length,
+          checkAll: checkedList.length === plainOptions.interviewers.length,
+        }
+      }
+    );
+  };
+
+  function onCheckPresenterChange(checkedList: any) {
+    setChecked({
+        ...checked,
+        presenter: {
+          checkedList: checkedList,
+          indeterminate: !!checkedList.length && checkedList.length < plainOptions.presenter.length,
+          checkAll: checkedList.length === plainOptions.presenter.length,
+        }
+      }
+    );
+  };
+
+  function onCheckMembersChange(event: any) {
+    setChecked({
+        ...checked,
+        members: {
+          checkedList: event.target.value,
+        }
+      }
+    );
+  };
+
+  function onCheckCandidateChange(event: any) {
+    setChecked({
+        ...checked,
+        candidate: {
+          checkedList: event.target.value,
+        }
+      }
+    );
+  };
+
+  function onCheckAllInterviewersChange(e: any) {
+    setChecked({
+      ...checked,
+      interviewers: {
+        checkedList: e.target.checked ? plainOptions.interviewers.map((item: any) => item.id) : [],
+        indeterminate: false,
+        checkAll: e.target.checked,
+      }
+    });
+  };
+
+  function onCheckAllPresenterChange(e: any) {
+    setChecked({
+      ...checked,
+      presenter: {
+        checkedList: e.target.checked ? plainOptions.presenter.map((item: any) => item.id) : [],
+        indeterminate: false,
+        checkAll: e.target.checked,
+      }
+    });
+  };
+
   return (
     <>
       <Modal
@@ -211,7 +335,7 @@ function ChangeProcessForm(props: IProps) {
         afterClose={handleCloseForm}
         onCancel={handleCloseForm}
         footer={""}>
-        <div style={{overflow: "auto", height: 700}}>
+        <div style={{overflow: "auto", height: 555}}>
           <div className="schedule-detail" style={{paddingBottom: 0}}>
             <div className="schedule-detail-head">
               <div className="schedule-detail-title">Chuyển vòng</div>
@@ -230,150 +354,93 @@ function ChangeProcessForm(props: IProps) {
             </div>
           </div>
 
-          {/*email ứng viên*/}
-          <div style={{padding: "0 24px 24px 24px"}}>
-            <div className="schedule-detail-title">Email thông báo</div>
-          </div>
           <div style={{padding: "0 24px 24px"}}>
-            <div className="font-15-bold-500">Nội dung email gửi cho ứng viên</div>
-            <Form>
-              <Form.Item className="form-label" label="Tên mẫu mail" labelCol={{span: 24}} wrapperCol={{span: 24}}>
-                {getFieldDecorator('title', {
-                  initialValue: emailTemp?.id,
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập tên mẫu',
-                      required: true,
-                    },
-                  ],
-                })(
-                <Select 
-                  getPopupContainer={(trigger:any) => trigger.parentNode} 
-                  onSelect={handleSelectMailTemplate} 
-                  style={fontWeightStyle}
-                  placeholder="Nhập tên mẫu"
-
-                  onSearch={onSearchEmail}
-                  onFocus={onFocusEmail}
-                  filterOption={(input, option: any) =>
-                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                  }
-                  optionFilterProp="children"
-                  showSearch
-                  className="bg-white text-black form-label"
-
-                >
-                    {props.listEmail.rows?.map((item: any, index: any) => {
-                      return <Option key={index} value={item.id}>{item.name}</Option>
-                    })}
-                  </Select>
-                )}
-              </Form.Item>
-
-              <Form.Item className="form-label" label="Tiêu đề mail" labelCol={{span: 24}} wrapperCol={{span: 24}}>
-                {getFieldDecorator('subjectCandidate', {
-                  initialValue: emailTemp?.subject,
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập tiêu đề mail',
-                      required: true,
-                    },
-                  ],
-                })(
-                  <Input placeholder="Nhập tiêu đề" className="bg-white text-black"/>
-                )}
-              </Form.Item>
-
-              <div className="form-label">
-                <div className="mb-2">Nội dung <span className="value-required">*</span></div>
-                
-                <ReactQuill
-                  style={fontWeightStyle}
-                  className="ql-custom"
-                  onChange={handleChangeMailContent}
-                  value={valueEditor||""}
-                  theme={'snow'}
-                  modules={modules}
-                  formats={formats}
-                  // bounds={'.app'}
-                  placeholder="Mô tả công việc"
-                />
-                <div className={display ? "value-required show" : "value-required hide"}>Vui lòng nhập nội dung</div>
-              </div>
-
-              {/*File attachment*/}
-              <div className="mt-2">
-                <input type="file" ref={inputFile} onChange={onFileChange} id={"tags"} style={{display: "none"}}/>
-                <div className="font-14-bold-500">Attachment file</div>
-                {fileAttach ? fileAttach?.map((item: any,index:any) => {
-                  return <div key={index} className="flex-space-between">
-                    <div className='pl-2' style={{color: "#1890ff",fontStyle:"italic"}}> {item?.name}</div>
-                    <div className="cursor-default" onClick={()=>handleDeleteFile(item,index)}><Icon type="delete" style={{color: "#f5222d"}}/></div>
-                  </div>
-                }) : null}
-                <div className="cursor-default" style={{color: "#969C9D"}} onClick={onOpenFileClick}><Icon type="tag"/> Click to add file</div>
-              </div>
-
-              {/*email người giới thiệu */}
-              <div className="font-15-bold-500 mt-5 mb-2">Nội dung email gửi cho người giới thiệu</div>
-              <div style={{border: "1px solid #dddde4", padding: 15}}>
-                <Form.Item label="Đến" className="form-label" {...formItemStyle}>
-                  {getFieldDecorator('username', {
-                    initialValue: showForm.change_process?.username || undefined,
-                    rules: [
-                      {
-                        message: 'Vui lòng nhập tên trường',
-                        required: false,
-                      },
-                    ],
-                  })(<Select getPopupContainer={(trigger:any) => trigger.parentNode}
-                    className="bg-white text-black"
-                    style={{...fontWeightStyle, width: "100%"}}
-                    mode="multiple"
+              <div style={{fontWeight: 500}}>Gửi mail cho hội đồng tuyển dụng</div>
+              <div style={{display: "flex"}}>
+                <div>
+                  <Checkbox
+                    indeterminate={checked.interviewers.indeterminate}
+                    onChange={onCheckAllInterviewersChange}
+                    checked={checked.interviewers.checkAll}
                   >
-                    {props.listAccount.rows?.map((item: any, index: any) => (
-                      <Option key={index} value={item.username}>{item.fullName}</Option>
-                    ))}
-                  </Select>)}
-                </Form.Item>
-
-
-
-                <Form.Item label="Tiêu đề" className="form-label" {...formItemStyle}>
-                  {getFieldDecorator('subjectPresenter', {
-                    initialValue: emailTemp?.subject,
-                    rules: [
-                      {
-                        message: 'Vui lòng nhập tên trường',
-                        required: false,
-                      },
-                    ],
-                  })(<Input placeholder="Nhập tiêu đề" className="bg-white text-black"/>)}
-                </Form.Item>
-
-                <Form.Item label="Mô tả" className="form-label" {...formItemStyle}>
-                  {getFieldDecorator('contentPresenter', {
-                    initialValue: '',
-                    rules: [
-                      {
-                        message: 'Vui lòng nhập tên trường',
-                        required: false,
-                      },
-                    ],
-                  })(<TextArea placeholder="Nhập nội dung" style={{height: 120}} className="bg-white text-black"/>
+                    Tất cả
+                  </Checkbox>
+                </div>
+                <CheckboxGroup
+                  value={checked.interviewers.checkedList}
+                  onChange={onCheckInterviewersChange}
+                >
+                  {plainOptions.interviewers.map((item: any, index: any) =>
+                    <Checkbox key={item.id} value={item.id}>{item.name}</Checkbox>
                   )}
-                </Form.Item>
+                </CheckboxGroup>
               </div>
+              <br/>
 
-            </Form>
+              <div style={{fontWeight: 500}}>Gửi mail cho ứng người giới thiệu</div>
+              <div style={{display: "flex"}}>
+                <div>
+                  <Checkbox
+                    indeterminate={checked.presenter.indeterminate}
+                    onChange={onCheckAllPresenterChange}
+                    checked={checked.presenter.checkAll}
+                  >
+                    Tất cả
+                  </Checkbox>
+                </div>
+                <CheckboxGroup
+                  value={checked.presenter.checkedList}
+                  onChange={onCheckPresenterChange}
+                >
+                  {plainOptions.presenter.map((item: any, index: any) =>
+                    <Checkbox key={item.id} value={item.id}>{item.name}</Checkbox>
+                  )}
+                </CheckboxGroup>
+              </div>
+              <br/>
+
+              <div style={{fontWeight: 500}}>Gửi mail cho ứng viên</div>
+              <div><Radio.Group
+                value={checked.candidate.checkedList}
+                onChange={onCheckCandidateChange}
+              >
+                {plainOptions.candidate.map((item: any, index: any) =>
+                  <Radio key={item.id} value={item.id}>{item.name}</Radio>
+                )}
+              </Radio.Group>
+              </div>
+              <br/>
+
+              <div style={{fontWeight: 500}}>Gửi mail cho cán bộ liên quan</div>
+              <div>
+                <Radio.Group
+                  value={checked.members.checkedList}
+                  onChange={onCheckMembersChange}
+                >
+                  {plainOptions.members.map((item: any, index: any) =>
+                    <Radio key={item.id} value={item.id}>{item.name}</Radio>
+                  )}
+                </Radio.Group>
+              </div>
+              <br/>
+
           </div>
         </div>
 
         <div className="footer-right">
           <Button onClick={handleCloseForm}>Hủy</Button>
-          <Button onClick={btnChangeProcessClicked} type={"primary"} className="ml-2">Chuyển</Button>
+          {checked.candidate.checkedList === "yes" ||
+          checked.members.checkedList === "yes" ||
+          checked.interviewers.checkedList.length>0||
+          checked.presenter.checkedList.length>0 ?
+            <Button type={"primary"} className="ml-2" onClick={onBtnContinueCreateClicked}>Tiếp tục</Button>
+            :
+            <Button onClick={btnChangeProcessClicked} type={"primary"} className="ml-2">Chuyển</Button>
+          }
         </div>
       </Modal>
+
+      <CreateEmailChangeProcessForm reqCreate={reqCreate}/>
     </>
   );
 }

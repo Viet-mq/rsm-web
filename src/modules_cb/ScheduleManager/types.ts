@@ -24,7 +24,7 @@ export interface ScheduleEntity {
 
 export interface CreateScheduleRequest {
   createScheduleForm: CreateScheduleForm,
-  mailRequest: MailRequest,
+  mailRequest?: MailRequest,
 }
 
 export interface CreateScheduleForm {

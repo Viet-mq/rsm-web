@@ -12,6 +12,7 @@ import {
   Input,
   InputNumber,
   Modal,
+  Radio,
   Row,
   Select,
   Table,
@@ -22,16 +23,15 @@ import TextArea from "antd/es/input/TextArea";
 import moment from "moment";
 import {emptyText} from "../../../configs/locales";
 import {getListAccount} from "../../AccountManager/redux/actions";
-import {getCandidates, resetCandidates, searchCandidates, showFormSchedule} from "../redux/actions";
+import {createSchedule, getCandidates, resetCandidates, searchCandidates, showFormSchedule} from "../redux/actions";
 import Loading from "../../../components/Loading";
 import {ProfileEntity} from "../../ProfileManager/types";
-import {CreateScheduleForm, ScheduleEntity, ScheduleTime} from "../types";
+import {CreateScheduleForm, CreateScheduleRequest, ScheduleEntity, ScheduleTime} from "../types";
 import {ColumnProps} from "antd/lib/table";
 import {getDetailRecruitment, getSearchRecruitment} from "../../RecruitmentManager/redux/actions";
 import {showEmailCreateForm, showInterviewEmailCreateForm} from "../../ProfileManager/redux/actions";
 import CreateInterviewEmailForm from "./CreateInterviewEmailForm";
 import {RecruitmentEntity} from "../../RecruitmentManager/types";
-import {time} from "html2canvas/dist/types/css/types/time";
 
 
 const mapStateToProps = (state: RootState) => ({
@@ -54,11 +54,14 @@ const connector = connect(mapStateToProps,
     getDetailRecruitment,
     showEmailCreateForm,
     showInterviewEmailCreateForm,
-    getSearchRecruitment
+    getSearchRecruitment,
+    createSchedule,
+
   });
 type ReduxProps = ConnectedProps<typeof connector>;
 
 const {Option} = Select;
+const CheckboxGroup = Checkbox.Group;
 
 interface IProps extends FormComponentProps, ReduxProps {
 }
@@ -132,10 +135,58 @@ function CreateScheduleInterview(props: IProps) {
   const [visibleCandidate, setVisibleCandidate] = useState(false)
   const [keySearch, setKeySearch] = useState(undefined);
   const [recruitment, setRecruitment] = useState<RecruitmentEntity[]>([]);
-
   const [trigger, setTrigger] = useState({
     recruitment: false,
   })
+  const plainOptions = {
+    candidate: [{
+      id: "yes",
+      name: "Có",
+    }, {
+      id: "no",
+      name: "Không",
+    }],
+    interviewers: [{
+      id: "system",
+      name: "Hệ thống",
+    }, {
+      id: "outSide",
+      name: "Ngoài hệ thống",
+    }],
+    members: [{
+      id: "yes",
+      name: "Có",
+    }, {
+      id: "no",
+      name: "Không",
+    }],
+    presenter: [{
+      id: "system",
+      name: "Hệ thống",
+    }, {
+      id: "outSide",
+      name: "Ngoài hệ thống",
+    }]
+  };
+  const [checked, setChecked] = useState<any>({
+    candidate: {
+      checkedList: 'no',
+    },
+    members: {
+      checkedList: 'no',
+    },
+    interviewers: {
+      checkedList: [],
+      indeterminate: false,
+      checkAll: false
+    },
+    presenter: {
+      checkedList: [],
+      indeterminate: false,
+      checkAll: false
+    }
+  })
+
 
   useEffect(() => {
     setListCandidates(props.listCandidate.rows);
@@ -265,21 +316,21 @@ function CreateScheduleInterview(props: IProps) {
         const interviewTime: any = new Date(yyyy, mm - 1, dd, hh, minutes + values.interviewTime, 0);
 
 
-        let times:ScheduleTime[]=dataSource?.reduce((curr:any,next:any)=>{
-          const newTimes:ScheduleTime={
+        let times: ScheduleTime[] = dataSource?.reduce((curr: any, next: any) => {
+          const newTimes: ScheduleTime = {
             // avatarColor: next.avatarColor,
             // date: next.date,
             // idProfile: next.idProfile,
             // interviewTime: next.interviewTime
 
             avatarColor: next.avatarColor,
-            date: dateChanged*1,
+            date: dateChanged * 1,
             idProfile: next.idProfile,
-            interviewTime: interviewTime*1
+            interviewTime: interviewTime * 1
           }
           curr.push(newTimes)
           return curr;
-        },[])
+        }, [])
 
         let req: CreateScheduleForm = {
           floor: values.floor,
@@ -291,11 +342,64 @@ function CreateScheduleInterview(props: IProps) {
           type: values.type,
         }
         setReqCreate(req)
-        console.log(" req.time:",times)
-        console.log(" dataSource:",dataSource)
+        console.log(" req.time:", times)
+        console.log(" dataSource:", dataSource)
         props.showInterviewEmailCreateForm(true)
 
         // props.createSchedule(req);
+        return;
+      }
+    });
+  }
+
+  function onBtnCreateClicked(e: FormEvent) {
+    e.preventDefault();
+    (e.target as any).disabled = true;
+    (e.target as any).disabled = false;
+    props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+
+        const date = new Date(values.date);
+        const time = new Date(values.timeStart);
+        const dd = date.getDate();
+        const mm = date.getMonth() + 1;
+        const yyyy = date.getFullYear();
+        const hh = time.getHours();
+        const minutes = time.getMinutes();
+        const dateChanged: any = new Date(yyyy, mm - 1, dd, hh, minutes, 0);
+        const interviewTime: any = new Date(yyyy, mm - 1, dd, hh, minutes + values.interviewTime, 0);
+
+
+        let times: ScheduleTime[] = dataSource?.reduce((curr: any, next: any) => {
+          const newTimes: ScheduleTime = {
+            // avatarColor: next.avatarColor,
+            // date: next.date,
+            // idProfile: next.idProfile,
+            // interviewTime: next.interviewTime
+
+            avatarColor: next.avatarColor,
+            date: dateChanged * 1,
+            idProfile: next.idProfile,
+            interviewTime: interviewTime * 1
+          }
+          curr.push(newTimes)
+          return curr;
+        }, [])
+
+        let req: CreateScheduleForm = {
+          floor: values.floor,
+          interviewAddress: values.interviewAddress,
+          interviewers: props.detailRecruitment.rows[0]?.interviewer?.map((item: any) => item.username),
+          note: values.note,
+          recruitmentId: values.recruitmentId,
+          times: times,
+          type: values.type,
+        }
+        let reqCreateSchedule: CreateScheduleRequest = {
+          createScheduleForm: req,
+        }
+
+        props.createSchedule(reqCreateSchedule);
         return;
       }
     });
@@ -309,6 +413,72 @@ function CreateScheduleInterview(props: IProps) {
   function onFocusRecruitment() {
     setRecruitment(props.listRecruitment.rows)
   }
+
+  function onCheckInterviewersChange(checkedList: any) {
+    setChecked({
+        ...checked,
+        interviewers: {
+          checkedList: checkedList,
+          indeterminate: !!checkedList.length && checkedList.length < plainOptions.interviewers.length,
+          checkAll: checkedList.length === plainOptions.interviewers.length,
+        }
+      }
+    );
+  };
+
+  function onCheckPresenterChange(checkedList: any) {
+    setChecked({
+        ...checked,
+        presenter: {
+          checkedList: checkedList,
+          indeterminate: !!checkedList.length && checkedList.length < plainOptions.presenter.length,
+          checkAll: checkedList.length === plainOptions.presenter.length,
+        }
+      }
+    );
+  };
+
+  function onCheckMembersChange(event: any) {
+    setChecked({
+        ...checked,
+        members: {
+          checkedList: event.target.value,
+        }
+      }
+    );
+  };
+
+  function onCheckCandidateChange(event: any) {
+    setChecked({
+        ...checked,
+        candidate: {
+          checkedList: event.target.value,
+        }
+      }
+    );
+  };
+
+  function onCheckAllInterviewersChange(e: any) {
+    setChecked({
+      ...checked,
+      interviewers: {
+        checkedList: e.target.checked ? plainOptions.interviewers.map((item: any) => item.id) : [],
+        indeterminate: false,
+        checkAll: e.target.checked,
+      }
+    });
+  };
+
+  function onCheckAllPresenterChange(e: any) {
+    setChecked({
+      ...checked,
+      presenter: {
+        checkedList: e.target.checked ? plainOptions.presenter.map((item: any) => item.id) : [],
+        indeterminate: false,
+        checkAll: e.target.checked,
+      }
+    });
+  };
 
   return (
     <>
@@ -327,7 +497,7 @@ function CreateScheduleInterview(props: IProps) {
           onCancel={onBtnCancelClicked}
           footer={""}>
           <div className="c-schedule-interview-popup">
-            <div className='ant-col-12 grid-left'>
+            <div className='ant-col-12 grid-left' style={{overflow:"auto",height:"inherit"}}>
               <Form>
                 <Form.Item className="form-label" label="Tin tuyển dụng" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                   {getFieldDecorator('recruitmentId', {
@@ -354,7 +524,8 @@ function CreateScheduleInterview(props: IProps) {
                             showSearch
                     >
                       {props.listRecruitment.rows?.map((item: any, index: any) => (
-                        <Option key={index} value={item.id}label={item.title}>[{item.departmentName}] {item.title}</Option>
+                        <Option key={index} value={item.id}
+                                label={item.title}>[{item.departmentName}] {item.title}</Option>
                       ))}
                     </Select>
                   )}
@@ -512,10 +683,74 @@ function CreateScheduleInterview(props: IProps) {
                   )}
                 </Form.Item>
 
-                <Checkbox defaultChecked={true}>Email thông báo cho ứng viên</Checkbox>
-                <Checkbox defaultChecked={true}>Email thông báo cho hội đồng</Checkbox>
-                <Checkbox defaultChecked={true} className="ml-0">Email thông báo cho người giới thiệu</Checkbox>
+                <div style={{fontWeight: 500}}>Gửi mail cho hội đồng tuyển dụng</div>
+                <div style={{display: "flex"}}>
+                  <div>
+                    <Checkbox
+                      indeterminate={checked.interviewers.indeterminate}
+                      onChange={onCheckAllInterviewersChange}
+                      checked={checked.interviewers.checkAll}
+                    >
+                      Tất cả
+                    </Checkbox>
+                  </div>
+                  <CheckboxGroup
+                    value={checked.interviewers.checkedList}
+                    onChange={onCheckInterviewersChange}
+                  >
+                    {plainOptions.interviewers.map((item: any, index: any) =>
+                      <Checkbox key={item.id} value={item.id}>{item.name}</Checkbox>
+                    )}
+                  </CheckboxGroup>
+                </div>
+                <br/>
 
+                <div style={{fontWeight: 500}}>Gửi mail cho ứng người giới thiệu</div>
+                <div style={{display: "flex"}}>
+                  <div>
+                    <Checkbox
+                      indeterminate={checked.presenter.indeterminate}
+                      onChange={onCheckAllPresenterChange}
+                      checked={checked.presenter.checkAll}
+                    >
+                      Tất cả
+                    </Checkbox>
+                  </div>
+                  <CheckboxGroup
+                    value={checked.presenter.checkedList}
+                    onChange={onCheckPresenterChange}
+                  >
+                    {plainOptions.presenter.map((item: any, index: any) =>
+                      <Checkbox key={item.id} value={item.id}>{item.name}</Checkbox>
+                    )}
+                  </CheckboxGroup>
+                </div>
+                <br/>
+
+                <div style={{fontWeight: 500}}>Gửi mail cho ứng viên</div>
+                <div><Radio.Group
+                  value={checked.candidate.checkedList}
+                  onChange={onCheckCandidateChange}
+                >
+                  {plainOptions.candidate.map((item: any, index: any) =>
+                    <Radio key={item.id} value={item.id}>{item.name}</Radio>
+                  )}
+                </Radio.Group>
+                </div>
+                <br/>
+
+                <div style={{fontWeight: 500}}>Gửi mail cho cán bộ liên quan</div>
+                <div>
+                  <Radio.Group
+                    value={checked.members.checkedList}
+                    onChange={onCheckMembersChange}
+                  >
+                    {plainOptions.members.map((item: any, index: any) =>
+                      <Radio key={item.id} value={item.id}>{item.name}</Radio>
+                    )}
+                  </Radio.Group>
+                </div>
+                <br/>
 
               </Form>
             </div>
@@ -580,8 +815,14 @@ function CreateScheduleInterview(props: IProps) {
           <div className="footer-right">
             <Button onClick={onBtnCancelClicked} type={"link"}
                     style={{color: "black", marginRight: 15}}>Hủy</Button>
-            <Button onClick={onBtnContinueCreateClicked} type={"primary"}>Tiếp tục</Button>
-            {/*<Button onClick={btnListScheduleClicked} type={"primary"}>Tạo mới</Button>*/}
+            {checked.candidate.checkedList === "yes" ||
+            checked.members.checkedList === "yes" ||
+            checked.interviewers.checkedList.length > 0 ||
+            checked.presenter.checkedList.length > 0 ?
+              <Button type={"primary"} onClick={onBtnContinueCreateClicked}>Tiếp tục</Button>
+              :
+              <Button type={"primary"} onClick={onBtnCreateClicked}>Đặt lịch</Button>
+            }
           </div>
 
         </Modal>

@@ -1,8 +1,15 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {getBooking, showEmailCreateForm, showEmailUpdateForm, showFormBooking} from "../redux/actions";
+import {
+  createBooking,
+  getBooking,
+  showEmailCreateForm,
+  showEmailUpdateForm,
+  showFormBooking,
+  updateBooking
+} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Checkbox, Col, DatePicker, Form, Input, InputNumber, Modal, Row, Select, TimePicker} from "antd";
+import {Button, Checkbox, Col, DatePicker, Form, Input, InputNumber, Modal, Radio, Row, Select, TimePicker} from "antd";
 import React, {FormEvent, useEffect, useState} from "react";
 import {getListAccount} from "../../AccountManager/redux/actions";
 import {getListStatusCV} from "../../StatusCVManager/redux/actions";
@@ -31,7 +38,10 @@ const connector = connect(mapStateToProps,
     getListStatusCV,
     showFormBooking,
     showEmailCreateForm,
-    showEmailUpdateForm
+    showEmailUpdateForm,
+    createBooking,
+    updateBooking
+
   });
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -49,6 +59,54 @@ function BookingForm(props: BookingFormProps) {
   const diffTime = interviewTime.diff(date, "minutes")
   const [reqCreate, setReqCreate] = useState<CreateBookingRequest | any>()
   const [reqUpdate, setReqUpdate] = useState<UpdateBookingRequest | any>()
+  const plainOptions = {
+    candidate: [{
+      id: "yes",
+      name: "Có",
+    }, {
+      id: "no",
+      name: "Không",
+    }],
+    interviewers: [{
+      id: "system",
+      name: "Hệ thống",
+    }, {
+      id: "outSide",
+      name: "Ngoài hệ thống",
+    }],
+    members: [{
+      id: "yes",
+      name: "Có",
+    }, {
+      id: "no",
+      name: "Không",
+    }],
+    presenter: [{
+      id: "system",
+      name: "Hệ thống",
+    }, {
+      id: "outSide",
+      name: "Ngoài hệ thống",
+    }]
+  };
+  const [checked, setChecked] = useState<any>({
+    candidate: {
+      checkedList: 'no',
+    },
+    members: {
+      checkedList: 'no',
+    },
+    interviewers: {
+      checkedList: [],
+      indeterminate: false,
+      checkAll: false
+    },
+    presenter: {
+      checkedList: [],
+      indeterminate: false,
+      checkAll: false
+    }
+  })
 
   useEffect(() => {
     if (showBooking.show_booking) {
@@ -109,6 +167,44 @@ function BookingForm(props: BookingFormProps) {
     });
   }
 
+  function onBtnUpdateClicked(e: FormEvent) {
+    e.preventDefault();
+    (e.target as any).disabled = true;
+    (e.target as any).disabled = false;
+    props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        const date = new Date(values.date);
+        const time = new Date(values.timeStart);
+        const dd = date.getDate();
+        const mm = date.getMonth() + 1;
+        const yyyy = date.getFullYear();
+        const hh = time.getHours();
+        const minutes = time.getMinutes();
+        const dateChanged: any = new Date(yyyy, mm - 1, dd, hh, minutes, 0);
+        const interviewTime: any = new Date(yyyy, mm - 1, dd, hh, minutes + values.interviewTime, 0);
+
+        let req: UpdateBookingForm = {
+          id: showBooking.data_update_booking?.id,
+          floor: values.room,
+          interviewAddress: values.interviewAddress,
+          interviewTime: interviewTime * 1,
+          interviewers: values.interviewers,
+          note: values.note,
+          recruitmentId: values.recruitmentId,
+          type: values.type,
+          date: dateChanged * 1,
+        }
+
+        let reqUpdateBooking: UpdateBookingRequest = {
+          updateBookingForm: req,
+
+        }
+        props.updateBooking(reqUpdateBooking)
+        return;
+      }
+    });
+  }
+
   function onBtnContinueCreateClicked(e: FormEvent) {
     e.preventDefault();
     (e.target as any).disabled = true;
@@ -146,6 +242,111 @@ function BookingForm(props: BookingFormProps) {
     });
   }
 
+  function onBtnCreateClicked(e: FormEvent) {
+    e.preventDefault();
+    (e.target as any).disabled = true;
+    (e.target as any).disabled = false;
+    props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        const date = new Date(values.date);
+        const time = new Date(values.timeStart);
+        const dd = date.getDate();
+        const mm = date.getMonth() + 1;
+        const yyyy = date.getFullYear();
+        const hh = time.getHours();
+        const minutes = time.getMinutes();
+        const dateChanged: any = new Date(yyyy, mm - 1, dd, hh, minutes, 0);
+        const interviewTime: any = new Date(yyyy, mm - 1, dd, hh, minutes + values.interviewTime, 0);
+
+        let req: CreateBookingForm = {
+          idProfile: showBooking.data_booking?.id,
+          date: dateChanged * 1,
+          avatarColor: setColor(),
+          floor: values.room,
+          interviewAddress: values.interviewAddress,
+          interviewTime: interviewTime * 1,
+          interviewers: values.interviewers,
+          note: values.note,
+          recruitmentId: values.recruitmentId,
+          type: values.type,
+        }
+
+        let reqBookingRequest: CreateBookingRequest = {
+          createBookingForm:req,
+        }
+        props.createBooking(reqBookingRequest)
+
+        return;
+      }
+    });
+  }
+
+  function onCheckInterviewersChange(checkedList: any) {
+    setChecked({
+        ...checked,
+        interviewers: {
+          checkedList: checkedList,
+          indeterminate: !!checkedList.length && checkedList.length < plainOptions.interviewers.length,
+          checkAll: checkedList.length === plainOptions.interviewers.length,
+        }
+      }
+    );
+  };
+
+  function onCheckPresenterChange(checkedList: any) {
+    setChecked({
+        ...checked,
+        presenter: {
+          checkedList: checkedList,
+          indeterminate: !!checkedList.length && checkedList.length < plainOptions.presenter.length,
+          checkAll: checkedList.length === plainOptions.presenter.length,
+        }
+      }
+    );
+  };
+
+  function onCheckMembersChange(event: any) {
+    setChecked({
+        ...checked,
+        members: {
+          checkedList: event.target.value,
+        }
+      }
+    );
+  };
+
+  function onCheckCandidateChange(event: any) {
+    setChecked({
+        ...checked,
+        candidate: {
+          checkedList: event.target.value,
+        }
+      }
+    );
+  };
+
+  function onCheckAllInterviewersChange(e: any) {
+    setChecked({
+      ...checked,
+      interviewers: {
+        checkedList: e.target.checked ? plainOptions.interviewers.map((item: any) => item.id) : [],
+        indeterminate: false,
+        checkAll: e.target.checked,
+      }
+    });
+  };
+
+  function onCheckAllPresenterChange(e: any) {
+    setChecked({
+      ...checked,
+      presenter: {
+        checkedList: e.target.checked ? plainOptions.presenter.map((item: any) => item.id) : [],
+        indeterminate: false,
+        checkAll: e.target.checked,
+      }
+    });
+  };
+
   return (
     <>
       <div>
@@ -179,8 +380,8 @@ function BookingForm(props: BookingFormProps) {
 
                   </div>
                 </div>
-                <div className="c-schedule-interview-popup">
-                  <div className='ant-col-14 grid-left'>
+                <div className="c-schedule-interview-popup" style={{overflow: "overlay", width: 580}}>
+                  <div className='ant-col-14 grid-left' style={{width: 580}}>
                     <Form>
                       <Form.Item className="form-label" label="Tin tuyển dụng" labelCol={{span: 24}}
                                  wrapperCol={{span: 24}}>
@@ -193,7 +394,8 @@ function BookingForm(props: BookingFormProps) {
                             },
                           ],
                         })(
-                        <Select getPopupContainer={(trigger:any) => trigger.parentNode} disabled className="bg-white text-black" style={fontWeightStyle}
+                          <Select getPopupContainer={(trigger: any) => trigger.parentNode} disabled
+                                  className="bg-white text-black" style={fontWeightStyle}
                                   placeholder="Chọn tin tuyển dụng"
                           >
                             {props.listRecruitment.rows?.map((item: any, index: any) => (
@@ -269,7 +471,8 @@ function BookingForm(props: BookingFormProps) {
                                 },
                               ],
                             })(
-                            <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle} placeholder="Nhập địa chỉ"
+                              <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                                      className="bg-white text-black" style={fontWeightStyle} placeholder="Nhập địa chỉ"
                               >
                                 {props.listAddress.rows?.map((item: any, index: any) => (
                                   <Option key={index} value={item.id}>{item.officeName} - {item.name}</Option>
@@ -307,7 +510,8 @@ function BookingForm(props: BookingFormProps) {
                             },
                           ],
                         })(
-                        <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle}
+                          <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                                  className="bg-white text-black" style={fontWeightStyle}
                                   mode="multiple"
                                   placeholder="Chọn thành viên"
                           >
@@ -328,7 +532,8 @@ function BookingForm(props: BookingFormProps) {
                             },
                           ],
                         })(
-                        <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle}
+                          <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                                  className="bg-white text-black" style={fontWeightStyle}
                           >
                             <Option key="1" value="Phỏng vấn trực tiếp">Phỏng vấn trực tiếp</Option>
                             <Option key="2" value="Phỏng vấn online">Phỏng vấn online</Option>
@@ -356,9 +561,74 @@ function BookingForm(props: BookingFormProps) {
                         )}
                       </Form.Item>
 
-                      <Checkbox defaultChecked={true}>Email thông báo cho ứng viên</Checkbox>
-                      <Checkbox defaultChecked={true}>Email thông báo cho hội đồng</Checkbox>
-                      <Checkbox defaultChecked={true} className="ml-0">Email thông báo cho người giới thiệu</Checkbox>
+                      <div style={{fontWeight: 500}}>Gửi mail cho hội đồng tuyển dụng</div>
+                      <div style={{display: "flex"}}>
+                        <div>
+                          <Checkbox
+                            indeterminate={checked.interviewers.indeterminate}
+                            onChange={onCheckAllInterviewersChange}
+                            checked={checked.interviewers.checkAll}
+                          >
+                            Tất cả
+                          </Checkbox>
+                        </div>
+                        <CheckboxGroup
+                          value={checked.interviewers.checkedList}
+                          onChange={onCheckInterviewersChange}
+                        >
+                          {plainOptions.interviewers.map((item: any, index: any) =>
+                            <Checkbox key={item.id} value={item.id}>{item.name}</Checkbox>
+                          )}
+                        </CheckboxGroup>
+                      </div>
+                      <br/>
+
+                      <div style={{fontWeight: 500}}>Gửi mail cho ứng người giới thiệu</div>
+                      <div style={{display: "flex"}}>
+                        <div>
+                          <Checkbox
+                            indeterminate={checked.presenter.indeterminate}
+                            onChange={onCheckAllPresenterChange}
+                            checked={checked.presenter.checkAll}
+                          >
+                            Tất cả
+                          </Checkbox>
+                        </div>
+                        <CheckboxGroup
+                          value={checked.presenter.checkedList}
+                          onChange={onCheckPresenterChange}
+                        >
+                          {plainOptions.presenter.map((item: any, index: any) =>
+                            <Checkbox key={item.id} value={item.id}>{item.name}</Checkbox>
+                          )}
+                        </CheckboxGroup>
+                      </div>
+                      <br/>
+
+                      <div style={{fontWeight: 500}}>Gửi mail cho ứng viên</div>
+                      <div><Radio.Group
+                        value={checked.candidate.checkedList}
+                        onChange={onCheckCandidateChange}
+                      >
+                        {plainOptions.candidate.map((item: any, index: any) =>
+                          <Radio key={item.id} value={item.id}>{item.name}</Radio>
+                        )}
+                      </Radio.Group>
+                      </div>
+                      <br/>
+
+                      <div style={{fontWeight: 500}}>Gửi mail cho cán bộ liên quan</div>
+                      <div>
+                        <Radio.Group
+                          value={checked.members.checkedList}
+                          onChange={onCheckMembersChange}
+                        >
+                          {plainOptions.members.map((item: any, index: any) =>
+                            <Radio key={item.id} value={item.id}>{item.name}</Radio>
+                          )}
+                        </Radio.Group>
+                      </div>
+                      <br/>
 
                     </Form>
                   </div>
@@ -366,7 +636,17 @@ function BookingForm(props: BookingFormProps) {
                 <div className="footer-right">
                   <Button onClick={onBtnCancelClicked} type={"link"}
                           style={{color: "black", marginRight: 15}}>Hủy</Button>
-                  <Button type={"primary"} onClick={onBtnContinueUpdateClicked}>Tiếp tục</Button>
+
+
+                  {checked.candidate.checkedList === "yes" ||
+                  checked.members.checkedList === "yes" ||
+                  checked.interviewers.checkedList.length>0||
+                  checked.presenter.checkedList.length>0 ?
+                    <Button type={"primary"} onClick={onBtnContinueUpdateClicked}>Tiếp tục</Button>
+                    :
+                    <Button type={"primary"} onClick={onBtnUpdateClicked}>Đặt lịch</Button>
+                  }
+
 
                 </div>
               </Modal>
@@ -400,8 +680,8 @@ function BookingForm(props: BookingFormProps) {
                     {/*<div className="main-1__job-description">Business Analysis</div>*/}
                   </div>
                 </div>
-                <div className="c-schedule-interview-popup" >
-                  <div className='ant-col-14 grid-left'>
+                <div className="c-schedule-interview-popup" style={{overflow: "overlay", width: 580}}>
+                  <div className='ant-col-14 grid-left' style={{width: 580}}>
                     <Form>
 
                       <Form.Item className="form-label" label="Tin tuyển dụng" labelCol={{span: 24}}
@@ -415,7 +695,8 @@ function BookingForm(props: BookingFormProps) {
                             },
                           ],
                         })(
-                        <Select getPopupContainer={(trigger:any) => trigger.parentNode} disabled className="bg-white text-black" style={fontWeightStyle}
+                          <Select getPopupContainer={(trigger: any) => trigger.parentNode} disabled
+                                  className="bg-white text-black" style={fontWeightStyle}
                                   placeholder="Chọn tin tuyển dụng"
                           >
                             {props.listRecruitment.rows?.map((item: any, index: any) => (
@@ -491,7 +772,8 @@ function BookingForm(props: BookingFormProps) {
                                 },
                               ],
                             })(
-                            <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle} placeholder="Nhập địa chỉ"
+                              <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                                      className="bg-white text-black" style={fontWeightStyle} placeholder="Nhập địa chỉ"
                               >
                                 {props.listAddress.rows?.map((item: any, index: any) => (
                                   <Option key={index} value={item.id}>{item.officeName} - {item.name}</Option>
@@ -529,7 +811,8 @@ function BookingForm(props: BookingFormProps) {
                             },
                           ],
                         })(
-                        <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle}
+                          <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                                  className="bg-white text-black" style={fontWeightStyle}
                                   mode="multiple"
                                   placeholder="Chọn thành viên"
                           >
@@ -550,7 +833,8 @@ function BookingForm(props: BookingFormProps) {
                             },
                           ],
                         })(
-                        <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle}
+                          <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                                  className="bg-white text-black" style={fontWeightStyle}
                           >
                             <Option key="1" value="Phỏng vấn trực tiếp">Phỏng vấn trực tiếp</Option>
                             <Option key="2" value="Phỏng vấn online">Phỏng vấn online</Option>
@@ -578,10 +862,74 @@ function BookingForm(props: BookingFormProps) {
                         )}
                       </Form.Item>
 
-                      <Checkbox defaultChecked={true}>Email thông báo cho ứng viên</Checkbox>
-                      <Checkbox defaultChecked={true}>Email thông báo cho hội đồng</Checkbox>
-                      <Checkbox defaultChecked={true} className="ml-0">Email thông báo cho người giới thiệu</Checkbox>
+                      <div style={{fontWeight: 500}}>Gửi mail cho hội đồng tuyển dụng</div>
+                      <div style={{display: "flex"}}>
+                        <div>
+                          <Checkbox
+                            indeterminate={checked.interviewers.indeterminate}
+                            onChange={onCheckAllInterviewersChange}
+                            checked={checked.interviewers.checkAll}
+                          >
+                            Tất cả
+                          </Checkbox>
+                        </div>
+                        <CheckboxGroup
+                          value={checked.interviewers.checkedList}
+                          onChange={onCheckInterviewersChange}
+                        >
+                          {plainOptions.interviewers.map((item: any, index: any) =>
+                            <Checkbox key={item.id} value={item.id}>{item.name}</Checkbox>
+                          )}
+                        </CheckboxGroup>
+                      </div>
+                      <br/>
 
+                      <div style={{fontWeight: 500}}>Gửi mail cho ứng người giới thiệu</div>
+                      <div style={{display: "flex"}}>
+                        <div>
+                          <Checkbox
+                            indeterminate={checked.presenter.indeterminate}
+                            onChange={onCheckAllPresenterChange}
+                            checked={checked.presenter.checkAll}
+                          >
+                            Tất cả
+                          </Checkbox>
+                        </div>
+                        <CheckboxGroup
+                          value={checked.presenter.checkedList}
+                          onChange={onCheckPresenterChange}
+                        >
+                          {plainOptions.presenter.map((item: any, index: any) =>
+                            <Checkbox key={item.id} value={item.id}>{item.name}</Checkbox>
+                          )}
+                        </CheckboxGroup>
+                      </div>
+                      <br/>
+
+                      <div style={{fontWeight: 500}}>Gửi mail cho ứng viên</div>
+                      <div><Radio.Group
+                        value={checked.candidate.checkedList}
+                        onChange={onCheckCandidateChange}
+                      >
+                        {plainOptions.candidate.map((item: any, index: any) =>
+                          <Radio key={item.id} value={item.id}>{item.name}</Radio>
+                        )}
+                      </Radio.Group>
+                      </div>
+                      <br/>
+
+                      <div style={{fontWeight: 500}}>Gửi mail cho cán bộ liên quan</div>
+                      <div>
+                        <Radio.Group
+                          value={checked.members.checkedList}
+                          onChange={onCheckMembersChange}
+                        >
+                          {plainOptions.members.map((item: any, index: any) =>
+                            <Radio key={item.id} value={item.id}>{item.name}</Radio>
+                          )}
+                        </Radio.Group>
+                      </div>
+                      <br/>
 
                     </Form>
                   </div>
@@ -589,7 +937,15 @@ function BookingForm(props: BookingFormProps) {
                 <div className="footer-right">
                   <Button onClick={onBtnCancelClicked} type={"link"}
                           style={{color: "black", marginRight: 15}}>Hủy</Button>
-                  <Button type={"primary"} onClick={onBtnContinueCreateClicked}>Tiếp tục</Button>
+
+                  {checked.candidate.checkedList === "yes" ||
+                  checked.members.checkedList === "yes" ||
+                  checked.interviewers.checkedList.length>0||
+                  checked.presenter.checkedList.length>0 ?
+                    <Button type={"primary"} onClick={onBtnContinueCreateClicked}>Tiếp tục</Button>
+                    :
+                    <Button type={"primary"} onClick={onBtnCreateClicked}>Đặt lịch</Button>
+                  }
                 </div>
 
               </Modal>
@@ -604,4 +960,5 @@ function BookingForm(props: BookingFormProps) {
   );
 }
 
-export default connector(Form.create<BookingFormProps>()(BookingForm));
+export default connector(Form.create
+  < BookingFormProps > ()(BookingForm));
