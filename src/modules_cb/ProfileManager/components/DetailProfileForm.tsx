@@ -403,8 +403,6 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     }
   }, [showForm.id_detail, activeLogs.current])
 
-  console.log("getBooking:", getBooking)
-
   function handleUploadAvatar(e: any) {
     e.preventDefault();
     setVisiblePopover(false)
@@ -783,7 +781,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
                         item.interviewTime < +moment() ?
                           <>
                             <span style={{fontWeight: 500}}>Lịch {index + 1}:</span>
-                            <span style={{color: "red"}}>Đã kết thức</span>
+                            <span style={{color: "red"}}>Đã kết thúc</span>
                           </>
                           :
                           <>

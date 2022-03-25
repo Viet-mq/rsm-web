@@ -283,7 +283,7 @@ function ScheduleManagerPages(props: IProps) {
                         <span style={{color:"#1890ff"}}>Sắp diễn ra</span>
                         :
                         itemChild.interviewTime<+moment()?
-                          <span style={{color:"red"}}>Đã kết thức</span>
+                          <span style={{color:"red"}}>Đã kết thúc</span>
                           :
                           <span style={{color:"#ffbd24"}}>Đang diễn ra</span>}
                     </div>

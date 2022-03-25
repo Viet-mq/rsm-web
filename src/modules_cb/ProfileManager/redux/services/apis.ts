@@ -131,16 +131,17 @@ export const updateDetail = async (params?: any): Promise<ResponseBase2> => {
 export const createBooking = async (params?: CreateBookingRequest): Promise<ResponseBase2> => {
   let formData:any = new FormData();
   if(params?.createBookingForm.avatarColor) formData.append('avatarColor', params?.createBookingForm.avatarColor);
-  if(params?.mailRequest.candidate?.content) formData.append('contentCandidate', params?.mailRequest.candidate?.content);
-  if(params?.mailRequest.presenters?.content) formData.append('contentPresenter',  params?.mailRequest.presenters?.content);
-  if(params?.mailRequest.recruitmentCouncils?.content) formData.append('contentRecruitmentCouncil', params?.mailRequest.recruitmentCouncils?.content);
+  if(params?.mailRequest?.candidate?.content) formData.append('contentCandidate', params?.mailRequest.candidate?.content);
+  if(params?.mailRequest?.presenters?.content) formData.append('contentPresenter',  params?.mailRequest.presenters?.content);
+  if(params?.mailRequest?.recruitmentCouncils?.content) formData.append('contentRecruitmentCouncil', params?.mailRequest.recruitmentCouncils?.content);
   if(params?.createBookingForm.date) formData.append('date', params?.createBookingForm.date);
-  if (params?.mailRequest.candidate?.file) {
+  if (params?.mailRequest?.candidate?.file) {
     for(let i=0;i<params?.mailRequest.candidate?.file.length;i++){
       formData.append('fileCandidates', params?.mailRequest.candidate?.file[i]);
     }
-  }  if(params?.mailRequest.presenters?.file) formData.append('filePresenters', params?.mailRequest.presenters?.file);
-  if(params?.mailRequest.recruitmentCouncils?.file) formData.append('fileRecruitmentCouncils', params?.mailRequest.recruitmentCouncils?.file);
+  }
+  if(params?.mailRequest?.presenters?.file) formData.append('filePresenters', params?.mailRequest.presenters?.file);
+  if(params?.mailRequest?.recruitmentCouncils?.file) formData.append('fileRecruitmentCouncils', params?.mailRequest.recruitmentCouncils?.file);
   if(params?.createBookingForm.floor) formData.append('floor', params?.createBookingForm.floor);
   if(params?.createBookingForm.idProfile) formData.append('idProfile', params?.createBookingForm.idProfile);
   if( params?.createBookingForm.interviewAddress) formData.append('interviewAddress', params?.createBookingForm.interviewAddress);
@@ -148,9 +149,9 @@ export const createBooking = async (params?: CreateBookingRequest): Promise<Resp
   if(params?.createBookingForm.interviewers) formData.append('interviewers', params?.createBookingForm.interviewers);
   if(params?.createBookingForm.note) formData.append('note', params?.createBookingForm.note);
   if(params?.createBookingForm.recruitmentId) formData.append('recruitmentId', params?.createBookingForm.recruitmentId);
-  if(params?.mailRequest.candidate?.subject) formData.append('subjectCandidate',  params?.mailRequest.candidate?.subject);
-  if(params?.mailRequest.presenters?.subject) formData.append('subjectPresenter', params?.mailRequest.presenters?.subject);
-  if(params?.mailRequest.recruitmentCouncils?.subject) formData.append('subjectRecruitmentCouncil', params?.mailRequest.recruitmentCouncils?.subject);
+  if(params?.mailRequest?.candidate?.subject) formData.append('subjectCandidate',  params?.mailRequest.candidate?.subject);
+  if(params?.mailRequest?.presenters?.subject) formData.append('subjectPresenter', params?.mailRequest.presenters?.subject);
+  if(params?.mailRequest?.recruitmentCouncils?.subject) formData.append('subjectRecruitmentCouncil', params?.mailRequest.recruitmentCouncils?.subject);
   if(params?.createBookingForm.type) formData.append('type', params?.createBookingForm.type);
   return POSTIMAGE('api-svc/calendar/create', formData, {
     headers: {
@@ -162,25 +163,26 @@ export const createBooking = async (params?: CreateBookingRequest): Promise<Resp
 export const updateBooking = async (params?: UpdateBookingRequest): Promise<ResponseBase2> => {
   let formData:any = new FormData();
   if(params?.updateBookingForm.id) formData.append('id', params?.updateBookingForm.id);
-  if(params?.mailRequest.candidate?.content) formData.append('contentCandidate', params?.mailRequest.candidate?.content);
-  if(params?.mailRequest.presenters?.content) formData.append('contentPresenter',  params?.mailRequest.presenters?.content);
-  if(params?.mailRequest.recruitmentCouncils?.content) formData.append('contentRecruitmentCouncil', params?.mailRequest.recruitmentCouncils?.content);
+  if(params?.mailRequest?.candidate?.content) formData.append('contentCandidate', params?.mailRequest.candidate?.content);
+  if(params?.mailRequest?.presenters?.content) formData.append('contentPresenter',  params?.mailRequest.presenters?.content);
+  if(params?.mailRequest?.recruitmentCouncils?.content) formData.append('contentRecruitmentCouncil', params?.mailRequest.recruitmentCouncils?.content);
   if(params?.updateBookingForm.date) formData.append('date', params?.updateBookingForm.date);
-  if (params?.mailRequest.candidate?.file) {
+  if (params?.mailRequest?.candidate?.file) {
     for(let i=0;i<params?.mailRequest.candidate?.file.length;i++){
       formData.append('fileCandidates', params?.mailRequest.candidate?.file[i]);
     }
-  }  if(params?.mailRequest.presenters?.file) formData.append('filePresenters', params?.mailRequest.presenters?.file);
-  if(params?.mailRequest.recruitmentCouncils?.file) formData.append('fileRecruitmentCouncils', params?.mailRequest.recruitmentCouncils?.file);
+  }
+  if(params?.mailRequest?.presenters?.file) formData.append('filePresenters', params?.mailRequest.presenters?.file);
+  if(params?.mailRequest?.recruitmentCouncils?.file) formData.append('fileRecruitmentCouncils', params?.mailRequest.recruitmentCouncils?.file);
   if(params?.updateBookingForm.floor) formData.append('floor', params?.updateBookingForm.floor);
   if( params?.updateBookingForm.interviewAddress) formData.append('interviewAddress', params?.updateBookingForm.interviewAddress);
   if(params?.updateBookingForm.interviewTime) formData.append('interviewTime', params?.updateBookingForm.interviewTime);
   if(params?.updateBookingForm.interviewers) formData.append('interviewers', params?.updateBookingForm.interviewers);
   if(params?.updateBookingForm.note) formData.append('note', params?.updateBookingForm.note);
   if(params?.updateBookingForm.recruitmentId) formData.append('recruitmentId', params?.updateBookingForm.recruitmentId);
-  if(params?.mailRequest.candidate?.subject) formData.append('subjectCandidate',  params?.mailRequest.candidate?.subject);
-  if(params?.mailRequest.presenters?.subject) formData.append('subjectPresenter', params?.mailRequest.presenters?.subject);
-  if(params?.mailRequest.recruitmentCouncils?.subject) formData.append('subjectRecruitmentCouncil', params?.mailRequest.recruitmentCouncils?.subject);
+  if(params?.mailRequest?.candidate?.subject) formData.append('subjectCandidate',  params?.mailRequest.candidate?.subject);
+  if(params?.mailRequest?.presenters?.subject) formData.append('subjectPresenter', params?.mailRequest.presenters?.subject);
+  if(params?.mailRequest?.recruitmentCouncils?.subject) formData.append('subjectRecruitmentCouncil', params?.mailRequest.recruitmentCouncils?.subject);
   if(params?.updateBookingForm.type) formData.append('type', params?.updateBookingForm.type);
   return POSTIMAGE('api-svc/calendar/update', formData, {
     headers: {

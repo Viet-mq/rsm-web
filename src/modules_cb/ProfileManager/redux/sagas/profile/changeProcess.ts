@@ -5,7 +5,7 @@ import {
   getDetailProfile,
   getListProfile,
   showChangeProcessForm,
-  showChangeRecruitmentForm
+  showChangeRecruitmentForm, showEmailChangeProcessForm
 } from "../../actions";
 import * as apis from "../../services/apis";
 import {put, select} from "redux-saga/effects";
@@ -37,6 +37,7 @@ export function* changeProcessAsync(action: ChangeProcessAction) {
 
       } else {
         yield put(showChangeProcessForm(false));
+        yield put(showEmailChangeProcessForm(false));
         yield put(getListProfile(params))
         if (paramsDetail?.idProfile) {
           yield put(getDetailProfile(paramsDetail))
