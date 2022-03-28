@@ -27,7 +27,7 @@ interface IProps extends ReduxProps {
 function StatusCVManagerPages(props: IProps) {
   const { list, create, deleteStatusCV, update} = props.statuscvManager
   const [schema, setSchema] = useState<any>([])
-  const [lastElement, setLastElement] = useState<any>(list.rows?.map((el: any) => el.isDragDisabled).lastIndexOf(false));
+  const [lastElement, setLastElement] = useState<any>(list.rows?.map((el: any) => el.isDragDisabled).lastIndexOf(false)!==-1?list.rows?.map((el: any) => el.isDragDisabled).lastIndexOf(false):0);
 
   useEffect(() => {
     document.title = "Quản lý quy trình tuyển dụng";
@@ -35,7 +35,15 @@ function StatusCVManagerPages(props: IProps) {
 
   useEffect(() => {
     setSchema(list?.rows)
-  }, [list.rows]);
+  }, [list.rows]); 
+
+  useEffect(()=>{
+    if (schema?.length) {
+      const calLastElement = schema.map((el: any) => el.isDragDisabled).lastIndexOf(false)
+      if (calLastElement !== -1) setLastElement(calLastElement)
+      else setLastElement(0)
+    }
+  },[schema])
 
   function onDragEnd(result: any) {
     // dropped outside the list
@@ -106,8 +114,8 @@ function StatusCVManagerPages(props: IProps) {
                         <>
                           {provided.placeholder}
                           <div className="add-process-button" onClick={showFormCreate}>
-                            <Button type="dashed" size={"large"}> <Icon type="plus"/>Thêm vòng tuyển
-                              dụng</Button>
+                            <Button type="dashed" size={"large"}> <Icon type="plus"/>
+                            Thêm vòng tuyển dụng</Button>
                           </div>
                         </>
                         : null}
