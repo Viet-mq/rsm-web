@@ -1,12 +1,12 @@
 import {combineReducers} from "redux";
-import list, {GetListApiRoleState} from "./list";
+import list, {GetListApiState} from "./list";
 import create, {CreateAPIState} from "./create";
 import showForm, {ShowFormAPIState} from "./showForm";
 import update, {UpdateAPIState} from "./update";
 import deleteApi, {DeleteAPIState} from "./deleteApi";
 
 export interface APIManagerModuleState {
-  list: GetListApiRoleState,
+  list: GetListApiState,
   create: CreateAPIState,
   deleteApi: DeleteAPIState,
   showForm: ShowFormAPIState,

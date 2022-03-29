@@ -3,11 +3,11 @@ import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Input, Modal} from "antd";
 import React, {FormEvent} from "react";
-import {addAction, showFrontEndViewCreateForm} from "../redux/actions";
+import {addAction, showViewCreateForm} from "../redux/actions";
 import {AddActionToViewRequest} from "../types";
 
 const mapStateToProps = ({viewManager}: RootState) => ({viewManager});
-const connector = connect(mapStateToProps, {showFrontEndViewCreateForm, addAction});
+const connector = connect(mapStateToProps, {showViewCreateForm, addAction});
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -37,10 +37,14 @@ function AddActionForm(props: AddActionFormProps) {
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         let req: AddActionToViewRequest = {
-          viewId: props.viewManager.showForm.view?.id || '',
-          actionId: values.action,
-          actionName: values.name,
-          desc: values.description
+          // viewId: props.viewManager.showForm.view?.id || '',
+          // actionId: values.action,
+          // actionName: values.name,
+          // desc: values.description
+
+          key: values.action,
+          permission_id: props.viewManager.showForm.view?.id || '',
+          title: values.description
         }
         props.addAction(req);
         return;
@@ -50,7 +54,7 @@ function AddActionForm(props: AddActionFormProps) {
 
   function onBtnCancelClicked() {
     resetFields();
-    props.showFrontEndViewCreateForm(false);
+    props.showViewCreateForm(false);
   }
 
   return (
@@ -67,7 +71,7 @@ function AddActionForm(props: AddActionFormProps) {
       }}
       onCancel={() => {
         resetFields();
-        props.showFrontEndViewCreateForm(false);
+        props.showViewCreateForm(false);
       }}
       footer={""}>
 
@@ -75,7 +79,7 @@ function AddActionForm(props: AddActionFormProps) {
 
         <Form.Item label="Menu" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('path', {
-            initialValue: props.viewManager.showForm.view?.name,
+            initialValue: props.viewManager.showForm.view?.title,
             rules: [
               {
                 message: 'Vui lòng nhập đường dẫn',

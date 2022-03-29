@@ -1,11 +1,11 @@
-import {CreateApiRoleRequest} from "../../types";
+import {CreateApiRequest} from "../../types";
 import {AppError, ResponseBase2} from "../../../../models/common";
 import * as Actions from "../actions";
 import {CreateAPIAction} from "../actions";
 
 export interface CreateAPIState {
   loading: boolean,
-  request?: CreateApiRoleRequest,
+  request?: CreateApiRequest,
   response?: ResponseBase2,
   error?: AppError
 }

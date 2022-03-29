@@ -1,11 +1,11 @@
-import {UpdateApiRoleRequest} from "../../types";
+import {UpdateApiRequest} from "../../types";
 import {AppError, ResponseBase2} from "../../../../models/common";
 import * as Actions from "../actions";
 import {UpdateAPIAction} from "../actions";
 
 export interface UpdateAPIState {
   loading: boolean,
-  request?: UpdateApiRoleRequest,
+  request?: UpdateApiRequest,
   response?: ResponseBase2,
   error?: AppError
 }

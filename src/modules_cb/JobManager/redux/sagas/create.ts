@@ -16,15 +16,15 @@ export function* createJobAsync(action: CreateJobAction) {
     const rs = yield apis.createJob(action.request);
     yield put(createJobSuccess(rs));
     if (rs.code !== 0) {
-      NotificationError('Tạo Job không thành công', "Lỗi: " + rs.message)
+      NotificationError('Tạo vị trí công viêc không thành công', "Lỗi: " + rs.message)
     } else {
-      NotificationSuccess('Thành công', "Tạo Job thành công");
+      NotificationSuccess('Thành công', "Tạo vị trí công viêc thành công");
       yield put(showFormCreate(false));
       const params = yield select((state: RootState) => state.jobManager.list.params);
       yield put(getListJob(params))
     }
   } catch (e) {
     yield put(createJobError(new AppError(e.message)));
-    NotificationError('Tạo Job không thành công', "Lỗi: " + e.message);
+    NotificationError('Tạo vị trí công viêc không thành công', "Lỗi: " + e.message);
   }
 }

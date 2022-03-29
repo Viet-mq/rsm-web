@@ -7,21 +7,21 @@ export interface DeleteViewAction {
   error?: AppError
 }
 
-export const DELETE_VIEW_FRONT_END = "DELETE_VIEW_FRONT_END";
-export const DELETE_VIEW_FRONT_END_SUCCESS = "DELETE_VIEW_FRONT_END_SUCCESS";
-export const DELETE_VIEW_FRONT_END_ERROR = "DELETE_VIEW_FRONT_END_ERROR";
+export const DELETE_VIEW = "DELETE_VIEW";
+export const DELETE_VIEW_SUCCESS = "DELETE_VIEW_SUCCESS";
+export const DELETE_VIEW_ERROR = "DELETE_VIEW_ERROR";
 
 export const deleteView = (id: string): DeleteViewAction => ({
-  type: DELETE_VIEW_FRONT_END,
+  type: DELETE_VIEW,
   id
 });
 
-export const createDeleteViewSuccess = (response?: ResponseBase2): DeleteViewAction => ({
-  type: DELETE_VIEW_FRONT_END_SUCCESS,
+export const deleteViewSuccess = (response?: ResponseBase2): DeleteViewAction => ({
+  type: DELETE_VIEW_SUCCESS,
   response
 });
 
-export const createDeleteViewError = (error?: AppError): DeleteViewAction => ({
-  type: DELETE_VIEW_FRONT_END_ERROR,
+export const deleteViewError = (error?: AppError): DeleteViewAction => ({
+  type: DELETE_VIEW_ERROR,
   error
 });

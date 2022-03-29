@@ -19,6 +19,10 @@ import {getListAddress} from "../../../../modules_cb/AddressManager/redux/action
 import {getListReasonReject} from "../../../../modules_cb/ReasonRejectManager/redux/actions";
 import {getListRecruitment} from "../../../../modules_cb/RecruitmentManager/redux/actions";
 import {getKeyPoint} from "../../../../modules_cb/EmailManager/redux/actions";
+import {getListApi} from "../../../../modules_cb/APIManager/redux/actions";
+import {getListAPIRoles} from "../../../../modules_cb/APIRolesManager/redux/actions";
+import {getListViewRoles} from "../../../../modules_cb/ViewRolesManager/redux/actions";
+import {getListView} from "../../../../modules_cb/ViewManager/redux/actions";
 
 const TOKEN_KEY = 'auth-n-token';
 const SCHOOL ="list-school";
@@ -34,6 +38,10 @@ const RECRUITMENT ="list-recruitment";
 const ACCOUNT ="list-account";
 const ADDRESS ="list-address";
 const KEY_POINT ="list-key-point";
+const API ="list-api";
+const API_ROLES ="list-api-roles";
+const VIEW_ROLES ="list-view-roles";
+const VIEW ="list-view";
 
 export function* loginAsync(action: LoginAction) {
   try {
@@ -63,6 +71,10 @@ export function* loginAsync(action: LoginAction) {
       yield put(getListAddress({page: 1, size: 100}))
       yield put(getListReasonReject({page: 1, size: 100}))
       yield put(getListRecruitment({page: 1, size: 100}))
+      yield put(getListApi({page: 1, size: 100}))
+      yield put(getListAPIRoles({page: 1, size: 100}))
+      yield put(getListViewRoles({page: 1, size: 100}))
+      yield put(getListView({page: 1, size: 100}))
       yield put(getKeyPoint())
 
 
@@ -104,6 +116,10 @@ export function* loginCheckerAsync() {
     localStorage.removeItem(ACCOUNT);
     localStorage.removeItem(ADDRESS);
     localStorage.removeItem(KEY_POINT);
+    localStorage.removeItem(API);
+    localStorage.removeItem(API_ROLES);
+    localStorage.removeItem(VIEW_ROLES);
+    localStorage.removeItem(VIEW);
 
   }
 }

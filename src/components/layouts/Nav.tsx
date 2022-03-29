@@ -106,14 +106,7 @@ const Nav = (props: IProps) => {
         <Menu.Item key="view-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/view-manager`}>
             <IoEyeSharp className="mr-2"/>
-            <span>Quản lý view </span>
-          </Link>
-        </Menu.Item>
-
-        <Menu.Item key="view-group-manager" style={{display: 'flex', alignItems: 'center'}}>
-          <Link to={`/view-group-manager`}>
-            <AiOutlineFolderView className="mr-2"/>
-            <span>Quản lý view group  </span>
+            <span>Quản lý View </span>
           </Link>
         </Menu.Item>
 
@@ -124,10 +117,24 @@ const Nav = (props: IProps) => {
           </Link>
         </Menu.Item>
 
-        <Menu.Item key="group-api-manager" style={{display: 'flex', alignItems: 'center'}}>
-          <Link to={`/group-api-manager`}>
+        <Menu.Item key="api-roles-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to={`/api-roles-manager`}>
+            <AiOutlineFolderView className="mr-2"/>
+            <span>Quản lý API Roles  </span>
+          </Link>
+        </Menu.Item>
+
+        <Menu.Item key="view-roles-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to={`/view-roles-manager`}>
+            <AiOutlineFolderView className="mr-2"/>
+            <span>Quản lý View Roles  </span>
+          </Link>
+        </Menu.Item>
+
+        <Menu.Item key="role-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to={`/role-manager`}>
             <FaUsersCog className="mr-2"/>
-            <span>Quản lý Group API </span>
+            <span>Quản lý Roles </span>
           </Link>
         </Menu.Item>
 

@@ -1,28 +1,28 @@
-import {CreateFrontendViewRequest} from "../../types";
+import {CreateViewRequest} from "../../types";
 import {AppError, ResponseBase2} from "src/models/common";
 
 export interface CreateViewAction {
   type: string,
-  request?: CreateFrontendViewRequest,
+  request?: CreateViewRequest,
   response?: ResponseBase2,
   error?: AppError
 }
 
-export const CREATE_VIEW_FRONT_END = "CREATE_VIEW_FRONT_END";
-export const CREATE_VIEW_FRONT_END_SUCCESS = "CREATE_VIEW_FRONT_END_SUCCESS";
-export const CREATE_VIEW_FRONT_END_ERROR = "CREATE_VIEW_FRONT_END_ERROR";
+export const CREATE_VIEW = "CREATE_VIEW";
+export const CREATE_VIEW_SUCCESS = "CREATE_VIEW_SUCCESS";
+export const CREATE_VIEW_ERROR = "CREATE_VIEW_ERROR";
 
-export const createViewFrontEnd = (request: CreateFrontendViewRequest): CreateViewAction => ({
-  type: CREATE_VIEW_FRONT_END,
+export const createView = (request: CreateViewRequest): CreateViewAction => ({
+  type: CREATE_VIEW,
   request
 });
 
-export const createViewFrontEndSuccess = (response?: ResponseBase2): CreateViewAction => ({
-  type: CREATE_VIEW_FRONT_END_SUCCESS,
+export const createViewSuccess = (response?: ResponseBase2): CreateViewAction => ({
+  type: CREATE_VIEW_SUCCESS,
   response
 });
 
-export const createViewFrontEndError = (error?: AppError): CreateViewAction => ({
-  type: CREATE_VIEW_FRONT_END_ERROR,
+export const createViewError = (error?: AppError): CreateViewAction => ({
+  type: CREATE_VIEW_ERROR,
   error
 });

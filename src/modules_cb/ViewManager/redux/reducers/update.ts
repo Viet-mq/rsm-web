@@ -1,11 +1,11 @@
-import {CreateFrontendViewRequest} from "../../types";
+import {CreateViewRequest} from "../../types";
 import {AppError, ResponseBase2} from "src/models/common";
 import * as Actions from "../actions";
 import {UpdateViewAction} from "../actions";
 
 export interface UpdateViewState {
   loading: boolean,
-  request?: CreateFrontendViewRequest,
+  request?: CreateViewRequest,
   response?: ResponseBase2,
   error?: AppError
 }
@@ -16,19 +16,19 @@ const initState: UpdateViewState = {
 
 export default (state = initState, {type, request, response, error}: UpdateViewAction): UpdateViewState => {
   switch (type) {
-    case Actions.UPDATE_VIEW_FRONT_END:
+    case Actions.UPDATE_VIEW:
       return {
         ...state,
         request,
         loading: true
       }
-    case Actions.UPDATE_VIEW_FRONT_END_SUCCESS:
+    case Actions.UPDATE_VIEW_SUCCESS:
       return {
         ...state,
         response,
         loading: false
       }
-    case Actions.UPDATE_VIEW_FRONT_END_ERROR:
+    case Actions.UPDATE_VIEW_ERROR:
       return {
         ...state,
         error,

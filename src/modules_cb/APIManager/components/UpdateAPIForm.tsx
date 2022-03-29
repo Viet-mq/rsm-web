@@ -4,7 +4,7 @@ import {FormComponentProps} from "antd/lib/form";
 import {showFormUpdateApi, updateApi} from "../redux/actions";
 import {Button, Form, Input, Modal, Select} from "antd";
 import React, {FormEvent} from "react";
-import {UpdateApiRoleRequest} from "../types";
+import {UpdateApiRequest} from "../types";
 
 const {Option} = Select;
 
@@ -37,9 +37,11 @@ function UpdateApiForm(props: UpdateApiFormProps) {
     (e.target as any).disabled = false;
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        let req: UpdateApiRoleRequest = {
-          id: props.showForm.entity?.id || "",
-          name: values.name
+        let req: UpdateApiRequest = {
+          id: props.showForm.entity?.id ,
+          name: values.name,
+          method: values.method,
+          path: values.path
         }
         props.updateApi(req);
         return;
@@ -57,7 +59,7 @@ function UpdateApiForm(props: UpdateApiFormProps) {
     <Modal
       zIndex={2}
       maskClosable={false}
-      title="Update API"
+      title="Cập nhập API"
       visible={props.showForm.show_update}
       centered={true}
       width="550px"
@@ -72,17 +74,17 @@ function UpdateApiForm(props: UpdateApiFormProps) {
 
       <Form {...formItemLayout}>
 
-        <Form.Item label="Path" className="mb-0" style={{...formItemStyle}}>
-          {getFieldDecorator('path', {
-            initialValue: props.showForm.entity?.path,
+        <Form.Item label="Tên" className="mb-0" style={{...formItemStyle}}>
+          {getFieldDecorator('name', {
+            initialValue: props.showForm.entity?.name,
             rules: [
               {
-                message: 'Vui lòng nhập tên api',
+                message: 'Vui lòng nhập tên',
                 required: true,
               },
             ],
           })(
-            <Input disabled={true} placeholder="Tên API" className="bg-white text-black"/>
+            <Input placeholder="Tên" className="bg-white text-black"/>
           )}
         </Form.Item>
 
@@ -96,7 +98,7 @@ function UpdateApiForm(props: UpdateApiFormProps) {
               },
             ],
           })(
-          <Select getPopupContainer={(trigger:any) => trigger.parentNode} disabled={true}
+            <Select getPopupContainer={(trigger:any) => trigger.parentNode}
                     placeholder="Chọn phương thức"
             >
               <Option value="GET">GET</Option>
@@ -107,17 +109,17 @@ function UpdateApiForm(props: UpdateApiFormProps) {
           )}
         </Form.Item>
 
-        <Form.Item label="Tên" className="mb-0" style={{...formItemStyle}}>
-          {getFieldDecorator('name', {
-            initialValue: props.showForm.entity?.name,
+        <Form.Item label="Path" className="mb-0" style={{...formItemStyle}}>
+          {getFieldDecorator('path', {
+            initialValue: props.showForm.entity?.path,
             rules: [
               {
-                message: 'Vui lòng nhập tên',
+                message: 'Vui lòng nhập tên API',
                 required: true,
               },
             ],
           })(
-            <Input placeholder="Tên" className="bg-white text-black"/>
+            <Input  placeholder="Tên API" className="bg-white text-black"/>
           )}
         </Form.Item>
 

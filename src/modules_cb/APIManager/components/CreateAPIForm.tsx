@@ -4,7 +4,7 @@ import {FormComponentProps} from "antd/lib/form";
 import {createApi, showFormCreateApi} from "../redux/actions";
 import {Button, Form, Input, Modal, Select} from "antd";
 import React, {FormEvent} from "react";
-import {CreateApiRoleRequest} from "../types";
+import {CreateApiRequest} from "../types";
 
 const {Option} = Select;
 
@@ -37,7 +37,7 @@ function CreateApiForm(props: CreateApiFormProps) {
     (e.target as any).disabled = false;
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        let req: CreateApiRoleRequest = {
+        let req: CreateApiRequest = {
           path: values.path,
           method: values.method,
           name: values.name
@@ -73,17 +73,17 @@ function CreateApiForm(props: CreateApiFormProps) {
 
       <Form {...formItemLayout}>
 
-        <Form.Item label="Path" className="mb-0" style={{...formItemStyle}}>
-          {getFieldDecorator('path', {
+        <Form.Item label="Tên" className="mb-0" style={{...formItemStyle}}>
+          {getFieldDecorator('name', {
             initialValue: '',
             rules: [
               {
-                message: 'Vui lòng nhập tên api',
+                message: 'Vui lòng nhập tên',
                 required: true,
               },
             ],
           })(
-            <Input placeholder="Tên API" className="bg-white text-black"/>
+            <Input placeholder="Tên" className="bg-white text-black"/>
           )}
         </Form.Item>
 
@@ -97,8 +97,8 @@ function CreateApiForm(props: CreateApiFormProps) {
               },
             ],
           })(
-          <Select getPopupContainer={(trigger:any) => trigger.parentNode}
-              placeholder="Chọn phương thức"
+            <Select getPopupContainer={(trigger:any) => trigger.parentNode}
+                    placeholder="Chọn phương thức"
             >
               <Option value="GET">GET</Option>
               <Option value="POST">POST</Option>
@@ -108,17 +108,17 @@ function CreateApiForm(props: CreateApiFormProps) {
           )}
         </Form.Item>
 
-        <Form.Item label="Tên" className="mb-0" style={{...formItemStyle}}>
-          {getFieldDecorator('name', {
+        <Form.Item label="Path" className="mb-0" style={{...formItemStyle}}>
+          {getFieldDecorator('path', {
             initialValue: '',
             rules: [
               {
-                message: 'Vui lòng nhập tên',
+                message: 'Vui lòng nhập tên API',
                 required: true,
               },
             ],
           })(
-            <Input placeholder="Tên" className="bg-white text-black"/>
+            <Input placeholder="Tên API" className="bg-white text-black"/>
           )}
         </Form.Item>
 

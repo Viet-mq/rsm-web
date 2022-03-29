@@ -16,19 +16,19 @@ const initState: AddActionViewState = {
 
 export default (state = initState, {type, request, response, error}: AddActionViewAction): AddActionViewState => {
   switch (type) {
-    case Actions.FRONT_END_ADD_ACTION:
+    case Actions.ADD_ACTION:
       return {
         ...state,
         request,
         loading: true
       }
-    case Actions.FRONT_END_ADD_ACTION_SUCCESS:
+    case Actions.ADD_ACTION_SUCCESS:
       return {
         ...state,
         response,
         loading: false
       }
-    case Actions.FRONT_END_ADD_ACTION_ERROR:
+    case Actions.ADD_ACTION_ERROR:
       return {
         ...state,
         error,

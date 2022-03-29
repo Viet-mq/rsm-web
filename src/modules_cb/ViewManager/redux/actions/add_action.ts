@@ -8,21 +8,21 @@ export interface AddActionViewAction {
   error?: AppError
 }
 
-export const FRONT_END_ADD_ACTION = "FRONT_END_ADD_ACTION";
-export const FRONT_END_ADD_ACTION_SUCCESS = "FRONT_END_ADD_ACTION_SUCCESS";
-export const FRONT_END_ADD_ACTION_ERROR = "FRONT_END_ADD_ACTION_ERROR";
+export const ADD_ACTION = "ADD_ACTION";
+export const ADD_ACTION_SUCCESS = "ADD_ACTION_SUCCESS";
+export const ADD_ACTION_ERROR = "ADD_ACTION_ERROR";
 
 export const addAction = (request?: AddActionToViewRequest): AddActionViewAction => ({
-  type: FRONT_END_ADD_ACTION,
+  type: ADD_ACTION,
   request
 });
 
 export const addActionSuccess = (response?: ResponseBase2): AddActionViewAction => ({
-  type: FRONT_END_ADD_ACTION_SUCCESS,
+  type: ADD_ACTION_SUCCESS,
   response
 });
 
 export const addActionError = (error?: AppError): AddActionViewAction => ({
-  type: FRONT_END_ADD_ACTION_ERROR,
+  type: ADD_ACTION_ERROR,
   error
 });

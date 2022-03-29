@@ -960,5 +960,4 @@ function BookingForm(props: BookingFormProps) {
   );
 }
 
-export default connector(Form.create
-  < BookingFormProps > ()(BookingForm));
+export default connector(Form.create < BookingFormProps > ()(BookingForm));
