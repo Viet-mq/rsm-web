@@ -22,6 +22,7 @@ import emailManager, {EmailManagerModuleState} from "../modules_cb/EmailManager/
 import reminderManager, {ReminderManagerModuleState} from "../modules_cb/ReminderManager/redux/reducers";
 import dashboardManager, {DashBoardModuleState} from "../modules_cb/DashboardManager/redux/reducers";
 import apiRolesManager,{APIRolesManagerModuleState} from "../modules_cb/APIRolesManager/redux/reducers";
+import rolesManager,{RolesManagerModuleState} from "../modules_cb/RolesManager/redux/reducers";
 import viewRolesManager,{ViewRolesManagerModuleState} from "../modules_cb/ViewRolesManager/redux/reducers";
 
 export interface RootState {
@@ -47,6 +48,7 @@ export interface RootState {
   reminderManager: ReminderManagerModuleState,
   dashboardManager: DashBoardModuleState,
   apiRolesManager: APIRolesManagerModuleState,
+  rolesManager: RolesManagerModuleState,
   viewRolesManager: ViewRolesManagerModuleState,
 }
 
@@ -74,6 +76,7 @@ export default combineReducers<RootState>({
   reminderManager,
   dashboardManager,
   apiRolesManager,
+  rolesManager,
   viewRolesManager,
 
 });

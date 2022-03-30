@@ -32,6 +32,7 @@ import DashboardManagerPages from "./modules_cb/DashboardManager/pages/Dashboard
 import UpdateViewForm from "./modules_cb/ViewManager/components/UpdateViewForm";
 import APIRolesManagerPages from "./modules_cb/APIRolesManager/pages/APIRolesManagerPages";
 import ViewRolesManagerPages from "./modules_cb/ViewRolesManager/pages/ViewRolesManagerPages";
+import RolesManagerPages from "./modules_cb/RolesManager/pages/RolesManagerPages";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -69,6 +70,7 @@ const Routes = (props: PropsFromRedux) => {
         <Route path="/api-manager" component={APIManagerPage} isLogin={props.isLogin}/>
         <Route path="/job-manager" component={JobManagerPages} isLogin={props.isLogin}/>
         <Route path="/api-roles-manager" component={APIRolesManagerPages} isLogin={props.isLogin}/>
+        <Route path="/roles-manager" component={RolesManagerPages} isLogin={props.isLogin}/>
         <Route path="/view-roles-manager" component={ViewRolesManagerPages} isLogin={props.isLogin}/>
         <Route path="/department-manager" component={DepartmentManagerPages} isLogin={props.isLogin}/>
         <Route path="/joblevel-manager" component={JobLevelManagerPages} isLogin={props.isLogin}/>

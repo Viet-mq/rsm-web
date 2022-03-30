@@ -19,8 +19,6 @@ import {CreateRecruitmentRequest, DeleteProcessRequest, RecruitmentEntity} from 
 import {useLocation} from "react-router-dom";
 import ReactQuill from "react-quill";
 
-const {TextArea} = Input;
-
 const mapStateToProps = (state: RootState) => ({
   recruitmentManager: state.recruitmentManager,
 })

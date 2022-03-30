@@ -21,6 +21,7 @@ import emailManagerSaga from '../modules_cb/EmailManager/redux/sagas';
 import reminderManagerSaga from '../modules_cb/ReminderManager/redux/sagas';
 import dashboardManagerSaga from '../modules_cb/DashboardManager/redux/sagas';
 import apiRolesManagerSaga from '../modules_cb/APIRolesManager/redux/sagas';
+import rolesManagerSaga from '../modules_cb/RolesManager/redux/sagas';
 import viewRolesManagerSaga from '../modules_cb/ViewRolesManager/redux/sagas';
 import * as commonSaga from './common-saga';
 
@@ -47,6 +48,7 @@ export default function* rootSaga() {
     emailManagerSaga(),
     reminderManagerSaga(),
     dashboardManagerSaga(),
+    rolesManagerSaga(),
     apiRolesManagerSaga(),
     viewRolesManagerSaga(),
     commonSaga.checkErrorAsync(),

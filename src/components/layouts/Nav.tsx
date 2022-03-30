@@ -131,8 +131,8 @@ const Nav = (props: IProps) => {
           </Link>
         </Menu.Item>
 
-        <Menu.Item key="role-manager" style={{display: 'flex', alignItems: 'center'}}>
-          <Link to={`/role-manager`}>
+        <Menu.Item key="roles-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to={`/roles-manager`}>
             <FaUsersCog className="mr-2"/>
             <span>Quản lý Roles </span>
           </Link>

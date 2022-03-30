@@ -13,7 +13,7 @@ export const GET_LIST_API_ROLES = "GET_LIST_API_ROLES";
 export const GET_LIST_API_ROLES_SUCCESS = "GET_LIST_API_ROLES_SUCCESS";
 export const GET_LIST_API_ROLES_ERROR = "GET_LIST_API_ROLES_ERROR";
 
-export const getListAPIRoles = (params: any): APIRolesListAction => ({
+export const getListAPIRoles = (params?: any): APIRolesListAction => ({
   type: GET_LIST_API_ROLES,
   params
 });

@@ -284,7 +284,7 @@ function CreateScheduleInterview(props: IProps) {
 
   function handleSearchCandidate(e?: any) {
     setKeySearch(e?.target.value)
-    props.searchCandidates({fullName: e?.target.value, recruitment: recruitment, calendar: "notSet", page: 1, size: 15})
+    props.searchCandidates({fullName: e?.target.value, recruitment: recruitmentSelect, calendar: "notSet", page: 1, size: 15})
   }
 
   function showScrollCandidate() {

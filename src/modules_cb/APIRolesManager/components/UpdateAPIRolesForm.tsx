@@ -73,7 +73,6 @@ function UpdateAPIRolesForm(props: UpdateAPIRolesFormProps) {
     }
   }, [showForm.data_update?.apis])
 
-  console.log("showForm.data_update?.apis:",showForm.data_update?.apis)
 
   function onBtnUpdateClicked(e: FormEvent) {
     e.preventDefault();
