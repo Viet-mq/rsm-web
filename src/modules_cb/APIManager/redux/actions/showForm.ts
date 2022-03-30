@@ -1,10 +1,10 @@
-import {ApiRoleEntity} from "../../types";
+import {ApiEntity} from "../../types";
 
 export interface ShowFormAPIAction {
   type: string,
   show_create?: boolean,
   show_update?: boolean,
-  entity?: ApiRoleEntity
+  entity?: ApiEntity
 }
 
 export const SHOW_FORM_CREATE_API = "SHOW_FORM_CREATE_API";
@@ -15,7 +15,7 @@ export const showFormCreateApi = (show_create: boolean): ShowFormAPIAction => ({
   show_create
 });
 
-export const showFormUpdateApi = (show_update: boolean, entity?: ApiRoleEntity): ShowFormAPIAction => ({
+export const showFormUpdateApi = (show_update: boolean, entity?: ApiEntity): ShowFormAPIAction => ({
   type: SHOW_FORM_UPDATE_API,
   show_update,
   entity

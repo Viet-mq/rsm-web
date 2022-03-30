@@ -1,13 +1,13 @@
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Checkbox, Form, Input, Modal} from "antd";
+import {Button, Checkbox, Form, Input, InputNumber, Modal} from "antd";
 import React, {FormEvent, useState} from "react";
-import {createViewFrontEnd, showFrontEndViewCreateForm} from "../redux/actions";
-import {CreateFrontendViewRequest} from "../types";
+import {createView, showViewCreateForm} from "../redux/actions";
+import {CreateViewRequest} from "../types";
 
 const mapStateToProps = ({viewManager}: RootState) => ({viewManager});
-const connector = connect(mapStateToProps, {showFrontEndViewCreateForm, createViewFrontEnd});
+const connector = connect(mapStateToProps, {showViewCreateForm, createView});
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -16,7 +16,6 @@ interface CreateViewFormProps extends FormComponentProps, ReduxProps {
 
 function CreateViewForm(props: CreateViewFormProps) {
 
-  const [show, setShow] = useState<boolean>(true);
   const {getFieldDecorator, resetFields} = props.form;
   const formItemStyle = {height: '60px'};
 
@@ -37,13 +36,13 @@ function CreateViewForm(props: CreateViewFormProps) {
     (e.target as any).disabled = false;
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        let req: CreateFrontendViewRequest = {
-          id: values.path,
-          name: values.name,
+        let req: CreateViewRequest = {
           icon: values.icon,
-          show: show
+          index: values.index,
+          path: values.path,
+          title: values.title
         }
-        props.createViewFrontEnd(req);
+        props.createView(req);
         return;
       }
     });
@@ -51,11 +50,7 @@ function CreateViewForm(props: CreateViewFormProps) {
 
   function onBtnCancelClicked() {
     resetFields();
-    props.showFrontEndViewCreateForm(false);
-  }
-
-  const onCheckBoxChange = (e: any) => {
-    setShow(e.target.checked);
+    props.showViewCreateForm(false);
   }
 
   return (
@@ -63,7 +58,7 @@ function CreateViewForm(props: CreateViewFormProps) {
     <Modal
       zIndex={2}
       maskClosable={false}
-      title="Tạo mới menu"
+      title="Tạo mới View"
       visible={props.viewManager.showForm.show_create}
       centered={true}
       width="550px"
@@ -72,11 +67,23 @@ function CreateViewForm(props: CreateViewFormProps) {
       }}
       onCancel={() => {
         resetFields();
-        props.showFrontEndViewCreateForm(false);
+        props.showViewCreateForm(false);
       }}
       footer={""}>
 
       <Form {...formItemLayout}>
+
+        <Form.Item label="Tên View" className="mb-0" style={{...formItemStyle}}>
+          {getFieldDecorator('title', {
+            initialValue: '',
+            rules: [
+              {
+                message: 'Vui lòng nhập tên',
+                required: true,
+              },
+            ],
+          })(<Input placeholder="Nhập tên View" className="bg-white text-black"/>)}
+        </Form.Item>
 
         <Form.Item label="Đường dẫn" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('path', {
@@ -90,27 +97,28 @@ function CreateViewForm(props: CreateViewFormProps) {
           })(<Input placeholder="Nhập đường dẫn" className="bg-white text-black"/>)}
         </Form.Item>
 
-        <Form.Item label="Tên menu" className="mb-0" style={{...formItemStyle}}>
-          {getFieldDecorator('name', {
+        <Form.Item label="Index" className="mb-0" style={{...formItemStyle}}>
+          {getFieldDecorator('index', {
             initialValue: '',
             rules: [
               {
-                message: 'Vui lòng nhập tên',
+                message: 'Vui lòng nhập Index',
                 required: true,
               },
             ],
-          })(<Input placeholder="Nhập tên menu" className="bg-white text-black"/>)}
+          })(<InputNumber style={{ width: '100%' }} placeholder="Nhập Index" className="bg-white text-black"/>)}
         </Form.Item>
 
         <Form.Item label="Icon" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('icon', {
             initialValue: '',
-            rules: [],
+            rules: [
+              {
+                message: 'Vui lòng nhập Icon',
+                required: true,
+              },
+            ],
           })(<Input placeholder="Nhập icon menu" className="bg-white text-black"/>)}
-        </Form.Item>
-
-        <Form.Item label="Show" className="mb-0" style={{...formItemStyle}}>
-          <Checkbox checked={show} onChange={onCheckBoxChange}/>
         </Form.Item>
 
         <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px'}} colon={false}>

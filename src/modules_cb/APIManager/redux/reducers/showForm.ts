@@ -1,11 +1,11 @@
-import {ApiRoleEntity} from "../../types";
+import {ApiEntity} from "../../types";
 import *as Actions from "../actions";
 import {ShowFormAPIAction} from "../actions";
 
 export interface ShowFormAPIState {
   show_create?: boolean,
   show_update?: boolean,
-  entity?: ApiRoleEntity
+  entity?: ApiEntity
 }
 
 const initState: ShowFormAPIState = {

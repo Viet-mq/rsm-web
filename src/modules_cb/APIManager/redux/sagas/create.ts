@@ -1,4 +1,4 @@
-import {CreateAPIAction, createApiError, createApiSuccess, getListApiRole, showFormCreateApi} from "../actions";
+import {CreateAPIAction, createApiError, createApiSuccess, getListApi, showFormCreateApi} from "../actions";
 import * as apis from "../services/apis";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
 import {put, select} from "redux-saga/effects";
@@ -7,7 +7,7 @@ import {RootState} from "src/redux/reducers";
 
 export function* createApiAsync(action: CreateAPIAction) {
   try {
-    const rs = yield apis.createApiRole(action.request);
+    const rs = yield apis.createApi(action.request);
     yield put(createApiSuccess(rs));
     if (rs.code !== 0) {
       NotificationError('Tạo API không thành công', "Lỗi: " + rs.message)
@@ -15,7 +15,7 @@ export function* createApiAsync(action: CreateAPIAction) {
       NotificationSuccess('Thành công', "Tạo API thành công");
       yield put(showFormCreateApi(false));
       const params = yield select((state: RootState) => state.apiManager.list.params);
-      yield put(getListApiRole(params));
+      yield put(getListApi(params));
     }
   } catch (e) {
     yield put(createApiError(new AppError(e.message, -1)));

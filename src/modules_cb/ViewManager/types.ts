@@ -1,28 +1,51 @@
 export interface ActionView {
-  viewId: string,
-  actionId: string,
-  actionName: string,
-  desc: string,
+  id: string
+  key: string,
+  permission_id: string,
+  title: string
 }
 
-export interface FrontendViewEntity {
+export interface ViewEntity {
   id: string,
-  name: string,
-  icon: string,
-  show: boolean,
+  title: string;
+  path: string;
+  icon: string;
+  key: string;
+  index: number;
   actions: ActionView[]
 }
 
-export interface CreateFrontendViewRequest {
-  id: string,
-  name: string,
-  icon?: string,
-  show?: boolean,
+export interface CreateViewRequest {
+  icon: string,
+  index: number,
+  path: string,
+  title: string
+}
+
+export interface UpdateViewRequest {
+  icon: string,
+  index: number,
+  path: string,
+  title: string
+  id?: string,
+
 }
 
 export interface AddActionToViewRequest {
-  viewId: string,
-  actionId: string,
-  actionName?: string,
-  desc?: string,
+  key: string,
+  permission_id?: string,
+  title: string
+}
+
+
+export interface DeleteActionToViewRequest {
+  id: string,
+  permission_id?: string
+}
+
+export interface UpdateActionToViewRequest {
+  id?: string,
+  key: string,
+  permission_id?: string,
+  title: string
 }

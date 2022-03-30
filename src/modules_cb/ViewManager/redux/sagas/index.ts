@@ -1,26 +1,30 @@
 import {all, takeLatest} from 'redux-saga/effects';
-import {getListViewFrontEnd} from "./list";
+
 import {
-  CREATE_VIEW_FRONT_END,
-  DELETE_VIEW_FRONT_END,
-  FRONT_END_ADD_ACTION,
-  FRONT_END_REMOVE_ACTION,
-  GET_LIST_FRONT_END_VIEW,
-  UPDATE_VIEW_FRONT_END
+  ADD_ACTION,
+  CREATE_VIEW,
+  DELETE_VIEW, GET_DETAIL_VIEW,
+  GET_LIST_VIEW, REMOVE_ACTION, UPDATE_ACTION,
+  UPDATE_VIEW
 } from "../actions";
-import {createFrontEndAsync} from "./create";
-import {updateFrontEndAsync} from "./update";
-import {deleteFrontEndAsync} from "./deleteView";
-import {addActionFrontEndAsync} from "./add_action";
-import {removeActionFrontEndAsync} from "./remove_action";
+import {createViewAsync} from "./create";
+import {updateViewAsync} from "./update";
+import {deleteViewAsync} from "./deleteView";
+import {getListViewAsync} from "./list";
+import {updateActionViewAsync} from "./update_action";
+import {addActionViewAsync} from "./add_action";
+import {removeActionViewAsync} from "./remove_action";
+import {getDetailViewAsync} from "./detail";
 
 export default function* root() {
   return all([
-    yield takeLatest(GET_LIST_FRONT_END_VIEW, getListViewFrontEnd),
-    yield takeLatest(CREATE_VIEW_FRONT_END, createFrontEndAsync),
-    yield takeLatest(UPDATE_VIEW_FRONT_END, updateFrontEndAsync),
-    yield takeLatest(DELETE_VIEW_FRONT_END, deleteFrontEndAsync),
-    yield takeLatest(FRONT_END_ADD_ACTION, addActionFrontEndAsync),
-    yield takeLatest(FRONT_END_REMOVE_ACTION, removeActionFrontEndAsync),
+    yield takeLatest(GET_LIST_VIEW, getListViewAsync),
+    yield takeLatest(GET_DETAIL_VIEW, getDetailViewAsync),
+    yield takeLatest(CREATE_VIEW, createViewAsync),
+    yield takeLatest(UPDATE_VIEW, updateViewAsync),
+    yield takeLatest(DELETE_VIEW, deleteViewAsync),
+    yield takeLatest(ADD_ACTION, addActionViewAsync),
+    yield takeLatest(UPDATE_ACTION, updateActionViewAsync),
+    yield takeLatest(REMOVE_ACTION, removeActionViewAsync),
   ]);
 }

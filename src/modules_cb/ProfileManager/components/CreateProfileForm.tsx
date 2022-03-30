@@ -318,8 +318,8 @@ function CreateProfileForm(props: CreateProfileFormProps) {
         }}
         footer={""}>
 
-        <Form className="form-create">
-          <div className="modal-overflow">
+        <Form className="form-create" style={{width:526}}>
+          <div className="modal-overflow" style={{paddingRight:15}}>
             <Form.Item label="Họ Tên" className="form-label"  {...formItemLayout}>
               {getFieldDecorator('fullName', {
                 initialValue: '',

@@ -1,11 +1,11 @@
-import {CreateFrontendViewRequest} from "../../types";
+import {CreateViewRequest} from "../../types";
 import {AppError, ResponseBase2} from "../../../../models/common";
 import * as  Actions from "../actions";
 import {CreateViewAction} from "../actions";
 
 export interface CreateViewState {
   loading: boolean,
-  request?: CreateFrontendViewRequest,
+  request?: CreateViewRequest,
   response?: ResponseBase2,
   error?: AppError
 }
@@ -16,19 +16,19 @@ const initState: CreateViewState = {
 
 export default (state = initState, {type, request, response, error}: CreateViewAction): CreateViewState => {
   switch (type) {
-    case Actions.CREATE_VIEW_FRONT_END:
+    case Actions.CREATE_VIEW:
       return {
         ...state,
         request,
         loading: true
       }
-    case Actions.CREATE_VIEW_FRONT_END_SUCCESS:
+    case Actions.CREATE_VIEW_SUCCESS:
       return {
         ...state,
         response,
         loading: false
       }
-    case Actions.CREATE_VIEW_FRONT_END_ERROR:
+    case Actions.CREATE_VIEW_ERROR:
       return {
         ...state,
         error,

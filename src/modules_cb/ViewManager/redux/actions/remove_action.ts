@@ -1,28 +1,28 @@
-import {AddActionToViewRequest} from "src/modules_cb/ViewManager/types";
+import {AddActionToViewRequest, DeleteActionToViewRequest} from "src/modules_cb/ViewManager/types";
 import {AppError, ResponseBase2} from "src/models/common";
 
 export interface RemoveActionViewAction {
   type: string,
-  request?: AddActionToViewRequest,
+  request?: DeleteActionToViewRequest,
   response?: ResponseBase2,
   error?: AppError
 }
 
-export const FRONT_END_REMOVE_ACTION = "FRONT_END_REMOVE_ACTION";
-export const FRONT_END_REMOVE_ACTION_SUCCESS = "FRONT_END_REMOVE_ACTION_SUCCESS";
-export const FRONT_END_REMOVE_ACTION_ERROR = "FRONT_END_REMOVE_ACTION_ERROR";
+export const REMOVE_ACTION = "REMOVE_ACTION";
+export const REMOVE_ACTION_SUCCESS = "REMOVE_ACTION_SUCCESS";
+export const REMOVE_ACTION_ERROR = "REMOVE_ACTION_ERROR";
 
-export const removeAction = (request?: AddActionToViewRequest): RemoveActionViewAction => ({
-  type: FRONT_END_REMOVE_ACTION,
+export const removeAction = (request?:DeleteActionToViewRequest): RemoveActionViewAction => ({
+  type: REMOVE_ACTION,
   request
 });
 
 export const removeActionSuccess = (response?: ResponseBase2): RemoveActionViewAction => ({
-  type: FRONT_END_REMOVE_ACTION_SUCCESS,
+  type: REMOVE_ACTION_SUCCESS,
   response
 });
 
 export const removeActionError = (error?: AppError): RemoveActionViewAction => ({
-  type: FRONT_END_REMOVE_ACTION_ERROR,
+  type: REMOVE_ACTION_ERROR,
   error
 });

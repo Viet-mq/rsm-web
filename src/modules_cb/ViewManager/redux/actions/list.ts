@@ -1,30 +1,30 @@
-import {FrontendViewEntity} from "../../types";
+import {ViewEntity} from "../../types";
 import {AppError} from "src/models/common";
 
-export interface GetListFrontendViewAction {
+export interface GetListViewAction {
   type: string,
   params?: any,
   total?: number,
-  rows?: FrontendViewEntity[],
+  rows?: ViewEntity[],
   error?: AppError
 }
 
-export const GET_LIST_FRONT_END_VIEW = "GET_LIST_FRONT_END_VIEW";
-export const GET_LIST_FRONT_END_VIEW_SUCCESS = "GET_LIST_FRONT_END_VIEW_SUCCESS";
-export const GET_LIST_FRONT_END_VIEW_ERROR = "GET_LIST_FRONT_END_VIEW_ERROR";
+export const GET_LIST_VIEW = "GET_LIST_VIEW";
+export const GET_LIST_VIEW_SUCCESS = "GET_LIST_VIEW_SUCCESS";
+export const GET_LIST_VIEW_ERROR = "GET_LIST_VIEW_ERROR";
 
-export const getListFrontendView = (params: any): GetListFrontendViewAction => ({
-  type: GET_LIST_FRONT_END_VIEW,
+export const getListView = (params: any): GetListViewAction => ({
+  type: GET_LIST_VIEW,
   params
 });
 
-export const getListFrontendViewSuccess = (total: number, rows: FrontendViewEntity[]): GetListFrontendViewAction => ({
-  type: GET_LIST_FRONT_END_VIEW_SUCCESS,
+export const getListViewSuccess = (total: number, rows: ViewEntity[]): GetListViewAction => ({
+  type: GET_LIST_VIEW_SUCCESS,
   total,
   rows
 });
 
-export const getListFrontendViewError = (error?: AppError): GetListFrontendViewAction => ({
-  type: GET_LIST_FRONT_END_VIEW_ERROR,
+export const getListViewError = (error?: AppError): GetListViewAction => ({
+  type: GET_LIST_VIEW_ERROR,
   error
 });

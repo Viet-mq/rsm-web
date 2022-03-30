@@ -1,39 +1,43 @@
-import {ApiRoleEntity} from "../../types";
+import {ApiEntity} from "../../types";
 import {AppError} from "src/models/common";
 import * as Actions from "../actions";
-import {GetListApiRoleAction} from "../actions";
+import {GetListApiAction} from "../actions";
 
-export interface GetListApiRoleState {
+export interface GetListApiState {
   loading: boolean,
   params?: any,
-  rows?: ApiRoleEntity[]|any,
+  rows?: ApiEntity[]|any,
   total?: number|any,
   error?: AppError
 }
 
-const initState: GetListApiRoleState = {
+const initState: GetListApiState = {
   loading: false,
   params: {},
   rows: [],
   total: 0
 }
 
-export default (state = initState, {type, total, rows, params, error}: GetListApiRoleAction): GetListApiRoleState => {
+const saveApi:any=localStorage.getItem('list-api');
+const dataApi:GetListApiState = JSON.parse(saveApi)?JSON.parse(saveApi):initState
+
+
+export default (state = dataApi, {type, total, rows, params, error}: GetListApiAction): GetListApiState => {
   switch (type) {
-    case Actions.GET_LIST_API_ROLE:
+    case Actions.GET_LIST_API:
       return {
         ...state,
         params,
         loading: true
       }
-    case Actions.GET_LIST_API_ROLE_SUCCESS:
+    case Actions.GET_LIST_API_SUCCESS:
       return {
         ...state,
         total,
         rows,
         loading: false
       }
-    case Actions.GET_LIST_API_ROLE_ERROR:
+    case Actions.GET_LIST_API_ERROR:
       return {
         ...state,
         error,

@@ -1,8 +1,10 @@
 
 export * from './list'
+export * from './detail'
 export * from './create'
 export * from './deleteView'
 export * from './update'
 export * from './showForm'
 export * from './add_action'
 export * from './remove_action'
+export * from './update_action'

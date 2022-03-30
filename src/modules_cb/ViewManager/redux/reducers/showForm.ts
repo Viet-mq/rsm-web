@@ -1,18 +1,22 @@
-import {FrontendViewEntity} from "../../types";
+import {ActionView, UpdateActionToViewRequest, ViewEntity} from "../../types";
 import * as Actions from "../actions";
-import {ViewShowFormAction} from "../actions";
+import {ShowViewFormAction} from "../actions";
 
 export interface ViewShowFormState {
   show_create?: boolean,
   show_update?: boolean,
   show_add_action?: boolean,
-  view?: FrontendViewEntity
+  show_update_action?: boolean,
+  view?: ViewEntity,
+  id_view?: string,
+  actions?: UpdateActionToViewRequest,
 }
 
 const initState: ViewShowFormState = {
   show_create: false,
   show_update: false,
-  show_add_action: false
+  show_add_action: false,
+  show_update_action: false
 }
 
 export default (state = initState, {
@@ -20,17 +24,20 @@ export default (state = initState, {
   show_create,
   show_update,
   show_add_action,
+  show_update_action,
+  id_view,
+  actions,
   view
-}: ViewShowFormAction): ViewShowFormState => {
+}: ShowViewFormAction): ViewShowFormState => {
   switch (type) {
-    case Actions.VIEW_FRONT_END_SHOW_CREATE_FORM:
+    case Actions.SHOW_VIEW_CREATE_FORM:
       return {
         ...state,
         show_create,
         show_update: false,
         show_add_action: false
       }
-    case Actions.VIEW_FRONT_END_SHOW_UPDATE_FORM:
+    case Actions.SHOW_VIEW_UPDATE_FORM:
       return {
         ...state,
         show_update,
@@ -39,11 +46,20 @@ export default (state = initState, {
         show_add_action: false
       }
 
-    case Actions.VIEW_FRONT_END_SHOW_ADD_ACTION_FORM:
+    case Actions.SHOW_VIEW_ADD_ACTION_FORM:
       return {
         ...state,
         show_add_action,
-        view,
+        id_view,
+        show_create: false,
+        show_update: false
+      }
+
+    case Actions.SHOW_VIEW_UPDATE_ACTION_FORM:
+      return {
+        ...state,
+        show_update_action,
+        actions,
         show_create: false,
         show_update: false
       }

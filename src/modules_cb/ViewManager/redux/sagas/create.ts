@@ -1,9 +1,9 @@
 import {
   CreateViewAction,
-  createViewFrontEndError,
-  createViewFrontEndSuccess,
-  getListFrontendView,
-  showFrontEndViewCreateForm
+  createViewError,
+  createViewSuccess,
+  getListView,
+  showViewCreateForm
 } from "../actions";
 import * as apis from "../services/apis";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
@@ -11,19 +11,19 @@ import {put, select} from "redux-saga/effects";
 import {AppError} from "src/models/common";
 import {RootState} from "src/redux/reducers";
 
-export function* createFrontEndAsync(action: CreateViewAction) {
+export function* createViewAsync(action: CreateViewAction) {
   try {
-    const rs = yield apis.createViewFrontEnd(action.request);
-    yield put(createViewFrontEndSuccess(rs));
+    const rs = yield apis.createView(action.request);
+    yield put(createViewSuccess(rs));
     if (rs.code !== 0) {
       NotificationError('Tạo view không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tạo view thành công");
-      yield put(showFrontEndViewCreateForm(false));
+      yield put(showViewCreateForm(false));
       const params = yield select((state: RootState) => state.viewManager.list.params);
-      yield put(getListFrontendView(params));
+      yield put(getListView(params));
     }
   } catch (e) {
-    yield put(createViewFrontEndError(new AppError(e.message, -1)));
+    yield put(createViewError(new AppError(e.message, -1)));
   }
 }

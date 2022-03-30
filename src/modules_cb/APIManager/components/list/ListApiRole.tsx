@@ -5,12 +5,12 @@ import env from "src/configs/env";
 import {ColumnProps} from "antd/lib/table";
 import {Button, Icon, Popconfirm, Table} from "antd";
 import {emptyText} from "src/configs/locales";
-import {deleteApi, getListApiRole, showFormUpdateApi} from "../../redux/actions";
-import {ApiRoleEntity, DeleteApiRoleRequest} from "../../types";
+import {deleteApi, getListApi, showFormUpdateApi} from "../../redux/actions";
+import {ApiEntity, DeleteApiRequest} from "../../types";
 
 const mapStateToProps = ({apiManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
-  getListApiRole,
+  getListApi,
   deleteApi,
   showFormUpdateApi,
 });
@@ -20,7 +20,7 @@ type ReduxProps = ConnectedProps<typeof connector>;
 interface IProps extends ReduxProps {
 }
 
-function ListApiRole(props: IProps) {
+function ListApi(props: IProps) {
 
   let screenWidth = document.documentElement.clientWidth;
   const [page, setPage] = useState(1);
@@ -31,21 +31,21 @@ function ListApiRole(props: IProps) {
   });
 
   useEffect(() => {
-    props.getListApiRole({page: 1, size: 100});
+    props.getListApi({page: 1, size: 100});
   }, []);
 
-  const handleDelete = (event: any, entity: ApiRoleEntity) => {
-    let req: DeleteApiRoleRequest = {
+  const handleDelete = (event: any, entity: ApiEntity) => {
+    let req: DeleteApiRequest = {
       id: entity.id
     }
     props.deleteApi(req);
   }
 
-  const handleEdit = (event: any, entity: ApiRoleEntity) => {
+  const handleEdit = (event: any, entity: ApiEntity) => {
     props.showFormUpdateApi(true, entity);
   }
 
-  const columns: ColumnProps<ApiRoleEntity>[] = [
+  const columns: ColumnProps<ApiEntity>[] = [
     {
       title: 'STT',
       key: 'index',
@@ -59,15 +59,17 @@ function ListApiRole(props: IProps) {
       width: 100,
     },
     {
-      title: 'Path',
-      dataIndex: 'path',
-      width: 100,
-    },
-    {
       title: 'Method',
       dataIndex: 'method',
       width: 100,
     },
+
+    {
+      title: 'Path',
+      dataIndex: 'path',
+      width: 100,
+    },
+
 
     {
       title: () => {
@@ -76,7 +78,7 @@ function ListApiRole(props: IProps) {
       dataIndex: 'action',
       width: 100,
       fixed: 'right',
-      render: (_text: string, record: ApiRoleEntity) => {
+      render: (_text: string, record: ApiEntity) => {
         return (
           <div style={{whiteSpace: 'nowrap'}}>
             <Popconfirm
@@ -125,7 +127,6 @@ function ListApiRole(props: IProps) {
         className="custom-table"
         dataSource={props.list.rows}
         columns={columns}
-        rowSelection={rowSelection}
         rowKey="id"
         locale={{emptyText: emptyText}}
         pagination={{
@@ -141,4 +142,4 @@ function ListApiRole(props: IProps) {
 
 }
 
-export default connector(ListApiRole);
+export default connector(ListApi);

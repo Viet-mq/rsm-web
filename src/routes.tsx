@@ -16,8 +16,6 @@ import BlacklistManagerPages from "./modules_cb/BlacklistManager/pages/Blacklist
 import ProfileManagerPages from "./modules_cb/ProfileManager/pages/ProfileManagerPages";
 import {showFormDetail} from "./modules_cb/ProfileManager/redux/actions";
 import {DetailCV} from "./modules_cb/ProfileManager/types";
-import ViewGroupManagerPage from './modules_cb/ViewGroupManager/pages/ViewGroupManagerPage';
-import GroupAPIManagerPage from "./modules_cb/GroupAPIManager/pages/GroupAPIManagerPage";
 import TalentPoolManagerPages from "./modules_cb/TalentPoolManager/pages/TalentPoolManagerPages";
 import ScheduleManagerPages from "./modules_cb/ScheduleManager/pages/ScheduleManagerPages";
 import SkillManagerPages from "./modules_cb/SkillManager/pages/SkillManagerPages";
@@ -31,6 +29,10 @@ import UpdateEmailForm from "./modules_cb/EmailManager/components/UpdateEmailFor
 import CreateEmailForm from "./modules_cb/EmailManager/components/CreateEmailForm";
 import ReminderManagerPages from "./modules_cb/ReminderManager/pages/ReminderManagerPages";
 import DashboardManagerPages from "./modules_cb/DashboardManager/pages/DashboardManagerPages";
+import UpdateViewForm from "./modules_cb/ViewManager/components/UpdateViewForm";
+import APIRolesManagerPages from "./modules_cb/APIRolesManager/pages/APIRolesManagerPages";
+import ViewRolesManagerPages from "./modules_cb/ViewRolesManager/pages/ViewRolesManagerPages";
+import RolesManagerPages from "./modules_cb/RolesManager/pages/RolesManagerPages";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -61,9 +63,15 @@ const Routes = (props: PropsFromRedux) => {
       <Switch>
         <Route path="/home" component={DashboardManagerPages} isLogin={props.isLogin}/>
         <Route path="/account-manager" component={AccountManagerPages} isLogin={props.isLogin}/>
-        <Route path="/view-manager" component={ViewManagerPage} isLogin={props.isLogin}/>
+        <Route path="/view-manager" exact={true} component={ViewManagerPage} isLogin={props.isLogin}/>
+        <Route path={`/view-manager/:id`} exact={true}
+               render={(props: any) => (<UpdateViewForm {...props}/>)}
+               isLogin={props.isLogin}/>
         <Route path="/api-manager" component={APIManagerPage} isLogin={props.isLogin}/>
         <Route path="/job-manager" component={JobManagerPages} isLogin={props.isLogin}/>
+        <Route path="/api-roles-manager" component={APIRolesManagerPages} isLogin={props.isLogin}/>
+        <Route path="/roles-manager" component={RolesManagerPages} isLogin={props.isLogin}/>
+        <Route path="/view-roles-manager" component={ViewRolesManagerPages} isLogin={props.isLogin}/>
         <Route path="/department-manager" component={DepartmentManagerPages} isLogin={props.isLogin}/>
         <Route path="/joblevel-manager" component={JobLevelManagerPages} isLogin={props.isLogin}/>
         <Route path="/sourcecv-manager" component={SourceCVManagerPages} isLogin={props.isLogin}/>
@@ -71,16 +79,14 @@ const Routes = (props: PropsFromRedux) => {
         <Route path="/blacklist-manager" component={BlacklistManagerPages} isLogin={props.isLogin}/>
         <Route path="/school-manager" component={SchoolManagerPages} isLogin={props.isLogin}/>
         <Route path="/profile-manager" component={ProfileManagerPages} isLogin={props.isLogin}/>
-        <Route path="/view-group-manager" component={ViewGroupManagerPage} isLogin={props.isLogin}/>
-        <Route path="/group-api-manager" component={GroupAPIManagerPage} isLogin={props.isLogin}/>
         <Route path="/talent-pool-manager" exact={true} component={TalentPoolManagerPages} isLogin={props.isLogin}/>
         <Route path="/schedule" component={ScheduleManagerPages} isLogin={props.isLogin}/>
         <Route path="/skill-manager" component={SkillManagerPages} isLogin={props.isLogin}/>
         <Route path="/reason-reject-manager" component={ReasonRejectManagerPages} isLogin={props.isLogin}/>
         <Route path="/address-manager" component={AddressManagerPages} isLogin={props.isLogin}/>
         <Route path="/email-manager" exact component={EmailManagerPages} isLogin={props.isLogin}/>
-        <Route path="/email-manager/detail"  component={UpdateEmailForm} isLogin={props.isLogin}/>
-        <Route path="/email-manager/create"  component={CreateEmailForm} isLogin={props.isLogin}/>
+        <Route path="/email-manager/detail" component={UpdateEmailForm} isLogin={props.isLogin}/>
+        <Route path="/email-manager/create" component={CreateEmailForm} isLogin={props.isLogin}/>
         <Route path="/recruitment-manager" exact component={RecruitmentManagerPages} isLogin={props.isLogin}/>
         <Route path="/recruitment-manager/create" isLogin={props.isLogin}
                render={(props: any) => (<CreateLayout path={"create"}/>)}/>
@@ -94,7 +100,7 @@ const Routes = (props: PropsFromRedux) => {
                isLogin={props.isLogin}/>
         <Route path="/reminder" component={ReminderManagerPages} isLogin={props.isLogin}/>
 
-        <Redirect exact from="/*" to={'/home'}/>
+        <Redirect exact from="/*" to={'/profile-manager'}/>
       </Switch>
     </div>
   );

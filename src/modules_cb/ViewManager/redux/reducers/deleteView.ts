@@ -15,19 +15,19 @@ const initState: DeleteViewState = {
 
 export default (state = initState, {type, id, response, error}: DeleteViewAction): DeleteViewState => {
   switch (type) {
-    case Actions.DELETE_VIEW_FRONT_END:
+    case Actions.DELETE_VIEW:
       return {
         ...state,
         id,
         loading: true
       }
-    case Actions.DELETE_VIEW_FRONT_END_SUCCESS:
+    case Actions.DELETE_VIEW_SUCCESS:
       return {
         ...state,
         response,
         loading: false
       }
-    case Actions.DELETE_VIEW_FRONT_END_ERROR:
+    case Actions.DELETE_VIEW_ERROR:
       return {
         ...state,
         error,

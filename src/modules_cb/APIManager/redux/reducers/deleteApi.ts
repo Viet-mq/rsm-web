@@ -1,11 +1,11 @@
-import {DeleteApiRoleRequest} from "../../types";
+import {DeleteApiRequest} from "../../types";
 import {AppError, ResponseBase2} from "../../../../models/common";
 import * as Actions from "../actions";
 import {DeleteAPIAction} from "../actions";
 
 export interface DeleteAPIState {
   loading: boolean,
-  request?: DeleteApiRoleRequest,
+  request?: DeleteApiRequest,
   response?: ResponseBase2,
   error?: AppError
 }

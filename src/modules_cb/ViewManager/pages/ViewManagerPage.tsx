@@ -1,24 +1,22 @@
 import React, {useEffect} from "react";
 import {Button, Col, Icon, Row} from "antd";
-import ListViewFrontEnd from "../components/list/ListViewFrontEnd";
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {showFrontEndViewCreateForm} from "../redux/actions";
+import {showViewCreateForm} from "../redux/actions";
 import CreateViewForm from "../components/CreateViewForm";
 import Loading from "../../../components/Loading";
-import UpdateViewForm from "../components/UpdateViewForm";
 import AddActionForm from "../components/AddActionForm";
+import ListView from "../components/list/ListView";
 
-const mapStateToProps = ({viewManager: {list, create, update, deleteView, add_action, remove_action}}: RootState) => ({
+const mapStateToProps = ({viewManager: {list, create, deleteView, add_action, remove_action}}: RootState) => ({
   list,
   create,
-  update,
   deleteView,
   add_action,
   remove_action
 })
 const connector = connect(mapStateToProps, {
-  showFrontEndViewCreateForm
+  showViewCreateForm
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -29,11 +27,11 @@ interface IProps extends ReduxProps {
 function ViewManagerPage(props: IProps) {
 
   useEffect(() => {
-    document.title = "Quản lý view front-end";
+    document.title = "Quản lý View";
   }, []);
 
   const handleCreate = () => {
-    props.showFrontEndViewCreateForm(true);
+    props.showViewCreateForm(true);
   }
 
   return (
@@ -41,7 +39,7 @@ function ViewManagerPage(props: IProps) {
       <div className="entryHeader">
         <Row>
           <Col md={16}>
-            <div className="tmp-title-page-size20">Quản lý view (menu hiển thị)</div>
+            <div className="tmp-title-page-size20">Quản lý View (menu hiển thị)</div>
           </Col>
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
@@ -55,15 +53,13 @@ function ViewManagerPage(props: IProps) {
         </Row>
       </div>
 
-      <ListViewFrontEnd/>
+      <ListView/>
 
       <CreateViewForm/>
 
-      <UpdateViewForm/>
-
       <AddActionForm/>
 
-      {props.list.loading || props.create.loading || props.update.loading || props.deleteView.loading || props.add_action.loading || props.remove_action.loading ?
+      {props.list.loading || props.create.loading || props.deleteView.loading || props.add_action.loading || props.remove_action.loading ?
         <Loading/> : null}
 
     </div>
