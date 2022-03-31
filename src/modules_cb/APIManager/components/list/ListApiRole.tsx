@@ -31,7 +31,7 @@ function ListApi(props: IProps) {
   });
 
   useEffect(() => {
-    props.getListApi({page: 1, size: 100});
+    props.getListApi({page: 1, size: 0});
   }, []);
 
   const handleDelete = (event: any, entity: ApiEntity) => {

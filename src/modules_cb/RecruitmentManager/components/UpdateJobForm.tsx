@@ -61,7 +61,7 @@ function UpdateRecruitmentForm(props: IProps) {
     <Modal
       zIndex={2}
       maskClosable={false}
-      title="Cập nhật vị trí tuyển dụng"
+      title="Cập nhật vị trí công việc"
       visible={props.showForm.show_update}
       centered={true}
       width="550px"
@@ -76,12 +76,12 @@ function UpdateRecruitmentForm(props: IProps) {
 
       <Form {...formItemLayout}>
 
-        <Form.Item label="Tên vị trí tuyển dụng" className="mb-0" style={{...formItemStyle}}>
+        <Form.Item label="Tên vị trí công việc" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('name', {
             initialValue: props.showForm.data_update?.name,
             rules: [
               {
-                message: 'Vui lòng nhập tên vị trí tuyển dụng',
+                message: 'Vui lòng nhập tên vị trí công việc',
                 required: true,
               },
             ],
