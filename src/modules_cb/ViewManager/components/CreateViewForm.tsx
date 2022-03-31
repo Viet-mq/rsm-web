@@ -99,7 +99,7 @@ function CreateViewForm(props: CreateViewFormProps) {
 
         <Form.Item label="Index" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('index', {
-            initialValue: '',
+            initialValue: '1',
             rules: [
               {
                 message: 'Vui lòng nhập Index',
