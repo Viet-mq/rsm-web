@@ -71,7 +71,7 @@ export function* loginAsync(action: LoginAction) {
       yield put(getListAddress({page: 1, size: 100}))
       yield put(getListReasonReject({page: 1, size: 100}))
       yield put(getListRecruitment({page: 1, size: 100}))
-      yield put(getListApi({page: 1, size: 100}))
+      yield put(getListApi({page: 1, size: 0}))
       yield put(getListAPIRoles({page: 1, size: 100}))
       yield put(getListViewRoles({page: 1, size: 100}))
       yield put(getListView({page: 1, size: 100}))

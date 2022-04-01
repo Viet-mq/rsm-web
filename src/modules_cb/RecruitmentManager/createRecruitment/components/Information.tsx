@@ -342,13 +342,13 @@ function InformationForm(props: IProps) {
                 )}
               </Form.Item>
 
-              <Form.Item className="form-label" label="Vị trí tuyển dụng" labelCol={{span: 24}} wrapperCol={{span: 24}}>
+              <Form.Item className="form-label" label="Vị trí công việc" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                 <div style={{display: 'flex'}}>
                   {getFieldDecorator('job', {
                     initialValue: isEdit ? update.dataUpdate?.jobId : createSteps.request?.job || undefined,
                     rules: [
                       {
-                        message: 'Vui lòng chọn vị trí tuyển dụng',
+                        message: 'Vui lòng chọn vị trí công việc',
                         required: true,
                       },
                     ],

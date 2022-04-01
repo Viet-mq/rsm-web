@@ -29,9 +29,6 @@ function ListView(props: IProps) {
   const [page, setPage] = useState(1);
   const scroll = screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false};
   const size = 10;
-  const [state, setState] = useState<any>({
-    selectedRowKeys: [],
-  });
   const history = useHistory();
 
   useEffect(() => {
@@ -86,13 +83,18 @@ function ListView(props: IProps) {
       dataIndex: 'icon',
       width: 100,
     },
+    {
+      title: 'Index',
+      dataIndex: 'index',
+      width: 100,
+    },
 
     {
       title: () => {
         return <div style={{whiteSpace: 'nowrap'}}>Thao tác</div>;
       },
       dataIndex: 'action',
-      width: 100,
+      width: 10,
       fixed: 'right',
       render: (_text: string, record: ViewEntity) => {
         return (

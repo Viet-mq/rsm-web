@@ -29,7 +29,11 @@ type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends ReduxProps {
 }
+
 function ViewRolesManagerPages(props: IProps) {
+
+  const view_id = "view-roles-manager";
+
   useEffect(() => {
     document.title = "Quản lý View Roles";
   }, []);
@@ -43,6 +47,14 @@ function ViewRolesManagerPages(props: IProps) {
     props.showFormCreate(true);
   }
 
+  const checkViewAction = (viewId:string, action:string) => {
+
+    // find view by id: view_id
+    // check "action" exist
+
+    return true;
+  }
+
   return (
     <div className="contentPage">
 
@@ -52,13 +64,16 @@ function ViewRolesManagerPages(props: IProps) {
             <div className="tmp-title-page-size20">Quản lý View Roles</div>
           </Col>
           <Col className="d-flex" md={8}>
-            <div className="tmp-btn">
+            {checkViewAction(view_id,"create")
+              ?
+              <div className="tmp-btn">
               <div>
                 <Button onClick={handleCreate}>
                   <Icon type="plus"/> Tạo View Roles
                 </Button>
               </div>
             </div>
+            : null}
           </Col>
         </Row>
       </div>
