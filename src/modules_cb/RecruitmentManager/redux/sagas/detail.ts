@@ -8,6 +8,7 @@ export function* getDetailRecruitmentAsync(action: DetailRecruitmentAction) {
   try {
     const rs = yield apis.getListRecruitment(action.params);
     if (rs.code !== 0) {
+      yield put(getDetailRecruitmentError(new AppError(rs.message)));
       NotificationError('Lấy chi tiết tin tuyển dụng không thành công', "Lỗi: " + rs.message);
 
     } else {

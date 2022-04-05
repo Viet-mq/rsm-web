@@ -16,6 +16,7 @@ export function* createReasonRejectAsync(action: CreateReasonRejectAction) {
     const rs = yield apis.createReasonReject(action.request);
     yield put(createReasonRejectSuccess(rs));
     if (rs.code !== 0) {
+      yield put(createReasonRejectError(new AppError(rs.message)));
       NotificationError('Tạo lý do loại không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tạo lý do loại thành công");

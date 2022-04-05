@@ -10,6 +10,8 @@ export function* deleteAPIRolesAsync(action: DeleteAPIRolesAction) {
     const rs = yield apis.deleteAPIRoles(action.request);
     yield put(deleteAPIRolesSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteAPIRolesError(new AppError(rs.message)));
+
       NotificationError('Xóa API Roles không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa API Roles thành công");

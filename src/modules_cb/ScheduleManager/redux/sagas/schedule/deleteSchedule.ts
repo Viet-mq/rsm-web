@@ -12,6 +12,7 @@ export function* deleteScheduleAsync(action: DeleteScheduleAction) {
     const rs = yield apis.deleteSchedule(action.request);
     yield put(deleteScheduleSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteScheduleError(new AppError(rs.message)));
       NotificationError('Xóa lịch phỏng vấn không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa lịch phỏng vấn thành công");

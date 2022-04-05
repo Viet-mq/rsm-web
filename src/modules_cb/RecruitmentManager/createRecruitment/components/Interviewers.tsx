@@ -9,6 +9,7 @@ import {createSteps, getDataRecruitmentUpdate, searchUser} from "../../redux/act
 import {UserAccount} from "../../../AccountManager/types";
 import {CreateRecruitmentRequest, RecruitmentEntity} from "../../types";
 import {useLocation} from "react-router-dom";
+import {getInitials} from "../../../../helpers/utilsFunc";
 
 const mapStateToProps = (state: RootState) => ({
   showBooking: state.profileManager.showBooking,
@@ -104,18 +105,6 @@ function InterviewersForm(props: IProps) {
   useEffect(() => {
     setListUser(props.searchUserState.rows);
   }, [props.searchUserState]);
-
-  const getInitials = (name: string) => {
-    if (name) {
-      let initials: any = name.split(' ');
-      if (initials.length > 1) {
-        initials = initials.shift().charAt(0) + initials.pop().charAt(0);
-      } else {
-        initials = name.substring(0, 2);
-      }
-      return initials.toUpperCase();
-    }
-  }
 
   function handleSearchCandidate(e?: any) {
     setKeySearch(e?.target.value)

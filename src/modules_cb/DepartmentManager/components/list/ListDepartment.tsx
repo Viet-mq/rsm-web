@@ -3,7 +3,7 @@ import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import env from "src/configs/env";
 import {ColumnProps} from "antd/lib/table";
-import {Button, Icon, Popconfirm, Table} from "antd";
+import {Table} from "antd";
 import {emptyText} from "src/configs/locales";
 import {
   deleteDepartment,
@@ -13,6 +13,9 @@ import {
   updateDepartment
 } from "../../redux/actions";
 import {DeleteDepartmentRequest, DepartmentEntity} from "../../types";
+import ButtonDelete from "../../../../components/ComponentUtils/ButtonDelete";
+import {department_path} from "../../../../helpers/utilsFunc";
+import ButtonUpdate from "../../../../components/ComponentUtils/ButtonUpdate";
 
 const mapStateToProps = ({departmentManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
@@ -48,7 +51,8 @@ function ListDepartment(props: IProps) {
     props.deleteDepartment(req);
   }
 
-  const handleEdit = (event: any, entity: DepartmentEntity) => {
+  const handleEdit = (event: any, entity: any) => {
+    console.log(entity)
     event.stopPropagation();
     props.showFormUpdate(true, entity);
   }
@@ -71,29 +75,10 @@ function ListDepartment(props: IProps) {
       render: (_text: string, record: DepartmentEntity) => {
         return (
           <div style={{whiteSpace: 'nowrap'}}>
-            <Popconfirm
-              title="Bạn muốn xóa phòng ban này chứ ?"
-              okText="Xóa"
-              onCancel={event => {
-                event?.stopPropagation();
-              }}
-              onConfirm={event => handleDelete(event, record)}
-            >
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                onClick={event => {
-                  event.stopPropagation();
-                }}
-              >
-                <Icon type="delete" theme="filled"/>
-              </Button>
-            </Popconfirm>
-            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
-                    onClick={event => handleEdit(event, record)}
-            >
-              <Icon type="edit"/>
-            </Button>
+            <ButtonDelete path={department_path} message="phòng ban" action="delete"
+                          handleClick={(event) => handleDelete(event, record)}/>
+            <ButtonUpdate path={department_path} action="update" handleClick={(event) => handleEdit(event, record)}/>
+
           </div>
         );
       },

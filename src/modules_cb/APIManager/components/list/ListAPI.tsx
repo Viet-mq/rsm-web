@@ -7,6 +7,9 @@ import {Button, Icon, Popconfirm, Table} from "antd";
 import {emptyText} from "src/configs/locales";
 import {deleteApi, getListApi, showFormUpdateApi} from "../../redux/actions";
 import {ApiEntity, DeleteApiRequest} from "../../types";
+import ButtonDelete from "../../../../components/ComponentUtils/ButtonDelete";
+import {api_path, view_role_path} from "../../../../helpers/utilsFunc";
+import ButtonUpdate from "../../../../components/ComponentUtils/ButtonUpdate";
 
 const mapStateToProps = ({apiManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
@@ -20,7 +23,7 @@ type ReduxProps = ConnectedProps<typeof connector>;
 interface IProps extends ReduxProps {
 }
 
-function ListApi(props: IProps) {
+function ListAPI(props: IProps) {
 
   let screenWidth = document.documentElement.clientWidth;
   const [page, setPage] = useState(1);
@@ -81,44 +84,15 @@ function ListApi(props: IProps) {
       render: (_text: string, record: ApiEntity) => {
         return (
           <div style={{whiteSpace: 'nowrap'}}>
-            <Popconfirm
-              title="Bạn muốn xóa API này chứ ?"
-              okText="Xóa"
-              onCancel={event => {
-                event?.stopPropagation();
-              }}
-              onConfirm={event => handleDelete(event, record)}
-            >
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                onClick={event => {
-                  event.stopPropagation();
-                }}
-              >
-                <Icon type="delete" theme="filled"/>
-              </Button>
-            </Popconfirm>
-            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
-                    onClick={event => handleEdit(event, record)}
-            >
-              <Icon type="edit"/>
-            </Button>
+
+            <ButtonDelete path={api_path} message="API" action="delete" handleClick={(event) => handleDelete(event, record)}/>
+            <ButtonUpdate path={api_path} action="update" handleClick={(event) => handleEdit(event, record)}/>
+
           </div>
         );
       },
     },
   ];
-
-  function onSelectedRowKeysChange(selectedRowKeys: any) {
-    setState({selectedRowKeys});
-  }
-
-  const {selectedRowKeys} = state;
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectedRowKeysChange,
-  };
 
   return (
     <>
@@ -142,4 +116,4 @@ function ListApi(props: IProps) {
 
 }
 
-export default connector(ListApi);
+export default connector(ListAPI);

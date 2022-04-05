@@ -7,6 +7,8 @@ import {showFormCreate, showFormUpdate} from "../redux/actions";
 import CreateDepartmentForm from "../components/CreateDepartmentForm";
 import Loading from "../../../components/Loading";
 import UpdateDepartmentForm from "../components/UpdateDepartmentForm";
+import ButtonCreate from "../../../components/ComponentUtils/ButtonCreate";
+import {department_path} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = ({
                            departmentManager: {
@@ -59,6 +61,9 @@ function DepartmentManagerPages(props: IProps) {
                 <Button onClick={handleCreate}>
                   <Icon type="plus"/> Tạo phòng ban
                 </Button>
+
+                <ButtonCreate path={department_path} action="create" name=" Thêm phòng ban" handleClick={handleCreate}/>
+
               </div>
             </div>
           </Col>

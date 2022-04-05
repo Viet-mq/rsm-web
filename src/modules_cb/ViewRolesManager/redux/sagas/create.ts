@@ -16,6 +16,7 @@ export function* createViewRolesAsync(action: CreateViewRolesAction) {
     const rs = yield apis.createViewRoles(action.request);
     yield put(createViewRolesSuccess(rs));
     if (rs.code !== 0) {
+      yield put(createViewRolesError(new AppError(rs.message)));
       NotificationError('Tạo View Roles không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tạo View Roles thành công");

@@ -16,6 +16,8 @@ export function* createDepartmentAsync(action: CreateDepartmentAction) {
     const rs = yield apis.createDepartment(action.request);
     yield put(createDepartmentSuccess(rs));
     if (rs.code !== 0) {
+          yield put(createDepartmentError(new AppError(rs.message)));
+
       NotificationError('Tạo phòng ban không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tạo phòng ban thành công");

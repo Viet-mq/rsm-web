@@ -10,6 +10,7 @@ export function* createNoteAsync(action: CreateNoteAction) {
     const rs = yield apis.createNote(action.request);
     yield put(createNoteSuccess(rs));
     if (rs.code !== 0) {
+      yield put(createNoteError(new AppError(rs.message)));
       NotificationError('Tạo đánh giá không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tạo đánh giá thành công");

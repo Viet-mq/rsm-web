@@ -45,10 +45,6 @@ function ListEmail(props: IProps) {
     props.getListEmail({page: 1, size: 90});
   }, []);
 
-  function unixTimeToDate(unixTime: number): Date {
-    return new Date(unixTime);
-  }
-
   function handleShowEditEmail(value: UpdateEmailRequest) {
     props.showFormUpdate(value)
   }

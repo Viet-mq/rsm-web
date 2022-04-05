@@ -22,7 +22,7 @@ import {
   MdOutlineWorkOutline,
   RiFolderUserLine,
   RiMailSettingsLine,
-  RiMapPin2Line
+  RiMapPin2Line, RiOrganizationChart
 } from "react-icons/all";
 
 interface ParentProps {
@@ -36,7 +36,8 @@ interface IProps extends ParentProps, PropsFromRedux {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    isLogin: state.auth.auth.data?.code === 0,
+    // isLogin: state.auth.auth.data?.code === 0,
+    permission: state.auth.auth.data?.permissions,
     listTalentPool: state.talentPoolManager.list,
     count: state.profileManager.createBooking.count
   };
@@ -160,6 +161,13 @@ const Nav = (props: IProps) => {
           <Link to={`/joblevel-manager`}>
             <FaRegUser className="mr-2"/>
             <span>Cấp bậc công việc </span>
+          </Link>
+        </Menu.Item>
+
+        <Menu.Item key="company-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to={`/company-manager`}>
+            <RiOrganizationChart className="mr-2"/>
+            <span>Công ty </span>
           </Link>
         </Menu.Item>
 

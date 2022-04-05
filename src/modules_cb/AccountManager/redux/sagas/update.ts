@@ -16,6 +16,8 @@ export function* updateAccountAsync(action: UpdateAccountAction) {
     const rs = yield apis.updateAccount(action.request);
     yield put(updateAccountSuccess(rs));
     if (rs.code !== 0) {
+      yield put(updateAccountError(new AppError(rs.message)));
+
       NotificationError('Cập nhật tài khoản không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Cập nhật tài khoản thành công");

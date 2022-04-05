@@ -3,21 +3,18 @@ import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import env from "src/configs/env";
 import {ColumnProps} from "antd/lib/table";
-import {Button, Icon, Popconfirm, Table} from "antd";
+import {Table} from "antd";
 import {emptyText} from "src/configs/locales";
-import {
-  deleteRoles,
-  getListRoles,
-  showFormCreate,
-  showFormUpdate,
-  updateRoles
-} from "../../redux/actions";
-import {RolesEntity, DeleteRolesRequest} from "../../types";
+import {deleteRoles, getListRoles, showFormCreate, showFormUpdate, updateRoles} from "../../redux/actions";
+import {DeleteRolesRequest, RolesEntity} from "../../types";
+import ButtonDelete from "../../../../components/ComponentUtils/ButtonDelete";
+import {roles_path} from "../../../../helpers/utilsFunc";
+import ButtonUpdate from "../../../../components/ComponentUtils/ButtonUpdate";
 
 const mapStateToProps = ({rolesManager}: RootState) => ({rolesManager});
 const connector = connect(mapStateToProps, {
   getListRoles,
-   deleteRoles,
+  deleteRoles,
   showFormCreate,
   showFormUpdate,
   updateRoles
@@ -29,7 +26,7 @@ interface IProps extends ReduxProps {
 }
 
 function ListRoles(props: IProps) {
-  const {list}=props.rolesManager
+  const {list} = props.rolesManager
   let screenWidth = document.documentElement.clientWidth;
   const [page, setPage] = useState(1);
   const scroll = screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false};
@@ -39,8 +36,10 @@ function ListRoles(props: IProps) {
       title: 'STT',
       key: 'index',
       width: 40,
-      align:"center",
-      render: (text, record, index) =>  {return (page - 1) * 10 + index + 1}
+      align: "center",
+      render: (text, record, index) => {
+        return (page - 1) * 10 + index + 1
+      }
     },
     {
       title: 'Name',
@@ -63,29 +62,10 @@ function ListRoles(props: IProps) {
       render: (_text: string, record: RolesEntity) => {
         return (
           <div style={{whiteSpace: 'nowrap'}}>
-            <Popconfirm
-              title="Bạn muốn xóa  Roles này chứ ?"
-              okText="Xóa"
-              onCancel={event => {
-                event?.stopPropagation();
-              }}
-              onConfirm={event => handleDelete(event, record)}
-            >
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                onClick={event => {
-                  event.stopPropagation();
-                }}
-              >
-                <Icon type="delete" theme="filled"/>
-              </Button>
-            </Popconfirm>
-            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
-                    onClick={event => handleEdit(event, record)}
-            >
-              <Icon type="edit"/>
-            </Button>
+            <ButtonDelete path={roles_path} message="Roles" action="delete"
+                          handleClick={(event) => handleDelete(event, record)}/>
+            <ButtonUpdate path={roles_path} action="update" handleClick={(event) => handleEdit(event, record)}/>
+
           </div>
         );
       },

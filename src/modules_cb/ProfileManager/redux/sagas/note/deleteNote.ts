@@ -10,6 +10,7 @@ export function* deleteNoteAsync(action: DeleteNoteAction) {
     const rs = yield apis.deleteNote(action.request);
     yield put(deleteNoteSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteNoteError(new AppError(rs.message)));
       NotificationError('Xóa đánh giá không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa đánh giá thành công");

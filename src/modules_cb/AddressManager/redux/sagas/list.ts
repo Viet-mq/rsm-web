@@ -8,6 +8,7 @@ export function* getListAddressAsync(action: AddressListAction) {
   try {
     const rs = yield apis.getListAddress(action.params);
     if (rs.code !== 0) {
+      yield put(getListAddressError(new AppError(rs.message)));
       NotificationError('Lấy danh sách địa chỉ không thành công', "Lỗi: " + rs.message);
 
     }

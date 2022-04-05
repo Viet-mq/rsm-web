@@ -16,6 +16,7 @@ export function* updateSkillAsync(action: UpdateSkillAction) {
     const rs = yield apis.updateSkill(action.request);
     yield put(updateSkillSuccess(rs));
     if (rs.code !== 0) {
+      yield put(updateSkillError(new AppError(rs.message)));
       NotificationError('Cập nhật kỹ năng không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Cập nhật kỹ năng thành công");

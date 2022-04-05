@@ -8,6 +8,7 @@ export function* getListSourceCVAsync(action: SourceCVListAction) {
   try {
     const rs = yield apis.getListSourceCV(action.params);
     if (rs.code !== 0) {
+      yield put(getListSourceCVError(new AppError(rs.message)));
       NotificationError('Lấy danh sách Nguồn ứng viên không thành công', "Lỗi: " + rs.message);
     } else {
       localStorage.setItem("list-source-cv", JSON.stringify(rs || {}));

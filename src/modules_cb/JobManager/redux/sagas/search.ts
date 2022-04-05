@@ -8,6 +8,8 @@ export function* getSearchJobAsync(action: SearchJobAction) {
   try {
     const rs = yield apis.getListJob(action.params);
     if (rs.code !== 0) {
+      yield put(getSearchJobError(new AppError(rs.message)));
+
       NotificationError('Lấy danh sách vị trí công việc không thành công', "Lỗi: " + rs.message);
 
     } else {

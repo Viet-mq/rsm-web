@@ -10,6 +10,7 @@ export function* deleteTalentPoolAsync(action: DeleteTalentPoolAction) {
     const rs = yield apis.deleteTalentPool(action.request);
     yield put(deleteTalentPoolSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteTalentPoolError(new AppError(rs.message)));
       NotificationError('Xóa Talent Pool không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa Talent Pool thành công");

@@ -11,6 +11,8 @@ export function* updateEmailAsync(action: UpdateEmailAction) {
     const rs = yield apis.updateEmail(action.request);
     yield put(updateEmailSuccess(rs));
     if (rs.code !== 0) {
+      yield put(updateEmailError(new AppError(rs.message)));
+
       NotificationError('Cập nhật Email không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Cập nhật Email thành công");

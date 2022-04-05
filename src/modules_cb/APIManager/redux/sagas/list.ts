@@ -8,6 +8,7 @@ export function* getListApiAsync(action: GetListApiAction) {
   try {
     const rs = yield apis.getListApi(action.params);
     if (rs.code !== 0) {
+      yield put(getListApiError(new AppError(rs.message)));
       NotificationError('Lấy danh sách API không thành công', "Lỗi: " + rs.message);
     }
     else{

@@ -8,6 +8,7 @@ export function* getDepartmentReportAsync(action: DepartmentReportAction) {
   try {
     const rs = yield apis.getDepartmentReport(action.params);
     if (rs.code !== 0) {
+      yield put(getDepartmentReportError(new AppError(rs.message)));
       NotificationError('Lấy báo cáo tổng hợp nguồn ứng viên bị loại không thành công', "Lỗi: " + rs.message);
 
     }

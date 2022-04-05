@@ -18,6 +18,7 @@ export function* createProfileAsync(action: CreateProfileAction) {
     const rs = yield apis.createProfile(action.request);
     yield put(createProfileSuccess(rs));
     if (rs.code !== 0) {
+      yield put(createProfileError(new AppError(rs.message)));
       NotificationError('Tạo ứng viên không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tạo ứng viên thành công");

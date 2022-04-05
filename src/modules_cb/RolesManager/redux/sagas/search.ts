@@ -8,6 +8,7 @@ export function* getSearchRolesAsync(action: SearchRolesAction) {
   try {
     const rs = yield apis.getListRoles(action.params);
     if (rs.code !== 0) {
+      yield put(getSearchRolesError(new AppError(rs.message)));
       NotificationError('Lấy danh sách  Roles không thành công', "Lỗi: " + rs.message);
 
     } else {

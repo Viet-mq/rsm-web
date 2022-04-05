@@ -11,6 +11,7 @@ export function* deleteViewAsync(action: DeleteViewAction) {
     const rs = yield apis.deleteView(params);
     yield put(deleteViewSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteViewError(new AppError(rs.message, -1)));
       NotificationError('Xóa view không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa view thành công");

@@ -8,6 +8,7 @@ export function* getListSkillAsync(action: SkillListAction) {
   try {
     const rs = yield apis.getListSkill(action.params);
     if (rs.code !== 0) {
+      yield put(getListSkillError(new AppError(rs.message)));
       NotificationError('Lấy danh sách kỹ năng không thành công', "Lỗi: " + rs.message);
 
     }

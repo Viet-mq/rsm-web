@@ -1,13 +1,14 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {FormEvent, useEffect, useRef, useState} from "react";
-import {Button, Col, Form, Input, Row, Tooltip} from "antd";
+import {Button, Col, Form, Icon, Input, Row, Tooltip} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 
 import {Link} from "react-router-dom";
 import {UpdateEmailRequest} from "../types";
 import {updateEmail} from "../redux/actions";
 import ReactQuill from "react-quill";
+import {CheckViewAction, email_path} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = (state: RootState) => ({
   emailManager: state.emailManager,
@@ -203,7 +204,10 @@ function UpdateEmailForm(props: IProps) {
         <Link to={`/email-manager`}>
           <Button>Hủy</Button>
         </Link>
-        <Button onClick={onBtnUpdateClicked} type={"primary"} className="ml-2">Lưu</Button>
+        {CheckViewAction(email_path, "update")
+          ?
+          <Button onClick={onBtnUpdateClicked} type={"primary"} className="ml-2">Lưu</Button>
+          : null}
       </div>
     </div>
   );

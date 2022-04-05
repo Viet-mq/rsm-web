@@ -10,6 +10,7 @@ export function* deleteSourceCVAsync(action: DeleteSourceCVAction) {
     const rs = yield apis.deleteSourceCV(action.request);
     yield put(deleteSourceCVSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteSourceCVError(new AppError(rs.message)));
       NotificationError('Xóa Nguồn ứng viên không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa Nguồn ứng viên thành công");

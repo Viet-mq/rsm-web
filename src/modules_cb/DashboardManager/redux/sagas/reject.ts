@@ -8,6 +8,8 @@ export function* getRejectReportAsync(action: RejectReportAction) {
   try {
     const rs = yield apis.getRejectReport(action.params);
     if (rs.code !== 0) {
+      yield put(getRejectReportError(new AppError(rs.message)));
+
       NotificationError('Lấy báo cáo ứng viên bị loại không thành công', "Lỗi: " + rs.message);
 
     }

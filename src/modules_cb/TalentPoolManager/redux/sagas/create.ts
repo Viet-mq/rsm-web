@@ -16,6 +16,7 @@ export function* createTalentPoolAsync(action: CreateTalentPoolAction) {
     const rs = yield apis.createTalentPool(action.request);
     yield put(createTalentPoolSuccess(rs));
     if (rs.code !== 0) {
+      yield put(createTalentPoolError(new AppError(rs.message)));
       NotificationError('Tạo kho tiềm năng không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tạo kho tiềm năng thành công");

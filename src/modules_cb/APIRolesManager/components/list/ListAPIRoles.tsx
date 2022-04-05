@@ -5,19 +5,16 @@ import env from "src/configs/env";
 import {ColumnProps} from "antd/lib/table";
 import {Button, Icon, Popconfirm, Table} from "antd";
 import {emptyText} from "src/configs/locales";
-import {
-  deleteAPIRoles,
-  getListAPIRoles,
-  showFormCreate,
-  showFormUpdate,
-  updateAPIRoles
-} from "../../redux/actions";
+import {deleteAPIRoles, getListAPIRoles, showFormCreate, showFormUpdate, updateAPIRoles} from "../../redux/actions";
 import {APIRolesEntity, DeleteAPIRolesRequest} from "../../types";
+import ButtonDelete from "../../../../components/ComponentUtils/ButtonDelete";
+import {api_roles_path} from "../../../../helpers/utilsFunc";
+import ButtonUpdate from "../../../../components/ComponentUtils/ButtonUpdate";
 
 const mapStateToProps = ({apiRolesManager}: RootState) => ({apiRolesManager});
 const connector = connect(mapStateToProps, {
   getListAPIRoles,
-   deleteAPIRoles,
+  deleteAPIRoles,
   showFormCreate,
   showFormUpdate,
   updateAPIRoles
@@ -29,7 +26,7 @@ interface IProps extends ReduxProps {
 }
 
 function ListAPIRoles(props: IProps) {
-  const {list}=props.apiRolesManager
+  const {list} = props.apiRolesManager
   let screenWidth = document.documentElement.clientWidth;
   const [page, setPage] = useState(1);
   const scroll = screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false};
@@ -39,8 +36,10 @@ function ListAPIRoles(props: IProps) {
       title: 'STT',
       key: 'index',
       width: 40,
-      align:"center",
-      render: (text, record, index) =>  {return (page - 1) * 10 + index + 1}
+      align: "center",
+      render: (text, record, index) => {
+        return (page - 1) * 10 + index + 1
+      }
     },
     {
       title: 'Name',
@@ -86,6 +85,11 @@ function ListAPIRoles(props: IProps) {
             >
               <Icon type="edit"/>
             </Button>
+
+            <ButtonDelete path={api_roles_path} message="API Roles" action="delete"
+                          handleClick={(event) => handleDelete(event, record)}/>
+            <ButtonUpdate path={api_roles_path} action="update" handleClick={(event) => handleEdit(event, record)}/>
+
           </div>
         );
       },
@@ -108,17 +112,6 @@ function ListAPIRoles(props: IProps) {
     event.stopPropagation();
     props.showFormUpdate(true, entity);
   }
-
-
-  // function onSelectedRowKeysChange(selectedRowKeys: any) {
-  //   setState({selectedRowKeys});
-  // }
-  //
-  // const {selectedRowKeys} = state;
-  // const rowSelection = {
-  //   selectedRowKeys,
-  //   onChange: onSelectedRowKeysChange,
-  // };
 
   return (
     <>

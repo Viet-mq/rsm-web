@@ -35,9 +35,11 @@ import {getSearchRecruitment} from "../../../RecruitmentManager/redux/actions";
 import {getSearchSourceCV} from "../../../SourceCVManager/redux/actions";
 import {UserAccount} from "../../../AccountManager/types";
 import {getSearchAccount} from "../../../AccountManager/redux/actions";
+import {convertArrayToTree, getInitials} from "../../../../helpers/utilsFunc";
 
 const {Option} = Select;
 const {RangePicker} = DatePicker;
+const {TreeNode} = TreeSelect;
 
 const mapStateToProps = (state: RootState) => ({
   profileManager: state.profileManager,
@@ -49,7 +51,7 @@ const mapStateToProps = (state: RootState) => ({
   listTalentPool: state.talentPoolManager.list,
   listJob: state.jobManager.list,
   searchJob: state.jobManager.search,
-  listAccount: state.accountManager.list
+  listAccount: state.accountManager.list,
 
 
 })
@@ -81,13 +83,6 @@ interface ListProfileProps extends ReduxProps {
 }
 
 function ListProfile(props: ListProfileProps) {
-  const {search, list, getBooking, deleteProfile, update, uploadCV, createBooking, updateBooking} = props.profileManager
-  const history = useHistory();
-  const location = useLocation();
-  const {pathname} = useLocation();
-  const [page, setPage] = useState(1);
-  const size = 30;
-  const width = {width: 200};
   const [state, setState] = useState<any>({
     filteredInfo: null,
     sortedInfo: {
@@ -95,22 +90,6 @@ function ListProfile(props: ListProfileProps) {
       columnKey: null,
     },
   });
-  const fontWeightStyle = {fontWeight: 400};
-  const [keySearch, setKeySearch] = useState<string>('')
-  const [dataSource, setDataSource] = useState<ProfileEntity[] | any>(undefined)
-  const [selected, setSelected] = useState<any>({
-    name: null,
-    job: null,
-    jobLevel: null,
-    department: null,
-    talentPool: null,
-    recruitment: null,
-    hRef: null,
-    pic: null,
-    startDateRange: undefined,
-    endDateRange: undefined,
-  })
-  const dateFormat = 'DD/MM/YYYY';
   const columns: ColumnProps<ProfileEntity>[] = [
     {
       title: 'STT',
@@ -402,6 +381,28 @@ function ListProfile(props: ListProfileProps) {
       },
     },
   ];
+  const {search, list, getBooking, deleteProfile, update, uploadCV, createBooking, updateBooking} = props.profileManager
+  const history = useHistory();
+  const location = useLocation();
+  const {pathname} = useLocation();
+  const [page, setPage] = useState(1);
+  const size = 30;
+  const width = {width: 200};
+  const fontWeightStyle = {fontWeight: 400};
+  const [keySearch, setKeySearch] = useState<string>('')
+  const [dataSource, setDataSource] = useState<ProfileEntity[] | any>(undefined)
+  const [selected, setSelected] = useState<any>({
+    job: undefined,
+    jobLevel: undefined,
+    department: undefined,
+    talentPool: undefined,
+    recruitment: undefined,
+    hrRef: undefined,
+    pic: undefined,
+    startDateRange: undefined,
+    endDateRange: undefined,
+  })
+  const dateFormat = 'DD/MM/YYYY';
   const [treeData, setTreeData] = useState([])
   const screenHeight = document.documentElement.clientHeight;
   const [job, setJob] = useState<JobEntity[]>([]);
@@ -468,7 +469,9 @@ function ListProfile(props: ListProfileProps) {
         page: page,
         size: 30,
       })
-    } else props.getListProfile({page: page, size: 30});
+    } else {
+      props.getListProfile({page: page, size: 30});
+    }
   }, [page, pathname])
 
   useEffect(() => {
@@ -492,38 +495,6 @@ function ListProfile(props: ListProfileProps) {
     setTalentPool(props.listTalentPool.rows)
   }, [])
 
-  const getInitials = (name: string) => {
-    let initials: any = name.split(' ');
-
-    if (initials.length > 1) {
-      initials = initials.shift().charAt(0) + initials.pop().charAt(0);
-    } else {
-      initials = name.substring(0, 2);
-    }
-    return initials.toUpperCase();
-  }
-
-  const convertArrayToTree = (arrays: any) => {
-    let dataFetch: any = [];
-    for (let i = 0; i < arrays.length; i++) {
-      if (arrays[i]?.children) {
-        dataFetch.push({
-          title: arrays[i].name,
-          key: arrays[i].id,
-          value: arrays[i].id,
-          children: convertArrayToTree(arrays[i].children)
-        })
-      } else {
-        dataFetch.push({
-          title: arrays[i].name,
-          key: arrays[i].id,
-          value: arrays[i].id,
-        })
-      }
-    }
-    return dataFetch;
-  }
-
   const handleChange = (pagination: any, filters: any, sorter: any) => {
     console.log('Various parameters', pagination, filters, sorter);
     setState({
@@ -541,13 +512,13 @@ function ListProfile(props: ListProfileProps) {
       },
     });
     setSelected({
-      job: null,
-      jobLevel: null,
-      department: null,
-      talentPool: null,
-      recruitment: null,
-      hRef: null,
-      pic: null,
+      job: undefined,
+      jobLevel: undefined,
+      department: undefined,
+      talentPool: undefined,
+      recruitment: undefined,
+      hrRef: undefined,
+      pic: undefined,
 
       startDateRange: undefined,
       endDateRange: undefined,
@@ -613,20 +584,21 @@ function ListProfile(props: ListProfileProps) {
   }
 
   function btnSearchClicked() {
-    props.getListProfile({
-      fullName: encodeURI(selected.name),
-      job: selected.job,
-      jobLevel: selected.jobLevel,
-      department: selected.department,
-      talentPool: selected.talentPool,
-      recruitment: selected.recruitment,
-      hrRef: selected.hrRef,
-      pic: selected.pic,
-      from: selected.startDateRange ? selected.startDateRange * 1 : undefined,
-      to: selected.endDateRange ? selected.endDateRange * 1 : undefined,
-      page: 1,
-      size: 30,
-    })
+
+    const req:any={}
+    if(selected.name) req.fullName=encodeURI(selected.name);
+    if(selected.job) req.job=selected.job
+    if(selected.jobLevel) req.jobLevel=selected.jobLevel
+    if(selected.department) req.department=selected.department
+    if(selected.talentPool) req.talentPool=selected.talentPool
+    if(selected.recruitment) req.recruitment=selected.recruitment
+    if(selected.hrRef) req.hrRef=selected.hrRef
+    if(selected.startDateRange) req.from=selected.startDateRange * 1
+    if(selected.endDateRange) req.to=selected.endDateRange * 1
+    req.page=1;
+    req.size=30;
+
+    props.getListProfile(req)
   }
 
   function onSearchJob(value: any) {
@@ -685,6 +657,15 @@ function ListProfile(props: ListProfileProps) {
   function onFocusAccount() {
     setAccount(props.listAccount.rows)
   }
+
+  function onChange(value: any) {
+    setSelected({...selected, department: value})
+  };
+
+  const filterTreeNode = (input:any,node: any) => {
+    const title = node.props.title;
+    return title.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+  };
 
   return (
     <>
@@ -756,16 +737,39 @@ function ListProfile(props: ListProfileProps) {
                 ))}
               </Select>
 
-              <TreeSelect getPopupContainer={(trigger: any) => trigger.parentNode}
-                          className="bg-white text-black form-label"
-                          style={{...width, ...fontWeightStyle}}
-                          value={selected.department ? selected.department : undefined}
-                          dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
-                          treeData={treeData}
-                          placeholder="Phòng ban"
-                          treeDefaultExpandAll
-                          onChange={(value: any) => setSelected({...selected, department: value})}
-              />
+              {/*<TreeSelect getPopupContainer={(trigger: any) => trigger.parentNode}*/}
+              {/*            className="bg-white text-black form-label"*/}
+              {/*            style={{...width, ...fontWeightStyle}}*/}
+              {/*            value={selected.department ? selected.department : undefined}*/}
+              {/*            dropdownStyle={{maxHeight: 400, overflow: 'auto'}}*/}
+              {/*            treeData={treeData}*/}
+              {/*            placeholder="Phòng ban"*/}
+              {/*            treeDefaultExpandAll*/}
+              {/*            onChange={(value: any) => setSelected({...selected, department: value})}*/}
+              {/*/>*/}
+
+              <TreeSelect
+                style={{...width, ...fontWeightStyle}}
+                showSearch
+                allowClear
+                value={selected.department ? selected.department : undefined}
+                dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
+                className="bg-white text-black form-label"
+                onChange={onChange}
+                getPopupContainer={(trigger: any) => trigger.parentNode}
+                filterTreeNode={filterTreeNode}
+                placeholder="Phòng ban"
+              >
+                {props.listDepartment.rows?.map((item: any) => (
+                  <TreeNode style={fontWeightStyle} value={item.id} title={item.name} key={item.id}>
+                    {item.children ? item.children.map((el: any) => (
+                      <TreeNode style={fontWeightStyle} value={el.id} key={el.id} title={el.name}/>
+                    )) : null}
+                  </TreeNode>
+
+                ))}
+
+              </TreeSelect>
 
               <Select getPopupContainer={(trigger: any) => trigger.parentNode}
                       className="bg-white text-black form-label"

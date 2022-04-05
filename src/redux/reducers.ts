@@ -24,6 +24,7 @@ import dashboardManager, {DashBoardModuleState} from "../modules_cb/DashboardMan
 import apiRolesManager,{APIRolesManagerModuleState} from "../modules_cb/APIRolesManager/redux/reducers";
 import rolesManager,{RolesManagerModuleState} from "../modules_cb/RolesManager/redux/reducers";
 import viewRolesManager,{ViewRolesManagerModuleState} from "../modules_cb/ViewRolesManager/redux/reducers";
+import companyManager,{CompanyManagerModuleState} from "../modules_cb/CompanyManager/redux/reducers";
 
 export interface RootState {
   auth: AuthModuleState;
@@ -50,6 +51,7 @@ export interface RootState {
   apiRolesManager: APIRolesManagerModuleState,
   rolesManager: RolesManagerModuleState,
   viewRolesManager: ViewRolesManagerModuleState,
+  companyManager: CompanyManagerModuleState,
 }
 
 export default combineReducers<RootState>({
@@ -78,5 +80,6 @@ export default combineReducers<RootState>({
   apiRolesManager,
   rolesManager,
   viewRolesManager,
+  companyManager,
 
 });

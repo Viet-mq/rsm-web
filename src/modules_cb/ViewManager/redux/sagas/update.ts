@@ -17,6 +17,7 @@ export function* updateViewAsync(action: CreateViewAction) {
     const rs = yield apis.updateView(action.request);
     yield put(updateViewSuccess(rs));
     if (rs.code !== 0) {
+      yield put(updateViewError(new AppError(rs.message, -1)));
       NotificationError('Cập nhật view không thành công', "Lỗi: " + rs.message)
     } else {
 

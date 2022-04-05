@@ -78,6 +78,7 @@ import UpdateDetailProfileForm from "./UpdateDetailProfileForm";
 import CreateCommentForm from "./CreateCommentForm";
 import UpdateCommentForm from "./UpdateCommentForm";
 import {deleteSchedule} from "../../ScheduleManager/redux/actions";
+import {getInitials} from "../../../helpers/utilsFunc";
 
 const {Step} = Steps;
 const {TabPane} = Tabs;
@@ -555,18 +556,6 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       id: entity.id
     }
     props.deleteComment({id: req.id});
-  }
-
-  const getInitials = (name: string) => {
-    if (name) {
-      let initials: any = name.split(' ');
-      if (initials.length > 1) {
-        initials = initials.shift().charAt(0) + initials.pop().charAt(0);
-      } else {
-        initials = name.substring(0, 2);
-      }
-      return initials.toUpperCase();
-    }
   }
 
   function handleShowReasonRejectForm(event: any) {

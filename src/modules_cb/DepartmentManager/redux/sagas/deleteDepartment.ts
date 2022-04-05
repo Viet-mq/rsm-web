@@ -10,6 +10,8 @@ export function* deleteDepartmentAsync(action: DeleteDepartmentAction) {
     const rs = yield apis.deleteDepartment(action.request);
     yield put(deleteDepartmentSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteDepartmentError(new AppError(rs.message)));
+
       NotificationError('Xóa phòng ban không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa phòng ban thành công");

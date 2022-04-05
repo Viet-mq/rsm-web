@@ -7,6 +7,8 @@ import {showFormCreate, showFormUpdate} from "../redux/actions";
 import CreateReasonRejectForm from "../components/CreateReasonRejectForm";
 import Loading from "../../../components/Loading";
 import UpdateReasonRejectForm from "../components/UpdateReasonRejectForm";
+import ButtonCreate from "../../../components/ComponentUtils/ButtonCreate";
+import {reason_reject_path} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = ({
                            reasonRejectManager: {
@@ -29,6 +31,7 @@ type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends ReduxProps {
 }
+
 function ReasonRejectManagerPages(props: IProps) {
   useEffect(() => {
     document.title = "Quản lý lý do loại";
@@ -57,6 +60,7 @@ function ReasonRejectManagerPages(props: IProps) {
                 <Button onClick={handleCreate}>
                   <Icon type="plus"/> Tạo lý do
                 </Button>
+                <ButtonCreate path={reason_reject_path} action="create" name=" Tạo lý do" handleClick={handleCreate}/>
               </div>
             </div>
           </Col>
@@ -64,7 +68,6 @@ function ReasonRejectManagerPages(props: IProps) {
       </div>
 
       <ListReasonReject/>
-
       <CreateReasonRejectForm/>
       <UpdateReasonRejectForm/>
 

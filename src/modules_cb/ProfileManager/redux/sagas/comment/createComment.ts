@@ -10,6 +10,7 @@ export function* createCommentAsync(action: CreateCommentAction) {
     const rs = yield apis.createComment(action.request);
     yield put(createCommentSuccess(rs));
     if (rs.code !== 0) {
+      yield put(createCommentError(new AppError(rs.message)));
       NotificationError('Tạo ghi chú không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tạo ghi chú thành công");

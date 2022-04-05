@@ -7,6 +7,8 @@ import CreateViewForm from "../components/CreateViewForm";
 import Loading from "../../../components/Loading";
 import AddActionForm from "../components/AddActionForm";
 import ListView from "../components/list/ListView";
+import ButtonCreate from "../../../components/ComponentUtils/ButtonCreate";
+import {view_path} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = ({viewManager: {list, create, deleteView, add_action, remove_action}}: RootState) => ({
   list,
@@ -44,9 +46,8 @@ function ViewManagerPage(props: IProps) {
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div>
-                <Button onClick={handleCreate}>
-                  <Icon type="plus"/> Tạo View
-                </Button>
+                <ButtonCreate path={view_path} action="create" name=" Thêm View" handleClick={handleCreate}/>
+
               </div>
             </div>
           </Col>

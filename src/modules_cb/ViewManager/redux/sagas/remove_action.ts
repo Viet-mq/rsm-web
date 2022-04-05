@@ -10,6 +10,7 @@ export function* removeActionViewAsync(action: RemoveActionViewAction) {
     const rs = yield apis.removeActionView(action.request);
     yield put(removeActionSuccess(rs));
     if (rs.code !== 0) {
+      yield put(removeActionError(new AppError(rs.message, -1)));
       NotificationError('Xóa action không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa action thành công");

@@ -10,6 +10,7 @@ export function* deleteReasonRejectAsync(action: DeleteReasonRejectAction) {
     const rs = yield apis.deleteReasonReject(action.request);
     yield put(deleteReasonRejectSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteReasonRejectError(new AppError(rs.message)));
       NotificationError('Xóa lý do loại không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa lý do loại thành công");

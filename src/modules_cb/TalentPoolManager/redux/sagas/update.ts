@@ -16,6 +16,7 @@ export function* updateTalentPoolAsync(action: UpdateTalentPoolAction) {
     const rs = yield apis.updateTalentPool(action.request);
     yield put(updateTalentPoolSuccess(rs));
     if (rs.code !== 0) {
+      yield put(updateTalentPoolError(new AppError(rs.message)));
       NotificationError(' Cập nhật kho tiềm năng không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', " Cập nhật kho tiềm năng thành công");

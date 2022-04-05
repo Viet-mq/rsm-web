@@ -3,11 +3,14 @@ import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import env from "src/configs/env";
 import {ColumnProps} from "antd/lib/table";
-import {Button, Icon, Popconfirm, Table} from "antd";
+import {Table} from "antd";
 import {emptyText} from "src/configs/locales";
 import {deleteView, getListView, removeAction, showViewAddActionForm, showViewUpdateForm} from "../../redux/actions";
 import {ActionView, DeleteActionToViewRequest, ViewEntity} from "../../types";
 import {useHistory} from "react-router-dom";
+import ButtonDelete from "../../../../components/ComponentUtils/ButtonDelete";
+import {view_path} from "../../../../helpers/utilsFunc";
+import ButtonUpdate from "../../../../components/ComponentUtils/ButtonUpdate";
 
 const mapStateToProps = ({viewManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
@@ -59,7 +62,7 @@ function ListView(props: IProps) {
   const columns: ColumnProps<ViewEntity>[] = [
     {
       title: 'STT',
-      key: 'index',
+      key: 'stt',
       width: 40,
       align: "center",
       render: (text, record, index) => {
@@ -99,29 +102,9 @@ function ListView(props: IProps) {
       render: (_text: string, record: ViewEntity) => {
         return (
           <div style={{whiteSpace: 'nowrap'}}>
-            <Popconfirm
-              title="Bạn muốn xóa menu này chứ ?"
-              okText="Xóa"
-              onCancel={event => {
-                event?.stopPropagation();
-              }}
-              onConfirm={event => handleDelete(event, record)}
-            >
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                onClick={event => {
-                  event.stopPropagation();
-                }}
-              >
-                <Icon type="delete" theme="filled"/>
-              </Button>
-            </Popconfirm>
-            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
-                    onClick={event => handleEdit(event, record)}
-            >
-              <Icon type="edit"/>
-            </Button>
+            <ButtonDelete path={view_path} message="menu" action="delete"
+                          handleClick={(event) => handleDelete(event, record)}/>
+            <ButtonUpdate path={view_path} action="update" handleClick={(event) => handleEdit(event, record)}/>
 
           </div>
         );
@@ -136,7 +119,6 @@ function ListView(props: IProps) {
         className="custom-table"
         dataSource={props.list.rows}
         columns={columns}
-
         rowKey="id"
         locale={{emptyText: emptyText}}
         pagination={{

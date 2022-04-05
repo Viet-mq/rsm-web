@@ -5,19 +5,16 @@ import env from "src/configs/env";
 import {ColumnProps} from "antd/lib/table";
 import {Button, Icon, Popconfirm, Table} from "antd";
 import {emptyText} from "src/configs/locales";
-import {
-  deleteSourceCV,
-  getListSourceCV,
-  showFormCreate,
-  showFormUpdate,
-  updateSourceCV
-} from "../../redux/actions";
-import {SourceCVEntity, DeleteSourceCVRequest} from "../../types";
+import {deleteSourceCV, getListSourceCV, showFormCreate, showFormUpdate, updateSourceCV} from "../../redux/actions";
+import {DeleteSourceCVRequest, SourceCVEntity} from "../../types";
+import ButtonDelete from "../../../../components/ComponentUtils/ButtonDelete";
+import {sourcecv_path} from "../../../../helpers/utilsFunc";
+import ButtonUpdate from "../../../../components/ComponentUtils/ButtonUpdate";
 
 const mapStateToProps = ({sourcecvManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
   getListSourceCV,
-   deleteSourceCV,
+  deleteSourceCV,
   showFormCreate,
   showFormUpdate,
   updateSourceCV
@@ -58,8 +55,10 @@ function ListSourceCV(props: IProps) {
       title: 'STT',
       key: 'index',
       width: 40,
-      align:"center",
-      render: (text, record, index) =>  {return (page - 1) * 10 + index + 1}
+      align: "center",
+      render: (text, record, index) => {
+        return (page - 1) * 10 + index + 1
+      }
     },
     {
       title: 'Name',
@@ -99,6 +98,12 @@ function ListSourceCV(props: IProps) {
             >
               <Icon type="edit"/>
             </Button>
+
+
+            <ButtonDelete path={sourcecv_path} message="Nguồn ứng viên" action="delete"
+                          handleClick={(event) => handleDelete(event, record)}/>
+            <ButtonUpdate path={sourcecv_path} action="update" handleClick={(event) => handleEdit(event, record)}/>
+
           </div>
         );
       },

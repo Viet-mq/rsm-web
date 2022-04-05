@@ -10,6 +10,8 @@ export function* deleteApiAsync(action: DeleteAPIAction) {
     const rs = yield apis.deleteApi(action.request);
     yield put(deleteApiSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteApiError(new AppError(rs.message, -1)));
+
       NotificationError('Xóa API không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa API thành công");

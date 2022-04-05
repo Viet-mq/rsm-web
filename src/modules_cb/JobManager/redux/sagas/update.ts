@@ -16,6 +16,7 @@ export function* updateJobAsync(action: UpdateJobAction) {
     const rs = yield apis.updateJob(action.request);
     yield put(updateJobSuccess(rs));
     if (rs.code !== 0) {
+      yield put(updateJobError(new AppError(rs.message)));
       NotificationError('Cập nhật vị trí công việc không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Cập nhật vị trí công việc thành công");

@@ -12,11 +12,13 @@ export interface ChildrenDepartment{
 }
 export interface CreateDepartmentRequest {
   name: string,
+  idParent?:string,
 }
 
 export interface UpdateDepartmentRequest {
   id: string,
-  name: string,
+
+  name: string
 }
 
 export interface DeleteDepartmentRequest {

@@ -10,6 +10,8 @@ export function* deleteAccountAsync(action: DeleteAccountAction) {
     const rs = yield apis.deleteAccount(action.request);
     yield put(deleteAccountSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteAccountError(new AppError(rs.message)));
+
       NotificationError('Xóa tài khoản không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa tài khoản thành công");

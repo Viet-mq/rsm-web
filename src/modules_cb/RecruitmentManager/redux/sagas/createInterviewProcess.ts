@@ -14,6 +14,7 @@ export function* createInterviewProcessAsync(action: CreateInterviewProcessActio
     const rs = yield apis.createInterviewProcess(action.request);
     yield put(createInterviewProcessSuccess(rs));
     if (rs.code !== 0) {
+      yield put(createInterviewProcessError(new AppError(rs.message)));
       NotificationError('Thêm vòng tuyển dụng không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Thêm vòng tuyển dụng thành công");

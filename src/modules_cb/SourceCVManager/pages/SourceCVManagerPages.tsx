@@ -1,12 +1,14 @@
 import React, {useEffect} from "react";
 import ListSourceCV from "../components/list/ListSourceCV";
-import {Button, Col, Icon, Row} from "antd";
+import {Col, Row} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {showFormCreate, showFormUpdate} from "../redux/actions";
 import CreateSourceCVForm from "../components/CreateSourceCVForm";
 import Loading from "../../../components/Loading";
 import UpdateSourceCVForm from "../components/UpdateSourceCVForm";
+import ButtonCreate from "../../../components/ComponentUtils/ButtonCreate";
+import {sourcecv_path} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = ({
                            sourcecvManager: {
@@ -56,9 +58,9 @@ function SourceCVManagerPages(props: IProps) {
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div>
-                <Button onClick={handleCreate}>
-                  <Icon type="plus"/> Tạo Nguồn ứng viên
-                </Button>
+                <ButtonCreate path={sourcecv_path} action="create" name=" Thêm Nguồn ứng viên"
+                              handleClick={handleCreate}/>
+
               </div>
             </div>
           </Col>
@@ -66,7 +68,6 @@ function SourceCVManagerPages(props: IProps) {
       </div>
 
       <ListSourceCV/>
-
       <CreateSourceCVForm/>
       <UpdateSourceCVForm/>
 

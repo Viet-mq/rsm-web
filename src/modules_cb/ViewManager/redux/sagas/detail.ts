@@ -8,6 +8,7 @@ export function* getDetailViewAsync(action: GetDetailViewAction) {
   try {
     const rs = yield apis.getListView(action.params);
     if (rs.code !== 0) {
+      yield put(getDetailViewError(new AppError(rs.message)));
       NotificationError('Lấy chi tiết view không thành công', "Lỗi: " + rs.message);
     }
     yield put(getDetailViewSuccess(rs.total, rs.rows))

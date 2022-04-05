@@ -10,6 +10,8 @@ export function* updateApiAsync(action: UpdateAPIAction) {
     const rs = yield apis.updateApi(action.request);
     yield put(updateApiSuccess(rs));
     if (rs.code !== 0) {
+      yield put(updateApiError(new AppError(rs.message, -1)));
+
       NotificationError('Cập nhập API không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Cập nhập API thành công");

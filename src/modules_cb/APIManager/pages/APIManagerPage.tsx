@@ -6,7 +6,9 @@ import {showFormCreateApi} from "../redux/actions";
 import CreateApiForm from "../components/CreateAPIForm";
 import UpdateApiForm from "../components/UpdateAPIForm";
 import Loading from "../../../components/Loading";
-import ListApiRole from "../components/list/ListApiRole";
+import ListAPI from "../components/list/ListAPI";
+import ButtonCreate from "../../../components/ComponentUtils/ButtonCreate";
+import {api_path} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = ({
                            apiManager: {
@@ -53,13 +55,16 @@ function APIManagerPage(props: IProps) {
                 <Button onClick={handleCreate}>
                   <Icon type="plus"/> Thêm API
                 </Button>
+
+                <ButtonCreate path={api_path} action="create" name=" Thêm API" handleClick={handleCreate}/>
+
               </div>
             </div>
           </Col>
         </Row>
       </div>
 
-      <ListApiRole/>
+      <ListAPI/>
 
       <CreateApiForm/>
 
@@ -68,7 +73,7 @@ function APIManagerPage(props: IProps) {
       {props.create.loading ||
       props.list.loading ||
       props.deleteApi.loading ||
-      props.update.loading  ?
+      props.update.loading ?
         <Loading/> : null}
 
     </div>

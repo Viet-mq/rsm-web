@@ -33,6 +33,7 @@ import UpdateViewForm from "./modules_cb/ViewManager/components/UpdateViewForm";
 import APIRolesManagerPages from "./modules_cb/APIRolesManager/pages/APIRolesManagerPages";
 import ViewRolesManagerPages from "./modules_cb/ViewRolesManager/pages/ViewRolesManagerPages";
 import RolesManagerPages from "./modules_cb/RolesManager/pages/RolesManagerPages";
+import CompanyManagerPages from "./modules_cb/CompanyManager/pages/CompanyManagerPages";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -99,6 +100,7 @@ const Routes = (props: PropsFromRedux) => {
                render={(props: any) => (<ProfileManagerPages {...props}/>)}
                isLogin={props.isLogin}/>
         <Route path="/reminder" component={ReminderManagerPages} isLogin={props.isLogin}/>
+        <Route path="/company-manager" component={CompanyManagerPages} isLogin={props.isLogin}/>
 
         <Redirect exact from="/*" to={'/profile-manager'}/>
       </Switch>

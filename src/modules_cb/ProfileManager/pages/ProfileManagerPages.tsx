@@ -34,13 +34,16 @@ interface IProps extends ReduxProps {
 }
 
 function ProfileManagerPages(props: IProps) {
-  const {search,create,uploadListCV,list}=props.profileManager
+  const {search, create, uploadListCV, list} = props.profileManager
   const {idTalentPool} = useParams()
   const location = useLocation();
   const [dataID, setDataID] = useState<any>()
   useEffect(() => {
-    location.pathname.includes("talent-pool-manager") ? document.title = "Talent pools" : document.title = "Ứng viên";
-    props.getDetailTalentPool({id: idTalentPool})
+    if (location.pathname.includes("talent-pool-manager")) {
+      document.title = "Talent pools"
+      props.getDetailTalentPool({id: idTalentPool})
+
+    } else document.title = "Ứng viên";
   }, []);
 
   const handleCreate = (e: any) => {
@@ -50,11 +53,11 @@ function ProfileManagerPages(props: IProps) {
       e.target.disabled = false;
     }
 
-    let req:RecruitmentTalentPool=({
-      talentPool:idTalentPool,
+    let req: RecruitmentTalentPool = ({
+      talentPool: idTalentPool,
 
     })
-    props.showFormCreate(true,req);
+    props.showFormCreate(true, req);
   }
 
   const handleUploadListCV = (e: any) => {
@@ -97,7 +100,7 @@ function ProfileManagerPages(props: IProps) {
                   <Icon type="upload"/> Upload DS ứng viên
                 </Button>
                 <Button>
-                  <a onClick={BtnExportExcel}><Icon type="export"/>  Xuất Excel</a>
+                  <a onClick={BtnExportExcel}><Icon type="export"/> Xuất Excel</a>
                 </Button>
               </div>
             </div>

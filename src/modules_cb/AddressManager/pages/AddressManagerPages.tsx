@@ -7,6 +7,8 @@ import {showFormCreate, showFormUpdate} from "../redux/actions";
 import CreateAddressForm from "../components/CreateAddressForm";
 import Loading from "../../../components/Loading";
 import UpdateAddressForm from "../components/UpdateAddressForm";
+import ButtonCreate from "../../../components/ComponentUtils/ButtonCreate";
+import {address_path, view_role_path} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = ({
                            addressManager: {
@@ -54,9 +56,7 @@ function AddressManagerPages(props: IProps) {
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div>
-                <Button onClick={handleCreate}>
-                  <Icon type="plus"/> Tạo địa chỉ
-                </Button>
+                <ButtonCreate path={address_path} action="create" name=" Tạo địa chỉ"  handleClick={handleCreate}/>
               </div>
             </div>
           </Col>

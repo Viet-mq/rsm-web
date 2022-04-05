@@ -8,6 +8,7 @@ export function* getListProfileAsync(action: ProfileListAction) {
   try {
     const rs = yield apis.getListProfile(action.params);
     if (rs.code !== 0) {
+      yield put(getListProfileError(new AppError(rs.message)));
       NotificationError('Lấy danh sách ứng viên không thành công', "Lỗi: " + rs.message);
     }
     yield put(getListProfileSuccess(rs.total, rs.rows))

@@ -8,6 +8,8 @@ export function* getListDepartmentAsync(action: DepartmentListAction) {
   try {
     const rs = yield apis.getListDepartment(action.params);
     if (rs.code !== 0) {
+      yield put(getListDepartmentError(new AppError(rs.message)));
+
       NotificationError('Lấy danh sách phòng ban không thành công', "Lỗi: " + rs.message);
     } else {
       localStorage.setItem("list-department", JSON.stringify(rs || {}));

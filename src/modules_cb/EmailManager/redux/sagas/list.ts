@@ -8,6 +8,8 @@ export function* getListEmailAsync(action: ListEmailAction) {
   try {
     const rs = yield apis.getListEmail(action.params);
     if (rs.code !== 0) {
+      yield put(getListEmailError(new AppError(rs.message)));
+
       NotificationError('Lấy danh sách email không thành công', "Lỗi: " + rs.message);
 
     } else {

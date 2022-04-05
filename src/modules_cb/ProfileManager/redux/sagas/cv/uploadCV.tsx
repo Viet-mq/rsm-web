@@ -1,7 +1,6 @@
 import {
   getDetailProfile,
   getListProfile,
-  showFormDetail,
   showFormUploadCV,
   UploadCVAction,
   uploadCVError,
@@ -12,13 +11,14 @@ import {put, select} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
 import {AppError} from "src/models/common";
 import {RootState} from "../../../../../redux/reducers";
-import {DetailCV} from "../../../types";
 
 export function* uploadCVAsync(action: UploadCVAction) {
   try {
     const rs = yield apis.updateCV(action.request?.file, action.request?.profileId);
     yield put(uploadCVSuccess(rs));
     if (rs.code !== 0) {
+      yield put(uploadCVError(new AppError(rs.message)));
+
       NotificationError('Tải CV không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tải CV thành công");

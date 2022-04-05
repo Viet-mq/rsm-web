@@ -8,6 +8,8 @@ import CreateAccountForm from "../components/CreateAccountForm";
 import Loading from "../../../components/Loading";
 import UpdateAccountForm from "../components/UpdateAccountForm";
 import ChangePasswordAccountForm from "../components/ChangePasswordAccountForm";
+import ButtonCreate from "../../../components/ComponentUtils/ButtonCreate";
+import {account_path, view_role_path} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = ({
                            accountManager: {
@@ -59,9 +61,7 @@ function AccountManagerPages(props: IProps) {
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div>
-                <Button onClick={handleCreate}>
-                  <Icon type="plus"/> Tạo tài khoản
-                </Button>
+                <ButtonCreate path={account_path} action="create" name=" Tạo tài khoản"  handleClick={handleCreate}/>
               </div>
             </div>
           </Col>

@@ -10,6 +10,7 @@ export function* updateNoteAsync(action: UpdateNoteAction) {
     const rs = yield apis.updateNote(action.request);
     yield put(updateNoteSuccess(rs));
     if (rs.code !== 0) {
+      yield put(updateNoteError(new AppError(rs.message)));
       NotificationError('Cập nhật đánh giá không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Cập nhật đánh giá thành công");

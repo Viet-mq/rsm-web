@@ -10,6 +10,7 @@ export function* deleteRolesAsync(action: DeleteRolesAction) {
     const rs = yield apis.deleteRoles(action.request);
     yield put(deleteRolesSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteRolesError(new AppError(rs.message)));
       NotificationError('Xóa  Roles không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa  Roles thành công");

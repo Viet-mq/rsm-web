@@ -8,6 +8,7 @@ export function* getListSchoolAsync(action: SchoolListAction) {
   try {
     const rs = yield apis.getListSchool(action.params);
     if (rs.code !== 0) {
+      yield put(getListSchoolError(new AppError(rs.message)));
       NotificationError('Lấy danh sách trường không thành công', "Lỗi: " + rs.message);
     } else {
       localStorage.setItem("list-school", JSON.stringify(rs || {}));

@@ -16,6 +16,7 @@ export function* updateReasonRejectAsync(action: UpdateReasonRejectAction) {
     const rs = yield apis.updateReasonReject(action.request);
     yield put(updateReasonRejectSuccess(rs));
     if (rs.code !== 0) {
+      yield put(updateReasonRejectError(new AppError(rs.message)));
       NotificationError('Cập nhật lý do loại không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Cập nhật lý do loại thành công");

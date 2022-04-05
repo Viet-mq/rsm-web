@@ -7,6 +7,8 @@ import {showFormCreate, showFormUpdate} from "../redux/actions";
 import CreateJobLevelForm from "../components/CreateJobLevelForm";
 import Loading from "../../../components/Loading";
 import UpdateJobLevelForm from "../components/UpdateJobLevelForm";
+import ButtonCreate from "../../../components/ComponentUtils/ButtonCreate";
+import {api_path, joblevel_path} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = ({
                            joblevelManager: {
@@ -56,9 +58,8 @@ function JobLevelManagerPages(props: IProps) {
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div>
-                <Button onClick={handleCreate}>
-                  <Icon type="plus"/> Tạo cấp bậc công việc
-                </Button>
+                <ButtonCreate path={joblevel_path} action="create" name=" Tạo cấp bậc công việc" handleClick={handleCreate}/>
+
               </div>
             </div>
           </Col>
@@ -66,7 +67,6 @@ function JobLevelManagerPages(props: IProps) {
       </div>
 
       <ListJobLevel/>
-
       <CreateJobLevelForm/>
       <UpdateJobLevelForm/>
 

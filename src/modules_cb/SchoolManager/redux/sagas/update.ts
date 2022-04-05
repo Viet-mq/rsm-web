@@ -16,6 +16,7 @@ export function* updateSchoolAsync(action: UpdateSchoolAction) {
     const rs = yield apis.updateSchool(action.request);
     yield put(updateSchoolSuccess(rs));
     if (rs.code !== 0) {
+      yield put(updateSchoolError(new AppError(rs.message)));
       NotificationError('Cập nhật trường không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Cập nhật trường thành công");

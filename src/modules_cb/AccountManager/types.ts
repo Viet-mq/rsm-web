@@ -16,16 +16,20 @@ export interface CreateAccountRequest {
   username: string,
   password: string,
   fullName: string,
-  role: number,
+  roles: string[],
   email:string,
   dateOfBirth: string,
+  organization: string,
+
 }
 
 export interface UpdateAccountRequest {
-  username: string,
-  fullName: string,
   dateOfBirth: string,
-  email:string,
+  email: string,
+  fullName: string,
+  organization: string,
+  roles: string[],
+  username: string
 
 }
 

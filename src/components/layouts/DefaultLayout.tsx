@@ -9,8 +9,9 @@ import {RootState} from "../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {getElasticSearch, getFullElasticSearch} from "../../modules_cb/ProfileManager/redux/actions";
-import {useHistory} from "react-router-dom";
+import {useHistory, Link} from "react-router-dom";
 import Loading from "../Loading";
+import {getInitials} from "../../helpers/utilsFunc";
 
 const {Sider} = Layout;
 const {Option} = Select;
@@ -41,17 +42,6 @@ const DefaultLayout = (props: LayoutProps) => {
     dataSource: [],
   });
 const arrayUrl=['/statuscv-manager',"/email-manager","/reminder"]
-  const getInitials = (name: string) => {
-    if (name) {
-      let initials: any = name.split(' ');
-      if (initials.length > 1) {
-        initials = initials.shift().charAt(0) + initials.pop().charAt(0);
-      } else {
-        initials = name.substring(0, 2);
-      }
-      return initials.toUpperCase();
-    }
-  }
 
   function toggle() {
     setCollapsed(!collapsed)
@@ -118,7 +108,10 @@ const arrayUrl=['/statuscv-manager',"/email-manager","/reminder"]
             <Sider className="menu" trigger={null} collapsible collapsed={collapsed} width={250}>
               {}
               <div className="logo">
-                {collapsed ? null : <img src={require('src/assets/images/logo-edsolabs.png')}/>
+                {collapsed ? null :
+                  <Link to={`/profile-manager`}>
+                    <img src={require('src/assets/images/logo-edsolabs.png')}/>
+                  </Link>
                 }
               </div>
               <Nav hiddenLabel={collapsed}/>

@@ -1,9 +1,9 @@
 import {
+  getDetailView,
+  showViewUpdateActionForm,
   updateActionError,
   updateActionSuccess,
-  UpdateActionViewAction,
-  getListView,
-  showViewUpdateActionForm, getDetailView
+  UpdateActionViewAction
 } from "../actions";
 import * as apis from "../services/apis";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
@@ -16,6 +16,7 @@ export function* updateActionViewAsync(action: UpdateActionViewAction) {
     const rs = yield apis.updateActionView(action.request);
     yield put(updateActionSuccess(rs));
     if (rs.code !== 0) {
+      yield put(updateActionError(new AppError(rs.message, -1)));
       NotificationError('Cập nhật action không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Cập nhật action thành công");

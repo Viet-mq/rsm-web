@@ -1,12 +1,14 @@
 import React, {useEffect} from "react";
 import ListBlacklist from "../components/list/ListBlacklist";
-import {Button, Col, Icon, Row} from "antd";
+import {Col, Row} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {showFormCreate, showFormUpdate} from "../redux/actions";
 import CreateBlacklistForm from "../components/CreateBlacklistForm";
 import Loading from "../../../components/Loading";
 import UpdateBlacklistForm from "../components/UpdateBlacklistForm";
+import ButtonCreate from "../../../components/ComponentUtils/ButtonCreate";
+import {blacklist_path} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = ({
                            blacklistManager: {
@@ -56,9 +58,8 @@ function BlacklistManagerPages(props: IProps) {
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div>
-                <Button onClick={handleCreate}>
-                  <Icon type="plus"/> Tạo Blacklist
-                </Button>
+                <ButtonCreate path={blacklist_path} action="create" name=" Tạo Blacklist" handleClick={handleCreate}/>
+
               </div>
             </div>
           </Col>

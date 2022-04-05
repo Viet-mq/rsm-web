@@ -16,6 +16,8 @@ export function* updateBlacklistAsync(action: UpdateBlacklistAction) {
     const rs = yield apis.updateBlacklist(action.request);
     yield put(updateBlacklistSuccess(rs));
     if (rs.code !== 0) {
+      yield put(updateBlacklistError(new AppError(rs.message)));
+
       NotificationError('Cập nhật Blacklist không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Cập nhật Blacklist thành công");

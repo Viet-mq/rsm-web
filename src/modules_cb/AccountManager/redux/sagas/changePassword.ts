@@ -16,6 +16,8 @@ export function* changePasswordAsync(action: ChangePasswordAction) {
     const rs = yield apis.changePasswordAccount(action.request);
     yield put(changePasswordSuccess(rs));
     if (rs.code !== 0) {
+      yield put(changePasswordError(new AppError(rs.message)));
+
       NotificationError('Đổi mật khẩu không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Đổi mật khẩu thành công");

@@ -8,6 +8,7 @@ export function* getListViewAsync(action: GetListViewAction) {
   try {
     const rs = yield apis.getListView(action.params);
     if (rs.code !== 0) {
+      yield put(getListViewError(new AppError(rs.message)));
       NotificationError('Lấy danh sách view không thành công', "Lỗi: " + rs.message);
     }
     else{

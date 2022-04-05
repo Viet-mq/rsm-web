@@ -8,6 +8,9 @@ import moment from "moment";
 import {Button, Icon, Popconfirm, Table} from "antd";
 import {emptyText} from "../../../configs/locales";
 import {DeleteAccountRequest, UserAccount} from "../types";
+import ButtonDelete from "../../../components/ComponentUtils/ButtonDelete";
+import {account_path, CheckViewAction, view_role_path} from "../../../helpers/utilsFunc";
+import ButtonUpdate from "../../../components/ComponentUtils/ButtonUpdate";
 
 const mapStateToProps = ({accountManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {deleteAccount, getListAccount, showFormUpdate, showFormChangePassword});
@@ -156,32 +159,17 @@ function ListAccount(props: IProps) {
       render: (_text: string, record: UserAccount) => {
         return (
           <div style={{whiteSpace: 'nowrap'}}>
-            <Popconfirm
-              title="Bạn muốn xóa tài khoản này ?"
-              okText="Xóa"
-              onCancel={event => {
-                event?.stopPropagation();
-              }}
-              onConfirm={event => handleDelete(event, record)}
-            >
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                onClick={event => {
-                  event.stopPropagation();
-                }}
-              >
-                <Icon type="delete" theme="filled"/>
+            <ButtonDelete path={account_path} message="tài khoản" action="delete" handleClick={(event) => handleDelete(event, record)}/>
+            <ButtonUpdate path={account_path} action="update" handleClick={(event) => handleEdit(event, record)}/>
+
+            {CheckViewAction(account_path, "change-password")
+              ?
+              <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
+                      onClick={event => handleChangePassword(event, record)}>
+                <Icon type="key"/>
               </Button>
-            </Popconfirm>
-            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
-                    onClick={event => handleEdit(event, record)}>
-              <Icon type="edit"/>
-            </Button>
-            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
-                    onClick={event => handleChangePassword(event, record)}>
-              <Icon type="key"/>
-            </Button>
+              : null}
+
           </div>
         );
       },

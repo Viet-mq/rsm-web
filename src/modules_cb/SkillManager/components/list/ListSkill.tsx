@@ -13,6 +13,9 @@ import {
   updateSkill
 } from "../../redux/actions";
 import {SkillEntity, DeleteSkillRequest} from "../../types";
+import ButtonDelete from "../../../../components/ComponentUtils/ButtonDelete";
+import {api_path, skill_path} from "../../../../helpers/utilsFunc";
+import ButtonUpdate from "../../../../components/ComponentUtils/ButtonUpdate";
 
 const mapStateToProps = ({skillManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
@@ -75,44 +78,14 @@ function ListSkill(props: IProps) {
       render: (_text: string, record: SkillEntity) => {
         return (
           <div style={{whiteSpace: 'nowrap'}}>
-            <Popconfirm
-              title="Bạn muốn xóa kỹ năng này chứ ?"
-              okText="Xóa"
-              onCancel={event => {
-                event?.stopPropagation();
-              }}
-              onConfirm={event => handleDelete(event, record)}
-            >
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                onClick={event => {
-                  event.stopPropagation();
-                }}
-              >
-                <Icon type="delete" theme="filled"/>
-              </Button>
-            </Popconfirm>
-            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
-                    onClick={event => handleEdit(event, record)}
-            >
-              <Icon type="edit"/>
-            </Button>
+            <ButtonDelete path={skill_path} message="kỹ năng" action="delete" handleClick={(event) => handleDelete(event, record)}/>
+            <ButtonUpdate path={skill_path} action="update" handleClick={(event) => handleEdit(event, record)}/>
+
           </div>
         );
       },
     },
   ];
-
-  // function onSelectedRowKeysChange(selectedRowKeys: any) {
-  //   setState({selectedRowKeys});
-  // }
-  //
-  // const {selectedRowKeys} = state;
-  // const rowSelection = {
-  //   selectedRowKeys,
-  //   onChange: onSelectedRowKeysChange,
-  // };
 
   return (
     <>

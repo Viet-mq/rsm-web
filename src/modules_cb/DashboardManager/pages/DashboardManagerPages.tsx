@@ -34,15 +34,6 @@ function DashboardManagerPages(props: IProps) {
           <Col md={16}>
             <div className="tmp-title-page-size20" style={{margin: 0}}>Kết quả tuyển dụng</div>
           </Col>
-          {/*<Col className="d-flex" md={8}>*/}
-          {/*  <div className="tmp-btn">*/}
-          {/*    <div>*/}
-          {/*      <Button >*/}
-          {/*        <Icon type="plus"/> Tạo vị trí công việc*/}
-          {/*      </Button>*/}
-          {/*    </div>*/}
-          {/*  </div>*/}
-          {/*</Col>*/}
         </Row>
       </div>
 

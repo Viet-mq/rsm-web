@@ -3,21 +3,18 @@ import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import env from "src/configs/env";
 import {ColumnProps} from "antd/lib/table";
-import {Button, Icon, Popconfirm, Table} from "antd";
+import {Table} from "antd";
 import {emptyText} from "src/configs/locales";
-import {
-  deleteViewRoles,
-  getListViewRoles,
-  showFormCreate,
-  showFormUpdate,
-  updateViewRoles
-} from "../../redux/actions";
-import {ViewRolesEntity, DeleteViewRolesRequest} from "../../types";
+import {deleteViewRoles, getListViewRoles, showFormCreate, showFormUpdate, updateViewRoles} from "../../redux/actions";
+import {DeleteViewRolesRequest, ViewRolesEntity} from "../../types";
+import {view_role_path} from "../../../../helpers/utilsFunc";
+import ButtonDelete from "../../../../components/ComponentUtils/ButtonDelete";
+import ButtonUpdate from "../../../../components/ComponentUtils/ButtonUpdate";
 
 const mapStateToProps = ({viewRolesManager}: RootState) => ({viewRolesManager});
 const connector = connect(mapStateToProps, {
   getListViewRoles,
-   deleteViewRoles: deleteViewRoles,
+  deleteViewRoles,
   showFormCreate,
   showFormUpdate,
   updateViewRoles
@@ -29,7 +26,7 @@ interface IProps extends ReduxProps {
 }
 
 function ListViewRoles(props: IProps) {
-  const {list}=props.viewRolesManager
+  const {list} = props.viewRolesManager
   let screenWidth = document.documentElement.clientWidth;
   const [page, setPage] = useState(1);
   const scroll = screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false};
@@ -39,8 +36,10 @@ function ListViewRoles(props: IProps) {
       title: 'STT',
       key: 'index',
       width: 40,
-      align:"center",
-      render: (text, record, index) =>  {return (page - 1) * 10 + index + 1}
+      align: "center",
+      render: (text, record, index) => {
+        return (page - 1) * 10 + index + 1
+      }
     },
     {
       title: 'Name',
@@ -62,30 +61,10 @@ function ListViewRoles(props: IProps) {
       fixed: 'right',
       render: (_text: string, record: ViewRolesEntity) => {
         return (
-          <div style={{whiteSpace: 'nowrap'}}>
-            <Popconfirm
-              title="Bạn muốn xóa View Roles này chứ ?"
-              okText="Xóa"
-              onCancel={event => {
-                event?.stopPropagation();
-              }}
-              onConfirm={event => handleDelete(event, record)}
-            >
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                onClick={event => {
-                  event.stopPropagation();
-                }}
-              >
-                <Icon type="delete" theme="filled"/>
-              </Button>
-            </Popconfirm>
-            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
-                    onClick={event => handleEdit(event, record)}
-            >
-              <Icon type="edit"/>
-            </Button>
+          <div style={{whiteSpace: 'nowrap'}} >
+            <ButtonDelete path={view_role_path} message="View Roles" action="delete" handleClick={(event) => handleDelete(event, record)}/>
+            <ButtonUpdate path={view_role_path} action="update" handleClick={(event) => handleEdit(event, record)}/>
+
           </div>
         );
       },
@@ -108,17 +87,6 @@ function ListViewRoles(props: IProps) {
     event.stopPropagation();
     props.showFormUpdate(true, entity);
   }
-
-
-  // function onSelectedRowKeysChange(selectedRowKeys: any) {
-  //   setState({selectedRowKeys});
-  // }
-  //
-  // const {selectedRowKeys} = state;
-  // const rowSelection = {
-  //   selectedRowKeys,
-  //   onChange: onSelectedRowKeysChange,
-  // };
 
   return (
     <>

@@ -29,7 +29,6 @@ import CreateSchoolForm from "../../SchoolManager/components/CreateSchoolForm";
 import CreateSkillForm from "../../SkillManager/components/CreateSkillForm";
 
 import Loading from "../../../components/Loading";
-import {getListTalentPool} from "../../TalentPoolManager/redux/actions";
 import {getListDepartment, showFormCreate as showDepartmentFormCreate} from "../../DepartmentManager/redux/actions";
 import CreateDepartmentForm from "../../DepartmentManager/components/CreateDepartmentForm";
 import {showFormCreate as showSkillFormCreate} from "../../SkillManager/redux/actions";
@@ -40,6 +39,7 @@ import {DepartmentEntity} from "../../DepartmentManager/types";
 import {SourceCVEntity} from "../../SourceCVManager/types";
 import {SchoolEntity} from "../../SchoolManager/types";
 import {UserAccount} from "../../AccountManager/types";
+import {convertArrayToTree, getInitials} from "../../../helpers/utilsFunc";
 
 const {Option} = Select;
 
@@ -75,7 +75,6 @@ const connector = connect(mapStateToProps,
     showJobLevelFormCreate,
     showSchoolFormCreate,
     showSourceCVFormCreate,
-    getListTalentPool,
     getListDepartment,
     showSkillFormCreate,
     showDepartmentFormCreate,
@@ -226,27 +225,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     props.showDepartmentFormCreate(true);
   }
 
-  function convertArrayToTree(arrays: any) {
-    let dataFetch: any = [];
-    for (let i = 0; i < arrays.length; i++) {
-      if (arrays[i]?.children) {
-        dataFetch.push({
-          title: arrays[i].name,
-          key: arrays[i].id,
-          value: arrays[i].id,
-          children: convertArrayToTree(arrays[i].children)
-        })
-      } else {
-        dataFetch.push({
-          title: arrays[i].name,
-          key: arrays[i].id,
-          value: arrays[i].id,
-        })
-      }
-    }
-    return dataFetch;
-  }
-
   function handleCreateSkill(e: any) {
     e.preventDefault();
     if (e?.target) {
@@ -255,19 +233,6 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     }
     props.showSkillFormCreate(true);
   }
-
-  function getInitials(name: string) {
-    if (name) {
-      let initials: any = name.split(' ');
-      if (initials.length > 1) {
-        initials = initials.shift().charAt(0) + initials.pop().charAt(0);
-      } else {
-        initials = name.substring(0, 2);
-      }
-      return initials.toUpperCase();
-    }
-  }
-
 
   function onSearchJob(value: any) {
     props.getSearchJob({name: value})
@@ -331,8 +296,8 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
           props.showFormUpdate(false);
         }}
         footer={""}>
-        <Form className="form-create" style={{width:526}}>
-          <div className="modal-overflow" style={{paddingRight:15}}>
+        <Form className="form-create" style={{width: 526}}>
+          <div className="modal-overflow" style={{paddingRight: 15}}>
 
             <Form.Item label="Họ Tên" className="form-label"  {...formItemLayout}>
               {getFieldDecorator('fullName', {

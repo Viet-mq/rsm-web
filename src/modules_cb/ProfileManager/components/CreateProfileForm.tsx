@@ -26,6 +26,7 @@ import {SourceCVEntity} from "../../SourceCVManager/types";
 import {SchoolEntity} from "../../SchoolManager/types";
 import {getSearchAccount} from "../../AccountManager/redux/actions";
 import {UserAccount} from "../../AccountManager/types";
+import {convertArrayToTree, getInitials} from "../../../helpers/utilsFunc";
 
 const {Option} = Select;
 
@@ -219,40 +220,6 @@ function CreateProfileForm(props: CreateProfileFormProps) {
     }
     props.showDepartmentFormCreate(true);
   }
-
-  const convertArrayToTree = (arrays: any) => {
-    let dataFetch: any = [];
-    for (let i = 0; i < arrays.length; i++) {
-      if (arrays[i]?.children) {
-        dataFetch.push({
-          title: arrays[i].name,
-          key: arrays[i].id,
-          value: arrays[i].id,
-          children: convertArrayToTree(arrays[i].children)
-        })
-      } else {
-        dataFetch.push({
-          title: arrays[i].name,
-          key: arrays[i].id,
-          value: arrays[i].id,
-        })
-      }
-    }
-    return dataFetch;
-  }
-
-  const getInitials = (name: string) => {
-    if (name) {
-      let initials: any = name.split(' ');
-      if (initials.length > 1) {
-        initials = initials.shift().charAt(0) + initials.pop().charAt(0);
-      } else {
-        initials = name.substring(0, 2);
-      }
-      return initials.toUpperCase();
-    }
-  }
-
 
   function onSearchJob(value: any) {
     props.getSearchJob({name: value})

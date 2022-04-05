@@ -10,6 +10,8 @@ export function* deleteBlacklistAsync(action: DeleteBlacklistAction) {
     const rs = yield apis.deleteBlacklist(action.request);
     yield put(deleteBlacklistSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteBlacklistError(new AppError(rs.message)));
+
       NotificationError('Xóa Blacklist không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa Blacklist thành công");

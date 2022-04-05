@@ -6,6 +6,7 @@ import {Avatar} from "antd";
 import {getDetailRecruitment, getListKanbanCandidate} from "../redux/actions";
 import {ChangeProcessRequest, ProcessForm} from "../../ProfileManager/types";
 import {changeProcess, showChangeProcessForm} from "../../ProfileManager/redux/actions";
+import {getInitials} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = (state: RootState) => ({
   recruitmentManager: state.recruitmentManager,
@@ -158,18 +159,6 @@ function KanbanProcess(props: IProps) {
     ...draggableStyle
 
   });
-
-  const getInitials = (name: string) => {
-    if (name) {
-      let initials: any = name.split(' ');
-      if (initials.length > 1) {
-        initials = initials.shift().charAt(0) + initials.pop().charAt(0);
-      } else {
-        initials = name.substring(0, 2);
-      }
-      return initials.toUpperCase();
-    }
-  }
 
   return (
     <>

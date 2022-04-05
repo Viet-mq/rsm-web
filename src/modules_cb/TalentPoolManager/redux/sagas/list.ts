@@ -8,6 +8,7 @@ export function* getListTalentPoolAsync(action: TalentPoolListAction) {
   try {
     const rs = yield apis.getListTalentPool(action.params);
     if (rs.code !== 0) {
+      yield put(getListTalentPoolError(new AppError(rs.message)));
       NotificationError('Lấy danh sách Talent Pool không thành công', "Lỗi: " + rs.message);
     } else {
       localStorage.setItem("list-talent-pool", JSON.stringify(rs || {}));

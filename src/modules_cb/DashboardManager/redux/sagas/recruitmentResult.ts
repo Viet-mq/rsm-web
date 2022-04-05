@@ -8,6 +8,8 @@ export function* getRecruitmentResultReportAsync(action: RecruitmentResultReport
   try {
     const rs = yield apis.getRecruitmentResultReport(action.params);
     if (rs.code !== 0) {
+      yield put(getRecruitmentResultReportError(new AppError(rs.message)));
+
       NotificationError('Lấy báo cáo kết quả tuyển dụng không thành công', "Lỗi: " + rs.message);
 
     }

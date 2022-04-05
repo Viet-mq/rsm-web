@@ -9,6 +9,7 @@ import {Link} from "react-router-dom";
 import moment from "moment";
 import 'moment/locale/vi';
 import {RecruitmentEntity} from "../types";
+import {CheckViewAction, recruitment_path} from "../../../helpers/utilsFunc";
 
 const {Option} = Select;
 const {RangePicker} = DatePicker;
@@ -81,12 +82,16 @@ function RecruitmentManagerPages(props: IProps) {
       <div className='header-align recruitment-title'>
         <div className="tmp-title-page-size20">Tin tuyển dụng</div>
         <div>
-          <Link to={`/recruitment-manager/create`}>
-            <Button type="primary">
-              <Icon type="plus" style={{fontSize: "125%"}}/>
-              Thêm mới
-            </Button>
-          </Link>
+          {CheckViewAction(recruitment_path, "create")
+            ?
+            <Link to={`/recruitment-manager/create`}>
+              <Button type="primary">
+                <Icon type="plus" style={{fontSize: "125%"}}/>
+                Thêm mới
+              </Button>
+            </Link>
+            : null}
+
         </div>
       </div>
       <div className='header-align recruitment-option'>

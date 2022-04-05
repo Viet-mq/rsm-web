@@ -12,6 +12,7 @@ import {ScheduleEntity} from "../types";
 import {DataShowBooking} from "../../ProfileManager/types";
 import BookingForm from "../../ProfileManager/components/BookingForm";
 import {deleteSchedule} from "../redux/actions";
+import {CheckViewAction, schedule_path} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = (state: RootState) => ({
   delete: state.scheduleManager.deleteSchedule
@@ -125,9 +126,18 @@ function DetailScheduleInterview(props: IProps) {
         </div>
         <div className="footer-left">
           {dataDetail?.date > +moment() ? <>
-            <Button onClick={btnDeleteScheduleClicked} style={{color: "red", marginRight: 10}}><Icon type="delete"
-                                                                                                     className="mr-1"/>Xóa</Button>
-            <Button onClick={event => handleBooking(event)}><Icon type="edit" className="mr-1"/>Chỉnh sửa</Button>
+            {CheckViewAction(schedule_path, "delete")
+              ?
+              <Button onClick={btnDeleteScheduleClicked} style={{color: "red", marginRight: 10}}><Icon type="delete"
+                                                                                                       className="mr-1"/>Xóa</Button>
+              : null}
+
+              {CheckViewAction(schedule_path, "update")
+              ?
+                <Button onClick={event => handleBooking(event)}><Icon type="edit" className="mr-1"/>Chỉnh sửa</Button>
+
+                : null}
+
 
           </> : null}
 

@@ -11,6 +11,7 @@ import DetailScheduleInterview from "../components/DetailScheduleInterview";
 import {getAllSchedule, showFormSchedule} from "../redux/actions";
 import {DataShowSchedule, ScheduleEntity} from "../types";
 import {useLocation} from "react-router-dom";
+import {CheckViewAction, getInitials, schedule_path} from "../../../helpers/utilsFunc";
 
 const {Search} = Input;
 const {Option} = Select;
@@ -84,18 +85,6 @@ function ScheduleManagerPages(props: IProps) {
 
   function handleClosePopupDetail() {
     setVisibleDetail(false)
-  }
-
-  const getInitials = (name: string) => {
-    if (name) {
-      let initials: any = name.split(' ');
-      if (initials.length > 1) {
-        initials = initials.shift().charAt(0) + initials.pop().charAt(0);
-      } else {
-        initials = name.substring(0, 2);
-      }
-      return initials.toUpperCase();
-    }
   }
 
   const setCurrentDate = (): any => {
@@ -248,12 +237,16 @@ function ScheduleManagerPages(props: IProps) {
               onSearch={value => onSearch(value)}
               style={{width: 340}}
             />
-            <Button type="primary"
-                    onClick={handlePopupScheduleInterview}
-                    style={{marginLeft: 24}}>
-              <Icon type="plus" style={{fontSize: "125%"}}/>
-              Đặt lịch
-            </Button>
+
+            {CheckViewAction(schedule_path, "create")
+              ?
+              <Button type="primary"
+                      onClick={handlePopupScheduleInterview}
+                      style={{marginLeft: 24}}>
+                <Icon type="plus" style={{fontSize: "125%"}}/>
+                Đặt lịch
+              </Button>
+              : null}
           </div>
         </div>
         {keySearch ?
@@ -296,7 +289,7 @@ function ScheduleManagerPages(props: IProps) {
                     <div className="c-main-content__wrap-main">
                       <div className="main-1">
                         <a className="main-1__candidate-name">{itemChild.fullName}</a>
-                        <div className="main-1__green-dot"></div>
+                        <div className="main-1__green-dot"/>
                         <div className="main-1__job-description">{itemChild.recruitmentName}</div>
                       </div>
                       <div className="main-2">
@@ -331,12 +324,16 @@ function ScheduleManagerPages(props: IProps) {
             <div className="text-2">
               Đặt lịch để quản lý thời gian thi tuyển phỏng vấn của ứng viên
             </div>
-            <Button type="primary" style={{marginLeft: 24}}
-                    onClick={handlePopupScheduleInterview}
-            >
-              <Icon type="plus" style={{fontSize: "125%"}}/>
-              Đặt lịch
-            </Button>
+            {CheckViewAction(schedule_path, "create")
+              ?
+              <Button type="primary" style={{marginLeft: 24}}
+                      onClick={handlePopupScheduleInterview}
+              >
+                <Icon type="plus" style={{fontSize: "125%"}}/>
+                Đặt lịch
+              </Button>
+              : null}
+
           </div>
 
         }

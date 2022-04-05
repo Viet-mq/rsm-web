@@ -16,6 +16,8 @@ export function* createAPIRolesAsync(action: CreateAPIRolesAction) {
     const rs = yield apis.createAPIRoles(action.request);
     yield put(createAPIRolesSuccess(rs));
     if (rs.code !== 0) {
+      yield put(createAPIRolesError(new AppError(rs.message)));
+
       NotificationError('Tạo API Roles không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tạo API Roles thành công");

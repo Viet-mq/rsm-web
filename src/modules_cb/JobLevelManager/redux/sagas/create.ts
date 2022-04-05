@@ -16,6 +16,8 @@ export function* createJobLevelAsync(action: CreateJobLevelAction) {
     const rs = yield apis.createJobLevel(action.request);
     yield put(createJobLevelSuccess(rs));
     if (rs.code !== 0) {
+      yield put(createJobLevelError(new AppError(rs.message)));
+
       NotificationError('Tạo cấp bậc công việc không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tạo cấp bậc công việc thành công");

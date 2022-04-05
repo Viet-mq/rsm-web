@@ -26,7 +26,7 @@ export interface LoginResponse2 {
   access_token: string;
   fullName: string;
   username: string;
-  permission: string[],
+  permissions: string[],
   pools: TalentPoolEntity[],
   //
   role: number,

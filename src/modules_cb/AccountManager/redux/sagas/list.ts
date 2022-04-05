@@ -8,6 +8,7 @@ export function* getListAccountAsync(action: AccountListAction) {
   try {
     const rs = yield apis.getListAccount(action.params);
     if (rs.code !== 0) {
+      yield put(getListAccountError(new AppError(rs.message)));
       NotificationError('Lấy danh sách tài khoản không thành công', "Lỗi: " + rs.message);
     } else {
       localStorage.setItem("list-account", JSON.stringify(rs || {}));

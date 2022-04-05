@@ -10,6 +10,7 @@ export function* deleteViewRolesAsync(action: DeleteViewRolesAction) {
     const rs = yield apis.deleteViewRoles(action.request);
     yield put(deleteViewRolesSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteViewRolesError(new AppError(rs.message)));
       NotificationError('Xóa View Roles không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa View Roles thành công");

@@ -10,6 +10,8 @@ export function* deleteAddressAsync(action: DeleteAddressAction) {
     const rs = yield apis.deleteAddress(action.request);
     yield put(deleteAddressSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteAddressError(new AppError(rs.message)));
+
       NotificationError('Xóa địa chỉ không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa địa chỉ thành công");

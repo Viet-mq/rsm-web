@@ -10,6 +10,7 @@ export function* deleteSchoolAsync(action: DeleteSchoolAction) {
     const rs = yield apis.deleteSchool(action.request);
     yield put(deleteSchoolSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteSchoolError(new AppError(rs.message)));
       NotificationError('Xóa trường không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa trường thành công");

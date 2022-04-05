@@ -10,6 +10,7 @@ export function* deleteRecruitmentAsync(action: DeleteRecruitmentAction) {
     const rs = yield apis.deleteRecruitment(action.request);
     yield put(deleteRecruitmentSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteRecruitmentError(new AppError(rs.message)));
       NotificationError('Xóa tin tuyển dụng không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa tin tuyển dụng thành công");

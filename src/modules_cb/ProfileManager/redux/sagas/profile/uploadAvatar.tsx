@@ -17,6 +17,7 @@ export function* uploadAvatarAsync(action: UploadAvatarAction) {
     const rs = yield apis.uploadAvatar(action.request);
     yield put(uploadAvatarSuccess(rs));
     if (rs.code !== 0) {
+      yield put(uploadAvatarError(new AppError(rs.message)));
       NotificationError('Cập nhật ảnh đại diện không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Cập nhật ảnh đại diện thành công");

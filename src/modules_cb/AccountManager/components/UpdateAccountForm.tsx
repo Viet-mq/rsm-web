@@ -2,13 +2,19 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {showFormUpdate, updateAccount} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Form, Input, Modal} from "antd";
+import {Button, Form, Input, Modal, Select} from "antd";
 import React, {FormEvent} from "react";
 import {UpdateAccountRequest} from "../types";
 
-const mapState = ({accountManager: {showForm}}: RootState) => ({showForm})
+const {Option} = Select;
 
-const connector = connect(mapState, {showFormUpdate, updateAccount});
+const mapStateToProps = (state: RootState) => ({
+  accountManager: state.accountManager,
+  listRole: state.rolesManager.list,
+  listCompany:state.companyManager.list
+});
+
+const connector = connect(mapStateToProps, {showFormUpdate, updateAccount});
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface UpdateAccountFormProps extends FormComponentProps, ReduxProps {
@@ -28,6 +34,8 @@ function UpdateAccountForm(props: UpdateAccountFormProps) {
       sm: {span: 16},
     },
   };
+  const fontWeightStyle = {fontWeight: 400};
+  const {showForm} = props.accountManager
 
   function onBtnUpdateClicked(e: FormEvent) {
     e.preventDefault();
@@ -40,6 +48,9 @@ function UpdateAccountForm(props: UpdateAccountFormProps) {
           fullName: values.full_name,
           dateOfBirth: values.date_of_birth,
           email:values.email,
+          organization: values.organization,
+          roles: values.roles,
+
         }
         props.updateAccount(req);
         return;
@@ -58,7 +69,7 @@ function UpdateAccountForm(props: UpdateAccountFormProps) {
       zIndex={2}
       maskClosable={false}
       title="Cập nhật tài khoản hệ thống"
-      visible={props.showForm.show_update}
+      visible={showForm.show_update}
       centered={true}
       width="550px"
       afterClose={() => {
@@ -72,23 +83,9 @@ function UpdateAccountForm(props: UpdateAccountFormProps) {
 
       <Form {...formItemLayout}>
 
-        <Form.Item label="Tên đăng nhập" className="mb-0" style={{...formItemStyle}}>
-          {getFieldDecorator('username', {
-            initialValue: props.showForm.data_update?.username,
-            rules: [
-              {
-                message: 'Vui lòng nhập tên đăng nhập',
-                required: true,
-              },
-            ],
-          })(
-            <Input disabled placeholder="Tên đăng nhập" className="bg-white text-black"/>
-          )}
-        </Form.Item>
-
         <Form.Item label="Họ tên" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('full_name', {
-            initialValue: props.showForm.data_update?.fullName,
+            initialValue: showForm.data_update?.fullName,
             rules: [
               {
                 message: 'Vui lòng nhập họ tên',
@@ -102,7 +99,7 @@ function UpdateAccountForm(props: UpdateAccountFormProps) {
 
         <Form.Item label="Email" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('email', {
-            initialValue: props.showForm.data_update?.email,
+            initialValue: showForm.data_update?.email,
             rules: [
               {
                 message: 'Vui lòng nhập email',
@@ -114,9 +111,80 @@ function UpdateAccountForm(props: UpdateAccountFormProps) {
           )}
         </Form.Item>
 
+        <Form.Item label="Tên đăng nhập" className="mb-0" style={{...formItemStyle}}>
+          {getFieldDecorator('username', {
+            initialValue: showForm.data_update?.username,
+            rules: [
+              {
+                message: 'Vui lòng nhập tên đăng nhập',
+                required: true,
+              },
+            ],
+          })(
+            <Input disabled placeholder="Tên đăng nhập" className="bg-white text-black"/>
+          )}
+        </Form.Item>
+
+        <Form.Item label="Role" className="mb-0 " style={{...formItemStyle}}>
+          {getFieldDecorator('role', {
+            initialValue:  showForm.data_update?.role,
+            rules: [
+              {
+                message: 'Vui lòng chọn role',
+                required: true,
+              },
+            ],
+          })(
+            <Select mode="multiple" getPopupContainer={(trigger: any) => trigger.parentNode}
+                    placeholder="Chọn role"
+                    filterOption={(input, option: any) =>
+                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                    optionFilterProp="children"
+                    showSearch
+                    style={fontWeightStyle}
+
+                    className="bg-white text-black form-label"
+            >
+              {props.listRole.rows?.map((item: any) => (
+                <Option key={item.id} value={item.id}>{item.name}</Option>
+              ))}
+
+            </Select>,
+          )}
+        </Form.Item>
+
+        <Form.Item label="Thuộc công ty" className="mb-0 " style={{...formItemStyle}}>
+          {getFieldDecorator('organization', {
+            initialValue: undefined,
+            rules: [
+              {
+                message: 'Vui lòng chọn công ty',
+                required: true,
+              },
+            ],
+          })(
+            <Select  getPopupContainer={(trigger: any) => trigger.parentNode}
+                     placeholder="Chọn công ty"
+                     filterOption={(input, option: any) =>
+                       option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                     }
+                     optionFilterProp="children"
+                     showSearch
+                     style={fontWeightStyle}
+                     className="bg-white text-black form-label"
+            >
+              {props.listCompany.rows?.map((item: any) => (
+                <Option key={item.id} value={item.id}>{item.name}</Option>
+              ))}
+
+            </Select>,
+          )}
+        </Form.Item>
+
         <Form.Item label="Ngày sinh" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('date_of_birth', {
-            initialValue: props.showForm.data_update?.dateOfBirth,
+            initialValue: showForm.data_update?.dateOfBirth,
             rules: [
               {required: true, message: 'Vui lòng nhập ngày sinh'}
             ],
