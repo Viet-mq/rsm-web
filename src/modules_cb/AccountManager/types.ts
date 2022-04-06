@@ -3,6 +3,7 @@ export interface UserAccount {
   fullName: string,
   dateOfBirth: string,
   role: number,
+  roles: string[],
   status: number,
   createAt: number,
   updateAt: number,
@@ -19,7 +20,7 @@ export interface CreateAccountRequest {
   roles: string[],
   email:string,
   dateOfBirth: string,
-  organization: string,
+  organizations: string[],
 
 }
 
@@ -27,7 +28,7 @@ export interface UpdateAccountRequest {
   dateOfBirth: string,
   email: string,
   fullName: string,
-  organization: string,
+  organizations: string[],
   roles: string[],
   username: string
 

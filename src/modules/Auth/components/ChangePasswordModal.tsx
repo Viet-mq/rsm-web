@@ -6,6 +6,7 @@ import {FormComponentProps} from 'antd/lib/form';
 import Password from 'antd/lib/input/Password';
 import {changePassword, hideChangePasswordForm} from '../redux/actions';
 import Loading from 'src/components/Loading';
+import {formItemLayout} from "../../../helpers/utilsFunc";
 
 const mapState = ({auth: {changePassword, changePasswordFrom, auth}}: RootState) => ({
   changePassword,
@@ -27,17 +28,6 @@ interface IProps extends FormComponentProps, ReduxProps {
 function ChangePasswordModal(props: IProps) {
   let retypeNewPassword: any;
   const {getFieldDecorator, resetFields} = props.form;
-
-  const formItemLayout = {
-    labelCol: {
-      xs: {span: 24},
-      sm: {span: 8},
-    },
-    wrapperCol: {
-      xs: {span: 24},
-      sm: {span: 16},
-    },
-  };
 
   useEffect(() => {
     if (props.changePasswordFrom.visible) {
@@ -109,7 +99,7 @@ function ChangePasswordModal(props: IProps) {
           {getFieldDecorator('old_password', {
             initialValue: '',
             rules: [{required: true, message: 'Trường Mật khẩu hiện tại bắt buộc'}],
-          })(<Password></Password>)}
+          })(<Password/>)}
         </Form.Item>
         <Form.Item label="Mật khẩu mới">
           {getFieldDecorator('new_password', {

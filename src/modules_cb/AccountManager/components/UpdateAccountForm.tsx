@@ -48,8 +48,8 @@ function UpdateAccountForm(props: UpdateAccountFormProps) {
           fullName: values.full_name,
           dateOfBirth: values.date_of_birth,
           email:values.email,
-          organization: values.organization,
-          roles: values.roles,
+          organizations: [values.organization],
+          roles: values.role,
 
         }
         props.updateAccount(req);
@@ -121,13 +121,13 @@ function UpdateAccountForm(props: UpdateAccountFormProps) {
               },
             ],
           })(
-            <Input disabled placeholder="Tên đăng nhập" className="bg-white text-black"/>
+            <Input  placeholder="Tên đăng nhập" className="bg-white text-black"/>
           )}
         </Form.Item>
 
         <Form.Item label="Role" className="mb-0 " style={{...formItemStyle}}>
-          {getFieldDecorator('role', {
-            initialValue:  showForm.data_update?.role,
+          {getFieldDecorator('roles', {
+            initialValue:  showForm.data_update?.roles?.map((item:any)=>item.id),
             rules: [
               {
                 message: 'Vui lòng chọn role',

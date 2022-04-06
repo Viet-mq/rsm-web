@@ -1,11 +1,10 @@
-import {DeleteScheduleAction, deleteScheduleError, deleteScheduleSuccess} from "../../actions";
+import {DeleteScheduleAction, deleteScheduleError, deleteScheduleSuccess, getAllSchedule} from "../../actions";
 import * as apis from "../../services/apis";
 import {put, select} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
 import {RootState} from "src/redux/reducers";
 import {AppError} from "src/models/common";
-import {getAllSchedule} from "../../actions";
-import {getBooking, getDetailProfile} from "../../../../ProfileManager/redux/actions";
+import {getBooking} from "../../../../ProfileManager/redux/actions";
 
 export function* deleteScheduleAsync(action: DeleteScheduleAction) {
   try {
@@ -21,7 +20,7 @@ export function* deleteScheduleAsync(action: DeleteScheduleAction) {
       const paramsBooking = yield select((state: RootState) => state.profileManager.getBooking.params);
 
       yield put(getAllSchedule(params))
-      if(paramsBooking){
+      if (paramsBooking) {
         yield put(getBooking(paramsBooking))
       }
     }

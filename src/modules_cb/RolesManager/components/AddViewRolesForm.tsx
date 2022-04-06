@@ -30,16 +30,6 @@ interface AddViewRolesFormProps extends FormComponentProps, ReduxProps {
 function AddViewRolesForm(props: AddViewRolesFormProps) {
   const {showForm} = props.rolesManager
   const {getFieldDecorator, resetFields} = props.form;
-  const formItemLayout = {
-    labelCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-    wrapperCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-  };
   const [viewRoles, setViewRoles] = useState<ViewRolesEntity[]>([]);
   const [trigger, setTrigger] = useState({
     viewRoles: false,

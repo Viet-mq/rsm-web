@@ -87,6 +87,18 @@ const arrayUrl=['/statuscv-manager',"/email-manager","/reminder"]
       ...search,
       value
     })
+
+  }
+
+  function onEnter(e: any) {
+    if (e.key === 'Enter') {
+      props.getFullElasticSearch({key: search.value, size: 100})
+      history.push({
+        pathname: "/profile-manager",
+      });
+    }
+
+
   }
 
   function onSelect(value: any) {
@@ -143,6 +155,7 @@ const arrayUrl=['/statuscv-manager',"/email-manager","/reminder"]
                           onSearch={onSearch}
                           onSelect={onSelect}
                           notFoundContent={null}
+                              onInputKeyDown={onEnter}
                           optionLabelProp="label"
                         >
                           {search.dataSource?.map((item: any) => {

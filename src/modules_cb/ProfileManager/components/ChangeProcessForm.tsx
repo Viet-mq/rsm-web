@@ -1,20 +1,17 @@
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Checkbox, Form, Icon, Input, Modal, Radio, Select} from "antd";
+import {Button, Checkbox, Form, Input, Modal, Radio, Select} from "antd";
 import React, {FormEvent, useEffect, useRef, useState} from "react";
 import 'devextreme/dist/css/dx.light.css';
 import {changeProcess, showChangeProcessForm, showEmailChangeProcessForm} from "../redux/actions";
 import {getListRecruitment} from "../../RecruitmentManager/redux/actions";
-import {ChangeProcessRequest, CreateBookingRequest, MailForm, MailRequest, ProcessForm} from "../types";
+import {ChangeProcessRequest, ProcessForm} from "../types";
 import 'react-quill/dist/quill.snow.css';
 import {getListEmail, searchListEmail} from "../../EmailManager/redux/actions";
 import {EmailEntity} from "../../EmailManager/types";
-import ReactQuill from "react-quill";
 import CreateEmailChangeProcessForm from "./CreateEmailChangeProcessForm";
 
-const {Option} = Select;
-const {TextArea} = Input;
 const CheckboxGroup = Checkbox.Group;
 
 const mapStateToProps = (state: RootState) => ({
@@ -47,11 +44,6 @@ function ChangeProcessForm(props: IProps) {
   const [process, setProcess] = useState<any>('')
   const {getFieldDecorator, resetFields} = props.form;
   const [display, setDisplay] = useState(false)
-  const fontWeightStyle = {fontWeight: 400};
-  const formItemStyle = {
-    labelCol: {span: 4},
-    wrapperCol: {span: 20}
-  };
   const [emailTemp, setEmailTemp] = useState<EmailEntity>()
   const [valueEditor, setValueEditor] = useState("")
   const inputFile = useRef<any>(null)
@@ -355,74 +347,74 @@ function ChangeProcessForm(props: IProps) {
           </div>
 
           <div style={{padding: "0 24px 24px"}}>
-              <div style={{fontWeight: 500}}>Gửi mail cho hội đồng tuyển dụng</div>
-              <div style={{display: "flex"}}>
-                <div>
-                  <Checkbox
-                    indeterminate={checked.interviewers.indeterminate}
-                    onChange={onCheckAllInterviewersChange}
-                    checked={checked.interviewers.checkAll}
-                  >
-                    Tất cả
-                  </Checkbox>
-                </div>
-                <CheckboxGroup
-                  value={checked.interviewers.checkedList}
-                  onChange={onCheckInterviewersChange}
+            <div style={{fontWeight: 500}}>Gửi mail cho hội đồng tuyển dụng</div>
+            <div style={{display: "flex"}}>
+              <div>
+                <Checkbox
+                  indeterminate={checked.interviewers.indeterminate}
+                  onChange={onCheckAllInterviewersChange}
+                  checked={checked.interviewers.checkAll}
                 >
-                  {plainOptions.interviewers.map((item: any, index: any) =>
-                    <Checkbox key={item.id} value={item.id}>{item.name}</Checkbox>
-                  )}
-                </CheckboxGroup>
+                  Tất cả
+                </Checkbox>
               </div>
-              <br/>
-
-              <div style={{fontWeight: 500}}>Gửi mail cho ứng người giới thiệu</div>
-              <div style={{display: "flex"}}>
-                <div>
-                  <Checkbox
-                    indeterminate={checked.presenter.indeterminate}
-                    onChange={onCheckAllPresenterChange}
-                    checked={checked.presenter.checkAll}
-                  >
-                    Tất cả
-                  </Checkbox>
-                </div>
-                <CheckboxGroup
-                  value={checked.presenter.checkedList}
-                  onChange={onCheckPresenterChange}
-                >
-                  {plainOptions.presenter.map((item: any, index: any) =>
-                    <Checkbox key={item.id} value={item.id}>{item.name}</Checkbox>
-                  )}
-                </CheckboxGroup>
-              </div>
-              <br/>
-
-              <div style={{fontWeight: 500}}>Gửi mail cho ứng viên</div>
-              <div><Radio.Group
-                value={checked.candidate.checkedList}
-                onChange={onCheckCandidateChange}
+              <CheckboxGroup
+                value={checked.interviewers.checkedList}
+                onChange={onCheckInterviewersChange}
               >
-                {plainOptions.candidate.map((item: any, index: any) =>
+                {plainOptions.interviewers.map((item: any, index: any) =>
+                  <Checkbox key={item.id} value={item.id}>{item.name}</Checkbox>
+                )}
+              </CheckboxGroup>
+            </div>
+            <br/>
+
+            <div style={{fontWeight: 500}}>Gửi mail cho ứng người giới thiệu</div>
+            <div style={{display: "flex"}}>
+              <div>
+                <Checkbox
+                  indeterminate={checked.presenter.indeterminate}
+                  onChange={onCheckAllPresenterChange}
+                  checked={checked.presenter.checkAll}
+                >
+                  Tất cả
+                </Checkbox>
+              </div>
+              <CheckboxGroup
+                value={checked.presenter.checkedList}
+                onChange={onCheckPresenterChange}
+              >
+                {plainOptions.presenter.map((item: any, index: any) =>
+                  <Checkbox key={item.id} value={item.id}>{item.name}</Checkbox>
+                )}
+              </CheckboxGroup>
+            </div>
+            <br/>
+
+            <div style={{fontWeight: 500}}>Gửi mail cho ứng viên</div>
+            <div><Radio.Group
+              value={checked.candidate.checkedList}
+              onChange={onCheckCandidateChange}
+            >
+              {plainOptions.candidate.map((item: any, index: any) =>
+                <Radio key={item.id} value={item.id}>{item.name}</Radio>
+              )}
+            </Radio.Group>
+            </div>
+            <br/>
+
+            <div style={{fontWeight: 500}}>Gửi mail cho cán bộ liên quan</div>
+            <div>
+              <Radio.Group
+                value={checked.members.checkedList}
+                onChange={onCheckMembersChange}
+              >
+                {plainOptions.members.map((item: any, index: any) =>
                   <Radio key={item.id} value={item.id}>{item.name}</Radio>
                 )}
               </Radio.Group>
-              </div>
-              <br/>
-
-              <div style={{fontWeight: 500}}>Gửi mail cho cán bộ liên quan</div>
-              <div>
-                <Radio.Group
-                  value={checked.members.checkedList}
-                  onChange={onCheckMembersChange}
-                >
-                  {plainOptions.members.map((item: any, index: any) =>
-                    <Radio key={item.id} value={item.id}>{item.name}</Radio>
-                  )}
-                </Radio.Group>
-              </div>
-              <br/>
+            </div>
+            <br/>
 
           </div>
         </div>
@@ -431,8 +423,8 @@ function ChangeProcessForm(props: IProps) {
           <Button onClick={handleCloseForm}>Hủy</Button>
           {checked.candidate.checkedList === "yes" ||
           checked.members.checkedList === "yes" ||
-          checked.interviewers.checkedList.length>0||
-          checked.presenter.checkedList.length>0 ?
+          checked.interviewers.checkedList.length > 0 ||
+          checked.presenter.checkedList.length > 0 ?
             <Button type={"primary"} className="ml-2" onClick={onBtnContinueCreateClicked}>Tiếp tục</Button>
             :
             <Button onClick={btnChangeProcessClicked} type={"primary"} className="ml-2">Chuyển</Button>

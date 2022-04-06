@@ -23,28 +23,27 @@ import {getListApi} from "../../../../modules_cb/APIManager/redux/actions";
 import {getListAPIRoles} from "../../../../modules_cb/APIRolesManager/redux/actions";
 import {getListViewRoles} from "../../../../modules_cb/ViewRolesManager/redux/actions";
 import {getListView} from "../../../../modules_cb/ViewManager/redux/actions";
-import {getListRoles} from "../../../../modules_cb/RolesManager/redux/actions";
 import {getListCompany} from "../../../../modules_cb/CompanyManager/redux/actions";
 
 const TOKEN_KEY = 'auth-n-token';
-const SCHOOL ="list-school";
-const JOB_LEVEL ="list-job-level";
-const SOURCE_CV ="list-source-cv";
-const DEPARTMENT ="list-department";
-const JOB ="list-job";
-const STATUS_CV ="list-status-cv";
-const TALENT_POOL ="list-talent-pool";
-const REASON_REJECT ="list-reason-reject";
-const SKILL ="list-skill";
-const RECRUITMENT ="list-recruitment";
-const ACCOUNT ="list-account";
-const ADDRESS ="list-address";
-const KEY_POINT ="list-key-point";
-const API ="list-api";
-const API_ROLES ="list-api-roles";
-const VIEW_ROLES ="list-view-roles";
-const VIEW ="list-view";
-const COMPANY ="list-company";
+const SCHOOL = "list-school";
+const JOB_LEVEL = "list-job-level";
+const SOURCE_CV = "list-source-cv";
+const DEPARTMENT = "list-department";
+const JOB = "list-job";
+const STATUS_CV = "list-status-cv";
+const TALENT_POOL = "list-talent-pool";
+const REASON_REJECT = "list-reason-reject";
+const SKILL = "list-skill";
+const RECRUITMENT = "list-recruitment";
+const ACCOUNT = "list-account";
+const ADDRESS = "list-address";
+const KEY_POINT = "list-key-point";
+const API = "list-api";
+const API_ROLES = "list-api-roles";
+const VIEW_ROLES = "list-view-roles";
+const VIEW = "list-view";
+const COMPANY = "list-company";
 
 export function* loginAsync(action: LoginAction) {
   try {
@@ -66,7 +65,7 @@ export function* loginAsync(action: LoginAction) {
       yield put(getListJobLevel({page: 1, size: 100}))
       yield put(getListDepartment({page: 1, size: 100}))
       yield put(getListSourceCV({page: 1, size: 100}))
-      yield put(getListTalentPool({page: 1, size: 100}))
+      yield put(getListTalentPool({page: 1, size: 0}))
       yield put(getListStatusCV({page: 1, size: 100}))
       yield put(getListSchool({page: 1, size: 100}))
       yield put(getListAccount({page: 1, size: 100}))

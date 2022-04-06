@@ -57,9 +57,6 @@ function ReasonRejectManagerPages(props: IProps) {
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div>
-                <Button onClick={handleCreate}>
-                  <Icon type="plus"/> Tạo lý do
-                </Button>
                 <ButtonCreate path={reason_reject_path} action="create" name=" Tạo lý do" handleClick={handleCreate}/>
               </div>
             </div>

@@ -140,7 +140,7 @@ function TalentPoolItem(props: IProps) {
 
               <div>
                 <Icon type="flag" theme="filled"/>
-                <span className="card-content__number">0</span>
+                <span className="card-content__number">{talentPool.total}</span>
                 <span> New contacts in the last 30 days</span>
               </div>
             </div>

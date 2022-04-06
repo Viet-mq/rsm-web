@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {Button, Col, Icon, Row} from "antd";
+import {Col, Row} from "antd";
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {showViewCreateForm} from "../redux/actions";

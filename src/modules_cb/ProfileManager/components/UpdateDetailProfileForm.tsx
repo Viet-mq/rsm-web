@@ -10,7 +10,7 @@ import {
 } from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
 import {Avatar, Button, DatePicker, Form, Icon, Input, Modal, Select, TreeSelect} from "antd";
-import React, {FormEvent, useEffect, useState} from "react";
+import React, {FormEvent} from "react";
 import {DetailCV, UpdateDetailRequest} from "../types";
 import {getListJob, showFormCreate as showJobFormCreate} from "../../JobManager/redux/actions";
 import {getListJobLevel, showFormCreate as showJobLevelFormCreate} from "../../JobLevelManager/redux/actions";
@@ -26,9 +26,10 @@ import CreateDepartmentForm from "../../DepartmentManager/components/CreateDepar
 import CreateSkillForm from "../../SkillManager/components/CreateSkillForm";
 import {getListDepartment, showFormCreate as showDepartmentFormCreate} from "../../DepartmentManager/redux/actions";
 import {showFormCreate as showSkillFormCreate} from "../../SkillManager/redux/actions";
-import {convertArrayToTree, getInitials} from "../../../helpers/utilsFunc";
+import {formItemLayout, getInitials} from "../../../helpers/utilsFunc";
 
 const {Option} = Select;
+const {TreeNode} = TreeSelect;
 
 const mapStateToProps = (state: RootState) => ({
   showForm: state.profileManager.showForm,
@@ -78,22 +79,7 @@ interface UpdateProfileFormProps extends FormComponentProps, ReduxProps {
 function UpdateProfileForm(props: UpdateProfileFormProps) {
   const {getFieldDecorator, resetFields} = props.form;
   const fontWeightStyle = {fontWeight: 400};
-  const [treeData, setTreeData] = useState([])
-  const formItemLayout = {
-    labelCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-    wrapperCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-  };
   const dateFormat = 'DD/MM/YYYY';
-
-  useEffect(() => {
-    setTreeData(convertArrayToTree(props.listDepartment.rows))
-  }, [props.listDepartment.rows])
 
   function onBtnUpdateClicked(e: FormEvent) {
     e.preventDefault();
@@ -204,6 +190,11 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
     }
     props.showSkillFormCreate(true);
   }
+
+  const filterTreeNode = (input: any, node: any) => {
+    const title = node.props.title;
+    return title.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+  };
 
   return (
     <>
@@ -631,14 +622,26 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                       },
                     ],
                   })(
-                    <TreeSelect getPopupContainer={(trigger: any) => trigger.parentNode}
-                                className="bg-white text-black"
-                                dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
-                                treeData={treeData}
-                                style={fontWeightStyle}
-                                placeholder="Chọn bộ phận, phòng ban"
-                                treeDefaultExpandAll
-                    />
+                    <TreeSelect
+                      showSearch
+                      allowClear
+                      dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
+                      filterTreeNode={filterTreeNode}
+                      placeholder="Phòng ban"
+                      className="bg-white text-black"
+                      style={fontWeightStyle}
+                    >
+                      {props.listDepartment.rows?.map((item: any) => (
+                        <TreeNode style={fontWeightStyle} value={item.id} title={item.name} key={item.id}>
+                          {item.children ? item.children.map((el: any) => (
+                            <TreeNode style={fontWeightStyle} value={el.id} key={el.id} title={el.name}/>
+                          )) : null}
+                        </TreeNode>
+
+                      ))}
+
+                    </TreeSelect>
                   )}
                   <Button
                     size="small"
@@ -667,6 +670,9 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                           optionLabelProp="label"
 
                           placeholder="Chọn người giới thiệu">
+                    <Option key={"none"} value={""} label={"<None>"}>
+                      <div>&lt;None&gt;</div>
+                    </Option>
                     {props.listAccount.rows?.map((item: any, index: any) => (
                       <Option key={index} value={item.username} label={item.fullName}>
                         <div className="flex-items-center" style={{paddingTop: 5}}>
@@ -715,8 +721,15 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
                           className="bg-white text-black select-account-custom"
                           style={fontWeightStyle}
                           optionLabelProp="label"
-
+                          filterOption={(input, option: any) =>
+                            option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            || option.props.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                          }
+                          showSearch
                           placeholder="Chọn HR phụ trách">
+                    <Option key={"none"} value={""} label={"<None>"}>
+                      <div>&lt;None&gt;</div>
+                    </Option>
                     {props.listAccount.rows?.map((item: any, index: any) => (
                       <Option key={index} value={item.username} label={item.fullName}>
                         <div className="flex-items-center" style={{paddingTop: 5}}>
@@ -738,7 +751,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
               </Form.Item>
 
             </div>
-            <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px', textAlign: "right"}} colon={false}>
+            <Form.Item label=" " style={{marginRight:20, textAlign: "right"}} colon={false}>
               <Button className="mr-3 create-btn" htmlType="submit" onClick={onBtnUpdateClicked}>
                 Cập nhật
               </Button>

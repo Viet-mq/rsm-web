@@ -6,6 +6,7 @@ import React, {FormEvent} from "react";
 import Loading from "../../../components/Loading";
 import {AddActionToViewRequest} from "../types";
 import {addAction, showViewAddActionForm} from "../redux/actions";
+import {formItemLayout} from "../../../helpers/utilsFunc";
 
 
 const mapStateToProps = (state: RootState) => ({
@@ -28,17 +29,6 @@ interface CreateActionFormProps extends FormComponentProps, ReduxProps {
 function CreateActionForm(props: CreateActionFormProps) {
   const {showForm,add_action} = props.viewManager
   const {getFieldDecorator, resetFields} = props.form;
-
-  const formItemLayout = {
-    labelCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-    wrapperCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-  };
 
   function onBtnCreateClicked(e: FormEvent) {
     e.preventDefault();

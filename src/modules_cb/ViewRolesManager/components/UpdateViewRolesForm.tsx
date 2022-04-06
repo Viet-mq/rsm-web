@@ -5,6 +5,7 @@ import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Input, Modal, Tree} from "antd";
 import React, {FormEvent, useEffect, useState} from "react";
 import {PermissionsRequest, UpdateViewRolesRequest} from "../types";
+import {formItemLayout} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = (state: RootState) => ({
   viewRolesManager: state.viewRolesManager,
@@ -19,16 +20,6 @@ interface UpdateViewRolesFormProps extends FormComponentProps, ReduxProps {
 function UpdateViewRolesForm(props: UpdateViewRolesFormProps) {
   const {showForm} = props.viewRolesManager
   const {getFieldDecorator, resetFields} = props.form;
-  const formItemLayout = {
-    labelCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-    wrapperCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-  };
   const fontWeightStyle = {fontWeight: 400};
   const [views, setViews] = useState<any>([]);
   const [permissionsChecked, setPermissionsChecked] = useState<PermissionsRequest[]>([]);

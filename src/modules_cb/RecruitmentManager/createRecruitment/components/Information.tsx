@@ -1,7 +1,7 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Col, DatePicker, Form, Icon, Input, InputNumber, Row, Select, Switch} from "antd";
+import {Button, Col, DatePicker, Form, Icon, Input, InputNumber, Row, Select, Switch, TreeSelect} from "antd";
 import React, {useEffect, useRef, useState} from "react";
 import moment from "moment";
 import {getSearchJob, showFormCreate as showJobFormCreate} from "../../../JobManager/redux/actions";
@@ -16,6 +16,7 @@ import {DepartmentEntity} from "../../../DepartmentManager/types";
 import {searchListDepartment} from "../../../DepartmentManager/redux/actions";
 
 const {Option} = Select;
+const {TreeNode} = TreeSelect;
 
 const mapStateToProps = (state: RootState) => ({
   listAddress: state.addressManager.list,
@@ -48,8 +49,8 @@ function InformationForm(props: IProps) {
   const {getFieldDecorator} = props.form;
   const fontWeightStyle = {fontWeight: 400};
   const dateFormat = 'DD/MM/YYYY';
-  const buttonCreate = useRef(null);
-  const textEditorStyle = {marginBottom: 30}
+  // const buttonCreate = useRef(null);
+  // const textEditorStyle = {marginBottom: 30}
   const isEdit = location.pathname.includes("edit");
   const [salary, setSalary] = useState<any>({
     from: 0,
@@ -103,11 +104,11 @@ function InformationForm(props: IProps) {
     'link', 'image', 'video'
   ]
   const editorRef = useRef<any>(null);
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
-    }
-  };
+  // const log = () => {
+  //   if (editorRef.current) {
+  //     console.log(editorRef.current.getContent());
+  //   }
+  // };
   const [job, setJob] = useState<JobEntity[]>([]);
   const [department, setDepartment] = useState<DepartmentEntity[]>([]);
   const [trigger, setTrigger] = useState({
@@ -316,6 +317,11 @@ function InformationForm(props: IProps) {
     setDepartment(props.listDepartment.rows)
   }
 
+  const filterTreeNode = (input: any, node: any) => {
+    const title = node.props.title;
+    return title.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+  };
+
   return (
     <>
       <div className="main-content">
@@ -392,22 +398,44 @@ function InformationForm(props: IProps) {
                       },
                     ],
                   })(
-                    <Select getPopupContainer={(trigger: any) => trigger.parentNode} showSearch
-                            onChange={onFormChange}
-                            onSearch={onSearchDepartment}
-                            onFocus={onFocusDepartment}
-                            className="bg-white text-black"
-                            style={fontWeightStyle}
-                            placeholder="Chọn phòng ban"
-                            filterOption={(input, option: any) =>
-                              option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                            }
-                            optionFilterProp="children"
+                    // <Select getPopupContainer={(trigger: any) => trigger.parentNode} showSearch
+                    //         onChange={onFormChange}
+                    //         onSearch={onSearchDepartment}
+                    //         onFocus={onFocusDepartment}
+                    //         className="bg-white text-black"
+                    //         style={fontWeightStyle}
+                    //         placeholder="Chọn phòng ban"
+                    //         filterOption={(input, option: any) =>
+                    //           option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    //         }
+                    //         optionFilterProp="children"
+                    // >
+                    //   {department.map((item: any, index: any) => (
+                    //     <Option key={index} value={item.id}>{item.name}</Option>
+                    //   ))}
+                    // </Select>
+
+                    <TreeSelect
+                    style={fontWeightStyle}
+                    showSearch
+                    allowClear
+                    dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
+                    className="bg-white text-black "
+                    getPopupContainer={(trigger: any) => trigger.parentNode}
+                    filterTreeNode={filterTreeNode}
+                    placeholder="Phòng ban"
                     >
-                      {department.map((item: any, index: any) => (
-                        <Option key={index} value={item.id}>{item.name}</Option>
-                      ))}
-                    </Select>)}
+                  {props.listDepartment.rows?.map((item: any) => (
+                    <TreeNode style={fontWeightStyle} value={item.id} title={item.name} key={item.id}>
+                  {item.children ? item.children.map((el: any) => (
+                    <TreeNode style={fontWeightStyle} value={el.id} key={el.id} title={el.name}/>
+                    )) : null}
+                    </TreeNode>
+
+                    ))}
+
+                    </TreeSelect>
+                  )}
                   <Button
                     size="small"
                     className="ant-btn ml-1 mr-1 ant-btn-sm"

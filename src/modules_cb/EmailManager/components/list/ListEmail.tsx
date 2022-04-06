@@ -1,7 +1,6 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import React, {useEffect, useState} from "react";
-import env from "src/configs/env";
+import React, {useEffect} from "react";
 import {Switch, Tabs} from "antd";
 import Search from "antd/es/input/Search";
 import {RiMailSendLine} from "react-icons/all";
@@ -32,9 +31,6 @@ interface IProps extends ReduxProps {
 function ListEmail(props: IProps) {
   let {list} = props.emailManager
   let screenWidth = document.documentElement.clientWidth;
-  const [page, setPage] = useState(1);
-  const scroll = screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false};
-  const size = 10;
   const operations = <Search
     placeholder="Tìm kiếm nhanh mẫu email"
     // onSearch={value => onSearch(value)}

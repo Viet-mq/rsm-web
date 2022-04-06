@@ -81,8 +81,8 @@ export interface CreateProfileRequest {
   status: string,
   time: number,
   web: string,
-  talentPool?:string,
-  recruitment?:string,
+  talentPool?: string,
+  recruitment?: string,
 
 }
 
@@ -107,7 +107,7 @@ export interface UpdateProfileRequest {
   mailRef2: string,
   recruitment: string,
   skill: string[],
-  
+
   company: string,
   facebook: string,
   github: string,
@@ -145,9 +145,9 @@ export interface SearchRequest {
   size?: number,
 }
 
-export interface RecruitmentTalentPool{
-  recruitment?:string,
-  talentPool?:string,
+export interface RecruitmentTalentPool {
+  recruitment?: string,
+  talentPool?: string,
 }
 
 
@@ -305,9 +305,13 @@ export interface DetailProfileEntity {
   departmentId: string
   departmentName: string
   levelSchool: string
+  // ----- người giới thiêu -------
   hrRef: string,
   username: string,
   mailRef: string
+  // ---------Ngoai he thong---------
+  mailRef2: string,
+// ----------------------
   recruitmentId: string
   recruitmentName: string
   skill: string[],
@@ -325,8 +329,6 @@ export interface DetailProfileEntity {
   companyId: string,
   companyName: string,
 
-
- 
 
 }
 
@@ -382,7 +384,7 @@ export interface CommentEntity {
   content: string,
   createAt: string,
   createBy: string,
-  fullName:string,
+  fullName: string,
 }
 
 export interface UpdateCommentRequest {
@@ -404,7 +406,7 @@ export interface ProcessForm {
   idProfile?: string,
   recruitmentId?: string,
   statusCVId?: string,
-  username?:string,
+  username?: string,
 }
 
 export interface ChangeProcessRequest {

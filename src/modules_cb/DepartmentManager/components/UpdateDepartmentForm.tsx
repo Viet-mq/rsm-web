@@ -2,7 +2,7 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {showFormUpdate, updateDepartment} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Form, Input, Modal, TreeSelect} from "antd";
+import {Button, Form, Input, Modal} from "antd";
 import React, {FormEvent} from "react";
 import {UpdateDepartmentRequest} from "../types";
 
@@ -28,7 +28,7 @@ function UpdateDepartmentForm(props: UpdateDepartmentFormProps) {
   };
   const {getFieldDecorator, resetFields} = props.form;
   const formItemStyle = {height: '60px'};
-  const { showForm} = props.departmentManager
+  const {showForm} = props.departmentManager
 
   function onBtnUpdateClicked(e: FormEvent) {
     e.preventDefault();
@@ -52,11 +52,6 @@ function UpdateDepartmentForm(props: UpdateDepartmentFormProps) {
     resetFields();
     props.showFormUpdate(false);
   }
-
-  const filterTreeNode = (input: any, node: any) => {
-    const title = node.props.title;
-    return title.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-  };
 
   return (
 

@@ -1,7 +1,7 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {FormEvent, useRef, useState} from "react";
-import {Button, Col, Form, Icon, Input, Row, Tooltip} from "antd";
+import {Button, Col, Form, Input, Row, Tooltip} from "antd";
 import {FormComponentProps} from "antd/lib/form";
 
 import {Link} from "react-router-dom";
@@ -10,7 +10,7 @@ import {createEmail} from "../redux/actions";
 import ReactQuill from "react-quill";
 
 const mapStateToProps = (state: RootState) => ({
-  emailManager:state.emailManager
+  emailManager: state.emailManager
 })
 
 const connector = connect(mapStateToProps,
@@ -23,7 +23,7 @@ interface IProps extends ReduxProps, FormComponentProps {
 }
 
 function CreateEmailForm(props: IProps) {
-  const {keyPoint}=props.emailManager
+  const {keyPoint} = props.emailManager
   const {getFieldDecorator} = props.form;
   const [display, setDisplay] = useState(false)
   const [valueEditor, setValueEditor] = useState('')
@@ -63,8 +63,8 @@ function CreateEmailForm(props: IProps) {
   let reactQuillRef = useRef<any>()
 
 
-  function onButtonClick(val:any){
-    if(val){
+  function onButtonClick(val: any) {
+    if (val) {
       const range = reactQuillRef.current.getEditor()?.getSelection();
       let position = range ? range.index : 0;
       reactQuillRef.current?.getEditor()?.insertText(position, val)
@@ -176,10 +176,11 @@ function CreateEmailForm(props: IProps) {
             <div className="form-label mb-3">Biến mẫu</div>
           </div>
           <div style={{overflow: "auto", height: 610}}>
-            {keyPoint.rows.map((item:any)=>{
+            {keyPoint.rows.map((item: any) => {
               return <>
                 <Tooltip placement="top" title={item.description}>
-                  <div style={{marginBottom:5}}><Button style={{width:"100%"}} key={item.id} onClick={()=>onButtonClick(item.id)}>{item.id}</Button></div>
+                  <div style={{marginBottom: 5}}><Button style={{width: "100%"}} key={item.id}
+                                                         onClick={() => onButtonClick(item.id)}>{item.id}</Button></div>
                 </Tooltip>
               </>
 

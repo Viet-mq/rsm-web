@@ -34,12 +34,12 @@ interface IProps extends FormComponentProps, ReduxProps {
 
 function InterviewersForm(props: IProps) {
   const location = useLocation();
-  const {getFieldDecorator, resetFields} = props.form;
-  const fontWeightStyle = {fontWeight: 400};
-  const dateFormat = 'DD/MM/YYYY';
-  const timeFormat = 'HH:mm';
-  const formItemHeight = {height: 250}
-  const textEditorHeight = {height: 150}
+  // const {getFieldDecorator, resetFields} = props.form;
+  // const fontWeightStyle = {fontWeight: 400};
+  // const dateFormat = 'DD/MM/YYYY';
+  // const timeFormat = 'HH:mm';
+  // const formItemHeight = {height: 250}
+  // const textEditorHeight = {height: 150}
   const isEdit=location.pathname.includes("edit");
   const [visibleCandidate, setVisibleCandidate] = useState(false)
   const wrapperRef = useRef<any>(null);

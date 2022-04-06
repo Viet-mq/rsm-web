@@ -9,6 +9,7 @@ import env from "../../../configs/env";
 import {ColumnProps} from "antd/lib/table";
 import {ApiEntity} from "../../APIManager/types";
 import {emptyText} from "../../../configs/locales";
+import {formItemLayout} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = (state: RootState) => ({
   apiRolesManager: state.apiRolesManager,
@@ -23,21 +24,12 @@ interface UpdateAPIRolesFormProps extends FormComponentProps, ReduxProps {
 function UpdateAPIRolesForm(props: UpdateAPIRolesFormProps) {
   const {showForm} = props.apiRolesManager
   const {getFieldDecorator, resetFields} = props.form;
-  const formItemLayout = {
-    labelCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-    wrapperCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-  };
   const fontWeightStyle = {fontWeight: 400};
   let screenWidth = document.documentElement.clientWidth;
-  const [page, setPage] = useState(1);
+  // const [page, setPage] = useState(1);
+  const page=1
   const scroll = screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false};
-  const size = 10;
+  // const size = 10;
   const [selectedRowKeys, setSelectedRowKeys] = useState<any>([]);
   const columns: ColumnProps<ApiEntity>[] = [
     {

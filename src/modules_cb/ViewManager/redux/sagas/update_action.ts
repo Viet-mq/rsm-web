@@ -1,5 +1,5 @@
 import {
-  getDetailView,
+  getDetailView, getListView,
   showViewUpdateActionForm,
   updateActionError,
   updateActionSuccess,
@@ -23,7 +23,9 @@ export function* updateActionViewAsync(action: UpdateActionViewAction) {
       yield put(showViewUpdateActionForm(false));
       const params = yield select((state: RootState) => state.viewManager.list.params);
       const paramsDetail = yield select((state: RootState) => state.viewManager.detail.params);
+
       yield put(getDetailView(paramsDetail));
+      yield put(getListView(params));
     }
   } catch (e) {
     yield put(updateActionError(new AppError(e.message, -1)));

@@ -1,10 +1,11 @@
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Form, Input, Modal, Tree} from "antd";
-import React, {FormEvent, useEffect, useState} from "react";
+import {Button, Form, Input, Modal} from "antd";
+import React, {FormEvent} from "react";
 import {createCompany, showFormCreate} from "../redux/actions";
 import {CreateCompanyRequest} from "../types";
+import {formItemLayout} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = (state: RootState) => ({
   companyManager: state.companyManager,
@@ -20,17 +21,6 @@ interface CreateCompanyFormProps extends FormComponentProps, ReduxProps {
 function CreateCompanyForm(props: CreateCompanyFormProps) {
   const {showForm} = props.companyManager
   const {getFieldDecorator, resetFields} = props.form;
-  const formItemLayout = {
-    labelCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-    wrapperCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-  };
-  const fontWeightStyle = {fontWeight: 400};
 
   function onBtnCreateClicked(e: FormEvent) {
     e.preventDefault();
@@ -72,7 +62,7 @@ function CreateCompanyForm(props: CreateCompanyFormProps) {
       }}
       footer={""}>
 
-      <Form className="form-create" >
+      <Form className="form-create">
 
         <Form.Item label="Tên Công ty" className="form-label"  {...formItemLayout}>
           {getFieldDecorator('name', {

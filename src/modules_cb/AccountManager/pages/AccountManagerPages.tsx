@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import ListAccount from "../components/ListAccount";
-import {Button, Col, Icon, Row} from "antd";
+import {Col, Row} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {showFormCreate} from "../redux/actions";
@@ -9,7 +9,7 @@ import Loading from "../../../components/Loading";
 import UpdateAccountForm from "../components/UpdateAccountForm";
 import ChangePasswordAccountForm from "../components/ChangePasswordAccountForm";
 import ButtonCreate from "../../../components/ComponentUtils/ButtonCreate";
-import {account_path, view_role_path} from "../../../helpers/utilsFunc";
+import {account_path} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = ({
                            accountManager: {
@@ -61,7 +61,7 @@ function AccountManagerPages(props: IProps) {
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div>
-                <ButtonCreate path={account_path} action="create" name=" Tạo tài khoản"  handleClick={handleCreate}/>
+                <ButtonCreate path={account_path} action="create" name=" Tạo tài khoản" handleClick={handleCreate}/>
               </div>
             </div>
           </Col>

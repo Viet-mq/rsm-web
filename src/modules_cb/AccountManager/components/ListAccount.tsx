@@ -5,11 +5,11 @@ import {deleteAccount, getListAccount, showFormChangePassword, showFormUpdate} f
 import env from "../../../configs/env";
 import {ColumnProps} from "antd/lib/table";
 import moment from "moment";
-import {Button, Icon, Popconfirm, Table} from "antd";
+import {Button, Icon, Table} from "antd";
 import {emptyText} from "../../../configs/locales";
 import {DeleteAccountRequest, UserAccount} from "../types";
 import ButtonDelete from "../../../components/ComponentUtils/ButtonDelete";
-import {account_path, CheckViewAction, view_role_path} from "../../../helpers/utilsFunc";
+import {account_path, CheckViewAction} from "../../../helpers/utilsFunc";
 import ButtonUpdate from "../../../components/ComponentUtils/ButtonUpdate";
 
 const mapStateToProps = ({accountManager: {list}}: RootState) => ({list})
@@ -75,8 +75,10 @@ function ListAccount(props: IProps) {
       title: 'STT',
       key: 'index',
       width: 40,
-      align:"center",
-      render: (text, record, index) =>  {return (page - 1) * 10 + index + 1}
+      align: "center",
+      render: (text, record, index) => {
+        return (page - 1) * 10 + index + 1
+      }
     },
     {
       title: 'Tên đăng nhập',
@@ -104,16 +106,10 @@ function ListAccount(props: IProps) {
     },
     {
       title: 'Role',
-      dataIndex: 'role',
+      dataIndex: 'roles',
       sorter: true,
       width: 80,
-      render: (value: number) => {
-        if (value === 1) {
-          return 'User'
-        } else {
-          return 'Admin'
-        }
-      },
+      render: (value: any) => value?.map((item: any) => item.name),
     },
     {
       title: 'Trạng thái',
@@ -159,7 +155,8 @@ function ListAccount(props: IProps) {
       render: (_text: string, record: UserAccount) => {
         return (
           <div style={{whiteSpace: 'nowrap'}}>
-            <ButtonDelete path={account_path} message="tài khoản" action="delete" handleClick={(event) => handleDelete(event, record)}/>
+            <ButtonDelete path={account_path} message="tài khoản" action="delete"
+                          handleClick={(event) => handleDelete(event, record)}/>
             <ButtonUpdate path={account_path} action="update" handleClick={(event) => handleEdit(event, record)}/>
 
             {CheckViewAction(account_path, "change-password")

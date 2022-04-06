@@ -5,6 +5,7 @@ import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Input, Modal, Tree} from "antd";
 import React, {FormEvent, useEffect, useState} from "react";
 import {DepartmentRequest, UpdateCompanyRequest} from "../types";
+import {formItemLayout} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = (state: RootState) => ({
   companyManager: state.companyManager,
@@ -20,19 +21,9 @@ interface UpdateCompanyFormProps extends FormComponentProps, ReduxProps {
 function UpdateCompanyForm(props: UpdateCompanyFormProps) {
   const {showForm} = props.companyManager
   const {getFieldDecorator, resetFields} = props.form;
-  const formItemLayout = {
-    labelCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-    wrapperCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-  };
   const fontWeightStyle = {fontWeight: 400};
   const [department, setDepartment] = useState<any>([]);
-  const [departmentChecked, setDepartmentChecked] = useState<DepartmentRequest[]>([]);
+  // const [departmentChecked, setDepartmentChecked] = useState<DepartmentRequest[]>([]);
   const [listChecked, setListChecked] = useState([]);
 
   useEffect(() => {

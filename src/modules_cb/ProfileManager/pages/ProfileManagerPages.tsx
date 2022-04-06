@@ -11,6 +11,8 @@ import {exportExcelFile} from "../redux/services/apis";
 import {useLocation, useParams} from "react-router-dom";
 import {getDetailTalentPool} from "../../TalentPoolManager/redux/actions";
 import {RecruitmentTalentPool} from "../types";
+import ButtonCreate from "../../../components/ComponentUtils/ButtonCreate";
+import {profile_path} from "../../../helpers/utilsFunc";
 
 
 const mapStateToProps = (state: RootState) => {
@@ -93,12 +95,12 @@ function ProfileManagerPages(props: IProps) {
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div style={{display: "flex", flexWrap: "nowrap"}}>
-                <Button onClick={handleCreate}>
-                  <Icon type="plus"/> Thêm ứng viên
-                </Button>
+                <ButtonCreate path={profile_path} action="create" name=" Thêm ứng viên" handleClick={handleCreate}/>
+
                 <Button onClick={event => handleUploadListCV(event)}>
                   <Icon type="upload"/> Upload DS ứng viên
                 </Button>
+
                 <Button>
                   <a onClick={BtnExportExcel}><Icon type="export"/> Xuất Excel</a>
                 </Button>

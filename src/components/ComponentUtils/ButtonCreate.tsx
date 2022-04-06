@@ -21,6 +21,7 @@ const ButtonCreate = (props: ButtonCreateProps) => {
                 onClick={handleClick}
                 type={type}
                 size={size}
+                style={size?{height:"inherit"}:{height:32}}
         >
           <Icon type="plus"/>{name}
         </Button>

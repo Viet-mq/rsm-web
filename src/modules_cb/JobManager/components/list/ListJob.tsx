@@ -3,18 +3,12 @@ import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import env from "src/configs/env";
 import {ColumnProps} from "antd/lib/table";
-import {Button, Icon, Popconfirm, Table} from "antd";
+import {Table} from "antd";
 import {emptyText} from "src/configs/locales";
-import {
-  deleteJob,
-  getListJob,
-  showFormCreate,
-  showFormUpdate,
-  updateJob
-} from "../../redux/actions";
-import {JobEntity, DeleteJobRequest} from "../../types";
+import {deleteJob, getListJob, showFormCreate, showFormUpdate, updateJob} from "../../redux/actions";
+import {DeleteJobRequest, JobEntity} from "../../types";
 import ButtonDelete from "../../../../components/ComponentUtils/ButtonDelete";
-import {api_path, job_path} from "../../../../helpers/utilsFunc";
+import {job_path} from "../../../../helpers/utilsFunc";
 import ButtonUpdate from "../../../../components/ComponentUtils/ButtonUpdate";
 
 const mapStateToProps = ({jobManager: {list}}: RootState) => ({list})
@@ -60,8 +54,10 @@ function ListJob(props: IProps) {
       title: 'STT',
       key: 'index',
       width: 40,
-      align:"center",
-      render: (text, record, index) =>  {return (page - 1) * 10 + index + 1}
+      align: "center",
+      render: (text, record, index) => {
+        return (page - 1) * 10 + index + 1
+      }
     },
     {
       title: 'Name',
@@ -78,7 +74,8 @@ function ListJob(props: IProps) {
       render: (_text: string, record: JobEntity) => {
         return (
           <div style={{whiteSpace: 'nowrap'}}>
-            <ButtonDelete path={job_path} message="vị trí công việc" action="delete" handleClick={(event) => handleDelete(event, record)}/>
+            <ButtonDelete path={job_path} message="vị trí công việc" action="delete"
+                          handleClick={(event) => handleDelete(event, record)}/>
             <ButtonUpdate path={job_path} action="update" handleClick={(event) => handleEdit(event, record)}/>
 
           </div>

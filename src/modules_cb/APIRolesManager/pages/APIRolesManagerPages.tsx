@@ -8,7 +8,7 @@ import CreateAPIRolesForm from "../components/CreateAPIRolesForm";
 import Loading from "../../../components/Loading";
 import UpdateAPIRolesForm from "../components/UpdateAPIRolesForm";
 import ButtonCreate from "../../../components/ComponentUtils/ButtonCreate";
-import {api_path, api_roles_path} from "../../../helpers/utilsFunc";
+import {api_roles_path} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = ({
                            apiRolesManager: {

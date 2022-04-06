@@ -2,7 +2,7 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import {ColumnProps} from "antd/lib/table";
-import {Avatar, Badge, Button, DatePicker, Icon, Popconfirm, Select, Table, Tooltip, TreeSelect} from "antd";
+import {Avatar, Badge, Button, DatePicker, Icon, Select, Table, Tooltip, TreeSelect} from "antd";
 import {emptyText} from "src/configs/locales";
 import {
   deleteProfile,
@@ -13,7 +13,7 @@ import {
   showFormUpdate,
   showFormUploadCV
 } from "../../redux/actions";
-import {DeleteProfileRequest, DetailCV, ProfileEntity} from "../../types";
+import {DataShowBooking, DeleteProfileRequest, DetailCV, ProfileEntity} from "../../types";
 import moment from 'moment';
 import 'moment/locale/vi';
 import {GiFemale, GiMale, ImPhoneHangUp} from "react-icons/all";
@@ -35,7 +35,9 @@ import {getSearchRecruitment} from "../../../RecruitmentManager/redux/actions";
 import {getSearchSourceCV} from "../../../SourceCVManager/redux/actions";
 import {UserAccount} from "../../../AccountManager/types";
 import {getSearchAccount} from "../../../AccountManager/redux/actions";
-import {convertArrayToTree, getInitials} from "../../../../helpers/utilsFunc";
+import {convertArrayToTree, getInitials, profile_path} from "../../../../helpers/utilsFunc";
+import ButtonDelete from "../../../../components/ComponentUtils/ButtonDelete";
+import ButtonUpdate from "../../../../components/ComponentUtils/ButtonUpdate";
 
 const {Option} = Select;
 const {RangePicker} = DatePicker;
@@ -243,29 +245,29 @@ function ListProfile(props: ListProfileProps) {
       sortOrder: state.sortedInfo.columnKey === 'talentPoolName' && state.sortedInfo.order,
       ellipsis: true,
     },
-    {
-      title: 'Người giới thiệu',
-      dataIndex: 'hrRef',
-      width: 180,
-      key: 'hrRef',
-      render: (text: string, record: ProfileEntity) => {
-        return <div>
-          <div style={{display: 'flex', alignItems: 'center'}}>
-            <span style={{fontWeight: 500}}>{record.hrRef}</span>
-          </div>
-          <div>
-            <span style={{color: "#B2B2B2"}}>{record.mailRef}</span>
-          </div>
-        </div>
-      }
-    },
-
-    {
-      title: 'Email người giới thiệu(Ngoài hệ thống)',
-      dataIndex: 'mailRef2',
-      width: 180,
-      key: 'mailRef2',
-    },
+    // {
+    //   title: 'Người giới thiệu',
+    //   dataIndex: 'hrRef',
+    //   width: 180,
+    //   key: 'hrRef',
+    //   render: (text: string, record: ProfileEntity) => {
+    //     return <div>
+    //       <div style={{display: 'flex', alignItems: 'center'}}>
+    //         <span style={{fontWeight: 500}}>{record.hrRef}</span>
+    //       </div>
+    //       <div>
+    //         <span style={{color: "#B2B2B2"}}>{record.mailRef}</span>
+    //       </div>
+    //     </div>
+    //   }
+    // },
+    //
+    // {
+    //   title: 'Email người giới thiệu(Ngoài hệ thống)',
+    //   dataIndex: 'mailRef2',
+    //   width: 180,
+    //   key: 'mailRef2',
+    // },
 
     {
       title: 'PIC',
@@ -305,60 +307,36 @@ function ListProfile(props: ListProfileProps) {
         return moment(unixTimeToDate(value)).format('DD/MM/YYYY');
       },
     },
-    {
-      title: 'Quê quán',
-      dataIndex: 'hometown',
-      width: 200,
-      key: '4',
-      ellipsis: true
-
-    },
-    {
-      title: 'Trường học',
-      dataIndex: 'schoolName',
-      width: 200,
-      key: '5',
-      ellipsis: true
-    },
+    // {
+    //   title: 'Quê quán',
+    //   dataIndex: 'hometown',
+    //   width: 200,
+    //   key: '4',
+    //   ellipsis: true
+    //
+    // },
+    // {
+    //   title: 'Trường học',
+    //   dataIndex: 'schoolName',
+    //   width: 200,
+    //   key: '5',
+    //   ellipsis: true
+    // },
     {
       title: () => {
         return <div style={{whiteSpace: 'nowrap'}}>Thao tác</div>;
       },
       dataIndex: 'action',
-      width: 130,
-      // fixed: 'right',
+      width: 170,
+      align: "center",
+      fixed: 'right',
       render: (_text: string, record: ProfileEntity) => {
         return (
           <div style={{whiteSpace: 'nowrap'}}>
-            <Popconfirm
-              title="Bạn muốn xóa Profile này chứ ?"
-              okText="Xóa"
-              onCancel={event => {
-                event?.stopPropagation();
-              }}
-              onConfirm={event => handleDelete(event, record)}
-            >
-              <Tooltip placement="top" title="Xóa">
-                <Button
-                  size="small"
-                  className="ant-btn ml-1 mr-1 ant-btn-sm"
-                  onClick={event => {
-                    event.stopPropagation();
-                  }}
-                >
-                  <Icon type="delete" theme="filled"/>
-                </Button>
-              </Tooltip>
+            <ButtonDelete path={profile_path} message="ứng viên" action="delete"
+                          handleClick={(event) => handleDelete(event, record)}/>
+            <ButtonUpdate path={profile_path} action="update" handleClick={(event) => handleEdit(event, record)}/>
 
-            </Popconfirm>
-
-            <Tooltip placement="top" title="Sửa">
-              <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
-                      onClick={event => handleEdit(event, record)}
-              >
-                <Icon type="edit"/>
-              </Button>
-            </Tooltip>
 
             <Tooltip placement="top" title="Upload CV">
               <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
@@ -369,13 +347,13 @@ function ListProfile(props: ListProfileProps) {
             </Tooltip>
 
 
-            {/*<Tooltip placement="top" title="Lịch phỏng vấn">*/}
-            {/*  <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"*/}
-            {/*          onClick={event => handleBooking(event, record)}*/}
-            {/*  >*/}
-            {/*    <Icon type="calendar"/>*/}
-            {/*  </Button>*/}
-            {/*</Tooltip>*/}
+            <Tooltip placement="top" title="Lịch phỏng vấn">
+              <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
+                      onClick={event => handleBooking(event, record)}
+              >
+                <Icon type="calendar"/>
+              </Button>
+            </Tooltip>
           </div>
         );
       },
@@ -411,6 +389,7 @@ function ListProfile(props: ListProfileProps) {
   const [recruitment, setRecruitment] = useState<RecruitmentEntity[]>([]);
   const [talentPool, setTalentPool] = useState<JobEntity[]>([]);
   const [account, setAccount] = useState<UserAccount[] | any>([]);
+  const arrayUrl = ['/talent-pool-manager', '/profile-manager', '/recruitment-manager']
 
   const [trigger, setTrigger] = useState({
     job: false,
@@ -430,48 +409,7 @@ function ListProfile(props: ListProfileProps) {
   }, [selected])
 
   useEffect(() => {
-    if (pathname.includes("recruitment-manager")) props.getListProfile({
-      recruitment: props.idRecruitment,
-      statusCV: props.idProcess,
-      page: page,
-      size: 30
-    });
-    else if (pathname.includes("talent-pool-manager")) {
-      props.getListProfile({
-        talentPool: props.idTalentPool,
-        page: page,
-        size: 30
-      });
-      props.getDetailTalentPool({id: props.idTalentPool})
-
-    } else if (
-      selected.fullName ||
-      selected.job ||
-      selected.jobLevel ||
-      selected.department ||
-      selected.talentPool ||
-      selected.recruitment ||
-      selected.hrRef ||
-      selected.pic ||
-      selected.from ||
-      selected.to) {
-      props.getListProfile({
-        fullName: selected.name,
-        job: selected.job,
-        jobLevel: selected.jobLevel,
-        department: selected.department,
-        talentPool: selected.talentPool,
-        recruitment: selected.recruitment,
-        hrRef: selected.hrRef,
-        pic: selected.pic,
-        from: selected.startDateRange ? selected.startDateRange * 1 : undefined,
-        to: selected.endDateRange ? selected.endDateRange * 1 : undefined,
-        page: page,
-        size: 30,
-      })
-    } else {
-      props.getListProfile({page: page, size: 30});
-    }
+    btnSearchClicked()
   }, [page, pathname])
 
   useEffect(() => {
@@ -522,9 +460,28 @@ function ListProfile(props: ListProfileProps) {
 
       startDateRange: undefined,
       endDateRange: undefined,
-    });
+    })
+    if (pathname.includes("talent-pool-manager")) {
+      let req = {
+        talentPool: props.idTalentPool,
+        page: 1,
+        size: 30
+      }
 
-    props.getListProfile({page: 1, size: 30});
+      props.getListProfile(req);
+      props.getDetailTalentPool({id: props.idTalentPool})
+    } else if (pathname.includes("recruitment-manager")) {
+      let req = {
+        recruitment: props.idRecruitment,
+        statusCV: props.idProcess,
+        page: 1,
+        size: 30
+      }
+
+      props.getListProfile(req);
+
+    } else props.getListProfile({page: 1, size: 30})
+
   };
 
   function unixTimeToDate(unixTime: number): Date {
@@ -545,16 +502,16 @@ function ListProfile(props: ListProfileProps) {
   const handleEdit = (event: any, entity: ProfileEntity) => {
     props.showFormUpdate(true, entity);
   }
-  //
-  // const handleBooking = (event: any, entity: ProfileEntity) => {
-  //   let req: DataShowBooking = {
-  //     id: entity.id,
-  //     fullName: entity.fullName,
-  //     idRecruitment: entity.recruitmentId,
-  //     username: entity.username,
-  //   }
-  //   props.showFormBooking(true, req);
-  // }
+
+  const handleBooking = (event: any, entity: ProfileEntity) => {
+    let req: DataShowBooking = {
+      id: entity.id,
+      fullName: entity.fullName,
+      idRecruitment: entity.recruitmentId,
+      username: entity.username,
+    }
+    props.showFormBooking(true, req);
+  }
 
   const handleUploadCV = (e: any, entity: ProfileEntity) => {
     props.showFormUploadCV(true, entity.id);
@@ -580,25 +537,45 @@ function ListProfile(props: ListProfileProps) {
     });
     props.resetSearch({key: ""})
     setKeySearch("")
-    props.getListProfile({page: 1, size: 100});
+    if (pathname.includes("talent-pool-manager")) {
+      let req = {
+        talentPool: props.idTalentPool,
+        page: 1,
+        size: 30
+      }
+      req.talentPool = props.idTalentPool
+      props.getListProfile(req);
+      props.getDetailTalentPool({id: props.idTalentPool})
+
+    } else props.getListProfile({page: 1, size: 30})
   }
 
   function btnSearchClicked() {
+    const req: any = {}
+    if (selected.name) req.fullName = encodeURI(selected.name);
+    if (selected.job) req.job = selected.job
+    if (selected.jobLevel) req.jobLevel = selected.jobLevel
+    if (selected.department) req.department = selected.department
+    if (selected.talentPool) req.talentPool = selected.talentPool
+    if (selected.recruitment) req.recruitment = selected.recruitment
+    if (selected.hrRef) req.hrRef = selected.hrRef
+    if (selected.pic) req.pic = selected.pic
+    if (selected.startDateRange) req.from = selected.startDateRange * 1
+    if (selected.endDateRange) req.to = selected.endDateRange * 1
+    req.page = page;
+    req.size = 30;
 
-    const req:any={}
-    if(selected.name) req.fullName=encodeURI(selected.name);
-    if(selected.job) req.job=selected.job
-    if(selected.jobLevel) req.jobLevel=selected.jobLevel
-    if(selected.department) req.department=selected.department
-    if(selected.talentPool) req.talentPool=selected.talentPool
-    if(selected.recruitment) req.recruitment=selected.recruitment
-    if(selected.hrRef) req.hrRef=selected.hrRef
-    if(selected.startDateRange) req.from=selected.startDateRange * 1
-    if(selected.endDateRange) req.to=selected.endDateRange * 1
-    req.page=1;
-    req.size=30;
+    if (pathname.includes("talent-pool-manager")) {
+      req.talentPool = props.idTalentPool
+      props.getListProfile(req);
+      props.getDetailTalentPool({id: props.idTalentPool})
 
-    props.getListProfile(req)
+    } else if (pathname.includes("recruitment-manager")) {
+      req.recruitment = props.idRecruitment
+      req.statusCV = props.idProcess
+      props.getListProfile(req);
+
+    } else props.getListProfile(req)
   }
 
   function onSearchJob(value: any) {
@@ -662,14 +639,14 @@ function ListProfile(props: ListProfileProps) {
     setSelected({...selected, department: value})
   };
 
-  const filterTreeNode = (input:any,node: any) => {
+  const filterTreeNode = (input: any, node: any) => {
     const title = node.props.title;
     return title.toLowerCase().indexOf(input.toLowerCase()) >= 0;
   };
 
   return (
     <>
-      {pathname === '/profile-manager' ? (
+      {arrayUrl.some((item: any) => pathname.includes(item)) ? (
         <>
           <div>
             {keySearch ?
@@ -737,17 +714,6 @@ function ListProfile(props: ListProfileProps) {
                 ))}
               </Select>
 
-              {/*<TreeSelect getPopupContainer={(trigger: any) => trigger.parentNode}*/}
-              {/*            className="bg-white text-black form-label"*/}
-              {/*            style={{...width, ...fontWeightStyle}}*/}
-              {/*            value={selected.department ? selected.department : undefined}*/}
-              {/*            dropdownStyle={{maxHeight: 400, overflow: 'auto'}}*/}
-              {/*            treeData={treeData}*/}
-              {/*            placeholder="Phòng ban"*/}
-              {/*            treeDefaultExpandAll*/}
-              {/*            onChange={(value: any) => setSelected({...selected, department: value})}*/}
-              {/*/>*/}
-
               <TreeSelect
                 style={{...width, ...fontWeightStyle}}
                 showSearch
@@ -771,43 +737,53 @@ function ListProfile(props: ListProfileProps) {
 
               </TreeSelect>
 
-              <Select getPopupContainer={(trigger: any) => trigger.parentNode}
-                      className="bg-white text-black form-label"
-                      style={{...width, ...fontWeightStyle}}
-                      value={selected.recruitment ? selected.recruitment : undefined}
-                      onChange={(value: any) => setSelected({...selected, recruitment: value})}
-                      placeholder="Tin tuyển dụng"
-                      onSearch={onSearchRecruitment}
-                      onFocus={onFocusRecruitment}
-                      filterOption={(input, option: any) =>
-                        option.props.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                      }
-                      optionFilterProp="label"
-                      showSearch
-              >
-                {recruitment.map((item: any, index: any) => (
-                  <Option key={index} value={item.id} label={item.title}>[{item.departmentName}] {item.title}</Option>
-                ))}
-              </Select>
+              {pathname.includes("recruitment-manager") ?
+                null
+                :
+                <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                        className="bg-white text-black form-label"
+                        style={{...width, ...fontWeightStyle}}
+                        value={selected.recruitment ? selected.recruitment : undefined}
+                        onChange={(value: any) => setSelected({...selected, recruitment: value})}
+                        placeholder="Tin tuyển dụng"
+                        onSearch={onSearchRecruitment}
+                        onFocus={onFocusRecruitment}
+                        filterOption={(input, option: any) =>
+                          option.props.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
+                        optionFilterProp="label"
+                        showSearch
+                >
+                  {recruitment.map((item: any, index: any) => (
+                    <Option key={index} value={item.id} label={item.title}>[{item.departmentName}] {item.title}</Option>
+                  ))}
+                </Select>
+              }
 
-              <Select getPopupContainer={(trigger: any) => trigger.parentNode}
-                      value={selected.talentPool ? selected.talentPool : undefined}
-                      onChange={(value: any) => setSelected({...selected, talentPool: value})}
-                      placeholder="Talent Pools"
-                      onSearch={onSearchTalentPool}
-                      onFocus={onFocusTalentPool}
-                      className="bg-white text-black form-label"
-                      style={{...width, ...fontWeightStyle}}
-                      filterOption={(input, option: any) =>
-                        option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                      }
-                      optionFilterProp="children"
-                      showSearch
-              >
-                {talentPool.map((item: any, index: any) => (
-                  <Option key={index} value={item.id}>{item.name}</Option>
-                ))}
-              </Select>
+
+              {pathname.includes("talent-pool-manager") ?
+                null
+                :
+                <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                        value={selected.talentPool ? selected.talentPool : undefined}
+                        onChange={(value: any) => setSelected({...selected, talentPool: value})}
+                        placeholder="Talent Pools"
+                        onSearch={onSearchTalentPool}
+                        onFocus={onFocusTalentPool}
+                        className="bg-white text-black form-label"
+                        style={{...width, ...fontWeightStyle}}
+                        filterOption={(input, option: any) =>
+                          option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        }
+                        optionFilterProp="children"
+                        showSearch
+                >
+                  {talentPool.map((item: any, index: any) => (
+                    <Option key={index} value={item.id}>{item.name}</Option>
+                  ))}
+                </Select>
+              }
+
 
               <Select getPopupContainer={(trigger: any) => trigger.parentNode}
                       onSearch={onSearchAccount}

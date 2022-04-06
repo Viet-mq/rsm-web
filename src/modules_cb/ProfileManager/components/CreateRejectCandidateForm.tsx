@@ -12,8 +12,8 @@ import CreateReasonRejectForm from "../../ReasonRejectManager/components/CreateR
 import Loading from "../../../components/Loading";
 import {EmailEntity} from "../../EmailManager/types";
 import {getListEmail, searchListEmail} from "../../EmailManager/redux/actions";
-import {JobEntity} from "../../JobManager/types";
 import {ReasonRejectEntity} from "../../ReasonRejectManager/types";
+import {formItemLayout} from "../../../helpers/utilsFunc";
 
 const {Option} = Select;
 const {TextArea} = Input;
@@ -45,16 +45,6 @@ function CreateRejectCandidateForm(props: IProps) {
   const {getFieldDecorator, resetFields} = props.form;
   const fontWeightStyle = {fontWeight: 400};
   const [display, setDisplay] = useState(false)
-  const formItemLayout = {
-    labelCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-    wrapperCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-  };
   const [valueEditor, setValueEditor] = useState("")
   const modules = {
     toolbar: [
@@ -117,7 +107,7 @@ function CreateRejectCandidateForm(props: IProps) {
       if (!err) {
         let rejectForm: CreateRejectForm = {
           idProfile: detail?.params.idProfile,
-          reason: otherReason?values.otherReason:values.reason,
+          reason: otherReason ? values.otherReason : values.reason,
           recruitmentId: detail?.result?.recruitmentId,
         }
 
@@ -193,6 +183,7 @@ function CreateRejectCandidateForm(props: IProps) {
   function onFocusEmail() {
     setEmailTemp(props.listEmail.rows)
   }
+
   return (
     <>
       <Modal

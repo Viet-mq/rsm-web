@@ -3,7 +3,8 @@ export interface TalentPoolEntity{
   name: string,
   description: string,
   numberOfProfile: number,
-  managers: string[]
+  managers: string[],
+  total:number
 }
 
 export interface CreateTalentPoolRequest{

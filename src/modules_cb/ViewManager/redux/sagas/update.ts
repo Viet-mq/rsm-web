@@ -1,10 +1,4 @@
-import {
-  CreateViewAction,
-  getListView,
-  showViewUpdateForm,
-  updateViewError,
-  updateViewSuccess
-} from "../actions";
+import {CreateViewAction, getListView, updateViewError, updateViewSuccess} from "../actions";
 import * as apis from "../services/apis";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
 import {put, select} from "redux-saga/effects";

@@ -8,7 +8,7 @@ import {emptyText} from "src/configs/locales";
 import {deleteCompany, getListCompany, showFormCreate, showFormUpdate, updateCompany} from "../../redux/actions";
 import {CompanyEntity, DeleteCompanyRequest} from "../../types";
 import ButtonDelete from "../../../../components/ComponentUtils/ButtonDelete";
-import {api_path, company_path} from "../../../../helpers/utilsFunc";
+import {company_path} from "../../../../helpers/utilsFunc";
 import ButtonUpdate from "../../../../components/ComponentUtils/ButtonUpdate";
 
 const mapStateToProps = ({companyManager}: RootState) => ({companyManager});

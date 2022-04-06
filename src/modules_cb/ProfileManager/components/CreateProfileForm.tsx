@@ -26,9 +26,10 @@ import {SourceCVEntity} from "../../SourceCVManager/types";
 import {SchoolEntity} from "../../SchoolManager/types";
 import {getSearchAccount} from "../../AccountManager/redux/actions";
 import {UserAccount} from "../../AccountManager/types";
-import {convertArrayToTree, getInitials} from "../../../helpers/utilsFunc";
+import {formItemLayout, getInitials} from "../../../helpers/utilsFunc";
 
 const {Option} = Select;
+const {TreeNode} = TreeSelect;
 
 const mapStateToProps = (state: RootState) => ({
   profileManager: state.profileManager,
@@ -75,18 +76,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
   const {showForm} = props.profileManager
   const {getFieldDecorator, resetFields} = props.form;
   const fontWeightStyle = {fontWeight: 400};
-  const formItemLayout = {
-    labelCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-    wrapperCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-  };
   const dateFormat = 'DD/MM/YYYY';
-  const [treeData, setTreeData] = useState([])
   const [job, setJob] = useState<JobEntity[]>([]);
   const [jobLevel, setJobLevel] = useState<JobLevelEntity[]>([]);
   const [department, setDepartment] = useState<DepartmentEntity[]>([]);
@@ -108,11 +98,6 @@ function CreateProfileForm(props: CreateProfileFormProps) {
     setDepartment(props.listDepartment.rows)
     setSchool(props.listSchool.rows)
   }, [])
-
-  useEffect(() => {
-    setTreeData(convertArrayToTree(props.listDepartment.rows))
-  }, [props.listDepartment.rows])
-
 
   const setColor = () => {
     const randomColor: string = Math.floor(Math.random() * 16777215).toString(16);
@@ -266,6 +251,10 @@ function CreateProfileForm(props: CreateProfileFormProps) {
     setAccount(props.listAccount.rows)
   }
 
+  const filterTreeNode = (input: any, node: any) => {
+    const title = node.props.title;
+    return title.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+  };
 
   return (
     <div>
@@ -285,8 +274,8 @@ function CreateProfileForm(props: CreateProfileFormProps) {
         }}
         footer={""}>
 
-        <Form className="form-create" style={{width:526}}>
-          <div className="modal-overflow" style={{paddingRight:15}}>
+        <Form className="form-create" style={{width: 526}}>
+          <div className="modal-overflow" style={{paddingRight: 15}}>
             <Form.Item label="Họ Tên" className="form-label"  {...formItemLayout}>
               {getFieldDecorator('fullName', {
                 initialValue: '',
@@ -734,14 +723,26 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                     },
                   ],
                 })(
-                  <TreeSelect getPopupContainer={(trigger: any) => trigger.parentNode}
-                              className="bg-white text-black"
-                              dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
-                              treeData={treeData}
-                              style={fontWeightStyle}
-                              placeholder="Chọn bộ phận, phòng ban"
-                              treeDefaultExpandAll
-                  />
+                  <TreeSelect
+                    showSearch
+                    allowClear
+                    dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
+                    getPopupContainer={(trigger: any) => trigger.parentNode}
+                    filterTreeNode={filterTreeNode}
+                    placeholder="Phòng ban"
+                    className="bg-white text-black"
+                    style={fontWeightStyle}
+                  >
+                    {props.listDepartment.rows?.map((item: any) => (
+                      <TreeNode style={fontWeightStyle} value={item.id} title={item.name} key={item.id}>
+                        {item.children ? item.children.map((el: any) => (
+                          <TreeNode style={fontWeightStyle} value={el.id} key={el.id} title={el.name}/>
+                        )) : null}
+                      </TreeNode>
+
+                    ))}
+
+                  </TreeSelect>
                 )}
                 <Button
                   size="small"
@@ -864,7 +865,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
             </Form.Item>
 
           </div>
-          <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px', textAlign: "right"}} colon={false}>
+          <Form.Item label=" " style={{marginRight:20, textAlign: "right"}} colon={false}>
             <Button className="mr-3 create-btn" htmlType="submit" onClick={onBtnCreateClicked}>
               Tạo mới
             </Button>

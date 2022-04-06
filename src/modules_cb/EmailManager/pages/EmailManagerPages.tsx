@@ -1,6 +1,5 @@
 import React, {useEffect} from "react";
 import ListEmail from "../components/list/ListEmail";
-import {Button, Icon} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import Loading from "../../../components/Loading";
@@ -38,7 +37,7 @@ function EmailManagerPages(props: IProps) {
       <div className="flex-space-between">
         <div className="font-20-bold-500">Mẫu Email</div>
         <Link to={`/email-manager/create`}>
-          <ButtonCreate path={email_path} action="create" name=" THÊM MẪU EMAIL MỚI" />
+          <ButtonCreate path={email_path} action="create" name=" THÊM MẪU EMAIL MỚI"/>
 
         </Link>
       </div>

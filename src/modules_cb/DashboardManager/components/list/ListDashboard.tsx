@@ -65,13 +65,6 @@ function ListDashboard(props: IProps) {
     pageRecruitmentResult: 10,
     pageDepartment: 10,
   };
-  const [state, setState] = useState<any>({
-    filteredInfo: null,
-    sortedInfo: {
-      order: null,
-      columnKey: null,
-    },
-  });
 
   const columnsDepartment: ColumnProps<DepartmentReportEntity>[] = [
     {

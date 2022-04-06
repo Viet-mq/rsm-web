@@ -1,4 +1,4 @@
-import {ActionView, UpdateActionToViewRequest, ViewEntity} from "../../types";
+import {UpdateActionToViewRequest, ViewEntity} from "../../types";
 
 export interface ShowViewFormAction {
   type: string,
@@ -7,8 +7,8 @@ export interface ShowViewFormAction {
   show_add_action?: boolean,
   show_update_action?: boolean,
   view?: ViewEntity,
-  id_view?:string,
-  actions?:UpdateActionToViewRequest,
+  id_view?: string,
+  actions?: UpdateActionToViewRequest,
 }
 
 export const SHOW_VIEW_CREATE_FORM = "SHOW_VIEW_CREATE_FORM";
@@ -30,7 +30,7 @@ export const showViewUpdateForm = (show_update: boolean, view?: ViewEntity): Sho
 export const showViewAddActionForm = (show_add_action: boolean, idView?: string): ShowViewFormAction => ({
   type: SHOW_VIEW_ADD_ACTION_FORM,
   show_add_action,
-  id_view:idView
+  id_view: idView
 });
 
 export const showViewUpdateActionForm = (show_update_action: boolean, actions?: UpdateActionToViewRequest): ShowViewFormAction => ({

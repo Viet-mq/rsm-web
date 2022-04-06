@@ -59,7 +59,6 @@ function CreateDepartmentForm(props: CreateDepartmentFormProps) {
   }
 
   function onChange(value: any) {
-    console.log(value);
     setValueSelect(value)
   };
 

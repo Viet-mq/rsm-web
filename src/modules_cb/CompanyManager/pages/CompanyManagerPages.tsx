@@ -8,7 +8,7 @@ import CreateCompanyForm from "../components/CreateCompanyForm";
 import Loading from "../../../components/Loading";
 import UpdateCompanyForm from "../components/UpdateCompanyForm";
 import ButtonCreate from "../../../components/ComponentUtils/ButtonCreate";
-import {api_path, company_path} from "../../../helpers/utilsFunc";
+import {company_path} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = ({
                            companyManager: {

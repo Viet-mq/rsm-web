@@ -1,7 +1,7 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {useState} from "react";
-import {Popconfirm, Popover, Select} from "antd";
+import {Popconfirm, Popover} from "antd";
 import {
   checkInformationValidate,
   deleteRecruitment,
@@ -15,7 +15,6 @@ import {RecruitmentEntity} from "../../types";
 import moment from "moment";
 import 'moment/locale/vi';
 
-const {Option} = Select;
 const mapStateToProps = (state: RootState) => ({
   jobManager: state.recruitmentManager.list
 })
@@ -37,7 +36,7 @@ function ListRecruitment(props: IProps) {
 
   const [visiblePopover, setVisiblePopover] = useState<boolean>(false);
   const dateFormat = 'DD/MM/YYYY';
-  const timeFormat = 'HH:mm';
+  // const timeFormat = 'HH:mm';
   const content = (<ul style={{width: 160}} className="popup-popover">
     <li><Link to={`/recruitment-manager/edit`} onClick={btnEditClicked}>Sửa tin</Link></li>
     <li><Link
@@ -112,17 +111,17 @@ function ListRecruitment(props: IProps) {
             </div>
           </div>
           <div>
-          <Select getPopupContainer={(trigger:any) => trigger.parentNode} defaultValue="create"
+            {/*<Select getPopupContainer={(trigger:any) => trigger.parentNode} defaultValue="create"*/}
 
-                    style={{
-                      fontWeight: 600,
-                      width: 150,
-                    }}>
-              <Option value="join">Công khai</Option>
-              <Option value="create">Nội bộ</Option>
-              <Option value="all">Ngưng nhận hồ sơ</Option>
-              <Option value="close">Đóng</Option>
-            </Select>
+            {/*          style={{*/}
+            {/*            fontWeight: 600,*/}
+            {/*            width: 150,*/}
+            {/*          }}>*/}
+            {/*    <Option value="join">Công khai</Option>*/}
+            {/*    <Option value="create">Nội bộ</Option>*/}
+            {/*    <Option value="all">Ngưng nhận hồ sơ</Option>*/}
+            {/*    <Option value="close">Đóng</Option>*/}
+            {/*  </Select>*/}
 
             <Popover
               onVisibleChange={handleVisibleChange}

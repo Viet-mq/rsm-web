@@ -3,12 +3,12 @@ import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import env from "src/configs/env";
 import {ColumnProps} from "antd/lib/table";
-import {Button, Icon, Popconfirm, Table} from "antd";
+import {Table} from "antd";
 import {emptyText} from "src/configs/locales";
 import {deleteApi, getListApi, showFormUpdateApi} from "../../redux/actions";
 import {ApiEntity, DeleteApiRequest} from "../../types";
 import ButtonDelete from "../../../../components/ComponentUtils/ButtonDelete";
-import {api_path, view_role_path} from "../../../../helpers/utilsFunc";
+import {api_path} from "../../../../helpers/utilsFunc";
 import ButtonUpdate from "../../../../components/ComponentUtils/ButtonUpdate";
 
 const mapStateToProps = ({apiManager: {list}}: RootState) => ({list})
@@ -29,9 +29,6 @@ function ListAPI(props: IProps) {
   const [page, setPage] = useState(1);
   const scroll = screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false};
   const size = 10;
-  const [state, setState] = useState<any>({
-    selectedRowKeys: [],
-  });
 
   useEffect(() => {
     props.getListApi({page: 1, size: 0});
@@ -52,9 +49,11 @@ function ListAPI(props: IProps) {
     {
       title: 'STT',
       key: 'index',
-      align:"center",
+      align: "center",
       width: 40,
-      render: (text, record, index) =>  {return (page - 1) * 10 + index + 1}
+      render: (text, record, index) => {
+        return (page - 1) * 10 + index + 1
+      }
     },
     {
       title: 'Name',
@@ -85,7 +84,8 @@ function ListAPI(props: IProps) {
         return (
           <div style={{whiteSpace: 'nowrap'}}>
 
-            <ButtonDelete path={api_path} message="API" action="delete" handleClick={(event) => handleDelete(event, record)}/>
+            <ButtonDelete path={api_path} message="API" action="delete"
+                          handleClick={(event) => handleDelete(event, record)}/>
             <ButtonUpdate path={api_path} action="update" handleClick={(event) => handleEdit(event, record)}/>
 
           </div>

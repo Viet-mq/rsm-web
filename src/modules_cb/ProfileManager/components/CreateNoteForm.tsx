@@ -1,12 +1,13 @@
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Form, Input, Modal, Select} from "antd";
+import {Avatar, Button, Form, Input, Modal, Select} from "antd";
 import React, {FormEvent, useEffect, useState} from "react";
 import {createNote} from "../redux/actions";
 import {CreateNoteRequest} from "../types";
 import {showFormCreateNote} from "../../ProfileManager/redux/actions/note/showNote";
 import {getListAccount} from "../../AccountManager/redux/actions";
+import {formItemLayout, getInitials} from "../../../helpers/utilsFunc";
 
 const {Option} = Select;
 const { TextArea } = Input;
@@ -33,7 +34,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
   const [file, setFile] = useState(null);
-
+  const fontWeightStyle = {fontWeight: 400};
   const formItemLayout = {
     labelCol: {
       xs: {span: 24},
@@ -85,7 +86,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
       <Modal
         zIndex={2}
         maskClosable={false}
-        title="Tạo mới Đánh giá"
+        title="Tạo mới đánh giá"
         visible={props.showNote.show_note_create}
         centered={true}
         width="550px"
@@ -100,9 +101,9 @@ function CreateProfileForm(props: CreateProfileFormProps) {
 
         <Form {...formItemLayout}>
 
-          <Form.Item label="Người phỏng vấn" className="mb-0" style={{height:50}}>
+          <Form.Item label="Người phỏng vấn" className="mb-0"  {...formItemLayout}>
             {getFieldDecorator('username', {
-              initialValue: '',
+              initialValue: undefined,
               rules: [
                 {
                   message: 'Vui lòng chọn người phỏng vấn',
@@ -110,14 +111,37 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                 },
               ],
             })(
-            <Select
-              getPopupContainer={(trigger:any) => trigger.parentNode}
-              className="bg-white text-black"
-              >
-                {props.listAccount.rows?.map((item: any) => (
-                  <Option key={item.username} value={item.username}>{item.fullName}</Option>
+              <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                      className=" form-label bg-white text-black select-account-custom"
+                      style={fontWeightStyle}
+                      optionLabelProp="label"
+                      filterOption={(input, option: any) =>
+                        option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                        || option.props.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                      }
+                      showSearch
+                      placeholder="Chọn người phỏng vấn">
+                <Option key={"none"} value={""} label={"<None>"}>
+                  <div>&lt;None&gt;</div>
+                </Option>
+                {props.listAccount.rows?.map((item: any, index: any) => (
+                  <Option key={index} value={item.username} label={item.fullName}>
+                    <div className="flex-items-center" style={{paddingTop: 5}}>
+                      <div style={{marginRight: 10}}>
+                        <Avatar src={item.image ? item.image : "#"}
+                                style={{backgroundColor: item?.avatarColor, marginRight: 5}}>
+                          {getInitials(item.fullName)}
+                        </Avatar>
+                      </div>
+                      <div className="c-list-profile" style={{fontWeight: 500}}>
+                        <div style={{height: 25}}>{item.fullName}</div>
+                        <div style={{height: 25}} className="more-information">{item.email}</div>
+                      </div>
+                    </div>
+                  </Option>
                 ))}
-              </Select>)}
+              </Select>
+            )}
           </Form.Item>
 
           <Form.Item label="Nhận xét" className="mb-0" style={{height:110}}>

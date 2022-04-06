@@ -49,7 +49,7 @@ function CreateAccountForm(props: CreateAccountFormProps) {
           email: values.email,
           fullName: values.fullName,
           dateOfBirth: values.dateOfBirth,
-          organization: values.organization,
+          organizations: values.organization,
         }
         props.createAccount(req);
         return;

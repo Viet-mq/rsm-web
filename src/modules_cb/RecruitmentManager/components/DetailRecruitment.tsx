@@ -1,7 +1,7 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
-import {Button, DatePicker, Icon, Layout, Menu, Popover, Select, Tabs} from "antd";
+import {Button, DatePicker, Icon, Layout, Popover, Select, Tabs} from "antd";
 import {BsDot, ImArrowLeft2} from "react-icons/all";
 import {Link, useParams} from "react-router-dom";
 import Search from "antd/es/input/Search";
@@ -42,7 +42,7 @@ interface IProps extends ReduxProps {
 }
 
 function DetailRecruitment(props: IProps) {
-  const {create}=props.profileManager
+  const {create} = props.profileManager
   const {idRecruitment} = useParams()
   const query = new URLSearchParams(props.location.search).get("roundID")
   const page = 1;
@@ -53,20 +53,21 @@ function DetailRecruitment(props: IProps) {
     <div className="flex-items-center">
       <div className='border-right pr-3'>Người tạo:<span
         className="bold-text"> {props.detailRecruitment?.rows[0]?.fullName}</span></div>
-      <div className=" ml-3">Ngày tạo:<span className="bold-text"> {moment(props.detailRecruitment?.rows[0]?.createAt).format(dateFormat)}</span>
+      <div className=" ml-3">Ngày tạo:<span
+        className="bold-text"> {moment(props.detailRecruitment?.rows[0]?.createAt).format(dateFormat)}</span>
       </div>
     </div>
     <div className='border-right' style={{width: 200}}>Thời hạn dự kiến: <span className="bold-text"/>
     </div>
   </div>)
-  const menu = (<Menu className='detail-action'>
-    <Menu.Item key="1">
-      <div><Icon type="plus"/><span> Thêm hàng loạt</span></div>
-    </Menu.Item>
-    <Menu.Item key="2">
-      <div><Icon type="export"/><span> Xuất Excel</span></div>
-    </Menu.Item>
-  </Menu>);
+  // const menu = (<Menu className='detail-action'>
+  //   <Menu.Item key="1">
+  //     <div><Icon type="plus"/><span> Thêm hàng loạt</span></div>
+  //   </Menu.Item>
+  //   <Menu.Item key="2">
+  //     <div><Icon type="export"/><span> Xuất Excel</span></div>
+  //   </Menu.Item>
+  // </Menu>);
   const operations = <Select className="tab-operator" defaultValue={"Công khai"}>
     <Option key={1} value={"Công khai"}>Công khai</Option>
     <Option key={2} value={"Nội bộ"}>Nội bộ</Option>
@@ -122,18 +123,18 @@ function DetailRecruitment(props: IProps) {
     props.checkInformationValidate(true)
   }
 
-  const  handleCreate = (e: any) => {
+  const handleCreate = (e: any) => {
     e.preventDefault();
     if (e?.target) {
       e.target.disabled = true;
       e.target.disabled = false;
     }
 
-    let req:RecruitmentTalentPool=({
-      recruitment:props.detailRecruitment?.rows[0]?.id,
+    let req: RecruitmentTalentPool = ({
+      recruitment: props.detailRecruitment?.rows[0]?.id,
 
     })
-    props.showFormCreate(true,req);
+    props.showFormCreate(true, req);
   }
 
 
@@ -145,7 +146,8 @@ function DetailRecruitment(props: IProps) {
             <ImArrowLeft2 size={20}/>
           </Link>
           <div className="header-box-main">
-            <span className="p">[{props.detailRecruitment?.rows[0]?.departmentName}] {props.detailRecruitment?.rows[0]?.title}</span>
+            <span
+              className="p">[{props.detailRecruitment?.rows[0]?.departmentName}] {props.detailRecruitment?.rows[0]?.title}</span>
             <Link to={`/recruitment-manager/edit`} onClick={btnEditClicked}>
               <Icon type={"edit"} style={{fontSize: "150%", marginLeft: 15}}/>
             </Link>
@@ -155,7 +157,8 @@ function DetailRecruitment(props: IProps) {
               <div>Mức lương: <span className="p"> {props.detailRecruitment?.rows[0]?.salaryDescription}</span>
               </div>
 
-              <div className="ml-3">SL cần tuyển: <span className="p">{props.detailRecruitment?.rows[0]?.quantity}</span>
+              <div className="ml-3">SL cần tuyển: <span
+                className="p">{props.detailRecruitment?.rows[0]?.quantity}</span>
               </div>
 
               <div className="ml-3">Hạn nộp hồ sơ: <span
@@ -180,7 +183,8 @@ function DetailRecruitment(props: IProps) {
               <Header className='header-candidate-detail'>
                 <div className='header-align recruitment-option'>
                   <div className='recruitment-option__pop-over'>
-                  <Select getPopupContainer={(trigger:any) => trigger.parentNode} defaultValue="join" className="select-custom" style={{
+                    <Select getPopupContainer={(trigger: any) => trigger.parentNode} defaultValue="join"
+                            className="select-custom" style={{
                       fontWeight: 600,
                       width: 145,
                       marginRight: 15

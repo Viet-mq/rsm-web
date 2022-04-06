@@ -1,7 +1,7 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Form, Icon, Input, Popconfirm, Switch, Tooltip} from "antd";
+import {Button, Form, Icon, Popconfirm, Switch, Tooltip} from "antd";
 import React, {useEffect, useState} from "react";
 import 'devextreme/dist/css/dx.light.css';
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
@@ -53,12 +53,12 @@ function ProcessForm(props: IProps) {
       [{'list': 'ordered'}, {'list': 'bullet'}],
       [{'indent': '-1'}, {'indent': '+1'}],
       ['link', 'image'],
-      [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-      [{ 'direction': 'rtl' }],                         // text direction
-      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-      [{ 'font': [] }],
-      [{ 'align': [] }],
+      [{'script': 'sub'}, {'script': 'super'}],      // superscript/subscript
+      [{'direction': 'rtl'}],                         // text direction
+      [{'header': [1, 2, 3, 4, 5, 6, false]}],
+      [{'color': []}, {'background': []}],          // dropdown with defaults from theme
+      [{'font': []}],
+      [{'align': []}],
       ['clean'],
     ],
 
@@ -81,7 +81,7 @@ function ProcessForm(props: IProps) {
   const [schema, setSchema] = useState<any>([])
   const [lastElement, setLastElement] = useState<any>();
   const [valueEditor, setValueEditor] = useState(
-     isEdit ? update.dataUpdate?.interest : createSteps.request?.interest || ""
+    isEdit ? update.dataUpdate?.interest : createSteps.request?.interest || ""
   )
 
   const [display, setDisplay] = useState(false)
@@ -191,13 +191,13 @@ function ProcessForm(props: IProps) {
     props.showFormUpdate(true, item, index)
   }
 
-  function handleChangeTextEditor(value:any) {
+  function handleChangeTextEditor(value: any) {
     console.log(value)
     if (value === "<p><br></p>") {
-      setDisplay( true)
-      setValueEditor( "")
+      setDisplay(true)
+      setValueEditor("")
     } else {
-      setDisplay( false)
+      setDisplay(false)
       // const newValueEditor = valueEditor
       // newValueEditor.interest = value
       // onFormChange(salary, newValueEditor)
@@ -330,8 +330,8 @@ function ProcessForm(props: IProps) {
               style={fontWeightStyle}
               className="ql-custom"
               onChange={handleChangeTextEditor}
-              value={valueEditor||""}
-              
+              value={valueEditor || ""}
+
               theme={'snow'}
               modules={modules}
               formats={formats}
