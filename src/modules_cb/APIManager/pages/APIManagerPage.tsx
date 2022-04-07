@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {Button, Col, Icon, Row} from "antd";
+import {Col, Row} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {showFormCreateApi} from "../redux/actions";
@@ -52,10 +52,6 @@ function APIManagerPage(props: IProps) {
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div>
-                <Button onClick={handleCreate}>
-                  <Icon type="plus"/> Thêm API
-                </Button>
-
                 <ButtonCreate path={api_path} action="create" name=" Thêm API" handleClick={handleCreate}/>
 
               </div>

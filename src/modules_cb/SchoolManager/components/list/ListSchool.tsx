@@ -5,19 +5,19 @@ import env from "src/configs/env";
 import {ColumnProps} from "antd/lib/table";
 import {Table} from "antd";
 import {emptyText} from "src/configs/locales";
-import {deleteSchool, getListSchool, showFormCreate, showFormUpdate, updateSchool} from "../../redux/actions";
+import {deleteSchool, getListSchool, getSearchSchool, showFormCreate, showFormUpdate} from "../../redux/actions";
 import {DeleteSchoolRequest, SchoolEntity} from "../../types";
 import ButtonDelete from "../../../../components/ComponentUtils/ButtonDelete";
 import {school_path} from "../../../../helpers/utilsFunc";
 import ButtonUpdate from "../../../../components/ComponentUtils/ButtonUpdate";
+import Search from "antd/es/input/Search";
 
-const mapStateToProps = ({schoolManager: {list}}: RootState) => ({list})
+const mapStateToProps = ({schoolManager}: RootState) => ({schoolManager})
 const connector = connect(mapStateToProps, {
   getListSchool,
   deleteSchool,
-  showFormCreate,
   showFormUpdate,
-  updateSchool
+  getSearchSchool
 });
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -25,29 +25,6 @@ interface IProps extends ReduxProps {
 }
 
 function ListSchool(props: IProps) {
-
-  let screenWidth = document.documentElement.clientWidth;
-  const [page, setPage] = useState(1);
-  const scroll = screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false};
-  const size = 10;
-
-  useEffect(() => {
-    props.getListSchool({page: 1, size: 100});
-  }, []);
-
-  const handleDelete = (event: any, entity: SchoolEntity) => {
-    event.stopPropagation();
-    let req: DeleteSchoolRequest = {
-      id: entity.id
-    }
-    props.deleteSchool(req);
-  }
-
-  const handleEdit = (event: any, entity: SchoolEntity) => {
-    event.stopPropagation();
-    props.showFormUpdate(true, entity);
-  }
-
   const columns: ColumnProps<SchoolEntity>[] = [
     {
       title: 'STT',
@@ -82,20 +59,66 @@ function ListSchool(props: IProps) {
       },
     },
   ];
+  const {search} = props.schoolManager
+  const [page, setPage] = useState(1);
+  const scroll = {y: 600};
+  const size = 30;
+  const [school, setSchool] = useState<any>()
+  const [nameSearch, setNameSearch] = useState<any>("")
+
+  useEffect(() => {
+    btnSearchClicked()
+  }, [page]);
+
+  useEffect(() => {
+    setSchool(search)
+  }, [search])
+
+  const handleDelete = (event: any, entity: SchoolEntity) => {
+    event.stopPropagation();
+    let req: DeleteSchoolRequest = {
+      id: entity.id
+    }
+    props.deleteSchool(req);
+  }
+
+  const handleEdit = (event: any, entity: SchoolEntity) => {
+    event.stopPropagation();
+    props.showFormUpdate(true, entity);
+  }
+
+  function btnSearchClicked() {
+    const req: any = {
+      page: page,
+      size: size,
+      name: nameSearch
+    }
+    props.getSearchSchool(req);
+  }
+
 
   return (
     <>
+      <div className="c-filter-profile">
+        <div style={{width: 200, display: "inline-block"}}>
+          <Search
+            onChange={e => setNameSearch(e.target.value)}
+            onSearch={btnSearchClicked}
+            placeholder="Tìm kiếm..."/>
+        </div>
+      </div>
+
       <Table
         scroll={scroll}
         className="custom-table"
-        dataSource={props.list.rows}
+        dataSource={school?.rows}
         columns={columns}
         rowKey="id"
         locale={{emptyText: emptyText}}
         pagination={{
           current: page,
           pageSize: size,
-          total: props.list.total,
+          total: school?.total,
           onChange: value => setPage(value),
           showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,
         }}

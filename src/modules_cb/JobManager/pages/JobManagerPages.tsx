@@ -52,7 +52,7 @@ function JobManagerPages(props: IProps) {
       <div className="entryHeader">
         <Row>
           <Col md={16}>
-            <div className="tmp-title-page-size20">Quản lý Vị trí công việc</div>
+            <div className="tmp-title-page-size20">Quản lý vị trí công việc</div>
           </Col>
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">

@@ -5,19 +5,18 @@ import env from "src/configs/env";
 import {ColumnProps} from "antd/lib/table";
 import {Table} from "antd";
 import {emptyText} from "src/configs/locales";
-import {deleteRoles, getListRoles, showFormCreate, showFormUpdate, updateRoles} from "../../redux/actions";
+import {deleteRoles, getSearchRoles, showFormUpdate} from "../../redux/actions";
 import {DeleteRolesRequest, RolesEntity} from "../../types";
 import ButtonDelete from "../../../../components/ComponentUtils/ButtonDelete";
 import {roles_path} from "../../../../helpers/utilsFunc";
 import ButtonUpdate from "../../../../components/ComponentUtils/ButtonUpdate";
+import Search from "antd/es/input/Search";
 
 const mapStateToProps = ({rolesManager}: RootState) => ({rolesManager});
 const connector = connect(mapStateToProps, {
-  getListRoles,
+  getSearchRoles,
   deleteRoles,
-  showFormCreate,
   showFormUpdate,
-  updateRoles
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -26,11 +25,6 @@ interface IProps extends ReduxProps {
 }
 
 function ListRoles(props: IProps) {
-  const {list} = props.rolesManager
-  let screenWidth = document.documentElement.clientWidth;
-  const [page, setPage] = useState(1);
-  const scroll = screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false};
-  const size = 10;
   const columns: ColumnProps<RolesEntity>[] = [
     {
       title: 'STT',
@@ -71,10 +65,20 @@ function ListRoles(props: IProps) {
       },
     },
   ];
+  const {search} = props.rolesManager
+  const [page, setPage] = useState(1);
+  const scroll = {y: 600};
+  const size = 30;
+  const [roles, setRoles] = useState<any>()
+  const [nameSearch, setNameSearch] = useState<any>("")
 
   useEffect(() => {
-    props.getListRoles({page: 1, size: 100});
-  }, []);
+    btnSearchClicked()
+  }, [page]);
+
+  useEffect(() => {
+    setRoles(search)
+  }, [search])
 
   const handleDelete = (event: any, entity: RolesEntity) => {
     event.stopPropagation();
@@ -89,19 +93,37 @@ function ListRoles(props: IProps) {
     props.showFormUpdate(true, entity);
   }
 
+  function btnSearchClicked() {
+    const req: any = {
+      page: page,
+      size: size,
+      name: nameSearch
+    }
+    props.getSearchRoles(req);
+  }
+
   return (
     <>
+      <div className="c-filter-profile">
+        <div style={{width: 200, display: "inline-block"}}>
+          <Search
+            onChange={e => setNameSearch(e.target.value)}
+            onSearch={btnSearchClicked}
+            placeholder="Tìm kiếm..."/>
+        </div>
+      </div>
+
       <Table
         scroll={scroll}
         className="custom-table"
-        dataSource={list.rows}
+        dataSource={roles?.rows}
         columns={columns}
         rowKey="id"
         locale={{emptyText: emptyText}}
         pagination={{
           current: page,
           pageSize: size,
-          total: list.total,
+          total: roles?.total,
           onChange: value => setPage(value),
           showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,
         }}

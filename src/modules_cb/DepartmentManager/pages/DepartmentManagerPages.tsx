@@ -58,10 +58,6 @@ function DepartmentManagerPages(props: IProps) {
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div>
-                <Button onClick={handleCreate}>
-                  <Icon type="plus"/> Tạo phòng ban
-                </Button>
-
                 <ButtonCreate path={department_path} action="create" name=" Thêm phòng ban" handleClick={handleCreate}/>
 
               </div>
@@ -71,7 +67,6 @@ function DepartmentManagerPages(props: IProps) {
       </div>
 
       <ListDepartment/>
-
       <CreateDepartmentForm/>
       <UpdateDepartmentForm/>
 

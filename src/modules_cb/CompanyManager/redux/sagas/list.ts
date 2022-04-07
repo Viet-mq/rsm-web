@@ -12,7 +12,7 @@ export function* getListCompanyAsync(action: CompanyListAction) {
 
     }
     else {
-      localStorage.setItem("list-view-roles", JSON.stringify(rs || {}));
+      localStorage.setItem("list-company", JSON.stringify(rs || {}));
       yield put(getListCompanySuccess(rs.total, rs.rows))
     }
   } catch (e) {

@@ -1,23 +1,24 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
-import env from "src/configs/env";
 import {ColumnProps} from "antd/lib/table";
 import {Table} from "antd";
 import {emptyText} from "src/configs/locales";
-import {deleteSkill, getListSkill, showFormCreate, showFormUpdate, updateSkill} from "../../redux/actions";
+import {deleteSkill, getListSkill, searchListSkill, showFormUpdate} from "../../redux/actions";
 import {DeleteSkillRequest, SkillEntity} from "../../types";
 import ButtonDelete from "../../../../components/ComponentUtils/ButtonDelete";
 import {skill_path} from "../../../../helpers/utilsFunc";
 import ButtonUpdate from "../../../../components/ComponentUtils/ButtonUpdate";
+import Search from "antd/es/input/Search";
 
-const mapStateToProps = ({skillManager: {list}}: RootState) => ({list})
+const mapStateToProps = (state: RootState) => ({
+  skillManager: state.skillManager,
+})
 const connector = connect(mapStateToProps, {
   getListSkill,
   deleteSkill,
-  showFormCreate,
   showFormUpdate,
-  updateSkill
+  searchListSkill
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -26,29 +27,6 @@ interface IProps extends ReduxProps {
 }
 
 function ListSkill(props: IProps) {
-
-  let screenWidth = document.documentElement.clientWidth;
-  const [page, setPage] = useState(1);
-  const scroll = screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false};
-  const size = 10;
-
-  useEffect(() => {
-    props.getListSkill({page: 1, size: 100});
-  }, []);
-
-  const handleDelete = (event: any, entity: SkillEntity) => {
-    event.stopPropagation();
-    let req: DeleteSkillRequest = {
-      id: entity.id
-    }
-    props.deleteSkill(req);
-  }
-
-  const handleEdit = (event: any, entity: SkillEntity) => {
-    event.stopPropagation();
-    props.showFormUpdate(true, entity);
-  }
-
   const columns: ColumnProps<SkillEntity>[] = [
     {
       title: 'STT',
@@ -83,20 +61,66 @@ function ListSkill(props: IProps) {
       },
     },
   ];
+  const {search} = props.skillManager
+  const [page, setPage] = useState(1);
+  const scroll = {y: 600};
+  const size = 30;
+  const [skill, setSkill] = useState<any>()
+  const [nameSearch, setNameSearch] = useState<any>("")
+
+  useEffect(() => {
+    btnSearchClicked()
+  }, [page]);
+
+  useEffect(() => {
+    setSkill(search)
+  }, [search])
+
+  const handleDelete = (event: any, entity: SkillEntity) => {
+    event.stopPropagation();
+    let req: DeleteSkillRequest = {
+      id: entity.id
+    }
+    props.deleteSkill(req);
+  }
+
+  const handleEdit = (event: any, entity: SkillEntity) => {
+    event.stopPropagation();
+    props.showFormUpdate(true, entity);
+  }
+
+  function btnSearchClicked() {
+    const req: any = {
+      page: page,
+      size: size,
+      name: nameSearch
+    }
+    props.searchListSkill(req);
+  }
+
 
   return (
     <>
+      <div className="c-filter-profile">
+        <div style={{width: 200, display: "inline-block"}}>
+          <Search
+            onChange={e => setNameSearch(e.target.value)}
+            onSearch={btnSearchClicked}
+            placeholder="Tìm kiếm..."/>
+        </div>
+      </div>
+
       <Table
         scroll={scroll}
         className="custom-table"
-        dataSource={props.list.rows}
+        dataSource={skill?.rows}
         columns={columns}
         rowKey="id"
         locale={{emptyText: emptyText}}
         pagination={{
           current: page,
           pageSize: size,
-          total: props.list.total,
+          total: skill?.total,
           onChange: value => setPage(value),
           showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,
         }}

@@ -1,24 +1,23 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
-import env from "src/configs/env";
 import {ColumnProps} from "antd/lib/table";
 import {Table} from "antd";
 import {emptyText} from "src/configs/locales";
-import {deleteView, getListView, removeAction, showViewAddActionForm, showViewUpdateForm} from "../../redux/actions";
-import {ActionView, DeleteActionToViewRequest, ViewEntity} from "../../types";
+import {deleteView, searchListView, showViewAddActionForm, showViewUpdateForm} from "../../redux/actions";
+import {ViewEntity} from "../../types";
 import {useHistory} from "react-router-dom";
 import ButtonDelete from "../../../../components/ComponentUtils/ButtonDelete";
 import {view_path} from "../../../../helpers/utilsFunc";
 import ButtonUpdate from "../../../../components/ComponentUtils/ButtonUpdate";
+import Search from "antd/es/input/Search";
 
-const mapStateToProps = ({viewManager: {list}}: RootState) => ({list})
+const mapStateToProps = ({viewManager}: RootState) => ({viewManager})
 const connector = connect(mapStateToProps, {
-  getListView,
+  searchListView,
   deleteView,
   showViewUpdateForm,
   showViewAddActionForm,
-  removeAction
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -27,38 +26,6 @@ interface IProps extends ReduxProps {
 }
 
 function ListView(props: IProps) {
-
-  let screenWidth = document.documentElement.clientWidth;
-  const [page, setPage] = useState(1);
-  const scroll = screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false};
-  const size = 10;
-  const history = useHistory();
-
-  useEffect(() => {
-    props.getListView({page: 1, size: 100});
-  }, []);
-
-  const handleDelete = (event: any, entity: ViewEntity) => {
-    props.deleteView(entity.id);
-  }
-
-  const handleEdit = (event: any, entity: ViewEntity) => {
-
-    history.push({
-      pathname: `/view-manager/${entity.id}`
-    });
-    // props.showViewUpdateForm(true, entity);
-
-  }
-
-  const removeAction = (event: any, entity: ViewEntity, action: ActionView) => {
-    let req: DeleteActionToViewRequest = {
-      id: action.id,
-      permission_id: entity.id
-    }
-    props.removeAction(req);
-  }
-
   const columns: ColumnProps<ViewEntity>[] = [
     {
       title: 'STT',
@@ -111,20 +78,66 @@ function ListView(props: IProps) {
       },
     },
   ];
+  const {search} = props.viewManager
+  const [page, setPage] = useState(1);
+  const scroll = {y: 600};
+  const size = 30;
+  const [view, setView] = useState<any>()
+  const [nameSearch, setNameSearch] = useState<any>("")
+  const history = useHistory();
+
+  useEffect(() => {
+    btnSearchClicked()
+  }, [page]);
+
+  useEffect(() => {
+    setView(search)
+  }, [search])
+
+  const handleDelete = (event: any, entity: ViewEntity) => {
+    props.deleteView(entity.id);
+  }
+
+  const handleEdit = (event: any, entity: ViewEntity) => {
+
+    history.push({
+      pathname: `/view-manager/${entity.id}`
+    });
+    // props.showViewUpdateForm(true, entity);
+  }
+
+  function btnSearchClicked() {
+    const req: any = {
+      page: page,
+      size: size,
+      name: nameSearch
+    }
+    props.searchListView(req);
+  }
+
 
   return (
     <>
+      <div className="c-filter-profile">
+        <div style={{width: 200, display: "inline-block"}}>
+          <Search
+            onChange={e => setNameSearch(e.target.value)}
+            onSearch={btnSearchClicked}
+            placeholder="Tìm kiếm..."/>
+        </div>
+      </div>
+
       <Table
         scroll={scroll}
         className="custom-table"
-        dataSource={props.list.rows}
+        dataSource={view?.rows}
         columns={columns}
         rowKey="id"
         locale={{emptyText: emptyText}}
         pagination={{
           current: page,
           pageSize: size,
-          total: props.list.total,
+          total: view?.total,
           onChange: value => setPage(value),
           showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,
         }}

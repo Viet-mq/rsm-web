@@ -866,7 +866,7 @@ function UpdateProfileForm(props: UpdateProfileFormProps) {
             </Form.Item>
 
           </div>
-          <Form.Item label=" " style={{marginRight:20, textAlign: "right"}} colon={false}>
+          <Form.Item label=" " style={{marginRight: 20, textAlign: "right"}} colon={false}>
             <Button className="mr-3 create-btn" htmlType="submit" onClick={onBtnUpdateClicked}>
               Cập nhật
             </Button>

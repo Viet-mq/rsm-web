@@ -1,4 +1,5 @@
 import {TalentPoolEntity} from "../../types";
+
 import {AppError} from "src/models/common";
 
 export interface SearchTalentPoolAction {

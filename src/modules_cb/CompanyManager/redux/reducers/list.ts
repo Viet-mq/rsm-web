@@ -18,7 +18,7 @@ const initState: CompanyListState = {
   total: 0
 }
 
-const saveCompany:any=localStorage.getItem('list-view-roles');
+const saveCompany:any=localStorage.getItem('list-company');
 const dataCompany:CompanyListState = JSON.parse(saveCompany)?JSON.parse(saveCompany):initState
 
 export default (state = dataCompany, {type, total, rows, params, error}: CompanyListAction): CompanyListState => {

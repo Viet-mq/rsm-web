@@ -1,4 +1,4 @@
-import {getListJobLevelError, getListJobLevelSuccess, JobLevelListAction} from "../actions";
+import {getListJobLevelError, getListJobLevelSuccess, getSearchJobLevel, JobLevelListAction} from "../actions";
 import * as apis from '../services/apis'
 import {put} from "redux-saga/effects";
 import {AppError} from "src/models/common";
@@ -15,6 +15,8 @@ export function* getListJobLevelAsync(action: JobLevelListAction) {
     } else {
       localStorage.setItem("list-job-level", JSON.stringify(rs || {}));
       yield put(getListJobLevelSuccess(rs.total, rs.rows))
+      yield put(getSearchJobLevel(action.params))
+
     }
   } catch (e) {
     yield put(getListJobLevelError(new AppError(e.message)));

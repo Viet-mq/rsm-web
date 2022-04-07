@@ -1,4 +1,10 @@
-import {DeleteTalentPoolAction, deleteTalentPoolError, deleteTalentPoolSuccess, getListTalentPool} from "../actions";
+import {
+  DeleteTalentPoolAction,
+  deleteTalentPoolError,
+  deleteTalentPoolSuccess,
+  getListTalentPool,
+  getSearchTalentPool
+} from "../actions";
 import * as apis from "../services/apis";
 import {put, select} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";

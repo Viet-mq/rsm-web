@@ -9,7 +9,7 @@ import {RootState} from "../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {getElasticSearch, getFullElasticSearch} from "../../modules_cb/ProfileManager/redux/actions";
-import {useHistory, Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import Loading from "../Loading";
 import {getInitials} from "../../helpers/utilsFunc";
 
@@ -41,7 +41,7 @@ const DefaultLayout = (props: LayoutProps) => {
     value: undefined,
     dataSource: [],
   });
-const arrayUrl=['/statuscv-manager',"/email-manager","/reminder"]
+  const arrayUrl = ['/statuscv-manager', "/email-manager", "/reminder"]
 
   function toggle() {
     setCollapsed(!collapsed)
@@ -97,8 +97,6 @@ const arrayUrl=['/statuscv-manager',"/email-manager","/reminder"]
         pathname: "/profile-manager",
       });
     }
-
-
   }
 
   function onSelect(value: any) {
@@ -145,18 +143,18 @@ const arrayUrl=['/statuscv-manager',"/email-manager","/reminder"]
                     <>
                       <div style={{display: "flex"}}>
 
-                      <Select getPopupContainer={(trigger:any) => trigger.parentNode}
-                          showSearch
-                          value={search.value}
-                          placeholder={"Họ tên, Năm sinh, Quê quán, Trường học, Số điện thoại, Email, Công việc"}
-                          defaultActiveFirstOption={false}
-                          showArrow={false}
-                          filterOption={false}
-                          onSearch={onSearch}
-                          onSelect={onSelect}
-                          notFoundContent={null}
-                              onInputKeyDown={onEnter}
-                          optionLabelProp="label"
+                        <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                                showSearch
+                                value={search.value}
+                                placeholder={"Họ tên, Năm sinh, Quê quán, Trường học, Số điện thoại, Email, Công việc"}
+                                defaultActiveFirstOption={false}
+                                showArrow={false}
+                                filterOption={false}
+                                onSearch={onSearch}
+                                onSelect={onSelect}
+                                notFoundContent={null}
+                                onInputKeyDown={onEnter}
+                                optionLabelProp="label"
                         >
                           {search.dataSource?.map((item: any) => {
                               return <Option key={item.id} value={item.id} label={item.fullName}>
@@ -193,7 +191,7 @@ const arrayUrl=['/statuscv-manager',"/email-manager","/reminder"]
                 <Row>
                   <Col span={props.showFormDetail?.show_detail?.general}
                        className="default-layout">
-                    <div style={arrayUrl.includes(history.location.pathname)  ? {
+                    <div style={arrayUrl.includes(history.location.pathname) ? {
                       background: "white",
                       height: "100%"
                     } : {height: "100%"}}>

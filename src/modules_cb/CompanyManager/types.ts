@@ -1,26 +1,17 @@
-export interface DepartmentRequest {
-  id: string
-  name: string
-}
-
 export interface CompanyEntity {
-  description: string,
   id: string,
   name: string,
-  organizations: DepartmentRequest[]
+  children: CompanyEntity[] | any,
 }
 
 export interface CreateCompanyRequest {
-  description: string,
   name: string,
-  organizations: string[]
+  idParent?: string,
 }
 
 export interface UpdateCompanyRequest {
-  description: string,
   id: string,
-  name: string,
-  organizations: string[]
+  name: string
 }
 
 export interface DeleteCompanyRequest {

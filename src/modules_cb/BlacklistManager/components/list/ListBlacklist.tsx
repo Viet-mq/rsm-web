@@ -5,7 +5,7 @@ import env from "src/configs/env";
 import {ColumnProps} from "antd/lib/table";
 import {Table} from "antd";
 import {emptyText} from "src/configs/locales";
-import {deleteBlacklist, getListBlacklist, showFormCreate, showFormUpdate, updateBlacklist} from "../../redux/actions";
+import {deleteBlacklist, getListBlacklist, showFormUpdate, updateBlacklist} from "../../redux/actions";
 import {BlacklistEntity, DeleteBlacklistRequest} from "../../types";
 import ButtonDelete from "../../../../components/ComponentUtils/ButtonDelete";
 import {blacklist_path} from "../../../../helpers/utilsFunc";
@@ -15,7 +15,6 @@ const mapStateToProps = ({blacklistManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
   getListBlacklist,
   deleteBlacklist,
-  showFormCreate,
   showFormUpdate,
   updateBlacklist
 });

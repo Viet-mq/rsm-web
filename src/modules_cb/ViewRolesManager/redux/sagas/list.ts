@@ -1,8 +1,10 @@
-import {ViewRolesListAction, getListViewRolesError, getListViewRolesSuccess} from "../actions";
+import {getListViewRolesError, getListViewRolesSuccess, getSearchViewRoles, ViewRolesListAction} from "../actions";
 import * as apis from '../services/apis'
-import {put} from "redux-saga/effects";
+import {put, select} from "redux-saga/effects";
 import {AppError} from "src/models/common";
 import {NotificationError} from "src/components/Notification/Notification";
+import {RootState} from "../../../../redux/reducers";
+import {getListAccount} from "../../../AccountManager/redux/actions";
 
 export function* getListViewRolesAsync(action: ViewRolesListAction) {
   try {
@@ -11,10 +13,13 @@ export function* getListViewRolesAsync(action: ViewRolesListAction) {
       yield put(getListViewRolesError(new AppError(rs.message)));
       NotificationError('Lấy danh sách View Roles không thành công', "Lỗi: " + rs.message);
 
-    }
-    else {
+    } else {
       localStorage.setItem("list-view-roles", JSON.stringify(rs || {}));
       yield put(getListViewRolesSuccess(rs.total, rs.rows))
+      const params = yield select((state: RootState) => state.accountManager.list.params);
+      yield put(getListAccount(params))
+      yield put(getSearchViewRoles(action.params))
+
     }
   } catch (e) {
     yield put(getListViewRolesError(new AppError(e.message)));

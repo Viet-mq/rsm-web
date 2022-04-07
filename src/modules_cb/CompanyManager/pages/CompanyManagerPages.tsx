@@ -33,9 +33,6 @@ interface IProps extends ReduxProps {
 }
 
 function CompanyManagerPages(props: IProps) {
-
-  const view_id = "company-manager";
-
   useEffect(() => {
     document.title = "Quản lý Công ty";
   }, []);
@@ -66,12 +63,11 @@ function CompanyManagerPages(props: IProps) {
             <div className="tmp-title-page-size20">Quản lý Công ty</div>
           </Col>
           <Col className="d-flex" md={8}>
-            {CheckViewAction(view_id, "create")
+            {CheckViewAction(company_path, "create")
               ?
               <div className="tmp-btn">
                 <div>
                   <ButtonCreate path={company_path} action="create" name=" Thêm công ty" handleClick={handleCreate}/>
-
                 </div>
               </div>
               : null}
@@ -80,7 +76,6 @@ function CompanyManagerPages(props: IProps) {
       </div>
 
       <ListCompany/>
-
       <CreateCompanyForm/>
       <UpdateCompanyForm/>
 

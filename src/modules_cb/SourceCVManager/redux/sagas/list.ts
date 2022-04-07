@@ -1,4 +1,4 @@
-import {getListSourceCVError, getListSourceCVSuccess, SourceCVListAction} from "../actions";
+import {getListSourceCVError, getListSourceCVSuccess, getSearchSourceCV, SourceCVListAction} from "../actions";
 import * as apis from '../services/apis'
 import {put} from "redux-saga/effects";
 import {AppError} from "src/models/common";
@@ -13,6 +13,8 @@ export function* getListSourceCVAsync(action: SourceCVListAction) {
     } else {
       localStorage.setItem("list-source-cv", JSON.stringify(rs || {}));
       yield put(getListSourceCVSuccess(rs.total, rs.rows))
+      yield put(getSearchSourceCV(action.params))
+
     }
   } catch (e) {
     yield put(getListSourceCVError(new AppError(e.message)));

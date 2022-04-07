@@ -1,4 +1,4 @@
-import {getListSchoolError, getListSchoolSuccess, SchoolListAction} from "../actions";
+import {getListSchoolError, getListSchoolSuccess, getSearchSchool, SchoolListAction} from "../actions";
 import * as apis from '../services/apis'
 import {put} from "redux-saga/effects";
 import {AppError} from "src/models/common";
@@ -13,6 +13,8 @@ export function* getListSchoolAsync(action: SchoolListAction) {
     } else {
       localStorage.setItem("list-school", JSON.stringify(rs || {}));
       yield put(getListSchoolSuccess(rs.total, rs.rows))
+      yield put(getSearchSchool(action.params))
+
     }
   } catch (e) {
     yield put(getListSchoolError(new AppError(e.message)));

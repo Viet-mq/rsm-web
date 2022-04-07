@@ -17,7 +17,6 @@ export interface CreateDepartmentRequest {
 
 export interface UpdateDepartmentRequest {
   id: string,
-
   name: string
 }
 

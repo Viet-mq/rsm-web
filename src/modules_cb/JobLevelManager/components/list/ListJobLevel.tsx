@@ -5,19 +5,23 @@ import env from "src/configs/env";
 import {ColumnProps} from "antd/lib/table";
 import {Table} from "antd";
 import {emptyText} from "src/configs/locales";
-import {deleteJobLevel, getListJobLevel, showFormCreate, showFormUpdate, updateJobLevel} from "../../redux/actions";
+import {deleteJobLevel, getListJobLevel, getSearchJobLevel, showFormCreate, showFormUpdate} from "../../redux/actions";
 import {DeleteJobLevelRequest, JobLevelEntity} from "../../types";
 import ButtonDelete from "../../../../components/ComponentUtils/ButtonDelete";
 import {joblevel_path} from "../../../../helpers/utilsFunc";
 import ButtonUpdate from "../../../../components/ComponentUtils/ButtonUpdate";
+import Search from "antd/es/input/Search";
 
-const mapStateToProps = ({joblevelManager: {list}}: RootState) => ({list})
+
+const mapStateToProps = (state: RootState) => ({
+  jobLevelManager: state.joblevelManager,
+})
+
 const connector = connect(mapStateToProps, {
   getListJobLevel,
   deleteJobLevel,
-  showFormCreate,
   showFormUpdate,
-  updateJobLevel
+  getSearchJobLevel
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -26,30 +30,6 @@ interface IProps extends ReduxProps {
 }
 
 function ListJobLevel(props: IProps) {
-
-  let screenWidth = document.documentElement.clientWidth;
-  const [page, setPage] = useState(1);
-  const scroll = screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false};
-  const size = 10;
-
-
-  useEffect(() => {
-    props.getListJobLevel({page: 1, size: 100});
-  }, []);
-
-  const handleDelete = (event: any, entity: JobLevelEntity) => {
-    event.stopPropagation();
-    let req: DeleteJobLevelRequest = {
-      id: entity.id
-    }
-    props.deleteJobLevel(req);
-  }
-
-  const handleEdit = (event: any, entity: JobLevelEntity) => {
-    event.stopPropagation();
-    props.showFormUpdate(true, entity);
-  }
-
   const columns: ColumnProps<JobLevelEntity>[] = [
     {
       title: 'STT',
@@ -84,20 +64,66 @@ function ListJobLevel(props: IProps) {
       },
     },
   ];
+  const {search} = props.jobLevelManager
+  const [page, setPage] = useState(1);
+  const scroll = {y: 600};
+  const size = 30;
+  const [jobLevel, setJobLevel] = useState<any>()
+  const [nameSearch, setNameSearch] = useState<any>("")
+
+  useEffect(() => {
+    btnSearchClicked()
+  }, [page]);
+
+  useEffect(() => {
+    setJobLevel(search)
+  }, [search])
+
+  const handleDelete = (event: any, entity: JobLevelEntity) => {
+    event.stopPropagation();
+    let req: DeleteJobLevelRequest = {
+      id: entity.id
+    }
+    props.deleteJobLevel(req);
+  }
+
+  const handleEdit = (event: any, entity: JobLevelEntity) => {
+    event.stopPropagation();
+    props.showFormUpdate(true, entity);
+  }
+
+  function btnSearchClicked() {
+    const req: any = {
+      page: page,
+      size: size,
+      name: nameSearch
+    }
+    props.getSearchJobLevel(req);
+  }
+
 
   return (
     <>
+      <div className="c-filter-profile">
+        <div style={{width: 200, display: "inline-block"}}>
+          <Search
+            onChange={e => setNameSearch(e.target.value)}
+            onSearch={btnSearchClicked}
+            placeholder="Tìm kiếm..."/>
+        </div>
+      </div>
+
       <Table
         scroll={scroll}
         className="custom-table"
-        dataSource={props.list.rows}
+        dataSource={jobLevel?.rows}
         columns={columns}
         rowKey="id"
         locale={{emptyText: emptyText}}
         pagination={{
           current: page,
           pageSize: size,
-          total: props.list.total,
+          total: jobLevel?.total,
           onChange: value => setPage(value),
           showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,
         }}

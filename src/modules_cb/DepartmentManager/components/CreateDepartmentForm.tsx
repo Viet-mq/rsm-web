@@ -32,9 +32,10 @@ function CreateDepartmentForm(props: CreateDepartmentFormProps) {
   };
   const {getFieldDecorator, resetFields} = props.form;
   const formItemStyle = {height: '60px'};
-  const {list} = props.departmentManager
+  const {list,showForm} = props.departmentManager
   const [valueSelect, setValueSelect] = useState(undefined)
   const fontWeightStyle = {fontWeight: 400};
+
   // const [searchValue, setSearchValue] = useState("");
 
   function onBtnCreateClicked(e: FormEvent) {
@@ -62,11 +63,10 @@ function CreateDepartmentForm(props: CreateDepartmentFormProps) {
     setValueSelect(value)
   };
 
-  const filterTreeNode = (input:any,node: any) => {
+  const filterTreeNode = (input: any, node: any) => {
     const title = node.props.title;
     return title.toLowerCase().indexOf(input.toLowerCase()) >= 0;
   };
-
 
   return (
 
@@ -74,7 +74,7 @@ function CreateDepartmentForm(props: CreateDepartmentFormProps) {
       zIndex={4}
       maskClosable={false}
       title="Tạo mới phòng ban"
-      visible={props.departmentManager.showForm.show_create}
+      visible={showForm.show_create}
       centered={true}
       width="550px"
       afterClose={() => {

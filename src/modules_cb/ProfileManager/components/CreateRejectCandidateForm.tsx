@@ -13,7 +13,7 @@ import Loading from "../../../components/Loading";
 import {EmailEntity} from "../../EmailManager/types";
 import {getListEmail, searchListEmail} from "../../EmailManager/redux/actions";
 import {ReasonRejectEntity} from "../../ReasonRejectManager/types";
-import {formItemLayout} from "../../../helpers/utilsFunc";
+import {formats, formItemLayout, modules} from "../../../helpers/utilsFunc";
 
 const {Option} = Select;
 const {TextArea} = Input;
@@ -46,39 +46,7 @@ function CreateRejectCandidateForm(props: IProps) {
   const fontWeightStyle = {fontWeight: 400};
   const [display, setDisplay] = useState(false)
   const [valueEditor, setValueEditor] = useState("")
-  const modules = {
-    toolbar: [
-      [{'header': '1'}, {'header': '2'}],
-      ['blockquote', 'code-block'],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [{'list': 'ordered'}, {'list': 'bullet'}],
-      [{'indent': '-1'}, {'indent': '+1'}],
-      ['link', 'image'],
-      [{'script': 'sub'}, {'script': 'super'}],      // superscript/subscript
-      [{'direction': 'rtl'}],                         // text direction
-      [{'header': [1, 2, 3, 4, 5, 6, false]}],
-      [{'color': []}, {'background': []}],          // dropdown with defaults from theme
-      [{'font': []}],
-      [{'align': []}],
-      ['clean'],
-    ],
-
-    clipboard: {
-      // toggle to add extra line breaks when pasting HTML:
-      matchVisual: false,
-    }
-  }
-  /*
-   * Quill editor formats
-   * See https://quilljs.com/docs/formats/
-   */
-  const formats = [
-    'header', 'font', 'size',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent',
-    'link', 'image', 'video'
-  ]
-  const [otherReason, setOtherReason] = useState(false)
+   const [otherReason, setOtherReason] = useState(false)
   const [trigger, setTrigger] = useState({
     reasonReject: false,
     email: false,

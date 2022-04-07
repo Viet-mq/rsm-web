@@ -1,4 +1,9 @@
-import {ReasonRejectListAction, getListReasonRejectError, getListReasonRejectSuccess} from "../actions";
+import {
+  ReasonRejectListAction,
+  getListReasonRejectError,
+  getListReasonRejectSuccess,
+  searchListReasonReject
+} from "../actions";
 import * as apis from '../services/apis'
 import {put} from "redux-saga/effects";
 import {AppError} from "src/models/common";
@@ -15,6 +20,8 @@ export function* getListReasonRejectAsync(action: ReasonRejectListAction) {
     else {
       localStorage.setItem("list-reason-reject", JSON.stringify(rs || {}));
       yield put(getListReasonRejectSuccess(rs.total, rs.rows))
+      yield put(searchListReasonReject(action.params))
+
     }
   } catch (e) {
     yield put(getListReasonRejectError(new AppError(e.message)));

@@ -2,9 +2,10 @@ import {all, takeLatest} from 'redux-saga/effects';
 import {createEmailAsync} from "./create";
 import {getListEmailAsync} from "./list";
 import {updateEmailAsync} from "./update";
-import {CREATE_EMAIL, GET_KEY_POINT, GET_LIST_EMAIL, SEARCH_LIST_EMAIL, UPDATE_EMAIL} from "../actions";
+import {CREATE_EMAIL, DELETE_EMAIL, GET_KEY_POINT, GET_LIST_EMAIL, SEARCH_LIST_EMAIL, UPDATE_EMAIL} from "../actions";
 import {getKeyPointAsync} from "./keyPoint";
 import {searchListEmailAsync} from "./search";
+import {deleteEmailAsync} from "./deleteEmail";
 
 export default function* root() {
   return all([
@@ -12,6 +13,7 @@ export default function* root() {
     yield takeLatest(GET_LIST_EMAIL, getListEmailAsync),
     yield takeLatest(SEARCH_LIST_EMAIL, searchListEmailAsync),
     yield takeLatest(UPDATE_EMAIL, updateEmailAsync),
+    yield takeLatest(DELETE_EMAIL, deleteEmailAsync),
     yield takeLatest(GET_KEY_POINT, getKeyPointAsync),
   ]);
 }

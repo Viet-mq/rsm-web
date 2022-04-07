@@ -8,6 +8,7 @@ import {Link} from "react-router-dom";
 import {CreateEmailRequest} from "../types";
 import {createEmail} from "../redux/actions";
 import ReactQuill from "react-quill";
+import {modules, formats} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = (state: RootState) => ({
   emailManager: state.emailManager
@@ -27,38 +28,6 @@ function CreateEmailForm(props: IProps) {
   const {getFieldDecorator} = props.form;
   const [display, setDisplay] = useState(false)
   const [valueEditor, setValueEditor] = useState('')
-  const modules = {
-    toolbar: [
-      [{'header': '1'}, {'header': '2'}],
-      ['blockquote', 'code-block'],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [{'list': 'ordered'}, {'list': 'bullet'}],
-      [{'indent': '-1'}, {'indent': '+1'}],
-      ['link', 'image'],
-      [{'script': 'sub'}, {'script': 'super'}],      // superscript/subscript
-      [{'direction': 'rtl'}],                         // text direction
-      [{'header': [1, 2, 3, 4, 5, 6, false]}],
-      [{'color': []}, {'background': []}],          // dropdown with defaults from theme
-      [{'font': []}],
-      [{'align': []}],
-      ['clean'],
-    ],
-
-    clipboard: {
-      // toggle to add extra line breaks when pasting HTML:
-      matchVisual: false,
-    }
-  }
-  /*
-   * Quill editor formats
-   * See https://quilljs.com/docs/formats/
-   */
-  const formats = [
-    'header', 'font', 'size',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent',
-    'link', 'image', 'video'
-  ]
   const fontWeightStyle = {fontWeight: 400};
   let reactQuillRef = useRef<any>()
 

@@ -1,23 +1,30 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
-import env from "src/configs/env";
 import {ColumnProps} from "antd/lib/table";
 import {Table} from "antd";
 import {emptyText} from "src/configs/locales";
-import {deleteCompany, getListCompany, showFormCreate, showFormUpdate, updateCompany} from "../../redux/actions";
+import {
+  deleteCompany,
+  getListCompany,
+  getSearchCompany,
+  showFormUpdate,
+
+} from "../../redux/actions";
 import {CompanyEntity, DeleteCompanyRequest} from "../../types";
 import ButtonDelete from "../../../../components/ComponentUtils/ButtonDelete";
 import {company_path} from "../../../../helpers/utilsFunc";
 import ButtonUpdate from "../../../../components/ComponentUtils/ButtonUpdate";
+import Search from "antd/es/input/Search";
 
 const mapStateToProps = ({companyManager}: RootState) => ({companyManager});
+
 const connector = connect(mapStateToProps, {
   getListCompany,
   deleteCompany,
-  showFormCreate,
   showFormUpdate,
-  updateCompany
+
+  getSearchCompany
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -26,11 +33,6 @@ interface IProps extends ReduxProps {
 }
 
 function ListCompany(props: IProps) {
-  const {list} = props.companyManager
-  let screenWidth = document.documentElement.clientWidth;
-  const [page, setPage] = useState(1);
-  const scroll = screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false};
-  const size = 10;
   const columns: ColumnProps<CompanyEntity>[] = [
     {
       title: 'STT',
@@ -47,11 +49,6 @@ function ListCompany(props: IProps) {
       width: 100,
     },
 
-    {
-      title: 'Miêu tả',
-      dataIndex: 'description',
-      width: 100,
-    },
     {
       title: () => {
         return <div style={{whiteSpace: 'nowrap'}}>Thao tác</div>;
@@ -71,10 +68,23 @@ function ListCompany(props: IProps) {
       },
     },
   ];
+  const {list, search} = props.companyManager
+  const [page, setPage] = useState(1);
+  const scroll = {y: 600};
+  const size = 30;
+  const [company, setCompany] = useState<any>()
 
   useEffect(() => {
-    props.getListCompany({page: 1, size: 100});
-  }, []);
+    props.getListCompany({page: page, size: size})
+  }, [])
+
+  useEffect(() => {
+    setCompany(list)
+  }, [list])
+
+  useEffect(() => {
+    setCompany(search)
+  }, [search])
 
   const handleDelete = (event: any, entity: CompanyEntity) => {
     event.stopPropagation();
@@ -89,19 +99,36 @@ function ListCompany(props: IProps) {
     props.showFormUpdate(true, entity);
   }
 
+  function btnSearchClicked(value: any) {
+    const req: any = {
+      page: page,
+      size: size,
+      name: value
+    }
+    props.getSearchCompany(req);
+  }
+
   return (
     <>
+      <div className="c-filter-profile">
+        <div style={{width: 200, display: "inline-block"}}>
+          <Search
+            onSearch={btnSearchClicked}
+            placeholder="Tìm kiếm..."/>
+        </div>
+      </div>
+
       <Table
         scroll={scroll}
         className="custom-table"
-        dataSource={list.rows}
+        dataSource={company?.rows}
         columns={columns}
         rowKey="id"
         locale={{emptyText: emptyText}}
         pagination={{
           current: page,
           pageSize: size,
-          total: list.total,
+          total: company?.total,
           onChange: value => setPage(value),
           showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,
         }}

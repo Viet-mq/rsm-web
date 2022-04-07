@@ -11,6 +11,7 @@ import {CreateScheduleRequest} from "../types";
 import {createSchedule} from "../redux/actions";
 import {createBooking, showInterviewEmailCreateForm} from "../../ProfileManager/redux/actions";
 import ReactQuill from "react-quill";
+import {formats, modules} from "../../../helpers/utilsFunc";
 
 const {Option} = Select;
 const {TextArea} = Input;
@@ -50,40 +51,7 @@ function CreateInterviewEmailForm(props: IProps) {
   const [valueEditor, setValueEditor] = useState("")
   const inputFile = useRef<any>(null)
   const [fileAttach, setFileAttach] = useState<any>([]);
-  const modules = {
-    toolbar: [
-      [{'header': '1'}, {'header': '2'}],
-      ['blockquote', 'code-block'],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [{'list': 'ordered'}, {'list': 'bullet'}],
-      [{'indent': '-1'}, {'indent': '+1'}],
-      ['link', 'image'],
-      [{'script': 'sub'}, {'script': 'super'}],      // superscript/subscript
-      [{'direction': 'rtl'}],                         // text direction
-      [{'header': [1, 2, 3, 4, 5, 6, false]}],
-      [{'color': []}, {'background': []}],          // dropdown with defaults from theme
-      [{'font': []}],
-      [{'align': []}],
-      ['clean'],
-    ],
-
-    clipboard: {
-      // toggle to add extra line breaks when pasting HTML:
-      matchVisual: false,
-    }
-  }
-  /*
-   * Quill editor formats
-   * See https://quilljs.com/docs/formats/
-   */
-  const formats = [
-    'header', 'font', 'size',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent',
-    'link', 'image', 'video'
-  ]
-
-  const [trigger, setTrigger] = useState({
+    const [trigger, setTrigger] = useState({
     email: false,
   })
 

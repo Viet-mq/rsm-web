@@ -1,4 +1,4 @@
-import {JobListAction, getListJobError, getListJobSuccess} from "../actions";
+import {JobListAction, getListJobError, getListJobSuccess, getSearchJob} from "../actions";
 import * as apis from '../services/apis'
 import {put} from "redux-saga/effects";
 import {AppError} from "src/models/common";
@@ -16,6 +16,8 @@ export function* getListJobAsync(action: JobListAction) {
     else {
       localStorage.setItem("list-job", JSON.stringify(rs || {}));
       yield put(getListJobSuccess(rs.total, rs.rows))
+      yield put(getSearchJob(action.params))
+
     }
   } catch (e) {
     yield put(getListJobError(new AppError(e.message)));

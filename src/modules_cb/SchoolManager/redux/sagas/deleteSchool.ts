@@ -1,4 +1,4 @@
-import {DeleteSchoolAction, deleteSchoolError, deleteSchoolSuccess, getListSchool} from "../actions";
+import {DeleteSchoolAction, deleteSchoolError, deleteSchoolSuccess, getListSchool, getSearchSchool} from "../actions";
 import * as apis from "../services/apis";
 import {put, select} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";

@@ -1,8 +1,10 @@
-import {GetListViewAction, getListViewError, getListViewSuccess} from "../actions";
+import {GetListViewAction, getListViewError, getListViewSuccess, searchListView} from "../actions";
 import * as apis from '../services/apis'
-import {put} from "redux-saga/effects";
+import {put, select} from "redux-saga/effects";
 import {AppError} from "src/models/common";
 import {NotificationError} from "src/components/Notification/Notification";
+import {RootState} from "../../../../redux/reducers";
+import {getListAccount} from "../../../AccountManager/redux/actions";
 
 export function* getListViewAsync(action: GetListViewAction) {
   try {
@@ -14,6 +16,9 @@ export function* getListViewAsync(action: GetListViewAction) {
     else{
       localStorage.setItem("list-view", JSON.stringify(rs || {}));
       yield put(getListViewSuccess(rs.total, rs.rows))
+      const params = yield select((state: RootState) => state.accountManager.list.params);
+      yield put(getListAccount(params))
+      yield put(searchListView(action.params));
 
     }
   } catch (e) {

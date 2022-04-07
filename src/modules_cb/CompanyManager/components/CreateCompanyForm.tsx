@@ -1,11 +1,13 @@
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Form, Input, Modal} from "antd";
-import React, {FormEvent} from "react";
+import {Button, Form, Input, Modal, TreeSelect} from "antd";
+import React, {FormEvent, useState} from "react";
 import {createCompany, showFormCreate} from "../redux/actions";
 import {CreateCompanyRequest} from "../types";
 import {formItemLayout} from "../../../helpers/utilsFunc";
+
+const {TreeNode} = TreeSelect;
 
 const mapStateToProps = (state: RootState) => ({
   companyManager: state.companyManager,
@@ -19,8 +21,11 @@ interface CreateCompanyFormProps extends FormComponentProps, ReduxProps {
 }
 
 function CreateCompanyForm(props: CreateCompanyFormProps) {
-  const {showForm} = props.companyManager
+  const {showForm,list} = props.companyManager
   const {getFieldDecorator, resetFields} = props.form;
+  const [valueSelect, setValueSelect] = useState(undefined)
+  const formItemStyle = {height: '60px'};
+  const fontWeightStyle = {fontWeight: 400};
 
   function onBtnCreateClicked(e: FormEvent) {
     e.preventDefault();
@@ -29,9 +34,8 @@ function CreateCompanyForm(props: CreateCompanyFormProps) {
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         let req: CreateCompanyRequest = {
-          description: values.description,
           name: values.name,
-          organizations: []
+          idParent: valueSelect,
         }
         props.createCompany(req);
         return;
@@ -43,6 +47,15 @@ function CreateCompanyForm(props: CreateCompanyFormProps) {
     resetFields();
     props.showFormCreate(false);
   }
+
+  const filterTreeNode = (input: any, node: any) => {
+    const title = node.props.title;
+    return title.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+  };
+
+  function onChange(value: any) {
+    setValueSelect(value)
+  };
 
   return (
 
@@ -76,16 +89,39 @@ function CreateCompanyForm(props: CreateCompanyFormProps) {
           })(<Input placeholder="Nhập tên Công ty" className="bg-white text-black"/>)}
         </Form.Item>
 
-        <Form.Item label="Miêu tả" className="form-label"  {...formItemLayout}>
-          {getFieldDecorator('description', {
-            initialValue: '',
+        <Form.Item label="Thuộc công ty" className="form-label" style={{...formItemStyle}}>
+          {getFieldDecorator('idParent', {
+            initialValue: undefined,
             rules: [
               {
-                message: 'Vui lòng nhập miêu tả',
-                required: true,
+                message: 'Vui lòng chọn công ty',
+                required: false,
               },
             ],
-          })(<Input placeholder="Nhập miêu tả" className="bg-white text-black"/>)}
+          })(
+            <TreeSelect
+              style={{width: '100%', ...fontWeightStyle}}
+              showSearch
+              allowClear
+              dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
+              placeholder="Chọn công ty"
+              className="bg-white text-black"
+              onChange={onChange}
+              getPopupContainer={(trigger: any) => trigger.parentNode}
+              filterTreeNode={filterTreeNode}
+
+            >
+              {list.rows?.map((item: any) => (
+                <TreeNode style={fontWeightStyle} value={item.id} title={item.name} key={item.id}>
+                  {item.children ? item.children.map((el: any) => (
+                    <TreeNode style={fontWeightStyle} value={el.id} key={el.id} title={el.name}/>
+                  )) : null}
+                </TreeNode>
+
+              ))}
+
+            </TreeSelect>
+          )}
         </Form.Item>
 
         <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px', textAlign: "right"}} colon={false}>

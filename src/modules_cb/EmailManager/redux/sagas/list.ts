@@ -1,4 +1,4 @@
-import {getListEmailError, getListEmailSuccess, ListEmailAction} from "../actions";
+import {getListEmailError, getListEmailSuccess, ListEmailAction, searchListEmail} from "../actions";
 import * as apis from '../services/apis'
 import {put} from "redux-saga/effects";
 import {AppError} from "src/models/common";
@@ -14,6 +14,8 @@ export function* getListEmailAsync(action: ListEmailAction) {
 
     } else {
       yield put(getListEmailSuccess(rs.total, rs.rows))
+      yield put(searchListEmail(action.params))
+
     }
   } catch (e) {
     yield put(getListEmailError(new AppError(e.message)));

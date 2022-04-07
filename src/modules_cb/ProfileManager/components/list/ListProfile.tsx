@@ -54,9 +54,8 @@ const mapStateToProps = (state: RootState) => ({
   listJob: state.jobManager.list,
   searchJob: state.jobManager.search,
   listAccount: state.accountManager.list,
-
-
 })
+
 const connector = connect(mapStateToProps, {
   getListProfile,
   deleteProfile,
@@ -170,6 +169,15 @@ function ListProfile(props: ListProfileProps) {
       ellipsis: true,
     },
     {
+      title: 'Phòng ban',
+      dataIndex: 'departmentName',
+      width: 150,
+      key: 'departmentName',
+      sorter: (a, b) => a.departmentName.length - b.departmentName.length,
+      sortOrder: state.sortedInfo.columnKey === 'departmentName' && state.sortedInfo.order,
+      ellipsis: true,
+    },
+    {
       title: 'Tin tuyển dụng',
       dataIndex: 'recruitmentName',
       width: 170,
@@ -197,15 +205,7 @@ function ListProfile(props: ListProfileProps) {
 
 
     },
-    {
-      title: 'Phòng ban',
-      dataIndex: 'departmentName',
-      width: 150,
-      key: 'departmentName',
-      sorter: (a, b) => a.departmentName.length - b.departmentName.length,
-      sortOrder: state.sortedInfo.columnKey === 'departmentName' && state.sortedInfo.order,
-      ellipsis: true,
-    },
+
     {
       title: 'CV',
       dataIndex: 'cv',
@@ -377,6 +377,7 @@ function ListProfile(props: ListProfileProps) {
     recruitment: undefined,
     hrRef: undefined,
     pic: undefined,
+    name: undefined,
     startDateRange: undefined,
     endDateRange: undefined,
   })
@@ -457,7 +458,7 @@ function ListProfile(props: ListProfileProps) {
       recruitment: undefined,
       hrRef: undefined,
       pic: undefined,
-
+      name: undefined,
       startDateRange: undefined,
       endDateRange: undefined,
     })

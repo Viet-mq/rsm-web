@@ -1,5 +1,5 @@
 export * from './list'
-export * from './deleteJob'
+export * from './deleteEmail'
 export * from './create'
 export * from './update'
 export * from './search'
