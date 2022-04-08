@@ -66,6 +66,10 @@ export const updateCV = async (file: any, profileId: any) => {
   })
 }
 
+export const deleteCV = async (params?: any): Promise<ResponseBase2> => {
+  return (await POST('upload-svc/upload/delete-cv', params)) as ResponseBase2;
+};
+
 export const uploadListCV = async (file: any) => {
   let formData = new FormData();
   formData.append('file', file);

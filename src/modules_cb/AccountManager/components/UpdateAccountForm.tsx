@@ -2,8 +2,8 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {showFormUpdate, updateAccount} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Form, Input, Modal, Select} from "antd";
-import React, {FormEvent} from "react";
+import {Button, Form, Input, Modal, Select, TreeSelect} from "antd";
+import React, {FormEvent, useEffect, useState} from "react";
 import {UpdateAccountRequest} from "../types";
 
 const {Option} = Select;
@@ -11,7 +11,7 @@ const {Option} = Select;
 const mapStateToProps = (state: RootState) => ({
   accountManager: state.accountManager,
   listRole: state.rolesManager.list,
-  listCompany:state.companyManager.list
+  listCompany: state.companyManager.list
 });
 
 const connector = connect(mapStateToProps, {showFormUpdate, updateAccount});
@@ -36,6 +36,20 @@ function UpdateAccountForm(props: UpdateAccountFormProps) {
   };
   const fontWeightStyle = {fontWeight: 400};
   const {showForm} = props.accountManager
+  const [company, setCompany] = useState<any>([]);
+
+  useEffect(() => {
+    setCompany(recursiveCompany(props.listCompany.rows))
+  }, [props.listCompany.rows])
+
+  function recursiveCompany(data: any) {
+    return data?.map((item: any) => ({
+      title: item.name,
+      value: item.id,
+      key: item.id,
+      children: recursiveCompany(item.children),
+    }))
+  }
 
   function onBtnUpdateClicked(e: FormEvent) {
     e.preventDefault();
@@ -47,9 +61,9 @@ function UpdateAccountForm(props: UpdateAccountFormProps) {
           username: values.username,
           fullName: values.full_name,
           dateOfBirth: values.date_of_birth,
-          email:values.email,
-          organizations: [values.organization],
-          roles: values.role,
+          email: values.email,
+          organizations: values.organization,
+          roles: values.roles,
 
         }
         props.updateAccount(req);
@@ -121,13 +135,13 @@ function UpdateAccountForm(props: UpdateAccountFormProps) {
               },
             ],
           })(
-            <Input  placeholder="Tên đăng nhập" className="bg-white text-black"/>
+            <Input placeholder="Tên đăng nhập" className="bg-white text-black"/>
           )}
         </Form.Item>
 
-        <Form.Item label="Role" className="mb-0 " style={{...formItemStyle}}>
+        <Form.Item label="Roles" className="mb-0 " style={{...formItemStyle}}>
           {getFieldDecorator('roles', {
-            initialValue:  showForm.data_update?.roles?.map((item:any)=>item.id),
+            initialValue: showForm.data_update?.roles?.map((item: any) => item.id),
             rules: [
               {
                 message: 'Vui lòng chọn role',
@@ -156,7 +170,7 @@ function UpdateAccountForm(props: UpdateAccountFormProps) {
 
         <Form.Item label="Thuộc công ty" className="mb-0 " style={{...formItemStyle}}>
           {getFieldDecorator('organization', {
-            initialValue: undefined,
+            initialValue: showForm.data_update?.organizations,
             rules: [
               {
                 message: 'Vui lòng chọn công ty',
@@ -164,21 +178,30 @@ function UpdateAccountForm(props: UpdateAccountFormProps) {
               },
             ],
           })(
-            <Select  getPopupContainer={(trigger: any) => trigger.parentNode}
-                     placeholder="Chọn công ty"
-                     filterOption={(input, option: any) =>
-                       option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                     }
-                     optionFilterProp="children"
-                     showSearch
-                     style={fontWeightStyle}
-                     className="bg-white text-black form-label"
-            >
-              {props.listCompany.rows?.map((item: any) => (
-                <Option key={item.id} value={item.id}>{item.name}</Option>
-              ))}
+            // <Select  getPopupContainer={(trigger: any) => trigger.parentNode}
+            //          placeholder="Chọn công ty"
+            //          filterOption={(input, option: any) =>
+            //            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            //          }
+            //          optionFilterProp="children"
+            //          showSearch
+            //          style={fontWeightStyle}
+            //          className="bg-white text-black form-label"
+            // >
+            //   {props.listCompany.rows?.map((item: any) => (
+            //     <Option key={item.id} value={item.id}>{item.name}</Option>
+            //   ))}
+            //
+            // </Select>
 
-            </Select>,
+            <TreeSelect
+              treeData={company}
+              treeCheckable={true}
+              showCheckedStrategy={"SHOW_PARENT"}
+              searchPlaceholder='Chọn công ty'
+              style={fontWeightStyle}
+            />
+            ,
           )}
         </Form.Item>
 

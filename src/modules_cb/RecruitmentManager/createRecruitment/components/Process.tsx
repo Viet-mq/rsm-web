@@ -156,7 +156,6 @@ function ProcessForm(props: IProps) {
   }
 
   function handleChangeTextEditor(value: any) {
-    console.log(value)
     if (value === "<p><br></p>") {
       setDisplay(true)
       setValueEditor("")

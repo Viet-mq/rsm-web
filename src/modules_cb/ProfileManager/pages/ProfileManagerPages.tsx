@@ -95,7 +95,9 @@ function ProfileManagerPages(props: IProps) {
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div style={{display: "flex", flexWrap: "nowrap"}}>
-                <ButtonCreate path={profile_path} action="create" name=" Thêm ứng viên" handleClick={handleCreate}/>
+
+                {location.pathname.includes("profile-manager") ?null:
+                <ButtonCreate path={profile_path} action="create" name=" Thêm ứng viên" handleClick={handleCreate}/>}
 
                 <Button onClick={event => handleUploadListCV(event)}>
                   <Icon type="upload"/> Upload DS ứng viên

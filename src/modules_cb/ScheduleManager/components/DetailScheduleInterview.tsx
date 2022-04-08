@@ -5,11 +5,17 @@ import {Button, Form, Icon, Modal} from "antd";
 import React, {useEffect, useState} from "react";
 import moment from "moment";
 import 'devextreme/dist/css/dx.light.css';
-import {createBooking, getBooking, showFormBooking, updateBooking} from "../../ProfileManager/redux/actions";
+import {
+  createBooking,
+  getBooking,
+  showFormBooking,
+  showFormDetail,
+  updateBooking
+} from "../../ProfileManager/redux/actions";
 import {getListAccount} from "../../AccountManager/redux/actions";
 import {getListStatusCV} from "../../StatusCVManager/redux/actions";
 import {ScheduleEntity} from "../types";
-import {DataShowBooking} from "../../ProfileManager/types";
+import {DataShowBooking, DetailCV} from "../../ProfileManager/types";
 import BookingForm from "../../ProfileManager/components/BookingForm";
 import {deleteSchedule} from "../redux/actions";
 import {CheckViewAction, schedule_path} from "../../../helpers/utilsFunc";
@@ -19,13 +25,9 @@ const mapStateToProps = (state: RootState) => ({
 })
 const connector = connect(mapStateToProps,
   {
-    getBooking,
-    getListAccount,
-    getListStatusCV,
-    updateBooking,
-    createBooking,
     showFormBooking,
-    deleteSchedule
+    deleteSchedule,
+    showFormDetail
   });
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -64,6 +66,18 @@ function DetailScheduleInterview(props: IProps) {
     props.handleClosePopupDetail();
   }
 
+  console.log(dataDetail)
+
+  function handleShowDetail(value:any){
+    let req: DetailCV = {
+      show_detail: false,
+      general: 12,
+      detail: 12
+    }
+    props.showFormDetail(req,value);
+    props.handleClosePopupDetail()
+  }
+
   return (
     <>
       <Modal
@@ -92,7 +106,7 @@ function DetailScheduleInterview(props: IProps) {
 
             <div style={{...fontWeight}}>Ứng viên</div>
             <div style={{...fontWeight, padding: 0}}>{dataDetail?.fullName}</div>
-            <div><a style={{display: "flex"}}>Xem hồ sơ <Icon type="arrow-right"
+            <div onClick={()=>handleShowDetail(dataDetail?.idProfile)}><a style={{display: "flex"}}>Xem hồ sơ <Icon type="arrow-right"
                                                               style={{fontSize: '22px', marginTop: 3}}/></a></div>
 
             <div style={{...fontWeight}}>Thời gian</div>

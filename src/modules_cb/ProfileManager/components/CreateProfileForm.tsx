@@ -27,6 +27,7 @@ import {SchoolEntity} from "../../SchoolManager/types";
 import {getSearchAccount} from "../../AccountManager/redux/actions";
 import {UserAccount} from "../../AccountManager/types";
 import {formItemLayout, getInitials} from "../../../helpers/utilsFunc";
+import {useLocation} from "react-router-dom";
 
 const {Option} = Select;
 const {TreeNode} = TreeSelect;
@@ -91,6 +92,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
     school: false,
     account: false,
   })
+  const location = useLocation();
 
   useEffect(() => {
     setJob(props.listJob.rows)
@@ -127,7 +129,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
           hrRef: values.hrRef,
           mailRef: values.mailRef,
           mailRef2: values.mailRef2,
-          department: values.department,
+          department: showForm.recruitment_talentpool?.department ? showForm.recruitment_talentpool?.department : values.department,
           dateOfApply: values.dateOfApply * 1,
 
           company: values.company,
@@ -712,48 +714,51 @@ function CreateProfileForm(props: CreateProfileFormProps) {
               </div>
             </Form.Item>
 
-            <Form.Item label="Phòng ban" className="form-label"  {...formItemLayout}>
-              <div style={{display: 'flex'}}>
-                {getFieldDecorator('department', {
-                  initialValue: undefined,
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập phòng ban',
-                      required: false,
-                    },
-                  ],
-                })(
-                  <TreeSelect
-                    showSearch
-                    allowClear
-                    dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
-                    getPopupContainer={(trigger: any) => trigger.parentNode}
-                    filterTreeNode={filterTreeNode}
-                    placeholder="Phòng ban"
-                    className="bg-white text-black"
-                    style={fontWeightStyle}
+            {location.pathname.includes("recruitment-manager") ? null :
+              <Form.Item label="Phòng ban" className="form-label"  {...formItemLayout}>
+                <div style={{display: 'flex'}}>
+                  {getFieldDecorator('department', {
+                    initialValue: undefined,
+                    rules: [
+                      {
+                        message: 'Vui lòng nhập phòng ban',
+                        required: false,
+                      },
+                    ],
+                  })(
+                    <TreeSelect
+                      showSearch
+                      allowClear
+                      dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
+                      filterTreeNode={filterTreeNode}
+                      placeholder="Phòng ban"
+                      className="bg-white text-black"
+                      style={fontWeightStyle}
+                    >
+                      {props.listDepartment.rows?.map((item: any) => (
+                        <TreeNode style={fontWeightStyle} value={item.id} title={item.name} key={item.id}>
+                          {item.children ? item.children.map((el: any) => (
+                            <TreeNode style={fontWeightStyle} value={el.id} key={el.id} title={el.name}/>
+                          )) : null}
+                        </TreeNode>
+
+                      ))}
+
+                    </TreeSelect>
+                  )}
+                  <Button
+                    size="small"
+                    className="ant-btn ml-1 mr-1 ant-btn-sm"
+                    style={{height: '32px'}}
+                    onClick={handleCreateDepartment}
                   >
-                    {props.listDepartment.rows?.map((item: any) => (
-                      <TreeNode style={fontWeightStyle} value={item.id} title={item.name} key={item.id}>
-                        {item.children ? item.children.map((el: any) => (
-                          <TreeNode style={fontWeightStyle} value={el.id} key={el.id} title={el.name}/>
-                        )) : null}
-                      </TreeNode>
+                    <Icon type="plus"/>
+                  </Button>
+                </div>
+              </Form.Item>
 
-                    ))}
-
-                  </TreeSelect>
-                )}
-                <Button
-                  size="small"
-                  className="ant-btn ml-1 mr-1 ant-btn-sm"
-                  style={{height: '32px'}}
-                  onClick={handleCreateDepartment}
-                >
-                  <Icon type="plus"/>
-                </Button>
-              </div>
-            </Form.Item>
+            }
 
             <Form.Item label="Người giới thiệu" className="form-label"  {...formItemLayout}>
               {getFieldDecorator('hrRef', {
@@ -865,7 +870,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
             </Form.Item>
 
           </div>
-          <Form.Item label=" " style={{marginRight:20, textAlign: "right"}} colon={false}>
+          <Form.Item label=" " style={{marginRight: 20, textAlign: "right"}} colon={false}>
             <Button className="mr-3 create-btn" htmlType="submit" onClick={onBtnCreateClicked}>
               Tạo mới
             </Button>

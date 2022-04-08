@@ -7,20 +7,25 @@ import {getDetailProfileAsync} from "./detail/detail";
 import {
   ADD_TO_TALENT_POOL,
   CHANGE_PROCESS,
-  CREATE_BOOKING, CREATE_COMMENT,
+  CREATE_BOOKING,
+  CREATE_COMMENT,
   CREATE_NOTE,
   CREATE_PROFILE,
-  CREATE_REJECT_CANDIDATE, DELETE_COMMENT,
+  CREATE_REJECT_CANDIDATE,
+  DELETE_COMMENT,
+  DELETE_CV,
   DELETE_NOTE,
   DELETE_PROFILE,
   GET_ACTIVITY,
   GET_BOOKING,
   GET_DETAIL_PROFILE,
   GET_ELASTIC_SEARCH,
-  GET_FULL_ELASTIC_SEARCH, GET_LIST_COMMENT,
+  GET_FULL_ELASTIC_SEARCH,
+  GET_LIST_COMMENT,
   GET_LIST_NOTE,
   GET_LIST_PROFILE,
-  UPDATE_BOOKING, UPDATE_COMMENT,
+  UPDATE_BOOKING,
+  UPDATE_COMMENT,
   UPDATE_DETAIL,
   UPDATE_NOTE,
   UPDATE_PROFILE,
@@ -49,6 +54,7 @@ import {createRejectCandidateAsync} from "./profile/createRejectCandidate";
 import {changeProcessAsync} from "./profile/changeProcess";
 import {changeTalentPoolAsync} from "./profile/addToTalentPool";
 import {searchFullAsync} from "./profile/searchFull";
+import {deleteCVAsync} from "./cv/deleteCV";
 
 export default function* root() {
   return all([
@@ -59,6 +65,7 @@ export default function* root() {
     yield takeLatest(UPDATE_DETAIL, updateDetailAsync),
     yield takeLatest(GET_DETAIL_PROFILE, getDetailProfileAsync),
     yield takeLatest(UPLOADCV, uploadCVAsync),
+    yield takeLatest(DELETE_CV, deleteCVAsync),
     yield takeLatest(UPLOAD_LIST_CV, uploadListCVAsync),
     yield takeLatest(GET_BOOKING, getBookingAsync),
     yield takeLatest(CREATE_BOOKING, createBookingAsync),

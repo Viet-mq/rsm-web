@@ -132,11 +132,12 @@ function DetailRecruitment(props: IProps) {
 
     let req: RecruitmentTalentPool = ({
       recruitment: props.detailRecruitment?.rows[0]?.id,
-
+      talentPool: props.detailRecruitment?.rows[0]?.talentPoolId,
+      department:props.detailRecruitment?.rows[0]?.departmentId
     })
+
     props.showFormCreate(true, req);
   }
-
 
   return (
     <>

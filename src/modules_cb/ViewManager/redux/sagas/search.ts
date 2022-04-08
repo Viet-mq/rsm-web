@@ -14,8 +14,7 @@ export function* searchListViewAsync(action: SearchListViewAction) {
       NotificationError('Lấy danh sách view không thành công', "Lỗi: " + rs.message);
     } else {
       yield put(searchListViewSuccess(rs.total, rs.rows))
-      const params = yield select((state: RootState) => state.accountManager.list.params);
-      yield put(getListAccount(params))
+
 
     }
   } catch (e) {

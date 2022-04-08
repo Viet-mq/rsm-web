@@ -186,12 +186,14 @@ function CreateRolesForm(props: CreateRolesFormProps) {
     props.showFormAddViewRoles(true)
   }
 
-  function handleDeleteAPIRoles(event: any, record: APIRolesEntity) {
+  function handleDeleteAPIRoles(event: any, record: any) {
     let index = apiRolesTable.findIndex(function (o: any) {
       return o.id === record.id;
     })
     if (index !== -1) {
-      setApiRolesTable(apiRolesTable.splice(index, 1))
+      const newApiRolesTable=apiRolesTable
+      newApiRolesTable.splice(index, 1)
+      setApiRolesTable(newApiRolesTable)
     }
   }
 
@@ -200,11 +202,11 @@ function CreateRolesForm(props: CreateRolesFormProps) {
       return o.id === record.id;
     })
     if (index !== -1) {
-      setViewRolesTable(viewRolesTable.splice(index, 1))
+      const newViewRolesTable=viewRolesTable
+      newViewRolesTable.splice(index, 1)
+      setViewRolesTable(newViewRolesTable)
     }
   }
-
-  console.log(apiRolesTable)
 
   return (
     <>

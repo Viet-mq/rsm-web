@@ -14,8 +14,7 @@ export function* searchListApiAsync(action: GetListApiAction) {
       NotificationError('Lấy danh sách API không thành công', "Lỗi: " + rs.message);
     } else {
       yield put(searchListApiSuccess(rs.rows, rs.total))
-      const params = yield select((state: RootState) => state.accountManager.list.params);
-      yield put(getListAccount(params))
+
     }
   } catch (e) {
     yield put(searchListApiError(new AppError(e.message)));

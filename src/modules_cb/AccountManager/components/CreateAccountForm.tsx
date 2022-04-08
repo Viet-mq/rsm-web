@@ -2,8 +2,8 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {createAccount, showFormCreate} from "../redux/actions";
-import {Button, Form, Input, Modal, Select} from "antd";
-import React, {FormEvent} from "react";
+import {Button, Form, Input, Modal, Select, TreeSelect} from "antd";
+import React, {FormEvent, useEffect, useState} from "react";
 import {CreateAccountRequest} from "../types";
 
 const {Option} = Select;
@@ -35,6 +35,20 @@ function CreateAccountForm(props: CreateAccountFormProps) {
     },
   };
   const fontWeightStyle = {fontWeight: 400};
+  const [company, setCompany] = useState<any>([]);
+
+  useEffect(() => {
+    setCompany(recursiveCompany(props.listCompany.rows))
+  }, [props.listCompany.rows])
+
+  function recursiveCompany(data: any) {
+    return data?.map((item: any) => ({
+      title: item.name,
+      value: item.id,
+      key: item.id,
+      children: recursiveCompany(item.children),
+    }))
+  }
 
   function onBtnCreateClicked(e: FormEvent) {
     e.preventDefault();
@@ -45,7 +59,7 @@ function CreateAccountForm(props: CreateAccountFormProps) {
         let req: CreateAccountRequest = {
           username: values.username,
           password: values.password,
-          roles: values.role,
+          roles: values.roles,
           email: values.email,
           fullName: values.fullName,
           dateOfBirth: values.dateOfBirth,
@@ -139,11 +153,11 @@ function CreateAccountForm(props: CreateAccountFormProps) {
         </Form.Item>
 
         <Form.Item label="Role" className="mb-0 " style={{...formItemStyle}}>
-          {getFieldDecorator('role', {
+          {getFieldDecorator('roles', {
             initialValue: undefined,
             rules: [
               {
-                message: 'Vui lòng chọn role',
+                message: 'Vui lòng chọn roles',
                 required: true,
               },
             ],
@@ -177,21 +191,13 @@ function CreateAccountForm(props: CreateAccountFormProps) {
               },
             ],
           })(
-            <Select  getPopupContainer={(trigger: any) => trigger.parentNode}
-                    placeholder="Chọn công ty"
-                    filterOption={(input, option: any) =>
-                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    }
-                    optionFilterProp="children"
-                    showSearch
-                    style={fontWeightStyle}
-                    className="bg-white text-black form-label"
-            >
-              {props.listCompany.rows?.map((item: any) => (
-                <Option key={item.id} value={item.id}>{item.name}</Option>
-              ))}
-
-            </Select>,
+            <TreeSelect
+              treeData={company}
+              treeCheckable={true}
+              showCheckedStrategy={"SHOW_PARENT"}
+              searchPlaceholder='Chọn công ty'
+              style={fontWeightStyle}
+            />,
           )}
         </Form.Item>
 

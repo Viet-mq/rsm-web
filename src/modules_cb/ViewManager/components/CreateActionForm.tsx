@@ -41,7 +41,6 @@ function CreateActionForm(props: CreateActionFormProps) {
           permission_id: showForm.id_view,
           title: values.title
         }
-        // console.log(req)
         props.addAction(req);
         return;
       }

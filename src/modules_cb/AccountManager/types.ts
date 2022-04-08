@@ -1,9 +1,11 @@
+import {RolesRequest} from "../RolesManager/types";
+
 export interface UserAccount {
   username: string,
   fullName: string,
   dateOfBirth: string,
   role: number,
-  roles: string[],
+  roles: RolesRequest[],
   status: number,
   createAt: number,
   updateAt: number,
@@ -11,6 +13,7 @@ export interface UserAccount {
   createBy: string,
   updateBy: string,
   email:string,
+  organizations:string[]
 }
 
 export interface CreateAccountRequest {

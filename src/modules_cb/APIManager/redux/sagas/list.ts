@@ -16,8 +16,7 @@ export function* getListApiAsync(action: GetListApiAction) {
     else{
       localStorage.setItem("list-api", JSON.stringify(rs || {}));
       yield put(getListApiSuccess(rs.rows, rs.total))
-      const params = yield select((state: RootState) => state.accountManager.list.params);
-      yield put(getListAccount(params))
+
       yield put(searchListApi(action.params));
 
     }

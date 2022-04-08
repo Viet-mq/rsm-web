@@ -148,6 +148,7 @@ export interface SearchRequest {
 export interface RecruitmentTalentPool {
   recruitment?: string,
   talentPool?: string,
+  department?:string,
 }
 
 
@@ -399,6 +400,10 @@ export interface CreateCommentRequest {
 }
 
 export interface DeleteCommentRequest {
+  id: string,
+}
+
+export interface DeleteCVRequest {
   id: string,
 }
 

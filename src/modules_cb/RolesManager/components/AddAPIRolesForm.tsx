@@ -65,7 +65,6 @@ function AddAPIRolesForm(props: AddAPIRolesFormProps) {
   }
 
   function handleSelectAPIRoles(value: any) {
-    console.log("value", value)
     setAddAPIRoles(JSON.parse(value));
   }
 

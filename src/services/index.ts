@@ -146,7 +146,8 @@ export const GET = <T extends {}>(path: string, params: any = {}): Promise<T> =>
     .join('&');
   return axios
     .get(API_PATH + '/' + path + (_params !== '' ? '?' + _params : ''), getOptions())
-    .then(response => response.data as T);
+    .then(response => response.data as T)
+    ;
 };
 
 export const PUT = (path: string, params?: any): Promise<any> => {

@@ -16,8 +16,7 @@ export function* getListViewRolesAsync(action: ViewRolesListAction) {
     } else {
       localStorage.setItem("list-view-roles", JSON.stringify(rs || {}));
       yield put(getListViewRolesSuccess(rs.total, rs.rows))
-      const params = yield select((state: RootState) => state.accountManager.list.params);
-      yield put(getListAccount(params))
+
       yield put(getSearchViewRoles(action.params))
 
     }

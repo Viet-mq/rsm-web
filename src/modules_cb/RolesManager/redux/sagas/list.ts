@@ -17,8 +17,7 @@ export function* getListRolesAsync(action: RolesListAction) {
     else {
       localStorage.setItem("list-roles", JSON.stringify(rs || {}));
       yield put(getListRolesSuccess(rs.total, rs.rows))
-      const params = yield select((state: RootState) => state.accountManager.list.params);
-      yield put(getListAccount(params))
+
       yield put(getSearchRoles(action.params))
 
     }

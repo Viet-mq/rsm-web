@@ -291,20 +291,29 @@ function ListProfile(props: ListProfileProps) {
       width: 120,
       key: 'dateOfApply',
       render: (value: number) => {
-        return moment(unixTimeToDate(value)).format('DD/MM/YYYY');
+        return value === 0 ? "" : moment(unixTimeToDate(value)).format('DD/MM/YYYY');
       },
       sorter: (a, b) => a.talentPoolName.length - b.talentPoolName.length,
       sortOrder: state.sortedInfo.columnKey === 'talentPoolName' && state.sortedInfo.order,
       ellipsis: true,
+    },
+    {
+      title: 'Thời gian tạo',
+      dataIndex: 'createAt',
+      width: 100,
+      key: 'createAt',
+      render: (value: number) => {
+        return value === 0 ? "" : moment(unixTimeToDate(value)).format('DD/MM/YYYY');
+      },
     },
 
     {
       title: 'Năm sinh',
       dataIndex: 'dateOfBirth',
       width: 100,
-      key: '3',
+      key: 'dateOfBirth',
       render: (value: number) => {
-        return moment(unixTimeToDate(value)).format('DD/MM/YYYY');
+        return value === 0 ? "" : moment(unixTimeToDate(value)).format('DD/MM/YYYY');
       },
     },
     // {
@@ -380,6 +389,8 @@ function ListProfile(props: ListProfileProps) {
     name: undefined,
     startDateRange: undefined,
     endDateRange: undefined,
+    startCreateAt: undefined,
+    endCreateAt: undefined,
   })
   const dateFormat = 'DD/MM/YYYY';
   const [treeData, setTreeData] = useState([])
@@ -450,6 +461,7 @@ function ListProfile(props: ListProfileProps) {
         columnKey: null,
       },
     });
+
     setSelected({
       job: undefined,
       jobLevel: undefined,
@@ -461,28 +473,27 @@ function ListProfile(props: ListProfileProps) {
       name: undefined,
       startDateRange: undefined,
       endDateRange: undefined,
+      startCreateAt: undefined,
+      endCreateAt: undefined,
     })
-    if (pathname.includes("talent-pool-manager")) {
-      let req = {
-        talentPool: props.idTalentPool,
-        page: 1,
-        size: 30
-      }
+    const req: any = {}
+    req.page = page;
+    req.size = 30;
 
+    if (pathname.includes("talent-pool-manager")) {
+      req.talentPool = props.idTalentPool
       props.getListProfile(req);
       props.getDetailTalentPool({id: props.idTalentPool})
-    } else if (pathname.includes("recruitment-manager")) {
-      let req = {
-        recruitment: props.idRecruitment,
-        statusCV: props.idProcess,
-        page: 1,
-        size: 30
-      }
 
+    } else if (pathname.includes("recruitment-manager")) {
+      req.recruitment = props.idRecruitment
+      req.statusCV = props.idProcess
       props.getListProfile(req);
 
-    } else props.getListProfile({page: 1, size: 30})
-
+    } else {
+      req.key = "recruitment"
+      props.getListProfile(req)
+    }
   };
 
   function unixTimeToDate(unixTime: number): Date {
@@ -563,6 +574,8 @@ function ListProfile(props: ListProfileProps) {
     if (selected.pic) req.pic = selected.pic
     if (selected.startDateRange) req.from = selected.startDateRange * 1
     if (selected.endDateRange) req.to = selected.endDateRange * 1
+    if (selected.startCreateAt) req.fromCreateAt = selected.startCreateAt * 1
+    if (selected.endCreateAt) req.toCreateAt = selected.endCreateAt * 1
     req.page = page;
     req.size = 30;
 
@@ -576,7 +589,10 @@ function ListProfile(props: ListProfileProps) {
       req.statusCV = props.idProcess
       props.getListProfile(req);
 
-    } else props.getListProfile(req)
+    } else {
+      req.key = "recruitment"
+      props.getListProfile(req)
+    }
   }
 
   function onSearchJob(value: any) {
@@ -624,6 +640,16 @@ function ListProfile(props: ListProfileProps) {
 
       setSelected({...selected, startDateRange: start, endDateRange: end})
 
+    }
+  }
+
+  function onChangeCreateAt(dates: any) {
+    if (dates) {
+      dates[0]?.set({hour: 0, minute: 0, second: 0})
+      dates[1]?.set({hour: 23, minute: 59, second: 59})
+      let [start, end] = [dates[0], dates[1]];
+      // setValueDateRange([start, end])
+      setSelected({...selected, startCreateAt: start, endCreateAt: end})
     }
   }
 
@@ -871,7 +897,21 @@ function ListProfile(props: ListProfileProps) {
                   'Hôm nay': [moment(), moment()],
                   'Tháng này': [moment().startOf('month'), moment().endOf('month')],
                 }}
+                placeholder={["Ngày nộp hồ sơ", "Ngày nộp hồ sơ"]}
                 onChange={onChangeDateRange}
+              />
+
+              <RangePicker
+                style={{width: 250}}
+                format={dateFormat}
+                value={[selected.startCreateAt, selected.endCreateAt]}
+                // allowClear={false}
+                ranges={{
+                  'Hôm nay': [moment(), moment()],
+                  'Tháng này': [moment().startOf('month'), moment().endOf('month')],
+                }}
+                placeholder={["Ngày tạo", "Ngày tạo"]}
+                onChange={onChangeCreateAt}
               />
 
               <Button type="primary" style={width}

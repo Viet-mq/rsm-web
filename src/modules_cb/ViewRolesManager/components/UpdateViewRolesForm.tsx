@@ -91,7 +91,6 @@ function UpdateViewRolesForm(props: UpdateViewRolesFormProps) {
       }))
       const list: any = [...listView, ...newListView]
       setPermissionsChecked(list);
-
     }
 
     setListChecked(checkedKeysValue);

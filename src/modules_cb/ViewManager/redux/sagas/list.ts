@@ -16,8 +16,7 @@ export function* getListViewAsync(action: GetListViewAction) {
     else{
       localStorage.setItem("list-view", JSON.stringify(rs || {}));
       yield put(getListViewSuccess(rs.total, rs.rows))
-      const params = yield select((state: RootState) => state.accountManager.list.params);
-      yield put(getListAccount(params))
+
       yield put(searchListView(action.params));
 
     }

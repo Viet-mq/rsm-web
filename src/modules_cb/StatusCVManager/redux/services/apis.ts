@@ -23,3 +23,8 @@ export const deleteStatusCV = async (params?: any): Promise<ResponseBase2> => {
 export const updateStatusCV = async (params?: any): Promise<ResponseBase2> => {
   return (await POST('api-svc/statuscv/update', params)) as ResponseBase2;
 };
+
+
+export const updateAllStatusCV = async (params?: any): Promise<ResponseBase2> => {
+  return (await POST('api-svc/statuscv/update-all', params)) as ResponseBase2;
+};

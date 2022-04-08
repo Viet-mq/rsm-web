@@ -4,6 +4,7 @@ import {
   createComment,
   createNote,
   deleteComment,
+  deleteCV,
   deleteNote,
   getActivityLogs,
   getBooking,
@@ -47,6 +48,7 @@ import {
   CommentEntity,
   DataShowBooking,
   DeleteCommentRequest,
+  DeleteCVRequest,
   DeleteNoteRequest,
   DetailCV,
   NoteEntity,
@@ -76,7 +78,8 @@ import UpdateDetailProfileForm from "./UpdateDetailProfileForm";
 import CreateCommentForm from "./CreateCommentForm";
 import UpdateCommentForm from "./UpdateCommentForm";
 import {deleteSchedule} from "../../ScheduleManager/redux/actions";
-import {getInitials} from "../../../helpers/utilsFunc";
+import {getInitials, profile_path} from "../../../helpers/utilsFunc";
+import ButtonDelete from "../../../components/ComponentUtils/ButtonDelete";
 
 const {Step} = Steps;
 const {TabPane} = Tabs;
@@ -117,7 +120,8 @@ const connector = connect(mapStateToProps,
     showChangeProcessForm,
     showChangeRecruitmentForm,
     showAddToTalentPoolForm,
-    deleteSchedule
+    deleteSchedule,
+    deleteCV
   });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -577,6 +581,13 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     props.deleteSchedule({id: val})
   }
 
+  function handleDelete(event: any, id: any) {
+    let req: DeleteCVRequest = {
+      id: id
+    }
+    props.deleteCV(req);
+  }
+
   return (
     <>
       <div className="detail-container">
@@ -694,7 +705,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
             <Icon type="facebook" className='mr-1'/>
             <a href={detail.result?.facebook} target={"_blank"}>{detail.result?.facebook}</a><br/>
             <Icon type="linkedin" className='mr-1'/>
-            <a href={detail.result?.linkedin} target={"_blank"}>{detail.result?.linkedin}</a><br/>
+            <a href={`https://${detail.result?.linkedin}`} target={"_blank"}>{detail.result?.linkedin}</a><br/>
             <Icon type="github" className='mr-1'/>
             <span>{detail.result?.github}</span><br/>
 
@@ -861,8 +872,12 @@ function DetailProfileForm(props: DetailProfileFormProps) {
                   <div className="p-2">
                     <div className="pb-2">Ứng viên chưa thuộc tin tuyển dụng nào</div>
                     <div>
-                      <Button onClick={handleShowRecruitment} type={"primary"} size={"large"}><Icon type="inbox"/>
+                      <Button onClick={handleShowRecruitment} className="mr-3" type={"primary"} size={"large"}><Icon
+                        type="inbox"/>
                         Chuyển ứng viên vào tin
+                      </Button>
+                      <Button onClick={handleShowTalentPools} type={"primary"} size={"large"}><Icon type="inbox"/>
+                        Chuyển sang Talent Pool khác
                       </Button>
                     </div>
                   </div>
@@ -939,6 +954,14 @@ function DetailProfileForm(props: DetailProfileFormProps) {
           <div className="detail-paragraph-4__title">
             <h1>Resumes & CVS</h1>
             <div className="detail-paragraph-4__title--button">
+
+              {/*<Button size="small" className="ant-btn mr-1 ant-btn-sm"*/}
+              {/*        onClick={event => onBtnUploadCV(event)}*/}
+              {/*>*/}
+              {/*  <Icon type="delete"/>*/}
+              {/*</Button>*/}
+              <ButtonDelete path={profile_path} message="CV" action="delete-cv"
+                            handleClick={(event) => handleDelete(event, detail.result?.id)}/>
 
               <Button size="small" className="ant-btn mr-1 ant-btn-sm"
                       onClick={event => onBtnUploadCV(event)}

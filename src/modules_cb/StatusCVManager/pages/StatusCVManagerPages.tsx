@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Button, Icon, Popconfirm, Tooltip} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {deleteStatusCV, showFormCreate, showFormUpdate} from "../redux/actions";
+import {deleteStatusCV, showFormCreate, showFormUpdate, updateAllStatusCV} from "../redux/actions";
 import CreateStatusCVForm from "../components/CreateStatusCVForm";
 import Loading from "../../../components/Loading";
 import UpdateStatusCVForm from "../components/UpdateStatusCVForm";
@@ -19,6 +19,7 @@ const connector = connect(mapStateToProps, {
   showFormCreate,
   showFormUpdate,
   deleteStatusCV,
+  updateAllStatusCV
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -59,6 +60,8 @@ function StatusCVManagerPages(props: IProps) {
     // put the removed one into destination.
     schemaCopy.splice(result.destination.index, 0, removed);
     setLastElement(schemaCopy?.map((el: any) => el.isDragDisabled).lastIndexOf(false))
+    // console.log(schemaCopy)
+    props.updateAllStatusCV({statusCVS:schemaCopy})
     setSchema(schemaCopy);
   };
 

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Avatar, Button, DatePicker, Icon, Input, Select, Tooltip} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {countBookingNumber,} from "../../ProfileManager/redux/actions";
+import {countBookingNumber, showFormDetail,} from "../../ProfileManager/redux/actions";
 import {AiOutlineCalendar, GrNext, GrPrevious} from "react-icons/all";
 import moment from 'moment';
 import 'moment/locale/vi';
@@ -12,6 +12,7 @@ import {getAllSchedule, showFormSchedule} from "../redux/actions";
 import {DataShowSchedule, ScheduleEntity} from "../types";
 import {useLocation} from "react-router-dom";
 import {CheckViewAction, getInitials, schedule_path} from "../../../helpers/utilsFunc";
+import {DetailCV} from "../../ProfileManager/types";
 
 const {Search} = Input;
 const {Option} = Select;
@@ -26,6 +27,7 @@ const connector = connect(mapStateToProps, {
   countBookingNumber,
   getAllSchedule,
   showFormSchedule,
+  showFormDetail
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -187,6 +189,16 @@ function ScheduleManagerPages(props: IProps) {
     return setOutObject(outObject)
   }
 
+  function handleShowDetail(event:any,value:any){
+    event.stopPropagation()
+    let req: DetailCV = {
+      show_detail: false,
+      general: 12,
+      detail: 12
+    }
+    props.showFormDetail(req,value);
+  }
+
   return (
     <>
       <div className="c-schedule-container">
@@ -288,7 +300,7 @@ function ScheduleManagerPages(props: IProps) {
                     </Avatar>
                     <div className="c-main-content__wrap-main">
                       <div className="main-1">
-                        <a className="main-1__candidate-name">{itemChild.fullName}</a>
+                        <div onClick={(event:any)=>handleShowDetail(event,itemChild.idProfile)}><a className="main-1__candidate-name">{itemChild.fullName}</a></div>
                         <div className="main-1__green-dot"/>
                         <div className="main-1__job-description">{itemChild.recruitmentName}</div>
                       </div>

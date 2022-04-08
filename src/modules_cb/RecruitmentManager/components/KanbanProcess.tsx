@@ -18,8 +18,8 @@ const connector = connect(mapStateToProps, {
   changeProcess,
   showChangeProcessForm,
   showFormDetail,
-
 });
+
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends ReduxProps {

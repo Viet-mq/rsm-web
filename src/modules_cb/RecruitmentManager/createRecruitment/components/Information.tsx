@@ -185,7 +185,6 @@ function InformationForm(props: IProps) {
                 interviewProcess: props.listProcess.rows,
                 interviewer: []
               })
-              console.log(req)
               props.createSteps(req)
             // }
           }
@@ -526,7 +525,7 @@ function InformationForm(props: IProps) {
                     rules: [
                       {
                         message: 'Vui lòng chọn talent pools',
-                        required: false,
+                        required: true,
                       },
                     ],
                   })(

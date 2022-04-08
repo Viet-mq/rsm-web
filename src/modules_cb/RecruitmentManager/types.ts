@@ -4,7 +4,7 @@ export interface RecruitmentEntity {
   jobId: string,
 
   jobName: string,
-  departmentId: string,
+  departmentId?: string,
   departmentName: string,
   addressId: string,
   addressName: string,
