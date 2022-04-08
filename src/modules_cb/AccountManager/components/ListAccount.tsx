@@ -1,16 +1,19 @@
 import {RootState} from "../../../redux/reducers";
 import React, {useEffect, useState} from "react";
 import {connect, ConnectedProps} from "react-redux";
-import {deleteAccount, getListAccount, showFormChangePassword, showFormUpdate} from "../redux/actions";
-import env from "../../../configs/env";
+import {deleteAccount, getSearchAccount, showFormChangePassword, showFormUpdate} from "../redux/actions";
 import {ColumnProps} from "antd/lib/table";
 import moment from "moment";
-import {Button, Icon, Popconfirm, Table} from "antd";
+import {Button, Icon, Table} from "antd";
 import {emptyText} from "../../../configs/locales";
 import {DeleteAccountRequest, UserAccount} from "../types";
+import ButtonDelete from "../../../components/ComponentUtils/ButtonDelete";
+import {account_path, CheckViewAction} from "../../../helpers/utilsFunc";
+import ButtonUpdate from "../../../components/ComponentUtils/ButtonUpdate";
+import Search from "antd/es/input/Search";
 
-const mapStateToProps = ({accountManager: {list}}: RootState) => ({list})
-const connector = connect(mapStateToProps, {deleteAccount, getListAccount, showFormUpdate, showFormChangePassword});
+const mapStateToProps = ({accountManager}: RootState) => ({accountManager})
+const connector = connect(mapStateToProps, {deleteAccount, getSearchAccount, showFormUpdate, showFormChangePassword});
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -18,62 +21,15 @@ interface IProps extends ReduxProps {
 }
 
 function ListAccount(props: IProps) {
-
-  useEffect(() => {
-    props.getListAccount({page: 1, size: 100});
-  }, []);
-
-  let screenWidth = document.documentElement.clientWidth;
-  const [page, setPage] = useState(1);
-  const [scroll, setScroll] = useState(screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false});
-  const size = 10;
-  const [state, setState] = useState<any>({
-    selectedRowKeys: [],
-  });
-
-  useEffect(() => {
-
-    function updateSize() {
-      if (document.documentElement.clientWidth < env.desktopWidth) setScroll({x: 'fit-content'})
-      else setScroll({x: false})
-    }
-
-    window.addEventListener('resize', updateSize);
-    updateSize();
-    return () => window.removeEventListener('resize', updateSize);
-
-  }, []);
-
-  function unixTimeToDate(unixTime: number): Date {
-    return new Date(unixTime);
-  }
-
-  function handleDelete(event: any, userAccount: UserAccount) {
-    event.stopPropagation();
-    let req: DeleteAccountRequest = {
-      username: userAccount.username
-    }
-    props.deleteAccount(req);
-  }
-
-  function handleEdit(event: any, userAccount: UserAccount) {
-    event.stopPropagation();
-    props.showFormUpdate(true, userAccount);
-
-  }
-
-  function handleChangePassword(event: any, userAccount: UserAccount) {
-    event.stopPropagation();
-    props.showFormChangePassword(true, userAccount);
-  }
-
   const columns: ColumnProps<UserAccount>[] = [
     {
       title: 'STT',
       key: 'index',
       width: 40,
-      align:"center",
-      render: (text, record, index) =>  {return (page - 1) * 10 + index + 1}
+      align: "center",
+      render: (text, record, index) => {
+        return (page - 1) * 10 + index + 1
+      }
     },
     {
       title: 'Tên đăng nhập',
@@ -101,16 +57,10 @@ function ListAccount(props: IProps) {
     },
     {
       title: 'Role',
-      dataIndex: 'role',
+      dataIndex: 'roles',
       sorter: true,
       width: 80,
-      render: (value: number) => {
-        if (value === 1) {
-          return 'User'
-        } else {
-          return 'Admin'
-        }
-      },
+      render: (value: any) => value?.map((item: any) => item.name),
     },
     {
       title: 'Trạng thái',
@@ -156,72 +106,100 @@ function ListAccount(props: IProps) {
       render: (_text: string, record: UserAccount) => {
         return (
           <div style={{whiteSpace: 'nowrap'}}>
-            <Popconfirm
-              title="Bạn muốn xóa tài khoản này ?"
-              okText="Xóa"
-              onCancel={event => {
-                event?.stopPropagation();
-              }}
-              onConfirm={event => handleDelete(event, record)}
-            >
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                onClick={event => {
-                  event.stopPropagation();
-                }}
-              >
-                <Icon type="delete" theme="filled"/>
+            <ButtonDelete path={account_path} message="tài khoản" action="delete"
+                          handleClick={(event) => handleDelete(event, record)}/>
+            <ButtonUpdate path={account_path} action="update" handleClick={(event) => handleEdit(event, record)}/>
+
+            {CheckViewAction(account_path, "change-password")
+              ?
+              <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
+                      onClick={event => handleChangePassword(event, record)}>
+                <Icon type="key"/>
               </Button>
-            </Popconfirm>
-            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
-                    onClick={event => handleEdit(event, record)}>
-              <Icon type="edit"/>
-            </Button>
-            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
-                    onClick={event => handleChangePassword(event, record)}>
-              <Icon type="key"/>
-            </Button>
+              : null}
+
           </div>
         );
       },
     },
   ];
+  const [page, setPage] = useState(1);
+  const scroll = {y: 600};
+  const size = 30;
+  const [account, setAccount] = useState<any>()
+  const [nameSearch, setNameSearch] = useState<any>("")
+  const {search} = props.accountManager
+
+  useEffect(() => {
+    btnSearchClicked()
+  }, [page]);
+
+  useEffect(() => {
+    setAccount(search)
+  }, [search])
+
+  function btnSearchClicked() {
+    const req: any = {
+      page: page,
+      size: size,
+      name: nameSearch
+    }
+    props.getSearchAccount(req);
+  }
+
+  function unixTimeToDate(unixTime: number): Date {
+    return new Date(unixTime);
+  }
+
+  function handleDelete(event: any, userAccount: UserAccount) {
+    event.stopPropagation();
+    let req: DeleteAccountRequest = {
+      username: userAccount.username
+    }
+    props.deleteAccount(req);
+  }
+
+  function handleEdit(event: any, userAccount: UserAccount) {
+    event.stopPropagation();
+    props.showFormUpdate(true, userAccount);
+
+  }
+
+  function handleChangePassword(event: any, userAccount: UserAccount) {
+    event.stopPropagation();
+    props.showFormChangePassword(true, userAccount);
+  }
+
 
   function handleRowClick(event: any, chatBot: UserAccount) {
     event.stopPropagation();
   }
 
-  function handleTableChange(pagination: any, filters: any, sorter: any) {
-
-  }
-
-  function onSelectedRowKeysChange(selectedRowKeys: any) {
-    setState({selectedRowKeys});
-  }
-
-  const {selectedRowKeys} = state;
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectedRowKeysChange,
-  };
   return (
     <>
+      <div className="c-filter-profile">
+        <div style={{width: 200, display: "inline-block"}}>
+          <Search
+            onChange={e => setNameSearch(e.target.value)}
+            onSearch={btnSearchClicked}
+            placeholder="Tìm kiếm..."/>
+        </div>
+      </div>
+
       <Table
         scroll={scroll}
         className="custom-table"
-        dataSource={props.list.rows}
+        dataSource={account?.rows}
         columns={columns}
         rowKey="username"
         locale={{emptyText: emptyText}}
         pagination={{
           current: page,
           pageSize: size,
-          total: props.list.total,
+          total: account?.total,
           onChange: value => setPage(value),
           showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,
         }}
-        onChange={handleTableChange}
         onRow={(record, recordIndex) => {
           return {
             onClick: event => {

@@ -26,8 +26,11 @@ import {SourceCVEntity} from "../../SourceCVManager/types";
 import {SchoolEntity} from "../../SchoolManager/types";
 import {getSearchAccount} from "../../AccountManager/redux/actions";
 import {UserAccount} from "../../AccountManager/types";
+import {formItemLayout, getInitials} from "../../../helpers/utilsFunc";
+import {useLocation} from "react-router-dom";
 
 const {Option} = Select;
+const {TreeNode} = TreeSelect;
 
 const mapStateToProps = (state: RootState) => ({
   profileManager: state.profileManager,
@@ -74,18 +77,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
   const {showForm} = props.profileManager
   const {getFieldDecorator, resetFields} = props.form;
   const fontWeightStyle = {fontWeight: 400};
-  const formItemLayout = {
-    labelCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-    wrapperCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-  };
   const dateFormat = 'DD/MM/YYYY';
-  const [treeData, setTreeData] = useState([])
   const [job, setJob] = useState<JobEntity[]>([]);
   const [jobLevel, setJobLevel] = useState<JobLevelEntity[]>([]);
   const [department, setDepartment] = useState<DepartmentEntity[]>([]);
@@ -100,6 +92,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
     school: false,
     account: false,
   })
+  const location = useLocation();
 
   useEffect(() => {
     setJob(props.listJob.rows)
@@ -107,11 +100,6 @@ function CreateProfileForm(props: CreateProfileFormProps) {
     setDepartment(props.listDepartment.rows)
     setSchool(props.listSchool.rows)
   }, [])
-
-  useEffect(() => {
-    setTreeData(convertArrayToTree(props.listDepartment.rows))
-  }, [props.listDepartment.rows])
-
 
   const setColor = () => {
     const randomColor: string = Math.floor(Math.random() * 16777215).toString(16);
@@ -141,7 +129,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
           hrRef: values.hrRef,
           mailRef: values.mailRef,
           mailRef2: values.mailRef2,
-          department: values.department,
+          department: showForm.recruitment_talentpool?.department ? showForm.recruitment_talentpool?.department : values.department,
           dateOfApply: values.dateOfApply * 1,
 
           company: values.company,
@@ -220,40 +208,6 @@ function CreateProfileForm(props: CreateProfileFormProps) {
     props.showDepartmentFormCreate(true);
   }
 
-  const convertArrayToTree = (arrays: any) => {
-    let dataFetch: any = [];
-    for (let i = 0; i < arrays.length; i++) {
-      if (arrays[i]?.children) {
-        dataFetch.push({
-          title: arrays[i].name,
-          key: arrays[i].id,
-          value: arrays[i].id,
-          children: convertArrayToTree(arrays[i].children)
-        })
-      } else {
-        dataFetch.push({
-          title: arrays[i].name,
-          key: arrays[i].id,
-          value: arrays[i].id,
-        })
-      }
-    }
-    return dataFetch;
-  }
-
-  const getInitials = (name: string) => {
-    if (name) {
-      let initials: any = name.split(' ');
-      if (initials.length > 1) {
-        initials = initials.shift().charAt(0) + initials.pop().charAt(0);
-      } else {
-        initials = name.substring(0, 2);
-      }
-      return initials.toUpperCase();
-    }
-  }
-
-
   function onSearchJob(value: any) {
     props.getSearchJob({name: value})
     setTrigger({...trigger, job: true})
@@ -299,6 +253,10 @@ function CreateProfileForm(props: CreateProfileFormProps) {
     setAccount(props.listAccount.rows)
   }
 
+  const filterTreeNode = (input: any, node: any) => {
+    const title = node.props.title;
+    return title.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+  };
 
   return (
     <div>
@@ -318,8 +276,8 @@ function CreateProfileForm(props: CreateProfileFormProps) {
         }}
         footer={""}>
 
-        <Form className="form-create" style={{width:526}}>
-          <div className="modal-overflow" style={{paddingRight:15}}>
+        <Form className="form-create" style={{width: 526}}>
+          <div className="modal-overflow" style={{paddingRight: 15}}>
             <Form.Item label="Họ Tên" className="form-label"  {...formItemLayout}>
               {getFieldDecorator('fullName', {
                 initialValue: '',
@@ -756,36 +714,51 @@ function CreateProfileForm(props: CreateProfileFormProps) {
               </div>
             </Form.Item>
 
-            <Form.Item label="Phòng ban" className="form-label"  {...formItemLayout}>
-              <div style={{display: 'flex'}}>
-                {getFieldDecorator('department', {
-                  initialValue: undefined,
-                  rules: [
-                    {
-                      message: 'Vui lòng nhập phòng ban',
-                      required: false,
-                    },
-                  ],
-                })(
-                  <TreeSelect getPopupContainer={(trigger: any) => trigger.parentNode}
-                              className="bg-white text-black"
-                              dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
-                              treeData={treeData}
-                              style={fontWeightStyle}
-                              placeholder="Chọn bộ phận, phòng ban"
-                              treeDefaultExpandAll
-                  />
-                )}
-                <Button
-                  size="small"
-                  className="ant-btn ml-1 mr-1 ant-btn-sm"
-                  style={{height: '32px'}}
-                  onClick={handleCreateDepartment}
-                >
-                  <Icon type="plus"/>
-                </Button>
-              </div>
-            </Form.Item>
+            {location.pathname.includes("recruitment-manager") ? null :
+              <Form.Item label="Phòng ban" className="form-label"  {...formItemLayout}>
+                <div style={{display: 'flex'}}>
+                  {getFieldDecorator('department', {
+                    initialValue: undefined,
+                    rules: [
+                      {
+                        message: 'Vui lòng nhập phòng ban',
+                        required: false,
+                      },
+                    ],
+                  })(
+                    <TreeSelect
+                      showSearch
+                      allowClear
+                      dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
+                      filterTreeNode={filterTreeNode}
+                      placeholder="Phòng ban"
+                      className="bg-white text-black"
+                      style={fontWeightStyle}
+                    >
+                      {props.listDepartment.rows?.map((item: any) => (
+                        <TreeNode style={fontWeightStyle} value={item.id} title={item.name} key={item.id}>
+                          {item.children ? item.children.map((el: any) => (
+                            <TreeNode style={fontWeightStyle} value={el.id} key={el.id} title={el.name}/>
+                          )) : null}
+                        </TreeNode>
+
+                      ))}
+
+                    </TreeSelect>
+                  )}
+                  <Button
+                    size="small"
+                    className="ant-btn ml-1 mr-1 ant-btn-sm"
+                    style={{height: '32px'}}
+                    onClick={handleCreateDepartment}
+                  >
+                    <Icon type="plus"/>
+                  </Button>
+                </div>
+              </Form.Item>
+
+            }
 
             <Form.Item label="Người giới thiệu" className="form-label"  {...formItemLayout}>
               {getFieldDecorator('hrRef', {
@@ -897,7 +870,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
             </Form.Item>
 
           </div>
-          <Form.Item label=" " style={{marginBottom: '0', marginTop: '8px', textAlign: "right"}} colon={false}>
+          <Form.Item label=" " style={{marginRight: 20, textAlign: "right"}} colon={false}>
             <Button className="mr-3 create-btn" htmlType="submit" onClick={onBtnCreateClicked}>
               Tạo mới
             </Button>

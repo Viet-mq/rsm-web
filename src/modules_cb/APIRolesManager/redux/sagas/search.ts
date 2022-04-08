@@ -8,6 +8,8 @@ export function* getSearchAPIRolesAsync(action: SearchAPIRolesAction) {
   try {
     const rs = yield apis.getListAPIRoles(action.params);
     if (rs.code !== 0) {
+      yield put(getSearchAPIRolesError(new AppError(rs.message)));
+
       NotificationError('Lấy danh sách API Roles không thành công', "Lỗi: " + rs.message);
 
     } else {

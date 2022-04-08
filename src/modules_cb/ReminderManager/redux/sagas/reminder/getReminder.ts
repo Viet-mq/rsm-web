@@ -8,6 +8,7 @@ export function* getListReminderAsync(action: GetListReminderAction) {
   try {
     const rs = yield apis.getListReminder(action.params);
     if (rs.code !== 0) {
+      yield put(getReminderError(new AppError(rs.message)));
       NotificationError('Lấy danh sách nhắc nhở không thành công', "Lỗi: " + rs.message);
     }
     yield put(getReminderSuccess(rs))

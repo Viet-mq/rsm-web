@@ -16,6 +16,7 @@ export function* updateProfileAsync(action: UpdateProfileAction) {
     const rs = yield apis.updateProfile(action.request);
     yield put(updateProfileSuccess(rs));
     if (rs.code !== 0) {
+      yield put(updateProfileError(new AppError(rs.message)));
       NotificationError('Cập nhật ứng viên không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Cập nhật ứng viên thành công");

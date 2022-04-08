@@ -1,7 +1,7 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Form, Icon, Input, Popconfirm, Switch, Tooltip} from "antd";
+import {Button, Form, Icon, Popconfirm, Switch, Tooltip} from "antd";
 import React, {useEffect, useState} from "react";
 import 'devextreme/dist/css/dx.light.css';
 import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
@@ -18,6 +18,7 @@ import {
 import {CreateRecruitmentRequest, DeleteProcessRequest, RecruitmentEntity} from "../../types";
 import {useLocation} from "react-router-dom";
 import ReactQuill from "react-quill";
+import {formats, modules} from "../../../../helpers/utilsFunc";
 
 const mapStateToProps = (state: RootState) => ({
   recruitmentManager: state.recruitmentManager,
@@ -41,47 +42,10 @@ function ProcessForm(props: IProps) {
   const location = useLocation();
   const isEdit = location.pathname.includes("edit");
   const fontWeightStyle = {fontWeight: 400};
-  /*
-   * Quill modules to attach to editor
-   * See https://quilljs.com/docs/modules/ for complete options
-   */
-  const modules = {
-    toolbar: [
-      [{'header': '1'}, {'header': '2'}],
-      ['blockquote', 'code-block'],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [{'list': 'ordered'}, {'list': 'bullet'}],
-      [{'indent': '-1'}, {'indent': '+1'}],
-      ['link', 'image'],
-      [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-      [{ 'direction': 'rtl' }],                         // text direction
-      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-      [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-      [{ 'font': [] }],
-      [{ 'align': [] }],
-      ['clean'],
-    ],
-
-    clipboard: {
-      // toggle to add extra line breaks when pasting HTML:
-      matchVisual: false,
-    }
-  }
-  /*
-   * Quill editor formats
-   * See https://quilljs.com/docs/formats/
-   */
-  const formats = [
-    'header', 'font', 'size',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent',
-    'link', 'image', 'video'
-  ]
-
   const [schema, setSchema] = useState<any>([])
   const [lastElement, setLastElement] = useState<any>();
   const [valueEditor, setValueEditor] = useState(
-     isEdit ? update.dataUpdate?.interest : createSteps.request?.interest || ""
+    isEdit ? update.dataUpdate?.interest : createSteps.request?.interest || ""
   )
 
   const [display, setDisplay] = useState(false)
@@ -191,13 +155,12 @@ function ProcessForm(props: IProps) {
     props.showFormUpdate(true, item, index)
   }
 
-  function handleChangeTextEditor(value:any) {
-    console.log(value)
+  function handleChangeTextEditor(value: any) {
     if (value === "<p><br></p>") {
-      setDisplay( true)
-      setValueEditor( "")
+      setDisplay(true)
+      setValueEditor("")
     } else {
-      setDisplay( false)
+      setDisplay(false)
       // const newValueEditor = valueEditor
       // newValueEditor.interest = value
       // onFormChange(salary, newValueEditor)
@@ -330,8 +293,8 @@ function ProcessForm(props: IProps) {
               style={fontWeightStyle}
               className="ql-custom"
               onChange={handleChangeTextEditor}
-              value={valueEditor||""}
-              
+              value={valueEditor || ""}
+
               theme={'snow'}
               modules={modules}
               formats={formats}

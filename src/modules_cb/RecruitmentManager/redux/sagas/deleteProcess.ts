@@ -9,6 +9,7 @@ export function* deleteProcessAsync(action: DeleteProcessAction) {
     const rs = yield apis.deleteProcess(action.request);
     yield put(deleteProcessSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteProcessError(new AppError(rs.message)));
       NotificationError('Xóa vòng tuyển dụng không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa vòng tuyển dụng thành công");

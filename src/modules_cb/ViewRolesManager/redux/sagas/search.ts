@@ -8,6 +8,7 @@ export function* getSearchViewRolesAsync(action: SearchViewRolesAction) {
   try {
     const rs = yield apis.getListViewRoles(action.params);
     if (rs.code !== 0) {
+      yield put(getSearchViewRolesError(new AppError(rs.message)));
       NotificationError('Lấy danh sách View Roles không thành công', "Lỗi: " + rs.message);
 
     } else {

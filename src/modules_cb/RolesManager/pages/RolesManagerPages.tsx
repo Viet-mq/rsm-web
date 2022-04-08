@@ -1,12 +1,14 @@
 import React, {useEffect} from "react";
 import ListRoles from "../components/list/ListRoles";
-import {Button, Col, Icon, Row} from "antd";
+import {Col, Row} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {showFormCreate, showFormUpdate} from "../redux/actions";
 import CreateRolesForm from "../components/CreateRolesForm";
 import Loading from "../../../components/Loading";
 import UpdateRolesForm from "../components/UpdateRolesForm";
+import ButtonCreate from "../../../components/ComponentUtils/ButtonCreate";
+import {roles_path} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = ({
                            rolesManager: {
@@ -29,6 +31,7 @@ type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends ReduxProps {
 }
+
 function RolesManagerPages(props: IProps) {
   useEffect(() => {
     document.title = "Quản lý Roles";
@@ -49,14 +52,13 @@ function RolesManagerPages(props: IProps) {
       <div className="entryHeader">
         <Row>
           <Col md={16}>
-            <div className="tmp-title-page-size20">Quản lý  Roles</div>
+            <div className="tmp-title-page-size20">Quản lý Roles</div>
           </Col>
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div>
-                <Button onClick={handleCreate}>
-                  <Icon type="plus"/> Tạo  Roles
-                </Button>
+                <ButtonCreate path={roles_path} action="create" name=" Thêm Roles" handleClick={handleCreate}/>
+
               </div>
             </div>
           </Col>
@@ -64,7 +66,6 @@ function RolesManagerPages(props: IProps) {
       </div>
 
       <ListRoles/>
-
       <CreateRolesForm/>
       <UpdateRolesForm/>
 

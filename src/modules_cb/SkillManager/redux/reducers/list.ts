@@ -1,7 +1,7 @@
 import {SkillEntity} from "../../types";
 import {AppError} from "src/models/common";
 import * as Actions from "../actions";
-import {SkillListAction} from "../actions";
+import {SearchSkillAction} from "../actions";
 
 export interface SkillListState {
   loading: boolean,
@@ -21,7 +21,7 @@ const initState: SkillListState = {
 const saveSkill:any=localStorage.getItem('list-skill');
 const dataSkill:SkillListState = JSON.parse(saveSkill)?JSON.parse(saveSkill):initState
 
-export default (state = dataSkill, {type, total, rows, params, error}: SkillListAction): SkillListState => {
+export default (state = dataSkill, {type, total, rows, params, error}: SearchSkillAction): SkillListState => {
   switch (type) {
     case Actions.GET_LIST_SKILL:
       return {

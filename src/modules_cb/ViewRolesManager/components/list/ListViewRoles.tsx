@@ -3,24 +3,20 @@ import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import env from "src/configs/env";
 import {ColumnProps} from "antd/lib/table";
-import {Button, Icon, Popconfirm, Table} from "antd";
+import {Table} from "antd";
 import {emptyText} from "src/configs/locales";
-import {
-  deleteViewRoles,
-  getListViewRoles,
-  showFormCreate,
-  showFormUpdate,
-  updateViewRoles
-} from "../../redux/actions";
-import {ViewRolesEntity, DeleteViewRolesRequest} from "../../types";
+import {deleteViewRoles, getSearchViewRoles, showFormCreate, showFormUpdate} from "../../redux/actions";
+import {DeleteViewRolesRequest, ViewRolesEntity} from "../../types";
+import {view_role_path} from "../../../../helpers/utilsFunc";
+import ButtonDelete from "../../../../components/ComponentUtils/ButtonDelete";
+import ButtonUpdate from "../../../../components/ComponentUtils/ButtonUpdate";
+import Search from "antd/es/input/Search";
 
 const mapStateToProps = ({viewRolesManager}: RootState) => ({viewRolesManager});
 const connector = connect(mapStateToProps, {
-  getListViewRoles,
-   deleteViewRoles: deleteViewRoles,
-  showFormCreate,
+  getSearchViewRoles,
+  deleteViewRoles,
   showFormUpdate,
-  updateViewRoles
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -29,18 +25,15 @@ interface IProps extends ReduxProps {
 }
 
 function ListViewRoles(props: IProps) {
-  const {list}=props.viewRolesManager
-  let screenWidth = document.documentElement.clientWidth;
-  const [page, setPage] = useState(1);
-  const scroll = screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false};
-  const size = 10;
   const columns: ColumnProps<ViewRolesEntity>[] = [
     {
       title: 'STT',
       key: 'index',
       width: 40,
-      align:"center",
-      render: (text, record, index) =>  {return (page - 1) * 10 + index + 1}
+      align: "center",
+      render: (text, record, index) => {
+        return (page - 1) * 10 + index + 1
+      }
     },
     {
       title: 'Name',
@@ -63,38 +56,29 @@ function ListViewRoles(props: IProps) {
       render: (_text: string, record: ViewRolesEntity) => {
         return (
           <div style={{whiteSpace: 'nowrap'}}>
-            <Popconfirm
-              title="Bạn muốn xóa View Roles này chứ ?"
-              okText="Xóa"
-              onCancel={event => {
-                event?.stopPropagation();
-              }}
-              onConfirm={event => handleDelete(event, record)}
-            >
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                onClick={event => {
-                  event.stopPropagation();
-                }}
-              >
-                <Icon type="delete" theme="filled"/>
-              </Button>
-            </Popconfirm>
-            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
-                    onClick={event => handleEdit(event, record)}
-            >
-              <Icon type="edit"/>
-            </Button>
+            <ButtonDelete path={view_role_path} message="View Roles" action="delete"
+                          handleClick={(event) => handleDelete(event, record)}/>
+            <ButtonUpdate path={view_role_path} action="update" handleClick={(event) => handleEdit(event, record)}/>
+
           </div>
         );
       },
     },
   ];
+  const {search} = props.viewRolesManager
+  const [page, setPage] = useState(1);
+  const scroll = {y: 600};
+  const size = 30;
+  const [viewRoles, setViewRoles] = useState<any>()
+  const [nameSearch, setNameSearch] = useState<any>("")
 
   useEffect(() => {
-    props.getListViewRoles({page: 1, size: 100});
-  }, []);
+    btnSearchClicked()
+  }, [page]);
+
+  useEffect(() => {
+    setViewRoles(search)
+  }, [search])
 
   const handleDelete = (event: any, entity: ViewRolesEntity) => {
     event.stopPropagation();
@@ -109,30 +93,36 @@ function ListViewRoles(props: IProps) {
     props.showFormUpdate(true, entity);
   }
 
-
-  // function onSelectedRowKeysChange(selectedRowKeys: any) {
-  //   setState({selectedRowKeys});
-  // }
-  //
-  // const {selectedRowKeys} = state;
-  // const rowSelection = {
-  //   selectedRowKeys,
-  //   onChange: onSelectedRowKeysChange,
-  // };
-
+  function btnSearchClicked() {
+    const req: any = {
+      page: page,
+      size: size,
+      name: nameSearch
+    }
+    props.getSearchViewRoles(req);
+  }
   return (
     <>
+      <div className="c-filter-profile">
+        <div style={{width: 200, display: "inline-block"}}>
+          <Search
+            onChange={e => setNameSearch(e.target.value)}
+            onSearch={btnSearchClicked}
+            placeholder="Tìm kiếm..."/>
+        </div>
+      </div>
+
       <Table
         scroll={scroll}
         className="custom-table"
-        dataSource={list.rows}
+        dataSource={viewRoles?.rows}
         columns={columns}
         rowKey="id"
         locale={{emptyText: emptyText}}
         pagination={{
           current: page,
           pageSize: size,
-          total: list.total,
+          total: viewRoles?.total,
           onChange: value => setPage(value),
           showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,
         }}

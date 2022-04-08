@@ -1,4 +1,4 @@
-import {DeleteSkillAction, deleteSkillError, deleteSkillSuccess, getListSkill} from "../actions";
+import {DeleteSkillAction, deleteSkillError, deleteSkillSuccess, getListSkill, searchListSkill} from "../actions";
 import * as apis from "../services/apis";
 import {put, select} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
@@ -10,6 +10,7 @@ export function* deleteSkillAsync(action: DeleteSkillAction) {
     const rs = yield apis.deleteSkill(action.request);
     yield put(deleteSkillSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteSkillError(new AppError(rs.message)));
       NotificationError('Xóa kỹ năng công việc không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa kỹ năng công việc thành công");

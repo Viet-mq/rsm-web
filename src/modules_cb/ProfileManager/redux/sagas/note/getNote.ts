@@ -8,6 +8,8 @@ export function* getListNoteAsync(action: GetListNoteAction) {
   try {
     const rs = yield apis.getListNote(action.params);
     if (rs.code !== 0) {
+      yield put(getNoteError(new AppError(rs.message)));
+
       NotificationError('Lấy danh sách đánh giá không thành công', "Lỗi: " + rs.message);
     }
     yield put(getNoteSuccess(rs))

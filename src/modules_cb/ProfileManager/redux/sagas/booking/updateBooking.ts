@@ -18,6 +18,7 @@ export function* updateBookingAsync(action: UpdateBookingAction) {
     const rs = yield apis.updateBooking(action.request);
     yield put(updateBookingSuccess(rs));
     if (rs.code !== 0) {
+      yield put(updateBookingError(new AppError(rs.message)));
       NotificationError('Cập nhật lịch phỏng vấn không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Cập nhật lịch phỏng vấn thành công");

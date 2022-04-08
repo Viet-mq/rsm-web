@@ -16,6 +16,7 @@ export function* createSourceCVAsync(action: CreateSourceCVAction) {
     const rs = yield apis.createSourceCV(action.request);
     yield put(createSourceCVSuccess(rs));
     if (rs.code !== 0) {
+      yield put(createSourceCVError(new AppError(rs.message)));
       NotificationError('Tạo Nguồn ứng viên không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tạo Nguồn ứng viên thành công");

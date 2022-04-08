@@ -6,6 +6,7 @@ import {BsThreeDots, FaUserCircle} from "react-icons/all";
 import {DeleteTalentPoolRequest, TalentPoolEntity} from "../types";
 import {deleteTalentPool, showFormUpdate} from "../redux/actions";
 import {Link} from 'react-router-dom';
+import {CheckViewAction, talent_pool_path} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = ({talentPoolManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
@@ -66,26 +67,34 @@ function TalentPoolItem(props: IProps) {
   const content = (
     <ul style={{width: 160}} className="popup-popover">
       <li>
-        <a onClick={handleUpdate}>Chỉnh sửa</a>
+        {CheckViewAction(talent_pool_path, "update")
+          ?
+          <a onClick={handleUpdate}>Chỉnh sửa</a>
+          : null}
+
       </li>
       <li>
-
-        <Popconfirm
-          title="Bạn muốn xóa Talent pool này chứ ?"
-          okText="Xóa"
-          onCancel={event => {
-            event?.stopPropagation();
-          }}
-          onConfirm={event => handleDelete(event)}
-        >
-          <a
-            onClick={event => {
-              event.stopPropagation();
+        {CheckViewAction(talent_pool_path, "delete")
+          ?
+          <Popconfirm
+            title="Bạn muốn xóa Talent pool này chứ ?"
+            okText="Xóa"
+            onCancel={event => {
+              event?.stopPropagation();
             }}
+            onConfirm={event => handleDelete(event)}
           >
-            Xóa
-          </a>
-        </Popconfirm>
+            <a
+              onClick={event => {
+                event.stopPropagation();
+              }}
+            >
+              Xóa
+            </a>
+          </Popconfirm>
+          : null}
+
+
       </li>
     </ul>
   );
@@ -131,7 +140,7 @@ function TalentPoolItem(props: IProps) {
 
               <div>
                 <Icon type="flag" theme="filled"/>
-                <span className="card-content__number">0</span>
+                <span className="card-content__number">{talentPool.total}</span>
                 <span> New contacts in the last 30 days</span>
               </div>
             </div>

@@ -16,6 +16,7 @@ export function* updateViewRolesAsync(action: UpdateViewRolesAction) {
     const rs = yield apis.updateViewRoles(action.request);
     yield put(updateViewRolesSuccess(rs));
     if (rs.code !== 0) {
+      yield put(updateViewRolesError(new AppError(rs.message)));
       NotificationError('Cập nhật View Roles không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Cập nhật View Roles thành công");

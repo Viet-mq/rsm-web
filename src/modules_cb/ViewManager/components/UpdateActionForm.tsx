@@ -4,8 +4,9 @@ import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Input, Modal} from "antd";
 import React, {FormEvent} from "react";
 import Loading from "../../../components/Loading";
-import {AddActionToViewRequest, UpdateActionToViewRequest} from "../types";
-import {addAction, showViewAddActionForm, showViewUpdateActionForm, updateAction} from "../redux/actions";
+import {UpdateActionToViewRequest} from "../types";
+import {showViewUpdateActionForm, updateAction} from "../redux/actions";
+import {formItemLayout} from "../../../helpers/utilsFunc";
 
 
 const mapStateToProps = (state: RootState) => ({
@@ -26,19 +27,8 @@ interface CreateActionFormProps extends FormComponentProps, ReduxProps {
 }
 
 function CreateActionForm(props: CreateActionFormProps) {
-  const {showForm,update_action} = props.viewManager
+  const {showForm, update_action} = props.viewManager
   const {getFieldDecorator, resetFields} = props.form;
-  const fontWeightStyle = {fontWeight: 400};
-  const formItemLayout = {
-    labelCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-    wrapperCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-  };
 
   function onBtnCreateClicked(e: FormEvent) {
     e.preventDefault();
@@ -82,7 +72,7 @@ function CreateActionForm(props: CreateActionFormProps) {
         }}
         footer={""}>
 
-        <Form className="form-create" >
+        <Form className="form-create">
           <Form.Item label="Tiêu đề" className="form-label"  {...formItemLayout}>
             {getFieldDecorator('title', {
               initialValue: showForm.actions?.title,

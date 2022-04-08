@@ -16,6 +16,7 @@ export function* updateRecruitmentAsync(action: UpdateRecruitmentAction) {
     const rs = yield apis.updateRecruitment(action.request);
     yield put(updateRecruitmentSuccess(rs));
     if (rs.code !== 0) {
+      yield put(updateRecruitmentError(new AppError(rs.message)));
       NotificationError('Cập nhật tin tuyển dụng không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Cập nhật tin tuyển dụng thành công");

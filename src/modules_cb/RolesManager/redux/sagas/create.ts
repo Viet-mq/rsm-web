@@ -16,6 +16,7 @@ export function* createRolesAsync(action: CreateRolesAction) {
     const rs = yield apis.createRoles(action.request);
     yield put(createRolesSuccess(rs));
     if (rs.code !== 0) {
+      yield put(createRolesError(new AppError(rs.message)));
       NotificationError('Tạo  Roles không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tạo  Roles thành công");

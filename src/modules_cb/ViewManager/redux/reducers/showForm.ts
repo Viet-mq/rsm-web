@@ -1,4 +1,4 @@
-import {ActionView, UpdateActionToViewRequest, ViewEntity} from "../../types";
+import {UpdateActionToViewRequest, ViewEntity} from "../../types";
 import * as Actions from "../actions";
 import {ShowViewFormAction} from "../actions";
 

@@ -1,12 +1,12 @@
 import {DepartmentReportEntity} from "../../types";
 import {AppError} from "src/models/common";
 import * as Actions from "../actions";
-import {DEPARTMENT_DOWNLOAD, DepartmentReportAction} from "../actions";
+import {DepartmentReportAction} from "../actions";
 
 export interface DepartmentReportState {
   loading: boolean,
   params?: any,
-  rows?: DepartmentReportEntity[]|any,
+  rows?: DepartmentReportEntity[] | any,
   total?: number,
   error?: AppError
 }
@@ -18,7 +18,13 @@ const initState: DepartmentReportState = {
   total: 0
 }
 
-export default (state = initState, {type, total, rows, params, error}: DepartmentReportAction): DepartmentReportState => {
+export default (state = initState, {
+  type,
+  total,
+  rows,
+  params,
+  error
+}: DepartmentReportAction): DepartmentReportState => {
   switch (type) {
     case Actions.DEPARTMENT_REPORT:
       return {
@@ -39,7 +45,7 @@ export default (state = initState, {type, total, rows, params, error}: Departmen
         error,
         loading: false
       }
-      case Actions.DEPARTMENT_DOWNLOAD:
+    case Actions.DEPARTMENT_DOWNLOAD:
       return {
         ...state,
         loading: false

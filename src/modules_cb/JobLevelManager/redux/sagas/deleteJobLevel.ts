@@ -1,4 +1,10 @@
-import {DeleteJobLevelAction, deleteJobLevelError, deleteJobLevelSuccess, getListJobLevel} from "../actions";
+import {
+  DeleteJobLevelAction,
+  deleteJobLevelError,
+  deleteJobLevelSuccess,
+  getListJobLevel,
+  getSearchJobLevel
+} from "../actions";
 import * as apis from "../services/apis";
 import {put, select} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
@@ -10,6 +16,8 @@ export function* deleteJobLevelAsync(action: DeleteJobLevelAction) {
     const rs = yield apis.deleteJobLevel(action.request);
     yield put(deleteJobLevelSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteJobLevelError(new AppError(rs.message)));
+
       NotificationError('Xóa cấp bậc công việc không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa cấp bậc công việc thành công");

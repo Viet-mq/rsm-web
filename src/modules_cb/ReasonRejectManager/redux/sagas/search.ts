@@ -8,6 +8,7 @@ export function* searchListReasonRejectAsync(action: ReasonRejectListAction) {
   try {
     const rs = yield apis.getListReasonReject(action.params);
     if (rs.code !== 0) {
+      yield put(searchListReasonRejectError(new AppError(rs.message)));
       NotificationError('Lấy danh sách lý do không thành công', "Lỗi: " + rs.message);
 
     } else {

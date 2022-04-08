@@ -4,6 +4,7 @@ import {
   createComment,
   createNote,
   deleteComment,
+  deleteCV,
   deleteNote,
   getActivityLogs,
   getBooking,
@@ -26,7 +27,6 @@ import {
   showFormUploadCV,
   updateComment,
   updateNote,
-
 } from "../redux/actions";
 import {
   Avatar,
@@ -45,10 +45,10 @@ import {
 } from "antd";
 import React, {useEffect, useState} from "react";
 import {
-  BookingEntity,
   CommentEntity,
   DataShowBooking,
   DeleteCommentRequest,
+  DeleteCVRequest,
   DeleteNoteRequest,
   DetailCV,
   NoteEntity,
@@ -78,6 +78,8 @@ import UpdateDetailProfileForm from "./UpdateDetailProfileForm";
 import CreateCommentForm from "./CreateCommentForm";
 import UpdateCommentForm from "./UpdateCommentForm";
 import {deleteSchedule} from "../../ScheduleManager/redux/actions";
+import {getInitials, profile_path} from "../../../helpers/utilsFunc";
+import ButtonDelete from "../../../components/ComponentUtils/ButtonDelete";
 
 const {Step} = Steps;
 const {TabPane} = Tabs;
@@ -118,7 +120,8 @@ const connector = connect(mapStateToProps,
     showChangeProcessForm,
     showChangeRecruitmentForm,
     showAddToTalentPoolForm,
-    deleteSchedule
+    deleteSchedule,
+    deleteCV
   });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -128,7 +131,7 @@ interface DetailProfileFormProps extends ReduxProps {
 
 function DetailProfileForm(props: DetailProfileFormProps) {
   const [page, setPage] = useState(1);
-  const [pageEmail, setPageEmail] = useState(1);
+  // const [pageEmail, setPageEmail] = useState(1);
   const size = 10;
   const {
     showForm,
@@ -510,7 +513,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     props.showFormUploadCV(true, detail.result?.id);
   }
 
-  const onBtnUpdateBooking = (event: any,value:any) => {
+  const onBtnUpdateBooking = (event: any, value: any) => {
     event.stopPropagation();
     if (detail.result) {
       let req: DataShowBooking = {
@@ -519,7 +522,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
         idRecruitment: detail.result.recruitmentId,
         username: detail.result.username
       }
-      props.showFormBooking(true, req,value, true);
+      props.showFormBooking(true, req, value, true);
     }
   }
 
@@ -532,8 +535,8 @@ function DetailProfileForm(props: DetailProfileFormProps) {
         idRecruitment: detail.result.recruitmentId,
         username: detail.result.username
       }
-      let reqBooking=null;
-      props.showFormBooking(true, req,reqBooking, false);
+      let reqBooking = null;
+      props.showFormBooking(true, req, reqBooking, false);
     }
   }
 
@@ -557,18 +560,6 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     props.deleteComment({id: req.id});
   }
 
-  const getInitials = (name: string) => {
-    if (name) {
-      let initials: any = name.split(' ');
-      if (initials.length > 1) {
-        initials = initials.shift().charAt(0) + initials.pop().charAt(0);
-      } else {
-        initials = name.substring(0, 2);
-      }
-      return initials.toUpperCase();
-    }
-  }
-
   function handleShowReasonRejectForm(event: any) {
     event.stopPropagation();
     props.showFormReasonReject(true);
@@ -586,8 +577,15 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     props.showChangeProcessForm(true, req)
   }
 
-  function btnDeleteScheduleClicked(event:any,val:any) {
+  function btnDeleteScheduleClicked(event: any, val: any) {
     props.deleteSchedule({id: val})
+  }
+
+  function handleDelete(event: any, id: any) {
+    let req: DeleteCVRequest = {
+      id: id
+    }
+    props.deleteCV(req);
   }
 
   return (
@@ -707,11 +705,18 @@ function DetailProfileForm(props: DetailProfileFormProps) {
             <Icon type="facebook" className='mr-1'/>
             <a href={detail.result?.facebook} target={"_blank"}>{detail.result?.facebook}</a><br/>
             <Icon type="linkedin" className='mr-1'/>
-            <span>{detail.result?.linkedin}</span><br/>
+            <a href={`https://${detail.result?.linkedin}`} target={"_blank"}>{detail.result?.linkedin}</a><br/>
             <Icon type="github" className='mr-1'/>
             <span>{detail.result?.github}</span><br/>
-            <Icon type="global" className='mr-1'/>
-            <span>{detail.result?.web}</span><br/>
+
+            <span>Người giới thiệu: </span>
+            <span>{detail.result?.hrRef ? detail.result?.hrRef + " - " + detail.result?.mailRef : detail.result?.mailRef2}</span><br/>
+
+            <span>Địa chỉ : </span>
+            <span>{detail.result?.hometown}</span><br/>
+
+            <span>Trường học : </span>
+            <span>{detail.result?.schoolName}</span><br/>
 
             <h1>Social profiles</h1>
           </div>
@@ -745,14 +750,14 @@ function DetailProfileForm(props: DetailProfileFormProps) {
                       {item.date > +moment() ?
                         <div className="flex-space-between" style={{paddingBottom: 5}}>
                           <div>
-                            <span style={{fontWeight: 500}}>Lịch {index+1}:</span>
+                            <span style={{fontWeight: 500}}>Lịch {index + 1}:</span>
                             <span style={{color: "#1890ff"}}> Sắp diễn ra</span>
                           </div>
                           <div>
                             <Popconfirm
                               title="Bạn muốn xóa lịch này chứ ?"
                               okText="Xóa"
-                              onConfirm={event=>btnDeleteScheduleClicked(event,item.id)}
+                              onConfirm={event => btnDeleteScheduleClicked(event, item.id)}
                             >
                               <Tooltip placement="top" title="Xóa">
                                 <Button
@@ -769,7 +774,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
                             <Tooltip placement="top" title="Sửa">
 
                               <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
-                                onClick={event => onBtnUpdateBooking(event, item)}
+                                      onClick={event => onBtnUpdateBooking(event, item)}
                               >
                                 <Icon type="edit"/>
                               </Button>
@@ -867,8 +872,12 @@ function DetailProfileForm(props: DetailProfileFormProps) {
                   <div className="p-2">
                     <div className="pb-2">Ứng viên chưa thuộc tin tuyển dụng nào</div>
                     <div>
-                      <Button onClick={handleShowRecruitment} type={"primary"} size={"large"}><Icon type="inbox"/>
+                      <Button onClick={handleShowRecruitment} className="mr-3" type={"primary"} size={"large"}><Icon
+                        type="inbox"/>
                         Chuyển ứng viên vào tin
+                      </Button>
+                      <Button onClick={handleShowTalentPools} type={"primary"} size={"large"}><Icon type="inbox"/>
+                        Chuyển sang Talent Pool khác
                       </Button>
                     </div>
                   </div>
@@ -945,6 +954,14 @@ function DetailProfileForm(props: DetailProfileFormProps) {
           <div className="detail-paragraph-4__title">
             <h1>Resumes & CVS</h1>
             <div className="detail-paragraph-4__title--button">
+
+              {/*<Button size="small" className="ant-btn mr-1 ant-btn-sm"*/}
+              {/*        onClick={event => onBtnUploadCV(event)}*/}
+              {/*>*/}
+              {/*  <Icon type="delete"/>*/}
+              {/*</Button>*/}
+              <ButtonDelete path={profile_path} message="CV" action="delete-cv"
+                            handleClick={(event) => handleDelete(event, detail.result?.id)}/>
 
               <Button size="small" className="ant-btn mr-1 ant-btn-sm"
                       onClick={event => onBtnUploadCV(event)}

@@ -16,6 +16,7 @@ export function* updateScheduleAsync(action: UpdateScheduleAction) {
     const rs = yield apis.updateSchedule(action.request);
     yield put(updateScheduleSuccess(rs));
     if (rs.code !== 0) {
+      yield put(updateScheduleError(new AppError(rs.message)));
       NotificationError('Cập nhật lịch phỏng vấn không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Cập nhật lịch phỏng vấn thành công");

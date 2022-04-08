@@ -12,7 +12,8 @@ export function* getCandidatesAsync(action: GetCandidatesAction) {
   try {
     const rs = yield getListProfile(action.params);
     if (rs.code !== 0) {
-      // NotificationError('Lấy danh sách ứng viên không thành công', "Lỗi: " + rs.message);
+      yield put(getScheduleError(new AppError(rs.message)));
+// NotificationError('Lấy danh sách ứng viên không thành công', "Lỗi: " + rs.message);
     }
     yield put(getCandidatesSuccess(rs.total, rs.rows))
   } catch (e) {

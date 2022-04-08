@@ -11,6 +11,7 @@ import {APIRolesEntity} from "../../APIRolesManager/types";
 import {ViewRolesEntity} from "../../ViewRolesManager/types";
 import AddAPIRolesForm from "./AddAPIRolesForm";
 import AddViewRolesForm from "./AddViewRolesForm";
+import {formItemLayout} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = (state: RootState) => ({
   rolesManager: state.rolesManager,
@@ -28,16 +29,7 @@ interface CreateRolesFormProps extends FormComponentProps, ReduxProps {
 }
 
 function CreateRolesForm(props: CreateRolesFormProps) {
-  const formItemLayout = {
-    labelCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-    wrapperCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-  };
+
   const columnsAPIRoles: ColumnProps<APIRolesEntity>[] = [
     {
       title: 'STT',
@@ -194,12 +186,14 @@ function CreateRolesForm(props: CreateRolesFormProps) {
     props.showFormAddViewRoles(true)
   }
 
-  function handleDeleteAPIRoles(event: any, record: APIRolesEntity) {
+  function handleDeleteAPIRoles(event: any, record: any) {
     let index = apiRolesTable.findIndex(function (o: any) {
       return o.id === record.id;
     })
     if (index !== -1) {
-      setApiRolesTable(apiRolesTable.splice(index, 1))
+      const newApiRolesTable=apiRolesTable
+      newApiRolesTable.splice(index, 1)
+      setApiRolesTable(newApiRolesTable)
     }
   }
 
@@ -208,11 +202,11 @@ function CreateRolesForm(props: CreateRolesFormProps) {
       return o.id === record.id;
     })
     if (index !== -1) {
-      setViewRolesTable(viewRolesTable.splice(index, 1))
+      const newViewRolesTable=viewRolesTable
+      newViewRolesTable.splice(index, 1)
+      setViewRolesTable(newViewRolesTable)
     }
   }
-
-  console.log(apiRolesTable)
 
   return (
     <>

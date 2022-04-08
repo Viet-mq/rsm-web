@@ -1,12 +1,14 @@
 import React, {useEffect} from "react";
 import ListAddress from "../components/list/ListAddress";
-import {Button, Col, Icon, Row} from "antd";
+import {Col, Row} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {showFormCreate, showFormUpdate} from "../redux/actions";
 import CreateAddressForm from "../components/CreateAddressForm";
 import Loading from "../../../components/Loading";
 import UpdateAddressForm from "../components/UpdateAddressForm";
+import ButtonCreate from "../../../components/ComponentUtils/ButtonCreate";
+import {address_path} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = ({
                            addressManager: {
@@ -29,6 +31,7 @@ type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends ReduxProps {
 }
+
 function AddressManagerPages(props: IProps) {
   useEffect(() => {
     document.title = "Quản lý địa chỉ";
@@ -54,9 +57,7 @@ function AddressManagerPages(props: IProps) {
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div>
-                <Button onClick={handleCreate}>
-                  <Icon type="plus"/> Tạo địa chỉ
-                </Button>
+                <ButtonCreate path={address_path} action="create" name=" Tạo địa chỉ" handleClick={handleCreate}/>
               </div>
             </div>
           </Col>

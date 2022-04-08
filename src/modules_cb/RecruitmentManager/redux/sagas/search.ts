@@ -8,6 +8,7 @@ export function* getSearchRecruitmentAsync(action: SearchRecruitmentAction) {
   try {
     const rs = yield apis.getListRecruitment(action.params);
     if (rs.code !== 0) {
+      yield put(getSearchRecruitmentError(new AppError(rs.message)));
       NotificationError('Lấy danh sách tin tuyển dụng không thành công', "Lỗi: " + rs.message);
 
     } else {

@@ -10,6 +10,7 @@ export function* deleteCommentAsync(action: DeleteCommentAction) {
     const rs = yield apis.deleteComment(action.request);
     yield put(deleteCommentSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteCommentError(new AppError(rs.message)));
       NotificationError('Xóa ghi chú không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa ghi chú thành công");

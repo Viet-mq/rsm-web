@@ -23,6 +23,7 @@ import dashboardManagerSaga from '../modules_cb/DashboardManager/redux/sagas';
 import apiRolesManagerSaga from '../modules_cb/APIRolesManager/redux/sagas';
 import rolesManagerSaga from '../modules_cb/RolesManager/redux/sagas';
 import viewRolesManagerSaga from '../modules_cb/ViewRolesManager/redux/sagas';
+import companyManagerSaga from '../modules_cb/CompanyManager/redux/sagas';
 import * as commonSaga from './common-saga';
 
 export default function* rootSaga() {
@@ -51,6 +52,7 @@ export default function* rootSaga() {
     rolesManagerSaga(),
     apiRolesManagerSaga(),
     viewRolesManagerSaga(),
+    companyManagerSaga(),
     commonSaga.checkErrorAsync(),
   ]);
 }

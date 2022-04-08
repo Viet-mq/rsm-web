@@ -8,6 +8,8 @@ export function* getKeyPointAsync(action: KeyPointAction) {
   try {
     const rs = yield apis.getKeyPoint(action.params);
     if (rs.code !== 0) {
+      yield put(getKeyPointError(new AppError(rs.message)));
+
       NotificationError('Lấy danh sách keypoint không thành công', "Lỗi: " + rs.message);
 
     } else {

@@ -16,6 +16,7 @@ export function* addActionViewAsync(action: AddActionViewAction) {
     const rs = yield apis.addActionView(action.request);
     yield put(addActionSuccess(rs));
     if (rs.code !== 0) {
+      yield put(addActionError(new AppError(rs.message, -1)));
       NotificationError('Thêm action không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Thêm action thành công");

@@ -1,12 +1,14 @@
 import React, {useEffect} from "react";
 import ListAPIRoles from "../components/list/ListAPIRoles";
-import {Button, Col, Icon, Row} from "antd";
+import {Col, Row} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {showFormCreate, showFormUpdate} from "../redux/actions";
 import CreateAPIRolesForm from "../components/CreateAPIRolesForm";
 import Loading from "../../../components/Loading";
 import UpdateAPIRolesForm from "../components/UpdateAPIRolesForm";
+import ButtonCreate from "../../../components/ComponentUtils/ButtonCreate";
+import {api_roles_path} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = ({
                            apiRolesManager: {
@@ -29,6 +31,7 @@ type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends ReduxProps {
 }
+
 function APIRolesManagerPages(props: IProps) {
   useEffect(() => {
     document.title = "Quản lý API Roles";
@@ -54,9 +57,7 @@ function APIRolesManagerPages(props: IProps) {
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div>
-                <Button onClick={handleCreate}>
-                  <Icon type="plus"/> Tạo API Roles
-                </Button>
+                <ButtonCreate path={api_roles_path} action="create" name=" Tạo API Roles" handleClick={handleCreate}/>
               </div>
             </div>
           </Col>

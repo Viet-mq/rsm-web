@@ -1,4 +1,10 @@
-import {DeleteAPIRolesAction, deleteAPIRolesError, deleteAPIRolesSuccess, getListAPIRoles} from "../actions";
+import {
+  DeleteAPIRolesAction,
+  deleteAPIRolesError,
+  deleteAPIRolesSuccess,
+  getListAPIRoles,
+  getSearchAPIRoles
+} from "../actions";
 import * as apis from "../services/apis";
 import {put, select} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
@@ -10,6 +16,8 @@ export function* deleteAPIRolesAsync(action: DeleteAPIRolesAction) {
     const rs = yield apis.deleteAPIRoles(action.request);
     yield put(deleteAPIRolesSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteAPIRolesError(new AppError(rs.message)));
+
       NotificationError('Xóa API Roles không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa API Roles thành công");

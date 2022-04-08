@@ -16,6 +16,7 @@ export function* updateSourceCVAsync(action: UpdateSourceCVAction) {
     const rs = yield apis.updateSourceCV(action.request);
     yield put(updateSourceCVSuccess(rs));
     if (rs.code !== 0) {
+      yield put(updateSourceCVError(new AppError(rs.message)));
       NotificationError('Cập nhật Nguồn ứng viên không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Cập nhật Nguồn ứng viên thành công");

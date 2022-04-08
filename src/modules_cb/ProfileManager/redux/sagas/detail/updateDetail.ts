@@ -18,6 +18,8 @@ export function* updateDetailAsync(action: UpdateDetailAction) {
     const rs = yield apis.updateDetail(action.request);
     yield put(updateDetailSuccess(rs));
     if (rs.code !== 0) {
+      yield put(updateDetailError(new AppError(rs.message)));
+
       NotificationError('Cập nhật chi tiết ứng viên không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Cập nhật chi tiết ứng viên thành công");

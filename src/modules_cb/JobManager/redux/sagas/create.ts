@@ -16,6 +16,8 @@ export function* createJobAsync(action: CreateJobAction) {
     const rs = yield apis.createJob(action.request);
     yield put(createJobSuccess(rs));
     if (rs.code !== 0) {
+      yield put(createJobError(new AppError(rs.message)));
+
       NotificationError('Tạo vị trí công viêc không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tạo vị trí công viêc thành công");

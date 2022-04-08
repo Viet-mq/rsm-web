@@ -8,6 +8,7 @@ export function* getListBlacklistAsync(action: BlacklistListAction) {
   try {
     const rs = yield apis.getListBlacklist(action.params);
     if (rs.code !== 0) {
+      yield put(getListBlacklistError(new AppError(rs.message)));
       NotificationError('Lấy danh sách Blacklist không thành công', "Lỗi: " + rs.message);
     }
     yield put(getListBlacklistSuccess(rs.total, rs.rows))

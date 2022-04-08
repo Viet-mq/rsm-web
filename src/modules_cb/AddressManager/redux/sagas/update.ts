@@ -16,6 +16,8 @@ export function* updateAddressAsync(action: UpdateAddressAction) {
     const rs = yield apis.updateAddress(action.request);
     yield put(updateAddressSuccess(rs));
     if (rs.code !== 0) {
+      yield put(updateAddressError(new AppError(rs.message)));
+
       NotificationError('Cập nhật địa chỉ không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Cập nhật địa chỉ thành công");

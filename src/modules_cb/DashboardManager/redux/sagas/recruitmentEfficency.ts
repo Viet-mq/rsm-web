@@ -8,6 +8,7 @@ export function* getRecruitmentEfficiencyReportAsync(action: RecruitmentEfficien
   try {
     const rs = yield apis.getRecruitmentEfficiencyReport(action.params);
     if (rs.code !== 0) {
+      yield put(getRecruitmentEfficiencyReportError(new AppError(rs.message)));
       NotificationError('Lấy báo cáo kết quả tin tuyển dụng và hiệu quả nhân sự không thành công', "Lỗi: " + rs.message);
 
     }

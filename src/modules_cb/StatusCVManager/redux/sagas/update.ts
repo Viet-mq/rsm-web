@@ -16,6 +16,7 @@ export function* updateStatusCVAsync(action: UpdateStatusCVAction) {
     const rs = yield apis.updateStatusCV(action.request);
     yield put(updateStatusCVSuccess(rs));
     if (rs.code !== 0) {
+      yield put(updateStatusCVError(new AppError(rs.message)));
       NotificationError('Cập nhật quy trình tuyển dụng không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Cập nhật quy trình tuyển dụng thành công");

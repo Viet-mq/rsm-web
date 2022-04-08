@@ -2,22 +2,26 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {createAccount, showFormCreate} from "../redux/actions";
-import {Button, Form, Input, Modal, Select} from "antd";
-import React, {FormEvent} from "react";
+import {Button, Form, Input, Modal, Select, TreeSelect} from "antd";
+import React, {FormEvent, useEffect, useState} from "react";
 import {CreateAccountRequest} from "../types";
 
 const {Option} = Select;
 
-const mapState = ({accountManager: {showForm}}: RootState) => ({showForm})
+const mapStateToProps = (state: RootState) => ({
+  accountManager: state.accountManager,
+  listRole: state.rolesManager.list,
+  listCompany:state.companyManager.list
+});
 
-const connector = connect(mapState, {showFormCreate, createAccount});
+const connector = connect(mapStateToProps, {showFormCreate, createAccount});
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface CreateAccountFormProps extends FormComponentProps, ReduxProps {
 }
 
 function CreateAccountForm(props: CreateAccountFormProps) {
-
+  const {showForm} = props.accountManager
   const {getFieldDecorator, resetFields} = props.form;
   const formItemStyle = {height: '60px'};
   const formItemLayout = {
@@ -30,6 +34,21 @@ function CreateAccountForm(props: CreateAccountFormProps) {
       sm: {span: 16},
     },
   };
+  const fontWeightStyle = {fontWeight: 400};
+  const [company, setCompany] = useState<any>([]);
+
+  useEffect(() => {
+    setCompany(recursiveCompany(props.listCompany.rows))
+  }, [props.listCompany.rows])
+
+  function recursiveCompany(data: any) {
+    return data?.map((item: any) => ({
+      title: item.name,
+      value: item.id,
+      key: item.id,
+      children: recursiveCompany(item.children),
+    }))
+  }
 
   function onBtnCreateClicked(e: FormEvent) {
     e.preventDefault();
@@ -40,10 +59,11 @@ function CreateAccountForm(props: CreateAccountFormProps) {
         let req: CreateAccountRequest = {
           username: values.username,
           password: values.password,
-          role: values.role,
-          email:values.email,
-          fullName: values.full_name,
-          dateOfBirth: values.date_of_birth,
+          roles: values.roles,
+          email: values.email,
+          fullName: values.fullName,
+          dateOfBirth: values.dateOfBirth,
+          organizations: values.organization,
         }
         props.createAccount(req);
         return;
@@ -62,7 +82,7 @@ function CreateAccountForm(props: CreateAccountFormProps) {
       zIndex={2}
       maskClosable={false}
       title="Tạo tài khoản hệ thống"
-      visible={props.showForm.show_create}
+      visible={showForm.show_create}
       centered={true}
       width="550px"
       afterClose={() => {
@@ -77,7 +97,7 @@ function CreateAccountForm(props: CreateAccountFormProps) {
       <Form {...formItemLayout}>
 
         <Form.Item label="Họ tên" className="mb-0" style={{...formItemStyle}}>
-          {getFieldDecorator('full_name', {
+          {getFieldDecorator('fullName', {
             initialValue: '',
             rules: [
               {
@@ -132,27 +152,57 @@ function CreateAccountForm(props: CreateAccountFormProps) {
           )}
         </Form.Item>
 
-        <Form.Item label="Role" className="mb-0" style={{...formItemStyle}}>
-          {getFieldDecorator('role', {
-            initialValue: '1',
+        <Form.Item label="Role" className="mb-0 " style={{...formItemStyle}}>
+          {getFieldDecorator('roles', {
+            initialValue: undefined,
             rules: [
               {
-                message: 'Vui lòng chọn role',
+                message: 'Vui lòng chọn roles',
                 required: true,
               },
             ],
           })(
-          <Select mode="multiple" getPopupContainer={(trigger:any) => trigger.parentNode}
-              placeholder="Chọn role"
+            <Select mode="multiple" getPopupContainer={(trigger: any) => trigger.parentNode}
+                    placeholder="Chọn role"
+                    filterOption={(input, option: any) =>
+                      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }
+                    optionFilterProp="children"
+                    showSearch
+                    style={fontWeightStyle}
+
+                    className="bg-white text-black form-label"
             >
-              <Option value="0">Admin</Option>
-              <Option value="1">User</Option>
+              {props.listRole.rows?.map((item: any) => (
+                <Option key={item.id} value={item.id}>{item.name}</Option>
+              ))}
+
             </Select>,
           )}
         </Form.Item>
 
+        <Form.Item label="Thuộc công ty" className="mb-0 " style={{...formItemStyle}}>
+          {getFieldDecorator('organization', {
+            initialValue: undefined,
+            rules: [
+              {
+                message: 'Vui lòng chọn công ty',
+                required: true,
+              },
+            ],
+          })(
+            <TreeSelect
+              treeData={company}
+              treeCheckable={true}
+              showCheckedStrategy={"SHOW_PARENT"}
+              searchPlaceholder='Chọn công ty'
+              style={fontWeightStyle}
+            />,
+          )}
+        </Form.Item>
+
         <Form.Item label="Ngày sinh" className="mb-0" style={{...formItemStyle}}>
-          {getFieldDecorator('date_of_birth', {
+          {getFieldDecorator('dateOfBirth', {
             initialValue: '',
             rules: [
               {required: true, message: 'Vui lòng nhập ngày sinh'}

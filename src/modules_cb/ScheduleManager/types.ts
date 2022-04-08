@@ -1,6 +1,5 @@
-
 //schedule
-import {CreateBookingForm, MailRequest} from "../ProfileManager/types";
+import {MailRequest} from "../ProfileManager/types";
 
 export interface ScheduleEntity {
   id: string | any,
@@ -37,7 +36,7 @@ export interface CreateScheduleForm {
   type: string
 }
 
-export interface ScheduleTime{
+export interface ScheduleTime {
   avatarColor: string,
   date: number,
   idProfile: string,

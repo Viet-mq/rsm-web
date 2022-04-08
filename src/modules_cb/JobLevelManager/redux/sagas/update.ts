@@ -16,6 +16,8 @@ export function* updateJobLevelAsync(action: UpdateJobLevelAction) {
     const rs = yield apis.updateJobLevel(action.request);
     yield put(updateJobLevelSuccess(rs));
     if (rs.code !== 0) {
+      yield put(updateJobLevelError(new AppError(rs.message)));
+
       NotificationError('Cập nhật cấp bậc công việc không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Cập nhật cấp bậc công việc thành công");

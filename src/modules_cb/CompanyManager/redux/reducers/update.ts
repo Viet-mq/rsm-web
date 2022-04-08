@@ -1,34 +1,34 @@
-import {DeleteJobRequest} from "../../types";
+import {UpdateCompanyRequest} from "../../types";
 import {AppError, ResponseBase2} from "../../../../models/common";
 import * as Actions from "../actions";
-import {DeleteJobAction} from "../actions";
+import {UpdateCompanyAction} from "../actions";
 
-export interface DeleteJobState {
+export interface UpdateCompanyState {
   loading: boolean,
-  request?: DeleteJobRequest,
+  request?: UpdateCompanyRequest,
   response?: ResponseBase2,
   error?: AppError
 }
 
-const initState: DeleteJobState = {
-  loading: false,
+const initState: UpdateCompanyState = {
+  loading: false
 }
 
-export default (state = initState, {type, request, response, error}: DeleteJobAction): DeleteJobState => {
+export default (state = initState, {type, request, response, error}: UpdateCompanyAction): UpdateCompanyState => {
   switch (type) {
-    case Actions.DELETE_JOB:
+    case Actions.UPDATE_COMPANY:
       return {
         ...state,
         request,
         loading: true
       }
-    case Actions.DELETE_JOB_SUCCESS:
+    case Actions.UPDATE_COMPANY_SUCCESS:
       return {
         ...state,
         response,
         loading: false
       }
-    case Actions.DELETE_JOB_ERROR:
+    case Actions.UPDATE_COMPANY_ERROR:
       return {
         ...state,
         error,

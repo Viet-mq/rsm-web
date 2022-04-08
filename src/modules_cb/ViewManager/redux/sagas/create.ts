@@ -16,6 +16,7 @@ export function* createViewAsync(action: CreateViewAction) {
     const rs = yield apis.createView(action.request);
     yield put(createViewSuccess(rs));
     if (rs.code !== 0) {
+      yield put(createViewError(new AppError(rs.message, -1)));
       NotificationError('Tạo view không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tạo view thành công");

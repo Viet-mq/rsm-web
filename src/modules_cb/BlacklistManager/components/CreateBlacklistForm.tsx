@@ -17,7 +17,6 @@ interface CreateBlacklistFormProps extends FormComponentProps, ReduxProps {
 function CreateBlacklistForm(props: CreateBlacklistFormProps) {
 
   const {getFieldDecorator, resetFields} = props.form;
-  const formItemStyle = {height: '60px'};
   const {TextArea} = Input;
 
   const formItemLayout = {

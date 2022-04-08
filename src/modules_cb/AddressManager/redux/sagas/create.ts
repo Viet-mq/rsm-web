@@ -16,6 +16,8 @@ export function* createAddressAsync(action: CreateAddressAction) {
     const rs = yield apis.createAddress(action.request);
     yield put(createAddressSuccess(rs));
     if (rs.code !== 0) {
+      yield put(createAddressError(new AppError(rs.message)));
+
       NotificationError('Tạo địa chỉ không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tạo địa chỉ thành công");

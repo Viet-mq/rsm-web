@@ -1,8 +1,8 @@
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Checkbox, Form, Input, InputNumber, Modal} from "antd";
-import React, {FormEvent, useState} from "react";
+import {Button, Form, Input, InputNumber, Modal} from "antd";
+import React, {FormEvent} from "react";
 import {createView, showViewCreateForm} from "../redux/actions";
 import {CreateViewRequest} from "../types";
 
@@ -99,14 +99,14 @@ function CreateViewForm(props: CreateViewFormProps) {
 
         <Form.Item label="Index" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('index', {
-            initialValue: '',
+            initialValue: '1',
             rules: [
               {
                 message: 'Vui lòng nhập Index',
                 required: true,
               },
             ],
-          })(<InputNumber style={{ width: '100%' }} placeholder="Nhập Index" className="bg-white text-black"/>)}
+          })(<InputNumber style={{width: '100%'}} placeholder="Nhập Index" className="bg-white text-black"/>)}
         </Form.Item>
 
         <Form.Item label="Icon" className="mb-0" style={{...formItemStyle}}>

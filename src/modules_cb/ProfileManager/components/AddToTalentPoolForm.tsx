@@ -2,11 +2,10 @@ import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Modal, Radio} from "antd";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import 'devextreme/dist/css/dx.light.css';
-import {showAddToTalentPoolForm} from "../redux/actions";
+import {addToTalentPool, showAddToTalentPoolForm} from "../redux/actions";
 import {AddToTalentPoolRequest} from "../types";
-import {addToTalentPool} from "../redux/actions";
 
 const mapStateToProps = (state: RootState) => ({
   profileManager: state.profileManager,
@@ -25,7 +24,7 @@ interface IProps extends FormComponentProps, ReduxProps {
 }
 
 function AddToTalentPoolForm(props: IProps) {
-  const {showForm}=props.profileManager
+  const {showForm} = props.profileManager
   const [talentPool, setTalentPool] = useState<any>('')
   const handleCloseForm = (event: any) => {
     event.stopPropagation();

@@ -32,6 +32,7 @@ import {getDetailRecruitment, getSearchRecruitment} from "../../RecruitmentManag
 import {showEmailCreateForm, showInterviewEmailCreateForm} from "../../ProfileManager/redux/actions";
 import CreateInterviewEmailForm from "./CreateInterviewEmailForm";
 import {RecruitmentEntity} from "../../RecruitmentManager/types";
+import {getInitials} from "../../../helpers/utilsFunc";
 
 
 const mapStateToProps = (state: RootState) => ({
@@ -232,18 +233,6 @@ function CreateScheduleInterview(props: IProps) {
     setDatasource([]);
     setKeySearch(undefined)
     setListCandidates([]);
-  }
-
-  const getInitials = (name: string) => {
-    if (name) {
-      let initials: any = name.split(' ');
-      if (initials.length > 1) {
-        initials = initials.shift().charAt(0) + initials.pop().charAt(0);
-      } else {
-        initials = name.substring(0, 2);
-      }
-      return initials.toUpperCase();
-    }
   }
 
   function handleDelete(e: any, values: any) {

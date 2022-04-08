@@ -1,4 +1,10 @@
-import {DeleteTalentPoolAction, deleteTalentPoolError, deleteTalentPoolSuccess, getListTalentPool} from "../actions";
+import {
+  DeleteTalentPoolAction,
+  deleteTalentPoolError,
+  deleteTalentPoolSuccess,
+  getListTalentPool,
+  getSearchTalentPool
+} from "../actions";
 import * as apis from "../services/apis";
 import {put, select} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
@@ -10,6 +16,7 @@ export function* deleteTalentPoolAsync(action: DeleteTalentPoolAction) {
     const rs = yield apis.deleteTalentPool(action.request);
     yield put(deleteTalentPoolSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteTalentPoolError(new AppError(rs.message)));
       NotificationError('Xóa Talent Pool không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa Talent Pool thành công");

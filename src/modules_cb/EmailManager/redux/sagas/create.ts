@@ -11,6 +11,8 @@ export function* createEmailAsync(action: CreateEmailAction) {
     const rs = yield apis.createEmail(action.request);
     yield put(createEmailSuccess(rs));
     if (rs.code !== 0) {
+      yield put(createEmailError(new AppError(rs.message)));
+
       NotificationError('Tạo Email không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tạo Email thành công");

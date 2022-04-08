@@ -8,6 +8,7 @@ export function* getListStatusCVAsync(action: StatusCVListAction) {
   try {
     const rs = yield apis.getListStatusCV(action.params);
     if (rs.code !== 0) {
+      yield put(getListStatusCVError(new AppError(rs.message)));
       NotificationError('Lấy danh sách quy trình tuyển dụng không thành công', "Lỗi: " + rs.message);
     } else {
       localStorage.setItem("list-status-cv", JSON.stringify(rs || {}));

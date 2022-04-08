@@ -16,6 +16,7 @@ export function* createSchoolAsync(action: CreateSchoolAction) {
     const rs = yield apis.createSchool(action.request);
     yield put(createSchoolSuccess(rs));
     if (rs.code !== 0) {
+      yield put(createSchoolError(new AppError(rs.message)));
       NotificationError('Tạo trường không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tạo trường thành công");

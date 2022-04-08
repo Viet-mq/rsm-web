@@ -2,7 +2,7 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {showFormUpdate, updateTalentPool} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Form, Input, InputNumber, Modal, Select} from "antd";
+import {Button, Form, Input, Modal, Select} from "antd";
 import React, {FormEvent, useEffect} from "react";
 import {UpdateTalentPoolRequest} from "../types";
 import {getListAccount} from "../../AccountManager/redux/actions";
@@ -112,7 +112,7 @@ function UpdateTalentPoolForm(props: UpdateTalentPoolFormProps) {
               },
             ],
           })(
-          <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black"
+            <Select getPopupContainer={(trigger: any) => trigger.parentNode} className="bg-white text-black"
                     mode="multiple"
                     placeholder="Vui lòng chọn người quản lý"
             >

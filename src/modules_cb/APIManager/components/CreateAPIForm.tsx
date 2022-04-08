@@ -110,7 +110,7 @@ function CreateApiForm(props: CreateApiFormProps) {
 
         <Form.Item label="Path" className="mb-0" style={{...formItemStyle}}>
           {getFieldDecorator('path', {
-            initialValue: '',
+            initialValue: '/',
             rules: [
               {
                 message: 'Vui lòng nhập tên API',

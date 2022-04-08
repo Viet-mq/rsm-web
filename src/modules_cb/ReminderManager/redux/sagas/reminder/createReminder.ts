@@ -10,6 +10,7 @@ export function* createReminderAsync(action: CreateReminderAction) {
     const rs = yield apis.createReminder(action.request);
     yield put(createReminderSuccess(rs));
     if (rs.code !== 0) {
+      yield put(createReminderError(new AppError(rs.message)));
       NotificationError('Tạo nhắc nhở không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tạo nhắc nhở thành công");

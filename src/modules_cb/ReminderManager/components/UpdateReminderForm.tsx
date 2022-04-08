@@ -1,12 +1,13 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, DatePicker, Form, Icon, Input, Modal, Popconfirm, Tooltip} from "antd";
+import {Button, DatePicker, Form, Input, Modal, Popconfirm} from "antd";
 import React, {FormEvent} from "react";
 import {deleteReminder, showFormUpdateReminder, updateReminder} from "../redux/actions";
 import {DeleteReminderRequest, UpdateReminderRequest} from "../types";
 import TextArea from "antd/es/input/TextArea";
 import moment from "moment";
+import {formItemLayout} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = (state: RootState) => ({
   reminderManager: state.reminderManager,
@@ -26,18 +27,6 @@ interface UpdateReminderFormProps extends FormComponentProps, ReduxProps {
 function UpdateReminderForm(props: UpdateReminderFormProps) {
   const {showReminder} = props.reminderManager
   const {getFieldDecorator, resetFields} = props.form;
-  const fontWeightStyle = {fontWeight: 400};
-
-  const formItemLayout = {
-    labelCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-    wrapperCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-  };
 
   function onBtnUpdateClicked(e: FormEvent) {
     e.preventDefault();
@@ -67,9 +56,9 @@ function UpdateReminderForm(props: UpdateReminderFormProps) {
   const dateFormat = 'DD/MM/YYYY HH:mm';
 
   function onBtnDeleteClicked() {
- let req:DeleteReminderRequest=({
-   id:showReminder.data_update?.id
- })
+    let req: DeleteReminderRequest = ({
+      id: showReminder.data_update?.id
+    })
     props.deleteReminder(req)
   }
 
@@ -91,7 +80,7 @@ function UpdateReminderForm(props: UpdateReminderFormProps) {
         }}
         footer={""}>
         <Form className="form-create">
-          <div className="modal-overflow" style={{height:290}}>
+          <div className="modal-overflow" style={{height: 290}}>
             <Form.Item label="Tiêu đề" className="form-label"  {...formItemLayout}>
               {getFieldDecorator('title', {
                 initialValue: showReminder.data_update?.title,
@@ -168,15 +157,15 @@ function UpdateReminderForm(props: UpdateReminderFormProps) {
               }}
               onConfirm={onBtnDeleteClicked}
             >
-                <Button
-                  className="mr-3"
-                  type={"danger"}
-                  onClick={event => {
-                    event.stopPropagation();
-                  }}
-                >
-                  Xóa
-                </Button>
+              <Button
+                className="mr-3"
+                type={"danger"}
+                onClick={event => {
+                  event.stopPropagation();
+                }}
+              >
+                Xóa
+              </Button>
             </Popconfirm>
 
             <Button type="default" className="pl-5 pr-5" onClick={onBtnCancelClicked}>

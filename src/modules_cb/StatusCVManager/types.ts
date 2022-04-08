@@ -15,6 +15,10 @@ export interface UpdateStatusCVRequest {
   name: string,
 }
 
+export interface UpdateAllStatusCVRequest {
+  statusCVS:StatusCVEntity[]
+}
+
 export interface DeleteStatusCVRequest {
   id: string,
 }

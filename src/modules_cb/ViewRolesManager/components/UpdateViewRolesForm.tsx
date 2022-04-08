@@ -4,7 +4,8 @@ import {showFormUpdate, updateViewRoles} from "../redux/actions";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Input, Modal, Tree} from "antd";
 import React, {FormEvent, useEffect, useState} from "react";
-import {UpdateViewRolesRequest} from "../types";
+import {PermissionsRequest, UpdateViewRolesRequest} from "../types";
+import {formItemLayout} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = (state: RootState) => ({
   viewRolesManager: state.viewRolesManager,
@@ -19,19 +20,9 @@ interface UpdateViewRolesFormProps extends FormComponentProps, ReduxProps {
 function UpdateViewRolesForm(props: UpdateViewRolesFormProps) {
   const {showForm} = props.viewRolesManager
   const {getFieldDecorator, resetFields} = props.form;
-  const formItemLayout = {
-    labelCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-    wrapperCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-  };
   const fontWeightStyle = {fontWeight: 400};
   const [views, setViews] = useState<any>([]);
-  const [permissionsChecked, setPermissionsChecked] = useState([]);
+  const [permissionsChecked, setPermissionsChecked] = useState<PermissionsRequest[]>([]);
   const [listChecked, setListChecked] = useState([]);
 
   useEffect(() => {
@@ -54,8 +45,9 @@ function UpdateViewRolesForm(props: UpdateViewRolesFormProps) {
 
   useEffect(()=>{
     if(showForm.data_update?.permissions){
-      setListChecked(showForm.data_update.permissions.map((node:any) => [node.id, ...node.actions.map((item:any)=>item.id)])
-        .flat())
+      const a =showForm.data_update.permissions.map((node:any) => node.actions.map((item:any)=>item.id)).flat()
+      setListChecked(a)
+      setPermissionsChecked(showForm.data_update.permissions.map((item:any)=>({permission_id:item.id,actions:item.actions.map((el:any)=>el.id)})))
     }
   },[showForm.data_update])
 
@@ -99,7 +91,6 @@ function UpdateViewRolesForm(props: UpdateViewRolesFormProps) {
       }))
       const list: any = [...listView, ...newListView]
       setPermissionsChecked(list);
-
     }
 
     setListChecked(checkedKeysValue);

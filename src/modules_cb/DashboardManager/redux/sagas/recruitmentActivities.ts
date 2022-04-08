@@ -8,6 +8,7 @@ export function* getRecruitmentActivitiesReportAsync(action: RecruitmentActiviti
   try {
     const rs = yield apis.getRecruitmentActivitiesReport(action.params);
     if (rs.code !== 0) {
+      yield put(getRecruitmentActivitiesReportError(new AppError(rs.message)));
       NotificationError('Lấy báo cáo tổng hợp hoạt động tuyển dụng không thành công', "Lỗi: " + rs.message);
 
     }

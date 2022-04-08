@@ -4,8 +4,9 @@ import React, {useEffect, useState} from "react";
 import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
 import {Avatar} from "antd";
 import {getDetailRecruitment, getListKanbanCandidate} from "../redux/actions";
-import {ChangeProcessRequest, ProcessForm} from "../../ProfileManager/types";
-import {changeProcess, showChangeProcessForm} from "../../ProfileManager/redux/actions";
+import {ChangeProcessRequest, DetailCV, ProcessForm} from "../../ProfileManager/types";
+import {changeProcess, showChangeProcessForm, showFormDetail} from "../../ProfileManager/redux/actions";
+import {getInitials} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = (state: RootState) => ({
   recruitmentManager: state.recruitmentManager,
@@ -16,9 +17,9 @@ const connector = connect(mapStateToProps, {
   getDetailRecruitment,
   changeProcess,
   showChangeProcessForm,
-
-
+  showFormDetail,
 });
+
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends ReduxProps {
@@ -79,6 +80,7 @@ function KanbanProcess(props: IProps) {
       setFilterCandidate(result)
       return result
   }
+
 
 // fake data generator
   /**
@@ -159,21 +161,19 @@ function KanbanProcess(props: IProps) {
 
   });
 
-  const getInitials = (name: string) => {
-    if (name) {
-      let initials: any = name.split(' ');
-      if (initials.length > 1) {
-        initials = initials.shift().charAt(0) + initials.pop().charAt(0);
-      } else {
-        initials = name.substring(0, 2);
-      }
-      return initials.toUpperCase();
+  function handleShowDetail(value:any){
+    let req: DetailCV = {
+      show_detail: false,
+      general: 12,
+      detail: 12
     }
+    props.showFormDetail(req,value.id);
+
   }
 
   return (
-    <>
-      <div style={{display: "flex"}}>
+    <div>
+      <div style={{display: "flex",width:"100%",overflow:"overlay"}}>
         <DragDropContext onDragEnd={onDragEnd}>
           {filterCandidate.map((element: any, ind: any) => (
             <Droppable key={ind} droppableId={`${ind}`}>
@@ -190,6 +190,7 @@ function KanbanProcess(props: IProps) {
                         key={item.id}
                         draggableId={item.id}
                         index={index}
+
                       >
                         {(provided, snapshot) => (
                           <div
@@ -200,6 +201,7 @@ function KanbanProcess(props: IProps) {
                               snapshot.isDragging,
                               provided.draggableProps.style,
                             )}
+                            onClick={()=>handleShowDetail(item)}
                           >
                             <div className="kanban-item-list">
                               <div className="c-main-content">
@@ -230,7 +232,7 @@ function KanbanProcess(props: IProps) {
           ))}
         </DragDropContext>
       </div>
-    </>
+    </div>
   );
 
 }

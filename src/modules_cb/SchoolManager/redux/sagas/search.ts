@@ -1,10 +1,4 @@
-import {
-  getListSchoolError,
-  getListSchoolSuccess,
-  getSearchSchoolError,
-  getSearchSchoolSuccess,
-  SearchSchoolAction
-} from "../actions";
+import {getSearchSchoolError, getSearchSchoolSuccess, SearchSchoolAction} from "../actions";
 import * as apis from '../services/apis'
 import {put} from "redux-saga/effects";
 import {AppError} from "src/models/common";
@@ -14,6 +8,7 @@ export function* getSearchSchoolAsync(action: SearchSchoolAction) {
   try {
     const rs = yield apis.getListSchool(action.params);
     if (rs.code !== 0) {
+      yield put(getSearchSchoolError(new AppError(rs.message)));
       NotificationError('Lấy danh sách trường không thành công', "Lỗi: " + rs.message);
     } else {
       yield put(getSearchSchoolSuccess(rs.total, rs.rows))

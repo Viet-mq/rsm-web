@@ -1,7 +1,7 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Col, DatePicker, Form, Icon, Input, InputNumber, Row, Select, Switch} from "antd";
+import {Button, Col, DatePicker, Form, Icon, Input, InputNumber, Row, Select, Switch, TreeSelect} from "antd";
 import React, {useEffect, useRef, useState} from "react";
 import moment from "moment";
 import {getSearchJob, showFormCreate as showJobFormCreate} from "../../../JobManager/redux/actions";
@@ -14,8 +14,10 @@ import Loading from "../../../../components/Loading";
 import {JobEntity} from "../../../JobManager/types";
 import {DepartmentEntity} from "../../../DepartmentManager/types";
 import {searchListDepartment} from "../../../DepartmentManager/redux/actions";
+import {formats, modules} from "../../../../helpers/utilsFunc";
 
 const {Option} = Select;
+const {TreeNode} = TreeSelect;
 
 const mapStateToProps = (state: RootState) => ({
   listAddress: state.addressManager.list,
@@ -48,8 +50,8 @@ function InformationForm(props: IProps) {
   const {getFieldDecorator} = props.form;
   const fontWeightStyle = {fontWeight: 400};
   const dateFormat = 'DD/MM/YYYY';
-  const buttonCreate = useRef(null);
-  const textEditorStyle = {marginBottom: 30}
+  // const buttonCreate = useRef(null);
+  // const textEditorStyle = {marginBottom: 30}
   const isEdit = location.pathname.includes("edit");
   const [salary, setSalary] = useState<any>({
     from: 0,
@@ -70,44 +72,13 @@ function InformationForm(props: IProps) {
   //   title: isEdit ? update.dataUpdate?.title : createSteps.request?.title || "",
   //   quantity: isEdit ? update.dataUpdate?.quantity : createSteps.request?.quantity || "",
   // })
-  const modules = {
-    toolbar: [
-      [{'header': '1'}, {'header': '2'}],
-      ['blockquote', 'code-block'],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [{'list': 'ordered'}, {'list': 'bullet'}],
-      [{'indent': '-1'}, {'indent': '+1'}],
-      ['link', 'image'],
-      [{'script': 'sub'}, {'script': 'super'}],      // superscript/subscript
-      [{'direction': 'rtl'}],                         // text direction
-      [{'header': [1, 2, 3, 4, 5, 6, false]}],
-      [{'color': []}, {'background': []}],          // dropdown with defaults from theme
-      [{'font': []}],
-      [{'align': []}],
-      ['clean'],
-    ],
 
-    clipboard: {
-      // toggle to add extra line breaks when pasting HTML:
-      matchVisual: false,
-    }
-  }
-  /*
-   * Quill editor formats
-   * See https://quilljs.com/docs/formats/
-   */
-  const formats = [
-    'header', 'font', 'size',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent',
-    'link', 'image', 'video'
-  ]
   const editorRef = useRef<any>(null);
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
-    }
-  };
+  // const log = () => {
+  //   if (editorRef.current) {
+  //     console.log(editorRef.current.getContent());
+  //   }
+  // };
   const [job, setJob] = useState<JobEntity[]>([]);
   const [department, setDepartment] = useState<DepartmentEntity[]>([]);
   const [trigger, setTrigger] = useState({
@@ -214,7 +185,6 @@ function InformationForm(props: IProps) {
                 interviewProcess: props.listProcess.rows,
                 interviewer: []
               })
-              console.log(req)
               props.createSteps(req)
             // }
           }
@@ -316,6 +286,11 @@ function InformationForm(props: IProps) {
     setDepartment(props.listDepartment.rows)
   }
 
+  const filterTreeNode = (input: any, node: any) => {
+    const title = node.props.title;
+    return title.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+  };
+
   return (
     <>
       <div className="main-content">
@@ -342,13 +317,13 @@ function InformationForm(props: IProps) {
                 )}
               </Form.Item>
 
-              <Form.Item className="form-label" label="Vị trí tuyển dụng" labelCol={{span: 24}} wrapperCol={{span: 24}}>
+              <Form.Item className="form-label" label="Vị trí công việc" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                 <div style={{display: 'flex'}}>
                   {getFieldDecorator('job', {
                     initialValue: isEdit ? update.dataUpdate?.jobId : createSteps.request?.job || undefined,
                     rules: [
                       {
-                        message: 'Vui lòng chọn vị trí tuyển dụng',
+                        message: 'Vui lòng chọn vị trí công việc',
                         required: true,
                       },
                     ],
@@ -392,22 +367,44 @@ function InformationForm(props: IProps) {
                       },
                     ],
                   })(
-                    <Select getPopupContainer={(trigger: any) => trigger.parentNode} showSearch
-                            onChange={onFormChange}
-                            onSearch={onSearchDepartment}
-                            onFocus={onFocusDepartment}
-                            className="bg-white text-black"
-                            style={fontWeightStyle}
-                            placeholder="Chọn phòng ban"
-                            filterOption={(input, option: any) =>
-                              option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                            }
-                            optionFilterProp="children"
+                    // <Select getPopupContainer={(trigger: any) => trigger.parentNode} showSearch
+                    //         onChange={onFormChange}
+                    //         onSearch={onSearchDepartment}
+                    //         onFocus={onFocusDepartment}
+                    //         className="bg-white text-black"
+                    //         style={fontWeightStyle}
+                    //         placeholder="Chọn phòng ban"
+                    //         filterOption={(input, option: any) =>
+                    //           option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    //         }
+                    //         optionFilterProp="children"
+                    // >
+                    //   {department.map((item: any, index: any) => (
+                    //     <Option key={index} value={item.id}>{item.name}</Option>
+                    //   ))}
+                    // </Select>
+
+                    <TreeSelect
+                    style={fontWeightStyle}
+                    showSearch
+                    allowClear
+                    dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
+                    className="bg-white text-black "
+                    getPopupContainer={(trigger: any) => trigger.parentNode}
+                    filterTreeNode={filterTreeNode}
+                    placeholder="Phòng ban"
                     >
-                      {department.map((item: any, index: any) => (
-                        <Option key={index} value={item.id}>{item.name}</Option>
-                      ))}
-                    </Select>)}
+                  {props.listDepartment.rows?.map((item: any) => (
+                    <TreeNode style={fontWeightStyle} value={item.id} title={item.name} key={item.id}>
+                  {item.children ? item.children.map((el: any) => (
+                    <TreeNode style={fontWeightStyle} value={el.id} key={el.id} title={el.name}/>
+                    )) : null}
+                    </TreeNode>
+
+                    ))}
+
+                    </TreeSelect>
+                  )}
                   <Button
                     size="small"
                     className="ant-btn ml-1 mr-1 ant-btn-sm"
@@ -528,7 +525,7 @@ function InformationForm(props: IProps) {
                     rules: [
                       {
                         message: 'Vui lòng chọn talent pools',
-                        required: false,
+                        required: true,
                       },
                     ],
                   })(

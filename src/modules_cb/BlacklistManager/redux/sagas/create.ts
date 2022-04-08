@@ -16,6 +16,8 @@ export function* createBlacklistAsync(action: CreateBlacklistAction) {
     const rs = yield apis.createBlacklist(action.request);
     yield put(createBlacklistSuccess(rs));
     if (rs.code !== 0) {
+      yield put(createBlacklistError(new AppError(rs.message)));
+
       NotificationError('Tạo Blacklist không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tạo Blacklist thành công");

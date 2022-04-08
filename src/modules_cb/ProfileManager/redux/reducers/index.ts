@@ -29,6 +29,7 @@ import uploadAvatar, {UploadAvatarState} from "./profile/uploadAvatar";
 import createRejectCandidate, {CreateRejectCandidateState} from "./profile/createRejectCandidate";
 import changeProcess, {ChangeProcessState} from "./profile/changeProcess";
 import addToTalentPool, {AddToTalentPoolState} from "./profile/addToTalentPool";
+import deleteCV, {DeleteCVState} from "./cv/deleteCV";
 
 export interface ProfileManagerModuleState {
   list: ProfileListState,
@@ -40,6 +41,7 @@ export interface ProfileManagerModuleState {
   updateDetail: UpdateDetailState,
   detail: DetailProfileState,
   uploadCV: UploadCVState,
+  deleteCV: DeleteCVState,
   uploadListCV: UploadListCVState,
   showFormUpload: ShowUploadFormState,
   showBooking: BookingState,
@@ -73,6 +75,7 @@ export default combineReducers<ProfileManagerModuleState>({
   updateDetail,
   detail,
   uploadCV,
+  deleteCV,
   uploadListCV,
   showFormUpload,
   showBooking,

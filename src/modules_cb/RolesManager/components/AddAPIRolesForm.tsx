@@ -29,16 +29,7 @@ interface AddAPIRolesFormProps extends FormComponentProps, ReduxProps {
 function AddAPIRolesForm(props: AddAPIRolesFormProps) {
   const {showForm} = props.rolesManager
   const {getFieldDecorator, resetFields} = props.form;
-  const formItemLayout = {
-    labelCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-    wrapperCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-  };
+
   const [apiRoles, setApiRoles] = useState<APIRolesEntity[]>([]);
   const [trigger, setTrigger] = useState({
     apiRoles: false,
@@ -74,7 +65,6 @@ function AddAPIRolesForm(props: AddAPIRolesFormProps) {
   }
 
   function handleSelectAPIRoles(value: any) {
-    console.log("value", value)
     setAddAPIRoles(JSON.parse(value));
   }
 

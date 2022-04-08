@@ -1,14 +1,15 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
-import env from "src/configs/env";
-import {Switch, Tabs} from "antd";
+import {Pagination, Tabs} from "antd";
 import Search from "antd/es/input/Search";
 import {RiMailSendLine} from "react-icons/all";
 import {Link} from "react-router-dom";
-import {getListEmail, showFormUpdate} from "../../redux/actions";
+import {deleteEmail, searchListEmail, showFormUpdate} from "../../redux/actions";
 import moment from "moment";
-import {UpdateEmailRequest} from "../../types";
+import {DeleteEmailRequest, EmailEntity, UpdateEmailRequest} from "../../types";
+import ButtonDelete from "../../../../components/ComponentUtils/ButtonDelete";
+import {email_path} from "../../../../helpers/utilsFunc";
 
 const {TabPane} = Tabs;
 
@@ -16,13 +17,12 @@ const mapStateToProps = (state: RootState) => ({
   emailManager: state.emailManager,
 
 })
-
 const connector = connect(mapStateToProps,
   {
-    getListEmail,
-    showFormUpdate
+    searchListEmail,
+    showFormUpdate,
+    deleteEmail
   })
-
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -30,34 +30,52 @@ interface IProps extends ReduxProps {
 }
 
 function ListEmail(props: IProps) {
-  let {list} = props.emailManager
-  let screenWidth = document.documentElement.clientWidth;
+  let {search} = props.emailManager
   const [page, setPage] = useState(1);
-  const scroll = screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false};
-  const size = 10;
+  const scroll = {y: 600};
+  const size = 30;
+  const [email, setEmail] = useState<any>()
+  const [nameSearch, setNameSearch] = useState<any>("")
   const operations = <Search
     placeholder="Tìm kiếm nhanh mẫu email"
-    // onSearch={value => onSearch(value)}
+    onChange={e => setNameSearch(e.target.value)}
+    onSearch={btnSearchClicked}
     style={{width: 235}}
   />;
 
   useEffect(() => {
-    props.getListEmail({page: 1, size: 90});
-  }, []);
+    btnSearchClicked()
+  }, [page]);
 
-  function unixTimeToDate(unixTime: number): Date {
-    return new Date(unixTime);
-  }
+  useEffect(() => {
+    setEmail(search)
+  }, [search])
 
   function handleShowEditEmail(value: UpdateEmailRequest) {
     props.showFormUpdate(value)
   }
 
+  function btnSearchClicked() {
+    const req: any = {
+      page: page,
+      size: size,
+      name: nameSearch
+    }
+    props.searchListEmail(req);
+  }
+
+  const handleDelete = (event: any, entity: EmailEntity) => {
+    let req: DeleteEmailRequest = {
+      id: entity.id
+    }
+    props.deleteEmail(req);
+  }
+
   return (
     <div className="list-email-container mt-2">
       <Tabs tabBarExtraContent={operations}>
-        <TabPane tab="XÁC NHẬN ỨNG TUYỂN" key="1">
-          {list.rows?.map((item: any, index: any) => {
+        <TabPane tab="DANH SÁCH MẪU EMAIL" key="1">
+          {email?.rows?.map((item: any, index: any) => {
             return <div key={item.id} className="border-bottom flex-space-between-item-center"
                         style={{padding: " 15px 0"}}>
               <div className="flex-items-flex-start">
@@ -81,22 +99,31 @@ function ListEmail(props: IProps) {
               </div>
 
               <div>
-                <Switch defaultChecked className="mr-2"/>
+                <ButtonDelete path={email_path} message="Email" action="delete"
+                              handleClick={(event) => handleDelete(event, item)}/>
               </div>
             </div>
 
-          })}
 
+          })}
+          <br/>
+          <Pagination
+            current={page}
+            total={email?.total}
+            pageSize={size}
+            onChange={value => setPage(value)}
+            className="pagination"
+          />
         </TabPane>
-        <TabPane tab="INTERVIEW" key="2">
-          Content of tab 2
-        </TabPane>
-        <TabPane tab="OFFER" key="3">
-          Content of tab 3
-        </TabPane>
-        <TabPane tab="REJECT" key="4">
-          Content of tab 3
-        </TabPane>
+        {/*<TabPane tab="INTERVIEW" key="2">*/}
+        {/*  Content of tab 2*/}
+        {/*</TabPane>*/}
+        {/*<TabPane tab="OFFER" key="3">*/}
+        {/*  Content of tab 3*/}
+        {/*</TabPane>*/}
+        {/*<TabPane tab="REJECT" key="4">*/}
+        {/*  Content of tab 3*/}
+        {/*</TabPane>*/}
       </Tabs>
     </div>
   );

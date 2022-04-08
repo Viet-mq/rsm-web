@@ -1,5 +1,5 @@
 import {Badge, Icon, Menu, Tag} from 'antd';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {RootState} from 'src/redux/reducers';
 import {connect, ConnectedProps} from 'react-redux';
@@ -22,8 +22,11 @@ import {
   MdOutlineWorkOutline,
   RiFolderUserLine,
   RiMailSettingsLine,
-  RiMapPin2Line
+  RiMapPin2Line,
+  RiOrganizationChart
 } from "react-icons/all";
+import Search from "antd/es/input/Search";
+import {TalentPoolEntity} from "../../modules_cb/TalentPoolManager/types";
 
 interface ParentProps {
   hiddenLabel: boolean;
@@ -36,7 +39,8 @@ interface IProps extends ParentProps, PropsFromRedux {
 
 const mapStateToProps = (state: RootState) => {
   return {
-    isLogin: state.auth.auth.data?.code === 0,
+    // isLogin: state.auth.auth.data?.code === 0,
+    permission: state.auth.auth.data?.permissions,
     listTalentPool: state.talentPoolManager.list,
     count: state.profileManager.createBooking.count
   };
@@ -46,6 +50,15 @@ const connector = connect(mapStateToProps, {});
 
 const Nav = (props: IProps) => {
   const paths = window.location.pathname.split('/');
+  const [talentPool, setTalentPool] = useState<TalentPoolEntity[]>()
+
+  useEffect(() => {
+    setTalentPool(props.listTalentPool.rows)
+  }, [props.listTalentPool.rows])
+
+  function handleSearch(e: any) {
+    setTalentPool(props.listTalentPool.rows?.filter((item: TalentPoolEntity) => item.name.toLowerCase().includes(e.target.value.toLowerCase())))
+  }
 
   return (
     <Menu
@@ -88,7 +101,7 @@ const Nav = (props: IProps) => {
       <Menu.Item key="reminder" style={{display: 'flex', alignItems: 'center'}}>
         <Link to={`/reminder`} style={{display: "flex", justifyContent: "space-between", width: "100%"}}>
           <div>
-            <Icon type="bell" />
+            <Icon type="bell"/>
             <span>Nhắc nhở</span>
           </div>
         </Link>
@@ -163,6 +176,13 @@ const Nav = (props: IProps) => {
           </Link>
         </Menu.Item>
 
+        <Menu.Item key="company-manager" style={{display: 'flex', alignItems: 'center'}}>
+          <Link to={`/company-manager`}>
+            <RiOrganizationChart className="mr-2"/>
+            <span>Công ty </span>
+          </Link>
+        </Menu.Item>
+
         <Menu.Item key="department-manager" style={{display: 'flex', alignItems: 'center'}}>
           <Link to={`/department-manager`}>
             <HiOutlineUserGroup className="mr-2"/>
@@ -222,13 +242,17 @@ const Nav = (props: IProps) => {
       </SubMenu>
 
       <SubMenu key="sub3" title={!props.hiddenLabel ? <span>TALENT POOLS</span> : <RiFolderUserLine/>}>
-        {props.listTalentPool.rows?.map((item: any) => {
+        <Menu.Item key="search">
+          <Search onChange={handleSearch}/>
+
+        </Menu.Item>
+        {talentPool?.map((item: any) => {
           return <Menu.Item key={item.id} style={{display: 'flex'}}>
             <Link to={`/talent-pool-manager/${item.id}`}
                   className='nav-element'>
               <Icon type="contacts"/>
               <span className="nav-element__content">{item.name} </span>
-              <Badge style={{backgroundColor: '#818181'}} count={item.total} overflowCount={999}/>
+              <Badge style={{backgroundColor: '#818181'}} count={item.numberOfProfile} overflowCount={999}/>
               {/*<Avatar style={{ backgroundColor: '#818181' }} shape="square" size={25}>{item.count}</Avatar>*/}
             </Link>
           </Menu.Item>

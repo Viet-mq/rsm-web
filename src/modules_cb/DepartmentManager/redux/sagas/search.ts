@@ -1,9 +1,4 @@
-import {
-  DepartmentListAction,
-  getListDepartmentError,
-  getListDepartmentSuccess, searchListDepartmentError,
-  searchListDepartmentSuccess
-} from "../actions";
+import {DepartmentListAction, searchListDepartmentError, searchListDepartmentSuccess} from "../actions";
 import * as apis from '../services/apis'
 import {put} from "redux-saga/effects";
 import {AppError} from "src/models/common";
@@ -13,6 +8,8 @@ export function* searchListDepartmentAsync(action: DepartmentListAction) {
   try {
     const rs = yield apis.getListDepartment(action.params);
     if (rs.code !== 0) {
+      yield put(searchListDepartmentError(new AppError(rs.message)));
+
       NotificationError('Lấy danh sách phòng ban không thành công', "Lỗi: " + rs.message);
     } else {
       yield put(searchListDepartmentSuccess(rs.total, rs.rows))

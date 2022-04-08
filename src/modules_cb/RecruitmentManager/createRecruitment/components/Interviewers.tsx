@@ -9,6 +9,7 @@ import {createSteps, getDataRecruitmentUpdate, searchUser} from "../../redux/act
 import {UserAccount} from "../../../AccountManager/types";
 import {CreateRecruitmentRequest, RecruitmentEntity} from "../../types";
 import {useLocation} from "react-router-dom";
+import {getInitials} from "../../../../helpers/utilsFunc";
 
 const mapStateToProps = (state: RootState) => ({
   showBooking: state.profileManager.showBooking,
@@ -33,48 +34,18 @@ interface IProps extends FormComponentProps, ReduxProps {
 
 function InterviewersForm(props: IProps) {
   const location = useLocation();
-  const {getFieldDecorator, resetFields} = props.form;
-  const fontWeightStyle = {fontWeight: 400};
-  const dateFormat = 'DD/MM/YYYY';
-  const timeFormat = 'HH:mm';
-  const formItemHeight = {height: 250}
-  const textEditorHeight = {height: 150}
+  // const {getFieldDecorator, resetFields} = props.form;
+  // const fontWeightStyle = {fontWeight: 400};
+  // const dateFormat = 'DD/MM/YYYY';
+  // const timeFormat = 'HH:mm';
+  // const formItemHeight = {height: 250}
+  // const textEditorHeight = {height: 150}
   const isEdit=location.pathname.includes("edit");
   const [visibleCandidate, setVisibleCandidate] = useState(false)
   const wrapperRef = useRef<any>(null);
   const [keySearch, setKeySearch] = useState(undefined);
   const [listUser, setListUser] = useState<UserAccount[] | any>([]);
   const [dataSource, setDatasource] = useState<any>([]);
-
-  /*
-   * Quill modules to attach to editor
-   * See https://quilljs.com/docs/modules/ for complete options
-   */
-  const modules = {
-    toolbar: [
-      [{'header': '1'}, {'header': '2'}],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [{'list': 'ordered'}, {'list': 'bullet'}],
-      [{'indent': '-1'}, {'indent': '+1'}],
-      ['link', 'image'],
-      ['clean']
-    ],
-
-    clipboard: {
-      // toggle to add extra line breaks when pasting HTML:
-      matchVisual: false,
-    }
-  }
-  /*
-   * Quill editor formats
-   * See https://quilljs.com/docs/formats/
-   */
-  const formats = [
-    'header', 'font', 'size',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent',
-    'link', 'image', 'video'
-  ]
 
   useEffect(() => {
     document.title = "Quản lý tin tuyển dụng";
@@ -104,18 +75,6 @@ function InterviewersForm(props: IProps) {
   useEffect(() => {
     setListUser(props.searchUserState.rows);
   }, [props.searchUserState]);
-
-  const getInitials = (name: string) => {
-    if (name) {
-      let initials: any = name.split(' ');
-      if (initials.length > 1) {
-        initials = initials.shift().charAt(0) + initials.pop().charAt(0);
-      } else {
-        initials = name.substring(0, 2);
-      }
-      return initials.toUpperCase();
-    }
-  }
 
   function handleSearchCandidate(e?: any) {
     setKeySearch(e?.target.value)

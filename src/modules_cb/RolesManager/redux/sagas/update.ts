@@ -16,6 +16,7 @@ export function* updateRolesAsync(action: UpdateRolesAction) {
     const rs = yield apis.updateRoles(action.request);
     yield put(updateRolesSuccess(rs));
     if (rs.code !== 0) {
+      yield put(updateRolesError(new AppError(rs.message)));
       NotificationError('Cập nhật  Roles không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Cập nhật  Roles thành công");

@@ -6,6 +6,7 @@ import React, {FormEvent} from "react";
 import Loading from "../../../components/Loading";
 import {AddActionToViewRequest} from "../types";
 import {addAction, showViewAddActionForm} from "../redux/actions";
+import {formItemLayout} from "../../../helpers/utilsFunc";
 
 
 const mapStateToProps = (state: RootState) => ({
@@ -29,17 +30,6 @@ function CreateActionForm(props: CreateActionFormProps) {
   const {showForm,add_action} = props.viewManager
   const {getFieldDecorator, resetFields} = props.form;
 
-  const formItemLayout = {
-    labelCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-    wrapperCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-  };
-
   function onBtnCreateClicked(e: FormEvent) {
     e.preventDefault();
     (e.target as any).disabled = true;
@@ -51,7 +41,6 @@ function CreateActionForm(props: CreateActionFormProps) {
           permission_id: showForm.id_view,
           title: values.title
         }
-        // console.log(req)
         props.addAction(req);
         return;
       }

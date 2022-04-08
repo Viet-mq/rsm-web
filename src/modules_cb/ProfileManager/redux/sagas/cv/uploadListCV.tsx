@@ -16,6 +16,8 @@ export function* uploadListCVAsync(action: UploadListCVAction) {
     const rs = yield apis.uploadListCV(action.request?.file);
     yield put(uploadListCVSuccess(rs));
     if (rs.code !== 0) {
+      yield put(uploadListCVError(new AppError(rs.message)));
+
       NotificationError('Tải danh sách CV không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tải danh sách CV thành công");

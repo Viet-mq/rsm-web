@@ -1,10 +1,4 @@
-import {
-  CreateViewAction,
-  getListView,
-  showViewUpdateForm,
-  updateViewError,
-  updateViewSuccess
-} from "../actions";
+import {CreateViewAction, getListView, updateViewError, updateViewSuccess} from "../actions";
 import * as apis from "../services/apis";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
 import {put, select} from "redux-saga/effects";
@@ -17,6 +11,7 @@ export function* updateViewAsync(action: CreateViewAction) {
     const rs = yield apis.updateView(action.request);
     yield put(updateViewSuccess(rs));
     if (rs.code !== 0) {
+      yield put(updateViewError(new AppError(rs.message, -1)));
       NotificationError('Cập nhật view không thành công', "Lỗi: " + rs.message)
     } else {
 

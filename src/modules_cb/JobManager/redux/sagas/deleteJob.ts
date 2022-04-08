@@ -1,4 +1,4 @@
-import {DeleteJobAction, deleteJobError, deleteJobSuccess, getListJob} from "../actions";
+import {DeleteJobAction, deleteJobError, deleteJobSuccess, getListJob, getSearchJob} from "../actions";
 import * as apis from "../services/apis";
 import {put, select} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
@@ -10,6 +10,8 @@ export function* deleteJobAsync(action: DeleteJobAction) {
     const rs = yield apis.deleteJob(action.request);
     yield put(deleteJobSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteJobError(new AppError(rs.message)));
+
       NotificationError('Xóa job không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa Job thành công");

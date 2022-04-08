@@ -1,12 +1,14 @@
 import React, {useEffect} from "react";
 import ListTalentPool from "../components/list/ListTalentPool";
-import {Button, Col, Icon, Row} from "antd";
+import {Col, Row} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {showFormCreate, showFormUpdate} from "../redux/actions";
 import CreateTalentPoolForm from "../components/CreateTalentPoolForm";
 import Loading from "../../../components/Loading";
 import UpdateTalentPoolForm from "../components/UpdateTalentPoolForm";
+import ButtonCreate from "../../../components/ComponentUtils/ButtonCreate";
+import {talent_pool_path} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = ({
                            talentPoolManager: {
@@ -55,9 +57,9 @@ function TalentPoolManagerPages(props: IProps) {
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div>
-                <Button onClick={handleCreate}>
-                  <Icon type="plus"/> Tạo kho tiềm năng
-                </Button>
+                <ButtonCreate path={talent_pool_path} action="create" name=" Thêm kho tiềm năng"
+                              handleClick={handleCreate}/>
+
               </div>
             </div>
           </Col>

@@ -1,12 +1,14 @@
 import React, {useEffect} from "react";
 import ListSchool from "../components/list/ListSchool";
-import {Button, Col, Icon, Row} from "antd";
+import {Col, Row} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {showFormCreate, showFormUpdate} from "../redux/actions";
 import CreateSchoolForm from "../components/CreateSchoolForm";
 import Loading from "../../../components/Loading";
 import UpdateSchoolForm from "../components/UpdateSchoolForm";
+import ButtonCreate from "../../../components/ComponentUtils/ButtonCreate";
+import {school_path} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = ({
                            schoolManager: {
@@ -56,9 +58,8 @@ function SchoolManagerPages(props: IProps) {
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div>
-                <Button onClick={handleCreate}>
-                  <Icon type="plus"/> Tạo trường
-                </Button>
+                <ButtonCreate path={school_path} action="create" name=" Thêm trường" handleClick={handleCreate}/>
+
               </div>
             </div>
           </Col>
@@ -66,7 +67,6 @@ function SchoolManagerPages(props: IProps) {
       </div>
 
       <ListSchool/>
-
       <CreateSchoolForm/>
       <UpdateSchoolForm/>
 

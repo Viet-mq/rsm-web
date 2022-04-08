@@ -17,6 +17,7 @@ export function* createRecruitmentAsync(action: CreateRecruitmentAction) {
     const rs = yield apis.createRecruitment(action.request);
     yield put(createRecruitmentSuccess(rs));
     if (rs.code !== 0) {
+      yield put(createRecruitmentError(new AppError(rs.message)));
       NotificationError('Tạo tin tuyển dụng không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tạo tin tuyển dụng thành công");

@@ -16,6 +16,8 @@ export function* updateDepartmentAsync(action: UpdateDepartmentAction) {
     const rs = yield apis.updateDepartment(action.request);
     yield put(updateDepartmentSuccess(rs));
     if (rs.code !== 0) {
+      yield put(updateDepartmentError(new AppError(rs.message)));
+
       NotificationError('Cập nhật phòng ban không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Cập nhật phòng ban thành công");

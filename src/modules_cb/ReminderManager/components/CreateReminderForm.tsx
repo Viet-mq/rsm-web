@@ -2,11 +2,12 @@ import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, DatePicker, Form, Input, Modal} from "antd";
-import React, {FormEvent, useEffect} from "react";
+import React, {FormEvent} from "react";
 import {CreateReminderRequest} from "../types";
 import TextArea from "antd/es/input/TextArea";
 import {createReminder, showFormCreateReminder} from "../redux/actions";
 import moment from "moment";
+import {formItemLayout} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = (state: RootState) => ({
   reminderManager: state.reminderManager,
@@ -27,17 +28,6 @@ interface CreateReminderFormProps extends FormComponentProps, ReduxProps {
 function CreateReminderForm(props: CreateReminderFormProps) {
   const {showReminder} = props.reminderManager
   const {getFieldDecorator, resetFields} = props.form;
-  const fontWeightStyle = {fontWeight: 400};
-  const formItemLayout = {
-    labelCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-    wrapperCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-  };
   const dateFormat = 'DD/MM/YYYY HH:mm';
 
   function onBtnCreateClicked(e: FormEvent) {
@@ -82,7 +72,7 @@ function CreateReminderForm(props: CreateReminderFormProps) {
         footer={""}>
 
         <Form className="form-create">
-          <div className="modal-overflow" style={{height:290}}>
+          <div className="modal-overflow" style={{height: 290}}>
             <Form.Item label="Tiêu đề" className="form-label"  {...formItemLayout}>
               {getFieldDecorator('title', {
                 initialValue: '',

@@ -18,6 +18,7 @@ export function* createRejectCandidateAsync(action: CreateRejectCandidateAction)
     const rs = yield apis.createRejectCandidate(action.request);
     yield put(createRejectCandidateSuccess(rs));
     if (rs.code !== 0) {
+      yield put(createRejectCandidateError(new AppError(rs.message)));
       NotificationError('Tạo lý do loại không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tạo lý do loại thành công");

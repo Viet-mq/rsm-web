@@ -8,6 +8,8 @@ export function* getSearchJobLevelAsync(action: SearchJobLevelAction) {
   try {
     const rs = yield apis.getListJobLevel(action.params);
     if (rs.code !== 0) {
+      yield put(getSearchJobLevelError(new AppError(rs.message)));
+
       NotificationError('Lấy danh sách cấp bậc công việc không thành công', "Lỗi: " + rs.message);
 
     } else {

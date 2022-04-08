@@ -1,4 +1,11 @@
-import {DeleteViewRolesAction, deleteViewRolesError, deleteViewRolesSuccess, getListViewRoles} from "../actions";
+import {
+  DeleteViewRolesAction,
+  deleteViewRolesError,
+  deleteViewRolesSuccess,
+  getListViewRoles,
+  getSearchViewRoles
+} from "../actions";
+
 import * as apis from "../services/apis";
 import {put, select} from "redux-saga/effects";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
@@ -10,6 +17,7 @@ export function* deleteViewRolesAsync(action: DeleteViewRolesAction) {
     const rs = yield apis.deleteViewRoles(action.request);
     yield put(deleteViewRolesSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteViewRolesError(new AppError(rs.message)));
       NotificationError('Xóa View Roles không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa View Roles thành công");

@@ -1,13 +1,12 @@
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Form, Input, Modal, Select} from "antd";
-import React, {FormEvent, useEffect, useState} from "react";
+import {Button, Form, Input, Modal} from "antd";
+import React, {FormEvent, useEffect} from "react";
 import {showFormUpdateComment, updateComment} from "../redux/actions";
 import {UpdateCommentRequest} from "../types";
 import {getListAccount} from "../../AccountManager/redux/actions";
 
-const {Option} = Select;
 const {TextArea} = Input;
 
 const mapStateToProps = (state: RootState) => ({

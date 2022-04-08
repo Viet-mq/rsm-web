@@ -14,15 +14,18 @@ import {ColumnProps} from "antd/lib/table";
 import {
   DepartmentReportEntity,
   RecruitmentActivitiesReportEntity,
-  RecruitmentEfficiencyReportEntity, RecruitmentResultReportEntity, RejectReportEntity
+  RecruitmentEfficiencyReportEntity,
+  RecruitmentResultReportEntity,
+  RejectReportEntity
 } from "../../types";
 import {Button, Icon, Table} from "antd";
 import {emptyText} from "src/configs/locales";
-import {exportExcelFile} from "../../../ProfileManager/redux/services/apis";
 import {
   exportDepartmentExcelFile,
   exportRecruitmentActivitiesExcelFile,
-  exportRecruitmentEfficiencyExcelFile, exportRecruitmentResultExcelFile, exportRejectExcelFile
+  exportRecruitmentEfficiencyExcelFile,
+  exportRecruitmentResultExcelFile,
+  exportRejectExcelFile
 } from "../../redux/services/apis";
 
 const mapStateToProps = (state: RootState) => ({
@@ -62,13 +65,6 @@ function ListDashboard(props: IProps) {
     pageRecruitmentResult: 10,
     pageDepartment: 10,
   };
-  const [state, setState] = useState<any>({
-    filteredInfo: null,
-    sortedInfo: {
-      order: null,
-      columnKey: null,
-    },
-  });
 
   const columnsDepartment: ColumnProps<DepartmentReportEntity>[] = [
     {
@@ -130,7 +126,7 @@ function ListDashboard(props: IProps) {
       title: 'Người tạo',
       key: 'createBy',
       width: 100,
-      dataIndex:"createBy"
+      dataIndex: "createBy"
     },
   ];
 
@@ -287,7 +283,7 @@ function ListDashboard(props: IProps) {
           dataIndex: next,
           width: 100,
           render: (text: string, record: any) => {
-            return record.sources?record.sources[next]:record.status[next];
+            return record.sources ? record.sources[next] : record.status[next];
           }
         }
         curr.push(treeObject);

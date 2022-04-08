@@ -12,6 +12,8 @@ export function* getActivityLogsAsync(action: ActivityLogsAction) {
   try {
     const rs = yield apis.getActivityLogs(action.params);
     if (rs.code !== 0) {
+      yield put(getActivityLogsError(new AppError(rs.message)));
+
       NotificationError('Lấy lịch sử hoạt động không thành công', "Lỗi: " + rs.message);
     }
     yield put(getActivityLogsSuccess(rs.total, rs.rows))

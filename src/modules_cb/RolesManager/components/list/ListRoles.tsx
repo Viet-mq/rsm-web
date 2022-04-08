@@ -3,24 +3,20 @@ import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import env from "src/configs/env";
 import {ColumnProps} from "antd/lib/table";
-import {Button, Icon, Popconfirm, Table} from "antd";
+import {Table} from "antd";
 import {emptyText} from "src/configs/locales";
-import {
-  deleteRoles,
-  getListRoles,
-  showFormCreate,
-  showFormUpdate,
-  updateRoles
-} from "../../redux/actions";
-import {RolesEntity, DeleteRolesRequest} from "../../types";
+import {deleteRoles, getSearchRoles, showFormUpdate} from "../../redux/actions";
+import {DeleteRolesRequest, RolesEntity} from "../../types";
+import ButtonDelete from "../../../../components/ComponentUtils/ButtonDelete";
+import {roles_path} from "../../../../helpers/utilsFunc";
+import ButtonUpdate from "../../../../components/ComponentUtils/ButtonUpdate";
+import Search from "antd/es/input/Search";
 
 const mapStateToProps = ({rolesManager}: RootState) => ({rolesManager});
 const connector = connect(mapStateToProps, {
-  getListRoles,
-   deleteRoles,
-  showFormCreate,
+  getSearchRoles,
+  deleteRoles,
   showFormUpdate,
-  updateRoles
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -29,18 +25,15 @@ interface IProps extends ReduxProps {
 }
 
 function ListRoles(props: IProps) {
-  const {list}=props.rolesManager
-  let screenWidth = document.documentElement.clientWidth;
-  const [page, setPage] = useState(1);
-  const scroll = screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false};
-  const size = 10;
   const columns: ColumnProps<RolesEntity>[] = [
     {
       title: 'STT',
       key: 'index',
       width: 40,
-      align:"center",
-      render: (text, record, index) =>  {return (page - 1) * 10 + index + 1}
+      align: "center",
+      render: (text, record, index) => {
+        return (page - 1) * 10 + index + 1
+      }
     },
     {
       title: 'Name',
@@ -63,38 +56,29 @@ function ListRoles(props: IProps) {
       render: (_text: string, record: RolesEntity) => {
         return (
           <div style={{whiteSpace: 'nowrap'}}>
-            <Popconfirm
-              title="Bạn muốn xóa  Roles này chứ ?"
-              okText="Xóa"
-              onCancel={event => {
-                event?.stopPropagation();
-              }}
-              onConfirm={event => handleDelete(event, record)}
-            >
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                onClick={event => {
-                  event.stopPropagation();
-                }}
-              >
-                <Icon type="delete" theme="filled"/>
-              </Button>
-            </Popconfirm>
-            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
-                    onClick={event => handleEdit(event, record)}
-            >
-              <Icon type="edit"/>
-            </Button>
+            <ButtonDelete path={roles_path} message="Roles" action="delete"
+                          handleClick={(event) => handleDelete(event, record)}/>
+            <ButtonUpdate path={roles_path} action="update" handleClick={(event) => handleEdit(event, record)}/>
+
           </div>
         );
       },
     },
   ];
+  const {search} = props.rolesManager
+  const [page, setPage] = useState(1);
+  const scroll = {y: 600};
+  const size = 30;
+  const [roles, setRoles] = useState<any>()
+  const [nameSearch, setNameSearch] = useState<any>("")
 
   useEffect(() => {
-    props.getListRoles({page: 1, size: 100});
-  }, []);
+    btnSearchClicked()
+  }, [page]);
+
+  useEffect(() => {
+    setRoles(search)
+  }, [search])
 
   const handleDelete = (event: any, entity: RolesEntity) => {
     event.stopPropagation();
@@ -109,19 +93,37 @@ function ListRoles(props: IProps) {
     props.showFormUpdate(true, entity);
   }
 
+  function btnSearchClicked() {
+    const req: any = {
+      page: page,
+      size: size,
+      name: nameSearch
+    }
+    props.getSearchRoles(req);
+  }
+
   return (
     <>
+      <div className="c-filter-profile">
+        <div style={{width: 200, display: "inline-block"}}>
+          <Search
+            onChange={e => setNameSearch(e.target.value)}
+            onSearch={btnSearchClicked}
+            placeholder="Tìm kiếm..."/>
+        </div>
+      </div>
+
       <Table
         scroll={scroll}
         className="custom-table"
-        dataSource={list.rows}
+        dataSource={roles?.rows}
         columns={columns}
         rowKey="id"
         locale={{emptyText: emptyText}}
         pagination={{
           current: page,
           pageSize: size,
-          total: list.total,
+          total: roles?.total,
           onChange: value => setPage(value),
           showTotal: (total, range) => `Đang xem ${range[0]} đến ${range[1]} trong tổng số ${total} mục`,
         }}

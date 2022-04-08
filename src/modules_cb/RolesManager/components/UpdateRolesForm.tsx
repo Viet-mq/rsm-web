@@ -11,6 +11,7 @@ import {APIRolesEntity} from "../../APIRolesManager/types";
 import {ViewRolesEntity} from "../../ViewRolesManager/types";
 import AddAPIRolesForm from "./AddAPIRolesForm";
 import AddViewRolesForm from "./AddViewRolesForm";
+import {formItemLayout} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = (state: RootState) => ({
   rolesManager: state.rolesManager,
@@ -29,16 +30,6 @@ interface UpdateRolesFormProps extends FormComponentProps, ReduxProps {
 }
 
 function UpdateRolesForm(props: UpdateRolesFormProps) {
-  const formItemLayout = {
-    labelCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-    wrapperCol: {
-      xs: {span: 24},
-      sm: {span: 24},
-    },
-  };
   const columnsAPIRoles: ColumnProps<APIRolesEntity>[] = [
     {
       title: 'STT',

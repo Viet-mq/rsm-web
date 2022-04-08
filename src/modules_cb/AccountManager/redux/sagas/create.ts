@@ -16,6 +16,8 @@ export function* createAccountAsync(action: CreateAccountAction) {
     const rs = yield apis.createAccount(action.request);
     yield put(createAccountSuccess(rs));
     if (rs.code !== 0) {
+      yield put(createAccountError(new AppError(rs.message)));
+
       NotificationError('Tạo tài khoản không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tạo tài khoản thành công");

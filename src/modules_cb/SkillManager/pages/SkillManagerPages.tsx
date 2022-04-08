@@ -1,12 +1,14 @@
 import React, {useEffect} from "react";
 import ListSkill from "../components/list/ListSkill";
-import {Button, Col, Icon, Row} from "antd";
+import {Col, Row} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {showFormCreate, showFormUpdate} from "../redux/actions";
 import CreateSkillForm from "../components/CreateSkillForm";
 import Loading from "../../../components/Loading";
 import UpdateSkillForm from "../components/UpdateSkillForm";
+import ButtonCreate from "../../../components/ComponentUtils/ButtonCreate";
+import {skill_path} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = ({
                            skillManager: {
@@ -29,6 +31,7 @@ type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends ReduxProps {
 }
+
 function SkillManagerPages(props: IProps) {
   useEffect(() => {
     document.title = "Quản lý kỹ năng công việc";
@@ -54,9 +57,8 @@ function SkillManagerPages(props: IProps) {
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div>
-                <Button onClick={handleCreate}>
-                  <Icon type="plus"/> Tạo kỹ năng
-                </Button>
+                <ButtonCreate path={skill_path} action="create" name=" Thêm kỹ năng" handleClick={handleCreate}/>
+
               </div>
             </div>
           </Col>

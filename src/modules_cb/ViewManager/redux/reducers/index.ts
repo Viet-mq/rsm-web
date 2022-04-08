@@ -8,9 +8,11 @@ import add_action, {AddActionViewState} from "./add_action";
 import remove_action, {RemoveActionViewState} from "./remove_action";
 import update_action, {UpdateActionViewState} from "./update_action";
 import detail, {GetDetailViewState} from "./detail";
+import search, {SearchListViewState} from "./search";
 
 export interface ViewManagerModuleState {
   list: GetListViewState,
+  search: SearchListViewState,
   detail: GetDetailViewState,
   create: CreateViewState,
   update: UpdateViewState,
@@ -23,6 +25,7 @@ export interface ViewManagerModuleState {
 
 export default combineReducers<ViewManagerModuleState>({
   list,
+  search,
   detail,
   create,
   update,

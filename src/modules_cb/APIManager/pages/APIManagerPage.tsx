@@ -1,12 +1,14 @@
 import React, {useEffect} from "react";
-import {Button, Col, Icon, Row} from "antd";
+import {Col, Row} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {showFormCreateApi} from "../redux/actions";
 import CreateApiForm from "../components/CreateAPIForm";
 import UpdateApiForm from "../components/UpdateAPIForm";
 import Loading from "../../../components/Loading";
-import ListApiRole from "../components/list/ListApiRole";
+import ListAPI from "../components/list/ListAPI";
+import ButtonCreate from "../../../components/ComponentUtils/ButtonCreate";
+import {api_path} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = ({
                            apiManager: {
@@ -50,16 +52,15 @@ function APIManagerPage(props: IProps) {
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div>
-                <Button onClick={handleCreate}>
-                  <Icon type="plus"/> Thêm API
-                </Button>
+                <ButtonCreate path={api_path} action="create" name=" Thêm API" handleClick={handleCreate}/>
+
               </div>
             </div>
           </Col>
         </Row>
       </div>
 
-      <ListApiRole/>
+      <ListAPI/>
 
       <CreateApiForm/>
 
@@ -68,7 +69,7 @@ function APIManagerPage(props: IProps) {
       {props.create.loading ||
       props.list.loading ||
       props.deleteApi.loading ||
-      props.update.loading  ?
+      props.update.loading ?
         <Loading/> : null}
 
     </div>

@@ -7,7 +7,8 @@ export function* searchUserAsync(action: SearchUserAction) {
   try {
     const rs = yield apis.searchUserRecruitment(action.params);
     if (rs.code !== 0) {
-      // NotificationError('Lấy danh sách thành viên không thành công', "Lỗi: " + rs.message);
+      yield put(searchUserError(new AppError(rs.message)));
+// NotificationError('Lấy danh sách thành viên không thành công', "Lỗi: " + rs.message);
     } else {
       yield put(searchUserSuccess(rs.total, rs.rows))
     }

@@ -1,4 +1,4 @@
-import {AddActionToViewRequest, DeleteActionToViewRequest} from "src/modules_cb/ViewManager/types";
+import {DeleteActionToViewRequest} from "src/modules_cb/ViewManager/types";
 import {AppError, ResponseBase2} from "src/models/common";
 
 export interface RemoveActionViewAction {
@@ -12,7 +12,7 @@ export const REMOVE_ACTION = "REMOVE_ACTION";
 export const REMOVE_ACTION_SUCCESS = "REMOVE_ACTION_SUCCESS";
 export const REMOVE_ACTION_ERROR = "REMOVE_ACTION_ERROR";
 
-export const removeAction = (request?:DeleteActionToViewRequest): RemoveActionViewAction => ({
+export const removeAction = (request?: DeleteActionToViewRequest): RemoveActionViewAction => ({
   type: REMOVE_ACTION,
   request
 });

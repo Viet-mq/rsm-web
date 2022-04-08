@@ -1,4 +1,4 @@
-import {deleteViewError, deleteViewSuccess, DeleteViewAction, getListView} from "../actions";
+import {deleteViewError, deleteViewSuccess, DeleteViewAction, getListView, searchListView} from "../actions";
 import * as apis from "../services/apis";
 import {NotificationError, NotificationSuccess} from "src/components/Notification/Notification";
 import {put, select} from "redux-saga/effects";
@@ -11,6 +11,7 @@ export function* deleteViewAsync(action: DeleteViewAction) {
     const rs = yield apis.deleteView(params);
     yield put(deleteViewSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteViewError(new AppError(rs.message, -1)));
       NotificationError('Xóa view không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa view thành công");

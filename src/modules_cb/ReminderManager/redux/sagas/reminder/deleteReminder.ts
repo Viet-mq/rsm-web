@@ -16,6 +16,7 @@ export function* deleteReminderAsync(action: DeleteReminderAction) {
     const rs = yield apis.deleteReminder(action.request);
     yield put(deleteReminderSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteReminderError(new AppError(rs.message)));
       NotificationError('Xóa nhắc nhở không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa nhắc nhở thành công");

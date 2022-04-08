@@ -16,6 +16,7 @@ export function* createSkillAsync(action: CreateSkillAction) {
     const rs = yield apis.createSkill(action.request);
     yield put(createSkillSuccess(rs));
     if (rs.code !== 0) {
+      yield put(createSkillError(new AppError(rs.message)));
       NotificationError('Tạo kỹ năng công việc không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tạo kỹ năng công việc thành công");

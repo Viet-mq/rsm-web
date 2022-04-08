@@ -10,6 +10,8 @@ export function* createApiAsync(action: CreateAPIAction) {
     const rs = yield apis.createApi(action.request);
     yield put(createApiSuccess(rs));
     if (rs.code !== 0) {
+      yield put(createApiError(new AppError(rs.message, -1)));
+
       NotificationError('Tạo API không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Tạo API thành công");
@@ -19,5 +21,6 @@ export function* createApiAsync(action: CreateAPIAction) {
     }
   } catch (e) {
     yield put(createApiError(new AppError(e.message, -1)));
+
   }
 }

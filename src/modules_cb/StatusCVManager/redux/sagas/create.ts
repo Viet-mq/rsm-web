@@ -16,6 +16,7 @@ export function* createStatusCVAsync(action: CreateStatusCVAction) {
     const rs = yield apis.createStatusCV(action.request);
     yield put(createStatusCVSuccess(rs));
     if (rs.code !== 0) {
+      yield put(createStatusCVError(new AppError(rs.message)));
       NotificationError('Thêm vòng tuyển dụng không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Thêm vòng tuyển dụng thành công");

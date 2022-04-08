@@ -10,6 +10,7 @@ export function* updateCommentAsync(action: UpdateCommentAction) {
     const rs = yield apis.updateComment(action.request);
     yield put(updateCommentSuccess(rs));
     if (rs.code !== 0) {
+      yield put(updateCommentError(new AppError(rs.message)));
       NotificationError('Cập nhật ghi chú không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Cập nhật ghi chú thành công");

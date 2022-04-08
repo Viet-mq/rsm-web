@@ -1,15 +1,13 @@
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Form, Input, Modal, Select} from "antd";
-import React, {FormEvent, useEffect, useState} from "react";
-import {createComment} from "../redux/actions";
+import {Button, Form, Input, Modal} from "antd";
+import React, {FormEvent, useEffect} from "react";
+import {createComment, showFormCreateComment} from "../redux/actions";
 import {CreateCommentRequest} from "../types";
-import {showFormCreateComment} from "../redux/actions";
 import {getListAccount} from "../../AccountManager/redux/actions";
 
-const {Option} = Select;
-const { TextArea } = Input;
+const {TextArea} = Input;
 
 const mapStateToProps = (state: RootState) => ({
   showComment: state.profileManager.showComment,
@@ -91,7 +89,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
 
         <Form {...formItemLayout}>
 
-          <Form.Item label="Ghi chú" className="mb-0" style={{height:110}}>
+          <Form.Item label="Ghi chú" className="mb-0" style={{height: 110}}>
             {getFieldDecorator('comment', {
               initialValue: '',
               rules: [
@@ -101,7 +99,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                 },
               ],
             })(
-              <TextArea placeholder="Ghi chú" style={{height:"100px"}} className="bg-white text-black"/>
+              <TextArea placeholder="Ghi chú" style={{height: "100px"}} className="bg-white text-black"/>
             )}
           </Form.Item>
 

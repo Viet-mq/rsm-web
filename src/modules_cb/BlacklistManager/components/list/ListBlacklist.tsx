@@ -3,16 +3,18 @@ import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import env from "src/configs/env";
 import {ColumnProps} from "antd/lib/table";
-import {Button, Icon, Popconfirm, Table} from "antd";
+import {Table} from "antd";
 import {emptyText} from "src/configs/locales";
-import {deleteBlacklist, getListBlacklist, showFormCreate, showFormUpdate, updateBlacklist} from "../../redux/actions";
+import {deleteBlacklist, getListBlacklist, showFormUpdate, updateBlacklist} from "../../redux/actions";
 import {BlacklistEntity, DeleteBlacklistRequest} from "../../types";
+import ButtonDelete from "../../../../components/ComponentUtils/ButtonDelete";
+import {blacklist_path} from "../../../../helpers/utilsFunc";
+import ButtonUpdate from "../../../../components/ComponentUtils/ButtonUpdate";
 
 const mapStateToProps = ({blacklistManager: {list}}: RootState) => ({list})
 const connector = connect(mapStateToProps, {
   getListBlacklist,
   deleteBlacklist,
-  showFormCreate,
   showFormUpdate,
   updateBlacklist
 });
@@ -52,8 +54,10 @@ function ListBlacklist(props: IProps) {
       title: 'STT',
       key: 'index',
       width: 40,
-      align:"center",
-      render: (text, record, index) =>  {return (page - 1) * 10 + index + 1}
+      align: "center",
+      render: (text, record, index) => {
+        return (page - 1) * 10 + index + 1
+      }
     },
     {
       title: 'Tên',
@@ -90,29 +94,10 @@ function ListBlacklist(props: IProps) {
       render: (_text: string, record: BlacklistEntity) => {
         return (
           <div style={{whiteSpace: 'nowrap'}}>
-            <Popconfirm
-              title="Bạn muốn xóa quy trình tuyển dụng này chứ ?"
-              okText="Xóa"
-              onCancel={event => {
-                event?.stopPropagation();
-              }}
-              onConfirm={event => handleDelete(event, record)}
-            >
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                onClick={event => {
-                  event.stopPropagation();
-                }}
-              >
-                <Icon type="delete" theme="filled"/>
-              </Button>
-            </Popconfirm>
-            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
-                    onClick={event => handleEdit(event, record)}
-            >
-              <Icon type="edit"/>
-            </Button>
+            <ButtonDelete path={blacklist_path} message="ứng viên" action="delete"
+                          handleClick={(event) => handleDelete(event, record)}/>
+            <ButtonUpdate path={blacklist_path} action="update" handleClick={(event) => handleEdit(event, record)}/>
+
           </div>
         );
       },

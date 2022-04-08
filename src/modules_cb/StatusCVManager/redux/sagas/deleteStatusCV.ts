@@ -10,6 +10,7 @@ export function* deleteStatusCVAsync(action: DeleteStatusCVAction) {
     const rs = yield apis.deleteStatusCV(action.request);
     yield put(deleteStatusCVSuccess(rs));
     if (rs.code !== 0) {
+      yield put(deleteStatusCVError(new AppError(rs.message)));
       NotificationError('Xóa quy trình tuyển dụng không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Xóa quy trình tuyển dụng thành công");

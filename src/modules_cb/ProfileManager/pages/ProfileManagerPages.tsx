@@ -11,6 +11,8 @@ import {exportExcelFile} from "../redux/services/apis";
 import {useLocation, useParams} from "react-router-dom";
 import {getDetailTalentPool} from "../../TalentPoolManager/redux/actions";
 import {RecruitmentTalentPool} from "../types";
+import ButtonCreate from "../../../components/ComponentUtils/ButtonCreate";
+import {profile_path} from "../../../helpers/utilsFunc";
 
 
 const mapStateToProps = (state: RootState) => {
@@ -34,13 +36,16 @@ interface IProps extends ReduxProps {
 }
 
 function ProfileManagerPages(props: IProps) {
-  const {search,create,uploadListCV,list}=props.profileManager
+  const {search, create, uploadListCV, list} = props.profileManager
   const {idTalentPool} = useParams()
   const location = useLocation();
   const [dataID, setDataID] = useState<any>()
   useEffect(() => {
-    location.pathname.includes("talent-pool-manager") ? document.title = "Talent pools" : document.title = "Ứng viên";
-    props.getDetailTalentPool({id: idTalentPool})
+    if (location.pathname.includes("talent-pool-manager")) {
+      document.title = "Talent pools"
+      props.getDetailTalentPool({id: idTalentPool})
+
+    } else document.title = "Ứng viên";
   }, []);
 
   const handleCreate = (e: any) => {
@@ -50,11 +55,11 @@ function ProfileManagerPages(props: IProps) {
       e.target.disabled = false;
     }
 
-    let req:RecruitmentTalentPool=({
-      talentPool:idTalentPool,
+    let req: RecruitmentTalentPool = ({
+      talentPool: idTalentPool,
 
     })
-    props.showFormCreate(true,req);
+    props.showFormCreate(true, req);
   }
 
   const handleUploadListCV = (e: any) => {
@@ -90,14 +95,16 @@ function ProfileManagerPages(props: IProps) {
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div style={{display: "flex", flexWrap: "nowrap"}}>
-                <Button onClick={handleCreate}>
-                  <Icon type="plus"/> Thêm ứng viên
-                </Button>
+
+                {location.pathname.includes("profile-manager") ?null:
+                <ButtonCreate path={profile_path} action="create" name=" Thêm ứng viên" handleClick={handleCreate}/>}
+
                 <Button onClick={event => handleUploadListCV(event)}>
                   <Icon type="upload"/> Upload DS ứng viên
                 </Button>
+
                 <Button>
-                  <a onClick={BtnExportExcel}><Icon type="export"/>  Xuất Excel</a>
+                  <a onClick={BtnExportExcel}><Icon type="export"/> Xuất Excel</a>
                 </Button>
               </div>
             </div>

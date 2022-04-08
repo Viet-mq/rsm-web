@@ -8,6 +8,8 @@ export function* getListCommentAsync(action: GetListCommentAction) {
   try {
     const rs = yield apis.getListComment(action.params);
     if (rs.code !== 0) {
+      yield put(getCommentError(new AppError(rs.message)));
+
       NotificationError('Lấy danh sách ghi chú không thành công', "Lỗi: " + rs.message);
     }
     yield put(getCommentSuccess(rs))

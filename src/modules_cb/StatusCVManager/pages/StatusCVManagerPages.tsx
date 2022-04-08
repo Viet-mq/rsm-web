@@ -2,12 +2,14 @@ import React, {useEffect, useState} from "react";
 import {Button, Icon, Popconfirm, Tooltip} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {deleteStatusCV, showFormCreate, showFormUpdate} from "../redux/actions";
+import {deleteStatusCV, showFormCreate, showFormUpdate, updateAllStatusCV} from "../redux/actions";
 import CreateStatusCVForm from "../components/CreateStatusCVForm";
 import Loading from "../../../components/Loading";
 import UpdateStatusCVForm from "../components/UpdateStatusCVForm";
 import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
 import {MdDragIndicator} from "react-icons/all";
+import ButtonCreate from "../../../components/ComponentUtils/ButtonCreate";
+import {CheckViewAction, statuscv_path} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = (state: RootState) => ({
   statuscvManager: state.statuscvManager,
@@ -17,6 +19,7 @@ const connector = connect(mapStateToProps, {
   showFormCreate,
   showFormUpdate,
   deleteStatusCV,
+  updateAllStatusCV
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -25,9 +28,9 @@ interface IProps extends ReduxProps {
 }
 
 function StatusCVManagerPages(props: IProps) {
-  const { list, create, deleteStatusCV, update} = props.statuscvManager
+  const {list, create, deleteStatusCV, update} = props.statuscvManager
   const [schema, setSchema] = useState<any>([])
-  const [lastElement, setLastElement] = useState<any>(list.rows?.map((el: any) => el.isDragDisabled).lastIndexOf(false)!==-1?list.rows?.map((el: any) => el.isDragDisabled).lastIndexOf(false):0);
+  const [lastElement, setLastElement] = useState<any>(list.rows?.map((el: any) => el.isDragDisabled).lastIndexOf(false) !== -1 ? list.rows?.map((el: any) => el.isDragDisabled).lastIndexOf(false) : 0);
 
   useEffect(() => {
     document.title = "Quản lý quy trình tuyển dụng";
@@ -35,15 +38,15 @@ function StatusCVManagerPages(props: IProps) {
 
   useEffect(() => {
     setSchema(list?.rows)
-  }, [list.rows]); 
+  }, [list.rows]);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (schema?.length) {
       const calLastElement = schema.map((el: any) => el.isDragDisabled).lastIndexOf(false)
       if (calLastElement !== -1) setLastElement(calLastElement)
       else setLastElement(0)
     }
-  },[schema])
+  }, [schema])
 
   function onDragEnd(result: any) {
     // dropped outside the list
@@ -57,6 +60,8 @@ function StatusCVManagerPages(props: IProps) {
     // put the removed one into destination.
     schemaCopy.splice(result.destination.index, 0, removed);
     setLastElement(schemaCopy?.map((el: any) => el.isDragDisabled).lastIndexOf(false))
+    // console.log(schemaCopy)
+    props.updateAllStatusCV({statusCVS:schemaCopy})
     setSchema(schemaCopy);
   };
 
@@ -115,7 +120,7 @@ function StatusCVManagerPages(props: IProps) {
                           {provided.placeholder}
                           <div className="add-process-button" onClick={showFormCreate}>
                             <Button type="dashed" size={"large"}> <Icon type="plus"/>
-                            Thêm vòng tuyển dụng</Button>
+                              Thêm vòng tuyển dụng</Button>
                           </div>
                         </>
                         : null}
@@ -147,11 +152,14 @@ function StatusCVManagerPages(props: IProps) {
                                 {item.name}
                               </div>
                               <div>
-                                <Tooltip placement="top" title="Sửa">
-                                  <Icon className="hover-pointer" type="edit"
-                                        onClick={() => showFormUpdate(item, index)}
-                                        style={{fontSize: '130%', marginRight: 15}}/>
-                                </Tooltip>
+                                {CheckViewAction(statuscv_path, "update")
+                                  ?
+                                  <Tooltip placement="top" title="Sửa">
+                                    <Icon className="hover-pointer" type="edit"
+                                          onClick={() => showFormUpdate(item, index)}
+                                          style={{fontSize: '130%', marginRight: 15}}/>
+                                  </Tooltip>
+                                  : null}
                               </div>
                               <div className="hover-pointer">
                                 <Popconfirm
@@ -162,11 +170,14 @@ function StatusCVManagerPages(props: IProps) {
                                   }}
                                   onConfirm={() => btnDeleteProcessClicked(item, index)}
                                 >
-                                  <Tooltip placement="top" title="Xóa">
-                                    <Icon type="delete" style={{color: 'red', fontSize: '130%'}}/>
 
-                                  </Tooltip>
+                                  {CheckViewAction(statuscv_path, "delete")
+                                    ?
+                                    <Tooltip placement="top" title="Xóa">
+                                      <Icon type="delete" style={{color: 'red', fontSize: '130%'}}/>
 
+                                    </Tooltip>
+                                    : null}
                                 </Popconfirm>
                               </div>
                             </div>
@@ -177,8 +188,9 @@ function StatusCVManagerPages(props: IProps) {
                           <>
                             {provided.placeholder}
                             <div className="add-process-button" onClick={showFormCreate}>
-                              <Button type="dashed" size={"large"}> <Icon type="plus"/>Thêm vòng tuyển
-                                dụng</Button>
+                              <ButtonCreate path={statuscv_path} action="create" type="dashed" size={"large"}
+                                            name=" Thêm vòng tuyển"/>
+
                             </div>
                           </>
                           : null}

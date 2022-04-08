@@ -8,6 +8,7 @@ export function* getAllScheduleAsync(action: GetScheduleAction) {
   try {
     const rs = yield apis.getAllSchedule(action.params);
     if (rs.code !== 0) {
+      yield put(getScheduleError(new AppError(rs.message)));
       NotificationError('Lấy danh sách lịch phỏng vấn không thành công', "Lỗi: " + rs.message);
     }
     yield put(getScheduleSuccess(rs.calendars))

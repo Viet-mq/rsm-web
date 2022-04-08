@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Button, DatePicker, Icon, Select} from "antd";
+import {Button, DatePicker, Icon, Select, TreeSelect} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {getListRecruitment, getSearchRecruitment} from "../redux/actions";
@@ -9,18 +9,23 @@ import {Link} from "react-router-dom";
 import moment from "moment";
 import 'moment/locale/vi';
 import {RecruitmentEntity} from "../types";
+import {CheckViewAction, recruitment_path} from "../../../helpers/utilsFunc";
+import {searchListDepartment} from "../../DepartmentManager/redux/actions";
 
 const {Option} = Select;
 const {RangePicker} = DatePicker;
+const {TreeNode} = TreeSelect;
 
 const mapStateToProps = (state: RootState) => ({
-  listRecruitment: state.recruitmentManager.list,
-  searchListRecruitment: state.recruitmentManager.search,
+  recruitmentManager: state.recruitmentManager,
+  listDepartment: state.departmentManager.list
+
 })
 
 const connector = connect(mapStateToProps, {
   getListRecruitment,
-  getSearchRecruitment
+  getSearchRecruitment,
+  searchListDepartment
 });
 
 
@@ -30,14 +35,15 @@ interface IProps extends ReduxProps {
 }
 
 function RecruitmentManagerPages(props: IProps) {
-
+  const {list, search} = props.recruitmentManager
   const dateFormat = 'DD/MM/YYYY';
-  const timeFormat = 'HH:mm';
+  // const timeFormat = 'HH:mm';
   const [valueDateRange, setValueDateRange] = useState<any[]>([])
   const [recruitment, setRecruitment] = useState<RecruitmentEntity[]>([])
-  const [trigger, setTrigger] = useState({
-    recruitment: false,
-  })
+  const fontWeightStyle = {fontWeight: 400};
+  const [valueSelect, setValueSelect] = useState(undefined)
+  const [valueFilter, setValueFilter] = useState("all")
+  const [valueSearch, setValueSearch] = useState()
 
   useEffect(() => {
     document.title = "Quản lý tin tuyển dụng";
@@ -45,15 +51,13 @@ function RecruitmentManagerPages(props: IProps) {
   }, []);
 
   useEffect(() => {
-    setRecruitment(props.listRecruitment.rows)
-  }, [props.listRecruitment]);
-
+    setRecruitment(list.rows)
+  }, [list]);
 
   useEffect(() => {
-    if(trigger.recruitment){
-      setRecruitment(props.searchListRecruitment.rows)
-    }
-  }, [props.searchListRecruitment.rows])
+    setRecruitment(search.rows)
+
+  }, [search.rows])
 
   function onChangeDateRange(dates: any) {
     dates[0].set({hour: 0, minute: 0, second: 0})
@@ -63,54 +67,86 @@ function RecruitmentManagerPages(props: IProps) {
     setValueDateRange([start, end])
   }
 
-  function handleCreateBySelected(value:any) {
-    if (value !== "all") {
-      props.getListRecruitment({key: value})
-    } else{
-      props.getListRecruitment({page: 1, size: 93});
-    }
+  function onChangeFilter(value: any) {
+    setValueFilter(value)
+    let req: any = {}
+    if (valueSelect) req.department = valueSelect
+    if (valueSearch) req.keySearch = valueSearch
+     req.key = value
+    req.page = 1
+    req.size = 93
+    props.getSearchRecruitment(req)
+
   }
 
-  function handleSearchRecruitment(value:any) {
-    props.getSearchRecruitment({keySearch:value,page: 1, size: 100})
-    setTrigger({...trigger,recruitment:true})
+  function handleSearchRecruitment(value: any) {
+    setValueSearch(value)
+    let req: any = {}
+    if (valueFilter) req.key = valueFilter
+    if (valueSelect) req.department = valueSelect
+    req.keySearch = value
+    req.page = 1
+    req.size = 93
+    props.getSearchRecruitment(req)
   }
+
+  function onChange(value: any) {
+    setValueSelect(value)
+    let req: any = {}
+    if (valueFilter) req.key = valueFilter
+    if (valueSearch) req.keySearch = valueSearch
+    if (value) req.department = value
+    req.page = 1
+    req.size = 93
+    props.getSearchRecruitment(req)
+  };
+
+  const filterTreeNode = (input: any, node: any) => {
+    const title = node.props.title;
+    return title.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+  };
 
   return (
     <div className="c-schedule-container">
       <div className='header-align recruitment-title'>
         <div className="tmp-title-page-size20">Tin tuyển dụng</div>
         <div>
-          <Link to={`/recruitment-manager/create`}>
-            <Button type="primary">
-              <Icon type="plus" style={{fontSize: "125%"}}/>
-              Thêm mới
-            </Button>
-          </Link>
+          {CheckViewAction(recruitment_path, "create")
+            ?
+            <Link to={`/recruitment-manager/create`}>
+              <Button type="primary">
+                <Icon type="plus" style={{fontSize: "125%"}}/>
+                Thêm mới
+              </Button>
+            </Link>
+            : null}
+
         </div>
       </div>
       <div className='header-align recruitment-option'>
         <div className='recruitment-option__pop-over'>
-        <Select getPopupContainer={(trigger:any) => trigger.parentNode} defaultValue="join" className="select-custom"
+          {/*<Select getPopupContainer={(trigger:any) => trigger.parentNode} defaultValue="join" className="select-custom"*/}
 
-                  style={{
-                    fontWeight: 600,
-                    width: 155,
-                    marginRight: 15
-                  }}>
-            <Option value="all">Tất cả</Option>
-            <Option value="join">Đang tuyển dụng</Option>
-            <Option value="public">Công khai</Option>
-            <Option value="internal">Nội bộ</Option>
-            <Option value="stop">Ngưng nhận hồ sơ</Option>
-            <Option value="draft">Nháp</Option>
-            <Option value="close">Đóng</Option>
-          </Select>
+          {/*          style={{*/}
+          {/*            fontWeight: 600,*/}
+          {/*            width: 155,*/}
+          {/*            marginRight: 15*/}
+          {/*          }}>*/}
+          {/*    <Option value="all">Tất cả</Option>*/}
+          {/*    <Option value="join">Đang tuyển dụng</Option>*/}
+          {/*    <Option value="public">Công khai</Option>*/}
+          {/*    <Option value="internal">Nội bộ</Option>*/}
+          {/*    <Option value="stop">Ngưng nhận hồ sơ</Option>*/}
+          {/*    <Option value="draft">Nháp</Option>*/}
+          {/*    <Option value="close">Đóng</Option>*/}
+          {/*  </Select>*/}
 
           <div style={{display: "flex", alignItems: "center"}}>
             <span id='sort'>Lọc theo</span>
-          <Select getPopupContainer={(trigger:any) => trigger.parentNode} defaultValue="all" className="select-custom"
-                    onSelect={handleCreateBySelected}
+            <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                    value={valueFilter}
+                    className="select-custom"
+                    onSelect={onChangeFilter}
                     style={{
                       fontWeight: 600,
                       width: 120,
@@ -122,11 +158,37 @@ function RecruitmentManagerPages(props: IProps) {
             </Select>
           </div>
 
+          <div style={{display: "flex", alignItems: "center"}}>
+            <span id='sort'>Thuộc phòng ban</span>
+            <TreeSelect
+              style={{width: 200, ...fontWeightStyle}}
+              showSearch
+              allowClear
+              dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
+              placeholder="Chọn phòng ban"
+              className="bg-white text-black form-label"
+              onChange={onChange}
+              getPopupContainer={(trigger: any) => trigger.parentNode}
+              filterTreeNode={filterTreeNode}
+
+            >
+              {props.listDepartment.rows?.map((item: any) => (
+                <TreeNode style={fontWeightStyle} value={item.id} title={item.name} key={item.id}>
+                  {item.children ? item.children.map((el: any) => (
+                    <TreeNode style={fontWeightStyle} value={el.id} key={el.id} title={el.name}/>
+                  )) : null}
+                </TreeNode>
+
+              ))}
+
+            </TreeSelect>
+          </div>
+
           <div style={{marginLeft: 5, width: 250}} className="align">
             <RangePicker
               format={dateFormat}
               value={valueDateRange}
-              placeholder={["Ngày tạo","Ngày tạo"]}
+              placeholder={["Ngày tạo", "Ngày tạo"]}
               allowClear={false}
               ranges={{
                 'Hôm nay': [moment(), moment()],

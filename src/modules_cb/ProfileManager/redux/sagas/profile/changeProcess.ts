@@ -5,7 +5,8 @@ import {
   getDetailProfile,
   getListProfile,
   showChangeProcessForm,
-  showChangeRecruitmentForm, showEmailChangeProcessForm
+  showChangeRecruitmentForm,
+  showEmailChangeProcessForm
 } from "../../actions";
 import * as apis from "../../services/apis";
 import {put, select} from "redux-saga/effects";
@@ -19,6 +20,7 @@ export function* changeProcessAsync(action: ChangeProcessAction) {
     const rs = yield apis.changeProcess(action.request);
     yield put(changeProcessSuccess(rs));
     if (rs.code !== 0) {
+      yield put(changeProcessError(new AppError(rs.message)));
       NotificationError('Chuyển vòng tuyển dụng không thành công', "Lỗi: " + rs.message)
     } else {
       NotificationSuccess('Thành công', "Chuyển vòng tuyển dụng thành công");
