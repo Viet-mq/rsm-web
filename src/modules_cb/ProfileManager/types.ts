@@ -49,6 +49,7 @@ export interface ProfileEntity {
   status: string,
   companyId: string,
   companyName: string,
+  blackList: boolean
 
 }
 
@@ -132,7 +133,7 @@ export interface CreateRejectForm {
 
 export interface CreateRejectCandidateRequest {
   createReject: CreateRejectForm,
-  mailRequest: MailRequest,
+  mailRequest?: MailRequest,
 }
 
 export interface UploadAvatarRequest {
@@ -191,12 +192,16 @@ export interface MailForm {
   subject: string,
   content: string,
   file?: any,
+  email?:any,
+  username?:any,
 }
 
 export interface MailRequest {
   candidate?: MailForm,
   presenters?: MailForm,
-  recruitmentCouncils?: MailForm
+  interviewers?: MailForm,
+  members?:MailForm
+
 }
 
 export interface CreateBookingForm {
@@ -329,6 +334,7 @@ export interface DetailProfileEntity {
   status: string,
   companyId: string,
   companyName: string,
+  blackList: boolean
 
 
 }
@@ -422,6 +428,11 @@ export interface ChangeProcessRequest {
 export interface AddToTalentPoolRequest {
   profileId?: string,
   talentPoolId: string
+
+}
+
+export interface AddToBlacklistRequest {
+  profileId: string,
 
 }
 

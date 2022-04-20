@@ -56,30 +56,6 @@ function ListAPIRoles(props: IProps) {
       render: (_text: string, record: APIRolesEntity) => {
         return (
           <div style={{whiteSpace: 'nowrap'}}>
-            <Popconfirm
-              title="Bạn muốn xóa API Roles này chứ ?"
-              okText="Xóa"
-              onCancel={event => {
-                event?.stopPropagation();
-              }}
-              onConfirm={event => handleDelete(event, record)}
-            >
-              <Button
-                size="small"
-                className="ant-btn ml-1 mr-1 ant-btn-sm"
-                onClick={event => {
-                  event.stopPropagation();
-                }}
-              >
-                <Icon type="delete" theme="filled"/>
-              </Button>
-            </Popconfirm>
-            <Button size="small" className="ant-btn ml-1 mr-1 ant-btn-sm"
-                    onClick={event => handleEdit(event, record)}
-            >
-              <Icon type="edit"/>
-            </Button>
-
             <ButtonDelete path={api_roles_path} message="API Roles" action="delete"
                           handleClick={(event) => handleDelete(event, record)}/>
             <ButtonUpdate path={api_roles_path} action="update" handleClick={(event) => handleEdit(event, record)}/>

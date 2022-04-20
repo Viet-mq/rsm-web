@@ -10,20 +10,9 @@ import UpdateRolesForm from "../components/UpdateRolesForm";
 import ButtonCreate from "../../../components/ComponentUtils/ButtonCreate";
 import {roles_path} from "../../../helpers/utilsFunc";
 
-const mapStateToProps = ({
-                           rolesManager: {
-                             showForm,
-                             list,
-                             create,
-                             deleteRoles,
-                             update,
-                           }
-                         }: RootState) => ({
-  showForm,
-  list,
-  create,
-  deleteRoles,
-  update,
+const mapStateToProps = (state: RootState) => ({
+  rolesManager: state.rolesManager,
+
 })
 const connector = connect(mapStateToProps, {showFormCreate, showFormUpdate});
 
@@ -33,6 +22,7 @@ interface IProps extends ReduxProps {
 }
 
 function RolesManagerPages(props: IProps) {
+  const {showForm, list, create, deleteRoles, update,} = props.rolesManager
   useEffect(() => {
     document.title = "Quản lý Roles";
   }, []);
@@ -66,13 +56,13 @@ function RolesManagerPages(props: IProps) {
       </div>
 
       <ListRoles/>
-      <CreateRolesForm/>
-      <UpdateRolesForm/>
+      {showForm.show_create&&<CreateRolesForm/>}
+      {showForm.show_update&&<UpdateRolesForm/>}
 
-      {props.create.loading ||
-      props.list.loading ||
-      props.deleteRoles.loading ||
-      props.update.loading ?
+      {create.loading ||
+      list.loading ||
+      deleteRoles.loading ||
+      update.loading ?
         <Loading/> : null}
 
     </div>

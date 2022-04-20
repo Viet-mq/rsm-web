@@ -86,6 +86,37 @@ export const getInitials = (name: string) => {
   }
 }
 
+export const plainOptions = {
+  candidate: [{
+    id: "yes",
+    name: "Có",
+  }, {
+    id: "no",
+    name: "Không",
+  }],
+  interviewers: [{
+    id: "system",
+    name: "Hệ thống",
+  }, {
+    id: "outSide",
+    name: "Ngoài hệ thống",
+  }],
+  members: [{
+    id: "yes",
+    name: "Có",
+  }, {
+    id: "no",
+    name: "Không",
+  }],
+  presenter: [{
+    id: "yes",
+    name: "Có",
+  }, {
+    id: "no",
+    name: "Không",
+  }]
+};
+
 export const view_role_path = "/view-roles-manager";
 export const view_path = "/view-manager"
 export const home_path = "/home"
@@ -110,4 +141,5 @@ export const address_path = "/address-manager"
 export const talent_pool_path = "/talent-pool-manager"
 export const email_path = "/email-manager"
 export const company_path = "/company-manager"
+export const dashboard_path = "/home"
 

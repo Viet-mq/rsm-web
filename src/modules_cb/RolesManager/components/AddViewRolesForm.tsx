@@ -29,7 +29,6 @@ interface AddViewRolesFormProps extends FormComponentProps, ReduxProps {
 
 function AddViewRolesForm(props: AddViewRolesFormProps) {
   const {showForm} = props.rolesManager
-  const {getFieldDecorator, resetFields} = props.form;
   const [viewRoles, setViewRoles] = useState<ViewRolesEntity[]>([]);
   const [trigger, setTrigger] = useState({
     viewRoles: false,
@@ -50,7 +49,6 @@ function AddViewRolesForm(props: AddViewRolesFormProps) {
 
   const handleCloseForm = (event: any) => {
     event.stopPropagation();
-    resetFields();
     setAddViewRoles(undefined)
     props.showFormAddViewRoles(false)
   }
@@ -74,7 +72,7 @@ function AddViewRolesForm(props: AddViewRolesFormProps) {
     if(!checkDuplicate){
       props.setViewRolesTable([...props.viewRolesTable, addViewRoles])
     }
-    setAddViewRoles("")
+    setAddViewRoles(undefined)
 
     props.showFormAddViewRoles(false)
   }

@@ -144,7 +144,6 @@ function CreateProfileForm(props: CreateProfileFormProps) {
           talentPool: showForm.recruitment_talentpool?.talentPool,
           recruitment: showForm.recruitment_talentpool?.recruitment,
         }
-        // console.log(req)
         props.createProfile(req);
         return;
       }
@@ -584,6 +583,7 @@ function CreateProfileForm(props: CreateProfileFormProps) {
                           <Option key={index} value={item.id}>{item.name}</Option>
                         ))}
                       </Select>
+
                     )}
                     <Button
                       size="small"

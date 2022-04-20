@@ -12,7 +12,7 @@ import {useLocation, useParams} from "react-router-dom";
 import {getDetailTalentPool} from "../../TalentPoolManager/redux/actions";
 import {RecruitmentTalentPool} from "../types";
 import ButtonCreate from "../../../components/ComponentUtils/ButtonCreate";
-import {profile_path} from "../../../helpers/utilsFunc";
+import {CheckViewAction, profile_path} from "../../../helpers/utilsFunc";
 
 
 const mapStateToProps = (state: RootState) => {
@@ -45,6 +45,8 @@ function ProfileManagerPages(props: IProps) {
       document.title = "Talent pools"
       props.getDetailTalentPool({id: idTalentPool})
 
+    } else if (location.pathname.includes("blacklist-manager")) {
+      document.title = "Quản lý Blacklist"
     } else document.title = "Ứng viên";
   }, []);
 
@@ -89,23 +91,27 @@ function ProfileManagerPages(props: IProps) {
         <Row>
           <Col md={16}>
             <div
-              className="tmp-title-page-size20">{location.pathname.includes("talent-pool-manager") ? `${props.talentPools.detail.result ? props.talentPools.detail.result[0]?.name : ""} ` : "Ứng viên "}({search.rowsSearchFull ? search.rowsSearchFull.length : list.total})
+              className="tmp-title-page-size20">
+              {location.pathname.includes("talent-pool-manager") ? `${props.talentPools.detail.result ? props.talentPools.detail.result[0]?.name : ""} ` : "Ứng viên "}
+              ({search.rowsSearchFull ? search.rowsSearchFull.length : list.total})
             </div>
           </Col>
           <Col className="d-flex" md={8}>
             <div className="tmp-btn">
               <div style={{display: "flex", flexWrap: "nowrap"}}>
 
-                {location.pathname.includes("profile-manager") ?null:
-                <ButtonCreate path={profile_path} action="create" name=" Thêm ứng viên" handleClick={handleCreate}/>}
+                {location.pathname.includes("profile-manager") || location.pathname.includes("blacklist-manager") ? null :
+                  <ButtonCreate path={profile_path} action="create" name=" Thêm ứng viên" handleClick={handleCreate}/>}
 
+                {!location.pathname.includes("blacklist-manager") && CheckViewAction(profile_path, "list-cv") &&
                 <Button onClick={event => handleUploadListCV(event)}>
                   <Icon type="upload"/> Upload DS ứng viên
-                </Button>
+                </Button>}
 
-                <Button>
+                {!location.pathname.includes("blacklist-manager") && CheckViewAction(profile_path, "export") && <Button>
                   <a onClick={BtnExportExcel}><Icon type="export"/> Xuất Excel</a>
-                </Button>
+                </Button>}
+
               </div>
             </div>
           </Col>

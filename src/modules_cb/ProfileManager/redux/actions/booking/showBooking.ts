@@ -3,7 +3,7 @@ import {DataShowBooking} from "../../../types";
 export interface ShowBookingAction {
   type: string,
   show_booking?: boolean,
-  data_booking?: DataShowBooking,
+  data_booking?: any,
   data_update_booking?: any,
   show_email_create?: boolean
   show_email_change_process?: boolean
@@ -18,7 +18,7 @@ export const SHOW_EMAIL_CHANGE_PROCESS_FORM = "SHOW_EMAIL_CHANGE_PROCESS_FORM";
 export const SHOW_INTERVIEW_EMAIL_CREATE_FORM = "SHOW_INTERVIEW_EMAIL_CREATE_FORM";
 export const SHOW_EMAIL_UPDATE_FORM = "SHOW_EMAIL_UPDATE_FORM";
 
-export const showFormBooking = (show: boolean, data?: DataShowBooking, dataUpdateBooking?: any, isUpdate?: boolean): ShowBookingAction => ({
+export const showFormBooking = (show: boolean, data?: any, dataUpdateBooking?: any, isUpdate?: boolean): ShowBookingAction => ({
   type: PROFILE_SHOW_FORM_BOOKING,
   show_booking: show,
   data_booking: data,

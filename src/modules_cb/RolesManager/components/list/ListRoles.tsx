@@ -1,7 +1,6 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
-import env from "src/configs/env";
 import {ColumnProps} from "antd/lib/table";
 import {Table} from "antd";
 import {emptyText} from "src/configs/locales";

@@ -1,6 +1,7 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {
+  addToBlacklist,
   createComment,
   createNote,
   deleteComment,
@@ -63,14 +64,15 @@ import UpdateNoteForm from "./UpdateNoteForm";
 import {
   BsThreeDotsVertical,
   FaLongArrowAltRight,
+  GiBlackBook,
   MdOutlineSource,
   RiFullscreenExitLine,
-  RiFullscreenLine
+  RiFullscreenLine,
+  RiMailSendLine
 } from "react-icons/all";
 import StarRatings from 'react-star-ratings';
 import UploadAvatarForm from "./UploadAvatarForm";
 import CreateReasonRejectForm from "./CreateRejectCandidateForm";
-import {getListRecruitment} from "../../RecruitmentManager/redux/actions";
 import ChangeProcessForm from "./ChangeProcessForm";
 import ChangeRecruitmentForm from "./ChangeRecruitmentForm";
 import AddToTalentPoolForm from "./AddToTalentPoolForm";
@@ -80,6 +82,10 @@ import UpdateCommentForm from "./UpdateCommentForm";
 import {deleteSchedule} from "../../ScheduleManager/redux/actions";
 import {getInitials, profile_path} from "../../../helpers/utilsFunc";
 import ButtonDelete from "../../../components/ComponentUtils/ButtonDelete";
+import {Link} from "react-router-dom";
+import {getListEmail} from "../../EmailManager/redux/actions";
+import {getListRecruitment as getListRecruitmentApi} from "../../RecruitmentManager/redux/services/apis";
+import {RecruitmentEntity} from "../../RecruitmentManager/types";
 
 const {Step} = Steps;
 const {TabPane} = Tabs;
@@ -89,7 +95,8 @@ const mapStateToProps = (state: RootState) => ({
   profileManager: state.profileManager,
   account: state.accountManager.list,
   skill: state.skillManager.list,
-  recruitment: state.recruitmentManager.list
+  emailManager: state.emailManager,
+
 })
 
 const connector = connect(mapStateToProps,
@@ -116,12 +123,13 @@ const connector = connect(mapStateToProps,
     getBooking,
     showFormUploadAvatar,
     showFormReasonReject,
-    getListRecruitment,
     showChangeProcessForm,
     showChangeRecruitmentForm,
     showAddToTalentPoolForm,
     deleteSchedule,
-    deleteCV
+    deleteCV,
+    getListEmail,
+    addToBlacklist
   });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -131,7 +139,8 @@ interface DetailProfileFormProps extends ReduxProps {
 
 function DetailProfileForm(props: DetailProfileFormProps) {
   const [page, setPage] = useState(1);
-  // const [pageEmail, setPageEmail] = useState(1);
+  const [pageEmail, setPageEmail] = useState(1);
+  const [email, setEmail] = useState<any>()
   const size = 10;
   const {
     showForm,
@@ -149,18 +158,6 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     changeProcess,
     addToTalentPool
   } = props.profileManager;
-  const [rate, setRate] = useState(2.4);
-  const [isFull, setIsFull] = useState<boolean>(false);
-  const [activeLogs, setActiveLogs] = useState({
-    params: '',
-    data: [],
-    totalPage: 0,
-    current: 1,
-    minIndex: 0,
-    maxIndex: 0
-  })
-  const [visiblePopover, setVisiblePopover] = useState<boolean>(false);
-  const [popoverRecruitment, setPopoverRecruitment] = useState<boolean>(false);
   const content = (<ul style={{width: 165}} className="popup-popover">
     <li>
       <a onClick={handleUploadAvatar}>Cập nhật ảnh đại diện</a>
@@ -177,6 +174,20 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     </li>
     <li>
       <a onClick={handleShowTalentPools}><MdOutlineSource className="mr-1"/>Chuyển đến kho tiềm năng</a>
+    </li>
+
+    <li>
+      <Popconfirm
+        title="Bạn muốn chuyển ứng viên vào blacklist chứ ?"
+        okText="Chuyển"
+        onCancel={event => {
+          event?.stopPropagation();
+        }}
+        onConfirm={addToBlacklist}
+      >
+        <a><GiBlackBook className="mr-1"/>Chuyển vào blacklist</a>
+
+      </Popconfirm>
     </li>
   </ul>);
   const columns: ColumnProps<NoteEntity>[] = [
@@ -378,6 +389,19 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
     },
   ]
+  const [rate, setRate] = useState(2.4);
+  const [isFull, setIsFull] = useState<boolean>(false);
+  const [activeLogs, setActiveLogs] = useState({
+    params: '',
+    data: [],
+    totalPage: 0,
+    current: 1,
+    minIndex: 0,
+    maxIndex: 0
+  })
+  const [visiblePopover, setVisiblePopover] = useState<boolean>(false);
+  const [popoverRecruitment, setPopoverRecruitment] = useState<boolean>(false);
+  const [recruitment, setRecruitment] = useState<any>();
 
   useEffect(() => {
     setActiveLogs({
@@ -392,11 +416,18 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
   useEffect(() => {
     if (showForm.id_detail) {
+      setEmail(props.emailManager.list)
+    }
+  }, [props.emailManager.list])
+
+  useEffect(() => {
+    if (showForm.id_detail) {
       props.getDetailProfile({idProfile: showForm.id_detail});
       props.getBooking({idProfile: showForm.id_detail});
       props.getListNote({idProfile: showForm.id_detail})
       props.getListComment({idProfile: showForm.id_detail})
-      if (detail.result?.recruitmentId) props.getListRecruitment({id: detail.result?.recruitmentId})
+      props.getListEmail({page: 1, size: 100})
+      if (detail.result?.recruitmentId) getListRecruitmentApi({id: detail.result?.recruitmentId}).then((rs: any) => {setRecruitment(rs)})
     }
   }, [showForm.id_detail])
 
@@ -429,6 +460,11 @@ function DetailProfileForm(props: DetailProfileFormProps) {
   function handleShowTalentPools() {
     setPopoverRecruitment(false)
     props.showAddToTalentPoolForm(true)
+  }
+
+  function addToBlacklist() {
+    setPopoverRecruitment(false)
+    props.addToBlacklist({profileId: detail.result?.id})
   }
 
   function unixTimeToDate(unixTime: number): Date {
@@ -513,16 +549,10 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     props.showFormUploadCV(true, detail.result?.id);
   }
 
-  const onBtnUpdateBooking = (event: any, value: any) => {
+  const onBtnUpdateBooking = (event: any, dataUpdateBooking: any) => {
     event.stopPropagation();
     if (detail.result) {
-      let req: DataShowBooking = {
-        id: detail.result.id,
-        fullName: detail.result.fullName,
-        idRecruitment: detail.result.recruitmentId,
-        username: detail.result.username
-      }
-      props.showFormBooking(true, req, value, true);
+      props.showFormBooking(true, dataUpdateBooking, detail.result, true);
     }
   }
 
@@ -535,8 +565,8 @@ function DetailProfileForm(props: DetailProfileFormProps) {
         idRecruitment: detail.result.recruitmentId,
         username: detail.result.username
       }
-      let reqBooking = null;
-      props.showFormBooking(true, req, reqBooking, false);
+
+      props.showFormBooking(true, req, detail.result, false);
     }
   }
 
@@ -574,7 +604,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
         username: detail.result?.username
       }
     )
-    props.showChangeProcessForm(true, req)
+    props.showChangeProcessForm(true, req, detail.result)
   }
 
   function btnDeleteScheduleClicked(event: any, val: any) {
@@ -638,6 +668,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
             </Avatar>
 
           </Popover>
+
           <div className="detail-paragraph-1__name">
 
             <div style={{display: "flex", justifyContent: "space-between"}}>
@@ -686,6 +717,14 @@ function DetailProfileForm(props: DetailProfileFormProps) {
             <p>{detail.result?.phoneNumber}</p>
             <p>{detail.result?.email}</p>
           </div>
+          {detail.result?.blackList &&
+          <div style={{flex: 1, textAlign: "end"}}>
+            <div>
+              <img src={require('src/assets/images/blacklist-9.png')} width={"25%"} height={"25%"}/>
+            </div>
+          </div>
+          }
+
         </div>
 
         <div className="detail-paragraph-2">
@@ -831,10 +870,10 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
                     <div className="apply-step">
                       <Steps
-                        current={props.recruitment?.rows[0]?.interviewProcess.findIndex((item: any) => item.name === detail.result?.statusCVName)}
+                        current={recruitment?.rows[0]?.interviewProcess.findIndex((item: any) => item.name === detail.result?.statusCVName)}
                         progressDot className="apply-step">
                         {
-                          props.recruitment?.rows[0]?.interviewProcess?.map((item: any, index: any) => {
+                          recruitment?.rows[0]?.interviewProcess?.map((item: any, index: any) => {
                             return <Step key={index} className="width-apply-position"/>
                           })
                         }
@@ -1029,8 +1068,44 @@ function DetailProfileForm(props: DetailProfileFormProps) {
 
             </TabPane>
 
-            <TabPane tab="EMAIL LOGS" key="2" style={{background: "#e8e8e8", marginLeft: 40}}>
+            <TabPane tab="EMAIL LOGS" key="2" style={{marginLeft: 40}}>
+              {email?.rows?.map((item: any, index: any) => {
+                return <div key={item.id} className="border-bottom flex-space-between-item-center"
+                            style={{padding: " 15px 0"}}>
+                  <div className="flex-items-flex-start">
+                    <div style={{marginRight: 10, color: "#969C9D"}}>
+                      <RiMailSendLine size={40}/>
+                    </div>
+                    <div>
+                      <div>
+                        <Link
+                          to={"/email-manager/detail"}
+                          // onClick={() => handleShowEditEmail(item)}
+                          className="font-17-bold-500"
+                          style={{marginRight: "1px", color: "#1890ff"}}>
+                          <span>{item.name}</span>
+                        </Link>
+                      </div>
 
+                      <div className="font-14-bold-500">{item.subject}</div>
+                      <div style={{color: "#B2B2B2"}}>Tạo bởi <span
+                        className="font-14-bold-500">{item.create_by}</span> lúc {moment(item.time).format('HH:mm DD/MM/YYYY')}
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+
+              })}
+              <br/>
+              <Pagination
+                current={pageEmail}
+                total={email?.total}
+                pageSize={size}
+                onChange={value => setPageEmail(value)}
+                className="pagination"
+              />
             </TabPane>
           </Tabs>
 

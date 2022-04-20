@@ -5,6 +5,7 @@ import {getListProfileAsync} from "./profile/list";
 import {updateProfileAsync} from "./profile/update";
 import {getDetailProfileAsync} from "./detail/detail";
 import {
+  ADD_TO_BLACKLIST,
   ADD_TO_TALENT_POOL,
   CHANGE_PROCESS,
   CREATE_BOOKING,
@@ -55,6 +56,7 @@ import {changeProcessAsync} from "./profile/changeProcess";
 import {changeTalentPoolAsync} from "./profile/addToTalentPool";
 import {searchFullAsync} from "./profile/searchFull";
 import {deleteCVAsync} from "./cv/deleteCV";
+import {changeBlacklistAsync} from "./profile/addToBlacklist";
 
 export default function* root() {
   return all([
@@ -85,6 +87,7 @@ export default function* root() {
     yield takeLatest(CREATE_REJECT_CANDIDATE, createRejectCandidateAsync),
     yield takeLatest(CHANGE_PROCESS, changeProcessAsync),
     yield takeLatest(ADD_TO_TALENT_POOL, changeTalentPoolAsync),
+    yield takeLatest(ADD_TO_BLACKLIST, changeBlacklistAsync),
 
   ]);
 }

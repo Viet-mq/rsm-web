@@ -5,7 +5,7 @@ import {Button, Form, Modal, Radio, Select} from "antd";
 import React, {useEffect, useState} from "react";
 import 'devextreme/dist/css/dx.light.css';
 import {changeProcess, showChangeProcessForm} from "../redux/actions";
-import {getListRecruitment, getSearchRecruitment} from "../../RecruitmentManager/redux/actions";
+import {getListRecruitment} from "../../RecruitmentManager/redux/actions";
 import {ChangeProcessRequest, ProcessForm} from "../types";
 import {InterviewProcess, RecruitmentEntity} from "../../RecruitmentManager/types";
 
@@ -23,7 +23,6 @@ const connector = connect(mapStateToProps,
     showChangeProcessForm,
     changeProcess,
     getListRecruitment,
-    getSearchRecruitment,
 
   })
 
@@ -123,7 +122,7 @@ function ChangeRecruitmentForm(props: IProps) {
   }
 
   function onSearchRecruitment(value: any) {
-    props.getSearchRecruitment({name: value})
+    // props.getSearchRecruitment({name: value})
     setTrigger({...trigger, recruitment: true})
   }
 

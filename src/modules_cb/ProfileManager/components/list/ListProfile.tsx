@@ -31,7 +31,6 @@ import {JobLevelEntity} from "../../../JobLevelManager/types";
 import {DepartmentEntity} from "../../../DepartmentManager/types";
 import {RecruitmentEntity} from "../../../RecruitmentManager/types";
 import {getSearchJobLevel} from "../../../JobLevelManager/redux/actions";
-import {getSearchRecruitment} from "../../../RecruitmentManager/redux/actions";
 import {getSearchSourceCV} from "../../../SourceCVManager/redux/actions";
 import {UserAccount} from "../../../AccountManager/types";
 import {getSearchAccount} from "../../../AccountManager/redux/actions";
@@ -67,7 +66,6 @@ const connector = connect(mapStateToProps, {
   getDetailTalentPool,
   getSearchJob,
   getSearchJobLevel,
-  getSearchRecruitment,
   getSearchTalentPool,
   getSearchSourceCV,
   getSearchAccount
@@ -205,7 +203,6 @@ function ListProfile(props: ListProfileProps) {
 
 
     },
-
     {
       title: 'CV',
       dataIndex: 'cv',
@@ -268,7 +265,6 @@ function ListProfile(props: ListProfileProps) {
     //   width: 180,
     //   key: 'mailRef2',
     // },
-
     {
       title: 'PIC',
       dataIndex: 'picName',
@@ -306,7 +302,6 @@ function ListProfile(props: ListProfileProps) {
         return value === 0 ? "" : moment(unixTimeToDate(value)).format('DD/MM/YYYY');
       },
     },
-
     {
       title: 'Năm sinh',
       dataIndex: 'dateOfBirth',
@@ -401,7 +396,7 @@ function ListProfile(props: ListProfileProps) {
   const [recruitment, setRecruitment] = useState<RecruitmentEntity[]>([]);
   const [talentPool, setTalentPool] = useState<JobEntity[]>([]);
   const [account, setAccount] = useState<UserAccount[] | any>([]);
-  const arrayUrl = ['/talent-pool-manager', '/profile-manager', '/recruitment-manager']
+  const arrayUrl = ['/talent-pool-manager', '/profile-manager', '/recruitment-manager','/blacklist-manager']
 
   const [trigger, setTrigger] = useState({
     job: false,
@@ -490,6 +485,10 @@ function ListProfile(props: ListProfileProps) {
       req.statusCV = props.idProcess
       props.getListProfile(req);
 
+    } else if (pathname.includes("blacklist-manager")) {
+      req.blackList = "reject"
+      props.getListProfile(req);
+
     } else {
       req.key = "recruitment"
       props.getListProfile(req)
@@ -522,7 +521,7 @@ function ListProfile(props: ListProfileProps) {
       idRecruitment: entity.recruitmentId,
       username: entity.username,
     }
-    props.showFormBooking(true, req);
+    props.showFormBooking(true, req,entity,false);
   }
 
   const handleUploadCV = (e: any, entity: ProfileEntity) => {
@@ -589,6 +588,10 @@ function ListProfile(props: ListProfileProps) {
       req.statusCV = props.idProcess
       props.getListProfile(req);
 
+    }  else if (pathname.includes("blacklist-manager")) {
+      req.blackList = "blacklist"
+      props.getListProfile(req);
+
     } else {
       req.key = "recruitment"
       props.getListProfile(req)
@@ -614,7 +617,7 @@ function ListProfile(props: ListProfileProps) {
   }
 
   function onSearchRecruitment(value: any) {
-    props.getSearchRecruitment({name: value})
+    // props.getSearchRecruitment({name: value})
     setTrigger({...trigger, recruitment: true})
   }
 
