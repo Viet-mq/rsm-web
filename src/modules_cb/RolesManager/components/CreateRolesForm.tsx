@@ -29,7 +29,6 @@ interface CreateRolesFormProps extends FormComponentProps, ReduxProps {
 }
 
 function CreateRolesForm(props: CreateRolesFormProps) {
-
   const columnsAPIRoles: ColumnProps<APIRolesEntity>[] = [
     {
       title: 'STT',
@@ -138,18 +137,18 @@ function CreateRolesForm(props: CreateRolesFormProps) {
       },
     },
   ];
-  const {showForm,create} = props.rolesManager
+  const {showForm, create} = props.rolesManager
   const {getFieldDecorator, resetFields} = props.form;
   const scroll = {x: 300};
   const [apiRolesTable, setApiRolesTable] = useState<APIRolesEntity[]>([])
   const [viewRolesTable, setViewRolesTable] = useState<ViewRolesEntity[]>([])
 
-  useEffect(()=>{
-    if(create.response?.code===0){
+  useEffect(() => {
+    if (create.response?.code === 0) {
       setApiRolesTable([])
       setViewRolesTable([])
     }
-  },[create.response])
+  }, [create.response])
 
   function onBtnCreateClicked(e: FormEvent) {
     e.preventDefault();
@@ -191,9 +190,9 @@ function CreateRolesForm(props: CreateRolesFormProps) {
       return o.id === record.id;
     })
     if (index !== -1) {
-      const newApiRolesTable=apiRolesTable
-      newApiRolesTable.splice(index, 1)
-      setApiRolesTable(newApiRolesTable)
+      const api = apiRolesTable
+      api.splice(index, 1)
+      setApiRolesTable([...api])
     }
   }
 
@@ -202,9 +201,9 @@ function CreateRolesForm(props: CreateRolesFormProps) {
       return o.id === record.id;
     })
     if (index !== -1) {
-      const newViewRolesTable=viewRolesTable
-      newViewRolesTable.splice(index, 1)
-      setViewRolesTable(newViewRolesTable)
+      const view = viewRolesTable
+      view.splice(index, 1)
+      setViewRolesTable([...view])
     }
   }
 
@@ -307,12 +306,15 @@ function CreateRolesForm(props: CreateRolesFormProps) {
         </Form>
 
 
-        {showForm.show_create && <><AddAPIRolesForm setApiRolesTable={setApiRolesTable} apiRolesTable={apiRolesTable}/>
-          <AddViewRolesForm setViewRolesTable={setViewRolesTable} viewRolesTable={viewRolesTable}/></>}
+        {/*{showForm.show_create && <>*/}
+        {/*  <AddAPIRolesForm setApiRolesTable={setApiRolesTable} apiRolesTable={apiRolesTable}/>*/}
+        {/*  <AddViewRolesForm setViewRolesTable={setViewRolesTable} viewRolesTable={viewRolesTable}/>*/}
+        {/*</>}*/}
       </Modal>
+      <AddAPIRolesForm setApiRolesTable={setApiRolesTable} apiRolesTable={apiRolesTable}/>
+      <AddViewRolesForm setViewRolesTable={setViewRolesTable} viewRolesTable={viewRolesTable}/>
     </>
-  );
-
+  )
 }
 
 export default connector(Form.create<CreateRolesFormProps>()(CreateRolesForm));

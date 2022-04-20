@@ -13,6 +13,10 @@ import {DataShowSchedule, ScheduleEntity} from "../types";
 import {useLocation} from "react-router-dom";
 import {CheckViewAction, getInitials, schedule_path} from "../../../helpers/utilsFunc";
 import {DetailCV} from "../../ProfileManager/types";
+import {Calendar, momentLocalizer, Views} from "react-big-calendar";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import {getListReminder, showFormCreateReminder, showFormUpdateReminder} from "../../ReminderManager/redux/actions";
+import {ReminderConvertEntity, TimeReminder, UpdateReminderRequest} from "../../ReminderManager/types";
 
 const {Search} = Input;
 const {Option} = Select;
@@ -20,28 +24,32 @@ const {RangePicker} = DatePicker;
 
 const mapStateToProps = (state: RootState) => ({
   schedule: state.scheduleManager.getSchedule,
-  showSchedule: state.scheduleManager.showSchedule
+  showSchedule: state.scheduleManager.showSchedule,
+
 })
 
 const connector = connect(mapStateToProps, {
   countBookingNumber,
   getAllSchedule,
   showFormSchedule,
-  showFormDetail
+  showFormDetail,
+  showFormCreateReminder,
+  getListReminder,
+  showFormUpdateReminder
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends ReduxProps {
-  idRecruitment?:string,
+  idRecruitment?: string,
 }
 
 function ScheduleManagerPages(props: IProps) {
   const dateFormat = 'DD/MM/YYYY';
   const timeFormat = 'HH:mm';
-  const currWeek: string = 'currWeek';
-  const preWeek: string = 'preWeek';
-  const nextWeek: string = 'nextWeek';
+  const currWeek: string = 'TODAY';
+  const preWeek: string = 'PREV';
+  const nextWeek: string = 'NEXT';
   const [keySearch, setKeySearch] = useState<string>('')
   const [outObject, setOutObject] = useState<ScheduleEntity | any>([])
   const [startDate, setStartDate] = useState(new Date());
@@ -50,11 +58,15 @@ function ScheduleManagerPages(props: IProps) {
   const [idDetail, setIdDetail] = useState<string>('');
   const [valueDateRange, setValueDateRange] = useState<any[]>([moment().startOf("week"), moment().endOf('week')])
   const {pathname} = useLocation();
+  const [visibleType, setVisibleType] = useState<string>('list')
+  const localizer = momentLocalizer(moment);
+  const [eventReminder, setEventReminder] = useState<ReminderConvertEntity[]>([]);
+  const [timeCalendar, setTimeCalendar] = useState<TimeReminder>()
 
   useEffect(() => {
     document.title = "Lịch";
     props.countBookingNumber();
-
+    setCurrentDate();
     if (pathname.includes("recruitment-manager")) props.getAllSchedule({
       recruitment: props.idRecruitment,
     });
@@ -64,12 +76,25 @@ function ScheduleManagerPages(props: IProps) {
   useEffect(() => {
     if (props.schedule?.result) {
       filterDatesByWeek(currWeek, props.schedule?.result);
+      changeFormatEvent(props.schedule?.result)
     }
   }, [props.schedule?.result])
 
-  useEffect(() => {
-    setCurrentDate();
-  }, []);
+  function changeFormatEvent(dataCalendar: any) {
+    if (dataCalendar) {
+      const newEvent: ReminderConvertEntity[] = [];
+      dataCalendar?.map((item: any) => {
+        newEvent.push({
+          title: item.fullName + " - " + item.recruitmentName,
+          start: new Date(item.date),
+          end: new Date(item.interviewTime),
+          desc: item.note,
+          id: item.id,
+        })
+      })
+      setEventReminder(newEvent)
+    }
+  }
 
   function handlePopupScheduleInterview(e: any) {
     e.preventDefault();
@@ -80,8 +105,8 @@ function ScheduleManagerPages(props: IProps) {
     props.showFormSchedule(true);
   }
 
-  function handlePopupScheduleInterviewDetail(values: DataShowSchedule) {
-    setIdDetail(values.id)
+  function handlePopupScheduleInterviewDetail(values: any) {
+    setIdDetail(values)
     setVisibleDetail(true)
   }
 
@@ -92,7 +117,7 @@ function ScheduleManagerPages(props: IProps) {
   const setCurrentDate = (): any => {
     let getCurrWeek = new Date();
     let dayOfWeek = getCurrWeek.getDay();
-    if(dayOfWeek===0) dayOfWeek=7;
+    if (dayOfWeek === 0) dayOfWeek = 7;
     let numDay = getCurrWeek.getDate();
     let s = new Date(getCurrWeek);
     let e = new Date(getCurrWeek);
@@ -140,6 +165,7 @@ function ScheduleManagerPages(props: IProps) {
   }
 
   function handleWeekClicked(week: string) {
+    console.log(week)
     filterDatesByWeek(week, props.schedule?.result);
   }
 
@@ -164,7 +190,7 @@ function ScheduleManagerPages(props: IProps) {
       const queryResult = acc.find((qr: any) => {
         const a: any = qr.date;
         const b: any = moment(curr.date).format("DD [tháng] MM, YYYY");
-       const diffTime = a.localeCompare(b)
+        const diffTime = a.localeCompare(b)
         return diffTime === 0;
 
       });
@@ -189,14 +215,51 @@ function ScheduleManagerPages(props: IProps) {
     return setOutObject(outObject)
   }
 
-  function handleShowDetail(event:any,value:any){
+  function handleShowDetail(event: any, value: any) {
     event.stopPropagation()
     let req: DetailCV = {
       show_detail: false,
       general: 12,
       detail: 12
     }
-    props.showFormDetail(req,value);
+    props.showFormDetail(req, value);
+  }
+
+  function candidateListClicked() {
+    setVisibleType("list")
+  }
+
+  function candidateKanbanClicked() {
+    setVisibleType("kanban")
+
+  }
+
+  function handleSelect({start, end}: any) {
+    let req: TimeReminder = ({
+      start: start * 1,
+      end: end * 1,
+    })
+    setTimeCalendar(req)
+    props.showFormSchedule(true);
+
+  }
+
+  function handleSelectEvent(event: any) {
+    // let req: UpdateReminderRequest = ({
+    //   start: event.start * 1,
+    //   end: event.end * 1,
+    //   title: event.title,
+    //   desc: event.desc,
+    //   id: event.id,
+    // })
+    // props.showFormUpdateReminder(true, req)
+
+    handlePopupScheduleInterviewDetail(event.id)
+  }
+
+  function handleCalendarClick(newDate: any, view: any, action: any) {
+    // console.log("1:",newDate,"2:",view,"3:",action)
+    handleWeekClicked(action)
   }
 
   return (
@@ -204,34 +267,41 @@ function ScheduleManagerPages(props: IProps) {
       <div className="c-schedule-container">
         <div className="c-schedule-header">
           <div className="c-schedule-header__align-left">
-            <Button style={{fontWeight: 500}} onClick={() => handleWeekClicked(currWeek)}>
-              <AiOutlineCalendar className="mr-1" size={20}/>
-              Tuần này
-            </Button>
-            <Tooltip placement="top" title="Tuần trước">
-              <Button onClick={() => handleWeekClicked(preWeek)}>
-                <GrPrevious/>
-              </Button>
-            </Tooltip>
-            <Tooltip placement="top" title="Tuần sau">
-              <Button onClick={() => handleWeekClicked(nextWeek)}>
-                <GrNext/>
-              </Button>
-            </Tooltip>
-            <div style={{marginRight: 5, width: 250}} className="align">
-              <RangePicker
-                format={dateFormat}
-                value={valueDateRange}
-                allowClear={false}
-                ranges={{
-                  'Hôm nay': [moment(), moment()],
-                  'Tháng này': [moment().startOf('month'), moment().endOf('month')],
-                }}
-                onChange={onChangeDateRange}
-              />
-            </div>
+            {visibleType === "list" ?
+              <>
+                <Button style={{fontWeight: 500}} onClick={() => handleWeekClicked(currWeek)}>
+                  <AiOutlineCalendar className="mr-1" size={20}/>
+                  Tuần này
+                </Button>
+                <Tooltip placement="top" title="Tuần trước">
+                  <Button onClick={() => handleWeekClicked(preWeek)}>
+                    <GrPrevious/>
+                  </Button>
+                </Tooltip>
+                <Tooltip placement="top" title="Tuần sau">
+                  <Button onClick={() => handleWeekClicked(nextWeek)}>
+                    <GrNext/>
+                  </Button>
+                </Tooltip>
+                <div style={{marginRight: 5, width: 250}} className="align">
+                  <RangePicker
+                    format={dateFormat}
+                    value={valueDateRange}
+                    allowClear={false}
+                    ranges={{
+                      'Hôm nay': [moment(), moment()],
+                      'Tháng này': [moment().startOf('month'), moment().endOf('month')],
+                    }}
+                    onChange={onChangeDateRange}
+                  />
+                </div>
+              </>
+              : null
 
-          <Select getPopupContainer={(trigger:any) => trigger.parentNode} defaultValue="all" className="select-custom"
+            }
+
+            <Select getPopupContainer={(trigger: any) => trigger.parentNode} defaultValue="all"
+                    className="select-custom"
 
                     style={{
                       fontWeight: 600,
@@ -244,6 +314,15 @@ function ScheduleManagerPages(props: IProps) {
           </div>
 
           <div className="c-schedule-header__align-right align">
+            <Button size="default" className={visibleType === 'list' ? "icon-list is-active" : "icon-list"}
+                    onClick={candidateListClicked}
+            ><Icon type="unordered-list"
+                   style={{fontSize: "150%"}}/></Button>
+
+            <Button size="default" className={visibleType === 'kanban' ? "is-active" : undefined}
+                    onClick={candidateKanbanClicked}
+            ><Icon type="calendar" style={{fontSize: "150%"}}/></Button>
+
             <Search
               placeholder="Tìm kiếm lịch theo tên ứng viên, tin tuyển dụng"
               onSearch={value => onSearch(value)}
@@ -272,25 +351,26 @@ function ScheduleManagerPages(props: IProps) {
             <a style={{color: "black", fontStyle: "italic"}} onClick={onBtnResetClicked}>x</a>
           </div>
           : null}
-        {outObject?.length > 0 ?
+        {visibleType === "list" ? outObject?.length > 0 ?
           outObject?.map((item: any, index: any) => {
             return <div className="c-schedule-content" key={item.date}>
               <div
                 className="c-schedule-content__head">{item.date.localeCompare(moment().format("DD [tháng] MM, YYYY")) === 0 ? "Hôm nay - " : null}{item.date}</div>
               {item.data?.map((itemChild: any, index1: any) => {
-                return <div className="c-item " onClick={() => handlePopupScheduleInterviewDetail(itemChild)} key={index1}>
+                return <div className="c-item " onClick={() => handlePopupScheduleInterviewDetail(itemChild.id)}
+                            key={index1}>
                   <div className="c-time-flex">
                     <div>
                       {moment(itemChild.date).format(timeFormat)} - {moment(itemChild.interviewTime).format(timeFormat)}
                     </div>
                     <div>
-                      {itemChild.date>+moment()?
-                        <span style={{color:"#1890ff"}}>Sắp diễn ra</span>
+                      {itemChild.date > +moment() ?
+                        <span style={{color: "#1890ff"}}>Sắp diễn ra</span>
                         :
-                        itemChild.interviewTime<+moment()?
-                          <span style={{color:"red"}}>Đã kết thúc</span>
+                        itemChild.interviewTime < +moment() ?
+                          <span style={{color: "red"}}>Đã kết thúc</span>
                           :
-                          <span style={{color:"#ffbd24"}}>Đang diễn ra</span>}
+                          <span style={{color: "#ffbd24"}}>Đang diễn ra</span>}
                     </div>
                   </div>
 
@@ -300,7 +380,8 @@ function ScheduleManagerPages(props: IProps) {
                     </Avatar>
                     <div className="c-main-content__wrap-main">
                       <div className="main-1">
-                        <div onClick={(event:any)=>handleShowDetail(event,itemChild.idProfile)}><a className="main-1__candidate-name">{itemChild.fullName}</a></div>
+                        <div onClick={(event: any) => handleShowDetail(event, itemChild.idProfile)}><a
+                          className="main-1__candidate-name">{itemChild.fullName}</a></div>
                         <div className="main-1__green-dot"/>
                         <div className="main-1__job-description">{itemChild.recruitmentName}</div>
                       </div>
@@ -323,9 +404,7 @@ function ScheduleManagerPages(props: IProps) {
 
             </div>
           })
-
           :
-
           <div className="c-schedule-content-nodata">
             <div className="image-nodata-schedule">
               <img src={require('src/assets/images/Empty.png')}/>
@@ -347,12 +426,29 @@ function ScheduleManagerPages(props: IProps) {
               : null}
 
           </div>
+          :
+          <div className=" status-cv-container">
+
+            <Calendar
+              selectable
+              onSelectSlot={handleSelect}
+              onSelectEvent={event => handleSelectEvent(event)}
+              events={eventReminder}
+              step={15}
+              timeslots={8}
+              localizer={localizer}
+              defaultView={Views.WEEK}
+              defaultDate={new Date()}
+              onNavigate={((newDate, view, action) => handleCalendarClick(newDate, view, action))}
+
+            />
+          </div>
 
         }
 
       </div>
 
-      <CreateScheduleInterview/>
+      <CreateScheduleInterview timeCalendar={timeCalendar}/>
       <DetailScheduleInterview idDetail={idDetail} dataDetail={props.schedule.result} visible={visibleDetail}
                                handleClosePopupDetail={handleClosePopupDetail}/>
     </>

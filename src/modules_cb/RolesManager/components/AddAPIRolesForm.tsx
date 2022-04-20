@@ -28,19 +28,12 @@ interface AddAPIRolesFormProps extends FormComponentProps, ReduxProps {
 
 function AddAPIRolesForm(props: AddAPIRolesFormProps) {
   const {showForm} = props.rolesManager
-  const {getFieldDecorator, resetFields} = props.form;
 
   const [apiRoles, setApiRoles] = useState<APIRolesEntity[]>([]);
   const [trigger, setTrigger] = useState({
     apiRoles: false,
   })
   const [addAPIRoles, setAddAPIRoles] = useState<any>()
-
-  // useEffect(() => {
-  //   if (showForm.show_add_api_roles) {
-  //     props.getListAPIRoles();
-  //   }
-  // }, [showForm.show_add_api_roles])
 
   useEffect(() => {
     if (showForm.show_add_api_roles) {
@@ -50,7 +43,6 @@ function AddAPIRolesForm(props: AddAPIRolesFormProps) {
 
   const handleCloseForm = (event: any) => {
     event.stopPropagation();
-    resetFields();
     setAddAPIRoles(undefined)
     props.showFormAddAPIRoles(false)
   }
@@ -87,7 +79,7 @@ function AddAPIRolesForm(props: AddAPIRolesFormProps) {
       width="530px"
       className="custom"
       afterClose={() => {
-        resetFields();
+        // resetFields();
       }}
       onCancel={handleCloseForm}
       footer={""}>

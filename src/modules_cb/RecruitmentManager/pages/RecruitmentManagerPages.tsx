@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Button, DatePicker, Icon, Select, TreeSelect} from "antd";
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
-import {getListRecruitment, getSearchRecruitment} from "../redux/actions";
+import {getListRecruitment} from "../redux/actions";
 import Search from "antd/es/input/Search";
 import ListRecruitment from "../components/list/ListRecruitment";
 import {Link} from "react-router-dom";
@@ -11,6 +11,7 @@ import 'moment/locale/vi';
 import {RecruitmentEntity} from "../types";
 import {CheckViewAction, recruitment_path} from "../../../helpers/utilsFunc";
 import {searchListDepartment} from "../../DepartmentManager/redux/actions";
+import {getListRecruitment as getListRecruitmentApi} from "../redux/services/apis";
 
 const {Option} = Select;
 const {RangePicker} = DatePicker;
@@ -24,7 +25,6 @@ const mapStateToProps = (state: RootState) => ({
 
 const connector = connect(mapStateToProps, {
   getListRecruitment,
-  getSearchRecruitment,
   searchListDepartment
 });
 
@@ -35,7 +35,7 @@ interface IProps extends ReduxProps {
 }
 
 function RecruitmentManagerPages(props: IProps) {
-  const {list, search} = props.recruitmentManager
+  const {list} = props.recruitmentManager
   const dateFormat = 'DD/MM/YYYY';
   // const timeFormat = 'HH:mm';
   const [valueDateRange, setValueDateRange] = useState<any[]>([])
@@ -47,24 +47,26 @@ function RecruitmentManagerPages(props: IProps) {
 
   useEffect(() => {
     document.title = "Quản lý tin tuyển dụng";
-    props.getListRecruitment({page: 1, size: 91});
+    props.getListRecruitment({page: 1, size: 100});
   }, []);
 
   useEffect(() => {
     setRecruitment(list.rows)
   }, [list]);
 
-  useEffect(() => {
-    setRecruitment(search.rows)
-
-  }, [search.rows])
+  // useEffect(() => {
+  //   setRecruitment(search.rows)
+  //
+  // }, [search.rows])
 
   function onChangeDateRange(dates: any) {
-    dates[0].set({hour: 0, minute: 0, second: 0})
-    dates[1].set({hour: 23, minute: 59, second: 59})
+    dates[0]?.set({hour: 0, minute: 0, second: 0})
+    dates[1]?.set({hour: 23, minute: 59, second: 59})
     let [start, end] = [dates[0], dates[1]];
-    props.getListRecruitment({from: +start, to: +end, page: 1, size: 92});
     setValueDateRange([start, end])
+    if (dates.length) {
+      getListRecruitmentApi({from: +start, to: +end, page: 1, size: 92}).then((rs: any) => {setRecruitment([...rs.rows])});
+    } else getListRecruitmentApi({page: 1, size: 92}).then((rs: any) => {setRecruitment([...rs.rows])});
   }
 
   function onChangeFilter(value: any) {
@@ -72,11 +74,14 @@ function RecruitmentManagerPages(props: IProps) {
     let req: any = {}
     if (valueSelect) req.department = valueSelect
     if (valueSearch) req.keySearch = valueSearch
-     req.key = value
+    req.key = value
     req.page = 1
     req.size = 93
-    props.getSearchRecruitment(req)
-
+    getListRecruitmentApi(req).then(
+      (rs: any) => {
+        setRecruitment([...rs.rows])
+      }
+    )
   }
 
   function handleSearchRecruitment(value: any) {
@@ -87,7 +92,11 @@ function RecruitmentManagerPages(props: IProps) {
     req.keySearch = value
     req.page = 1
     req.size = 93
-    props.getSearchRecruitment(req)
+    getListRecruitmentApi(req).then(
+      (rs: any) => {
+        setRecruitment([...rs.rows])
+      }
+    )
   }
 
   function onChange(value: any) {
@@ -98,7 +107,11 @@ function RecruitmentManagerPages(props: IProps) {
     if (value) req.department = value
     req.page = 1
     req.size = 93
-    props.getSearchRecruitment(req)
+    getListRecruitmentApi(req).then(
+      (rs: any) => {
+        setRecruitment([...rs.rows])
+      }
+    )
   };
 
   const filterTreeNode = (input: any, node: any) => {
@@ -189,7 +202,7 @@ function RecruitmentManagerPages(props: IProps) {
               format={dateFormat}
               value={valueDateRange}
               placeholder={["Ngày tạo", "Ngày tạo"]}
-              allowClear={false}
+              allowClear={true}
               ranges={{
                 'Hôm nay': [moment(), moment()],
                 'Tháng này': [moment().startOf('month'), moment().endOf('month')],
@@ -205,12 +218,13 @@ function RecruitmentManagerPages(props: IProps) {
             onSearch={handleSearchRecruitment}
             style={{width: 340}}
           />
-          <Button
+          {CheckViewAction(recruitment_path, "export") && <Button
             // onClick={handlePopupScheduleInterview}
             style={{marginLeft: 10}}>
             <Icon type="export" style={{fontSize: "125%"}}/>
-            Xuât file
-          </Button>
+            Xuất file
+          </Button>}
+
         </div>
       </div>
 

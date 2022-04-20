@@ -5,11 +5,12 @@ import {getListRecruitmentAsync} from "./list";
 import {updateRecruitmentAsync} from "./update";
 import {
   CREATE_INTERVIEW_PROCESS,
-  CREATE_RECRUITMENT, DELETE_PROCESS,
+  CREATE_RECRUITMENT,
+  DELETE_PROCESS,
   DELETE_RECRUITMENT,
   GET_DETAIL_RECRUITMENT,
   GET_LIST_KANBAN_CANDIDATE,
-  GET_LIST_RECRUITMENT, GET_SEARCH_RECRUITMENT,
+  GET_LIST_RECRUITMENT,
   SEARCH_USER,
   UPDATE_RECRUITMENT
 } from "../actions";
@@ -18,7 +19,6 @@ import {getListKanbanCandidateAsync} from "./listKanbanCandidate";
 import {searchUserAsync} from "./searchUser";
 import {createInterviewProcessAsync} from "./createInterviewProcess";
 import {deleteProcessAsync} from "./deleteProcess";
-import {getSearchRecruitmentAsync} from "./search";
 
 export default function* root() {
   return all([
@@ -31,6 +31,5 @@ export default function* root() {
     yield takeLatest(GET_LIST_KANBAN_CANDIDATE, getListKanbanCandidateAsync),
     yield takeLatest(CREATE_INTERVIEW_PROCESS, createInterviewProcessAsync),
     yield takeLatest(SEARCH_USER, searchUserAsync),
-    yield takeLatest(GET_SEARCH_RECRUITMENT, getSearchRecruitmentAsync),
   ]);
 }

@@ -4,7 +4,7 @@ import {DataShowBooking} from "../../../types";
 
 export interface BookingState {
   show_booking?: boolean
-  data_booking?: DataShowBooking
+  data_booking?: any
   data_update_booking?: any,
   show_email_create?: boolean
   show_email_change_process?: boolean

@@ -30,6 +30,7 @@ import createRejectCandidate, {CreateRejectCandidateState} from "./profile/creat
 import changeProcess, {ChangeProcessState} from "./profile/changeProcess";
 import addToTalentPool, {AddToTalentPoolState} from "./profile/addToTalentPool";
 import deleteCV, {DeleteCVState} from "./cv/deleteCV";
+import addToBlacklist, {AddToBlacklistState} from "./profile/addToBlacklist";
 
 export interface ProfileManagerModuleState {
   list: ProfileListState,
@@ -63,6 +64,7 @@ export interface ProfileManagerModuleState {
   uploadAvatar: UploadAvatarState,
   changeProcess: ChangeProcessState,
   addToTalentPool: AddToTalentPoolState,
+  addToBlacklist: AddToBlacklistState,
 }
 
 export default combineReducers<ProfileManagerModuleState>({
@@ -97,4 +99,5 @@ export default combineReducers<ProfileManagerModuleState>({
   uploadAvatar,
   changeProcess,
   addToTalentPool,
+  addToBlacklist,
 });

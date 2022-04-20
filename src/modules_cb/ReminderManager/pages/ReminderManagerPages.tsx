@@ -11,7 +11,6 @@ import Loading from "../../../components/Loading";
 import {getListReminder, showFormCreateReminder, showFormUpdateReminder} from "../redux/actions";
 import {ReminderConvertEntity, TimeReminder, UpdateReminderRequest} from "../types";
 
-
 const mapStateToProps = (state: RootState) => ({
   reminderManager: state.reminderManager,
 
@@ -78,6 +77,8 @@ function ReminderManagerPages(props: IProps) {
     })
     props.showFormUpdateReminder(true, req)
   }
+
+
 
   return (
     <>

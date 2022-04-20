@@ -1,34 +1,29 @@
 import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
-import {Button, Checkbox, Form, Input, Modal, Radio, Select} from "antd";
-import React, {FormEvent, useEffect, useRef, useState} from "react";
+import {Button, Checkbox, Form, Modal, Radio} from "antd";
+import React, {FormEvent, useEffect, useState} from "react";
 import 'devextreme/dist/css/dx.light.css';
-import {changeProcess, showChangeProcessForm, showEmailChangeProcessForm} from "../redux/actions";
-import {getListRecruitment} from "../../RecruitmentManager/redux/actions";
+import {changeProcess, showChangeProcessForm, showEmailCreateForm} from "../redux/actions";
 import {ChangeProcessRequest, ProcessForm} from "../types";
 import 'react-quill/dist/quill.snow.css';
-import {getListEmail, searchListEmail} from "../../EmailManager/redux/actions";
-import {EmailEntity} from "../../EmailManager/types";
-import CreateEmailChangeProcessForm from "./CreateEmailChangeProcessForm";
+import {plainOptions} from "../../../helpers/utilsFunc";
+import CreateEmailForm from "./CreateEmailForm";
+import { getListRecruitment as getListRecruitmentApi } from "src/modules_cb/RecruitmentManager/redux/services/apis";
+
 
 const CheckboxGroup = Checkbox.Group;
 
 const mapStateToProps = (state: RootState) => ({
   profileManager: state.profileManager,
-  recruitment: state.recruitmentManager.list,
-  listAccount: state.accountManager.list,
-  listEmail: state.emailManager.list,
+
 })
 
 const connector = connect(mapStateToProps,
   {
     showChangeProcessForm,
     changeProcess,
-    getListRecruitment,
-    getListEmail,
-    searchListEmail,
-    showEmailChangeProcessForm
+    showEmailCreateForm
   })
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -42,47 +37,6 @@ function ChangeProcessForm(props: IProps) {
   }
   const {showForm} = props.profileManager
   const [process, setProcess] = useState<any>('')
-  const {getFieldDecorator, resetFields} = props.form;
-  const [display, setDisplay] = useState(false)
-  const [emailTemp, setEmailTemp] = useState<EmailEntity>()
-  const [valueEditor, setValueEditor] = useState("")
-  const inputFile = useRef<any>(null)
-  const [fileAttach, setFileAttach] = useState<any>([]);
-  const [trigger, setTrigger] = useState({
-    email: false,
-
-  })
-
-  const plainOptions = {
-    candidate: [{
-      id: "yes",
-      name: "Có",
-    }, {
-      id: "no",
-      name: "Không",
-    }],
-    interviewers: [{
-      id: "system",
-      name: "Hệ thống",
-    }, {
-      id: "outSide",
-      name: "Ngoài hệ thống",
-    }],
-    members: [{
-      id: "yes",
-      name: "Có",
-    }, {
-      id: "no",
-      name: "Không",
-    }],
-    presenter: [{
-      id: "system",
-      name: "Hệ thống",
-    }, {
-      id: "outSide",
-      name: "Ngoài hệ thống",
-    }]
-  };
   const [checked, setChecked] = useState<any>({
     candidate: {
       checkedList: 'no',
@@ -96,36 +50,22 @@ function ChangeProcessForm(props: IProps) {
       checkAll: false
     },
     presenter: {
-      checkedList: [],
-      indeterminate: false,
-      checkAll: false
+      checkedList: 'no',
     }
   })
   const [reqCreate, setReqCreate] = useState<ChangeProcessRequest | any>()
+  const [recruitment, setRecruitment] = useState<any>()
 
   useEffect(() => {
     if (showForm.show_change_process) {
-      props.getListRecruitment({id: showForm.change_process?.recruitmentId})
+      getListRecruitmentApi({id: showForm.change_process?.recruitmentId}).then((rs: any) => {setRecruitment(rs)})
       setProcess(showForm.change_process?.statusCVId)
-
-      props.getListEmail({page: 1, size: 91});
     }
   }, [showForm.show_change_process])
 
-
-  useEffect(() => {
-    if (showForm.show_change_process && props.listEmail) {
-      setEmailTemp(props.listEmail.rows[0])
-      setValueEditor(props.listEmail.rows[0]?.content)
-    }
-  }, [props.listEmail])
-
-
   const handleCloseForm = () => {
-    resetFields()
     props.showChangeProcessForm(false)
-    setValueEditor("")
-    setEmailTemp(undefined)
+
   }
 
   function btnChangeProcessClicked(e: FormEvent) {
@@ -143,7 +83,6 @@ function ChangeProcessForm(props: IProps) {
 
         let req: ChangeProcessRequest = ({
           changeProcess: processForm,
-
         })
         props.changeProcess(req, false)
         return;
@@ -165,7 +104,7 @@ function ChangeProcessForm(props: IProps) {
           statusCVId: process
         })
         setReqCreate(processForm)
-        props.showEmailChangeProcessForm(true)
+        props.showEmailCreateForm(true)
         return;
       }
     });
@@ -175,48 +114,6 @@ function ChangeProcessForm(props: IProps) {
   function handleChangeProcess(event: any) {
     setProcess(event.target.value)
   }
-
-  function handleChangeMailContent(content: string) {
-    if (content === "<p><br></p>") {
-      setDisplay(true)
-      setValueEditor("")
-    } else {
-      setDisplay(false)
-      setValueEditor(content)
-    }
-  }
-
-  function handleSelectMailTemplate(value: any) {
-    const selectEmail = props.listEmail.rows.find((item: any) => item.id === value)
-    setEmailTemp(selectEmail)
-    setValueEditor(selectEmail.content)
-  }
-
-  function onFileChange(e: any) {
-    const newFile = fileAttach.concat(e.target.files[0])
-    setFileAttach(newFile);
-  }
-
-  function handleDeleteFile(item: any, index: any) {
-    const newFile = Array.from(fileAttach);
-    newFile.splice(index, 1)
-    setFileAttach(newFile)
-  }
-
-  const onOpenFileClick = () => {
-    // `current` points to the mounted file input element
-    inputFile.current.click();
-  };
-
-  function onSearchEmail(value: any) {
-    props.searchListEmail({name: value})
-    setTrigger({...trigger, email: true})
-  }
-
-  function onFocusEmail() {
-    setEmailTemp(props.listEmail.rows)
-  }
-
 
   function onCheckInterviewersChange(checkedList: any) {
     setChecked({
@@ -230,13 +127,11 @@ function ChangeProcessForm(props: IProps) {
     );
   };
 
-  function onCheckPresenterChange(checkedList: any) {
+  function onCheckPresenterChange(event: any) {
     setChecked({
         ...checked,
         presenter: {
-          checkedList: checkedList,
-          indeterminate: !!checkedList.length && checkedList.length < plainOptions.presenter.length,
-          checkAll: checkedList.length === plainOptions.presenter.length,
+          checkedList: event.target.value,
         }
       }
     );
@@ -273,17 +168,6 @@ function ChangeProcessForm(props: IProps) {
     });
   };
 
-  function onCheckAllPresenterChange(e: any) {
-    setChecked({
-      ...checked,
-      presenter: {
-        checkedList: e.target.checked ? plainOptions.presenter.map((item: any) => item.id) : [],
-        indeterminate: false,
-        checkAll: e.target.checked,
-      }
-    });
-  };
-
   return (
     <>
       <Modal
@@ -305,7 +189,7 @@ function ChangeProcessForm(props: IProps) {
               <div style={{...fontWeight}}>Vòng tuyển dụng</div>
 
               <Radio.Group onChange={handleChangeProcess} value={process}>
-                {props.recruitment.rows[0]?.interviewProcess.map((item: any, index: any) => {
+                {recruitment?.rows[0]?.interviewProcess.map((item: any, index: any) => {
                   return <Radio key={index} value={item.id} className="flex-items-center">
                     {item.name}
                   </Radio>
@@ -338,25 +222,16 @@ function ChangeProcessForm(props: IProps) {
             </div>
             <br/>
 
-            <div style={{fontWeight: 500}}>Gửi mail cho ứng người giới thiệu</div>
-            <div style={{display: "flex"}}>
-              <div>
-                <Checkbox
-                  indeterminate={checked.presenter.indeterminate}
-                  onChange={onCheckAllPresenterChange}
-                  checked={checked.presenter.checkAll}
-                >
-                  Tất cả
-                </Checkbox>
-              </div>
-              <CheckboxGroup
+            <div style={{fontWeight: 500}}>Gửi mail cho người giới thiệu</div>
+            <div>
+              <Radio.Group
                 value={checked.presenter.checkedList}
                 onChange={onCheckPresenterChange}
               >
-                {plainOptions.presenter.map((item: any, index: any) =>
-                  <Checkbox key={item.id} value={item.id}>{item.name}</Checkbox>
+                {plainOptions.members.map((item: any, index: any) =>
+                  <Radio key={item.id} value={item.id}>{item.name}</Radio>
                 )}
-              </CheckboxGroup>
+              </Radio.Group>
             </div>
             <br/>
 
@@ -393,7 +268,7 @@ function ChangeProcessForm(props: IProps) {
           {checked.candidate.checkedList === "yes" ||
           checked.members.checkedList === "yes" ||
           checked.interviewers.checkedList.length > 0 ||
-          checked.presenter.checkedList.length > 0 ?
+          checked.presenter.checkedList === "yes" ?
             <Button type={"primary"} className="ml-2" onClick={onBtnContinueCreateClicked}>Tiếp tục</Button>
             :
             <Button onClick={btnChangeProcessClicked} type={"primary"} className="ml-2">Chuyển</Button>
@@ -401,7 +276,9 @@ function ChangeProcessForm(props: IProps) {
         </div>
       </Modal>
 
-      <CreateEmailChangeProcessForm reqCreate={reqCreate}/>
+      {showForm.show_change_process &&
+      <CreateEmailForm type={"process"} reqCreate={reqCreate} profile={showForm.data_profile} checked={checked}/>
+      }
     </>
   );
 }

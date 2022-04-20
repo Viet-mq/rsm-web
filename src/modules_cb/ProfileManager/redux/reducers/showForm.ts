@@ -19,6 +19,8 @@ export interface ProfileFormState {
   change_process?: ProcessForm
   show_add_to_talent_pool?: boolean,
   recruitment_talentpool?: RecruitmentTalentPool,
+  data_profile?:any,
+
 }
 
 const initState: ProfileFormState = {
@@ -55,7 +57,9 @@ export default (state = initState, {
   show_change_recruitment,
   change_process,
   show_add_to_talent_pool,
-  recruitment_talentpool
+  recruitment_talentpool,
+  data_profile,
+
 }: ProfileFormAction): ProfileFormState => {
   switch (type) {
     case Actions.PROFILE_SHOW_FORM_CREATE:
@@ -128,6 +132,7 @@ export default (state = initState, {
         ...state,
         show_change_process,
         change_process,
+        data_profile,
         show_create: false,
         show_update: false,
         show_reason_reject: false,

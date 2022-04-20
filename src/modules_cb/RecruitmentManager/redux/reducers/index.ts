@@ -10,11 +10,9 @@ import createSteps, {CreateStepsState} from "./createSteps";
 import showForm, {ProcessFormState} from "./showForm";
 import createInterviewProcess, {CreateInterviewProcessState} from "./createInterviewProcess";
 import deleteProcess, {DeleteProcessState} from "./deleteProcess";
-import search, {SearchRecruitmentState} from "./search";
 
 export interface RecruitmentManagerModuleState {
   list: RecruitmentListState,
-  search: SearchRecruitmentState,
   deleteRecruitment: DeleteRecruitmentState,
   deleteProcess: DeleteProcessState,
   create: CreateRecruitmentState,
@@ -22,9 +20,9 @@ export interface RecruitmentManagerModuleState {
   update: UpdateRecruitmentState,
   listKanbanCandidate: ListKanbanCandidateState,
   createSteps: CreateStepsState,
-  showForm:ProcessFormState,
-  createInterviewProcess:CreateInterviewProcessState,
-  searchUser:SearchUserState
+  showForm: ProcessFormState,
+  createInterviewProcess: CreateInterviewProcessState,
+  searchUser: SearchUserState
 }
 
 export default combineReducers<RecruitmentManagerModuleState>({
@@ -39,5 +37,4 @@ export default combineReducers<RecruitmentManagerModuleState>({
   createInterviewProcess,
   searchUser,
   deleteProcess,
-  search,
 });

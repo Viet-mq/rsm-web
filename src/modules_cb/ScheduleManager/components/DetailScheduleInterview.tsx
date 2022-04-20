@@ -2,32 +2,28 @@ import {RootState} from "../../../redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Form, Icon, Modal} from "antd";
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import moment from "moment";
 import 'devextreme/dist/css/dx.light.css';
-import {
-  createBooking,
-  getBooking,
-  showFormBooking,
-  showFormDetail,
-  updateBooking
-} from "../../ProfileManager/redux/actions";
-import {getListAccount} from "../../AccountManager/redux/actions";
-import {getListStatusCV} from "../../StatusCVManager/redux/actions";
+import {getDetailProfile, showFormBooking, showFormDetail} from "../../ProfileManager/redux/actions";
 import {ScheduleEntity} from "../types";
-import {DataShowBooking, DetailCV} from "../../ProfileManager/types";
+import {DetailCV} from "../../ProfileManager/types";
 import BookingForm from "../../ProfileManager/components/BookingForm";
 import {deleteSchedule} from "../redux/actions";
 import {CheckViewAction, schedule_path} from "../../../helpers/utilsFunc";
 
 const mapStateToProps = (state: RootState) => ({
-  delete: state.scheduleManager.deleteSchedule
+  delete: state.scheduleManager.deleteSchedule,
+  profileManager: state.profileManager,
+
 })
 const connector = connect(mapStateToProps,
   {
     showFormBooking,
     deleteSchedule,
-    showFormDetail
+    showFormDetail,
+    getDetailProfile,
+
   });
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -39,52 +35,43 @@ interface IProps extends FormComponentProps, ReduxProps {
 }
 
 function DetailScheduleInterview(props: IProps) {
-  const [visible, setVisible] = useState(false);
   const dateFormat = 'DD/MM/YYYY';
   const timeFormat = 'HH:mm';
   const dataDetail = props.dataDetail?.find((item: any) => item.id === props.idDetail)
+  const {detail} = props.profileManager;
+  const fontWeight = {fontWeight: 500}
 
-  const handleBooking = (event: any) => {
+  useEffect(() => {
+    props.visible && props.getDetailProfile({idProfile: dataDetail?.idProfile});
+  }, [props.visible])
+
+  const handleBooking = (event: any, dataBookingDetail: any) => {
     event.stopPropagation();
-    let req: DataShowBooking = {
-      id: dataDetail.idProfile,
-      fullName: dataDetail.fullName,
-      idRecruitment: dataDetail.recruitmentId,
-      username: dataDetail.username
-    }
-
-    props.showFormBooking(true, req);
     props.handleClosePopupDetail()
+    props.showFormBooking(true, dataBookingDetail, detail.result, true);
   }
-  const fontWeight = {
-    fontWeight: 500
-  }
-  useEffect(() => setVisible(props?.visible), [props?.visible]);
 
   function btnDeleteScheduleClicked() {
     props.deleteSchedule({id: dataDetail?.id})
     props.handleClosePopupDetail();
   }
 
-  console.log(dataDetail)
-
-  function handleShowDetail(value:any){
+  function handleShowDetail(value: any) {
     let req: DetailCV = {
       show_detail: false,
       general: 12,
       detail: 12
     }
-    props.showFormDetail(req,value);
+    props.showFormDetail(req, value);
     props.handleClosePopupDetail()
   }
 
   return (
     <>
       <Modal
-        zIndex={2}
+        zIndex={5}
         maskClosable={false}
-        visible={visible}
-        // visible={true}
+        visible={props?.visible}
         centered={true}
         width="530px"
         className="custom"
@@ -98,7 +85,7 @@ function DetailScheduleInterview(props: IProps) {
           <div className="schedule-detail-head">
             <div className="schedule-detail-title">{dataDetail?.type}</div>
             <div className="schedule-detail-job">
-              <div className="main-1__green-dot"></div>
+              <div className="main-1__green-dot"/>
               <div className="main-1__job-description">{dataDetail?.recruitmentName}</div>
             </div>
           </div>
@@ -106,8 +93,9 @@ function DetailScheduleInterview(props: IProps) {
 
             <div style={{...fontWeight}}>Ứng viên</div>
             <div style={{...fontWeight, padding: 0}}>{dataDetail?.fullName}</div>
-            <div onClick={()=>handleShowDetail(dataDetail?.idProfile)}><a style={{display: "flex"}}>Xem hồ sơ <Icon type="arrow-right"
-                                                              style={{fontSize: '22px', marginTop: 3}}/></a></div>
+            <div onClick={() => handleShowDetail(dataDetail?.idProfile)}><a style={{display: "flex"}}>Xem hồ sơ <Icon
+              type="arrow-right"
+              style={{fontSize: '22px', marginTop: 3}}/></a></div>
 
             <div style={{...fontWeight}}>Thời gian</div>
             <div>{moment(dataDetail?.date).format(dateFormat)}, {moment(dataDetail?.date).format(timeFormat)} - {moment(dataDetail?.interviewTime).format(timeFormat)}
@@ -146,11 +134,11 @@ function DetailScheduleInterview(props: IProps) {
                                                                                                        className="mr-1"/>Xóa</Button>
               : null}
 
-              {CheckViewAction(schedule_path, "update")
+            {CheckViewAction(schedule_path, "update")
               ?
-                <Button onClick={event => handleBooking(event)}><Icon type="edit" className="mr-1"/>Chỉnh sửa</Button>
+              <Button onClick={event => handleBooking(event, dataDetail)}><Icon type="edit" className="mr-1"/>Chỉnh sửa</Button>
 
-                : null}
+              : null}
 
 
           </> : null}

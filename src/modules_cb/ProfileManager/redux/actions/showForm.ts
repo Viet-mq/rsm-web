@@ -18,6 +18,7 @@ export interface ProfileFormAction {
   change_process?: ProcessForm
   show_add_to_talent_pool?: boolean,
   recruitment_talentpool?:RecruitmentTalentPool,
+  data_profile?:any,
 
 }
 
@@ -67,10 +68,11 @@ export const showFormUploadAvatar = (show_upload_avatar: boolean, id_upload_avat
 });
 
 
-export const showChangeProcessForm = (show: boolean, changeProcess?: ProcessForm): ProfileFormAction => ({
+export const showChangeProcessForm = (show: boolean, changeProcess?: ProcessForm,  dataProfile?:any): ProfileFormAction => ({
   type: SHOW_CHANGE_PROCESS_FORM,
   show_change_process: show,
-  change_process: changeProcess
+  change_process: changeProcess,
+  data_profile:dataProfile
 });
 
 export const showChangeRecruitmentForm = (show: boolean, idRecruitment?: string): ProfileFormAction => ({

@@ -1,7 +1,6 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
-import env from "src/configs/env";
 import {
   getDepartmentDownload,
   getDepartmentReport,
@@ -27,6 +26,7 @@ import {
   exportRecruitmentResultExcelFile,
   exportRejectExcelFile
 } from "../../redux/services/apis";
+import {CheckViewAction, dashboard_path} from "../../../../helpers/utilsFunc";
 
 const mapStateToProps = (state: RootState) => ({
   dashboardManager: state.dashboardManager,
@@ -57,7 +57,7 @@ function ListDashboard(props: IProps) {
     pageRecruitmentResult: 1,
     pageDepartment: 1,
   });
-  const scroll = screenWidth < env.desktopWidth ? {x: 'fit-content'} : {x: false};
+  const scroll = {x: 1500};
   const size = {
     pageReject: 10,
     pageRecruitmentActivities: 10,
@@ -352,7 +352,9 @@ function ListDashboard(props: IProps) {
     <>
       <div className='flex-space-between-item-center'>
         <div className="font-15-bold-500">Báo cáo tổng hợp nguồn ứng viên</div>
+        {CheckViewAction(dashboard_path, "export") &&
         <Button onClick={btnDepartmentDownload}><Icon type={"download"}/></Button>
+        }
       </div>
 
       <Table
@@ -376,7 +378,9 @@ function ListDashboard(props: IProps) {
 
       <div className='flex-space-between-item-center'>
         <div className="font-15-bold-500">Báo cáo kết quả tin tuyển dụng và hiệu quả nhân sự</div>
+        {CheckViewAction(dashboard_path, "export") &&
         <Button onClick={btnRecruitmentEfficiencyDownload}><Icon type={"download"}/></Button>
+        }
       </div>
       <Table
         scroll={scroll}
@@ -399,7 +403,9 @@ function ListDashboard(props: IProps) {
 
       <div className='flex-space-between-item-center'>
         <div className="font-15-bold-500">Báo cáo tổng hợp hoạt động tuyển dụng</div>
+        {CheckViewAction(dashboard_path, "export") &&
         <Button onClick={btnRecruitmentActivitiesDownload}><Icon type={"download"}/></Button>
+        }
       </div>
       <Table
         scroll={scroll}
@@ -424,7 +430,9 @@ function ListDashboard(props: IProps) {
 
       <div className='flex-space-between-item-center'>
         <div className="font-15-bold-500">Báo cáo kết quả tuyển dụng</div>
+        {CheckViewAction(dashboard_path, "export") &&
         <Button onClick={btnRecruitmentResultDownload}><Icon type={"download"}/></Button>
+        }
       </div>
       <Table
         scroll={scroll}
@@ -449,7 +457,9 @@ function ListDashboard(props: IProps) {
 
       <div className='flex-space-between-item-center'>
         <div className="font-15-bold-500">Báo cáo ứng viên bị loại</div>
+        {CheckViewAction(dashboard_path, "export") &&
         <Button onClick={btnRejectDownload}><Icon type={"download"}/></Button>
+        }
       </div>
       <Table
         scroll={scroll}

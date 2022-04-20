@@ -28,11 +28,11 @@ import Loading from "../../../components/Loading";
 import {ProfileEntity} from "../../ProfileManager/types";
 import {CreateScheduleForm, CreateScheduleRequest, ScheduleEntity, ScheduleTime} from "../types";
 import {ColumnProps} from "antd/lib/table";
-import {getDetailRecruitment, getSearchRecruitment} from "../../RecruitmentManager/redux/actions";
-import {showEmailCreateForm, showInterviewEmailCreateForm} from "../../ProfileManager/redux/actions";
-import CreateInterviewEmailForm from "./CreateInterviewEmailForm";
+import {getDetailRecruitment, getListRecruitment} from "../../RecruitmentManager/redux/actions";
+import {showEmailCreateForm} from "../../ProfileManager/redux/actions";
 import {RecruitmentEntity} from "../../RecruitmentManager/types";
-import {getInitials} from "../../../helpers/utilsFunc";
+import {getInitials, plainOptions} from "../../../helpers/utilsFunc";
+import CreateEmailForm from "../../ProfileManager/components/CreateEmailForm";
 
 
 const mapStateToProps = (state: RootState) => ({
@@ -54,9 +54,8 @@ const connector = connect(mapStateToProps,
     searchCandidates,
     getDetailRecruitment,
     showEmailCreateForm,
-    showInterviewEmailCreateForm,
-    getSearchRecruitment,
     createSchedule,
+    getListRecruitment,
 
   });
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -65,6 +64,7 @@ const {Option} = Select;
 const CheckboxGroup = Checkbox.Group;
 
 interface IProps extends FormComponentProps, ReduxProps {
+  timeCalendar?: any
 }
 
 function CreateScheduleInterview(props: IProps) {
@@ -139,36 +139,6 @@ function CreateScheduleInterview(props: IProps) {
   const [trigger, setTrigger] = useState({
     recruitment: false,
   })
-  const plainOptions = {
-    candidate: [{
-      id: "yes",
-      name: "Có",
-    }, {
-      id: "no",
-      name: "Không",
-    }],
-    interviewers: [{
-      id: "system",
-      name: "Hệ thống",
-    }, {
-      id: "outSide",
-      name: "Ngoài hệ thống",
-    }],
-    members: [{
-      id: "yes",
-      name: "Có",
-    }, {
-      id: "no",
-      name: "Không",
-    }],
-    presenter: [{
-      id: "system",
-      name: "Hệ thống",
-    }, {
-      id: "outSide",
-      name: "Ngoài hệ thống",
-    }]
-  };
   const [checked, setChecked] = useState<any>({
     candidate: {
       checkedList: 'no',
@@ -182,12 +152,12 @@ function CreateScheduleInterview(props: IProps) {
       checkAll: false
     },
     presenter: {
-      checkedList: [],
-      indeterminate: false,
-      checkAll: false
+      checkedList: 'no',
     }
   })
-
+  const interviewTime: any = moment(props.timeCalendar?.end)
+  const date: any = moment(props.timeCalendar?.start)
+  const diffTime = interviewTime.diff(date, "minutes")
 
   useEffect(() => {
     setListCandidates(props.listCandidate.rows);
@@ -202,7 +172,9 @@ function CreateScheduleInterview(props: IProps) {
   }, [recruitmentSelect])
 
   useEffect(() => {
-    if (props.showSchedule.show_schedule === false) {
+    if (props.showSchedule.show_schedule) {
+      props.getListRecruitment({page: 1, size: 0})
+    } else {
       props.resetCandidates();
       resetFields();
       setDatasource([]);
@@ -273,7 +245,13 @@ function CreateScheduleInterview(props: IProps) {
 
   function handleSearchCandidate(e?: any) {
     setKeySearch(e?.target.value)
-    props.searchCandidates({fullName: e?.target.value, recruitment: recruitmentSelect, calendar: "notSet", page: 1, size: 15})
+    props.searchCandidates({
+      fullName: e?.target.value,
+      recruitment: recruitmentSelect,
+      calendar: "notSet",
+      page: 1,
+      size: 15
+    })
   }
 
   function showScrollCandidate() {
@@ -304,14 +282,8 @@ function CreateScheduleInterview(props: IProps) {
         const dateChanged: any = new Date(yyyy, mm - 1, dd, hh, minutes, 0);
         const interviewTime: any = new Date(yyyy, mm - 1, dd, hh, minutes + values.interviewTime, 0);
 
-
         let times: ScheduleTime[] = dataSource?.reduce((curr: any, next: any) => {
           const newTimes: ScheduleTime = {
-            // avatarColor: next.avatarColor,
-            // date: next.date,
-            // idProfile: next.idProfile,
-            // interviewTime: next.interviewTime
-
             avatarColor: next.avatarColor,
             date: dateChanged * 1,
             idProfile: next.idProfile,
@@ -333,9 +305,7 @@ function CreateScheduleInterview(props: IProps) {
         setReqCreate(req)
         console.log(" req.time:", times)
         console.log(" dataSource:", dataSource)
-        props.showInterviewEmailCreateForm(true)
-
-        // props.createSchedule(req);
+        props.showEmailCreateForm(true)
         return;
       }
     });
@@ -347,7 +317,6 @@ function CreateScheduleInterview(props: IProps) {
     (e.target as any).disabled = false;
     props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-
         const date = new Date(values.date);
         const time = new Date(values.timeStart);
         const dd = date.getDate();
@@ -358,14 +327,8 @@ function CreateScheduleInterview(props: IProps) {
         const dateChanged: any = new Date(yyyy, mm - 1, dd, hh, minutes, 0);
         const interviewTime: any = new Date(yyyy, mm - 1, dd, hh, minutes + values.interviewTime, 0);
 
-
         let times: ScheduleTime[] = dataSource?.reduce((curr: any, next: any) => {
           const newTimes: ScheduleTime = {
-            // avatarColor: next.avatarColor,
-            // date: next.date,
-            // idProfile: next.idProfile,
-            // interviewTime: next.interviewTime
-
             avatarColor: next.avatarColor,
             date: dateChanged * 1,
             idProfile: next.idProfile,
@@ -387,7 +350,6 @@ function CreateScheduleInterview(props: IProps) {
         let reqCreateSchedule: CreateScheduleRequest = {
           createScheduleForm: req,
         }
-
         props.createSchedule(reqCreateSchedule);
         return;
       }
@@ -395,7 +357,7 @@ function CreateScheduleInterview(props: IProps) {
   }
 
   function onSearchRecruitment(value: any) {
-    props.getSearchRecruitment({name: value})
+    // props.getSearchRecruitment({name: value})
     setTrigger({...trigger, recruitment: true})
   }
 
@@ -415,13 +377,11 @@ function CreateScheduleInterview(props: IProps) {
     );
   };
 
-  function onCheckPresenterChange(checkedList: any) {
+  function onCheckPresenterChange(event: any) {
     setChecked({
         ...checked,
         presenter: {
-          checkedList: checkedList,
-          indeterminate: !!checkedList.length && checkedList.length < plainOptions.presenter.length,
-          checkAll: checkedList.length === plainOptions.presenter.length,
+          checkedList: event.target.value,
         }
       }
     );
@@ -458,22 +418,11 @@ function CreateScheduleInterview(props: IProps) {
     });
   };
 
-  function onCheckAllPresenterChange(e: any) {
-    setChecked({
-      ...checked,
-      presenter: {
-        checkedList: e.target.checked ? plainOptions.presenter.map((item: any) => item.id) : [],
-        indeterminate: false,
-        checkAll: e.target.checked,
-      }
-    });
-  };
-
   return (
     <>
       <div>
         <Modal
-          zIndex={2}
+          zIndex={5}
           maskClosable={false}
           title="Đặt lịch"
           visible={props.showSchedule.show_schedule}
@@ -486,7 +435,7 @@ function CreateScheduleInterview(props: IProps) {
           onCancel={onBtnCancelClicked}
           footer={""}>
           <div className="c-schedule-interview-popup">
-            <div className='ant-col-12 grid-left' style={{overflow:"auto",height:"inherit"}}>
+            <div className='ant-col-12 grid-left' style={{overflow: "auto", height: "inherit"}}>
               <Form>
                 <Form.Item className="form-label" label="Tin tuyển dụng" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                   {getFieldDecorator('recruitmentId', {
@@ -524,7 +473,7 @@ function CreateScheduleInterview(props: IProps) {
                   <div className="mr-2">
                     <Form.Item className="form-label" label="Ngày" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                       {getFieldDecorator('date', {
-                        initialValue: moment().add(1, 'days'),
+                        initialValue: props.timeCalendar?.start ? moment(props.timeCalendar?.start) : moment().add(1, 'days'),
                         rules: [
                           {
                             message: 'Vui lòng chọn ngày bắt đầu',
@@ -540,7 +489,7 @@ function CreateScheduleInterview(props: IProps) {
                   <div className="mr-2">
                     <Form.Item className="form-label" label="Giờ bắt đầu" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                       {getFieldDecorator('timeStart', {
-                        initialValue: moment(),
+                        initialValue: props.timeCalendar?.start ? moment(props.timeCalendar?.start) : moment(),
                         rules: [
                           {
                             message: 'Vui lòng chọn giờ bắt đầu',
@@ -557,7 +506,7 @@ function CreateScheduleInterview(props: IProps) {
                     <Form.Item className="form-label" label="Thời lượng(phút)" labelCol={{span: 24}}
                                wrapperCol={{span: 24}}>
                       {getFieldDecorator('interviewTime', {
-                        initialValue: 15,
+                        initialValue: diffTime || 15,
                         rules: [
                           {
                             message: 'Vui lòng nhập thời lượng',
@@ -613,26 +562,29 @@ function CreateScheduleInterview(props: IProps) {
                   </Col>
                 </Row>
 
-                {/*<Form.Item label="Hội đồng tuyển dụng" className="form-label" labelCol={{span: 24}} wrapperCol={{span: 24}}>*/}
-                {/*  {getFieldDecorator('interviewers', {*/}
-                {/*    initialValue: props.detailRecruitment.rows[0]?.interviewer?.map((item:any)=>item.username)||undefined,*/}
-                {/*    rules: [*/}
-                {/*      {*/}
-                {/*        message: 'Vui lòng chọn Hội đồng tuyển dụng',*/}
-                {/*        required: true,*/}
-                {/*      },*/}
-                {/*    ],*/}
-                {/*  })(*/}
-                {/*  <Select getPopupContainer={(trigger:any) => trigger.parentNode} className="bg-white text-black" style={fontWeightStyle}*/}
-                {/*            mode="multiple"*/}
-                {/*            placeholder="Chọn thành viên"*/}
-                {/*    >*/}
-                {/*      {props.listAccount.rows?.map((item: any, index: any) => (*/}
-                {/*        <Option key={index} value={item.username}>{item.fullName}</Option>*/}
-                {/*      ))}*/}
-                {/*    </Select>*/}
-                {/*  )}*/}
-                {/*</Form.Item>*/}
+                {checked.interviewers.checkedList.length === 0 &&
+                <Form.Item label="Hội đồng tuyển dụng" className="form-label" labelCol={{span: 24}}
+                           wrapperCol={{span: 24}}>
+                  {getFieldDecorator('interviewers', {
+                    initialValue: undefined,
+                    rules: [
+                      {
+                        message: 'Vui lòng chọn Hội đồng tuyển dụng',
+                        required: true,
+                      },
+                    ],
+                  })(
+                    <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                            className="bg-white text-black" style={fontWeightStyle}
+                            mode="multiple"
+                            placeholder="Chọn thành viên"
+                    >
+                      {props.listAccount.rows?.map((item: any, index: any) => (
+                        <Option key={index} value={item.username}>{item.fullName}</Option>
+                      ))}
+                    </Select>
+                  )}
+                </Form.Item>}
 
                 <Form.Item className="form-label" label="Loại lịch" labelCol={{span: 24}} wrapperCol={{span: 24}}>
                   {getFieldDecorator('type', {
@@ -694,25 +646,16 @@ function CreateScheduleInterview(props: IProps) {
                 </div>
                 <br/>
 
-                <div style={{fontWeight: 500}}>Gửi mail cho ứng người giới thiệu</div>
-                <div style={{display: "flex"}}>
-                  <div>
-                    <Checkbox
-                      indeterminate={checked.presenter.indeterminate}
-                      onChange={onCheckAllPresenterChange}
-                      checked={checked.presenter.checkAll}
-                    >
-                      Tất cả
-                    </Checkbox>
-                  </div>
-                  <CheckboxGroup
+                <div style={{fontWeight: 500}}>Gửi mail cho người giới thiệu</div>
+                <div>
+                  <Radio.Group
                     value={checked.presenter.checkedList}
                     onChange={onCheckPresenterChange}
                   >
-                    {plainOptions.presenter.map((item: any, index: any) =>
-                      <Checkbox key={item.id} value={item.id}>{item.name}</Checkbox>
+                    {plainOptions.members.map((item: any, index: any) =>
+                      <Radio key={item.id} value={item.id}>{item.name}</Radio>
                     )}
-                  </CheckboxGroup>
+                  </Radio.Group>
                 </div>
                 <br/>
 
@@ -804,10 +747,11 @@ function CreateScheduleInterview(props: IProps) {
           <div className="footer-right">
             <Button onClick={onBtnCancelClicked} type={"link"}
                     style={{color: "black", marginRight: 15}}>Hủy</Button>
+
             {checked.candidate.checkedList === "yes" ||
             checked.members.checkedList === "yes" ||
             checked.interviewers.checkedList.length > 0 ||
-            checked.presenter.checkedList.length > 0 ?
+            checked.presenter.checkedList === "yes" ?
               <Button type={"primary"} onClick={onBtnContinueCreateClicked}>Tiếp tục</Button>
               :
               <Button type={"primary"} onClick={onBtnCreateClicked}>Đặt lịch</Button>
@@ -816,7 +760,11 @@ function CreateScheduleInterview(props: IProps) {
 
         </Modal>
       </div>
-      <CreateInterviewEmailForm reqCreateSchedule={reqCreate}/>
+      {props.showSchedule.show_schedule &&
+      <CreateEmailForm type={"schedule"}
+                       reqCreate={reqCreate}
+                       checked={checked}/>
+      }
       {props.listCandidate.loading ?
         <Loading/> : null}
     </>);
