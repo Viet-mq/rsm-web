@@ -1,17 +1,17 @@
 import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
-import {deleteTalentPool, getListTalentPool, getSearchTalentPool, showFormUpdate} from "../../redux/actions";
+import {deleteTalentPool, getListTalentPool, showFormUpdate} from "../../redux/actions";
 import TalentPoolItem from "../TalentPoolItem";
 import Search from "antd/es/input/Search";
 import {Pagination} from "antd";
+import {getListTalentPool as getListTalentPoolApi} from "../../redux/services/apis";
 
 const mapStateToProps = ({talentPoolManager}: RootState) => ({talentPoolManager})
 const connector = connect(mapStateToProps, {
-  getListTalentPool,
   deleteTalentPool,
   showFormUpdate,
-  getSearchTalentPool
+  getListTalentPool
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -20,7 +20,7 @@ interface IProps extends ReduxProps {
 }
 
 function ListTalentPool(props: IProps) {
-  const {search} = props.talentPoolManager
+  const {list} = props.talentPoolManager
   const [page, setPage] = useState(1);
   const size = 10;
   const [talentPool, setTalentPool] = useState<any>()
@@ -30,17 +30,15 @@ function ListTalentPool(props: IProps) {
     btnSearchClicked()
   }, [page]);
 
-  useEffect(() => {
-    setTalentPool(search)
-  }, [search])
-
   function btnSearchClicked() {
     const req: any = {
       page: page,
       size: size,
       name: nameSearch
     }
-    props.getSearchTalentPool(req);
+    getListTalentPoolApi(req).then((rs: any) => {
+      setTalentPool(rs)
+    })
   }
 
   return (
@@ -55,7 +53,7 @@ function ListTalentPool(props: IProps) {
       </div>
 
       <div className="card-container">
-        {talentPool?.rows.map((item: any, index: any) => {
+        {talentPool?.rows?.map((item: any, index: any) => {
           return <TalentPoolItem key={index} talentPool={item}/>
 
         })}

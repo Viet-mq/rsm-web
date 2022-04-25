@@ -2,9 +2,9 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import {FormComponentProps} from "antd/lib/form";
 import {Button, Col, DatePicker, Form, Icon, Input, InputNumber, Row, Select, Switch, TreeSelect} from "antd";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import moment from "moment";
-import {getSearchJob, showFormCreate as showJobFormCreate} from "../../../JobManager/redux/actions";
+import {showFormCreate as showJobFormCreate} from "../../../JobManager/redux/actions";
 import {checkInformationValidate, createSteps, getDataRecruitmentUpdate} from "../../redux/actions";
 import {CreateRecruitmentRequest, RecruitmentEntity} from "../../types";
 import {useLocation} from "react-router-dom";
@@ -12,9 +12,9 @@ import ReactQuill from "react-quill";
 import CreateJobForm from "../../../JobManager/components/CreateJobForm";
 import Loading from "../../../../components/Loading";
 import {JobEntity} from "../../../JobManager/types";
-import {DepartmentEntity} from "../../../DepartmentManager/types";
-import {searchListDepartment} from "../../../DepartmentManager/redux/actions";
 import {formats, modules} from "../../../../helpers/utilsFunc";
+import {getListTalentPool as getListTalentPoolApi} from "src/modules_cb/TalentPoolManager/redux/services/apis";
+import {TalentPoolEntity} from "../../../TalentPoolManager/types";
 
 const {Option} = Select;
 const {TreeNode} = TreeSelect;
@@ -24,7 +24,6 @@ const mapStateToProps = (state: RootState) => ({
   recruitmentManager: state.recruitmentManager,
   listTalentPool: state.talentPoolManager.list,
   listJob: state.jobManager.list,
-  searchJob: state.jobManager.search,
   createJob: state.jobManager.create,
   listProcess: state.statuscvManager.list,
   listDepartment: state.departmentManager.list
@@ -36,8 +35,6 @@ const connector = connect(mapStateToProps,
     checkInformationValidate,
     createSteps,
     getDataRecruitmentUpdate,
-    getSearchJob,
-    searchListDepartment
   });
 type ReduxProps = ConnectedProps<typeof connector>;
 
@@ -50,8 +47,6 @@ function InformationForm(props: IProps) {
   const {getFieldDecorator} = props.form;
   const fontWeightStyle = {fontWeight: 400};
   const dateFormat = 'DD/MM/YYYY';
-  // const buttonCreate = useRef(null);
-  // const textEditorStyle = {marginBottom: 30}
   const isEdit = location.pathname.includes("edit");
   const [salary, setSalary] = useState<any>({
     from: 0,
@@ -59,37 +54,23 @@ function InformationForm(props: IProps) {
     detailOfSalary: "Chi tiết mức lương",
     // salaryDescription: "Từ 0 VND đến 0 VND"
   })
-  const [displayInterest, setDisplayInterest] = useState(false)
-  const [displayRequirementOfJob, setDisplayRequirementOfJob] = useState(false)
-  const [displayJobDescription, setDisplayJobDescription] = useState(false)
+  // const [displayInterest, setDisplayInterest] = useState(false)
+  // const [displayRequirementOfJob, setDisplayRequirementOfJob] = useState(false)
+  // const [displayJobDescription, setDisplayJobDescription] = useState(false)
+  //
   const [valueEditor, setValueEditor] = useState({
     interest: isEdit ? update.dataUpdate?.interest : createSteps.request?.interest || "",
     requirementOfJob: isEdit ? update.dataUpdate?.requirementOfJob : createSteps.request?.requirementOfJob || "",
     jobDescription: isEdit ? update.dataUpdate?.jobDescription : createSteps.request?.jobDescription || ""
   })
-  //
-  // const [inputForm, setInputForm] = useState({
-  //   title: isEdit ? update.dataUpdate?.title : createSteps.request?.title || "",
-  //   quantity: isEdit ? update.dataUpdate?.quantity : createSteps.request?.quantity || "",
-  // })
-
-  const editorRef = useRef<any>(null);
-  // const log = () => {
-  //   if (editorRef.current) {
-  //     console.log(editorRef.current.getContent());
-  //   }
-  // };
   const [job, setJob] = useState<JobEntity[]>([]);
-  const [department, setDepartment] = useState<DepartmentEntity[]>([]);
-  const [trigger, setTrigger] = useState({
-    job: false,
-    department: false,
-  })
+  const [talentPool, setTalentPool] = useState<TalentPoolEntity[]>([]);
   const [salaryDescription, setSalaryDescription] = useState("")
+
   useEffect(() => {
     document.title = "Quản lý tin tuyển dụng";
     setJob(props.listJob.rows)
-    setDepartment(props.listDepartment.rows)
+    setTalentPool(props.listTalentPool.rows)
     if (isEdit) {
       setSalary({
         from: update.dataUpdate?.from,
@@ -98,13 +79,6 @@ function InformationForm(props: IProps) {
       })
     }
   }, []);
-
-
-  // useEffect(() => {
-  //   if (trigger.job) {
-  //     setJob(props.searchJob.rows)
-  //   }
-  // }, [props.searchJob.rows])
 
   function onFormChange(salaryChange?: any, valueEditorChange?: any) {
     setTimeout(() => props.form.validateFields((err, values) => {
@@ -123,23 +97,25 @@ function InformationForm(props: IProps) {
             setSalaryDescription(` Up to ${salaryChange.to.toLocaleString()} VND`);
             break
         }
+        //
+        // if (!valueEditor.interest) {
+        //   setDisplayInterest(true)
+        // }
+        //
+        // if (!valueEditor.requirementOfJob) {
+        //   setDisplayRequirementOfJob(true)
+        // }
+        //
+        // if (!valueEditor.jobDescription) {
+        //   setDisplayJobDescription(true)
+        // }
 
-        if (!valueEditor.interest) {
-          setDisplayInterest(true)
-        }
-
-        if (!valueEditor.requirementOfJob) {
-          setDisplayRequirementOfJob(true)
-        }
-
-        if (!valueEditor.jobDescription) {
-          setDisplayJobDescription(true)
-        }
-
-        if (!err &&
-          valueEditor.interest &&
-          valueEditor.requirementOfJob &&
-          valueEditor.jobDescription) {
+        if (!err
+          // &&
+          // valueEditor.interest &&
+          // valueEditor.requirementOfJob &&
+          // valueEditor.jobDescription
+        ) {
 
           if (isEdit) {
             if (update.dataUpdate) {
@@ -165,27 +141,27 @@ function InformationForm(props: IProps) {
             }
           } else {
             // if (valueEditorChange.interest && valueEditorChange.jobDescription && valueEditorChange.requirementOfJob) {
-              let req: CreateRecruitmentRequest = ({
-                address: values.address,
-                deadLine: values.deadLine * 1,
-                job: values.job,
-                department: values.department,
-                quantity: values.quantity,
-                talentPool: values.talentPool,
-                title: values.title,
-                typeOfJob: values.typeOfJob,
-                detailOfSalary: salaryChange.detailOfSalary,
-                from: salaryChange.from,
-                to: salaryChange.to,
-                salaryDescription: salaryDescription,
-                requirementOfJob: valueEditorChange.requirementOfJob,
-                jobDescription: valueEditorChange.jobDescription,
-                interest: valueEditorChange.interest,
+            let req: CreateRecruitmentRequest = ({
+              address: values.address,
+              deadLine: values.deadLine * 1,
+              job: values.job,
+              department: values.department,
+              quantity: values.quantity,
+              talentPool: values.talentPool,
+              title: values.title,
+              typeOfJob: values.typeOfJob,
+              detailOfSalary: salaryChange.detailOfSalary,
+              from: salaryChange.from,
+              to: salaryChange.to,
+              salaryDescription: salaryDescription,
+              requirementOfJob: valueEditorChange.requirementOfJob,
+              jobDescription: valueEditorChange.jobDescription,
+              interest: valueEditorChange.interest,
 
-                interviewProcess: props.listProcess.rows,
-                interviewer: []
-              })
-              props.createSteps(req)
+              interviewProcess: props.listProcess.rows,
+              interviewer: []
+            })
+            props.createSteps(req)
             // }
           }
           props.checkInformationValidate(true)
@@ -218,45 +194,61 @@ function InformationForm(props: IProps) {
     setSalary(newSalary)
   }
 
-
   function handleChangeInterest(content: any) {
+    // if (content === "<p><br></p>") {
+    //   setDisplayInterest(true)
+    //   setValueEditor({...valueEditor, interest: ""})
+    // } else {
+    //   setDisplayInterest(false)
+    //   const newValueEditor = valueEditor
+    //   newValueEditor.interest = content
+    //   onFormChange(salary, newValueEditor)
+    //   setValueEditor(newValueEditor)
+    // }
 
-    if (content === "<p><br></p>") {
-      setDisplayInterest(true)
-      setValueEditor({...valueEditor, interest: ""})
-    } else {
-      setDisplayInterest(false)
-      const newValueEditor = valueEditor
-      newValueEditor.interest = content
-      onFormChange(salary, newValueEditor)
-      setValueEditor(newValueEditor)
-    }
+    const newValueEditor = valueEditor
+    newValueEditor.interest = content
+    onFormChange(salary, newValueEditor)
+    setValueEditor(newValueEditor)
+
   }
 
   function handleChangeRequirement(content: any) {
-    if (content === "<p><br></p>") {
-      setDisplayRequirementOfJob(true)
-      setValueEditor({...valueEditor, requirementOfJob: ""})
-    } else {
-      setDisplayRequirementOfJob(false)
-      const newValueEditor = valueEditor
-      newValueEditor.requirementOfJob = content
-      onFormChange(salary, newValueEditor)
-      setValueEditor(newValueEditor)
-    }
+    // if (content === "<p><br></p>") {
+    //   setDisplayRequirementOfJob(true)
+    //   setValueEditor({...valueEditor, requirementOfJob: ""})
+    // } else {
+    //   setDisplayRequirementOfJob(false)
+    //   const newValueEditor = valueEditor
+    //   newValueEditor.requirementOfJob = content
+    //   onFormChange(salary, newValueEditor)
+    //   setValueEditor(newValueEditor)
+    // }
+
+    const newValueEditor = valueEditor
+    newValueEditor.requirementOfJob = content
+    onFormChange(salary, newValueEditor)
+    setValueEditor(newValueEditor)
+
   }
 
   function handleChangeJobDescription(content: any) {
-    if (content === "<p><br></p>") {
-      setDisplayJobDescription(true)
-      setValueEditor({...valueEditor, jobDescription: ""})
-    } else {
-      setDisplayJobDescription(false)
-      const newValueEditor = valueEditor
-      newValueEditor.jobDescription = content
-      onFormChange(salary, newValueEditor)
-      setValueEditor(newValueEditor)
-    }
+    // if (content === "<p><br></p>") {
+    //   setDisplayJobDescription(true)
+    //   setValueEditor({...valueEditor, jobDescription: ""})
+    // } else {
+    //   setDisplayJobDescription(false)
+    //   const newValueEditor = valueEditor
+    //   newValueEditor.jobDescription = content
+    //   onFormChange(salary, newValueEditor)
+    //   setValueEditor(newValueEditor)
+    // }
+
+    const newValueEditor = valueEditor
+    newValueEditor.jobDescription = content
+    onFormChange(salary, newValueEditor)
+    setValueEditor(newValueEditor)
+
   }
 
   const handleCreateJob = (e: any) => {
@@ -269,22 +261,23 @@ function InformationForm(props: IProps) {
   }
 
   function onSearchJob(value: any) {
-    props.getSearchJob({name: value})
-    setTrigger({...trigger, job: true})
+
   }
 
   function onFocusJob() {
-    setJob(props.listJob.rows)
+
   }
 
-  function onSearchDepartment(value: any) {
-    props.searchListDepartment({name: value})
-    setTrigger({...trigger, department: true})
+  function onSearchTalentPool(value: any) {
+    getListTalentPoolApi({name: value}).then((rs: any) => {
+      setTalentPool(rs.rows)
+    })
   }
 
-  function onFocusDepartment() {
-    setDepartment(props.listDepartment.rows)
+  function onFocusTalentPool() {
+    setTalentPool(props.listTalentPool.rows)
   }
+
 
   const filterTreeNode = (input: any, node: any) => {
     const title = node.props.title;
@@ -385,23 +378,23 @@ function InformationForm(props: IProps) {
                     // </Select>
 
                     <TreeSelect
-                    style={fontWeightStyle}
-                    showSearch
-                    allowClear
-                    dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
-                    className="bg-white text-black "
-                    getPopupContainer={(trigger: any) => trigger.parentNode}
-                    filterTreeNode={filterTreeNode}
-                    placeholder="Phòng ban"
+                      style={fontWeightStyle}
+                      showSearch
+                      allowClear
+                      dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
+                      className="bg-white text-black "
+                      getPopupContainer={(trigger: any) => trigger.parentNode}
+                      filterTreeNode={filterTreeNode}
+                      placeholder="Phòng ban"
                     >
-                  {props.listDepartment.rows?.map((item: any) => (
-                    <TreeNode style={fontWeightStyle} value={item.id} title={item.name} key={item.id}>
-                  {item.children ? item.children.map((el: any) => (
-                    <TreeNode style={fontWeightStyle} value={el.id} key={el.id} title={el.name}/>
-                    )) : null}
-                    </TreeNode>
+                      {props.listDepartment.rows?.map((item: any) => (
+                        <TreeNode style={fontWeightStyle} value={item.id} title={item.name} key={item.id}>
+                          {item.children ? item.children.map((el: any) => (
+                            <TreeNode style={fontWeightStyle} value={el.id} key={el.id} title={el.name}/>
+                          )) : null}
+                        </TreeNode>
 
-                    ))}
+                      ))}
 
                     </TreeSelect>
                   )}
@@ -532,9 +525,14 @@ function InformationForm(props: IProps) {
                     <Select
                       getPopupContainer={(trigger: any) => trigger.parentNode}
                       onChange={onFormChange}
+                      onSearch={onSearchTalentPool}
+                      onFocus={onFocusTalentPool}
                       className="bg-white text-black" style={fontWeightStyle}
-                      placeholder={"Chọn talent pool"}>
-                      {props.listTalentPool.rows?.map((item: any, index: any) => (
+                      placeholder={"Chọn talent pool"}
+                      filterOption={false}
+                      showSearch
+                    >
+                      {talentPool?.map((item: any, index: any) => (
                         <Option key={index} value={item.id}>{item.name}</Option>
                       ))}
                     </Select>
@@ -617,7 +615,8 @@ function InformationForm(props: IProps) {
                 <div className="mb-2">Mô tả công việc chi tiết<span className="value-required">*</span></div>
                 <ReactQuill
                   style={fontWeightStyle}
-                  className={displayJobDescription ? "ql-custom ql-required" : "ql-custom "}
+                  className={"ql-custom "}
+                  // className={displayJobDescription ? "ql-custom ql-required" : "ql-custom "}
                   onChange={handleChangeJobDescription}
                   value={valueEditor.jobDescription || ""}
 
@@ -627,16 +626,17 @@ function InformationForm(props: IProps) {
                   bounds={'.app'}
                   placeholder="Mô tả công việc chi tiết"
                 />
-                <div className={displayJobDescription ? "value-required show" : "value-required hide"}>
-                  Vui lòng nhập mô tả chung
-                </div>
+                {/*<div className={displayJobDescription ? "value-required show" : "value-required hide"}>*/}
+                {/*  Vui lòng nhập mô tả chung*/}
+                {/*</div>*/}
 
               </div>
               <div className="form-label mb-4">
                 <div className="mb-2">Yêu cầu công việc <span className="value-required">*</span></div>
                 <ReactQuill
                   style={fontWeightStyle}
-                  className={displayRequirementOfJob ? "ql-custom ql-required" : "ql-custom "}
+                  className={"ql-custom "}
+                  // className={displayRequirementOfJob ? "ql-custom ql-required" : "ql-custom "}
                   onChange={handleChangeRequirement}
                   value={valueEditor.requirementOfJob || ""}
 
@@ -646,16 +646,17 @@ function InformationForm(props: IProps) {
                   bounds={'.app'}
                   placeholder="Yêu cầu công việc"
                 />
-                <div className={displayRequirementOfJob ? "value-required show" : "value-required hide"}>
-                  Vui lòng nhập yêu cầu công việc
-                </div>
+                {/*<div className={displayRequirementOfJob ? "value-required show" : "value-required hide"}>*/}
+                {/*  Vui lòng nhập yêu cầu công việc*/}
+                {/*</div>*/}
               </div>
 
               <div className="form-label">
                 <div className="mb-2">Quyền lợi <span className="value-required">*</span></div>
                 <ReactQuill
                   style={fontWeightStyle}
-                  className={displayInterest ? "ql-custom ql-required" : "ql-custom "}
+                  className={"ql-custom "}
+                  // className={displayInterest ? "ql-custom ql-required" : "ql-custom "}
                   onChange={handleChangeInterest}
                   value={valueEditor.interest || ""}
 
@@ -666,9 +667,9 @@ function InformationForm(props: IProps) {
                   placeholder="Quyền lợi"
                 />
 
-                <div className={displayInterest ? "value-required show" : "value-required hide"}>
-                  Vui lòng nhập quyền lợi
-                </div>
+                {/*<div className={displayInterest ? "value-required show" : "value-required hide"}>*/}
+                {/*  Vui lòng nhập quyền lợi*/}
+                {/*</div>*/}
 
               </div>
 
