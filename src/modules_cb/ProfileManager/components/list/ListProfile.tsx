@@ -944,9 +944,11 @@ function ListProfile(props: ListProfileProps) {
                       onFocus={onFocusPresenter}
                       filterOption={false}
                       showSearch
+                      value={selected.hrRef ? selected.hrRef : undefined}
                       className="bg-white text-black form-label"
                       style={{width: "200px", ...fontWeightStyle}}
-                      onChange={e => {
+                      optionLabelProp="label"
+                      onChange={(e:any) => {
                         setSelected({...selected, hrRef: e});
                       }}
                       placeholder="Chọn người giới thiệu">
@@ -977,9 +979,10 @@ function ListProfile(props: ListProfileProps) {
                       onFocus={onFocusPIC}
                       filterOption={false}
                       showSearch
-                      onChange={e => {
+                      onChange={(e:any) => {
                         setSelected({...selected, pic: e});
                       }}
+                      value={selected.pic ? selected.pic : undefined}
                       className="bg-white text-black form-label"
                       style={{width: "200px", ...fontWeightStyle}}
                       optionLabelProp="label"

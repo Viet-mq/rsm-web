@@ -5,7 +5,7 @@ import {connect, ConnectedProps} from "react-redux";
 import {getListRecruitment} from "../redux/actions";
 import Search from "antd/es/input/Search";
 import ListRecruitment from "../components/list/ListRecruitment";
-import {Link} from "react-router-dom";
+import {Link, useHistory, useRouteMatch} from "react-router-dom";
 import moment from "moment";
 import 'moment/locale/vi';
 import {RecruitmentEntity} from "../types";
@@ -44,10 +44,41 @@ function RecruitmentManagerPages(props: IProps) {
   const [valueSelect, setValueSelect] = useState(undefined)
   const [valueFilter, setValueFilter] = useState("all")
   const [valueSearch, setValueSearch] = useState()
+  let {path, url} = useRouteMatch();
+  const history = useHistory();
 
   useEffect(() => {
     document.title = "Quản lý tin tuyển dụng";
-    props.getListRecruitment({page: 1, size: 100});
+    let start;
+    let end;
+
+    const searchUrl = history.location.search?.substring(1, history.location.search?.length - 1)
+      .split("&").reduce((curr: any, next: any) => {
+        if(next!==""){
+          let p = next.split("=");
+          curr[decodeURIComponent(p[0])] = decodeURIComponent(p[1]);
+          if(p[0]==="key"){
+            setValueFilter(p[1])
+          }
+          if(p[0]==="keySearch"){
+            setValueSearch(p[1])
+          }
+          if(p[0]==="department"){
+            setValueSelect(p[1])
+          }
+          if(p[0]==="from"){
+            start=moment(parseInt(p[1]))
+          }
+          if(p[0]==="to"){
+            end=moment(parseInt(p[1]))
+
+          }
+          return curr;
+        }
+      }, {})
+    setValueDateRange([start,end])
+
+    props.getListRecruitment(searchUrl);
   }, []);
 
   useEffect(() => {
@@ -63,20 +94,94 @@ function RecruitmentManagerPages(props: IProps) {
     dates[0]?.set({hour: 0, minute: 0, second: 0})
     dates[1]?.set({hour: 23, minute: 59, second: 59})
     let [start, end] = [dates[0], dates[1]];
+    console.log( [start, end])
     setValueDateRange([start, end])
+
+    let req: any = {}
+    let urlQuery = ""
+
+    if (valueFilter) {
+      req.key = valueFilter;
+      urlQuery += `key=${req.key}&`
+    }
+
+    if (valueSearch) {
+      req.keySearch = valueSearch;
+      urlQuery += `keySearch=${req.keySearch}&`
+    }
+
+    if (valueSelect) {
+      req.department = valueSelect
+      urlQuery += `department=${req.department}&`
+    }
+
+    req.page = 1
+    req.size = 93
+
     if (dates.length) {
-      getListRecruitmentApi({from: +start, to: +end, page: 1, size: 92}).then((rs: any) => {setRecruitment([...rs.rows])});
-    } else getListRecruitmentApi({page: 1, size: 92}).then((rs: any) => {setRecruitment([...rs.rows])});
+      req.from = +start;
+      urlQuery += `from=${req.from}&`
+
+      req.to = +end;
+      urlQuery += `to=${req.to}&`
+
+      history.push({
+        pathname: url,
+        search: urlQuery
+      })
+
+      getListRecruitmentApi(req).then((rs: any) => {
+        setRecruitment([...rs.rows])
+      });
+    } else {
+      history.push({
+        pathname: url,
+        search: urlQuery
+      })
+      getListRecruitmentApi({page: 1, size: 92}).then((rs: any) => {
+        setRecruitment([...rs.rows])
+      });
+
+    }
   }
+
+  console.log(valueDateRange)
 
   function onChangeFilter(value: any) {
     setValueFilter(value)
     let req: any = {}
-    if (valueSelect) req.department = valueSelect
-    if (valueSearch) req.keySearch = valueSearch
+    let urlQuery = ""
+
     req.key = value
+    urlQuery += `key=${req.key}&`
+
+    if (valueSelect) {
+      req.department = valueSelect
+      urlQuery += `department=${req.department}&`
+    }
+
+    if (valueDateRange[0]) {
+      req.from = +valueDateRange[0];
+      urlQuery += `from=${req.from}&`
+    }
+
+    if (valueDateRange[1]) {
+      req.to = +valueDateRange[1];
+      urlQuery += `to=${req.to}&`
+    }
+
+    if (valueSearch) {
+      req.keySearch = valueSearch;
+      urlQuery += `keySearch=${req.keySearch}&`
+    }
+
     req.page = 1
     req.size = 93
+
+    history.push({
+      pathname: url,
+      search: urlQuery
+    })
     getListRecruitmentApi(req).then(
       (rs: any) => {
         setRecruitment([...rs.rows])
@@ -87,11 +192,35 @@ function RecruitmentManagerPages(props: IProps) {
   function handleSearchRecruitment(value: any) {
     setValueSearch(value)
     let req: any = {}
-    if (valueFilter) req.key = valueFilter
-    if (valueSelect) req.department = valueSelect
+    let urlQuery = ""
+    if (valueFilter) {
+      req.key = valueFilter;
+      urlQuery += `key=${req.key}&`
+    }
+    if (valueSelect) {
+      req.department = valueSelect
+      urlQuery += `department=${req.department}&`
+    }
+
+    if (valueDateRange[0]) {
+      req.from = +valueDateRange[0];
+      urlQuery += `from=${req.from}&`
+    }
+
+    if (valueDateRange[1]) {
+      req.to = +valueDateRange[1];
+      urlQuery += `to=${req.to}&`
+    }
+
     req.keySearch = value
+    urlQuery += `keySearch=${value}&`
+
     req.page = 1
     req.size = 93
+    history.push({
+      pathname: url,
+      search: urlQuery
+    })
     getListRecruitmentApi(req).then(
       (rs: any) => {
         setRecruitment([...rs.rows])
@@ -102,11 +231,40 @@ function RecruitmentManagerPages(props: IProps) {
   function onChange(value: any) {
     setValueSelect(value)
     let req: any = {}
-    if (valueFilter) req.key = valueFilter
-    if (valueSearch) req.keySearch = valueSearch
-    if (value) req.department = value
+    let urlQuery = ""
+
+    if (valueFilter) {
+      req.key = valueFilter;
+      urlQuery += `key=${req.key}&`
+    }
+
+    if (value) {
+      req.department = value
+      urlQuery += `department=${value}&`
+    }
+
+    if (valueDateRange[0]) {
+      req.from = +valueDateRange[0];
+      urlQuery += `from=${req.from}&`
+    }
+
+    if (valueDateRange[1]) {
+      req.to = +valueDateRange[1];
+      urlQuery += `to=${req.to}&`
+    }
+
+    if (valueSearch) {
+      req.keySearch = valueSearch;
+      urlQuery += `keySearch=${req.keySearch}&`
+    }
+
     req.page = 1
     req.size = 93
+
+    history.push({
+      pathname: url,
+      search: urlQuery
+    })
     getListRecruitmentApi(req).then(
       (rs: any) => {
         setRecruitment([...rs.rows])
@@ -177,6 +335,7 @@ function RecruitmentManagerPages(props: IProps) {
               style={{width: 200, ...fontWeightStyle}}
               showSearch
               allowClear
+              value={valueSelect}
               dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
               placeholder="Chọn phòng ban"
               className="bg-white text-black form-label"
@@ -214,6 +373,7 @@ function RecruitmentManagerPages(props: IProps) {
         </div>
         <div className="c-schedule-header__align-right align">
           <Search
+            value={valueSearch}
             placeholder="Tìm kiếm nhanh trong danh sách"
             onSearch={handleSearchRecruitment}
             style={{width: 340}}

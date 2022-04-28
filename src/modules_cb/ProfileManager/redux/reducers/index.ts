@@ -13,6 +13,7 @@ import getBooking, {GetBookingState} from "./booking/getBooking";
 import createBooking, {CreateBookingState} from "./booking/createBooking";
 import updateBooking, {UpdateBookingState} from "./booking/updateBooking";
 import getActivity, {ActivityLogsState} from "./detail/getActivityLogs";
+import getEmailLogs, {EmailLogsState} from "./detail/getEmailLogs";
 import search, {GetElasticSearchState} from "./profile/search";
 import uploadListCV, {UploadListCVState} from "./cv/uploadListCV";
 import createNote, {CreateNoteState} from "./note/createNote";
@@ -50,6 +51,7 @@ export interface ProfileManagerModuleState {
   createBooking: CreateBookingState,
   updateBooking: UpdateBookingState,
   getActivity: ActivityLogsState,
+  getEmailLogs: EmailLogsState,
   search: GetElasticSearchState,
   createNote: CreateNoteState,
   deleteNote: DeleteNoteState,
@@ -85,6 +87,7 @@ export default combineReducers<ProfileManagerModuleState>({
   getBooking,
   createBooking,
   getActivity,
+  getEmailLogs,
   search,
   createNote,
   deleteNote,

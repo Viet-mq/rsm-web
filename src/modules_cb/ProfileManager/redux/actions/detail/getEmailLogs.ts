@@ -1,30 +1,30 @@
-import {ActivityLogsEntity} from "../../../types";
+import {EmailLogsEntity} from "../../../types";
 import {AppError} from "src/models/common";
 
-export interface ActivityLogsAction {
+export interface EmailLogsAction {
   type: string,
   params?: any,
-  rows?: ActivityLogsEntity[],
+  rows?: EmailLogsEntity[],
   total?: number,
   error?: AppError
 }
 
-export const GET_ACTIVITY = "GET_ACTIVITY";
-export const GET_ACTIVITY_SUCCESS = "GET_ACTIVITY_SUCCESS";
-export const GET_ACTIVITY_ERROR = "GET_ACTIVITY_ERROR";
+export const GET_EMAIL_LOGS = "GET_EMAIL_LOGS";
+export const GET_EMAIL_LOGS_SUCCESS = "GET_EMAIL_LOGS_SUCCESS";
+export const GET_EMAIL_LOGS_ERROR = "GET_EMAIL_LOGS_ERROR";
 
-export const getActivityLogs = (params: any): ActivityLogsAction => ({
-  type: GET_ACTIVITY,
+export const getEmailLogs = (params: any): EmailLogsAction => ({
+  type: GET_EMAIL_LOGS,
   params
 });
 
-export const getActivityLogsSuccess = (total: number, rows: ActivityLogsEntity[]): ActivityLogsAction => ({
-  type: GET_ACTIVITY_SUCCESS,
+export const getEmailLogsSuccess = (total: number, rows: EmailLogsEntity[]): EmailLogsAction => ({
+  type: GET_EMAIL_LOGS_SUCCESS,
   total,
   rows
 });
 
-export const getActivityLogsError = (error: AppError): ActivityLogsAction => ({
-  type: GET_ACTIVITY_ERROR,
+export const getEmailLogsError = (error: AppError): EmailLogsAction => ({
+  type: GET_EMAIL_LOGS_ERROR,
   error
 });

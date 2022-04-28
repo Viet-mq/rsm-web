@@ -24,6 +24,12 @@
   align-items: center;
 }
 
+.flex-space-between-items-flex-start{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
 .font-20-bold-500{
   font-size: 20px;
   font-weight: 500;
@@ -155,6 +161,19 @@ display: none;
     opacity: 0;
     display: none;
   }
+}
+
+.ellipsis{
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 
