@@ -374,6 +374,7 @@ function RecruitmentManagerPages(props: IProps) {
         <div className="c-schedule-header__align-right align">
           <Search
             value={valueSearch}
+            onChange={(event:any)=>setValueSearch(event.target.value)}
             placeholder="Tìm kiếm nhanh trong danh sách"
             onSearch={handleSearchRecruitment}
             style={{width: 340}}
