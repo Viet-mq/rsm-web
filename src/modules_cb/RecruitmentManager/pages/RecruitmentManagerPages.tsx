@@ -28,7 +28,7 @@ const connector = connect(mapStateToProps, {
   searchListDepartment
 });
 
-
+//
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends ReduxProps {
