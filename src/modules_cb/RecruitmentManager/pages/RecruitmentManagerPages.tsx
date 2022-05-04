@@ -28,7 +28,7 @@ const connector = connect(mapStateToProps, {
   searchListDepartment
 });
 
-
+//
 type ReduxProps = ConnectedProps<typeof connector>;
 
 interface IProps extends ReduxProps {
@@ -85,6 +85,7 @@ function RecruitmentManagerPages(props: IProps) {
     setRecruitment(list.rows)
   }, [list]);
 
+  //
   // useEffect(() => {
   //   setRecruitment(search.rows)
   //
