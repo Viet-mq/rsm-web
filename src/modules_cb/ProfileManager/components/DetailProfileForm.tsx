@@ -10,6 +10,7 @@ import {
   getActivityLogs,
   getBooking,
   getDetailProfile,
+  getEmailLogs,
   getListComment,
   getListNote,
   showAddToTalentPoolForm,
@@ -58,34 +59,31 @@ import {
 import moment from "moment";
 import {ColumnProps} from "antd/lib/table";
 import {emptyText} from "../../../configs/locales";
-import Loading from "../../../components/Loading";
-import CreateNoteForm from "./CreateNoteForm";
-import UpdateNoteForm from "./UpdateNoteForm";
 import {
   BsThreeDotsVertical,
   FaLongArrowAltRight,
   GiBlackBook,
   MdOutlineSource,
   RiFullscreenExitLine,
-  RiFullscreenLine,
-  RiMailSendLine
+  RiFullscreenLine
 } from "react-icons/all";
 import StarRatings from 'react-star-ratings';
-import UploadAvatarForm from "./UploadAvatarForm";
-import CreateReasonRejectForm from "./CreateRejectCandidateForm";
-import ChangeProcessForm from "./ChangeProcessForm";
-import ChangeRecruitmentForm from "./ChangeRecruitmentForm";
-import AddToTalentPoolForm from "./AddToTalentPoolForm";
-import UpdateDetailProfileForm from "./UpdateDetailProfileForm";
-import CreateCommentForm from "./CreateCommentForm";
-import UpdateCommentForm from "./UpdateCommentForm";
 import {deleteSchedule} from "../../ScheduleManager/redux/actions";
 import {getInitials, profile_path} from "../../../helpers/utilsFunc";
 import ButtonDelete from "../../../components/ComponentUtils/ButtonDelete";
-import {Link} from "react-router-dom";
 import {getListEmail} from "../../EmailManager/redux/actions";
 import {getListRecruitment as getListRecruitmentApi} from "../../RecruitmentManager/redux/services/apis";
-import {RecruitmentEntity} from "../../RecruitmentManager/types";
+import CreateNoteForm from "./CreateNoteForm";
+import CreateCommentForm from "./CreateCommentForm";
+import UpdateCommentForm from "./UpdateCommentForm";
+import UpdateNoteForm from "./UpdateNoteForm";
+import UploadAvatarForm from "./UploadAvatarForm";
+import CreateReasonRejectForm from "../../ReasonRejectManager/components/CreateReasonRejectForm";
+import ChangeProcessForm from "./ChangeProcessForm";
+import AddToTalentPoolForm from "./AddToTalentPoolForm";
+import UpdateDetailProfileForm from "./UpdateDetailProfileForm";
+import ChangeRecruitmentForm from "./ChangeRecruitmentForm";
+import Loading from "../../../components/Loading";
 
 const {Step} = Steps;
 const {TabPane} = Tabs;
@@ -95,7 +93,6 @@ const mapStateToProps = (state: RootState) => ({
   profileManager: state.profileManager,
   account: state.accountManager.list,
   skill: state.skillManager.list,
-  emailManager: state.emailManager,
 
 })
 
@@ -129,7 +126,8 @@ const connector = connect(mapStateToProps,
     deleteSchedule,
     deleteCV,
     getListEmail,
-    addToBlacklist
+    addToBlacklist,
+    getEmailLogs
   });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -146,6 +144,7 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     showForm,
     detail,
     getActivity,
+    getEmailLogs,
     getBooking,
     getListNote,
     createNote,
@@ -399,6 +398,14 @@ function DetailProfileForm(props: DetailProfileFormProps) {
     minIndex: 0,
     maxIndex: 0
   })
+  const [emailLogs, setEmailLogs] = useState({
+    params: '',
+    data: [],
+    totalPage: 0,
+    current: 1,
+    minIndex: 0,
+    maxIndex: 0
+  })
   const [visiblePopover, setVisiblePopover] = useState<boolean>(false);
   const [popoverRecruitment, setPopoverRecruitment] = useState<boolean>(false);
   const [recruitment, setRecruitment] = useState<any>();
@@ -415,10 +422,15 @@ function DetailProfileForm(props: DetailProfileFormProps) {
   }, [getActivity])
 
   useEffect(() => {
-    if (showForm.id_detail) {
-      setEmail(props.emailManager.list)
-    }
-  }, [props.emailManager.list])
+    setEmailLogs({
+      params: getEmailLogs.params,
+      data: getEmailLogs.rows,
+      totalPage: getEmailLogs.total,
+      current: activeLogs.current,
+      minIndex: 0,
+      maxIndex: size
+    })
+  }, [getEmailLogs])
 
   useEffect(() => {
     if (showForm.id_detail) {
@@ -427,7 +439,9 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       props.getListNote({idProfile: showForm.id_detail})
       props.getListComment({idProfile: showForm.id_detail})
       props.getListEmail({page: 1, size: 100})
-      if (detail.result?.recruitmentId) getListRecruitmentApi({id: detail.result?.recruitmentId}).then((rs: any) => {setRecruitment(rs)})
+      if (detail.result?.recruitmentId) getListRecruitmentApi({id: detail.result?.recruitmentId}).then((rs: any) => {
+        setRecruitment(rs)
+      })
     }
   }, [showForm.id_detail])
 
@@ -436,6 +450,12 @@ function DetailProfileForm(props: DetailProfileFormProps) {
       props.getActivityLogs({idProfile: showForm.id_detail, page: activeLogs.current, size: 10});
     }
   }, [showForm.id_detail, activeLogs.current])
+
+  useEffect(() => {
+    if (showForm.id_detail) {
+      props.getEmailLogs({idProfile: showForm.id_detail, page: activeLogs.current, size: 10});
+    }
+  }, [showForm.id_detail, emailLogs.current])
 
   function handleUploadAvatar(e: any) {
     e.preventDefault();
@@ -529,6 +549,15 @@ function DetailProfileForm(props: DetailProfileFormProps) {
   function handleChangeActivityLogs(page: any) {
     setActiveLogs({
       ...activeLogs,
+      current: page,
+      minIndex: (page - 1) * size,
+      maxIndex: page * size,
+    });
+  }
+
+  function handleChangeEmailLogs(page: any) {
+    setEmailLogs({
+      ...emailLogs,
       current: page,
       minIndex: (page - 1) * size,
       maxIndex: page * size,
@@ -1069,41 +1098,61 @@ function DetailProfileForm(props: DetailProfileFormProps) {
             </TabPane>
 
             <TabPane tab="EMAIL LOGS" key="2" style={{marginLeft: 40}}>
-              {email?.rows?.map((item: any, index: any) => {
-                return <div key={item.id} className="border-bottom flex-space-between-item-center"
-                            style={{padding: " 15px 0"}}>
-                  <div className="flex-items-flex-start">
-                    <div style={{marginRight: 10, color: "#969C9D"}}>
-                      <RiMailSendLine size={40}/>
+              {emailLogs.data?.map((item: any, index: any) => {
+                return <div key={item.id} style={{overflow:"hidden"}} className="border-bottom pb-2 flex-space-between-items-flex-start">
+                  <div   style={{width:'130px'}}>
+                    <div className="font-14-bold-500">
+                      {item.fullName}
                     </div>
-                    <div>
-                      <div>
-                        <Link
-                          to={"/email-manager/detail"}
-                          // onClick={() => handleShowEditEmail(item)}
-                          className="font-17-bold-500"
-                          style={{marginRight: "1px", color: "#1890ff"}}>
-                          <span>{item.name}</span>
-                        </Link>
-                      </div>
-
-                      <div className="font-14-bold-500">{item.subject}</div>
-                      <div style={{color: "#B2B2B2"}}>Tạo bởi <span
-                        className="font-14-bold-500">{item.create_by}</span> lúc {moment(item.time).format('HH:mm DD/MM/YYYY')}
-                      </div>
+                    <div className={"ellipsis"} style={{fontSize:'13px'}}>tới {item.email}
                     </div>
                   </div>
-
+                  <div style={{flex:1, padding:"0 10px"}}>
+                    <div>
+                      <p className="font-14-bold-500">{item.subject}</p>
+                      <p className="line-clamp" style={{width:"100%"}}>{item.content.replace(/<[^>]+>/g, '')}</p>
+                    </div>
+                    <div style={{display:"flex"}}>
+                      {item.files?.map((el:any,index:any)=>{
+                        return <div className="file-email ellipsis" key={index}><Icon type="file-text" /> <a href={el.filePath} target={"_blank"}>{el.fileName}</a></div>
+                      })}
+                    </div>
+                  </div>
+                  <div style={{width:'100px'}}>{moment(item.time).format('DD/MM/YYYY HH:mm')}</div>
                 </div>
-
+                // <div key={item.id} className="border-bottom flex-space-between-item-center"
+                //             style={{padding: " 15px 0"}}>
+                //   <div className="flex-items-flex-start">
+                //     <div style={{marginRight: 10, color: "#969C9D"}}>
+                //       <RiMailSendLine size={40}/>
+                //     </div>
+                //     <div>
+                //       <div>
+                //         <a
+                //           // to={"/email-manager/detail"}
+                //           // onClick={() => handleShowEditEmail(item)}
+                //           className="font-17-bold-500"
+                //           style={{marginRight: "1px", color: "#1890ff"}}>
+                //           <span>{item.subject}</span>
+                //         </a>
+                //       </div>
+                //
+                //       <div className="font-14-bold-500">{item.subject}</div>
+                //       <div style={{color: "#B2B2B2"}}>Tạo bởi <span
+                //         className="font-14-bold-500">{item.create_by}</span> lúc {moment(item.time).format('HH:mm DD/MM/YYYY')}
+                //       </div>
+                //     </div>
+                //   </div>
+                // </div>
 
               })}
               <br/>
               <Pagination
-                current={pageEmail}
-                total={email?.total}
+                current={emailLogs.current}
+                total={emailLogs.totalPage}
                 pageSize={size}
-                onChange={value => setPageEmail(value)}
+                showTotal={(total, range) => `Đang xem ${range[0]}- ${range[1]} trong tổng số ${total} mục`}
+                onChange={handleChangeEmailLogs}
                 className="pagination"
               />
             </TabPane>

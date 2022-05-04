@@ -3,7 +3,6 @@ import {
   deleteTalentPoolError,
   deleteTalentPoolSuccess,
   getListTalentPool,
-  getSearchTalentPool
 } from "../actions";
 import * as apis from "../services/apis";
 import {put, select} from "redux-saga/effects";

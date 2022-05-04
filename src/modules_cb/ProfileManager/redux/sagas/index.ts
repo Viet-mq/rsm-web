@@ -20,7 +20,7 @@ import {
   GET_ACTIVITY,
   GET_BOOKING,
   GET_DETAIL_PROFILE,
-  GET_ELASTIC_SEARCH,
+  GET_ELASTIC_SEARCH, GET_EMAIL_LOGS,
   GET_FULL_ELASTIC_SEARCH,
   GET_LIST_COMMENT,
   GET_LIST_NOTE,
@@ -38,6 +38,7 @@ import {uploadCVAsync} from "./cv/uploadCV";
 import {getBookingAsync} from "./booking/getBooking";
 import {updateBookingAsync} from "./booking/updateBooking";
 import {getActivityLogsAsync} from "./detail/getActivityLogs";
+import {getEmailLogsAsync} from "./detail/getEmailLogs";
 import {createBookingAsync} from "./booking/createBooking";
 import {searchAsync} from "./profile/search";
 import {updateDetailAsync} from "./detail/updateDetail";
@@ -73,6 +74,7 @@ export default function* root() {
     yield takeLatest(CREATE_BOOKING, createBookingAsync),
     yield takeLatest(UPDATE_BOOKING, updateBookingAsync),
     yield takeLatest(GET_ACTIVITY, getActivityLogsAsync),
+    yield takeLatest(GET_EMAIL_LOGS, getEmailLogsAsync),
     yield takeLatest(GET_ELASTIC_SEARCH, searchAsync),
     yield takeLatest(GET_FULL_ELASTIC_SEARCH, searchFullAsync),
     yield takeLatest(GET_LIST_NOTE, getListNoteAsync),

@@ -349,6 +349,24 @@ export interface ActivityLogsEntity {
   fullName: string
 }
 
+export interface EmailLogsEntity  {
+  id: string,
+  type: string,
+  idProfile: string,
+  email: string,
+  subject: string,
+  files: [
+    {
+      fileName: string,
+      filePath: string
+    }
+  ],
+  time: number,
+  content: string,
+  status: string,
+  username: string,
+  fullName: string,
+}
 
 //reminder
 export interface NoteEntity {

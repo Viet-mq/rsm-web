@@ -2,7 +2,21 @@ import {RootState} from "src/redux/reducers";
 import {connect, ConnectedProps} from "react-redux";
 import React, {useEffect, useState} from "react";
 import {ColumnProps} from "antd/lib/table";
-import {Avatar, Badge, Button, DatePicker, Icon, Select, Table, Tooltip, TreeSelect} from "antd";
+import {
+  Avatar,
+  Badge,
+  Button,
+  Checkbox,
+  Col,
+  DatePicker,
+  Icon,
+  Popover,
+  Row,
+  Select,
+  Table,
+  Tooltip,
+  TreeSelect
+} from "antd";
 import {emptyText} from "src/configs/locales";
 import {
   deleteProfile,
@@ -19,28 +33,29 @@ import 'moment/locale/vi';
 import {GiFemale, GiMale, ImPhoneHangUp} from "react-icons/all";
 import {useHistory, useLocation} from "react-router-dom";
 import Search from "antd/es/input/Search";
-import {getDetailTalentPool, getSearchTalentPool} from "../../../TalentPoolManager/redux/actions";
+import {getDetailTalentPool} from "../../../TalentPoolManager/redux/actions";
 import BookingForm from "../BookingForm";
 import Loading from "../../../../components/Loading";
 import UpdateProfileForm from "../UpdateProfileForm";
 import UploadCVForm from "../UploadCVForm";
 import env from 'src/configs/env';
-import {getSearchJob} from "../../../JobManager/redux/actions";
 import {JobEntity} from "../../../JobManager/types";
 import {JobLevelEntity} from "../../../JobLevelManager/types";
 import {DepartmentEntity} from "../../../DepartmentManager/types";
 import {RecruitmentEntity} from "../../../RecruitmentManager/types";
-import {getSearchJobLevel} from "../../../JobLevelManager/redux/actions";
-import {getSearchSourceCV} from "../../../SourceCVManager/redux/actions";
-import {UserAccount} from "../../../AccountManager/types";
-import {getSearchAccount} from "../../../AccountManager/redux/actions";
 import {convertArrayToTree, getInitials, profile_path} from "../../../../helpers/utilsFunc";
 import ButtonDelete from "../../../../components/ComponentUtils/ButtonDelete";
 import ButtonUpdate from "../../../../components/ComponentUtils/ButtonUpdate";
+import {getListJob as getListJobApi} from "../../../JobManager/redux/services/apis";
+import {getListJobLevel as getListJobLevelApi} from "../../../JobLevelManager/redux/services/apis";
+import {getListRecruitment as getListRecruitmentApi} from "src/modules_cb/RecruitmentManager/redux/services/apis";
+import {getListTalentPool as getListTalentPoolApi} from "src/modules_cb/TalentPoolManager/redux/services/apis";
+import {getListAccount as getListAccountApi} from "../../../AccountManager/redux/services/apis";
 
 const {Option} = Select;
 const {RangePicker} = DatePicker;
 const {TreeNode} = TreeSelect;
+const CheckboxGroup = Checkbox.Group;
 
 const mapStateToProps = (state: RootState) => ({
   profileManager: state.profileManager,
@@ -51,7 +66,6 @@ const mapStateToProps = (state: RootState) => ({
   listRecruitment: state.recruitmentManager.list,
   listTalentPool: state.talentPoolManager.list,
   listJob: state.jobManager.list,
-  searchJob: state.jobManager.search,
   listAccount: state.accountManager.list,
 })
 
@@ -64,11 +78,7 @@ const connector = connect(mapStateToProps, {
   showFormBooking,
   resetSearch,
   getDetailTalentPool,
-  getSearchJob,
-  getSearchJobLevel,
-  getSearchTalentPool,
-  getSearchSourceCV,
-  getSearchAccount
+
 });
 
 type ReduxProps = ConnectedProps<typeof connector>;
@@ -395,17 +405,89 @@ function ListProfile(props: ListProfileProps) {
   const [department, setDepartment] = useState<DepartmentEntity[]>([]);
   const [recruitment, setRecruitment] = useState<RecruitmentEntity[]>([]);
   const [talentPool, setTalentPool] = useState<JobEntity[]>([]);
-  const [account, setAccount] = useState<UserAccount[] | any>([]);
-  const arrayUrl = ['/talent-pool-manager', '/profile-manager', '/recruitment-manager','/blacklist-manager']
-
-  const [trigger, setTrigger] = useState({
-    job: false,
-    jobLevel: false,
-    department: false,
-    recruitment: false,
-    talentPool: false,
-    account: false,
+  const arrayUrl = ['/talent-pool-manager', '/profile-manager', '/recruitment-manager', '/blacklist-manager']
+  const [visibleSelect, setVisibleSelect] = useState(false)
+  const [checkSelect, setCheckSelect] = useState<any>({
+    checkedList: ["job",
+      "department",
+      "recruitment",
+      "pic",
+      "name"],
+    indeterminate: false,
+    checkAll: false
   })
+  const [account, setAccount] = useState<any>({
+    pic: [],
+    presenter: [],
+  });
+  const options = [
+    {
+      id: "job",
+      name: "Vị trí công việc"
+    },
+    {
+      id: "jobLevel",
+      name: "Cấp bậc công việc"
+    },
+    {
+      id: "department",
+      name: "Phòng ban"
+    },
+    {
+      id: "talentPool",
+      name: "Talent Pools"
+    },
+    {
+      id: "recruitment",
+      name: "Tin tuyển dụng"
+    },
+    {
+      id: "hrRef",
+      name: "Người giới thiệu"
+    },
+    {
+      id: "pic",
+      name: "HR phụ trách"
+    },
+    {
+      id: "name",
+      name: "Họ tên"
+    },
+    {
+      id: "dateRange",
+      name: "Ngày nộp hồ sơ"
+    },
+    {
+      id: "createAt",
+      name: "Ngày tạo"
+    },
+
+  ];
+  const content = (<div>
+    <div style={{borderBottom: '1px solid #E9E9E9'}}>
+      <Checkbox
+        indeterminate={checkSelect.indeterminate}
+        onChange={onCheckAll}
+        checked={checkSelect.checkAll}
+      >
+        All
+      </Checkbox>
+    </div>
+    <br/>
+    <CheckboxGroup
+      style={{width: '100%'}}
+      value={checkSelect.checkedList}
+      onChange={onChangeSelect}
+    >
+      <Row>
+        {options?.map((item: any, index: any) =>
+          <Col span={12} key={index}>
+            <Checkbox key={index} value={item.id}>{item.name}</Checkbox>
+          </Col>
+        )}
+      </Row>
+    </CheckboxGroup>
+  </div>)
 
   useEffect(() => {
     setTreeData(convertArrayToTree(props.listDepartment.rows))
@@ -426,12 +508,6 @@ function ListProfile(props: ListProfileProps) {
     }
   }, [search.rowsSearchFull])
 
-  // useEffect(() => {
-  //   if (trigger.job) {
-  //     setJob(props.searchJob.rows)
-  //   }
-  // }, [props.searchJob.rows])
-
   useEffect(() => {
     setJob(props.listJob.rows)
     setJobLevel(props.listJobLevel.rows)
@@ -439,6 +515,29 @@ function ListProfile(props: ListProfileProps) {
     setRecruitment(props.listRecruitment.rows)
     setTalentPool(props.listTalentPool.rows)
   }, [])
+
+  const onVisibleChange = (visible: any) => {
+    setVisibleSelect(visible);
+  };
+
+  function onChangeSelect(checkedList: any) {
+    setCheckSelect({
+        ...checkSelect,
+        checkedList: checkedList,
+        indeterminate: !!checkedList.length && checkedList.length < options.length,
+        checkAll: checkedList.length === options.length,
+      }
+    );
+  }
+
+  function onCheckAll(e: any) {
+    setCheckSelect({
+      ...checkSelect,
+      checkedList: e.target.checked ? options?.map((item: any) => item.id) : [],
+      indeterminate: false,
+      checkAll: e.target.checked,
+    });
+  };
 
   const handleChange = (pagination: any, filters: any, sorter: any) => {
     console.log('Various parameters', pagination, filters, sorter);
@@ -521,7 +620,7 @@ function ListProfile(props: ListProfileProps) {
       idRecruitment: entity.recruitmentId,
       username: entity.username,
     }
-    props.showFormBooking(true, req,entity,false);
+    props.showFormBooking(true, req, entity, false);
   }
 
   const handleUploadCV = (e: any, entity: ProfileEntity) => {
@@ -588,7 +687,7 @@ function ListProfile(props: ListProfileProps) {
       req.statusCV = props.idProcess
       props.getListProfile(req);
 
-    }  else if (pathname.includes("blacklist-manager")) {
+    } else if (pathname.includes("blacklist-manager")) {
       req.blackList = "blacklist"
       props.getListProfile(req);
 
@@ -599,8 +698,9 @@ function ListProfile(props: ListProfileProps) {
   }
 
   function onSearchJob(value: any) {
-    props.getSearchJob({name: value})
-    setTrigger({...trigger, job: true})
+    getListJobApi({name: value}).then((rs: any) => {
+      setJob([...rs.rows])
+    })
   }
 
   function onFocusJob() {
@@ -608,8 +708,9 @@ function ListProfile(props: ListProfileProps) {
   }
 
   function onSearchJobLevel(value: any) {
-    props.getSearchJobLevel({name: value})
-    setTrigger({...trigger, jobLevel: true})
+    getListJobLevelApi({name: value}).then((rs: any) => {
+      setJobLevel([...rs.rows])
+    })
   }
 
   function onFocusJobLevel() {
@@ -617,8 +718,9 @@ function ListProfile(props: ListProfileProps) {
   }
 
   function onSearchRecruitment(value: any) {
-    // props.getSearchRecruitment({name: value})
-    setTrigger({...trigger, recruitment: true})
+    getListRecruitmentApi({keySearch: value}).then((rs: any) => {
+      setRecruitment([...rs.rows])
+    })
   }
 
   function onFocusRecruitment() {
@@ -626,8 +728,9 @@ function ListProfile(props: ListProfileProps) {
   }
 
   function onSearchTalentPool(value: any) {
-    props.getSearchJob({name: value})
-    setTrigger({...trigger, talentPool: true})
+    getListTalentPoolApi({name: value}).then((rs: any) => {
+      setTalentPool([...rs.rows])
+    })
   }
 
   function onFocusTalentPool() {
@@ -656,13 +759,30 @@ function ListProfile(props: ListProfileProps) {
     }
   }
 
-  function onSearchAccount(value: any) {
-    props.getSearchAccount({name: value})
-    setTrigger({...trigger, account: true})
+  function onSearchPIC(value: any) {
+    getListAccountApi({name: value}).then((rs: any) => {
+      setAccount({...account, pic: rs.rows})
+    })
   }
 
-  function onFocusAccount() {
-    setAccount(props.listAccount.rows)
+  function onFocusPIC() {
+    setAccount({
+      ...account,
+      pic: props.listAccount.rows,
+    })
+  }
+
+  function onSearchPresenter(value: any) {
+    getListAccountApi({name: value}).then((rs: any) => {
+      setAccount({...account, presenter: rs.rows})
+    })
+  }
+
+  function onFocusPresenter() {
+    setAccount({
+      ...account,
+      presenter: props.listAccount.rows,
+    })
   }
 
   function onChange(value: any) {
@@ -676,6 +796,18 @@ function ListProfile(props: ListProfileProps) {
 
   return (
     <>
+      <div>
+        <Popover onVisibleChange={onVisibleChange}
+                 visible={visibleSelect}
+                 placement="right"
+                 content={content}
+                 overlayStyle={{width: "20%"}}
+                 trigger="click">
+          <Button><Icon type="setting"/> Config Fields</Button>
+
+        </Popover>
+
+      </div>
       {arrayUrl.some((item: any) => pathname.includes(item)) ? (
         <>
           <div>
@@ -694,9 +826,8 @@ function ListProfile(props: ListProfileProps) {
             <br/>
 
             <div className="c-filter-profile">
-              <div style={{width: 200, display: "inline-block"}}>
+              {checkSelect.checkedList.includes("name") && <div style={{width: 200, display: "inline-block"}}>
                 <Search
-                  // style={{display: "inline",width:200}}
                   value={selected.name}
 
                   onChange={e => {
@@ -704,47 +835,46 @@ function ListProfile(props: ListProfileProps) {
                   }}
                   onSearch={btnSearchClicked}
                   placeholder="Họ tên"/>
-              </div>
+              </div>}
 
+              {checkSelect.checkedList.includes("job") &&
               <Select getPopupContainer={(trigger: any) => trigger.parentNode}
                       className="bg-white text-black form-label"
                       style={{...width, ...fontWeightStyle}}
                       placeholder="Vị trí công việc"
-                      value={selected.job ? selected.job : undefined}
+                value={selected.job ? selected.job : undefined}
                       onChange={(value: any) => setSelected({...selected, job: value})}
                       onSearch={onSearchJob}
                       onFocus={onFocusJob}
-                      filterOption={(input, option: any) =>
-                        option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                      }
-                      optionFilterProp="children"
+                      filterOption={false}
                       showSearch
               >
                 {job?.map((item: any, index: any) => (
                   <Option key={index} value={item.id}>{item.name}</Option>
                 ))}
-              </Select>
+              </Select>}
 
+              {checkSelect.checkedList.includes("jobLevel") &&
               <Select getPopupContainer={(trigger: any) => trigger.parentNode}
                       className="bg-white text-black form-label"
                       style={{...width, ...fontWeightStyle}}
                       value={selected.jobLevel ? selected.jobLevel : undefined}
-                      onChange={(value: any) => setSelected({...selected, jobLevel: value})}
+                      onChange={(value: any) => setSelected({
+                        ...selected,
+                        jobLevel: value
+                      })}
                       placeholder="Cấp bậc công việc"
                       onSearch={onSearchJobLevel}
                       onFocus={onFocusJobLevel}
-                      filterOption={(input, option: any) =>
-                        option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                      }
-                      optionFilterProp="children"
+                      filterOption={false}
                       showSearch
               >
-                {jobLevel.map((item: any, index: any) => (
+                {jobLevel?.map((item: any, index: any) => (
                   <Option key={index} value={item.id}>{item.name}</Option>
                 ))}
-              </Select>
+              </Select>}
 
-              <TreeSelect
+              {checkSelect.checkedList.includes("department") && <TreeSelect
                 style={{...width, ...fontWeightStyle}}
                 showSearch
                 allowClear
@@ -758,40 +888,16 @@ function ListProfile(props: ListProfileProps) {
               >
                 {props.listDepartment.rows?.map((item: any) => (
                   <TreeNode style={fontWeightStyle} value={item.id} title={item.name} key={item.id}>
-                    {item.children ? item.children.map((el: any) => (
+                    {item.children ? item.children?.map((el: any) => (
                       <TreeNode style={fontWeightStyle} value={el.id} key={el.id} title={el.name}/>
                     )) : null}
                   </TreeNode>
 
                 ))}
 
-              </TreeSelect>
+              </TreeSelect>}
 
-              {pathname.includes("recruitment-manager") ?
-                null
-                :
-                <Select getPopupContainer={(trigger: any) => trigger.parentNode}
-                        className="bg-white text-black form-label"
-                        style={{...width, ...fontWeightStyle}}
-                        value={selected.recruitment ? selected.recruitment : undefined}
-                        onChange={(value: any) => setSelected({...selected, recruitment: value})}
-                        placeholder="Tin tuyển dụng"
-                        onSearch={onSearchRecruitment}
-                        onFocus={onFocusRecruitment}
-                        filterOption={(input, option: any) =>
-                          option.props.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }
-                        optionFilterProp="label"
-                        showSearch
-                >
-                  {recruitment.map((item: any, index: any) => (
-                    <Option key={index} value={item.id} label={item.title}>[{item.departmentName}] {item.title}</Option>
-                  ))}
-                </Select>
-              }
-
-
-              {pathname.includes("talent-pool-manager") ?
+              {checkSelect.checkedList.includes("talentPool") ? pathname.includes("talent-pool-manager") ?
                 null
                 :
                 <Select getPopupContainer={(trigger: any) => trigger.parentNode}
@@ -802,40 +908,54 @@ function ListProfile(props: ListProfileProps) {
                         onFocus={onFocusTalentPool}
                         className="bg-white text-black form-label"
                         style={{...width, ...fontWeightStyle}}
-                        filterOption={(input, option: any) =>
-                          option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        }
-                        optionFilterProp="children"
+                        filterOption={false}
                         showSearch
                 >
-                  {talentPool.map((item: any, index: any) => (
+                  {talentPool?.map((item: any, index: any) => (
                     <Option key={index} value={item.id}>{item.name}</Option>
                   ))}
                 </Select>
-              }
+                : null}
 
+              {checkSelect.checkedList.includes("recruitment") ?
+                pathname.includes("recruitment-manager") ?
+                  null
+                  :
+                  <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                          className="bg-white text-black form-label"
+                          style={{...width, ...fontWeightStyle}}
+                          value={selected.recruitment ? selected.recruitment : undefined}
+                          onChange={(value: any) => setSelected({...selected, recruitment: value})}
+                          placeholder="Tin tuyển dụng"
+                          onSearch={onSearchRecruitment}
+                          onFocus={onFocusRecruitment}
+                          filterOption={false}
+                          showSearch
+                  >
+                    {recruitment?.map((item: any, index: any) => (
+                      <Option key={index} value={item.id}
+                              label={item.title}>[{item.departmentName}] {item.title}</Option>
+                    ))}
+                  </Select> : null}
 
+              {checkSelect.checkedList.includes("hrRef") &&
               <Select getPopupContainer={(trigger: any) => trigger.parentNode}
-                      onSearch={onSearchAccount}
-                      onFocus={onFocusAccount}
-
-                      filterOption={(input, option: any) =>
-                        option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        || option.props.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                      }
+                      onSearch={onSearchPresenter}
+                      onFocus={onFocusPresenter}
+                      filterOption={false}
                       showSearch
+                      value={selected.hrRef ? selected.hrRef : undefined}
                       className="bg-white text-black form-label"
                       style={{width: "200px", ...fontWeightStyle}}
                       optionLabelProp="label"
-                      onChange={e => {
+                      onChange={(e:any) => {
                         setSelected({...selected, hrRef: e});
                       }}
                       placeholder="Chọn người giới thiệu">
-
                 <Option key={"none"} value={""} label={"<None>"}>
                   <div>&lt;None&gt;</div>
                 </Option>
-                {account.map((item: any, index: any) => (
+                {account.presenter?.map((item: any, index: any) => (
                   <Option key={index} value={item.username} label={item.fullName}>
                     <div className="flex-items-center" style={{paddingTop: 5}}>
                       <div style={{marginRight: 10}}>
@@ -851,21 +971,18 @@ function ListProfile(props: ListProfileProps) {
                     </div>
                   </Option>
                 ))}
-              </Select>
+              </Select>}
 
+              {checkSelect.checkedList.includes("pic") &&
               <Select getPopupContainer={(trigger: any) => trigger.parentNode}
-                      onSearch={onSearchAccount}
-                      onFocus={onFocusAccount}
-
-                      filterOption={(input, option: any) =>
-                        option.props.value.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                        || option.props.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                      }
-                      optionFilterProp="children"
+                      onSearch={onSearchPIC}
+                      onFocus={onFocusPIC}
+                      filterOption={false}
                       showSearch
-                      onChange={e => {
+                      onChange={(e:any) => {
                         setSelected({...selected, pic: e});
                       }}
+                      value={selected.pic ? selected.pic : undefined}
                       className="bg-white text-black form-label"
                       style={{width: "200px", ...fontWeightStyle}}
                       optionLabelProp="label"
@@ -873,7 +990,7 @@ function ListProfile(props: ListProfileProps) {
                 <Option key={"none"} value={""} label={"<None>"}>
                   <div>&lt;None&gt;</div>
                 </Option>
-                {account.map((item: any, index: any) => (
+                {account.pic?.map((item: any, index: any) => (
                   <Option key={index} value={item.username} label={item.fullName}>
                     <div className="flex-items-center" style={{paddingTop: 5}}>
                       <div style={{marginRight: 10}}>
@@ -889,9 +1006,9 @@ function ListProfile(props: ListProfileProps) {
                     </div>
                   </Option>
                 ))}
-              </Select>
+              </Select>}
 
-              <RangePicker
+              {checkSelect.checkedList.includes("dateRange") && <RangePicker
                 style={{width: 250}}
                 format={dateFormat}
                 value={[selected.startDateRange, selected.endDateRange]}
@@ -902,9 +1019,8 @@ function ListProfile(props: ListProfileProps) {
                 }}
                 placeholder={["Ngày nộp hồ sơ", "Ngày nộp hồ sơ"]}
                 onChange={onChangeDateRange}
-              />
-
-              <RangePicker
+              />}
+              {checkSelect.checkedList.includes("createAt") && <RangePicker
                 style={{width: 250}}
                 format={dateFormat}
                 value={[selected.startCreateAt, selected.endCreateAt]}
@@ -915,7 +1031,7 @@ function ListProfile(props: ListProfileProps) {
                 }}
                 placeholder={["Ngày tạo", "Ngày tạo"]}
                 onChange={onChangeCreateAt}
-              />
+              />}
 
               <Button type="primary" style={width}
                       onClick={btnSearchClicked}
