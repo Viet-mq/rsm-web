@@ -54,6 +54,7 @@ function RecruitmentManagerPages(props: IProps) {
     setRecruitment(list.rows)
   }, [list]);
 
+  //
   // useEffect(() => {
   //   setRecruitment(search.rows)
   //
