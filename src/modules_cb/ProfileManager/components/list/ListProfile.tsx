@@ -51,6 +51,8 @@ import {getListJobLevel as getListJobLevelApi} from "../../../JobLevelManager/re
 import {getListRecruitment as getListRecruitmentApi} from "src/modules_cb/RecruitmentManager/redux/services/apis";
 import {getListTalentPool as getListTalentPoolApi} from "src/modules_cb/TalentPoolManager/redux/services/apis";
 import {getListAccount as getListAccountApi} from "../../../AccountManager/redux/services/apis";
+import {SourceCVEntity} from "../../../SourceCVManager/types";
+import {getListSourceCV as getListSourceCVApi} from "../../../SourceCVManager/redux/services/apis";
 
 const {Option} = Select;
 const {RangePicker} = DatePicker;
@@ -396,12 +398,14 @@ function ListProfile(props: ListProfileProps) {
     endDateRange: undefined,
     startCreateAt: undefined,
     endCreateAt: undefined,
+    sourceCV:undefined,
   })
   const dateFormat = 'DD/MM/YYYY';
   const [treeData, setTreeData] = useState([])
   const screenHeight = document.documentElement.clientHeight;
   const [job, setJob] = useState<JobEntity[]>([]);
   const [jobLevel, setJobLevel] = useState<JobLevelEntity[]>([]);
+  const [sourceCV, setSourceCV] = useState<SourceCVEntity[]>([]);
   const [department, setDepartment] = useState<DepartmentEntity[]>([]);
   const [recruitment, setRecruitment] = useState<RecruitmentEntity[]>([]);
   const [talentPool, setTalentPool] = useState<JobEntity[]>([]);
@@ -448,6 +452,10 @@ function ListProfile(props: ListProfileProps) {
     {
       id: "pic",
       name: "HR phụ trách"
+    },
+    {
+      id: "sourceCV",
+      name: "Nguồn ứng viên"
     },
     {
       id: "name",
@@ -514,6 +522,7 @@ function ListProfile(props: ListProfileProps) {
     setDepartment(props.listDepartment.rows)
     setRecruitment(props.listRecruitment.rows)
     setTalentPool(props.listTalentPool.rows)
+    setSourceCV(props.listSourceCV.rows)
   }, [])
 
   const onVisibleChange = (visible: any) => {
@@ -569,6 +578,7 @@ function ListProfile(props: ListProfileProps) {
       endDateRange: undefined,
       startCreateAt: undefined,
       endCreateAt: undefined,
+      sourceCV:undefined,
     })
     const req: any = {}
     req.page = page;
@@ -674,6 +684,7 @@ function ListProfile(props: ListProfileProps) {
     if (selected.endDateRange) req.to = selected.endDateRange * 1
     if (selected.startCreateAt) req.fromCreateAt = selected.startCreateAt * 1
     if (selected.endCreateAt) req.toCreateAt = selected.endCreateAt * 1
+    if (selected.sourceCV) req.sourceCV = selected.sourceCV
     req.page = page;
     req.size = 30;
 
@@ -705,6 +716,16 @@ function ListProfile(props: ListProfileProps) {
 
   function onFocusJob() {
     setJob(props.listJob.rows)
+  }
+
+  function onSearchSourceCV(value: any) {
+    getListSourceCVApi({name: value}).then((rs: any) => {
+      setSourceCV([...rs.rows])
+    })
+  }
+
+  function onFocusSourceCV() {
+    setSourceCV(props.listSourceCV.rows)
   }
 
   function onSearchJobLevel(value: any) {
@@ -870,6 +891,26 @@ function ListProfile(props: ListProfileProps) {
                       showSearch
               >
                 {jobLevel?.map((item: any, index: any) => (
+                  <Option key={index} value={item.id}>{item.name}</Option>
+                ))}
+              </Select>}
+
+              {checkSelect.checkedList.includes("sourceCV") &&
+              <Select getPopupContainer={(trigger: any) => trigger.parentNode}
+                      className="bg-white text-black form-label"
+                      style={{...width, ...fontWeightStyle}}
+                      value={selected.sourceCV ? selected.sourceCV : undefined}
+                      onChange={(value: any) => setSelected({
+                        ...selected,
+                        sourceCV: value
+                      })}
+                      placeholder="Nguồn ứng tuyển"
+                      onSearch={onSearchSourceCV}
+                      onFocus={onFocusSourceCV}
+                      filterOption={false}
+                      showSearch
+              >
+                {sourceCV?.map((item: any, index: any) => (
                   <Option key={index} value={item.id}>{item.name}</Option>
                 ))}
               </Select>}
